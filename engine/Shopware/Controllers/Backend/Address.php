@@ -37,70 +37,12 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     private $addressService;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function preDispatch()
     {
         parent::preDispatch();
         $this->addressService = $this->get('shopware_account.address_service');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getListQuery()
-    {
-        $customerId = (int) $this->Request()->get('customerId');
-
-        if (!$customerId) {
-            throw new \RuntimeException("You have to provide a valid customerId.");
-        }
-
-        $query = parent::getListQuery();
-        $query = $this->addAssociations($query);
-        $query->andWhere('IDENTITY(address.customer) = :customerId')
-            ->setParameter('customerId', $customerId);
-
-        return $query;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getQueryPaginator(
-        \Doctrine\ORM\QueryBuilder $builder,
-        $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-    ) {
-        $query = $builder->getQuery();
-        $query->setHydrationMode($hydrationMode);
-        $query->setHint(\Doctrine\ORM\Query::HINT_INCLUDE_META_COLUMNS, true);
-        return $this->getManager()->createPaginator($query);
-    }
-
-    /**
-     * @param \Shopware\Components\Model\QueryBuilder $query
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    private function addAssociations(\Shopware\Components\Model\QueryBuilder $query)
-    {
-        $query
-            ->addSelect(['country', 'state', 'PARTIAL customer.{id,email}'])
-            ->join('address.customer', 'customer')
-            ->join('address.country', 'country')
-            ->leftJoin('address.state', 'state');
-
-        return $query;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getDetailQuery($id)
-    {
-        $query = parent::getDetailQuery($id);
-        $query = $this->addAssociations($query);
-
-        return $query;
     }
 
     /**
@@ -123,11 +65,12 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      * If isDefaultBillingAddress or isDefaultShippingAddress, the appropriate action will be made
      *
      * @param array $data
+     *
      * @return array
      */
     public function save($data)
     {
-        /**@var $model \Shopware\Models\Customer\Address */
+        /* @var $model \Shopware\Models\Customer\Address */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -143,15 +86,15 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         $form->submit($data);
 
         if (!$form->isValid()) {
-            $errors = array();
+            $errors = [];
             foreach ($form->getErrors(true) as $violation) {
-                $errors[] = array(
+                $errors[] = [
                     'message' => $violation->getMessage(),
-                    'property' => $violation->getOrigin()->getName()
-                );
+                    'property' => $violation->getOrigin()->getName(),
+                ];
             }
 
-            return array('success' => false, 'violations' => $errors);
+            return ['success' => false, 'violations' => $errors];
         }
 
         $model = $form->getData();
@@ -174,33 +117,94 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
 
         $detail = $this->getDetail($model->getId());
 
-        return array('success' => true, 'data' => $detail['data']);
+        return ['success' => true, 'data' => $detail['data']];
     }
 
     /**
      * Use address service for deletion
      *
      * @param int $id
+     *
      * @return array
      */
     public function delete($id)
     {
         if (empty($id)) {
-            return array('success' => false, 'error' => 'The id parameter contains no value.');
+            return ['success' => false, 'error' => 'The id parameter contains no value.'];
         }
 
         $model = $this->getManager()->find($this->model, $id);
 
         if (!($model instanceof $this->model)) {
-            return array('success' => false, 'error' => 'The passed id parameter exists no more.');
+            return ['success' => false, 'error' => 'The passed id parameter exists no more.'];
         }
 
         try {
             $this->addressService->delete($model);
         } catch (\Exception $ex) {
-            return array('success' => false, 'error' => $ex->getMessage());
+            return ['success' => false, 'error' => $ex->getMessage()];
         }
 
-        return array('success' => true);
+        return ['success' => true];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getListQuery()
+    {
+        $customerId = (int) $this->Request()->get('customerId');
+
+        if (!$customerId) {
+            throw new \RuntimeException('You have to provide a valid customerId.');
+        }
+
+        $query = parent::getListQuery();
+        $query = $this->addAssociations($query);
+        $query->andWhere('IDENTITY(address.customer) = :customerId')
+            ->setParameter('customerId', $customerId);
+
+        return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getQueryPaginator(
+        \Doctrine\ORM\QueryBuilder $builder,
+        $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
+    ) {
+        $query = $builder->getQuery();
+        $query->setHydrationMode($hydrationMode);
+        $query->setHint(\Doctrine\ORM\Query::HINT_INCLUDE_META_COLUMNS, true);
+
+        return $this->getManager()->createPaginator($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDetailQuery($id)
+    {
+        $query = parent::getDetailQuery($id);
+        $query = $this->addAssociations($query);
+
+        return $query;
+    }
+
+    /**
+     * @param \Shopware\Components\Model\QueryBuilder $query
+     *
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    private function addAssociations(\Shopware\Components\Model\QueryBuilder $query)
+    {
+        $query
+            ->addSelect(['country', 'state', 'PARTIAL customer.{id,email}'])
+            ->join('address.customer', 'customer')
+            ->join('address.country', 'country')
+            ->leftJoin('address.state', 'state');
+
+        return $query;
     }
 }

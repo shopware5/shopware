@@ -31,7 +31,7 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Models\Media
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaSubscriber implements EventSubscriber
@@ -58,14 +58,35 @@ class MediaSubscriber implements EventSubscriber
     {
         return [
             Events::postLoad,
-            Events::prePersist
+            Events::prePersist,
         ];
+    }
+
+    /**
+     * Set meta data on load
+     *
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function postLoad(LifecycleEventArgs $eventArgs)
+    {
+        $this->migrateMeta($eventArgs);
+    }
+
+    /**
+     * Set meta data on save
+     *
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function prePersist(LifecycleEventArgs $eventArgs)
+    {
+        $this->migrateMeta($eventArgs);
     }
 
     /**
      * Live migration to fill width/height
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @throws \Exception
      */
     private function migrateMeta(LifecycleEventArgs $eventArgs)
@@ -91,7 +112,7 @@ class MediaSubscriber implements EventSubscriber
                     [
                         ':width' => $width,
                         ':height' => $height,
-                        ':id' => $media->getId()
+                        ':id' => $media->getId(),
                     ]
                 );
             }
@@ -99,25 +120,5 @@ class MediaSubscriber implements EventSubscriber
             $media->setWidth($width);
             $media->setHeight($height);
         }
-    }
-
-    /**
-     * Set meta data on load
-     *
-     * @param LifecycleEventArgs $eventArgs
-     */
-    public function postLoad(LifecycleEventArgs $eventArgs)
-    {
-        $this->migrateMeta($eventArgs);
-    }
-
-    /**
-     * Set meta data on save
-     *
-     * @param LifecycleEventArgs $eventArgs
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        $this->migrateMeta($eventArgs);
     }
 }

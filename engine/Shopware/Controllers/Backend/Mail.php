@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Shop\Shop;
-use Shopware\Models\Mail\Mail;
 use Shopware\Models\Mail\Attachment;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Backend Controller for the mail backend module
@@ -35,38 +35,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * @var \Shopware\Models\Mail\Repository
      */
     protected $repository = null;
-
-    /**
-     * Internal helper function to get access to the mail repository.
-     * @return null|Shopware\Models\Mail\Repository
-     */
-    private function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
-        }
-        return $this->repository;
-    }
-
-    /**
-     * Method to define acl dependencies in backend controllers
-     */
-    protected function initAcl()
-    {
-        $this->addAclPermission('index', 'update');
-
-        $this->addAclPermission('index', 'read');
-        $this->addAclPermission('getMails', 'read');
-        $this->addAclPermission('createMail', 'create');
-        $this->addAclPermission('removeMail', 'delete');
-        $this->addAclPermission('updateMail', 'update');
-        $this->addAclPermission('copyMail', 'create');
-
-        $this->addAclPermission('getAttachments', 'read');
-        $this->addAclPermission('addAttachment', 'update');
-        $this->addAclPermission('removeAttachment', 'update');
-        $this->addAclPermission('updateAttachment', 'update');
-    }
 
     /**
      * Returns available mails
@@ -80,51 +48,52 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $id = $this->Request()->getParam('id');
         if (!empty($id) && is_numeric($id)) {
             $this->getSingleMail($id);
+
             return;
         }
 
         $mails = $this->getRepository()->findAll();
 
-        $nodes = array();
+        $nodes = [];
 
-        $statusNodes = array(
+        $statusNodes = [
             'name' => $snippet->get('mails_status', 'Status emails'),
             'leaf' => false,
-            'data' => array(),
-        );
+            'data' => [],
+        ];
 
-        $paymentNodes = array(
-            'name'     => $snippet->get('mails_status_payment', 'Payment status'),
-            'leaf'     => false,
-            'data'     => array()
-        );
+        $paymentNodes = [
+            'name' => $snippet->get('mails_status_payment', 'Payment status'),
+            'leaf' => false,
+            'data' => [],
+        ];
 
-        $orderNodes = array(
+        $orderNodes = [
             'name' => $snippet->get('mails_status_order', 'Order status'),
             'leaf' => false,
-            'data' => array()
-        );
+            'data' => [],
+        ];
 
-        $systemNodes = array(
+        $systemNodes = [
             'name' => $snippet->get('mails_system', 'System emails'),
             'leaf' => false,
-            'data' => array()
-        );
+            'data' => [],
+        ];
 
-        $userNodes = array(
+        $userNodes = [
             'name' => $snippet->get('mails_user', 'User emails'),
             'leaf' => false,
-            'data' => array()
-        );
+            'data' => [],
+        ];
 
         /* @var $mail Mail */
         foreach ($mails as $mail) {
-            $node = array(
+            $node = [
                 'leaf' => true,
                 'name' => $mail->getName(),
-                'id'   => $mail->getId(),
+                'id' => $mail->getId(),
                 'iconCls' => 'sprite-mail',
-            );
+            ];
 
             if ($mail->isOrderStateMail()) {
                 $orderStatus = $mail->getStatus();
@@ -153,72 +122,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $nodes[] = $systemNodes;
         $nodes[] = $userNodes;
 
-        $this->View()->assign(array('success' => true, 'data' => $nodes));
-    }
-
-    /**
-     * Gets a single mail
-     *
-     * @param $id
-     * @return void
-     */
-    protected function getSingleMail($id)
-    {
-        $data = $this->getMail($id);
-        $mail = $data['mail'];
-        $data = $data['data'];
-
-        /**@var $mail \Shopware\Models\Mail\Mail*/
-        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
-            return;
-        }
-
-        /** @var $shop Shop **/
-        $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
-
-        $context = $mail->getContext();
-        if (empty($context)) {
-            $context = array();
-        }
-        $data['contextPath'] = $mail->arrayGetPath(array_merge($this->getDefaultMailContext($shop), $context));
-
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
-    }
-
-    /**
-     * Returns an array with the converted mail data and a mail object for the passed mail id.
-     * @param $id
-     * @return array
-     */
-    private function getMail($id)
-    {
-        $query = $this->getRepository()->getMailQuery($id);
-        $mail = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-
-        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
-            return false;
-        }
-
-        if ($mail->isOrderStateMail()) {
-            $type = 'orderState';
-        } elseif ($mail->isPaymentStateMail()) {
-            $type = 'paymentState';
-        } elseif ($mail->isSystemMail()) {
-            $type = 'systemMail';
-        } else {
-            $type = 'userMail';
-        }
-
-        $data = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $data['type'] = $type;
-
-        return array(
-            'data' => $data,
-            'mail' => $mail
-        );
+        $this->View()->assign(['success' => true, 'data' => $nodes]);
     }
 
     /**
@@ -236,32 +140,33 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             Shopware()->Models()->persist($mail);
             Shopware()->Models()->flush();
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
         $data = $this->getMail($mail->getId());
         $data = $data['data'];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
      * Updates mail
-     *
-     * @return void
      */
     public function updateMailAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'mail id found'));
+            $this->View()->assign(['success' => false, 'message' => 'mail id found']);
+
             return;
         }
 
         /* @var $mail Mail */
         $mail = Shopware()->Models()->getRepository(Mail::class)->find($id);
         if (!$mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
             return;
         }
 
@@ -274,14 +179,15 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             Shopware()->Models()->persist($mail);
             Shopware()->Models()->flush();
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
         $data = $this->getMail($mail->getId());
         $data = $data['data'];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -290,26 +196,29 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function removeMailAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'mail id found'));
+            $this->View()->assign(['success' => false, 'message' => 'mail id found']);
+
             return;
         }
 
         /* @var $mail Mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
             return;
         }
 
         if (!$mail->isUserMail()) {
-            $this->View()->assign(array('success' => false, 'message' => 'Only Usermails may be removed'));
+            $this->View()->assign(['success' => false, 'message' => 'Only Usermails may be removed']);
+
             return;
         }
 
         Shopware()->Models()->remove($mail);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -318,19 +227,22 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function copyMailAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'mail id found'));
+            $this->View()->assign(['success' => false, 'message' => 'mail id found']);
+
             return;
         }
 
         /* @var $mail Mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
             return;
         }
 
         if (!$mail->isUserMail()) {
-            $this->View()->assign(array('success' => false, 'message' => 'Only Usermails may be cloned'));
+            $this->View()->assign(['success' => false, 'message' => 'Only Usermails may be cloned']);
+
             return;
         }
 
@@ -340,7 +252,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         Shopware()->Models()->persist($clonedMail);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -365,37 +277,37 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
                      ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!empty($mail)) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail found found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail found found']);
+
             return;
         }
 
         echo 'true';
-        return;
     }
 
     /**
      * Verify smarty Action
      *
      * Validates if the given value contains valid smartystring
-     *
-     * @return void
      */
     public function sendTestmailAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'no mail id found'));
+            $this->View()->assign(['success' => false, 'message' => 'no mail id found']);
+
             return;
         }
 
         /* @var $mail Mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
             return;
         }
 
         if (!($value = $this->Request()->getParam('value'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'Value not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Value not found']);
         }
 
         $recipient = Shopware()->Config()->get('mail');
@@ -408,36 +320,37 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $templateMail->addTo($recipient);
             $templateMail->send();
         } catch (\Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
      * Verify smarty Action
      *
      * Validates if the given value contains valid smartystring
-     *
-     * @return void
      */
     public function verifySmartyAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'mail id found'));
+            $this->View()->assign(['success' => false, 'message' => 'mail id found']);
+
             return;
         }
 
         /* @var $mail Mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
             return;
         }
 
         if (!($value = $this->Request()->getParam('value'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'Value not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Value not found']);
         }
 
         $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
@@ -450,11 +363,12 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         try {
             $template = $compiler->compileString($value);
         } catch (Enlight_Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
-        $this->View()->assign(array('success' => true, 'message' => $template));
+        $this->View()->assign(['success' => true, 'message' => $template]);
     }
 
     /**
@@ -463,26 +377,30 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function addAttachmentAction()
     {
         if (!($mailId = $this->Request()->getParam('mailId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'MailId not found'));
+            $this->View()->assign(['success' => false, 'message' => 'MailId not found']);
+
             return;
         }
 
         if (!($mediaId = $this->Request()->getParam('mediaId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'MediaId not found'));
+            $this->View()->assign(['success' => false, 'message' => 'MediaId not found']);
+
             return;
         }
 
         /* @var $mail \Shopware\Models\Mail\Mail */
         $mail = $this->getRepository()->find($mailId);
         if (!$mail) {
-            $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
             return;
         }
 
         /* @var $media \Shopware\Models\Media\Media */
         $media = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class)->find($mediaId);
         if (!$media) {
-            $this->View()->assign(array('success' => false, 'message' => 'Media not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Media not found']);
+
             return;
         }
 
@@ -492,13 +410,14 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             Shopware()->Models()->persist($attachment);
             Shopware()->Models()->flush();
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
         $data = Shopware()->Models()->toArray($attachment);
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -507,13 +426,14 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function removeAttachmentAction()
     {
         if (!($attachmentId = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Id not found']);
         }
 
         /* @var $attachment Attachment */
         $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
-            $this->View()->assign(array('success' => false, 'message' => 'Attachment not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
+
             return;
         }
 
@@ -521,11 +441,12 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             Shopware()->Models()->remove($attachment);
             Shopware()->Models()->flush();
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -534,12 +455,14 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function updateAttachmentAction()
     {
         if (!($attachmentId = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Id not found']);
+
             return;
         }
 
         if (!($shopId = $this->Request()->getParam('destinationShopId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'destinationShopId not found'));
+            $this->View()->assign(['success' => false, 'message' => 'destinationShopId not found']);
+
             return;
         }
 
@@ -549,7 +472,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             /* @var $shop Shop */
             $shop = Shopware()->Models()->getRepository(Shop::class)->find($shopId);
             if (!$shop) {
-                $this->View()->assign(array('success' => false, 'message' => 'Shop not found'));
+                $this->View()->assign(['success' => false, 'message' => 'Shop not found']);
+
                 return;
             }
         }
@@ -557,7 +481,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         /* @var $attachment Attachment */
         $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
-            $this->View()->assign(array('success' => false, 'message' => 'Attachment not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
+
             return;
         }
 
@@ -566,11 +491,12 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         try {
             Shopware()->Models()->flush();
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -579,7 +505,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function getAttachmentsAction()
     {
         $mailId = $this->Request()->getParam('mailId', false);
-        $attachments = array();
+        $attachments = [];
 
         if ($mailId) {
             /* @var $mail \Shopware\Models\Mail\Mail */
@@ -589,34 +515,34 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             }
         }
 
-        $nodes = array();
+        $nodes = [];
 
         /** @var $shop Shop */
         $shops = Shopware()->Models()->getRepository(Shop::class)->findAll();
         foreach ($shops as $shop) {
-            $shopNode = array(
+            $shopNode = [
                 'allowDrag' => false,
-                'leaf'      => false,
-                'filename'  => $shop->getName(),
-                'expanded'  => true,
-                'data'      => array(),
-                'shopId'    => $shop->getId()
-            );
+                'leaf' => false,
+                'filename' => $shop->getName(),
+                'expanded' => true,
+                'data' => [],
+                'shopId' => $shop->getId(),
+            ];
 
-            $childNodes = array();
+            $childNodes = [];
             foreach ($attachments as $attachment) {
                 if ($shop->getId() != $attachment->getShopId()) {
                     continue;
                 }
 
-                $childNodes[] = array(
-                    'leaf'     => true,
-                    'checked'  => false,
-                    'id'       => $attachment->getId(),
+                $childNodes[] = [
+                    'leaf' => true,
+                    'checked' => false,
+                    'id' => $attachment->getId(),
                     'filename' => $attachment->getFileName(),
-                    'size'     => $attachment->getFormattedFileSize(),
-                    'shopId'   => $attachment->getShopId(),
-                );
+                    'size' => $attachment->getFormattedFileSize(),
+                    'shopId' => $attachment->getShopId(),
+                ];
             }
 
             $shopNode['data'] = $childNodes;
@@ -624,36 +550,139 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $nodes[] = $shopNode;
         }
 
-        $childNodes = array();
+        $childNodes = [];
         foreach ($attachments as $attachment) {
             if ($attachment->getShopId() !== null) {
                 continue;
             }
 
-            $childNodes[] = array(
-                'leaf'     => true,
-                'checked'  => false,
-                'id'       => $attachment->getId(),
+            $childNodes[] = [
+                'leaf' => true,
+                'checked' => false,
+                'id' => $attachment->getId(),
                 'filename' => $attachment->getFileName(),
-                'size'     => $attachment->getFormattedFileSize(),
-            );
+                'size' => $attachment->getFormattedFileSize(),
+            ];
         }
 
-        $all = array(
+        $all = [
             'allowDrag' => false,
-            'leaf'      => false,
-            'filename'  => 'Global',
-            'expanded'  => true,
-            'data'      => $childNodes,
-        );
+            'leaf' => false,
+            'filename' => 'Global',
+            'expanded' => true,
+            'data' => $childNodes,
+        ];
 
         $nodes[] = $all;
 
-        $this->View()->assign(array('success' => true, 'data' => $nodes));
+        $this->View()->assign(['success' => true, 'data' => $nodes]);
+    }
+
+    /**
+     * Method to define acl dependencies in backend controllers
+     */
+    protected function initAcl()
+    {
+        $this->addAclPermission('index', 'update');
+
+        $this->addAclPermission('index', 'read');
+        $this->addAclPermission('getMails', 'read');
+        $this->addAclPermission('createMail', 'create');
+        $this->addAclPermission('removeMail', 'delete');
+        $this->addAclPermission('updateMail', 'update');
+        $this->addAclPermission('copyMail', 'create');
+
+        $this->addAclPermission('getAttachments', 'read');
+        $this->addAclPermission('addAttachment', 'update');
+        $this->addAclPermission('removeAttachment', 'update');
+        $this->addAclPermission('updateAttachment', 'update');
+    }
+
+    /**
+     * Gets a single mail
+     *
+     * @param $id
+     */
+    protected function getSingleMail($id)
+    {
+        $data = $this->getMail($id);
+        $mail = $data['mail'];
+        $data = $data['data'];
+
+        /** @var $mail \Shopware\Models\Mail\Mail */
+        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
+            return;
+        }
+
+        /** @var $shop Shop * */
+        $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
+        $shop->registerResources();
+
+        $context = $mail->getContext();
+        if (empty($context)) {
+            $context = [];
+        }
+        $data['contextPath'] = $mail->arrayGetPath(array_merge($this->getDefaultMailContext($shop), $context));
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
+    }
+
+    /**
+     * Internal helper function to get access to the mail repository.
+     *
+     * @return null|Shopware\Models\Mail\Repository
+     */
+    private function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
+        }
+
+        return $this->repository;
+    }
+
+    /**
+     * Returns an array with the converted mail data and a mail object for the passed mail id.
+     *
+     * @param $id
+     *
+     * @return array
+     */
+    private function getMail($id)
+    {
+        $query = $this->getRepository()->getMailQuery($id);
+        $mail = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+
+        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
+            $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
+
+            return false;
+        }
+
+        if ($mail->isOrderStateMail()) {
+            $type = 'orderState';
+        } elseif ($mail->isPaymentStateMail()) {
+            $type = 'paymentState';
+        } elseif ($mail->isSystemMail()) {
+            $type = 'systemMail';
+        } else {
+            $type = 'userMail';
+        }
+
+        $data = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $data['type'] = $type;
+
+        return [
+            'data' => $data,
+            'mail' => $mail,
+        ];
     }
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getDefaultMailContext(Shop $shop)

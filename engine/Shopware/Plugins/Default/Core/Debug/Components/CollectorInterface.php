@@ -28,18 +28,16 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CollectorInterface
 {
-    /**
-     * @return void
-     */
     public function start();
 
     /**
      * @param Logger $log
+     *
      * @return mixed
      */
     public function logResults(Logger $log);

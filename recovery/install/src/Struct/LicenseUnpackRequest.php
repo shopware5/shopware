@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LicenseUnpackRequest

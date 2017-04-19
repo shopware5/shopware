@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Tests\Unit\Components\Model;
 
 use PHPUnit\DbUnit\Database\DefaultConnection;
 use PHPUnit\DbUnit\DataSet\IDataSet;
-use Shopware\Components\Model\CategoryDenormalization;
-use PHPUnit\DbUnit\TestCase;
 use PHPUnit\DbUnit\DataSet\ReplacementDataSet;
+use PHPUnit\DbUnit\TestCase;
+use Shopware\Components\Model\CategoryDenormalization;
 
 class PDOMock extends \PDO
 {
@@ -38,7 +39,7 @@ class PDOMock extends \PDO
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryDenormalizationTest extends TestCase
@@ -64,7 +65,6 @@ class CategoryDenormalizationTest extends TestCase
 
             return;
         }
-
 
         try {
             $conn = new \PDO('sqlite::memory:');
@@ -135,13 +135,12 @@ class CategoryDenormalizationTest extends TestCase
      */
     public function testGetParentCategoryIdsReturnsArrayWithCategoryIds()
     {
-        $expectedResult = array(5, 4, 2);
+        $expectedResult = [5, 4, 2];
 
         $result = $this->component->getParentCategoryIds(5);
 
         $this->assertEquals($expectedResult, $result);
     }
-
 
     public function testRebuildAssignment()
     {
@@ -152,7 +151,6 @@ class CategoryDenormalizationTest extends TestCase
 
         // Assign to Spirits
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
-
 
         $result = $this->component->rebuildAllAssignmentsCount();
         // We have 2 rows in s_articles_categories
@@ -210,12 +208,12 @@ class CategoryDenormalizationTest extends TestCase
         $affectedRows = $this->component->rebuildCategoryPath();
         $this->assertEquals(4, $affectedRows);
 
-        $expectedResult = array(
-            array('id' => '4', 'path' => '|2|'),
-            array('id' => '5', 'path' => '|4|2|'),
-            array('id' => '6', 'path' => '|3|'),
-            array('id' => '7', 'path' => '|6|3|'),
-        );
+        $expectedResult = [
+            ['id' => '4', 'path' => '|2|'],
+            ['id' => '5', 'path' => '|4|2|'],
+            ['id' => '6', 'path' => '|3|'],
+            ['id' => '7', 'path' => '|6|3|'],
+        ];
 
         $result = $this->conn->query('SELECT id, path FROM s_categories WHERE path IS NOT NULL')->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -335,7 +333,7 @@ class CategoryDenormalizationTest extends TestCase
 
     public function testGetParentCategoryIdsForRootLevelReturnsEmptyArray()
     {
-        $expectedResult = array();
+        $expectedResult = [];
 
         $result = $this->component->getParentCategoryIds(1);
 
@@ -358,7 +356,6 @@ class CategoryDenormalizationTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
-
 
     public function testLimitWithLimitArgumentAndOffsetNull()
     {

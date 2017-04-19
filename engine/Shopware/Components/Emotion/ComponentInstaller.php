@@ -30,17 +30,16 @@ use Shopware\Models\Plugin\Plugin;
 
 class ComponentInstaller
 {
-    /**
-     * @var ModelManager
-     */
-    private $em;
-
     const COMPONENT_DEFAULTS = [
         'convertFunction' => null,
         'description' => '',
         'cls' => '',
-        'xtype' => 'emotion-components-base'
+        'xtype' => 'emotion-components-base',
     ];
+    /**
+     * @var ModelManager
+     */
+    private $em;
 
     /**
      * @param ModelManager $em
@@ -53,9 +52,11 @@ class ComponentInstaller
     /**
      * @param string $pluginName
      * @param string $componentName
-     * @param array $data
-     * @return Component
+     * @param array  $data
+     *
      * @throws \Exception
+     *
+     * @return Component
      */
     public function createOrUpdate($pluginName, $componentName, array $data)
     {
@@ -63,13 +64,13 @@ class ComponentInstaller
         $plugin = $repo->findOneBy(['name' => $pluginName]);
 
         if (!$plugin) {
-            throw new \Exception(sprintf("Plugin by name %s not found", $pluginName));
+            throw new \Exception(sprintf('Plugin by name %s not found', $pluginName));
         }
 
         $repo = $this->em->getRepository(Component::class);
         $component = $repo->findOneBy([
             'name' => $componentName,
-            'pluginId' => $plugin->getId()
+            'pluginId' => $plugin->getId(),
         ]);
         if (!$component) {
             $component = new Component();
@@ -80,6 +81,7 @@ class ComponentInstaller
         $component->setPluginId($plugin->getId());
         $component->setPlugin($plugin);
         $plugin->getEmotionComponents()->add($component);
+
         return $component;
     }
 }

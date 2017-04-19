@@ -27,12 +27,12 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
@@ -44,7 +44,7 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof ImmediateDeliveryCondition);
+        return $condition instanceof ImmediateDeliveryCondition;
     }
 
     /**

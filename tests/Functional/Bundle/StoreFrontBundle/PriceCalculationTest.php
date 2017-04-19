@@ -1,46 +1,31 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle;
-
 class PriceCalculationTest extends TestCase
 {
-    /**
-     * @param bool $displayGross
-     * @param int $discount
-     * @param int $currencyFactor
-     * @return TestContext
-     */
-    protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup(
-            array(
-                'key' => 'DISC',
-                'tax' => $displayGross,
-                'mode' => true,
-                'discount' => $discount
-            )
-        );
-
-        $currency = $this->helper->createCurrency(
-            array(
-                'factor' => $currencyFactor
-            )
-        );
-
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax),
-            null,
-            $currency
-        );
-    }
-
     public function testCustomerGroupDiscount()
     {
         $number = __FUNCTION__;
@@ -58,7 +43,6 @@ class PriceCalculationTest extends TestCase
         $this->assertEquals(60, $graduations[1]->getCalculatedPrice());
         $this->assertEquals(40, $graduations[2]->getCalculatedPrice());
     }
-
 
     public function testNetPrices()
     {
@@ -148,7 +132,6 @@ class PriceCalculationTest extends TestCase
         $this->helper->createArticle($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
-
         /*
 
         INPUT	TAX	        DISCOUNT	CURRENCY	UNIT
@@ -189,7 +172,6 @@ class PriceCalculationTest extends TestCase
         $this->helper->createArticle($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
-
         /*
         INPUT	TAX	        DISCOUNT	CURRENCY	UNIT
         100	    100.00000	85.00000	122.4	    244.80000
@@ -218,5 +200,41 @@ class PriceCalculationTest extends TestCase
         $this->assertEquals(61.2, $graduation->getCalculatedPrice());
         $this->assertEquals(73.44, $graduation->getCalculatedPseudoPrice());
         $this->assertEquals(122.40000, $graduation->getCalculatedReferencePrice());
+    }
+
+    /**
+     * @param bool $displayGross
+     * @param int  $discount
+     * @param int  $currencyFactor
+     *
+     * @return TestContext
+     */
+    protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
+    {
+        $tax = $this->helper->createTax();
+        $customerGroup = $this->helper->createCustomerGroup(
+            [
+                'key' => 'DISC',
+                'tax' => $displayGross,
+                'mode' => true,
+                'discount' => $discount,
+            ]
+        );
+
+        $currency = $this->helper->createCurrency(
+            [
+                'factor' => $currencyFactor,
+            ]
+        );
+
+        $shop = $this->helper->getShop();
+
+        return $this->helper->createContext(
+            $customerGroup,
+            $shop,
+            [$tax],
+            null,
+            $currency
+        );
     }
 }

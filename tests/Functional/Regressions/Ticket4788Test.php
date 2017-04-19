@@ -24,38 +24,37 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin_TestCase
 {
-    protected $articlesToTest = array(
+    protected $articlesToTest = [
         206 => 23,
-        209 => 23
-    );
+        209 => 23,
+    ];
 
     protected $backup = null;
 
-    protected $shortDescription = "";
-    protected $longDescription = "&nbsp;äü @ Старт <strong>test</strong>";
-    protected $longDescriptionStripped = "äü @ Старт test";
-
+    protected $shortDescription = '';
+    protected $longDescription = '&nbsp;äü @ Старт <strong>test</strong>';
+    protected $longDescriptionStripped = 'äü @ Старт test';
 
     /**
-        * Set up test case, fix demo data where needed
-        */
+     * Set up test case, fix demo data where needed
+     */
     public function setUp()
     {
         parent::setUp();
 
         // Get a copy of article descriptions
-        $ids = implode(", ", array_keys($this->articlesToTest));
+        $ids = implode(', ', array_keys($this->articlesToTest));
         $sql = "SELECT `id`, `description_long`, `description` FROM s_articles WHERE `id` IN ({$ids})";
         $this->backup = Shopware()->Db()->fetchAssoc($sql);
 
         // Update article description, set UTF-8 string
         $sql = "UPDATE s_articles SET `description_long`= ?, `description` = ? WHERE `id` IN ({$ids})";
-        Shopware()->Db()->query($sql, array($this->longDescription, $this->shortDescription));
+        Shopware()->Db()->query($sql, [$this->longDescription, $this->shortDescription]);
     }
 
     /**
@@ -66,8 +65,8 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         parent::tearDown();
 
         // Restore old descriptions
-        $sql = "";
-        $values = array();
+        $sql = '';
+        $values = [];
         foreach ($this->backup as $key => $fields) {
             $sql .= "UPDATE s_articles SET `description_long` = ?, `description` = ? WHERE `id` = {$key};";
             $values[] = $fields['description_long'];
@@ -75,7 +74,6 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         }
         Shopware()->Db()->query($sql, $values);
     }
-
 
     /**
      * Test for long description fallback in category listing
@@ -87,14 +85,14 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         Shopware()->Container()->get('cache')->clean();
 
         // Count occurrences in category listing
-        $this->dispatch("/cat/index/sCategory/23");
+        $this->dispatch('/cat/index/sCategory/23');
         $count = substr_count($this->Response()->getBody(), $this->longDescriptionStripped);
         $this->assertEquals(2, $count);
 
         $oldValue = 'b:' . $oldValue . ';';
         Shopware()->Db()->query(
             "UPDATE s_core_config_elements SET value = ? WHERE name = 'useShortDescriptionInListing'",
-            array($oldValue)
+            [$oldValue]
         );
 
         $this->reset();

@@ -30,10 +30,9 @@ namespace Shopware\Components;
  * This class is highly based on Rand.php of Component_ZendMath
  *
  * @category  Shopware
- * @package   Shopware\Components
  *
- * @link      https://github.com/zendframework/zf2/blob/master/library/Zend/Math/Rand.php
- * @link      https://github.com/ircmaxell/RandomLib
+ * @see      https://github.com/zendframework/zf2/blob/master/library/Zend/Math/Rand.php
+ * @see      https://github.com/ircmaxell/RandomLib
  *
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://opensource.org/licenses/bsd-license.php New BSD License
@@ -43,10 +42,12 @@ abstract class Random
     /**
      * Generate random bytes
      *
-     * @param  integer $length
-     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
-     * @return string
+     * @param int  $length
+     * @param bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getBytes($length, $strong = false)
     {
@@ -60,7 +61,8 @@ abstract class Random
     /**
      * Generate random boolean
      *
-     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     * @param bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     *
      * @return bool
      */
     public static function getBoolean($strong = false)
@@ -73,11 +75,13 @@ abstract class Random
     /**
      * Generate a random integer between $min and $max inclusive
      *
-     * @param  integer $min
-     * @param  integer $max
-     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
-     * @return integer
+     * @param int  $min
+     * @param int  $max
+     * @param bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     *
      * @throws \DomainException
+     *
+     * @return int
      */
     public static function getInteger($min, $max, $strong = false)
     {
@@ -99,17 +103,18 @@ abstract class Random
      * and we fix the exponent to the bias (1023). In this way we generate
      * a float of 1.mantissa.
      *
-     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     * @param bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     *
      * @return float
      */
     public static function getFloat($strong = false)
     {
-        $bytes    = static::getBytes(7);
+        $bytes = static::getBytes(7);
         $bytes[6] = $bytes[6] | chr(0xF0);
-        $bytes   .= chr(63); // exponent bias (1023)
+        $bytes .= chr(63); // exponent bias (1023)
         list(, $float) = unpack('d', $bytes);
 
-        return ($float - 1);
+        return $float - 1;
     }
 
     /**
@@ -118,11 +123,13 @@ abstract class Random
      * Uses supplied character list for generating the new string.
      * If no character list provided - uses Base 64 character set.
      *
-     * @param  integer $length
-     * @param  string|null $charlist
-     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
-     * @return string
+     * @param int         $length
+     * @param string|null $charlist
+     * @param bool        $strong   @deprecated since 5.2.3, to be removed in 5.3.
+     *
      * @throws \DomainException
+     *
+     * @return string
      */
     public static function getString($length, $charlist = null, $strong = false)
     {
@@ -133,7 +140,8 @@ abstract class Random
         // charlist is empty or not provided
         if (empty($charlist)) {
             $numBytes = ceil($length * 0.75);
-            $bytes    = static::getBytes($numBytes);
+            $bytes = static::getBytes($numBytes);
+
             return mb_substr(rtrim(base64_encode($bytes), '='), 0, $length, '8bit');
         }
 
@@ -144,10 +152,11 @@ abstract class Random
         }
 
         $result = '';
-        for ($i = 0; $i < $length; $i++) {
-            $pos     = static::getInteger(0, $listLen - 1);
+        for ($i = 0; $i < $length; ++$i) {
+            $pos = static::getInteger(0, $listLen - 1);
             $result .= $charlist[$pos];
         }
+
         return $result;
     }
 
@@ -156,10 +165,12 @@ abstract class Random
      *
      * Charlist: a-zA-Z0-9
      *
-     * @param  integer $length
-     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
-     * @return string
+     * @param int  $length
+     * @param bool $strong @deprecated since 5.2.3, to be removed in 5.3.
+     *
      * @throws \DomainException
+     *
+     * @return string
      */
     public static function getAlphanumericString($length, $strong = false)
     {

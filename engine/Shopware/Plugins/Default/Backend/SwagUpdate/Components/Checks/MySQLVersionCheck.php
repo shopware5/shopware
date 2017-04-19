@@ -31,7 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class MySQLVersionCheck implements CheckInterface
@@ -49,7 +49,7 @@ class MySQLVersionCheck implements CheckInterface
     private $namespace;
 
     /**
-     * @param Connection $connection
+     * @param Connection       $connection
      * @param SnippetNamespace $namespace
      */
     public function __construct(Connection $connection, SnippetNamespace $namespace)
@@ -72,35 +72,35 @@ class MySQLVersionCheck implements CheckInterface
     public function check($requirement)
     {
         $conn = Shopware()->Container()->get('dbal_connection');
-        $version = $conn->fetchColumn("SELECT VERSION()");
+        $version = $conn->fetchColumn('SELECT VERSION()');
 
         $minMySQLVersion = $requirement['value'];
 
         $validVersion = (version_compare($version, $minMySQLVersion) >= 0);
 
-        $successMessage = $this->namespace->get('controller/check_mysqlversion_success', "Min MySQL Version: %s, your version %s");
-        $failMessage = $this->namespace->get('controller/check_mysqlversion_failure', "Min MySQL Version %s, your version %s");
+        $successMessage = $this->namespace->get('controller/check_mysqlversion_success', 'Min MySQL Version: %s, your version %s');
+        $failMessage = $this->namespace->get('controller/check_mysqlversion_failure', 'Min MySQL Version %s, your version %s');
 
         if ($validVersion) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message'    => sprintf(
+                'message' => sprintf(
                     $successMessage,
                     $minMySQLVersion,
                     $version
-                )
-            );
-        } else {
-            return array(
+                ),
+            ];
+        }
+
+        return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
-                'message'    => sprintf(
+                'message' => sprintf(
                     $failMessage,
                     $minMySQLVersion,
                     $version
-                )
-            );
-        }
+                ),
+            ];
     }
 }

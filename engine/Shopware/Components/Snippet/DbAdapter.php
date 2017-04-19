@@ -27,11 +27,12 @@ namespace Shopware\Components\Snippet;
 class DbAdapter extends \Enlight_Config_Adapter_DbTable
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function write(\Enlight_Config $config, $fields = null, $update = true, $force = false, $allowReset = false)
     {
         $this->overwriteWithDefaultShopValues($config);
+
         return parent::write($config, $fields, $update, $force, $allowReset);
     }
 

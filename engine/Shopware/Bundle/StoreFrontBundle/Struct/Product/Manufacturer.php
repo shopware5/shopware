@@ -28,13 +28,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manufacturer extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier of the manufacturer
+     *
      * @var int
      */
     protected $id;
@@ -93,6 +94,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
 
     /**
      * @param string $description
+     *
      * @return $this
      */
     public function setDescription($description)
@@ -112,6 +114,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -131,6 +134,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
 
     /**
      * @param string $metaDescription
+     *
      * @return $this
      */
     public function setMetaDescription($metaDescription)
@@ -150,6 +154,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
 
     /**
      * @param string $metaKeywords
+     *
      * @return $this
      */
     public function setMetaKeywords($metaKeywords)
@@ -169,6 +174,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
 
     /**
      * @param string $metaTitle
+     *
      * @return $this
      */
     public function setMetaTitle($metaTitle)
@@ -188,6 +194,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return $this
      */
     public function setName($name)
@@ -238,7 +245,7 @@ class Manufacturer extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -31,7 +31,6 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * Class CustomerService
- * @package Shopware\Bundle\AccountBundle\Service\Core
  */
 class CustomerService implements CustomerServiceInterface
 {
@@ -46,7 +45,7 @@ class CustomerService implements CustomerServiceInterface
     private $validator;
 
     /**
-     * @param ModelManager $modelManager
+     * @param ModelManager               $modelManager
      * @param CustomerValidatorInterface $validator
      */
     public function __construct(ModelManager $modelManager, CustomerValidatorInterface $validator)
@@ -57,8 +56,10 @@ class CustomerService implements CustomerServiceInterface
 
     /**
      * @param Customer $customer
-     * @return Customer
+     *
      * @throws ValidationException
+     *
+     * @return Customer
      */
     public function update(Customer $customer)
     {

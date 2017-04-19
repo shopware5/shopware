@@ -36,7 +36,7 @@ namespace Shopware\Recovery\Install;
  * </shopware>
  *
  * @category  Shopware
- * @package   Shopware\Recovery\Update
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RequirementsPath
@@ -69,21 +69,6 @@ class RequirementsPath
     }
 
     /**
-     * @param string $sourceFile
-     * @return string[]
-     */
-    private function readList($sourceFile)
-    {
-        $xml = simplexml_load_file($sourceFile);
-        $list = [];
-        foreach ($xml->files->file as $file) {
-            $list[] = (string) $file->name;
-        }
-
-        return $list;
-    }
-
-    /**
      * @return RequirementsPathResult
      */
     public function check()
@@ -100,15 +85,32 @@ class RequirementsPath
     }
 
     /**
+     * @param string $sourceFile
+     *
+     * @return string[]
+     */
+    private function readList($sourceFile)
+    {
+        $xml = simplexml_load_file($sourceFile);
+        $list = [];
+        foreach ($xml->files->file as $file) {
+            $list[] = (string) $file->name;
+        }
+
+        return $list;
+    }
+
+    /**
      * Checks a requirement
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     private function checkExits($name)
     {
         $name = $this->basePath . $name;
 
-        return (file_exists($name) && is_readable($name) && is_writeable($name));
+        return file_exists($name) && is_readable($name) && is_writeable($name);
     }
 }

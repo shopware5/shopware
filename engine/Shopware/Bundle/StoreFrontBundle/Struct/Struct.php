@@ -21,11 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Struct
@@ -43,6 +44,7 @@ abstract class Struct
 
     /**
      * @param array $array
+     *
      * @return array
      */
     private function cloneArray($array)
@@ -58,6 +60,7 @@ abstract class Struct
                 $newValue[$index] = $value;
             }
         }
+
         return $newValue;
     }
 }

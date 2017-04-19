@@ -24,12 +24,12 @@
 
 namespace   Shopware\Models\Emotion\Library;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -40,7 +40,7 @@ class Field extends ModelEntity
     /**
      * Unique identifier field of the element model.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -52,23 +52,21 @@ class Field extends ModelEntity
      * Id of the associated \Shopware\Models\Library\Component
      * which will be displayed in the shopware backend component library.
      *
-     * @var integer $componentId
+     * @var int
      *
      * @ORM\Column(name="componentID", type="integer", nullable=false)
      */
     private $componentId;
 
     /**
-     *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="field_label", type="string", length=255, nullable=false)
      */
@@ -77,7 +75,7 @@ class Field extends ModelEntity
     /**
      * The xType for the backend module.
      *
-     * @var string $xType
+     * @var string
      *
      * @ORM\Column(name="x_type", type="string", length=255, nullable=false)
      */
@@ -86,7 +84,7 @@ class Field extends ModelEntity
     /**
      * The valueType for the database
      *
-     * @var string $valueType
+     * @var string
      *
      * @ORM\Column(name="value_type", type="string", length=255, nullable=false)
      */
@@ -95,7 +93,7 @@ class Field extends ModelEntity
     /**
      * Contains the support text for the extJs field.
      *
-     * @var string $supportText
+     * @var string
      *
      * @ORM\Column(name="support_text", type="string", length=255, nullable=false)
      */
@@ -103,43 +101,47 @@ class Field extends ModelEntity
 
     /**
      * Contains the store name for a component field.
-     * @var string $supportText
+     *
+     * @var string
      * @ORM\Column(name="store", type="string", length=255, nullable=false)
      */
     private $store;
     /**
      * Contains the field name which used as display for a combo box field
-     * @var string $supportText
+     *
+     * @var string
      * @ORM\Column(name="display_field", type="string", length=255, nullable=false)
      */
     private $displayField;
 
     /**
      * Contains the field name which used as value for a combo box field
-     * @var string $valueField
+     *
+     * @var string
      * @ORM\Column(name="value_field", type="string", length=255, nullable=false)
      */
     private $valueField;
 
     /**
      * Contains the default-value for the field
-     * @var string $defaultValue
+     *
+     * @var string
      * @ORM\Column(name="default_value", type="string", length=255, nullable=false)
      */
     private $defaultValue;
 
     /**
      * Could this field be let unfilled
-     * @var integer $allowBlank
+     *
+     * @var int
      * @ORM\Column(name="allow_blank", type="integer", length=1, nullable=false)
      */
     private $allowBlank;
 
-
     /**
      * Contains the help title for the extJs field.
      *
-     * @var string $helpTitle
+     * @var string
      *
      * @ORM\Column(name="help_title", type="string", length=255, nullable=false)
      */
@@ -148,20 +150,20 @@ class Field extends ModelEntity
     /**
      * Contains the help title for the extJs field.
      *
-     * @var string $helpTitle
+     * @var string
      *
      * @ORM\Column(name="help_text", type="text",  nullable=false)
      */
     private $helpText;
 
     /**
-     * @var integer $translatable
+     * @var int
      * @ORM\Column(name="translatable", type="integer", length=1, nullable=false)
      */
     private $translatable;
 
     /**
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
@@ -179,6 +181,7 @@ class Field extends ModelEntity
 
     /**
      * Unique identifier field of the element model.
+     *
      * @return int
      */
     public function getId()

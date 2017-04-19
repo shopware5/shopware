@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\FormBundle\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormBuilderInterface;
 
 class EventExtension extends AbstractTypeExtension
 {
@@ -38,6 +38,7 @@ class EventExtension extends AbstractTypeExtension
 
     /**
      * FormTypeEventExtension constructor.
+     *
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(\Enlight_Event_EventManager $eventManager)
@@ -72,7 +73,7 @@ class EventExtension extends AbstractTypeExtension
     {
         $this->eventManager->notify('Shopware_Form_Builder', [
             'reference' => $event->getForm()->getConfig()->getType()->getName(),
-            'builder' => $event->getForm()
+            'builder' => $event->getForm(),
         ]);
     }
 }

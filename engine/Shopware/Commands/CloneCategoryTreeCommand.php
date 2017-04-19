@@ -117,6 +117,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
             $this->duplicateCategory($originalCategory->getId(), $parent->getId(), $copyArticleAssociations);
         } catch (\RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+
             return;
         }
 
@@ -130,8 +131,10 @@ class CloneCategoryTreeCommand extends ShopwareCommand
      * May print a helping table in case of multiple matches
      *
      * @param int|string $categoryInput
-     * @return Category|null
+     *
      * @throws \Exception
+     *
+     * @return Category|null
      */
     private function getCategoryFromInput($categoryInput)
     {
@@ -159,7 +162,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
         }
         if (empty($category)) {
             $this->output->writeln(
-                '<error>The given id or name "'.$categoryInput.'" does not match an existing category</error>'
+                '<error>The given id or name "' . $categoryInput . '" does not match an existing category</error>'
             );
 
             return null;
@@ -171,10 +174,11 @@ class CloneCategoryTreeCommand extends ShopwareCommand
     /**
      * Recursively duplicates categories
      *
-     * @param int $categoryId
-     * @param int $newParentId
+     * @param int  $categoryId
+     * @param int  $newParentId
      * @param bool $copyArticleAssociations
-     * @param int $newRootCategoryId
+     * @param int  $newRootCategoryId
+     *
      * @throws \RuntimeException
      */
     private function duplicateCategory(
@@ -191,7 +195,6 @@ class CloneCategoryTreeCommand extends ShopwareCommand
         $childrenStmt = $this->container->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
         $childrenStmt->execute([':parent' => $categoryId]);
         $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
-
 
         $newRootCategoryId = $newRootCategoryId ?: $newCategoryId;
 
@@ -220,13 +223,13 @@ class CloneCategoryTreeCommand extends ShopwareCommand
             $tableData[] = [
                 $category->getId(),
                 $category->getName(),
-                $this->getCategoryPath($category)
+                $this->getCategoryPath($category),
             ];
         }
 
         $table = new Table($this->output);
         $table
-            ->setHeaders(array('Id', 'Name', 'Path'))
+            ->setHeaders(['Id', 'Name', 'Path'])
             ->setRows($tableData);
         $table->render();
     }
@@ -235,6 +238,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
      * Creates a human readable category path
      *
      * @param Category $category
+     *
      * @return string
      */
     private function getCategoryPath(Category $category)
@@ -243,8 +247,8 @@ class CloneCategoryTreeCommand extends ShopwareCommand
 
         if (!$parent) {
             return $category->getName();
-        } else {
-            return $this->getCategoryPath($parent).' > '.$category->getName();
         }
+
+        return $this->getCategoryPath($parent) . ' > ' . $category->getName();
     }
 }

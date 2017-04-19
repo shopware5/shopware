@@ -1,10 +1,32 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
 use Behat\Mink\Element\NodeElement;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
 use Shopware\Tests\Mink\Helper;
 
@@ -13,14 +35,15 @@ use Shopware\Tests\Mink\Helper;
  */
 abstract class MultipleElement extends Element implements \Countable, \Iterator, \Shopware\Tests\Mink\HelperSelectorInterface
 {
-    /** @var  string */
+    /** @var string */
     private $xPath;
 
-    /** @var  NodeElement[] array */
+    /** @var NodeElement[] array */
     private $siblings;
 
     /**
      * Constructor
+     *
      * @param Session $session
      * @param Factory $factory
      */
@@ -28,11 +51,30 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     {
         parent::__construct($session, $factory);
 
-        $this->siblings = array();
+        $this->siblings = [];
     }
 
     /**
-     * @inheritdoc
+     * If an undefined property method was requested, getProperty() will be called.
+     *
+     * @param string $name
+     * @param array  $arguments
+     *
+     * @return string
+     */
+    public function __call($name, $arguments)
+    {
+        preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
+
+        if (!$property) {
+            parent::__call($name, $arguments);
+        }
+
+        return $this->getProperty(lcfirst($property[1]));
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -40,7 +82,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -49,7 +91,9 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Have to be called after get the MultipleElement to find all its siblings
-     * @param  \Behat\Mink\Element\Element $parent
+     *
+     * @param \Behat\Mink\Element\Element $parent
+     *
      * @return $this
      */
     public function setParent(\Behat\Mink\Element\Element $parent)
@@ -68,6 +112,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Returns the XPath of the current element
+     *
      * @return string
      */
     public function getXpath()
@@ -77,7 +122,9 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Sets the instance to the element to use.
-     * @param  integer         $position
+     *
+     * @param int $position
+     *
      * @return MultipleElement $this
      */
     public function setInstance($position = 0)
@@ -91,7 +138,9 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * Count elements of an object
-     * @link http://php.net/manual/en/countable.count.php
+     *
+     * @see http://php.net/manual/en/countable.count.php
+     *
      * @return int The custom count as an integer.
      *             </p>
      *             <p>
@@ -105,8 +154,10 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
-     * @link http://php.net/manual/en/iterator.current.php
-     * @return MultipleElement Can return any type.
+     *
+     * @see http://php.net/manual/en/iterator.current.php
+     *
+     * @return MultipleElement can return any type
      */
     public function current()
     {
@@ -116,8 +167,8 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Move forward to next element
-     * @link http://php.net/manual/en/iterator.next.php
-     * @return void Any returned value is ignored.
+     *
+     * @see http://php.net/manual/en/iterator.next.php
      */
     public function next()
     {
@@ -130,8 +181,10 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the key of the current element
-     * @link http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
+     *
+     * @see http://php.net/manual/en/iterator.key.php
+     *
+     * @return mixed scalar on success, or null on failure
      */
     public function key()
     {
@@ -141,9 +194,11 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Checks if current position is valid
-     * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     *                 Returns true on success or false on failure.
+     *
+     * @see http://php.net/manual/en/iterator.valid.php
+     *
+     * @return bool The return value will be casted to boolean and then evaluated.
+     *              Returns true on success or false on failure.
      */
     public function valid()
     {
@@ -153,8 +208,8 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Rewind the Iterator to the first element
-     * @link http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
+     *
+     * @see http://php.net/manual/en/iterator.rewind.php
      */
     public function rewind()
     {
@@ -171,30 +226,15 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
-     * If an undefined property method was requested, getProperty() will be called.
-     * @param string $name
-     * @param array $arguments
-     * @return string
-     */
-    public function __call($name, $arguments)
-    {
-        preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
-
-        if (!$property) {
-            parent::__call($name, $arguments);
-        }
-
-        return $this->getProperty(lcfirst($property[1]));
-    }
-
-    /**
      * Default method to get an element property
+     *
      * @param string $property
+     *
      * @return null|string
      */
     public function getProperty($property)
     {
-        $element = Helper::findElements($this, array($property));
+        $element = Helper::findElements($this, [$property]);
 
         return $element[$property]->getText();
     }

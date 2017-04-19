@@ -24,11 +24,10 @@
 
 namespace Shopware\Models\Order\Document;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware order document type model represents a single order document.
  * <br>
  * The Shopware order document type model represents a row of the core_documents table.
@@ -42,7 +41,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Type extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -51,56 +50,56 @@ class Type extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $template
+     * @var string
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=false)
      */
     private $template;
 
     /**
-     * @var string $numbers
+     * @var string
      *
      * @ORM\Column(name="numbers", type="string", length=25, nullable=false)
      */
     private $numbers;
 
     /**
-     * @var integer $left
+     * @var int
      *
      * @ORM\Column(name="left", type="integer", nullable=false)
      */
     private $left;
 
     /**
-     * @var integer $right
+     * @var int
      *
      * @ORM\Column(name="right", type="integer", nullable=false)
      */
     private $right;
 
     /**
-     * @var integer $top
+     * @var int
      *
      * @ORM\Column(name="top", type="integer", nullable=false)
      */
     private $top;
 
     /**
-     * @var integer $bottom
+     * @var int
      *
      * @ORM\Column(name="bottom", type="integer", nullable=false)
      */
     private $bottom;
 
     /**
-     * @var integer $pageBreak
+     * @var int
      *
      * @ORM\Column(name="pagebreak", type="integer", nullable=false)
      */
@@ -109,7 +108,7 @@ class Type extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -120,11 +119,13 @@ class Type extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Type
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -142,11 +143,13 @@ class Type extends ModelEntity
      * Set template
      *
      * @param string $template
+     *
      * @return Type
      */
     public function setTemplate($template)
     {
         $this->template = $template;
+
         return $this;
     }
 
@@ -164,11 +167,13 @@ class Type extends ModelEntity
      * Set numbers
      *
      * @param string $numbers
+     *
      * @return Type
      */
     public function setNumbers($numbers)
     {
         $this->numbers = $numbers;
+
         return $this;
     }
 
@@ -185,19 +190,21 @@ class Type extends ModelEntity
     /**
      * Set left
      *
-     * @param integer $left
+     * @param int $left
+     *
      * @return Type
      */
     public function setLeft($left)
     {
         $this->left = $left;
+
         return $this;
     }
 
     /**
      * Get left
      *
-     * @return integer
+     * @return int
      */
     public function getLeft()
     {
@@ -207,19 +214,21 @@ class Type extends ModelEntity
     /**
      * Set right
      *
-     * @param integer $right
+     * @param int $right
+     *
      * @return Type
      */
     public function setRight($right)
     {
         $this->right = $right;
+
         return $this;
     }
 
     /**
      * Get right
      *
-     * @return integer
+     * @return int
      */
     public function getRight()
     {
@@ -229,19 +238,21 @@ class Type extends ModelEntity
     /**
      * Set top
      *
-     * @param integer $top
+     * @param int $top
+     *
      * @return Type
      */
     public function setTop($top)
     {
         $this->top = $top;
+
         return $this;
     }
 
     /**
      * Get top
      *
-     * @return integer
+     * @return int
      */
     public function getTop()
     {
@@ -251,19 +262,21 @@ class Type extends ModelEntity
     /**
      * Set bottom
      *
-     * @param integer $bottom
+     * @param int $bottom
+     *
      * @return Type
      */
     public function setBottom($bottom)
     {
         $this->bottom = $bottom;
+
         return $this;
     }
 
     /**
      * Get bottom
      *
-     * @return integer
+     * @return int
      */
     public function getBottom()
     {
@@ -273,19 +286,21 @@ class Type extends ModelEntity
     /**
      * Set pageBreak
      *
-     * @param integer $pageBreak
+     * @param int $pageBreak
+     *
      * @return Type
      */
     public function setPageBreak($pageBreak)
     {
         $this->pageBreak = $pageBreak;
+
         return $this;
     }
 
     /**
      * Get pageBreak
      *
-     * @return integer
+     * @return int
      */
     public function getPageBreak()
     {

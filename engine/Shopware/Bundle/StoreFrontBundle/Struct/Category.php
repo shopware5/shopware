@@ -28,7 +28,7 @@ use Shopware\Models\Category\Category as CategoryEntity;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Category extends Extendable implements \JsonSerializable
@@ -89,17 +89,17 @@ class Category extends Extendable implements \JsonSerializable
     protected $template;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $blog;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $displayFacets;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $displayInNavigation;
 
@@ -130,6 +130,7 @@ class Category extends Extendable implements \JsonSerializable
 
     /**
      * @param CategoryEntity $category
+     *
      * @return Category
      */
     public static function createFromCategoryEntity(CategoryEntity $category)
@@ -315,7 +316,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $displayFacets
+     * @param bool $displayFacets
      */
     public function setDisplayFacets($displayFacets)
     {
@@ -323,7 +324,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $displayInNavigation
+     * @param bool $displayInNavigation
      */
     public function setDisplayInNavigation($displayInNavigation)
     {
@@ -331,7 +332,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $blog
+     * @param bool $blog
      */
     public function setBlog($blog)
     {
@@ -355,7 +356,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isBlog()
     {
@@ -363,7 +364,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayFacets()
     {
@@ -371,7 +372,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayInNavigation()
     {
@@ -379,7 +380,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

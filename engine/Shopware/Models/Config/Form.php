@@ -24,19 +24,33 @@
 
 namespace Shopware\Models\Config;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_core_config_forms")
  * @ORM\Entity
  */
 class Form extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var \Shopware\Models\Plugin\Plugin
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="configForms")
+     * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
+     */
+    protected $plugin;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $translations;
+    /**
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -44,7 +58,7 @@ class Form extends ModelEntity
     private $id;
 
     /**
-     * @var integer $parentId
+     * @var int
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId;
@@ -57,37 +71,37 @@ class Form extends ModelEntity
     private $parent;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $label
+     * @var string
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
-     * @var string $description
+     * @var string
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $description;
 
     /**
-     * @var integer $pluginId
+     * @var int
      * @ORM\Column(name="plugin_id", type="integer", nullable=false)
      */
     private $pluginId;
 
     /**
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
-     * @var Element[] $elements
+     * @var Element[]
      * @ORM\OneToMany(targetEntity="Element", mappedBy="form", cascade={"all"})
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
@@ -101,20 +115,6 @@ class Form extends ModelEntity
     private $children;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="configForms")
-     * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
-     */
-    protected $plugin;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $translations;
-
-    /**
      * Class constructor.
      */
     public function __construct()
@@ -126,7 +126,7 @@ class Form extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -137,11 +137,13 @@ class Form extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Form
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -157,11 +159,13 @@ class Form extends ModelEntity
 
     /**
      * @param $label
+     *
      * @return Form
      */
     public function setLabel($label)
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -177,11 +181,13 @@ class Form extends ModelEntity
      * Set description
      *
      * @param string $description
+     *
      * @return string
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -196,7 +202,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -204,7 +210,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param integer $position
+     * @param int $position
      */
     public function setPosition($position)
     {
@@ -213,43 +219,49 @@ class Form extends ModelEntity
 
     /**
      * @param string $name
+     *
      * @return Element
      */
     public function getElement($name)
     {
-        /** @var $value Element */
+        /* @var $value Element */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 return $element;
             }
         }
+
         return null;
     }
 
     /**
      * @param string $type
      * @param string $name
-     * @param array $options
+     * @param array  $options
+     *
      * @return Form
      */
     public function setElement($type, $name, $options = null)
     {
-        /** @var $value Element */
+        /* @var $value Element */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 $element->setType($type);
                 if ($options !== null) {
                     $element->setOptions($options);
                 }
+
                 return $this;
             }
         }
         $this->addElement($type, $name, $options);
+
         return $this;
     }
 
     /**
      * @param string|Element $element
+     *
      * @return Form
      */
     public function removeElement($element)
@@ -260,13 +272,15 @@ class Form extends ModelEntity
         if ($element !== null) {
             $this->elements->removeElement($element);
         }
+
         return $this;
     }
 
     /**
      * @param Element|string $element
-     * @param string $name
-     * @param array $options
+     * @param string         $name
+     * @param array          $options
+     *
      * @return \Shopware\Models\Config\Form
      */
     public function addElement($element, $name = null, $options = null)
@@ -278,6 +292,7 @@ class Form extends ModelEntity
         }
         $element->setForm($this);
         $this->elements->add($element);
+
         return $this;
     }
 
@@ -299,6 +314,7 @@ class Form extends ModelEntity
 
     /**
      * @deprecated
+     *
      * @return Form
      */
     public function save()
@@ -307,7 +323,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param integer $pluginId
+     * @param int $pluginId
      */
     public function setPluginId($pluginId)
     {
@@ -315,7 +331,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPluginId()
     {
@@ -364,12 +380,14 @@ class Form extends ModelEntity
 
     /**
      * @param $translation FormTranslation
+     *
      * @return \Shopware\Models\Config\Form
      */
     public function addTranslation($translation)
     {
         $this->translations->add($translation);
         $translation->setForm($this);
+
         return $this;
     }
 

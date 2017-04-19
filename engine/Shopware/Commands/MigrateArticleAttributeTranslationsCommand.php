@@ -24,17 +24,14 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
-use Shopware\Models\Attribute\Article as ArticleAttribute;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Migrates article attribute translations from Shopware 5.1 to Shopware 5.2.
- *
- * @package Shopware\Commands
  */
 class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
 {
@@ -54,7 +51,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     private $updateStatement;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -64,7 +61,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -83,7 +80,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
 
     /**
      * @param ProgressBar $progressBar
-     * @param int $maxId
+     * @param int         $maxId
      */
     private function migrate(ProgressBar $progressBar, $maxId)
     {
@@ -140,6 +137,7 @@ EOL
 
     /**
      * @param string $underscored
+     *
      * @return string
      */
     private function underscoreToCamelCase($underscored)
@@ -152,6 +150,7 @@ EOL
     /**
      * @param array $data
      * @param array $columns
+     *
      * @return null|array
      */
     private function filter($data, array $columns)
@@ -180,8 +179,9 @@ EOL
     }
 
     /**
-     * @param array[] $rows
+     * @param array[]  $rows
      * @param string[] $columns
+     *
      * @return string[] indexed by translation id
      */
     private function getUpdatedTranslations($rows, $columns)

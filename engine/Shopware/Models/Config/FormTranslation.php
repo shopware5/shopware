@@ -24,48 +24,15 @@
 
 namespace Shopware\Models\Config;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_core_config_form_translations")
  * @ORM\Entity
  */
 class FormTranslation extends ModelEntity
 {
-    /**
-     * @var integer $id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string $label
-     * @ORM\Column(name="label", type="string", nullable=true)
-     */
-    private $label = null;
-
-    /**
-     * @var string $description
-     * @ORM\Column(name="description", type="string", nullable=true)
-     */
-    private $description = null;
-
-    /**
-     * @var integer $formId
-     * @ORM\Column(name="form_id", type="integer", nullable=false)
-     */
-    private $formId;
-
-    /**
-     * @var integer $localeId
-     * @ORM\Column(name="locale_id", type="integer", nullable=false)
-     */
-    private $localeId;
-
     /**
      * @var \Shopware\Models\Config\Form
      *
@@ -77,17 +44,48 @@ class FormTranslation extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Shop\Locale $locale
+     * @var \Shopware\Models\Shop\Locale
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
     protected $locale;
+    /**
+     * @var int
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="label", type="string", nullable=true)
+     */
+    private $label = null;
+
+    /**
+     * @var string
+     * @ORM\Column(name="description", type="string", nullable=true)
+     */
+    private $description = null;
+
+    /**
+     * @var int
+     * @ORM\Column(name="form_id", type="integer", nullable=false)
+     */
+    private $formId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="locale_id", type="integer", nullable=false)
+     */
+    private $localeId;
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -96,11 +94,13 @@ class FormTranslation extends ModelEntity
 
     /**
      * @param $label
+     *
      * @return Form
      */
     public function setLabel($label)
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -116,11 +116,13 @@ class FormTranslation extends ModelEntity
      * Set description
      *
      * @param string $description
+     *
      * @return string
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 

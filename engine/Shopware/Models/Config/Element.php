@@ -24,12 +24,11 @@
 
 namespace Shopware\Models\Config;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_core_config_elements")
  * @ORM\Entity
  */
@@ -39,7 +38,16 @@ class Element extends ModelEntity
     const SCOPE_SHOP = 1;
 
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $translations;
+
+    /**
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -47,80 +55,72 @@ class Element extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $value
+     * @var string
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
 
     /**
-     * @var string $description
+     * @var string
      * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
     /**
-     * @var string $label
+     * @var string
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
-     * @var string $type
+     * @var string
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     private $type;
 
     /**
-     * @var boolean $required
+     * @var bool
      * @ORM\Column(name="required", type="boolean")
      */
     private $required = false;
 
     /**
-     * @var string $position
+     * @var string
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
-     * @var integer $scope
+     * @var int
      * @ORM\Column(name="scope", type="integer", nullable=false)
      */
     private $scope = 0;
 
     /**
-     * @var array $options
+     * @var array
      * @ORM\Column(name="options", type="array")
      */
     private $options;
 
     /**
-     * @var Form $form
+     * @var Form
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="elements")
      * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
     private $form;
 
     /**
-     * @var Value[] $values
+     * @var Value[]
      * @ORM\OneToMany(targetEntity="Value", mappedBy="element", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="element_id")
      */
     private $values;
-
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $translations;
 
     /**
      * Class constructor.
@@ -141,7 +141,7 @@ class Element extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -152,11 +152,13 @@ class Element extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Element
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -174,11 +176,13 @@ class Element extends ModelEntity
      * Set value
      *
      * @param mixed $value
+     *
      * @return Element
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -196,11 +200,13 @@ class Element extends ModelEntity
      * Set description
      *
      * @param string $description
+     *
      * @return Element
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -218,11 +224,13 @@ class Element extends ModelEntity
      * Set label
      *
      * @param string $label
+     *
      * @return Element
      */
     public function setLabel($label)
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -257,7 +265,7 @@ class Element extends ModelEntity
      */
     public function setOptions(array $options)
     {
-        $fields = array('label', 'value', 'description', 'required', 'scope', 'position');
+        $fields = ['label', 'value', 'description', 'required', 'scope', 'position'];
         foreach ($fields as $field) {
             if (array_key_exists($field, $options)) {
                 $method = 'set' . ucfirst($field);
@@ -279,11 +287,13 @@ class Element extends ModelEntity
 
     /**
      * @param string $position
+     *
      * @return Element
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
@@ -296,17 +306,19 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param boolean $required
+     * @param bool $required
+     *
      * @return Element
      */
     public function setRequired($required)
     {
         $this->required = $required;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getRequired()
     {
@@ -315,11 +327,13 @@ class Element extends ModelEntity
 
     /**
      * @param int $scope
+     *
      * @return Element
      */
     public function setScope($scope)
     {
         $this->scope = $scope;
+
         return $this;
     }
 
@@ -333,11 +347,13 @@ class Element extends ModelEntity
 
     /**
      * @param string $type
+     *
      * @return Element
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -351,11 +367,13 @@ class Element extends ModelEntity
 
     /**
      * @param Value[] $values
+     *
      * @return Element
      */
     public function setValues($values)
     {
         $this->values = $values;
+
         return $this;
     }
 
@@ -385,12 +403,14 @@ class Element extends ModelEntity
 
     /**
      * @param \Shopware\Models\Config\ElementTranslation $translation
+     *
      * @return \Shopware\Models\Config\Element
      */
     public function addTranslation($translation)
     {
         $this->translations->add($translation);
         $translation->setElement($this);
+
         return $this;
     }
 

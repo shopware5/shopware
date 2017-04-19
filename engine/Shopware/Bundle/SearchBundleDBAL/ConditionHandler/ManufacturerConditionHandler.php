@@ -28,12 +28,12 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerConditionHandler implements ConditionHandlerInterface
@@ -43,7 +43,7 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof ManufacturerCondition);
+        return $condition instanceof ManufacturerCondition;
     }
 
     /**
@@ -62,7 +62,7 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
              AND product.supplierID IN (:manufacturer)'
         );
 
-        /** @var ManufacturerCondition $condition */
+        /* @var ManufacturerCondition $condition */
         $query->setParameter(
             ':manufacturer',
             $condition->getManufacturerIds(),

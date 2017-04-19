@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\CorePasswordManager
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -42,11 +42,11 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
-            'enable'  => false,
-            'update'  => true
-        );
+            'enable' => false,
+            'update' => true,
+        ];
     }
 
     /**
@@ -63,77 +63,15 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     }
 
     /**
-     * Registers all necessary events and hooks.
-     */
-     private function subscribeEvents()
-     {
-         $this->subscribeEvent(
-            'Enlight_Bootstrap_InitResource_PasswordEncoder',
-            'onInitResourcePasswordEncoder'
-        );
-
-         $this->subscribeEvent(
-            'Shopware_Components_Password_Manager_AddEncoder',
-            'onAddEncoder'
-        );
-     }
-
-    /**
-     * Crate config form elements
-     */
-    protected function createForm()
-    {
-        $form = $this->Form();
-
-        $form->setElement('combo', 'defaultPasswordEncoderName', array(
-            'label' => 'Passwörter verschlüsseln mit...',
-            'editable' => false,
-            'value' => 'Auto',
-            'valueField' => 'id', 'displayField'=>'id',
-            'triggerAction' => 'all',
-            'store' => 'base.EncoderName'
-        ));
-
-        $form->setElement('boolean', 'liveMigration', array(
-            'description' => 'Sollen vorhandene Benutzer-Passwörter mit anderen Passwort-Algorithmen beim nächsten Einloggen erneut gehasht werden? Das geschieht voll automatisch im Hintergrund, so dass die Passwörter sukzessiv auf einen neuen Algorithmus umgestellt werden können.',
-            'label' => 'Live Migration',
-            'value' => true,
-        ));
-
-        $form->setElement('number', 'Bcrypt-Rechenaufwand', array(
-            'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
-            'label'    => 'bcrypt Cost',
-            'minValue' => 4,
-            'maxValue' => 31,
-            'required' => true,
-            'value'    => 10
-        ));
-
-        $form->setElement('number', 'sha256iterations', array(
-            'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
-            'label'    => 'Sha256 Iterationen',
-            'minValue' => 1,
-            'maxValue' => 1000000,
-            'required' => true,
-            'value'    => 100000
-        ));
-
-        $form->setLabel('Passwörter');
-        $form->setParent(
-            $this->Forms()->findOneBy(array('name' => 'Core'))
-        );
-    }
-
-    /**
      * @return array
      */
     public function getBcryptOptions()
     {
         $config = $this->Config();
 
-        $options = array(
-            'cost' => $config['bcryptCost']
-        );
+        $options = [
+            'cost' => $config['bcryptCost'],
+        ];
 
         return $options;
     }
@@ -145,16 +83,17 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     {
         $config = $this->Config();
 
-        $options = array(
+        $options = [
             'iterations' => $config['sha256iterations'],
-            'salt_len' => 22
-        );
+            'salt_len' => 22,
+        ];
 
         return $options;
     }
 
     /**
      * @param Enlight_Event_EventArgs $args
+     *
      * @return \Shopware\Components\Password\Manager
      */
     public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args)
@@ -162,8 +101,8 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         // Get a list of all available hashes
         $availableHasher = Shopware()->Events()->filter(
             'Shopware_Components_Password_Manager_AddEncoder',
-            array(),
-            array('subject' => $this)
+            [],
+            ['subject' => $this]
         );
 
         $passwordManager = new \Shopware\Components\Password\Manager(
@@ -179,7 +118,9 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
 
     /**
      * This method registers shopware's default hash algorithm
+     *
      * @param Enlight_Event_EventArgs $args
+     *
      * @return array
      */
     public function onAddEncoder(\Enlight_Event_EventArgs $args)
@@ -194,4 +135,66 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
 
         return $hashes;
     }
+
+    /**
+     * Crate config form elements
+     */
+    protected function createForm()
+    {
+        $form = $this->Form();
+
+        $form->setElement('combo', 'defaultPasswordEncoderName', [
+            'label' => 'Passwörter verschlüsseln mit...',
+            'editable' => false,
+            'value' => 'Auto',
+            'valueField' => 'id', 'displayField' => 'id',
+            'triggerAction' => 'all',
+            'store' => 'base.EncoderName',
+        ]);
+
+        $form->setElement('boolean', 'liveMigration', [
+            'description' => 'Sollen vorhandene Benutzer-Passwörter mit anderen Passwort-Algorithmen beim nächsten Einloggen erneut gehasht werden? Das geschieht voll automatisch im Hintergrund, so dass die Passwörter sukzessiv auf einen neuen Algorithmus umgestellt werden können.',
+            'label' => 'Live Migration',
+            'value' => true,
+        ]);
+
+        $form->setElement('number', 'Bcrypt-Rechenaufwand', [
+            'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
+            'label' => 'bcrypt Cost',
+            'minValue' => 4,
+            'maxValue' => 31,
+            'required' => true,
+            'value' => 10,
+        ]);
+
+        $form->setElement('number', 'sha256iterations', [
+            'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
+            'label' => 'Sha256 Iterationen',
+            'minValue' => 1,
+            'maxValue' => 1000000,
+            'required' => true,
+            'value' => 100000,
+        ]);
+
+        $form->setLabel('Passwörter');
+        $form->setParent(
+            $this->Forms()->findOneBy(['name' => 'Core'])
+        );
+    }
+
+     /**
+      * Registers all necessary events and hooks.
+      */
+     private function subscribeEvents()
+     {
+         $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_PasswordEncoder',
+            'onInitResourcePasswordEncoder'
+        );
+
+         $this->subscribeEvent(
+            'Shopware_Components_Password_Manager_AddEncoder',
+            'onAddEncoder'
+        );
+     }
 }

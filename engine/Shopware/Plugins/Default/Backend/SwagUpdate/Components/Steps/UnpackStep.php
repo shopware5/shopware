@@ -24,13 +24,13 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 
-use ShopwarePlugins\SwagUpdate\Components\Archive\Zip;
 use ShopwarePlugins\SwagUpdate\Components\Archive\Entry\Zip as ZipEntry;
+use ShopwarePlugins\SwagUpdate\Components\Archive\Zip;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Steps;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class UnpackStep
@@ -51,16 +51,17 @@ class UnpackStep
      */
     public function __construct($source, $destinationDir)
     {
-        $this->source         = $source;
+        $this->source = $source;
         $this->destinationDir = rtrim($destinationDir, '/') . '/';
     }
 
     /**
      * @param $offset
      *
-     * @return FinishResult|ValidResult
      * @throws \RuntimeException
      * @throws \Exception
+     *
+     * @return FinishResult|ValidResult
      */
     public function run($offset)
     {

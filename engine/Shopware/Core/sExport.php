@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
  * Deprecated Shopware Class to provide article export feeds
  *
  * @category  Shopware
- * @package   Shopware\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sExport
@@ -47,11 +47,6 @@ class sExport
 
     public $sCurrency;
     public $sCustomergroup;
-
-    /**
-     * @var array Contains shop data in array format
-     */
-    private $shopData;
 
     /**
      * @deprecated Use $shopData instead
@@ -89,6 +84,11 @@ class sExport
     protected $articleMediaAlbum = null;
 
     /**
+     * @var array Contains shop data in array format
+     */
+    private $shopData;
+
+    /**
      * @var ContextServiceInterface
      */
     private $contextService;
@@ -108,14 +108,14 @@ class sExport
      */
     private $config;
 
-    /** @var StoreFrontBundle\Service\ConfiguratorServiceInterface  */
+    /** @var StoreFrontBundle\Service\ConfiguratorServiceInterface */
     private $configuratorService;
 
     /**
-     * @param ContextServiceInterface $contextService
-     * @param AdditionalTextServiceInterface $additionalTextService
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param Shopware_Components_Config $config
+     * @param ContextServiceInterface                               $contextService
+     * @param AdditionalTextServiceInterface                        $additionalTextService
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql               $db
+     * @param Shopware_Components_Config                            $config
      * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
      */
     public function __construct(
@@ -136,22 +136,23 @@ class sExport
 
     /**
      * @param $currency
+     *
      * @return array
      */
     public function sGetCurrency($currency)
     {
-        static $currencyCache = array();
+        static $currencyCache = [];
 
         if (empty($currency)) {
-            $currency = $this->shopData["currency_id"];
+            $currency = $this->shopData['currency_id'];
         }
         if (isset($currencyCache[$currency])) {
             return $currencyCache[$currency];
         }
         if (is_numeric($currency)) {
-            $sql = "id=".$currency;
+            $sql = 'id=' . $currency;
         } elseif (is_string($currency)) {
-            $sql = "currency=".$this->db->quote(trim($currency));
+            $sql = 'currency=' . $this->db->quote(trim($currency));
         } else {
             return false;
         }
@@ -167,21 +168,22 @@ class sExport
 
     /**
      * @param $customerGroup
+     *
      * @return bool
      */
     public function sGetCustomergroup($customerGroup)
     {
-        static $cache = array();
+        static $cache = [];
         if (empty($customerGroup)) {
-            $customerGroup = $this->sMultishop["defaultcustomergroup"];
+            $customerGroup = $this->sMultishop['defaultcustomergroup'];
         }
         if (isset($cache[$customerGroup])) {
             return $cache[$customerGroup];
         }
         if (is_int($customerGroup)) {
-            $sql = "id=".$customerGroup;
+            $sql = 'id=' . $customerGroup;
         } elseif (is_string($customerGroup)) {
-            $sql = "groupkey=".$this->db->quote(trim($customerGroup));
+            $sql = 'groupkey=' . $this->db->quote(trim($customerGroup));
         } else {
             return false;
         }
@@ -196,80 +198,25 @@ class sExport
     }
 
     /**
-     * @param int $id
-     * @return mixed
-     */
-    private function getShopData($id)
-    {
-        static $cache = array();
-
-        if (isset($cache[$id])) {
-            return $cache[$id];
-        }
-
-        if (empty($id)) {
-            $sql = 's.`default`=1';
-        } elseif (is_numeric($id)) {
-            $sql = 's.id=' . $id;
-        } elseif (is_string($id)) {
-            $sql = 's.name=' . $this->db->quote(trim($id));
-        }
-
-        $cache[$id] = $this->db->fetchRow("
-            SELECT
-              s.id,
-              s.main_id,
-              s.name,
-              s.title,
-              COALESCE (s.host, m.host) AS host,
-              COALESCE (s.base_path, m.base_path) AS base_path,
-              COALESCE (s.base_url, m.base_url) AS base_url,
-              COALESCE (s.hosts, m.hosts) AS hosts,
-              GREATEST (COALESCE (s.secure, 0), COALESCE (m.secure, 0)) AS secure,
-              GREATEST (COALESCE (s.always_secure, 0), COALESCE (m.always_secure, 0)) AS always_secure,
-              COALESCE (s.secure_host, m.secure_host) AS secure_host,
-              COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
-              COALESCE (s.template_id, m.template_id) AS template_id,
-              COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
-              s.category_id,
-              s.currency_id,
-              s.customer_group_id,
-              s.fallback_id,
-              s.customer_scope,
-              s.`default`,
-              s.active
-            FROM s_core_shops s
-            LEFT JOIN s_core_shops m
-              ON m.id=s.main_id
-              OR (s.main_id IS NULL AND m.id=s.id)
-            LEFT JOIN s_core_shop_currencies d
-              ON d.shop_id=m.id
-            WHERE s.active = 1 AND $sql
-            GROUP BY s.id
-        ");
-
-        return $cache[$id];
-    }
-
-    /**
      * @deprecated Use getShopData
      *
      * @param $language
+     *
      * @return mixed
      */
     public function sGetMultishop($language)
     {
-        static $cache = array();
+        static $cache = [];
 
         if (isset($cache[$language])) {
             return $cache[$language];
         }
         if (empty($language)) {
-            $sql = "s.`default`=1";
+            $sql = 's.`default`=1';
         } elseif (is_numeric($language)) {
-            $sql = "s.id=".$language;
+            $sql = 's.id=' . $language;
         } elseif (is_string($language)) {
-            $sql = "s.name=".$this->db->quote(trim($language));
+            $sql = 's.name=' . $this->db->quote(trim($language));
         }
 
         $cache[$language] = $this->db->fetchRow("
@@ -296,31 +243,6 @@ class sExport
         return $cache[$language];
     }
 
-    /**
-     * Helper function to get access to the article repository.
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getArticleRepository()
-    {
-        if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-        }
-        return $this->articleRepository;
-    }
-
-    /**
-     * Helper function to get access to the media repository.
-     * @return \Shopware\Models\Media\Repository
-     */
-    private function getMediaRepository()
-    {
-        if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
-        }
-        return $this->mediaRepository;
-    }
-
-
     public function sInitSettings()
     {
         $hash = $this->db->quote($this->sHash);
@@ -343,78 +265,78 @@ class sExport
         $this->sSettings = $this->db->fetchRow($sql);
 
         if (empty($this->sSettings)) {
-            header("HTTP/1.0 404 Not Found");
-            die("Item Export not found");
+            header('HTTP/1.0 404 Not Found');
+            die('Item Export not found');
         }
 
-        $this->sSettings["dec_separator"] = ",";
-        switch ($this->sSettings["formatID"]) {
+        $this->sSettings['dec_separator'] = ',';
+        switch ($this->sSettings['formatID']) {
             case 1:
-                $this->sSettings["fieldmark"] = "\"";
-                $this->sSettings["escaped_fieldmark"] = "\"\"";
-                $this->sSettings["separator"] = ";";
-                $this->sSettings["escaped_separator"] = ";";
-                $this->sSettings["line_separator"] = "\r\n";
-                $this->sSettings["escaped_line_separator"] = "\r\n";
+                $this->sSettings['fieldmark'] = '"';
+                $this->sSettings['escaped_fieldmark'] = '""';
+                $this->sSettings['separator'] = ';';
+                $this->sSettings['escaped_separator'] = ';';
+                $this->sSettings['line_separator'] = "\r\n";
+                $this->sSettings['escaped_line_separator'] = "\r\n";
                 break;
             case 2:
-                $this->sSettings["fieldmark"] = "";
-                $this->sSettings["escaped_fieldmark"] = "";
-                $this->sSettings["separator"] = "\t";
-                $this->sSettings["escaped_separator"] = "";
-                $this->sSettings["line_separator"] = "\r\n";
-                $this->sSettings["escaped_line_separator"] = "";
+                $this->sSettings['fieldmark'] = '';
+                $this->sSettings['escaped_fieldmark'] = '';
+                $this->sSettings['separator'] = "\t";
+                $this->sSettings['escaped_separator'] = '';
+                $this->sSettings['line_separator'] = "\r\n";
+                $this->sSettings['escaped_line_separator'] = '';
                 break;
             case 4:
-                $this->sSettings["fieldmark"] = "";
-                $this->sSettings["escaped_fieldmark"] = "";
-                $this->sSettings["separator"] = "|";
-                $this->sSettings["escaped_separator"] = "";
-                $this->sSettings["line_separator"] = "\r\n";
-                $this->sSettings["escaped_line_separator"] = "";
+                $this->sSettings['fieldmark'] = '';
+                $this->sSettings['escaped_fieldmark'] = '';
+                $this->sSettings['separator'] = '|';
+                $this->sSettings['escaped_separator'] = '';
+                $this->sSettings['line_separator'] = "\r\n";
+                $this->sSettings['escaped_line_separator'] = '';
                 break;
             default:
-                $this->sSettings["fieldmark"] = null;
-                $this->sSettings["escaped_fieldmark"] = null;
-                $this->sSettings["separator"] = null;
-                $this->sSettings["escaped_separator"] = null;
-                $this->sSettings["line_separator"] = null;
-                $this->sSettings["escaped_line_separator"] = null;
+                $this->sSettings['fieldmark'] = null;
+                $this->sSettings['escaped_fieldmark'] = null;
+                $this->sSettings['separator'] = null;
+                $this->sSettings['escaped_separator'] = null;
+                $this->sSettings['line_separator'] = null;
+                $this->sSettings['escaped_line_separator'] = null;
         }
 
-        if (!empty($this->sSettings['encodingID']) && $this->sSettings['encodingID']==2) {
+        if (!empty($this->sSettings['encodingID']) && $this->sSettings['encodingID'] == 2) {
             $this->sSettings['encoding'] = 'UTF-8';
         } else {
             $this->sSettings['encoding'] = 'ISO-8859-1';
         }
 
-        if (empty($this->sSettings["languageID"])) {
+        if (empty($this->sSettings['languageID'])) {
             $defaultShop = $shopRepository->getDefault();
             //just a fall back for update reasons
-            $this->sSettings["languageID"] = $defaultShop->getId();
+            $this->sSettings['languageID'] = $defaultShop->getId();
         }
 
-        $shop = $shopRepository->getActiveById($this->sSettings["languageID"]);
-        $this->shopData = $this->getShopData($this->sSettings["languageID"]);
+        $shop = $shopRepository->getActiveById($this->sSettings['languageID']);
+        $this->shopData = $this->getShopData($this->sSettings['languageID']);
 
-        $this->sLanguage = $this->sGetMultishop($this->sSettings["languageID"]);
+        $this->sLanguage = $this->sGetMultishop($this->sSettings['languageID']);
         $this->sMultishop = $this->sLanguage;
 
-        if (empty($this->sSettings["categoryID"])) {
-            $this->sSettings["categoryID"] = $this->shopData["category_id"];
+        if (empty($this->sSettings['categoryID'])) {
+            $this->sSettings['categoryID'] = $this->shopData['category_id'];
         }
-        if (empty($this->sSettings["customergroupID"])) {
-            $this->sSettings["customergroupID"] = $shop->getCustomerGroup()->getKey();
+        if (empty($this->sSettings['customergroupID'])) {
+            $this->sSettings['customergroupID'] = $shop->getCustomerGroup()->getKey();
         } else {
-            $this->sSettings["customergroupID"] = (int) $this->sSettings["customergroupID"];
+            $this->sSettings['customergroupID'] = (int) $this->sSettings['customergroupID'];
         }
-        if (empty($this->sSettings["currencyID"])) {
-            $this->sSettings["currencyID"] = $this->shopData["currency_id"];
+        if (empty($this->sSettings['currencyID'])) {
+            $this->sSettings['currencyID'] = $this->shopData['currency_id'];
         }
 
-        $this->sCurrency = $this->sGetCurrency($this->sSettings["currencyID"]);
+        $this->sCurrency = $this->sGetCurrency($this->sSettings['currencyID']);
 
-        $this->sCustomergroup = $this->sGetCustomergroup($this->sSettings["customergroupID"]);
+        $this->sCustomergroup = $this->sGetCustomergroup($this->sSettings['customergroupID']);
 
         $this->articleMediaAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
@@ -431,38 +353,38 @@ class sExport
 
     public function sInitSmarty()
     {
-        $this->sSYSTEM->sSMARTY->compile_id = "export_".$this->sFeedID;
+        $this->sSYSTEM->sSMARTY->compile_id = 'export_' . $this->sFeedID;
 
         $this->sSYSTEM->sSMARTY->cache_lifetime = 0;
         $this->sSYSTEM->sSMARTY->debugging = 0;
         $this->sSYSTEM->sSMARTY->caching = 0;
 
-        $this->sSmarty->registerPlugin('modifier', 'htmlentities', array(&$this, 'sHtmlEntities'));
-        $this->sSmarty->registerPlugin('modifier', 'format', array(&$this, 'sFormatString'));
-        $this->sSmarty->registerPlugin('modifier', 'escape', array(&$this, 'sEscapeString'));
-        $this->sSmarty->registerPlugin('modifier', 'category', array(&$this, 'sGetArticleCategoryPath'));
-        $this->sSmarty->registerPlugin('modifier', 'link', array(&$this, 'sGetArticleLink'));
-        $this->sSmarty->registerPlugin('modifier', 'image', array(&$this, 'sGetImageLink'));
-        $this->sSmarty->registerPlugin('modifier', 'articleImages', array(&$this, 'sGetArticleImageLinks'));
-        $this->sSmarty->registerPlugin('modifier', 'shippingcost', array(&$this, 'sGetArticleShippingcost'));
-        $this->sSmarty->registerPlugin('modifier', 'property', array(&$this, 'sGetArticleProperties'));
+        $this->sSmarty->registerPlugin('modifier', 'htmlentities', [&$this, 'sHtmlEntities']);
+        $this->sSmarty->registerPlugin('modifier', 'format', [&$this, 'sFormatString']);
+        $this->sSmarty->registerPlugin('modifier', 'escape', [&$this, 'sEscapeString']);
+        $this->sSmarty->registerPlugin('modifier', 'category', [&$this, 'sGetArticleCategoryPath']);
+        $this->sSmarty->registerPlugin('modifier', 'link', [&$this, 'sGetArticleLink']);
+        $this->sSmarty->registerPlugin('modifier', 'image', [&$this, 'sGetImageLink']);
+        $this->sSmarty->registerPlugin('modifier', 'articleImages', [&$this, 'sGetArticleImageLinks']);
+        $this->sSmarty->registerPlugin('modifier', 'shippingcost', [&$this, 'sGetArticleShippingcost']);
+        $this->sSmarty->registerPlugin('modifier', 'property', [&$this, 'sGetArticleProperties']);
 
-        $this->sSmarty->assign("sConfig", $this->sSYSTEM->sCONFIG);
-        $this->sSmarty->assign("shopData", $this->shopData);
-        $this->sSmarty->assign("sCurrency", $this->sCurrency);
-        $this->sSmarty->assign("sCustomergroup", $this->sCustomergroup);
-        $this->sSmarty->assign("sSettings", $this->sSettings);
+        $this->sSmarty->assign('sConfig', $this->sSYSTEM->sCONFIG);
+        $this->sSmarty->assign('shopData', $this->shopData);
+        $this->sSmarty->assign('sCurrency', $this->sCurrency);
+        $this->sSmarty->assign('sCustomergroup', $this->sCustomergroup);
+        $this->sSmarty->assign('sSettings', $this->sSettings);
 
         // deprecated: use shopData instead
-        $this->sSmarty->assign("sLanguage", $this->sLanguage);
-        $this->sSmarty->assign("sMultishop", $this->sMultishop);
+        $this->sSmarty->assign('sLanguage', $this->sLanguage);
+        $this->sSmarty->assign('sMultishop', $this->sMultishop);
 
-        $this->sSmarty->config_vars["F"] = $this->sSettings["fieldmark"];
-        $this->sSmarty->config_vars["EF"] = $this->sSettings["escaped_separator"];
-        $this->sSmarty->config_vars["S"] = $this->sSettings["separator"];
-        $this->sSmarty->config_vars["ES"] = $this->sSettings["escaped_fieldmark"];
-        $this->sSmarty->config_vars["L"] = $this->sSettings["line_separator"];
-        $this->sSmarty->config_vars["EL"] = $this->sSettings["escaped_line_separator"];
+        $this->sSmarty->config_vars['F'] = $this->sSettings['fieldmark'];
+        $this->sSmarty->config_vars['EF'] = $this->sSettings['escaped_separator'];
+        $this->sSmarty->config_vars['S'] = $this->sSettings['separator'];
+        $this->sSmarty->config_vars['ES'] = $this->sSettings['escaped_fieldmark'];
+        $this->sSmarty->config_vars['L'] = $this->sSettings['line_separator'];
+        $this->sSmarty->config_vars['EL'] = $this->sSettings['escaped_line_separator'];
         if ($this->sSettings['encoding'] == 'UTF-8') {
             $this->sSmarty->config_vars['BOM'] = "\xEF\xBB\xBF";
         } else {
@@ -488,10 +410,10 @@ class sExport
     public function sEscapeString($string, $esc_type = '', $char_set = null)
     {
         if (empty($esc_type)) {
-            if (!empty($this->sSettings["formatID"]) && $this->sSettings["formatID"]==3) {
-                $esc_type = "html";
+            if (!empty($this->sSettings['formatID']) && $this->sSettings['formatID'] == 3) {
+                $esc_type = 'html';
             } else {
-                $esc_type = "csv";
+                $esc_type = 'csv';
             }
         }
 
@@ -501,15 +423,15 @@ class sExport
 
         switch ($esc_type) {
             case 'number':
-                return number_format($string, 2, $this->sSettings["dec_separator"], '');
+                return number_format($string, 2, $this->sSettings['dec_separator'], '');
             case 'csv':
-                if (empty($this->sSettings["escaped_line_separator"])) {
+                if (empty($this->sSettings['escaped_line_separator'])) {
                     $string = preg_replace('#[\r\n]+#m', ' ', $string);
-                } elseif ($this->sSettings["escaped_line_separator"]!=$this->sSettings["line_separator"]) {
-                    $string = str_replace($this->sSettings["line_separator"], $this->sSettings['escaped_line_separator'], $string);
+                } elseif ($this->sSettings['escaped_line_separator'] != $this->sSettings['line_separator']) {
+                    $string = str_replace($this->sSettings['line_separator'], $this->sSettings['escaped_line_separator'], $string);
                 }
-                if (!empty($this->sSettings["fieldmark"])) {
-                    $string = str_replace($this->sSettings["fieldmark"], $this->sSettings['escaped_fieldmark'], $string);
+                if (!empty($this->sSettings['fieldmark'])) {
+                    $string = str_replace($this->sSettings['fieldmark'], $this->sSettings['escaped_fieldmark'], $string);
                 } else {
                     $string = str_replace($this->sSettings['separator'], $this->sSettings['escaped_separator'], $string);
                 }
@@ -518,14 +440,17 @@ class sExport
                     $string = utf8_decode($string);
                 }
                 $string = html_entity_decode($string, ENT_NOQUOTES, $char_set);
-                return $this->sSettings["fieldmark"].$string.$this->sSettings["fieldmark"];
+
+                return $this->sSettings['fieldmark'] . $string . $this->sSettings['fieldmark'];
             case 'xml':
                  if ($char_set != 'UTF-8') {
                      $string = utf8_decode($string);
                  }
+
                 return $string;
                case 'html':
                 $string = html_entity_decode($string, ENT_NOQUOTES, $char_set);
+
                    return htmlspecialchars($string, ENT_QUOTES, $char_set, false);
             case 'htmlall':
                 return htmlentities($string, ENT_QUOTES, $char_set);
@@ -541,37 +466,40 @@ class sExport
             case 'hex':
                 // escape every character into hex
                 $return = '';
-                for ($x=0; $x < strlen($string); $x++) {
+                for ($x = 0; $x < strlen($string); ++$x) {
                     $return .= '%' . bin2hex($string[$x]);
                 }
+
                 return $return;
 
             case 'hexentity':
                 $return = '';
-                for ($x=0; $x < strlen($string); $x++) {
+                for ($x = 0; $x < strlen($string); ++$x) {
                     $return .= '&#x' . bin2hex($string[$x]) . ';';
                 }
+
                 return $return;
 
             case 'decentity':
                 $return = '';
-                for ($x=0; $x < strlen($string); $x++) {
+                for ($x = 0; $x < strlen($string); ++$x) {
                     $return .= '&#' . ord($string[$x]) . ';';
                 }
+
                 return $return;
 
             case 'javascript':
                 // escape quotes and backslashes, newlines, etc.
-                return strtr($string, array('\\'=>'\\\\', "'"=>"\\'", '"'=>'\\"', "\r"=>'\\r', "\n"=>'\\n', '</'=>'<\/'));
+                return strtr($string, ['\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/']);
 
             case 'mail':
                 // safe way to display e-mail address on a web page
-                return str_replace(array('@', '.'), array(' [AT] ', ' [DOT] '), $string);
+                return str_replace(['@', '.'], [' [AT] ', ' [DOT] '], $string);
 
             case 'nonstd':
                // escape non-standard chars, such as ms document quotes
                $_res = '';
-               for ($_i = 0, $_len = strlen($string); $_i < $_len; $_i++) {
+               for ($_i = 0, $_len = strlen($string); $_i < $_len; ++$_i) {
                    $_ord = ord(substr($string, $_i, 1));
                    // non-standard char, escape it
                    if ($_ord >= 126) {
@@ -580,18 +508,20 @@ class sExport
                        $_res .= substr($string, $_i, 1);
                    }
                }
+
                return $_res;
         }
     }
 
-    public function sGetArticleLink($articleID, $title="")
+    public function sGetArticleLink($articleID, $title = '')
     {
-        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID", $title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
+        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
     }
 
     /**
-     * @param string $hash
+     * @param string      $hash
      * @param null|string $imageSize
+     *
      * @return null|string
      */
     public function sGetImageLink($hash, $imageSize = null)
@@ -642,22 +572,23 @@ class sExport
      *
      * @param $articleId
      * @param $orderNumber
-     * @param null $imageSize
+     * @param null   $imageSize
      * @param string $separator
+     *
      * @return string
      */
-    public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = "|")
+    public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = '|')
     {
-        $imageSize = ($imageSize == null) ? "original" : $imageSize;
-        $returnData = array();
+        $imageSize = ($imageSize == null) ? 'original' : $imageSize;
+        $returnData = [];
         if (empty($articleId) || empty($orderNumber)) {
-            return "";
+            return '';
         }
         $imageData = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, false, null, $orderNumber);
         $cover = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, true, null, $orderNumber);
-        $returnData[] = $cover["src"][$imageSize];
+        $returnData[] = $cover['src'][$imageSize];
         foreach ($imageData as $image) {
-            $returnData[] = $image["src"][$imageSize];
+            $returnData[] = $image['src'][$imageSize];
         }
 
         return implode($separator, $returnData);
@@ -669,27 +600,29 @@ class sExport
      *
      * @param $articleId
      * @param $filterGroupId
+     *
      * @return string
      */
     public function sGetArticleProperties($articleId, $filterGroupId)
     {
         if (empty($articleId) || empty($filterGroupId)) {
-            return "";
+            return '';
         }
+
         return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
     public function sMapTranslation($object, $objectData)
     {
         switch ($object) {
-            case "detail":
-            case "article":
-                $map = array(
-                    "txtshortdescription" => "description",
-                    "txtlangbeschreibung" => "description_long",
-                    "txtArtikel" => "name",
-                    "txtzusatztxt" => "additionaltext"
-                );
+            case 'detail':
+            case 'article':
+                $map = [
+                    'txtshortdescription' => 'description',
+                    'txtlangbeschreibung' => 'description_long',
+                    'txtArtikel' => 'name',
+                    'txtzusatztxt' => 'additionaltext',
+                ];
 
                 $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
                 foreach ($attributes as $attribute) {
@@ -699,27 +632,28 @@ class sExport
                     $map[CrudService::EXT_JS_PREFIX . $attribute->getColumnName()] = $attribute->getColumnName();
                 }
                 break;
-            case "link":
-                $map = array("linkname" => "description");
+            case 'link':
+                $map = ['linkname' => 'description'];
                 break;
-            case "download":
-                $map = array("downloadname" => "description");
+            case 'download':
+                $map = ['downloadname' => 'description'];
                 break;
         }
         if (empty($objectData)) {
-            return array();
+            return [];
         }
 
         $objectData = @unserialize($objectData);
         if (empty($objectData)) {
-            return array();
+            return [];
         }
-        $result = array();
+        $result = [];
         foreach ($map as $key => $value) {
             if (isset($objectData[$key])) {
                 $result[$value] = $objectData[$key];
             }
         }
+
         return $result;
     }
 
@@ -727,43 +661,45 @@ class sExport
      * Expects a string of type
      *
      * @param $line
+     *
      * @return array
      */
     public function _decode_line($line)
     {
-        $separator = ";";
-        $fieldmark = "\"";
+        $separator = ';';
+        $fieldmark = '"';
         $elements = explode($separator, $line);
-        $tmp_elements = array();
-        for ($i = 0; $i < count($elements); $i++) {
+        $tmp_elements = [];
+        for ($i = 0; $i < count($elements); ++$i) {
             $nquotes = substr_count($elements[$i], $fieldmark);
-            if ($nquotes %2 == 1) {
-                if (isset($elements[$i+1])) {
-                    $elements[$i+1] = $elements[$i].$separator.$elements[$i+1];
+            if ($nquotes % 2 == 1) {
+                if (isset($elements[$i + 1])) {
+                    $elements[$i + 1] = $elements[$i] . $separator . $elements[$i + 1];
                 }
             } else {
                 if ($nquotes > 0) {
-                    if (substr($elements[$i], 0, 1)==$fieldmark) {
+                    if (substr($elements[$i], 0, 1) == $fieldmark) {
                         $elements[$i] = substr($elements[$i], 1);
                     }
-                    if (substr($elements[$i], -1, 1)==$fieldmark) {
+                    if (substr($elements[$i], -1, 1) == $fieldmark) {
                         $elements[$i] = substr($elements[$i], 0, -1);
                     }
-                    $elements[$i] = str_replace($fieldmark.$fieldmark, $fieldmark, $elements[$i]);
+                    $elements[$i] = str_replace($fieldmark . $fieldmark, $fieldmark, $elements[$i]);
                 }
                 $index = substr($elements[$i], 0, strpos($elements[$i], ':'));
-                $elements[$i] = substr($elements[$i], strpos($elements[$i], ':')+1);
+                $elements[$i] = substr($elements[$i], strpos($elements[$i], ':') + 1);
                 $tmp_elements[$index] = $elements[$i];
             }
         }
+
         return $tmp_elements;
     }
 
     public function sCreateSql()
     {
-        $sql_add_join   = array();
-        $sql_add_select = array();
-        $sql_add_where  = array();
+        $sql_add_join = [];
+        $sql_add_select = [];
+        $sql_add_where = [];
 
         $skipBackend = $this->shop->get('skipbackend');
         $isoCode = $this->shop->get('isocode');
@@ -776,8 +712,8 @@ class sExport
                 LEFT JOIN s_core_translations as td
                 ON td.objectkey=d.id AND td.objecttype='variant' AND td.objectlanguage=$sql_isocode
             ";
-            $sql_add_select[] = "ta.objectdata as article_translation";
-            $sql_add_select[] = "td.objectdata as detail_translation";
+            $sql_add_select[] = 'ta.objectdata as article_translation';
+            $sql_add_select[] = 'td.objectdata as detail_translation';
 
             //read the fallback for the case the translation is not going to be set
             $fallbackId = $this->shop->getFallback() ? $this->shop->getFallback()->getId() : null;
@@ -790,119 +726,118 @@ class sExport
                 LEFT JOIN s_core_translations as tdf
                     ON tdf.objectkey=d.id AND tdf.objecttype='variant' AND tdf.objectlanguage=$sqlFallbackLanguageId
             ";
-                $sql_add_select[] = "taf.objectdata as article_translation_fallback";
-                $sql_add_select[] = "tdf.objectdata as detail_translation_fallback";
+                $sql_add_select[] = 'taf.objectdata as article_translation_fallback';
+                $sql_add_select[] = 'tdf.objectdata as detail_translation_fallback';
             }
         }
 
-        if (!empty($this->sSettings["categoryID"])) {
+        if (!empty($this->sSettings['categoryID'])) {
             $sql_add_join[] = "
                 INNER JOIN s_articles_categories_ro act
                     ON  act.articleID = a.id
-                    AND act.categoryID = {$this->sSettings["categoryID"]}
+                    AND act.categoryID = {$this->sSettings['categoryID']}
                 INNER JOIN s_categories c
                     ON  c.id = act.categoryID
                     AND c.active = 1
             ";
         }
-        if (empty($this->sSettings["image_filter"])) {
-            $sql_add_join[] = "
+        if (empty($this->sSettings['image_filter'])) {
+            $sql_add_join[] = '
                 LEFT JOIN s_articles_img as i
                 ON i.articleID = a.id AND i.main=1 AND i.article_detail_id IS NULL
-            ";
+            ';
         } else {
-            $sql_add_join[] = "
+            $sql_add_join[] = '
                 JOIN s_articles_img as i
                 ON i.articleID = a.id AND i.main=1 AND i.article_detail_id IS NULL
-            ";
+            ';
         }
 
         if (
-            !empty($this->sCustomergroup["groupkey"])
-            && empty($this->sCustomergroup["mode"])
-            && $this->sCustomergroup["groupkey"] != "EK"
+            !empty($this->sCustomergroup['groupkey'])
+            && empty($this->sCustomergroup['mode'])
+            && $this->sCustomergroup['groupkey'] != 'EK'
         ) {
             $sql_add_join[] = "
                 LEFT JOIN s_articles_prices as p2
                 ON p2.articledetailsID = d.id AND p2.`from`=1
-                AND p2.pricegroup='{$this->sCustomergroup["groupkey"]}'
+                AND p2.pricegroup='{$this->sCustomergroup['groupkey']}'
                 AND p2.price!=0
             ";
-            $pricefield = "IFNULL(p2.price, p.price)";
-            $pseudoprice = "IFNULL(p2.pseudoprice, p.pseudoprice)";
+            $pricefield = 'IFNULL(p2.price, p.price)';
+            $pseudoprice = 'IFNULL(p2.pseudoprice, p.pseudoprice)';
         } else {
-            $pricefield = "p.price";
-            $pseudoprice = "p.pseudoprice";
+            $pricefield = 'p.price';
+            $pseudoprice = 'p.pseudoprice';
         }
 
-
-        if (empty($this->sSettings["variant_export"]) || $this->sSettings["variant_export"] == 1) {
+        if (empty($this->sSettings['variant_export']) || $this->sSettings['variant_export'] == 1) {
             $sql_add_select[] = "IF(COUNT(d.ordernumber) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.ordernumber,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_ordernumber";
             $sql_add_select[] = "IF(COUNT(d.additionaltext) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.additionaltext,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_additionaltext";
-            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_pricenet";
-            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_price";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_pricenet";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_price";
             $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
             $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 
-            $sql_add_group_by = "a.id";
-            $sql_add_article_detail_join_condition = "AND d.kind=1";
-        } elseif ($this->sSettings["variant_export"] == 2) {
-            $sql_add_group_by = "d.id";
-            $sql_add_article_detail_join_condition ='';
+            $sql_add_group_by = 'a.id';
+            $sql_add_article_detail_join_condition = 'AND d.kind=1';
+        } elseif ($this->sSettings['variant_export'] == 2) {
+            $sql_add_group_by = 'd.id';
+            $sql_add_article_detail_join_condition = '';
         }
 
-        $grouppricefield = "gp.price";
+        $grouppricefield = 'gp.price';
         if (
-            empty($this->sSettings["variant_export"])
-            || $this->sSettings["variant_export"] == 2
-            || $this->sSettings["variant_export"] == 1
+            empty($this->sSettings['variant_export'])
+            || $this->sSettings['variant_export'] == 2
+            || $this->sSettings['variant_export'] == 1
         ) {
-            $sql_add_join[] = "
+            $sql_add_join[] = '
                 JOIN (SELECT NULL as `articleID` , NULL as `valueID` , NULL as `attr1` , NULL as `attr2` , NULL as `attr3` , NULL as `attr4` , NULL as `attr5` , NULL as `attr6` , NULL as `attr7` , NULL as `attr8` , NULL as `attr9` , NULL as `attr10` , NULL as `standard` , NULL as `active` , NULL as `ordernumber` , NULL as `instock`, NULL as `minpurchase`) as v
-            ";
-            $sql_add_join[] = "
+            ';
+            $sql_add_join[] = '
                 JOIN (SELECT NULL as articleID, NULL as valueID, NULL as groupkey, NULL as price, NULL as optionID) as gp
-            ";
+            ';
         }
 
-        if (!empty($this->sSettings["active_filter"])) {
-            $sql_add_where[] = "(a.active = 1 AND (v.active=1 OR (v.active IS NULL AND d.active=1)))";
+        if (!empty($this->sSettings['active_filter'])) {
+            $sql_add_where[] = '(a.active = 1 AND (v.active=1 OR (v.active IS NULL AND d.active=1)))';
         }
-        if (!empty($this->sSettings["stockmin_filter"])) {
-            $sql_add_where[] ="(v.instock>=d.stockmin OR (v.instock IS NULL AND d.instock>=d.stockmin))";
+        if (!empty($this->sSettings['stockmin_filter'])) {
+            $sql_add_where[] = '(v.instock>=d.stockmin OR (v.instock IS NULL AND d.instock>=d.stockmin))';
         }
-        if (!empty($this->sSettings["instock_filter"])) {
-            $sql_add_where[] ="(v.instock>={$this->sSettings["instock_filter"]} OR (v.instock IS NULL AND d.instock>={$this->sSettings["instock_filter"]}))";
+        if (!empty($this->sSettings['instock_filter'])) {
+            $sql_add_where[] = "(v.instock>={$this->sSettings['instock_filter']} OR (v.instock IS NULL AND d.instock>={$this->sSettings['instock_filter']}))";
         }
-        if (!empty($this->sSettings["price_filter"])) {
-            $sql_add_where[] = "ROUND(CAST(IFNULL($grouppricefield,$pricefield)*(100+t.tax-IF(pd.discount IS NULL,0,pd.discount)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2)>=".$this->sSettings["price_filter"];
+        if (!empty($this->sSettings['price_filter'])) {
+            $sql_add_where[] = "ROUND(CAST(IFNULL($grouppricefield,$pricefield)*(100+t.tax-IF(pd.discount IS NULL,0,pd.discount)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2)>=" . $this->sSettings['price_filter'];
         }
-        if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
-            $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
+        if (!empty($this->sSettings['own_filter']) && trim($this->sSettings['own_filter'])) {
+            $sql_add_where[] = '(' . $this->sSettings['own_filter'] . ')';
         }
         if ($this->config->offsetGet('hideNoInStock')) {
-            $sql_add_where[] = "(
+            $sql_add_where[] = '(
                 (a.laststock * v.instock >= a.laststock * v.minpurchase)
                 OR
                 (a.laststock * d.instock >= a.laststock * d.minpurchase)
-            )";
+            )';
         }
 
-        $sql_add_join = implode(" ", $sql_add_join);
+        $sql_add_join = implode(' ', $sql_add_join);
         if (!empty($sql_add_select)) {
-            $sql_add_select = ", ".implode(", ", $sql_add_select);
+            $sql_add_select = ', ' . implode(', ', $sql_add_select);
         } else {
-            $sql_add_select = "";
+            $sql_add_select = '';
         }
         if (!empty($sql_add_where)) {
-            $sql_add_where = " AND ".implode(" AND ", $sql_add_where);
+            $sql_add_where = ' AND ' . implode(' AND ', $sql_add_where);
         } else {
-            $sql_add_where = "";
+            $sql_add_where = '';
         }
         if (!empty($sql_add_group_by)) {
             $sql_add_group_by = "GROUP BY ($sql_add_group_by)";
         } else {
-            $sql_add_group_by = "";
+            $sql_add_group_by = '';
         }
 
         $sql = "
@@ -973,13 +908,13 @@ class sExport
 
                 a.configurator_set_id as configurator,
 
-                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netprice,
-                IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as netprice_numeric,
-                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as price,
-                IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as price_numeric,
+                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as netprice,
+                IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} as netprice_numeric,
+                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as price,
+                IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} as price_numeric,
                 pd.discount,
-                ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
-                ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
+                ROUND(CAST($pseudoprice*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as netpseudoprice,
+                ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency['factor']}/100 AS DECIMAL(10,3)),2) as pseudoprice,
                 IF(file IS NULL,0,1) as esd
 
                 $sql_add_select
@@ -1047,8 +982,8 @@ class sExport
             $sql_add_group_by
         ";
 
-        if (!empty($this->sSettings["count_filter"])) {
-            $sql .= "LIMIT ".$this->sSettings["count_filter"];
+        if (!empty($this->sSettings['count_filter'])) {
+            $sql .= 'LIMIT ' . $this->sSettings['count_filter'];
         }
 
         return $sql;
@@ -1083,17 +1018,17 @@ class sExport
         $count = (int) $result->rowCount();
         $this->db->update(
             's_export',
-            array(
+            [
                 'last_export' => new Zend_Date(),
                 'cache_refreshed' => new Zend_Date(),
-                'count_articles' => $count
-            ),
-            array('id = ?' => $this->sFeedID)
+                'count_articles' => $count,
+            ],
+            ['id = ?' => $this->sFeedID]
         );
 
         // fetches all required data to smarty
-        $rows = array();
-        for ($rowIndex = 1; $row = $result->fetch(); $rowIndex++) {
+        $rows = [];
+        for ($rowIndex = 1; $row = $result->fetch(); ++$rowIndex) {
             if (!empty($row['group_ordernumber_2'])) {
                 $row['group_ordernumber'] = $this->_decode_line($row['group_ordernumber_2']);
                 $row['group_pricenet'] = explode(';', $row['group_pricenet_2']);
@@ -1102,7 +1037,7 @@ class sExport
                 $row['group_active'] = explode(';', $row['group_active_2']);
                 unset($row['group_ordernumber_2'], $row['group_pricenet_2']);
                 unset($row['group_price_2'], $row['group_instock_2'], $row['group_active_2']);
-                for ($i = 1; $i <= 10; $i++) {
+                for ($i = 1; $i <= 10; ++$i) {
                     if (!empty($row['group_group' . $i])) {
                         $row['group_group' . $i] = $this->_decode_line($row['group_group' . $i]);
                     } else {
@@ -1162,14 +1097,14 @@ class sExport
                 );
             }
             if ($row['configurator'] > 0) {
-                if (empty($this->sSettings["variant_export"]) || $this->sSettings["variant_export"] == 1) {
-                    $row['group_additionaltext'] = array();
+                if (empty($this->sSettings['variant_export']) || $this->sSettings['variant_export'] == 1) {
+                    $row['group_additionaltext'] = [];
 
                     if (!empty($row['group_ordernumber'])) {
                         foreach ($row['group_ordernumber'] as $orderNumber) {
                             $product = new StoreFrontBundle\Struct\ListProduct(
                                 (int) $row['articleID'],
-                                (int) $row["articledetailsID"],
+                                (int) $row['articledetailsID'],
                                 $orderNumber
                             );
 
@@ -1188,7 +1123,7 @@ class sExport
                 }
                 $product = new StoreFrontBundle\Struct\ListProduct(
                     (int) $row['articleID'],
-                    (int) $row["articledetailsID"],
+                    (int) $row['articledetailsID'],
                     $row['ordernumber']
                 );
 
@@ -1201,7 +1136,7 @@ class sExport
 
                 $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
 
-                /** @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
+                /* @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
                 foreach ($configurationGroups as $configurationGroup) {
                     $option = current($configurationGroup->getOptions());
                     $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
@@ -1213,7 +1148,7 @@ class sExport
                 @set_time_limit(30);
 
                 $this->sSmarty->assign('sArticles', $rows);
-                $rows = array();
+                $rows = [];
 
                 $template = 'string:{foreach $sArticles as $sArticle}' . $this->sSettings['body'] . '{/foreach}';
 
@@ -1224,24 +1159,25 @@ class sExport
         fclose($handleResource);
     }
 
-    public function sGetArticleCategoryPath($articleID, $separator = " > ", $categoryID=null)
+    public function sGetArticleCategoryPath($articleID, $separator = ' > ', $categoryID = null)
     {
         if (empty($categoryID)) {
-            $categoryID = $this->sSettings["categoryID"];
+            $categoryID = $this->sSettings['categoryID'];
         }
 
-        $articleCategoryId = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($articleID, $categoryID);
+        $articleCategoryId = $this->sSYSTEM->sMODULES['sCategories']->sGetCategoryIdByArticleId($articleID, $categoryID);
         $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
 
         foreach ($breadcrumb as $breadcrumbObj) {
-            $breadcrumbs[] = $breadcrumbObj["name"];
+            $breadcrumbs[] = $breadcrumbObj['name'];
         }
+
         return htmlspecialchars_decode(implode($separator, $breadcrumbs));
     }
 
     public function sGetCountry($country)
     {
-        static $cache = array();
+        static $cache = [];
         if (empty($country)) {
             return false;
         }
@@ -1249,9 +1185,9 @@ class sExport
             return $cache[$country];
         }
         if (is_numeric($country)) {
-            $sql = "c.id=".$country;
+            $sql = 'c.id=' . $country;
         } elseif (is_string($country)) {
-            $sql = "c.countryiso=".$this->db->quote($country);
+            $sql = 'c.countryiso=' . $this->db->quote($country);
         } else {
             return false;
         }
@@ -1263,12 +1199,13 @@ class sExport
             FROM s_core_countries c
             WHERE $sql
         ";
+
         return $cache[$country] = $this->db->fetchRow($sql);
     }
 
     public function sGetPaymentmean($payment)
     {
-        static $cache = array();
+        static $cache = [];
         if (empty($payment)) {
             return false;
         }
@@ -1276,9 +1213,9 @@ class sExport
             return $cache[$payment];
         }
         if (is_numeric($payment)) {
-            $sql = "id=".$payment;
+            $sql = 'id=' . $payment;
         } elseif (is_string($payment)) {
-            $sql = "name=".$this->db->quote($payment);
+            $sql = 'name=' . $this->db->quote($payment);
         } else {
             return false;
         }
@@ -1288,45 +1225,46 @@ class sExport
         ";
         $cache[$payment] = $this->db->fetchRow($sql);
 
-        $cache[$payment]["country_surcharge"] = array();
-        if (!empty($cache[$payment]["surchargestring"])) {
-            foreach (explode(";", $cache[$payment]["surchargestring"]) as $countrySurcharge) {
-                list($key, $value) = explode(":", $countrySurcharge);
-                $value = floatval(str_replace(",", ".", $value));
+        $cache[$payment]['country_surcharge'] = [];
+        if (!empty($cache[$payment]['surchargestring'])) {
+            foreach (explode(';', $cache[$payment]['surchargestring']) as $countrySurcharge) {
+                list($key, $value) = explode(':', $countrySurcharge);
+                $value = floatval(str_replace(',', '.', $value));
                 if (!empty($value)) {
-                    $cache[$payment]["country_surcharge"][$key] = $value;
+                    $cache[$payment]['country_surcharge'][$key] = $value;
                 }
             }
         }
-        $cache[$payment]["surcharge"] = $cache[$payment]["surcharge"];
+        $cache[$payment]['surcharge'] = $cache[$payment]['surcharge'];
+
         return $cache[$payment];
     }
 
     public function sGetDispatch($dispatch = null, $country = null)
     {
         if (empty($dispatch)) {
-            $sql_order = "";
+            $sql_order = '';
         } elseif (is_numeric($dispatch)) {
-            $sql_order = "IF(sd.id=".(int) $dispatch.",0,1),";
+            $sql_order = 'IF(sd.id=' . (int) $dispatch . ',0,1),';
         } elseif (is_string($dispatch)) {
-            $sql_order = "IF(name=".$this->db->quote($dispatch).",0,1),";
+            $sql_order = 'IF(name=' . $this->db->quote($dispatch) . ',0,1),';
         } else {
-            $sql_order = "";
+            $sql_order = '';
         }
 
         if (empty($country)) {
-            $sql_where = "";
+            $sql_where = '';
         } elseif (is_numeric($country)) {
-            $sql_where = "c.id=".$country;
+            $sql_where = 'c.id=' . $country;
         } elseif (is_string($country)) {
-            $sql_where = "c.countryiso=".$this->db->quote($country);
+            $sql_where = 'c.countryiso=' . $this->db->quote($country);
         } else {
-            $sql_where = "";
+            $sql_where = '';
         }
 
-        static $cache = array();
-        if (isset($cache[$sql_order."|".$sql_where])) {
-            return $cache[$sql_order."|".$sql_where];
+        static $cache = [];
+        if (isset($cache[$sql_order . '|' . $sql_where])) {
+            return $cache[$sql_order . '|' . $sql_where];
         }
 
         if (!empty($sql_where)) {
@@ -1345,14 +1283,15 @@ class sExport
             $sql_where
             ORDER BY $sql_order sd.position ASC LIMIT 1
         ";
-        return $cache[$sql_order."|".$sql_where] = $this->db->fetchRow($sql);
+
+        return $cache[$sql_order . '|' . $sql_where] = $this->db->fetchRow($sql);
     }
 
-    public function sGetDispatchBasket($article, $countryID=null, $paymentID = null)
+    public function sGetDispatchBasket($article, $countryID = null, $paymentID = null)
     {
         $sql_select = '';
         if (!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
-            $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
+            $sql_select .= ', ' . $this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
         $calculations = $this->db->fetchPairs($sql);
@@ -1361,7 +1300,7 @@ class sExport
                 if (empty($calculation)) {
                     $calculation = $this->db->quote($calculation);
                 }
-                $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
+                $sql_select .= ', (' . $calculation . ') as calculation_value_' . $dispatchID;
             }
         }
 
@@ -1426,15 +1365,15 @@ class sExport
         ";
 
         try {
-            $basket = $this->db->fetchRow($sql, array(
-            $article["articleID"],
-            $article["ordernumber"],
-            $article["shippingfree"],
-            $article["price"],
-            $article["netprice"],
-            $article["esd"],
-            $this->sCurrency["factor"]
-        ));
+            $basket = $this->db->fetchRow($sql, [
+            $article['articleID'],
+            $article['ordernumber'],
+            $article['shippingfree'],
+            $article['price'],
+            $article['netprice'],
+            $article['esd'],
+            $this->sCurrency['factor'],
+        ]);
         } catch (Exception $e) {
             echo $e->getMessage();
             exit();
@@ -1450,12 +1389,13 @@ class sExport
         $basket['customergroupID'] = $this->sCustomergroup['id'];
         $basket['multishopID'] = $mainID === null ? $shopID : $mainID;
         $basket['sessionID'] = null;
+
         return $basket;
     }
 
     public function sGetArticleShippingcost($article, $payment, $country, $dispatch = null)
     {
-        if (empty($article)||!is_array($article)) {
+        if (empty($article) || !is_array($article)) {
             return false;
         }
         $country = $this->sGetCountry($country);
@@ -1466,10 +1406,10 @@ class sExport
         if (empty($payment)) {
             return false;
         }
-        if (!empty($payment["country_surcharge"][$country["countryiso"]])) {
-            $payment["surcharge"] += $payment["country_surcharge"][$country["countryiso"]];
+        if (!empty($payment['country_surcharge'][$country['countryiso']])) {
+            $payment['surcharge'] += $payment['country_surcharge'][$country['countryiso']];
         }
-        $payment['surcharge'] = round($payment['surcharge']*$this->sCurrency["factor"], 2);
+        $payment['surcharge'] = round($payment['surcharge'] * $this->sCurrency['factor'], 2);
 
         return $this->sGetArticlePremiumShippingcosts($article, $payment, $country, $dispatch);
     }
@@ -1477,16 +1417,16 @@ class sExport
     public function sGetPremiumDispatch($basket, $dispatch = null)
     {
         if (empty($dispatch)) {
-            $sql_order = "";
+            $sql_order = '';
         } elseif (is_numeric($dispatch)) {
-            $sql_order = "IF(d.id=".(int) $dispatch.",0,1),";
+            $sql_order = 'IF(d.id=' . (int) $dispatch . ',0,1),';
         } elseif (is_string($dispatch)) {
-            $sql_order = "IF(d.name=".$this->db->quote($dispatch).",0,1),";
+            $sql_order = 'IF(d.name=' . $this->db->quote($dispatch) . ',0,1),';
         } else {
-            $sql_order = "";
+            $sql_order = '';
         }
 
-        $sql_add_join = "";
+        $sql_add_join = '';
         if (!empty($basket['paymentID'])) {
             $sql_add_join .= "
                 JOIN s_premium_dispatch_paymentmeans dp
@@ -1502,19 +1442,19 @@ class sExport
             ";
         }
 
-        $sql = "SELECT id, bind_sql FROM s_premium_dispatch WHERE type IN (0) AND bind_sql IS NOT NULL";
+        $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type IN (0) AND bind_sql IS NOT NULL';
         $statements = $this->db->fetchPairs($sql);
 
-        $sql_where = "";
+        $sql_where = '';
         foreach ($statements as $dispatchID => $statement) {
             $sql_where .= "
             AND ( d.id!=$dispatchID OR ($statement))
             ";
         }
 
-        $sql_basket = array();
+        $sql_basket = [];
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->db->quote($value)." as `$key`";
+            $sql_basket[] = $this->db->quote($value) . " as `$key`";
         }
         $sql_basket = implode(', ', $sql_basket);
 
@@ -1565,7 +1505,7 @@ class sExport
         ";
         $dispatch = $this->db->fetchRow($sql);
         if (empty($dispatch)) {
-            $sql = "
+            $sql = '
                 SELECT
                     d.id, d.name,
                     d.description,
@@ -1582,9 +1522,10 @@ class sExport
                 AND d.type=1
                 ORDER BY d.position, d.name
                 LIMIT 1
-            ";
+            ';
             $dispatch = $this->db->fetchRow($sql);
         }
+
         return $dispatch;
     }
 
@@ -1603,13 +1544,13 @@ class sExport
             AND ( d.id!=$dispatchID OR ($statement))
             ";
         }
-        $sql_basket = array();
+        $sql_basket = [];
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->db->quote($value)." as `$key`";
+            $sql_basket[] = $this->db->quote($value) . " as `$key`";
         }
         $sql_basket = implode(', ', $sql_basket);
 
-        $sql_add_join = "";
+        $sql_add_join = '';
         if (!empty($basket['paymentID'])) {
             $sql_add_join .= "
                 JOIN s_premium_dispatch_paymentmeans dp
@@ -1676,12 +1617,12 @@ class sExport
             foreach ($dispatches as $dispatch) {
                 if (empty($dispatch['calculation'])) {
                     $from = round($basket['weight'], 3);
-                } elseif ($dispatch['calculation']==1) {
+                } elseif ($dispatch['calculation'] == 1) {
                     $from = round($basket['amount'], 2);
-                } elseif ($dispatch['calculation']==2) {
+                } elseif ($dispatch['calculation'] == 2) {
                     $from = round($basket['count_article']);
-                } elseif ($dispatch['calculation']==3) {
-                    $from = round($basket['calculation_value_'.$dispatch['id']], 2);
+                } elseif ($dispatch['calculation'] == 3) {
+                    $from = round($basket['calculation_value_' . $dispatch['id']], 2);
                 } else {
                     continue;
                 }
@@ -1699,10 +1640,11 @@ class sExport
                 }
                 $surcharge += $result['value'];
                 if (!empty($result['factor'])) {
-                    $surcharge +=  $result['factor']/100*$from;
+                    $surcharge += $result['factor'] / 100 * $from;
                 }
             }
         }
+
         return $surcharge;
     }
 
@@ -1717,25 +1659,25 @@ class sExport
             return false;
         }
 
-        if ((!empty($dispatch['shippingfree'])&&$dispatch['shippingfree']<=$basket['amount'])
-            ||empty($basket['count_article'])
-            ||(!empty($basket['shippingfree'])&&empty($dispatch['bind_shippingfree']))
+        if ((!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount'])
+            || empty($basket['count_article'])
+            || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
             if (empty($dispatch['surcharge_calculation'])) {
                 return $payment['surcharge'];
-            } else {
-                return 0;
             }
+
+            return 0;
         }
 
         if (empty($dispatch['calculation'])) {
             $from = round($basket['weight'], 3);
-        } elseif ($dispatch['calculation']==1) {
+        } elseif ($dispatch['calculation'] == 1) {
             $from = round($basket['amount'], 2);
-        } elseif ($dispatch['calculation']==2) {
+        } elseif ($dispatch['calculation'] == 2) {
             $from = round($basket['count_article']);
-        } elseif ($dispatch['calculation']==3) {
-            $from = round($basket['calculation_value_'.$dispatch['id']], 2);
+        } elseif ($dispatch['calculation'] == 3) {
+            $from = round($basket['calculation_value_' . $dispatch['id']], 2);
         } else {
             return false;
         }
@@ -1756,15 +1698,15 @@ class sExport
 
         $result['shippingcosts'] = $result['value'];
         if (!empty($result['factor'])) {
-            $result['shippingcosts'] +=  $result['factor']/100*$from;
+            $result['shippingcosts'] += $result['factor'] / 100 * $from;
         }
         $result['surcharge'] = $this->sGetPremiumDispatchSurcharge($basket);
         if (!empty($result['surcharge'])) {
             $result['shippingcosts'] += $result['surcharge'];
         }
-        $result['shippingcosts'] *= $this->sCurrency["factor"];
+        $result['shippingcosts'] *= $this->sCurrency['factor'];
         $result['shippingcosts'] = round($result['shippingcosts'], 2);
-        if (!empty($payment['surcharge'])&&$dispatch['surcharge_calculation']!=2&&(empty($article['shippingfree'])||empty($dispatch['surcharge_calculation']))) {
+        if (!empty($payment['surcharge']) && $dispatch['surcharge_calculation'] != 2 && (empty($article['shippingfree']) || empty($dispatch['surcharge_calculation']))) {
             $result['shippingcosts'] += $payment['surcharge'];
         }
 
@@ -1772,10 +1714,96 @@ class sExport
     }
 
     /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    private function getShopData($id)
+    {
+        static $cache = [];
+
+        if (isset($cache[$id])) {
+            return $cache[$id];
+        }
+
+        if (empty($id)) {
+            $sql = 's.`default`=1';
+        } elseif (is_numeric($id)) {
+            $sql = 's.id=' . $id;
+        } elseif (is_string($id)) {
+            $sql = 's.name=' . $this->db->quote(trim($id));
+        }
+
+        $cache[$id] = $this->db->fetchRow("
+            SELECT
+              s.id,
+              s.main_id,
+              s.name,
+              s.title,
+              COALESCE (s.host, m.host) AS host,
+              COALESCE (s.base_path, m.base_path) AS base_path,
+              COALESCE (s.base_url, m.base_url) AS base_url,
+              COALESCE (s.hosts, m.hosts) AS hosts,
+              GREATEST (COALESCE (s.secure, 0), COALESCE (m.secure, 0)) AS secure,
+              GREATEST (COALESCE (s.always_secure, 0), COALESCE (m.always_secure, 0)) AS always_secure,
+              COALESCE (s.secure_host, m.secure_host) AS secure_host,
+              COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
+              COALESCE (s.template_id, m.template_id) AS template_id,
+              COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
+              s.category_id,
+              s.currency_id,
+              s.customer_group_id,
+              s.fallback_id,
+              s.customer_scope,
+              s.`default`,
+              s.active
+            FROM s_core_shops s
+            LEFT JOIN s_core_shops m
+              ON m.id=s.main_id
+              OR (s.main_id IS NULL AND m.id=s.id)
+            LEFT JOIN s_core_shop_currencies d
+              ON d.shop_id=m.id
+            WHERE s.active = 1 AND $sql
+            GROUP BY s.id
+        ");
+
+        return $cache[$id];
+    }
+
+    /**
+     * Helper function to get access to the article repository.
+     *
+     * @return \Shopware\Models\Article\Repository
+     */
+    private function getArticleRepository()
+    {
+        if ($this->articleRepository === null) {
+            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+        }
+
+        return $this->articleRepository;
+    }
+
+    /**
+     * Helper function to get access to the media repository.
+     *
+     * @return \Shopware\Models\Media\Repository
+     */
+    private function getMediaRepository()
+    {
+        if ($this->mediaRepository === null) {
+            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+        }
+
+        return $this->mediaRepository;
+    }
+
+    /**
      * Makes sure the given URL contains the correct host for the selected (sub-)shop
      *
      * @param string $url
      * @param string $adapterType
+     *
      * @return string
      */
     private function fixShopHost($url, $adapterType)

@@ -27,12 +27,12 @@ namespace Shopware\Recovery\Update;
 class DeleteResult
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $isReady;
 
     /**
-     * @var integer
+     * @var int
      */
     private $fileCount;
 
@@ -54,7 +54,7 @@ class DeleteResult
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsReady()
     {
@@ -62,7 +62,7 @@ class DeleteResult
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getFileCount()
     {
@@ -82,6 +82,6 @@ class DeleteResult
      */
     public function countUp()
     {
-        $this->fileCount++;
+        ++$this->fileCount;
     }
 }

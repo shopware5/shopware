@@ -28,13 +28,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Customer
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Group extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier
+     *
      * @var int
      */
     protected $id;
@@ -48,6 +49,7 @@ class Group extends Extendable implements \JsonSerializable
 
     /**
      * Name of the customer group
+     *
      * @var string
      */
     protected $name;
@@ -57,14 +59,14 @@ class Group extends Extendable implements \JsonSerializable
      * should see gross prices in the store
      * front.
      *
-     * @var boolean
+     * @var bool
      */
     protected $displayGrossPrices;
 
     /**
      * Defines if prices inserted as gross prices
      *
-     * @var boolean
+     * @var bool
      */
     protected $insertedGrossPrices;
 
@@ -73,13 +75,14 @@ class Group extends Extendable implements \JsonSerializable
      * already reduces with a global customer
      * group discount
      *
-     * @var boolean
+     * @var bool
      */
     protected $useDiscount;
 
     /**
      * Percentage global discount value
      * for this customer group.
+     *
      * @var float
      */
     protected $percentageDiscount;
@@ -185,7 +188,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $useDiscount
+     * @param bool $useDiscount
      */
     public function setUseDiscount($useDiscount)
     {
@@ -193,7 +196,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function useDiscount()
     {
@@ -201,7 +204,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $displayGrossPrices
+     * @param bool $displayGrossPrices
      */
     public function setDisplayGrossPrices($displayGrossPrices)
     {
@@ -209,7 +212,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayGrossPrices()
     {
@@ -217,7 +220,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function insertedGrossPrices()
     {
@@ -225,13 +228,12 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $insertedGrossPrices
+     * @param bool $insertedGrossPrices
      */
     public function setInsertedGrossPrices($insertedGrossPrices)
     {
         $this->insertedGrossPrices = $insertedGrossPrices;
     }
-
 
     /**
      * @return float
@@ -250,7 +252,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

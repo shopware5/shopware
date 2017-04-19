@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Keyword

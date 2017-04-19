@@ -29,7 +29,7 @@ namespace Shopware\Components\Theme\Compressor;
  * Used to compress theme and plugin javascript files.
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme\Compressor
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Js implements CompressorInterface
@@ -39,6 +39,7 @@ class Js implements CompressorInterface
      * the compressed content.
      *
      * @param string $content
+     *
      * @return string
      */
     public function compress($content)

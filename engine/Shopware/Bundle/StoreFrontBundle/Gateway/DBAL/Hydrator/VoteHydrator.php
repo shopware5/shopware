@@ -28,13 +28,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteHydrator extends Hydrator
 {
     /**
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage
      */
     public function hydrateAverage(array $data)
@@ -59,20 +60,8 @@ class VoteHydrator extends Hydrator
     }
 
     /**
-     * @param $data
-     */
-    private function sortByPointsDescending($data)
-    {
-        usort($data, function ($a, $b) {
-            if ($a['points'] == $b['points']) {
-                return 0;
-            }
-            return ($a['points'] > $b['points']) ? -1 : 1;
-        });
-    }
-
-    /**
      * @param array $data
+     *
      * @return Struct\Product\Vote
      */
     public function hydrate(array $data)
@@ -120,5 +109,19 @@ class VoteHydrator extends Hydrator
         }
 
         return $struct;
+    }
+
+    /**
+     * @param $data
+     */
+    private function sortByPointsDescending($data)
+    {
+        usort($data, function ($a, $b) {
+            if ($a['points'] == $b['points']) {
+                return 0;
+            }
+
+            return ($a['points'] > $b['points']) ? -1 : 1;
+        });
     }
 }

@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Currency
@@ -37,19 +37,6 @@ class Currency
     private $currency;
 
     /**
-     * Returns a list of valid Currencies
-     * @return array
-     */
-    public static function getValidCurrencies()
-    {
-        return [
-            'EUR',
-            'USD',
-            'GBP'
-        ];
-    }
-
-    /**
      * @param string $Currency
      */
     private function __construct($Currency)
@@ -58,19 +45,34 @@ class Currency
     }
 
     /**
-     * @param string $Currency
-     * @return Currency
-     */
-    public static function createFromString($Currency)
-    {
-        return new self($Currency);
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
         return $this->currency;
+    }
+
+    /**
+     * Returns a list of valid Currencies
+     *
+     * @return array
+     */
+    public static function getValidCurrencies()
+    {
+        return [
+            'EUR',
+            'USD',
+            'GBP',
+        ];
+    }
+
+    /**
+     * @param string $Currency
+     *
+     * @return Currency
+     */
+    public static function createFromString($Currency)
+    {
+        return new self($Currency);
     }
 }

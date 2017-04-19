@@ -29,7 +29,7 @@ use Shopware\Components\Theme\PathResolver;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\CacheManager
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheManager
@@ -76,11 +76,11 @@ class CacheManager
     {
         $this->container = $container;
 
-        $this->cache    = $container->get('cache');
+        $this->cache = $container->get('cache');
         $this->emConfig = $container->get('shopware.model_config');
-        $this->db       = $container->get('db');
-        $this->config   = $container->get('config');
-        $this->events   = $container->get('events');
+        $this->db = $container->get('db');
+        $this->config = $container->get('config');
+        $this->events = $container->get('events');
         $this->themePathResolver = $container->get('theme_path_resolver');
     }
 
@@ -112,7 +112,7 @@ class CacheManager
      */
     public function clearTemplateCache()
     {
-        $cacheDir   = $this->container->getParameter('shopware.template.cacheDir');
+        $cacheDir = $this->container->getParameter('shopware.template.cacheDir');
         $compileDir = $this->container->getParameter('shopware.template.compileDir');
 
         $this->clearDirectory($compileDir);
@@ -141,12 +141,12 @@ class CacheManager
         $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'routerlastupdate'";
         $elementId = $this->db->fetchOne($sql);
 
-        $sql = "
+        $sql = '
             SELECT v.shop_id, v.value
             FROM s_core_config_values v
             WHERE v.element_id=?
-        ";
-        $values = $this->db->fetchPairs($sql, array($elementId));
+        ';
+        $values = $this->db->fetchPairs($sql, [$elementId]);
 
         foreach ($values as $shopId => $value) {
             $value = unserialize($value);
@@ -157,7 +157,7 @@ class CacheManager
                 UPDATE s_core_config_values SET value=?
                 WHERE shop_id=? AND element_id=?
             ';
-            $this->db->query($sql, array($value, $shopId, $elementId));
+            $this->db->query($sql, [$value, $shopId, $elementId]);
         }
     }
 
@@ -170,7 +170,7 @@ class CacheManager
         $elementId = $this->db->fetchOne($sql);
 
         $sql = 'DELETE FROM s_core_config_values WHERE element_id=?';
-        $this->db->query($sql, array($elementId));
+        $this->db->query($sql, [$elementId]);
     }
 
     /**
@@ -182,10 +182,10 @@ class CacheManager
         if (!empty($capabilities['tags'])) {
             $this->cache->clean(
                 \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                array(
+                [
                     'Shopware_Config',
-                    'Shopware_Plugin'
-                )
+                    'Shopware_Plugin',
+                ]
             );
         } else {
             $this->cache->clean();
@@ -234,6 +234,7 @@ class CacheManager
      * Returns cache information
      *
      * @param null $request
+     *
      * @return array
      */
     public function getHttpCacheInfo($request = null)
@@ -243,7 +244,7 @@ class CacheManager
                 $this->container->getParameter('shopware.httpCache.cache_dir')
             );
         } else {
-            $info = array();
+            $info = [];
         }
 
         $info['name'] = 'Http-Reverse-Proxy';
@@ -374,24 +375,27 @@ class CacheManager
      * Returns cache information
      *
      * @param string $dir
+     *
      * @return array
      */
     public function getDirectoryInfo($dir)
     {
         $docRoot = $this->container->getParameter('kernel.root_dir') . '/';
 
-        $info = array();
+        $info = [];
         $info['dir'] = str_replace($docRoot, '', $dir);
         $info['dir'] = str_replace(DIRECTORY_SEPARATOR, '/', $info['dir']);
         $info['dir'] = rtrim($info['dir'], '/') . '/';
 
         if (!file_exists($dir) || !is_dir($dir)) {
             $info['message'] = 'Cache dir not exists';
+
             return $info;
         }
 
         if (!is_readable($dir)) {
             $info['message'] = 'Cache dir is not readable';
+
             return $info;
         }
 
@@ -419,13 +423,28 @@ class CacheManager
             }
 
             $info['size'] += $entry->getSize();
-            $info['files']++;
+            ++$info['files'];
         }
         $info['size'] = $this->encodeSize($info['size']);
         $info['freeSpace'] = disk_free_space($dir);
         $info['freeSpace'] = $this->encodeSize($info['freeSpace']);
 
         return $info;
+    }
+
+    /**
+     * Format size method
+     *
+     * @param float $bytes
+     *
+     * @return string
+     */
+    public function encodeSize($bytes)
+    {
+        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
+
+        return round($bytes, 2) . ' ' . $types[$i];
     }
 
     /**
@@ -438,7 +457,7 @@ class CacheManager
         if (!file_exists($dir)) {
             return;
         }
-        
+
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
@@ -459,18 +478,5 @@ class CacheManager
                 unlink($path->__toString());
             }
         }
-    }
-
-    /**
-     * Format size method
-     *
-     * @param float $bytes
-     * @return string
-     */
-    public function encodeSize($bytes)
-    {
-        $types = array('B', 'KB', 'MB', 'GB', 'TB');
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++) ;
-        return (round($bytes, 2) . ' ' . $types[$i]);
     }
 }

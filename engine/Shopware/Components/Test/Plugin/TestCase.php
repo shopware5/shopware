@@ -39,12 +39,17 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
  * );
  *
  * @runInSeparateProcess
+ *
  * @category  Shopware
- * @package   Shopware\Components\Test\Plugin
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var array
+     */
+    protected static $ensureLoadedPlugins = [];
     /**
      * @var InstallerService
      */
@@ -53,12 +58,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    protected static $ensureLoadedPlugins = array();
-
-    /**
-     * @var array
-     */
-    private static $pluginStates = array();
+    private static $pluginStates = [];
 
     public static function setUpBeforeClass()
     {
@@ -71,7 +71,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 $config = $value;
             } else {
                 $pluginName = $value;
-                $config = array();
+                $config = [];
             }
 
             self::ensurePluginAvailable($pluginName, $config);
@@ -91,14 +91,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param $pluginName
      * @param array $config
      */
-    private static function ensurePluginAvailable($pluginName, $config = array())
+    private static function ensurePluginAvailable($pluginName, $config = [])
     {
         $plugin = self::$pluginManager->getPluginByName($pluginName);
 
-        self::$pluginStates[$pluginName] = array(
+        self::$pluginStates[$pluginName] = [
             'isInstalled' => (bool) $plugin->getInstalled(),
-            'isActive'    => (bool) $plugin->getActive(),
-        );
+            'isActive' => (bool) $plugin->getActive(),
+        ];
 
         self::$pluginManager->installPlugin($plugin);
         self::$pluginManager->activatePlugin($plugin);
@@ -122,6 +122,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param $pluginName
      * @param $status
+     *
      * @return int
      */
     private static function restorePluginState($pluginName, $status)
@@ -130,6 +131,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         if ($plugin->getInstalled() && !$status['isInstalled']) {
             self::$pluginManager->uninstallPlugin($plugin);
+
             return;
         }
 

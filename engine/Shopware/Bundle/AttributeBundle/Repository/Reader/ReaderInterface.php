@@ -26,19 +26,21 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 interface ReaderInterface
 {
     /**
      * @param int[]|string[] $identifiers
+     *
      * @return array[]
      */
     public function getList($identifiers);
 
     /**
      * @param int|string $identifier
+     *
      * @return array
      */
     public function get($identifier);

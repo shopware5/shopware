@@ -45,6 +45,7 @@ class SimilarProductConditionHandler implements HandlerInterface
 
     /**
      * SimilarProductConditionHandler constructor.
+     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)
@@ -57,7 +58,7 @@ class SimilarProductConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof SimilarProductCondition);
+        return $criteriaPart instanceof SimilarProductCondition;
     }
 
     /**
@@ -91,6 +92,7 @@ class SimilarProductConditionHandler implements HandlerInterface
 
     /**
      * @param int $productId
+     *
      * @return int[]
      */
     private function getProductCategories($productId)

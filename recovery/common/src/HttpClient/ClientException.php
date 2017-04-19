@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Common\HttpClient;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Common\HttpClient
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ClientException extends \RuntimeException

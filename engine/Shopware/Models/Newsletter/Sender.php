@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware mailing model represents a sender.
@@ -38,7 +38,7 @@ class Sender extends ModelEntity
     /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -49,7 +49,7 @@ class Sender extends ModelEntity
     /**
      * mail address of the sender
      *
-     * @var string $mailAddress
+     * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
@@ -58,7 +58,7 @@ class Sender extends ModelEntity
     /**
      * name of the sender
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255 , nullable=false)
      */

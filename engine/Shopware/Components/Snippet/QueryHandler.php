@@ -29,7 +29,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Snippet
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryHandler
@@ -50,48 +50,49 @@ class QueryHandler
     /**
      * Parses current .ini snippet files and generates the matching MySQL queries
      *
-     * @param string  $snippetsDir
-     * @param bool $update if false, UPDATE IGNORE statements are generated. Default true, generates UPDATE .. ON DUPLICATE KEY statements
-     * @return array The array containing the generated queries.
+     * @param string $snippetsDir
+     * @param bool   $update      if false, UPDATE IGNORE statements are generated. Default true, generates UPDATE .. ON DUPLICATE KEY statements
+     *
+     * @return array the array containing the generated queries
      */
     public function loadToQuery($snippetsDir = null, $update = true)
     {
-        $snippetsDir = $snippetsDir?:$this->snippetsDir;
+        $snippetsDir = $snippetsDir ?: $this->snippetsDir;
 
         if (!file_exists($snippetsDir)) {
-            return array();
+            return [];
         }
 
-        $locales = array();
+        $locales = [];
         $finder = new Finder();
 
-        $inputAdapter = new \Enlight_Config_Adapter_File(array(
+        $inputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
-        ));
+        ]);
 
         $queryWriter = new QueryWriter();
 
         $finder->files()->in($snippetsDir);
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath)-4) {
+            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
             } else {
                 continue;
             }
 
-            $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
+            $namespaceData = new \Enlight_Components_Snippet_Namespace([
                 'adapter' => $inputAdapter,
-                'name'    => $namespace,
-            ));
+                'name' => $namespace,
+            ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
                 if (!array_key_exists($index, $locales)) {
-                    $locales[$index] = 'SET @locale_'.$index.' = (SELECT id FROM s_core_locales WHERE locale = \''.$index.'\');';
+                    $locales[$index] = 'SET @locale_' . $index . ' = (SELECT id FROM s_core_locales WHERE locale = \'' . $index . '\');';
                 }
 
                 $queryWriter->setUpdate($update);
-                $queryWriter->write($values, $namespace, '@locale_'.$index, 1);
+                $queryWriter->write($values, $namespace, '@locale_' . $index, 1);
             }
         }
         $result = $queryWriter->getQueries();

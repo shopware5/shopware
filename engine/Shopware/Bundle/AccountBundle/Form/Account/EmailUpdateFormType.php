@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
-use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
+use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -37,8 +37,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form reflects the needed fields for changing the email address in the account
- *
- * @package Shopware\Bundle\AccountBundle\Form\Account
  */
 class EmailUpdateFormType extends AbstractType
 {
@@ -59,8 +57,8 @@ class EmailUpdateFormType extends AbstractType
 
     /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $context
+     * @param \Shopware_Components_Config          $config
+     * @param ContextServiceInterface              $context
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -79,7 +77,7 @@ class EmailUpdateFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Customer::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
@@ -93,34 +91,34 @@ class EmailUpdateFormType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('email', EmailType::class, [
             'constraints' => [
-                new FormEmail(['shop' => $this->context->getShopContext()->getShop()])
-            ]
+                new FormEmail(['shop' => $this->context->getShopContext()->getShop()]),
+            ],
         ]);
 
         $builder->add('emailConfirmation', EmailType::class, [
-            'mapped' => false
+            'mapped' => false,
         ]);
 
         if ($this->config->get('accountPasswordCheck')) {
             $builder->add('currentPassword', PasswordType::class, [
                 'mapped' => false,
-                'constraints' => [new CurrentPassword()]
+                'constraints' => [new CurrentPassword()],
             ]);
         }
 
         $builder->add('attribute', AttributeFormType::class, [
-            'data_class' => CustomerAttribute::class
+            'data_class' => CustomerAttribute::class,
         ]);
 
         $builder->add('additional', null, [
             'compound' => true,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 }

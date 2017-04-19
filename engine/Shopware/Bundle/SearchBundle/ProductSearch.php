@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductSearch implements ProductSearchInterface
@@ -45,7 +45,7 @@ class ProductSearch implements ProductSearchInterface
 
     /**
      * @param StoreFrontBundle\Service\ListProductServiceInterface $productService
-     * @param ProductNumberSearchInterface $searchGateway
+     * @param ProductNumberSearchInterface                         $searchGateway
      */
     public function __construct(
         StoreFrontBundle\Service\ListProductServiceInterface $productService,
@@ -56,7 +56,7 @@ class ProductSearch implements ProductSearchInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search(
         Criteria $criteria,
@@ -75,12 +75,14 @@ class ProductSearch implements ProductSearchInterface
         );
 
         $result->addAttributes($numberResult->getAttributes());
+
         return $result;
     }
 
     /**
      * @param StoreFrontBundle\Struct\ListProduct[] $products
      * @param StoreFrontBundle\Struct\BaseProduct[] $searchProducts
+     *
      * @return StoreFrontBundle\Struct\ListProduct[]
      */
     private function assignAttributes($products, $searchProducts)

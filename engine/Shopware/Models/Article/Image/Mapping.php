@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Article\Image;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Article Image Mapping model.
@@ -41,23 +40,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Mapping extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="image_id", type="integer", nullable=false)
-     */
-    private $imageId;
-
-    /**
      * OWNING SIDE
+     *
      * @var \Shopware\Models\Article\Image
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image", inversedBy="mappings")
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
@@ -69,6 +53,21 @@ class Mapping extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Rule", mappedBy="mapping", orphanRemoval=true, cascade={"persist"})
      */
     protected $rules;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="image_id", type="integer", nullable=false)
+     */
+    private $imageId;
 
     /**
      * Class constructor which initials the array collections.

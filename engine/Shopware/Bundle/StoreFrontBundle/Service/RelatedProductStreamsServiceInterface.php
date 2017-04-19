@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface RelatedProductStreamsServiceInterface
@@ -36,18 +36,20 @@ interface RelatedProductStreamsServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
-     * @return array Indexed with the product number, each array element contains product stream structs.
+     *
+     * @return array indexed with the product number, each array element contains product stream structs
      */
     public function getList($products, Struct\ShopContextInterface $context);
 
     /**
      * Selects all related product stream ids for the provided product.
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
-     * @return int[] Array of product stream structs, indexed by the product order number.
+     *
+     * @return int[] array of product stream structs, indexed by the product order number
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

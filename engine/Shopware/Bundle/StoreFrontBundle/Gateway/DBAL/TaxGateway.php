@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TaxGateway implements Gateway\TaxGatewayInterface
@@ -61,8 +61,8 @@ class TaxGateway implements Gateway\TaxGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection           $connection
+     * @param FieldHelper          $fieldHelper
      * @param Hydrator\TaxHydrator $taxHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRules(
         Struct\Customer\Group $customerGroup,
@@ -88,7 +88,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         $query->select($this->fieldHelper->getTaxFields())
             ->from('s_core_tax', 'tax');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -104,7 +104,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         foreach ($data as $tax) {
             $query->setParameter(':taxId', $tax['__tax_id']);
 
-            /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+            /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
             $statement = $query->execute();
 
             $area = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -125,9 +125,10 @@ class TaxGateway implements Gateway\TaxGatewayInterface
 
     /**
      * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Country\Area $area
-     * @param Struct\Country $country
-     * @param Struct\Country\State $state
+     * @param Struct\Country\Area   $area
+     * @param Struct\Country        $country
+     * @param Struct\Country\State  $state
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getAreaQuery(
