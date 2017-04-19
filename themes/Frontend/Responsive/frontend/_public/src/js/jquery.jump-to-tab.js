@@ -19,7 +19,7 @@
 
         init: function () {
             var me = this,
-                param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [null, null])[1]);
+                param = decodeURI((new RegExp('action=(.+?)(&|$)').exec(location.search) || [null, ''])[1]);
 
             me.$htmlBody = $('body, html');
             me.tabMenuProduct = me.$el.find(me.opts.tabDetail).data('plugin_swTabMenu');
@@ -28,12 +28,17 @@
             me.resizeCrossSelling();
             me.registerEvents();
 
-            if (param === 'rating') {
-                var $tab = $('[data-tabName="' + param + '"]'),
-                    index = $tab.index() || 1;
-
-                me.jumpToTab(index, $tab);
+            if (param.length === 0) {
+                me.onHashChange(window.location.hash.replace('#', ''));
             }
+
+            /**
+             * Listen to when hash value changed on url and change to desired tab
+             */
+            $(window).on('hashchange', function() {
+                me.onHashChange(window.location.hash.replace('#', ''));
+            });
+
         },
 
         resizeCrossSelling: function () {
@@ -57,6 +62,31 @@
             me.$el.on(me.getEventName('click'), '.product--rating-link, .link--publish-comment', $.proxy(me.onJumpToTab, me));
 
             $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
+        },
+
+        onHashChange: function (param) {
+            var me = this;
+
+            if (window.StateManager.getCurrentState() === 's' || window.StateManager.getCurrentState() === 'xs') {
+                if (param.length > 0) {
+                    var $tab = $('[data-containerName="' + param + '"]');
+
+                    if ($tab.length > 0) {
+                        me.openContainerInMenu($tab);
+                    }
+                }
+
+                return;
+            }
+
+            if (param.length > 0) {
+                var $tab = $('[data-tabName="' + param + '"]'),
+                    index = $tab.index() || 0;
+
+                if ($tab.length > 0) {
+                    me.jumpToTab(index, $tab);
+                }
+            }
         },
 
         onJumpToTab: function (event) {
@@ -86,9 +116,16 @@
 
             me.$htmlBody.animate({
                 scrollTop: $(jumpTo).offset().top
-            }, 0);
+            }, 1000);
 
             $.publish('plugin/swJumpToTab/onJumpToTab', [ me, tabIndex, jumpTo ]);
+        },
+
+        openContainerInMenu: function ($tab) {
+            var plugin = $tab.data('plugin_swOffcanvasButton'),
+                canvasMenu = plugin.$el.data('plugin_swOffcanvasMenu');
+
+            canvasMenu.openMenu();
         }
     });
 })(jQuery, window);
