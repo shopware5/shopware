@@ -160,9 +160,6 @@
             }
         });
 
-        // Start up the placeholder polyfill, see ```jquery.ie-fixes.js```
-        $('input, textarea').placeholder();
-
         $('.add-voucher--checkbox').on('change', function (event) {
             var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';
             event.preventDefault();
