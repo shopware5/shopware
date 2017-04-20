@@ -230,4 +230,4 @@
     {/if}
 {/block}
 </body>
-</html>
+</html>{block name="frontend_index_behind_html"}{/block}
