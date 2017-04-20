@@ -161,11 +161,16 @@
          * @private
          */
         _jsonpBeforeSend: function(event, request, settings) {
-            if (!settings.type || settings.type.toLowerCase() !== 'get') {
+            if (!settings.type || settings.type.toLowerCase() !== 'get' ||
+                !settings.dataType || settings.dataType.toLowerCase() !== 'jsonp') {
                 return;
             }
 
             if (settings.url.indexOf('__csrf_token=') !== -1) {
+                return;
+            }
+
+            if (!settings.appendCSRFToken || settings.appendCSRFToken !== true) {
                 return;
             }
             settings.url += (settings.url.indexOf('?') >= 0 ? '&' : '?') + '__csrf_token=' + this.getToken();
