@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * Define window height
      * @integer
      */
-    height: 360,
+    height: 260,
 
     /**
      * Display no footer button for the detail window
@@ -97,6 +97,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * @boolean
      */
     maximizable: false,
+
     /**
      * Disables the minimize button in the window header
      * @boolean
@@ -137,7 +138,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
                 bodyPadding: 20,
                 style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.message + '</p>',
-                height: '100px'
+                height: '40px'
             },
             me.createLanguageSwitcherForm()
         ];
@@ -168,6 +169,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
                         marginTop: '5px'
                     },
                     handler: function() {
+                        me.preventDefault();
                         me.fireEvent('switchLanguage', elem.get('id'));
                     }
                 })
@@ -177,7 +179,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
         return Ext.create('Ext.container.Container', {
             items: me.languageButtons,
             overflowY: 'auto',
-            height: 159,
+            height: 120,
             layout: {
                 align: 'stretch',
                 type: 'vbox'

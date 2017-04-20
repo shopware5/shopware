@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         if (Ext.isEmpty(me.firstRunWizardIsConnected)) {
             me.firstRunWizardIsConnected = null;
         } else {
-            me.firstRunWizardIsConnected = me.firstRunWizardIsConnected == 'true';
+            me.firstRunWizardIsConnected = me.firstRunWizardIsConnected === 'true';
         }
 
         me.control({
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         var me = this,
             calculatedStep = me.switchNavigation(+1);
 
-        if (calculatedStep == null) {
+        if (calculatedStep === null) {
             me.getWizardWindow().confirmedClose = true;
             me.getWizardWindow().close();
             return;

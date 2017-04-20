@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
      * Define window height
      * @integer
      */
-    height: 360,
+    height: 210,
 
     /**
      * Display no footer button for the detail window
@@ -97,6 +97,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
      * @boolean
      */
     maximizable: false,
+
     /**
      * Disables the minimize button in the window header
      * @boolean
@@ -117,11 +118,14 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
             'cz_CZ': { 'language': '{s name=localization_installer/content/cz_CZ/language}Czech{/s}', 'country': '{s name=localization_installer/content/cz_CZ/country}Czech Republic{/s}' },
             'de_DE': { 'language': '{s name=localization_installer/content/de_DE/language}German{/s}', 'country': '{s name=localization_installer/content/de_DE/country}Germany{/s}' },
             'es_ES': { 'language': '{s name=localization_installer/content/es_ES/language}Spanish{/s}', 'country': '{s name=localization_installer/content/es_ES/country}Spain{/s}' },
+            'fi_FI': { 'language': '{s name=localization_installer/content/fi_FI/language}Finish{/s}', 'country': '{s name=localization_installer/content/fi_FI/country}Finland{/s}' },
             'fr_FR': { 'language': '{s name=localization_installer/content/fr_FR/language}French{/s}', 'country': '{s name=localization_installer/content/fr_FR/country}France{/s}' },
             'it_IT': { 'language': '{s name=localization_installer/content/it_IT/language}Italian{/s}', 'country': '{s name=localization_installer/content/it_IT/country}Italy{/s}' },
             'nl_NL': { 'language': '{s name=localization_installer/content/nl_NL/language}Dutch{/s}', 'country': '{s name=localization_installer/content/nl_NL/country}Netherlands{/s}' },
             'pt_PT': { 'language': '{s name=localization_installer/content/pt_PT/language}Portuguese{/s}', 'country': '{s name=localization_installer/content/pt_PT/country}Portugal{/s}' },
-            'pl_Pl': { 'language': '{s name=localization_installer/content/pl_Pl/language}Polish{/s}', 'country': '{s name=localization_installer/content/pl_Pl/country}Poland{/s}' }
+            'pl_Pl': { 'language': '{s name=localization_installer/content/pl_Pl/language}Polish{/s}', 'country': '{s name=localization_installer/content/pl_Pl/country}Poland{/s}' },
+            'tk_TK': { 'language': '{s name=localization_installer/content/tk_TK/language}Turkish{/s}', 'country': '{s name=localization_installer/content/tk_TK/country}Turkey{/s}' },
+            'ru_RU': { 'language': '{s name=localization_installer/content/ru_RU/language}Russian{/s}', 'country': '{s name=localization_installer/content/ru_RU/country}Russia{/s}' }
         }
     },
 
@@ -162,7 +166,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
                 bodyPadding: 20,
                 style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.message.replace('[language]', me.snippets.locales[installerLocale]['language']) + '</p>',
-                height: '100px'
+                height: '40px'
             },
             me.createLanguageSwitcherForm(installerLocale)
         ];
@@ -192,14 +196,14 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
                 marginTop: '5px'
             },
             handler: function() {
-                me.fireEvent('switchLanguage', me.pluginName, installerLocale);
+                me.fireEvent('installLanguage', me.pluginName, installerLocale);
             }
         });
 
         return Ext.create('Ext.container.Container', {
             items: me.languageButton,
             overflowY: 'auto',
-            height: 159,
+            height: 70,
             layout: {
                 align: 'stretch',
                 type: 'vbox'

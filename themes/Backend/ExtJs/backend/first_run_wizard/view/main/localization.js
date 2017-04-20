@@ -56,7 +56,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             message: '{s name=localization/content/message}Take your business abroad using localizations plugins. Start by selecting the language you want to add to your shop. You will receive a list of recommended plugins for your shop, that will add translations and other useful features to your Shopware installation.{/s}',
             noPlugins: '{s name=localization/content/noPlugins}No plugins found{/s}'
         },
-        languagePicker: '{s name=localization/languagePicker}Select a language to filter{/s}',
         buttons: {
             retry: '{s name=home/buttons/retry}Retry{/s}'
         },
@@ -69,16 +68,19 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     initComponent: function() {
         var me = this;
 
-        // A list of available localizations. Can be moved to a store after SBP has a call to load those.
-        me.technicalLocalizationPluginNames = [
-            'SwagBulgaria', 'SwagCzech', 'SwagFrance', 'SwagItaly', 'SwagNetherlands', 'SwagPoland', 'SwagPortuguese', 'SwagSpain'
-        ];
-
-        me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load(
-            function(records) {
-                me.setDefaultLocalization(records);
-            }
-        );
+        // A list of available localizations.
+        me.technicalLocalizationPluginNames = {
+            'bg_BG': 'SwagBulgaria',
+            'cz_CZ': 'SwagCzech',
+            'fr_FR': 'SwagFrance',
+            'it_IT': 'SwagItaly',
+            'nl_NL': 'SwagNetherlands',
+            'pl_PL': 'SwagPoland',
+            'pt_PT': 'SwagPortuguese',
+            'ru_RU': 'SwagRussia',
+            'tk_TK': 'SwagTurkey',
+            'es_ES': 'SwagSpain'
+        };
 
         me.welcomeTitleContainer = Ext.create('Ext.container.Container', {
             border: false,
@@ -111,9 +113,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             html: '<p>' + me.snippets.content.message + '</p>'
         });
 
+        me.defaultLocale = '{s namespace="backend/base/index" name=script/ext/locale}{/s}';
+
         me.loadingIndicatorContainer = me.createLoadingIndicator();
         me.loadingResultContainer = me.createLoadingResultContainer();
-        me.languagePicker = me.createLanguagePicker();
         me.storeListingContainer = me.createStoreListing();
         me.noResultMessage = me.createNoResultMessage();
 
@@ -126,7 +129,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             me.localizationMessageContainer,
             me.loadingIndicatorContainer,
             me.loadingResultContainer,
-            me.languagePicker,
             me.storeListingContainer,
             me.noResultMessage
         ];
@@ -134,48 +136,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         me.callParent(arguments);
     },
 
-    /**
-     * Creates the existing account form
-     *
-     * @return Ext.form.FieldSet Contains the form for existing account login
-     */
-    createLanguagePicker: function () {
-        var me = this;
-
-        me.languageFilter = Ext.create('Ext.form.field.ComboBox', {
-            store: me.localizationStore,
-            queryMode: 'local',
-            valueField: 'locale',
-            displayField: 'text',
-            hidden: true,
-            emptyText: me.snippets.languagePicker,
-            editable: false,
-            listeners: {
-                change: {
-                    fn: function(view, newValue) {
-                        me.fireEvent('changeLanguageFilter', newValue);
-                    }
-                }
-            }
-        });
-
-        return Ext.create('Ext.form.FieldSet', {
-            cls: Ext.baseCSSPrefix + 'base-field-set',
-            width: 632,
-            hidden: true,
-            defaults: {
-                anchor: '100%'
-            },
-            items: [
-                me.languageFilter
-            ]
-        });
-    },
-
     createStoreListing: function() {
-        var me = this;
+        var me = this,
+            installedLocale = Ext.util.Cookies.get('installed-locale');
 
-        me.communityStore = Ext.create('Shopware.apps.FirstRunWizard.store.LocalizationPlugin');
+        me.communityStore = Ext.create('Shopware.apps.FirstRunWizard.store.AvailableLocalizationPlugin');
+
         me.storeListing = Ext.create('Shopware.apps.PluginManager.view.components.Listing', {
             store: me.communityStore,
             scrollContainer: me,
@@ -189,13 +155,17 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
                 me.noResultMessage.setVisible(true);
             } else {
                 Ext.each(records, function (record) {
-                    if (Ext.Array.contains(me.technicalLocalizationPluginNames, record.data.technicalName)) {
+                    if (installedLocale &&
+                        me.technicalLocalizationPluginNames[installedLocale] === record.data.technicalName) {
                         me.fireEvent('promptInstallLocalization', record.data.technicalName);
                     }
                 });
             }
             me.storeListing.setLoading(false);
+            me.storeListing.show();
         });
+
+        me.communityStore.load();
 
         me.content = Ext.create('Ext.container.Container', {
             items: [
@@ -222,12 +192,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         me.fireEvent('localizationResetData');
         me.content.setVisible(true);
         me.noResultMessage.setVisible(false);
-
-        if (me.languageFilter.getValue()) {
-            me.storeListing.setLoading(true);
-            me.storeListing.resetListing();
-            me.communityStore.load();
-        }
     },
 
     getButtons: function() {
@@ -263,9 +227,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         var me = this;
         me.localizationTitleContainer.show();
         me.localizationMessageContainer.show();
-        me.languageFilter.show();
-        me.storeListing.show();
-        me.languagePicker.show();
     },
 
     createLoadingIndicator: function() {
@@ -300,7 +261,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         Ext.each(records, function(record) {
             if (record.get('locale') === '{s namespace="backend/base/index" name=script/ext/locale}{/s}' ||
                 record.get('locale') === installedLocale) {
-                me.languageFilter.setValue(record.get('locale'));
+                me.defaultLocale = record.get('locale');
             }
         });
     },
@@ -310,9 +271,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
 
         if (me.firstRunWizardIsConnected === true) {
             me.loadingResultContainer.hide();
-            me.languageFilter.getStore().load(function(records) {
-                me.setDefaultLocalization(records);
-            });
             me.displayLocalizationElements();
         } else if (me.firstRunWizardIsConnected === false) {
             me.loadingResultContainer.update(

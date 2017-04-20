@@ -68,17 +68,17 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
 
         me.control({
             'first-run-wizard-localization': {
-                changeLanguageFilter: me.onChangeLanguageFilter,
                 localizationResetData: me.onLocalizationResetData,
                 retryConnectivityTest: me.onRetryConnectivityTest,
-                promptInstallLocalization: me.promptInstallLocalization
+                promptInstallLocalization: me.promptInstallLocalization,
+                'install-plugin': me.onSwitchLanguage
             },
             'first-run-wizard-localization-switcher': {
                 switchLanguage: me.onSwitchLanguage,
                 closeWindow: me.onCloseWindow
             },
             'first-run-wizard-localization-installer': {
-                switchLanguage: me.switchLanguage
+                installLanguage: me.installLanguage
             },
             'first-run-wizard': {
                 'navigate-next-localization': me.promptLanguageChange,
@@ -94,6 +94,20 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
             me.checkConnectivityStatus();
         }
 
+        Shopware.app.Application.on(
+            'install-plugin',
+            function() { this.dirty = true; },
+            me,
+            { single: true }
+        );
+
+        Shopware.app.Application.on(
+            'reinstall-plugin',
+            function() { this.dirty = true; },
+            me,
+            { single: true }
+        );
+
         me.callParent(arguments);
     },
 
@@ -103,7 +117,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
      * @param { string } pluginName
      * @param { string } locale
      */
-    switchLanguage: function(pluginName, locale) {
+    installLanguage: function(pluginName, locale) {
         var me = this,
             plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
             technicalName: pluginName
@@ -146,29 +160,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
                 );
             }
         });
-    },
-
-    onChangeLanguageFilter: function(value) {
-        var me = this;
-
-        Shopware.app.Application.on(
-            'install-plugin',
-            function() { this.dirty = true; },
-            me,
-            { single: true }
-        );
-
-        Shopware.app.Application.on(
-            'reinstall-plugin',
-            function() { this.dirty = true; },
-            me,
-            { single: true }
-        );
-
-        me.getLocalizationPanel().storeListing.resetListing();
-        me.getLocalizationPanel().communityStore.getProxy().extraParams.localeId = value;
-        me.getLocalizationPanel().communityStore.load();
-        me.getLocalizationPanel().storeListing.setLoading(true);
     },
 
     onCloseWindow: function() {

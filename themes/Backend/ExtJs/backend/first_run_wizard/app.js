@@ -20,6 +20,7 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'LicensePlugin',
         'IntegratedPlugin',
         'DemoPlugin',
+        'AvailableLocalizationPlugin',
         'LocalizationPlugin',
         'Localization',
         'Locale',
