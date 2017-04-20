@@ -40,7 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 class ListProduct extends BaseProduct implements \JsonSerializable
 {
     /**
-     * State for a calculated product price.
+     * State for a calculated product price
      */
     const STATE_PRICE_CALCULATED = 'price_calculated';
 
@@ -321,7 +321,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $voteAverage;
 
     /**
-     * Flag if the product has an available variant.
+     * Flag if the product has an available variant
      *
      * @var bool
      */
@@ -386,7 +386,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * Resets the struct states.
+     * Resets the struct states
      */
     public function resetStates()
     {
@@ -394,7 +394,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * Checks if the product has a specify state.
+     * Checks if the product has a specify state
      *
      * @param $state
      *

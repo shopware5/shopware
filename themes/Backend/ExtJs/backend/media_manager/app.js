@@ -90,7 +90,8 @@ Ext.define('Shopware.apps.MediaManager', {
         'replace.Grid',
         'replace.Row',
         'replace.Upload',
-        'replace.FileSelect'
+        'replace.FileSelect',
+        'batchMove.BatchMove'
     ],
     /**
      * Required stores for sub-application

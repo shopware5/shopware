@@ -429,8 +429,6 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                     models = data.mediaModels,
                     store;
 
-                mediaView.setLoading(true);
-
                 // The event was fired from the list view
                 if(!models) {
                     models = data.records;
@@ -445,7 +443,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                     view.fireEvent('startBatchMoveMedia', view, models);
                     return;
                 }
-                
+
+                mediaView.setLoading(true);
+
                 store.sync({
                     callback: function(){
                         mediaView.setLoading(false);

@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\PluginInstallerBundle\Service\ZipUtils;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\Filesystem\Filesystem;

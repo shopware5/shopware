@@ -65,6 +65,13 @@ class MediaOptimizeCommand extends ShopwareCommand
     {
         $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
 
+        if ($this->hasRunnableOptimizer() === false) {
+            $output->writeln('<error>No runnable optimizer found. Consider installing one of the following optimizers.</error>');
+            $this->displayCapabilities($output, $optimizerService->getOptimizers());
+
+            return;
+        }
+
         if ($input->getOption('info')) {
             $this->displayCapabilities($output, $optimizerService->getOptimizers());
 
@@ -142,5 +149,21 @@ class MediaOptimizeCommand extends ShopwareCommand
         }
 
         return $finder;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasRunnableOptimizer()
+    {
+        $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
+
+        foreach ($optimizerService->getOptimizers() as $optimizer) {
+            if ($optimizer->isRunnable()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -26,6 +26,7 @@ namespace Shopware\Models\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware order detail model represents a single detail data of an order .
@@ -56,6 +57,8 @@ class Detail extends ModelEntity
     protected $order;
 
     /**
+     * @Assert\NotBlank
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\DetailStatus")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
      *
@@ -105,6 +108,8 @@ class Detail extends ModelEntity
     private $orderId;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var int
      *
      * @ORM\Column(name="articleID", type="integer", nullable=false)
@@ -119,8 +124,9 @@ class Detail extends ModelEntity
     private $taxId;
 
     /**
-     * @var float
+     * @Assert\NotBlank
      *
+     * @var float
      * @ORM\Column(name="tax_rate", type="float", nullable=false)
      */
     private $taxRate;
@@ -135,11 +141,13 @@ class Detail extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
     private $number;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var string
      *
      * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
@@ -147,6 +155,8 @@ class Detail extends ModelEntity
     private $articleNumber;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var float
      *
      * @ORM\Column(name="price", type="float", nullable=false)
@@ -154,6 +164,8 @@ class Detail extends ModelEntity
     private $price;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var int
      *
      * @ORM\Column(name="quantity", type="integer", nullable=false)
@@ -161,11 +173,14 @@ class Detail extends ModelEntity
     private $quantity;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $articleName;
+
     /**
      * @var int
      *

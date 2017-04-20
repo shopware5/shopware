@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             /*{/if}*/
 
             /*{if {acl_is_allowed privilege=read resource=articlelist}}*/
-            // Article overview - CTRL + ALT + U
+            // Article overview - CTRL + ALT + O
             {
                 key: "o",
                 ctrl: true,
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             },
             /*{/if}*/
 
-            // Shopware Community - CTRL + ALT + H
+            // Keymap Overview - CTRL + ALT + H
             {
                 key: 'h',
                 ctrl: true,

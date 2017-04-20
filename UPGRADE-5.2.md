@@ -2,7 +2,37 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.22
+* Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
+* Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
+
+## 5.2.21
+
+[View all changes from v5.2.20...v5.2.21](https://github.com/shopware/shopware/compare/v5.2.20...v5.2.21)
+
+* Updated Symfony to version 2.8.17
+* Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
+* Added support for creating new orders using the `Order` API resource
+* Added option `allowHtml` for ExtJS grid columns and display form fields in order to allow unescaped html output. Default value is: `false`
+* Added optional `Guzzle` client config parameter to `Shopware\Components\HttpClient\GuzzleFactory::createClient` method
+* Added events `sendRequestSuccess` and `sendRequestFailure` to `_sendRequest` in `themes/Backend/ExtJs/backend/category/controller/article_mapping.js`
+* Deprecated duplicate block `frontend_blog_detail_comments` in `frontend/blog/detail.tpl`, use `frontend_blog_detail_comments_count` and `frontend_blog_detail_comments_list` instead. 
+* Changed CSRF validation method in `engine/Shopware/Components/CSRFTokenValidator` from session validation to cookie validation.
+* Removed `invalidateToken` from `engine/Shopware/Components/CSRFTokenValidator`
+* Added opt-in for CSRF GET protection. Implement `engine/Shopware/Components/CSRFTGetProtectionAware` and return the controller actons which should be protected via `getCSRFProtectedActions`.
+* Added CSRF specific error message.
+* Changed behaviour of plugin installer to show the correct translated label and description in plugin manager and basic settings (new 5.2 plugin system only, see [DevDocs](https://developers.shopware.com/developers-guide/plugin-system/#plugin-metadata))
+
+## 5.2.20
+
+[View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
+
+* Reverted shopware/shopware#821 which added left joins for basket attributes in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+
 ## 5.2.19
+
+[View all changes from v5.2.18...v5.2.19](https://github.com/shopware/shopware/compare/v5.2.18...v5.2.19)
+
 * Changed the loading of backend widgets to disable widgets of deactivated plugins
 * Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
 * Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
@@ -15,8 +45,18 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added the possibility to add a Theme info tab. Add a folder with the name "info" to your theme folder. Add a html file to the folder with the required language iso like "en_EN.html". The HTML content of the file is the content of the tab.
 * Changed internal loop variable name `positions` in `themes/Frontend/Bare/documents/index.tpl` to fix typo
 * Added configuration option `ShopwarePlugins` to `plugin_directories` in the `engine/Shopware/Configs/Default.php` to make the path of the plugin system directory configurable
+* Support for custom CSS files in themes added to Grunt tasks
+* Added command option `shopId` for `sw:theme:cache:generate`
+
+## 5.2.18
+
+[View all changes from v5.2.17...v5.2.18](https://github.com/shopware/shopware/compare/v5.2.17...v5.2.18)
+
+* Fixed invalid permissions after running media optimizer on some hosting systems
+* Fixed session error in exports
 
 ## 5.2.17
+
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
@@ -59,6 +99,12 @@ The api resources are now available in the dependency injection container using 
     shared="false">
 </service>
 ```
+
+## 5.2.16
+
+[View all changes from v5.2.15...v5.2.16](https://github.com/shopware/shopware/compare/v5.2.15...v5.2.16)
+
+* Improved form input filtering
 
 ## 5.2.15
 

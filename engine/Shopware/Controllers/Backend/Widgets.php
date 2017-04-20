@@ -700,16 +700,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
         if ($status == 'accepted') {
             Shopware()->Container()->get('db')->query(
-                "
-                                    UPDATE s_user SET customergroup = validation, validation = '' WHERE id = ?
-                                    ",
+                "UPDATE s_user SET customergroup = validation, validation = '' WHERE id = ?",
                 [$userId]
             );
         } else {
             Shopware()->Container()->get('db')->query(
-                "
-                                    UPDATE s_user SET validation = '' WHERE id = ?
-                                    ",
+                "UPDATE s_user SET validation = '' WHERE id = ?",
                 [$userId]
             );
         }
