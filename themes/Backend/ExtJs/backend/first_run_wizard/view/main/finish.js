@@ -51,6 +51,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
             title: '{s name=finish/content/title}Finished{/s}',
             message: '{s name=finish/content/message}The First Run Wizard is now complete and you are ready to start using your new Shopware shop. Information, help, and the latest Shopware news can be found in the following pages:{/s}'
         },
+        shopware_id: {
+            title: '{s name=finish/shopware_id/title}Shopware ID{/s}',
+            descriptionMessage: '{s name=finish/shopware_id/description_message}Here you can create you personal Shopware ID. The Shopware ID will give you access to your Shopware account in our forum, wiki and other community resources. It will also grant you access to our plugin store, where you can find many more plugins that will help you easily customize your shop to your needs.{/s}',
+        },
         buttons: {
             finish: '{s name=finish/buttons/finish}Finish{/s}'
         }
@@ -77,8 +81,21 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
             {
                 xtype: 'container',
                 border: false,
+                style: 'margin-bottom: 20px;',
                 width: '100%',
                 html: me.createTiles()
+            },
+            {
+                xtype: 'container',
+                border: false,
+                style: 'font-weight: 700; line-height: 20px;',
+                html: '<h1>' + me.snippets.shopware_id.title + '</h1>'
+            },
+            {
+                xtype: 'container',
+                border: false,
+                width: '100%',
+                html: '<p>' + me.snippets.shopware_id.descriptionMessage + '</p>'
             }
         ];
 
@@ -88,34 +105,34 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
     createTiles: function () {
         var tileData = [
             {
-                'link': '{s name="finish/links/help"}http://en.wiki.shopware.com/{/s}',
+                'link': '{s name="finish/links/help"}{/s}',
                 'icon': 'help',
-                'text': '{s name="finish/tile/help"}Shopware Help{/s}'
+                'text': '{s name="finish/tile/help"}{/s}'
             },
             {
-                'link': '{s name="finish/links/templater"}http://en.wiki.shopware.com/Designer-s-Guide_cat_884.html{/s}',
+                'link': '{s name="finish/links/templater"}{/s}',
                 'icon': 'templater',
-                'text': '{s name="finish/tile/templater"}Shopware for templaters{/s}'
+                'text': '{s name="finish/tile/templater"}{/s}'
             },
             {
-                'link': '{s name="finish/links/developer"}http://en.wiki.shopware.com/Developer-s-Guide_cat_888.html{/s}',
+                'link': '{s name="finish/links/developer"}{/s}',
                 'icon': 'developer',
-                'text': '{s name="finish/tile/developer"}Shopware for developers{/s}'
+                'text': '{s name="finish/tile/developer"}{/s}'
             },
             {
-                'link': '{s name="finish/links/forum"}http://en.forum.shopware.com/{/s}',
+                'link': '{s name="finish/links/forum"}{/s}',
                 'icon': 'forum',
-                'text': '{s name="finish/tile/forum"}Shopware Forum{/s}'
+                'text': '{s name="finish/tile/forum"}{/s}'
             },
             {
-                'link': '{s name="finish/links/account"}http://account.shopware.com/{/s}',
+                'link': '{s name="finish/links/account"}{/s}',
                 'icon': 'account',
-                'text': '{s name="finish/tile/account"}Shopware Account{/s}'
+                'text': '{s name="finish/tile/account"}{/s}'
             },
             {
-                'link': '{s name="finish/links/store"}http://store.shopware.com/en/{/s}',
+                'link': '{s name="finish/links/store"}{/s}',
                 'icon': 'store',
-                'text': '{s name="finish/tile/store"}Shopware Store{/s}'
+                'text': '{s name="finish/tile/store"}{/s}'
             }
         ],
         tiles = [];

@@ -12,7 +12,6 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.Config',
         'main.DemoData',
         'main.Recommendation',
-        'main.ShopwareId',
         'main.PremiumListing'
     ],
 
@@ -36,7 +35,6 @@ Ext.define('Shopware.apps.FirstRunWizard', {
     controllers: [
         'Main',
         'Config',
-        'ShopwareId',
         'Localization',
         'Recommendation'
     ],
