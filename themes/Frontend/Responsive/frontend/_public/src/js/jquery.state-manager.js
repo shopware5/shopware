@@ -1380,107 +1380,32 @@
         },
 
         /**
-         * matchMedia() polyfill
-         * Test a CSS media type/query in JS.
-         * Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas, David Knight.
-         * Dual MIT/BSD license
+         * matchMedia proxy
          *
          * @public
          * @method matchMedia
          * @param {String} media
          */
-        matchMedia: (function () {
-            // For browsers that support matchMedium api such as IE 9 and webkit
-            var styleMedia = (window.styleMedia || window.media);
-
-            // For those that don't support matchMedium
-            if (!styleMedia) {
-                var style = document.createElement('style'),
-                    script = document.getElementsByTagName('script')[0],
-                    info = null;
-
-                style.type = 'text/css';
-                style.id = 'matchmediajs-test';
-
-                script.parentNode.insertBefore(style, script);
-
-                // 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
-                info = (('getComputedStyle' in window) && window.getComputedStyle(style, null)) || style.currentStyle;
-
-                styleMedia = {
-                    matchMedium: function (media) {
-                        var text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
-
-                        // 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
-                        if (style.styleSheet) {
-                            style.styleSheet.cssText = text;
-                        } else {
-                            style.textContent = text;
-                        }
-
-                        // Test if media query is true or false
-                        return info.width === '1px';
-                    }
-                };
-            }
-
-            return function (media) {
-                return {
-                    matches: styleMedia.matchMedium(media || 'all'),
-                    media: media || 'all'
-                };
-            };
-        }()),
+        matchMedia: window.matchMedia.bind(window),
 
         /**
-         * requestAnimationFrame() polyfill
+         * requestAnimationFrame proxy
          *
          * @public
          * @method requestAnimationFrame
          * @param {Function} callback
          * @returns {Number}
          */
-        requestAnimationFrame: (function () {
-            var raf = window.requestAnimationFrame,
-                i = vendorPrefixes.length,
-                lastTime = 0;
-
-            while (!raf && i) {
-                raf = window[vendorPrefixes[i--] + 'RequestAnimationFrame'];
-            }
-
-            return raf || function (callback) {
-                var currTime = +(new Date()),
-                    timeToCall = Math.max(0, 16 - (currTime - lastTime)),
-                    id = window.setTimeout(function () {
-                        callback(currTime + timeToCall);
-                    }, timeToCall);
-
-                lastTime = currTime + timeToCall;
-
-                return id;
-            };
-        }()).bind(window),
+        requestAnimationFrame: window.requestAnimationFrame.bind(window),
 
         /**
-         * cancelAnimationFrame() polyfill
+         * cancelAnimationFrame proxy
          *
          * @public
          * @method cancelAnimationFrame
          * @param {Number} id
          */
-        cancelAnimationFrame: (function () {
-            var caf = window.cancelAnimationFrame,
-                i = vendorPrefixes.length,
-                fnName;
-
-            while (!caf && i) {
-                fnName = vendorPrefixes[i--];
-                caf = window[fnName + 'CancelAnimationFrame'] || window[fnName + 'CancelRequestAnimationFrame'];
-            }
-
-            return caf || window.clearTimeout;
-        }()).bind(window),
+        cancelAnimationFrame: window.cancelAnimationFrame.bind(window),
 
         /**
          * Tests the given CSS style property on an empty div with all vendor

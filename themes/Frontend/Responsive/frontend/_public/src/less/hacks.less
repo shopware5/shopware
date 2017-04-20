@@ -6,8 +6,8 @@ The `hacks.less` contains all dirty hacks like !important or negative margins, s
 More precise designations are commented inside the document.
 */
 
-    // The product tax information will be filled using a snippet through the administration. The WYSIWYG adds inline styles
-    // which needs to be overridden with a ```!important```
+// The product tax information will be filled using a snippet through the administration. The WYSIWYG adds inline styles
+// which needs to be overridden with a ```!important```
 .product--tax a {
     text-decoration: none !important;
 
@@ -16,7 +16,7 @@ More precise designations are commented inside the document.
     }
 }
 
-    // Arrow icon is too big on default font size. We have to reduce it manually
+// Arrow icon is too big on default font size. We have to reduce it manually
 .entry--all-results-link i {
     font-size: 8px;
 }
@@ -47,16 +47,22 @@ More precise designations are commented inside the document.
     }
 }
 
-    // inactive class for disabling scrolling on different parts of Shopware
+// inactive class for disabling scrolling on different parts of Shopware
 .is--inactive {
     overflow: hidden !important;
 }
 
-    // Removing unwanted padding on button-elements in firefox
+// Removing unwanted padding on button-elements in firefox
 .btn::-moz-focus-inner {
     border: 0;
     padding: 0;
 }
+
+// IE 11 has a problem with "rem"-based line-height values, therefore we're forcing the size in pixel values
+.is--ie .action--sort .sort--select:after {
+    line-height: 34px;
+}
+
 
 @media screen and (min-width: @tabletViewportWidth) {
 
@@ -71,5 +77,14 @@ More precise designations are commented inside the document.
     .sidebar--navigation .is--level1 .navigation--entry.has--sub-children.is--active:before,
     .sidebar--navigation .is--level1 .navigation--entry.has--sub-children.is--active::before {
         font-size: 5px;
+    }
+
+    // IE 11 has a problem with "rem"-based line-height values, therefore we're forcing the size in pixel values
+    .is--ie .header-main .top-bar--navigation .select-field:after {
+        line-height: 24px;
+    }
+    .is--ie .action--filter-btn .filter--trigger:before,
+    .is--ie .action--filter-btn .filter--trigger:after {
+        line-height: 16px;
     }
 }
