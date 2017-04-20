@@ -141,36 +141,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     }
 
     /**
-     * Event listener method which fires when the customer list store is loaded. Returns an array of customer data
-     * which displayed in an Ext.grid.Panel. Grants by the limit and start parameter a paging
-     * for the customer list data. The filter parameter allows the user a full text search
-     * over the displayed fields.
-     */
-    public function getListAction()
-    {
-        //read store parameter to filter and paginate the data.
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', [['property' => 'customer.id', 'direction' => 'DESC']]);
-        $filter = $this->Request()->getParam('filter', null);
-        $filter = $filter[0]['value'];
-
-        $customerGroup = $this->Request()->getParam('customerGroup', null);
-
-        //get access on the customer repository
-        $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
-
-        //returns the customer data
-        $customers = $query->getArrayResult();
-
-        //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
-        $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
-        $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $this->View()->assign(['success' => true, 'data' => $customers, 'total' => $countResult['customerCount']]);
-    }
-
-    /**
      * Event listener method which fires when the customer detail
      * store is loaded. Returns an array with all data about one customer.
      * Expects an customer id as parameter to read the detail data
