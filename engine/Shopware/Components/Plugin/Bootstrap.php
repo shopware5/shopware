@@ -24,10 +24,10 @@
 
 use Shopware\Components\ConfigWriter;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Config\Form;
-use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Config\ElementTranslation;
+use Shopware\Models\Config\Form;
 use Shopware\Models\Config\FormTranslation;
+use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Menu\Menu;
 use Shopware\Models\Menu\Repository as MenuRepository;
 use Shopware\Models\Payment\Payment;
@@ -40,7 +40,7 @@ use Shopware\Models\Widget\Widget;
  * Shopware Plugin Bootstrap
  *
  * @category  Shopware
- * @package   Shopware\Components\Plugin\Bootstrap
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Bootstrap_Config
@@ -95,32 +95,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * Helper function to get access on the http cache plugin.
-     * Notice if the Http Cache plugin isn't installed, this function
-     * returns null.
-     *
-     * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
-     */
-    protected function HttpCache()
-    {
-        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
-
-        if (!$httpCache instanceof Shopware_Components_Plugin_Bootstrap) {
-            return null;
-        }
-
-        /**@var $plugin Plugin */
-        $plugin = Shopware()->Models()->find(Plugin::class, $httpCache->getId());
-
-        if (!$plugin->getActive() || !$plugin->getInstalled()) {
-            return null;
-        }
-
-        return $httpCache;
-    }
-
-
-    /**
      * Returnswhether or not $updatePluginInfo contains a newer version than $currentPluginInfo
      *
      * @param \Enlight_Config $currentPluginInfo
@@ -138,7 +112,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         // Exception for Pre-Installed Plugins
-        if ($currentVersion == "1" && $updateVersion == "1.0.0") {
+        if ($currentVersion == '1' && $updateVersion == '1.0.0') {
             return false;
         }
 
@@ -306,29 +280,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * @return Form
-     */
-    private function initForm()
-    {
-        $info = $this->Info();
-        $formRepository = $this->Forms();
-        $form = new Form;
-        $form->setPluginId($this->getId());
-        $form->setName($info->name);
-        $form->setLabel($info->label);
-        $form->setDescription($info->description);
-
-        /** @var Form $parent */
-        $parent = $formRepository->findOneBy([
-            'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other'
-        ]);
-        $form->setParent($parent);
-        Shopware()->Models()->persist($form);
-
-        return $form;
-    }
-
-    /**
      * Returns shopware menu
      *
      * @return MenuRepository
@@ -371,44 +322,36 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Create a new payment instance
      *
-     * @param   array $options
-     * @param   null $description
-     * @param   null $action
+     * @param array $options
+     * @param null  $description
+     * @param null  $action
      *
-     * @return  Payment
+     * @return Payment
      */
     public function createPayment($options, $description = null, $action = null)
     {
+        /** @var \Shopware\Components\Plugin\PaymentInstaller $installer */
+        $installer = $this->get('shopware.plugin_payment_installer');
+
         if (is_string($options)) {
             $options = ['name' => $options];
         }
-        $payment = $this->Payments()->findOneBy(['name' => $options['name']]);
-        if ($payment === null) {
-            $payment = new Payment();
-            $payment->setName($options['name']);
-            Shopware()->Models()->persist($payment);
-        }
-        $payment->fromArray($options);
         if ($description !== null) {
-            $payment->setDescription($description);
+            $options['description'] = $description;
         }
         if ($action !== null) {
-            $payment->setAction($action);
+            $options['action'] = $action;
         }
-        $plugin = $this->Plugin();
-        $plugin->getPayments()->add($payment);
-        $payment->setPlugin($plugin);
-        Shopware()->Models()->flush($payment);
 
-        return $payment;
+        return $installer->createOrUpdate($this->getName(), $options);
     }
 
     /**
      * Create a new template
      *
-     * @param   array|string $options
+     * @param array|string $options
      *
-     * @return  Template
+     * @return Template
      */
     public function createTemplate($options)
     {
@@ -432,11 +375,12 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * Create cron job method
+     *
      * @param string $name
      * @param string $action
-     * @param int $interval
-     * @param int $active
-     * @param boolean $disableOnError
+     * @param int    $interval
+     * @param int    $active
+     * @param bool   $disableOnError
      */
     public function createCronJob($name, $action, $interval = 86400, $active = 1, $disableOnError = true)
     {
@@ -445,19 +389,19 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $connection->insert(
             's_crontab',
             [
-                'name'             => $name,
-                'action'           => $action,
-                'next'             => new \DateTime(),
-                'start'            => null,
-                '`interval`'       => $interval,
-                'active'           => $active,
+                'name' => $name,
+                'action' => $action,
+                'next' => new \DateTime(),
+                'start' => null,
+                '`interval`' => $interval,
+                'active' => $active,
                 'disable_on_error' => $disableOnError ? 1 : 0,
-                'end'              => new \DateTime(),
-                'pluginID'         => $this->getId(),
+                'end' => new \DateTime(),
+                'pluginID' => $this->getId(),
             ],
             [
                 'next' => 'datetime',
-                'end'  => 'datetime',
+                'end' => 'datetime',
             ]
         );
     }
@@ -479,11 +423,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Subscribes a plugin event.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param string|Enlight_Event_Handler $event
-     * @param string $listener
-     * @param integer $position
+     * @param string                       $listener
+     * @param int                          $position
      *
      * @return Enlight_Plugin_Bootstrap_Config
      */
@@ -521,11 +465,13 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *   }
      * </code>
      *
-     * @param string $module - Possible values: Frontend, Backend, Widgets, Api
-     * @param string $name - The name of the controller
+     * @param string $module   - Possible values: Frontend, Backend, Widgets, Api
+     * @param string $name     - The name of the controller
      * @param string $listener - Name of the event listener function which will be called
-     * @return $this
+     *
      * @throws Exception
+     *
+     * @return $this
      */
     public function registerController($module, $name, $listener = 'getDefaultControllerPath')
     {
@@ -543,7 +489,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         return $this;
     }
 
-
     /**
      * Standard event listener function for plugin controllers.
      * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
@@ -559,7 +504,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *  3. The 'Components' plugin directory is added as a component namespace.
      *
      * @param Enlight_Event_EventArgs $arguments
+     *
      * @throws Exception
+     *
      * @return string
      */
     public function getDefaultControllerPath(Enlight_Event_EventArgs $arguments)
@@ -617,7 +564,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'install' => true,
             'update' => true,
             'enable' => true,
-            'secureUninstall' => false
+            'secureUninstall' => false,
         ];
     }
 
@@ -625,6 +572,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Returns plugin id
      *
      * @final
+     *
      * @return int
      */
     public function getId()
@@ -656,6 +604,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Returns plugin name
      *
      * @final
+     *
      * @return string
      */
     final public function getName()
@@ -667,6 +616,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Returns plugin source
      *
      * @final
+     *
      * @return string
      */
     final public function getSource()
@@ -683,7 +633,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         return [
             'version' => $this->getVersion(),
-            'label' => $this->getLabel()
+            'label' => $this->getLabel(),
         ];
     }
 
@@ -700,84 +650,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * Check if a list of given plugins is currently available
-     * and active
-     *
-     * @param array $plugins
-     *
-     * @return bool
-     */
-    protected function assertRequiredPluginsPresent(array $plugins)
-    {
-        foreach ($plugins as $plugin) {
-            $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
-            $test = $this->get('dbal_connection')->fetchColumn($sql, [$plugin]);
-            if (!$test) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if a given version is greater or equal to
-     * the currently installed shopware version.
-     *
-     * Attention: If your target shopware version may
-     * include a version less than 4.1.3 you have to
-     * use assertVersionGreaterThen().
-     *
-     * @since 4.1.3 introduced assertMinimumVersion($requiredVersion)
-     *
-     * @param  string $requiredVersion string Format: 3.5.4 or 3.5.4.21111
-     *
-     * @return bool
-     */
-    protected function assertMinimumVersion($requiredVersion)
-    {
-        $version = Shopware()->Config()->version;
-
-        if ($version === '___VERSION___') {
-            return true;
-        }
-
-        return version_compare($version, $requiredVersion, '>=');
-    }
-
-    /**
-     * Alias for assertMinimumVersion().
-     *
-     * Check if a given version is greater or equal to
-     * the currently installed shopware version.
-     *
-     * @deprecated 4.1.3 Use assertMinimumVersion instead
-     *
-     * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
-     *
-     * @return bool
-     */
-    protected function assertVersionGreaterThen($requiredVersion)
-    {
-        return $this->assertMinimumVersion($requiredVersion);
-    }
-
-    /**
-     * Register the custom model dir
-     */
-    protected function registerCustomModels()
-    {
-        Shopware()->Loader()->registerNamespace(
-            'Shopware\CustomModels',
-            $this->Path() . 'Models/'
-        );
-    }
-
-
-    /**
      * Helper function to enable the http cache for a single shopware controller.
      *
-     * @param int $cacheTime
+     * @param int   $cacheTime
      * @param array $cacheIds
      */
     public function enableControllerCache($cacheTime = 3600, $cacheIds = [])
@@ -804,12 +679,13 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * module.
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component
-     *     @type string $template           Required; Template class name which will be loaded in the frontend
-     *     @type string $xType              Required; Ext JS xtype for the backend module component
-     *     @type string $cls                Optional; $cls Css class which used in the frontend emotion
-     *     @type string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
-     *     @type string $description        Optional; Description field for the component, which displayed in the backend module.
+     *
+     *     @var string $name               Required; Logical name of the component
+     *     @var string $template           Required; Template class name which will be loaded in the frontend
+     *     @var string $xType              Required; Ext JS xtype for the backend module component
+     *     @var string $cls                Optional; $cls Css class which used in the frontend emotion
+     *     @var string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
+     *     @var string $description        Optional; Description field for the component, which displayed in the backend module.
      * }
      *
      * @return Component
@@ -824,9 +700,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 'extendsEmotionTemplates');
+
         return $component;
     }
-
 
     /**
      * Event listener of the post dispatch event of the backend and widgets emotion controller
@@ -836,7 +712,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function extendsEmotionTemplates(Enlight_Controller_ActionEventArgs $args)
     {
-        /**@var $view Enlight_View_Default*/
+        /** @var $view Enlight_View_Default */
         $view = $args->getSubject()->View();
 
         if (file_exists($this->Path() . '/Views/emotion_components/')) {
@@ -858,29 +734,10 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $path = 'backend/' . $file[0];
             $view->extendsBlock(
                 'backend/Emotion/app',
-                PHP_EOL . '{include file="'. $path .'"}',
+                PHP_EOL . '{include file="' . $path . '"}',
                 'append'
             );
         }
-    }
-
-    /**
-     * @return bool|string
-     */
-    private function getExistingBackendEmotionPath()
-    {
-        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
-
-        if (file_exists($backendPath)) {
-            return $backendPath;
-        }
-
-        $backendPath = $this->Path() . '/Views/backend/emotion_components/';
-        if (file_exists($backendPath)) {
-            return $backendPath;
-        }
-
-        return false;
     }
 
     /**
@@ -888,13 +745,13 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * from the database
      *
      * @param bool $removeDirty if true, the snippets changed by the
-     * shop owner will also be removed
+     *                          shop owner will also be removed
      */
     public function removeSnippets($removeDirty = false)
     {
-        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Snippets/', $removeDirty);
-        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'snippets/', $removeDirty);
-        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Resources/snippet/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path() . 'Snippets/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path() . 'snippets/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path() . 'Resources/snippet/', $removeDirty);
     }
 
     /**
@@ -905,18 +762,18 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Example $translations array:
      * <code>
      * array(
-         'en_GB' => array(
-            'plugin_form' => array(
-                'label' => 'Recently viewed items'
-            ),
-            'show' => array(
-                'label' => 'Display recently viewed items'
-            ),
-            'thumb' => array(
-                'label' => 'Thumbnail size',
-                'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
-            )
-         )
+     'en_GB' => array(
+     'plugin_form' => array(
+     'label' => 'Recently viewed items'
+     ),
+     'show' => array(
+     'label' => 'Display recently viewed items'
+     ),
+     'thumb' => array(
+     'label' => 'Thumbnail size',
+     'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+     )
+     )
      * )
      * </code>
      *
@@ -998,14 +855,114 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Helper function to get access on the http cache plugin.
+     * Notice if the Http Cache plugin isn't installed, this function
+     * returns null.
+     *
+     * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
+     */
+    protected function HttpCache()
+    {
+        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+
+        if (!$httpCache instanceof self) {
+            return null;
+        }
+
+        /** @var $plugin Plugin */
+        $plugin = Shopware()->Models()->find(Plugin::class, $httpCache->getId());
+
+        if (!$plugin->getActive() || !$plugin->getInstalled()) {
+            return null;
+        }
+
+        return $httpCache;
+    }
+
+    /**
+     * Check if a list of given plugins is currently available
+     * and active
+     *
+     * @param array $plugins
+     *
+     * @return bool
+     */
+    protected function assertRequiredPluginsPresent(array $plugins)
+    {
+        foreach ($plugins as $plugin) {
+            $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
+            $test = $this->get('dbal_connection')->fetchColumn($sql, [$plugin]);
+            if (!$test) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a given version is greater or equal to
+     * the currently installed shopware version.
+     *
+     * Attention: If your target shopware version may
+     * include a version less than 4.1.3 you have to
+     * use assertVersionGreaterThen().
+     *
+     * @since 4.1.3 introduced assertMinimumVersion($requiredVersion)
+     *
+     * @param string $requiredVersion string Format: 3.5.4 or 3.5.4.21111
+     *
+     * @return bool
+     */
+    protected function assertMinimumVersion($requiredVersion)
+    {
+        $version = Shopware()->Config()->version;
+
+        if ($version === '___VERSION___') {
+            return true;
+        }
+
+        return version_compare($version, $requiredVersion, '>=');
+    }
+
+    /**
+     * Alias for assertMinimumVersion().
+     *
+     * Check if a given version is greater or equal to
+     * the currently installed shopware version.
+     *
+     * @deprecated 4.1.3 Use assertMinimumVersion instead
+     *
+     * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
+     *
+     * @return bool
+     */
+    protected function assertVersionGreaterThen($requiredVersion)
+    {
+        return $this->assertMinimumVersion($requiredVersion);
+    }
+
+    /**
+     * Register the custom model dir
+     */
+    protected function registerCustomModels()
+    {
+        Shopware()->Loader()->registerNamespace(
+            'Shopware\CustomModels',
+            $this->Path() . 'Models/'
+        );
+    }
+
+    /**
      * @param string $route
-     * @param int $time
-     * @param array $invalidateTags
+     * @param int    $time
+     * @param array  $invalidateTags
+     *
      * @return bool
      */
     protected function addHttpCacheRoute($route, $time, $invalidateTags = [])
     {
-        /**@var $writer ConfigWriter*/
+        /** @var $writer ConfigWriter */
         $writer = $this->get('config_writer');
 
         $value = $writer->get('cacheControllers', 'HttpCache');
@@ -1035,11 +992,12 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * @param string $route
+     *
      * @return bool
      */
     protected function removeHttpCacheRoute($route)
     {
-        /**@var $writer ConfigWriter*/
+        /** @var $writer ConfigWriter */
         $writer = $this->get('config_writer');
 
         //remove cached controller
@@ -1050,7 +1008,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
         $value = $this->explodeHttpCacheRoutes($value);
         $new = array_filter($value, function ($row) use ($route) {
-            return ($row['route'] != $route);
+            return $row['route'] != $route;
         });
 
         $new = $this->implodeHttpCacheRoutes($new);
@@ -1060,7 +1018,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $value = $writer->get('noCacheControllers', 'HttpCache');
         $value = $this->explodeHttpCacheRoutes($value);
         $new = array_filter($value, function ($row) use ($route) {
-            return ($row['route'] != $route);
+            return $row['route'] != $route;
         });
 
         $new = $this->implodeHttpCacheRoutes($new);
@@ -1070,7 +1028,50 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * @param  string $value
+     * @return Form
+     */
+    private function initForm()
+    {
+        $info = $this->Info();
+        $formRepository = $this->Forms();
+        $form = new Form();
+        $form->setPluginId($this->getId());
+        $form->setName($info->name);
+        $form->setLabel($info->label);
+        $form->setDescription($info->description);
+
+        /** @var Form $parent */
+        $parent = $formRepository->findOneBy([
+            'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other',
+        ]);
+        $form->setParent($parent);
+        Shopware()->Models()->persist($form);
+
+        return $form;
+    }
+
+    /**
+     * @return bool|string
+     */
+    private function getExistingBackendEmotionPath()
+    {
+        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
+
+        if (file_exists($backendPath)) {
+            return $backendPath;
+        }
+
+        $backendPath = $this->Path() . '/Views/backend/emotion_components/';
+        if (file_exists($backendPath)) {
+            return $backendPath;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $value
+     *
      * @return array
      */
     private function explodeHttpCacheRoutes($value)
@@ -1082,17 +1083,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             if (empty($row[0])) {
                 return null;
             }
+
             return ['route' => $row[0], 'time' => $row[1]];
         }, $value);
 
         $value = array_filter($value);
+
         return $value;
     }
 
     /**
      * @param string $route
-     * @param int $time
-     * @param array $value
+     * @param int    $time
+     * @param array  $value
+     *
      * @return array
      */
     private function addOrUpdateHttpCacheRoute($route, $time, $value)
@@ -1121,7 +1125,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @param string $route
      * @param string $tag
-     * @param array $value
+     * @param array  $value
+     *
      * @return array
      */
     private function addNoCacheTag($route, $tag, $value)
@@ -1148,6 +1153,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * @param array $value
+     *
      * @return string
      */
     private function implodeHttpCacheRoutes($value)

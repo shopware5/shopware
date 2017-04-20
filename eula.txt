@@ -61,7 +61,7 @@ Die shopware AG räumt dem Kunden das Recht ein, das Basis-Produkt und Shopware 
 
 7.1.	Das Basis-Produkt und – soweit vom Vertrag erfasst – die Shopware Premium-Plugins sowie die nach den Ziffern 4 und 5 eingeräumten Rechte dürfen dauerhaft auf Dritte übertragen werden, wenn der Dritte diesen Nutzungsbedingungen zustimmt. Der Dritte ist zur Nutzung in demselben Umfang berechtigt, wie der Kunde es aufgrund des mit der shopware AG geschlossenen Professional-, Enterprise Business- oder Enterprise Cluster-Vertrags war.
 7.2.	Im Fall der Übertragung ist der Kunde verpflichtet, sämtliche auf den Web- oder Datenbank-Servern vorhandenen Kopien der Produkte zu löschen und diese Löschung gegenüber der shopware AG beispielsweise durch Abgabe einer Vernichtungserklärung nachzuweisen.
-7.3.	Die showare AG erstellt für den Dritten auf Anfrage und ohne zusätzliche Kosten einen neuen Lizenzschlüssel, mit dem der Dritte die Produkte auf dem neuen Web- oder Datenbank-Server freischalten kann.
+7.3.	Die shopware AG erstellt für den Dritten auf Anfrage und ohne zusätzliche Kosten einen neuen Lizenzschlüssel, mit dem der Dritte die Produkte auf dem neuen Web- oder Datenbank-Server freischalten kann.
 
 8.	GEWÄHRLEISTUNG
 

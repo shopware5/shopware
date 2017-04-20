@@ -27,6 +27,7 @@ namespace Shopware\Recovery\Update\Command;
 use Shopware\Components\Migrations\Manager as MigrationManager;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\IOHelper;
+use Shopware\Recovery\Update\Cleanup;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DependencyInjection\Container;
 use Shopware\Recovery\Update\DummyPluginFinder;
@@ -79,7 +80,7 @@ class UpdateCommand extends Command
         );
 
         if (!is_dir(UPDATE_FILES_PATH) && !is_dir(UPDATE_ASSET_PATH)) {
-            $ioService->writeln("No update files found.");
+            $ioService->writeln('No update files found.');
 
             return 1;
         }
@@ -89,9 +90,9 @@ class UpdateCommand extends Command
         if ($ioService->isInteractive()) {
             $ioService->cls();
             $ioService->printBanner();
-            $ioService->writeln("<info>Welcome to the Shopware updater </info>");
-            $ioService->writeln(sprintf("Shopware Version %s", $version));
-            $ioService->writeln("");
+            $ioService->writeln('<info>Welcome to the Shopware updater </info>');
+            $ioService->writeln(sprintf('Shopware Version %s', $version));
+            $ioService->writeln('');
             $ioService->ask('Press return to start the update.');
             $ioService->cls();
         }
@@ -103,28 +104,27 @@ class UpdateCommand extends Command
         $this->synchronizeThemes();
         $this->writeLockFile();
 
-
         $ioService->cls();
-        $ioService->writeln("");
-        $ioService->writeln("");
-        $ioService->writeln("<info>The update has been finished succesfuly.</info>");
-        $ioService->writeln("Your shop is currently in maintenance mode.");
-        $ioService->writeln(sprintf("Please delete <question>%s</question> to finish the update.", UPDATE_ASSET_PATH));
-        $ioService->writeln("");
+        $ioService->writeln('');
+        $ioService->writeln('');
+        $ioService->writeln('<info>The update has been finished succesfuly.</info>');
+        $ioService->writeln('Your shop is currently in maintenance mode.');
+        $ioService->writeln(sprintf('Please delete <question>%s</question> to finish the update.', UPDATE_ASSET_PATH));
+        $ioService->writeln('');
     }
 
     private function unpackFiles()
     {
-        $this->IOHelper->writeln("Replace system files...");
+        $this->IOHelper->writeln('Replace system files...');
         if (!is_dir(UPDATE_FILES_PATH)) {
-            $this->IOHelper->writeln("skipped...");
+            $this->IOHelper->writeln('skipped...');
 
             return;
         }
 
         /** @var FilesystemFactory $factory */
         $factory = $this->container->get('filesystem.factory');
-        $localFilesytem   = $factory->createLocalFilesystem();
+        $localFilesytem = $factory->createLocalFilesystem();
         $remoteFilesystem = $factory->createLocalFilesystem();
 
         /** @var PathBuilder $pathBuilder */
@@ -141,16 +141,16 @@ class UpdateCommand extends Command
                 throw new \Exception($result->getMessage(), 0, $result->getException());
             }
             $offset = $result->getOffset();
-            $total  = $result->getTotal();
+            $total = $result->getTotal();
         } while ($result instanceof ValidResult);
     }
 
     private function migrateDatabase()
     {
-        $this->IOHelper->writeln("Apply database migrations...");
+        $this->IOHelper->writeln('Apply database migrations...');
 
         if (!is_dir(UPDATE_ASSET_PATH . '/migrations/')) {
-            $this->IOHelper->writeln("skipped...");
+            $this->IOHelper->writeln('skipped...');
 
             return 1;
         }
@@ -178,18 +178,18 @@ class UpdateCommand extends Command
             $progress->setCurrent($offset);
         } while ($result instanceof ValidResult);
         $progress->finish();
-        $this->IOHelper->writeln("");
+        $this->IOHelper->writeln('');
     }
 
     private function importSnippets()
     {
-        $this->IOHelper->writeln("Import snippets...");
+        $this->IOHelper->writeln('Import snippets...');
 
         /** @var DumpIterator $dump */
         $dump = $this->container->get('dump');
 
         if (!$dump) {
-            $this->IOHelper->writeln("skipped...");
+            $this->IOHelper->writeln('skipped...');
 
             return 1;
         }
@@ -212,16 +212,15 @@ class UpdateCommand extends Command
             $progress->setCurrent($offset);
         } while ($result instanceof ValidResult);
         $progress->finish();
-        $this->IOHelper->writeln("");
+        $this->IOHelper->writeln('');
     }
 
     private function cleanup()
     {
-        $this->IOHelper->writeln("Cleanup old files, clearing caches...");
+        $this->IOHelper->writeln('Cleanup old files, clearing caches...');
 
         $this->deleteDummyPlugins();
         $this->cleanupFiles();
-        $this->cleanupCache();
     }
 
     private function deleteDummyPlugins()
@@ -240,17 +239,10 @@ class UpdateCommand extends Command
         foreach ($cleanupFilesFinder->getCleanupFiles() as $path) {
             Utils::cleanPath($path);
         }
-    }
 
-    private function cleanupCache()
-    {
-        $cachePath = SW_PATH . '/var/cache';
-        foreach (new \DirectoryIterator($cachePath) as $cacheDirectory) {
-            if ($cacheDirectory->isDot() || !$cacheDirectory->isDir()) {
-                continue;
-            }
-            Utils::deleteDir($cacheDirectory->getPathname(), true);
-        }
+        /** @var Cleanup $cleanup */
+        $cleanup = $this->container->get('shopware.update.cleanup');
+        $cleanup->cleanup(false);
     }
 
     private function writeLockFile()

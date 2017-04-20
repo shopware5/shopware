@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sArticlesTest extends TestCase
@@ -60,7 +60,9 @@ class sArticlesTest extends TestCase
 
     /**
      * Test case method
+     *
      * @dataProvider provideData
+     *
      * @param string $input
      * @param string $expectedResult
      */

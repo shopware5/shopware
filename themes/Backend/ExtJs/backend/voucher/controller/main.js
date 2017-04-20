@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Voucher.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Required sub-controller for this controller
@@ -57,19 +57,26 @@ Ext.define('Shopware.apps.Voucher.controller.Main', {
      */
     stores:[ 'List'],
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
-        me.mainWindow = me.getView('main.Window').create({
-            listStore: me.getStore('List')
-        });
-        me.getStore('List').load();
+
+        if (me.subApplication && me.subApplication.params && Ext.isNumeric(me.subApplication.params.voucherId)) {
+            var voucherController = me.subApplication.getController('Voucher');
+            voucherController.openVoucher(me.subApplication.params.voucherId);
+        } else {
+            me.mainWindow = me.getView('main.Window').create({
+                listStore: me.getStore('List')
+            });
+            me.getStore('List').load();
+        }
+
         me.callParent(arguments);
     }
 });

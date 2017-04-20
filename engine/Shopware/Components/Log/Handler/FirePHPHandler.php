@@ -32,7 +32,7 @@ use Monolog\Handler\FirePHPHandler as BaseFirePHPHandler;
  * FirePHPHandler.
  *
  * @category  Shopware
- * @package   Shopware\Components\Log\Handler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FirePHPHandler extends BaseFirePHPHandler
@@ -40,12 +40,33 @@ class FirePHPHandler extends BaseFirePHPHandler
     /**
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * @var \Enlight_Controller_Response_ResponseHttp
      */
     private $response;
+
+    /**
+     * @param Request  $request
+     * @param Response $response
+     */
+    public function setUp(Request $request, Response $response)
+    {
+        if (!$this->acceptsRequest($request)) {
+            $this->sendHeaders = false;
+            $this->headers = [];
+
+            return;
+        }
+
+        $this->response = $response;
+        foreach ($this->headers as $header => $content) {
+            $this->response->setHeader($header, $content, true);
+        }
+
+        $this->headers = [];
+    }
 
     /**
      * Adds the headers to the response once it's created
@@ -60,39 +81,19 @@ class FirePHPHandler extends BaseFirePHPHandler
 
     /**
      * @param Request $request
+     *
      * @return bool
      */
     public function acceptsRequest(Request $request)
     {
         $firePhpVersion = $request->getHeader('X-FirePHP-Version');
-        $userAgent      = preg_match('{\bFirePHP/\d+\.\d+\b}', $request->getHeader('User-Agent'));
+        $userAgent = preg_match('{\bFirePHP/\d+\.\d+\b}', $request->getHeader('User-Agent'));
 
         return $firePhpVersion || $userAgent;
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     */
-    public function setUp(Request $request, Response $response)
-    {
-        if (!$this->acceptsRequest($request)) {
-            $this->sendHeaders = false;
-            $this->headers = array();
-
-            return;
-        }
-
-        $this->response = $response;
-        foreach ($this->headers as $header => $content) {
-            $this->response->setHeader($header, $content, true);
-        }
-
-        $this->headers = array();
-    }
-
-    /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function sendHeader($header, $content)
     {
@@ -111,7 +112,9 @@ class FirePHPHandler extends BaseFirePHPHandler
      * Creates message header from record
      *
      * @see createHeader()
-     * @param  array  $record
+     *
+     * @param array $record
+     *
      * @return string
      */
     protected function createRecordHeader(array $record)
@@ -123,33 +126,33 @@ class FirePHPHandler extends BaseFirePHPHandler
             // Wildfire is extensible to support multiple protocols & plugins in a single request,
             // but we're not taking advantage of that (yet), so we're using "1" for simplicity's sake.
             $header = $this->createHeader(
-                array(1, 1, 1, self::$messageIndex++),
-                $length . '|' . $record['formatted']. '|'
+                [1, 1, 1, self::$messageIndex++],
+                $length . '|' . $record['formatted'] . '|'
             );
 
             return $header;
         }
 
         $parts = str_split($record['formatted'], $chunkSize);
-        $headers = array();
-        for ($i = 0; $i < count($parts); $i++) {
-            $part    = $parts[$i];
+        $headers = [];
+        for ($i = 0; $i < count($parts); ++$i) {
+            $part = $parts[$i];
             $isFirst = ($i == 0);
-            $isLast  = ($i == count($parts) -1);
+            $isLast = ($i == count($parts) - 1);
 
             if ($isFirst) {
                 $headers[] = $this->createHeader(
-                    array(1, 1, 1, self::$messageIndex++),
+                    [1, 1, 1, self::$messageIndex++],
                     $length . '|' . $part . '|\\'
                 );
             } elseif ($isLast) {
                 $headers[] = $this->createHeader(
-                    array(1, 1, 1, self::$messageIndex++),
-                    '|' . $part. '|'
+                    [1, 1, 1, self::$messageIndex++],
+                    '|' . $part . '|'
                 );
             } else {
                 $headers[] = $this->createHeader(
-                    array(1, 1, 1, self::$messageIndex++),
+                    [1, 1, 1, self::$messageIndex++],
                     '|' . $part . '|\\'
                 );
             }
@@ -163,6 +166,7 @@ class FirePHPHandler extends BaseFirePHPHandler
      *
      * @see sendHeader()
      * @see sendInitHeaders()
+     *
      * @param array $record
      */
     protected function write(array $record)

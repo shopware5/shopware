@@ -39,18 +39,18 @@ Ext.define('Shopware.apps.Blog.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     mainWindow: null,
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
         me.subApplication.treeStore =  me.subApplication.getStore('Tree').load();
         me.subApplication.listStore =  me.subApplication.getStore('List').load();

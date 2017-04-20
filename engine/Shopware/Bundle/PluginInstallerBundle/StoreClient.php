@@ -32,15 +32,13 @@ use Shopware\Bundle\PluginInstallerBundle\Exception\OrderException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\SbpServerException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
+use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\RequestException;
 use Shopware\Components\HttpClient\Response;
 use Shopware\Components\OpenSSLVerifier;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle
- */
 class StoreClient
 {
     /**
@@ -64,28 +62,38 @@ class StoreClient
     private $openSSLVerifier;
 
     /**
-     * @param HttpClientInterface $httpClient
-     * @param string $apiEndPoint
-     * @param Struct\StructHydrator $structHydrator
-     * @param OpenSSLVerifier $openSSLVerifier
+     * @var UniqueIdGeneratorInterface
+     */
+    private $uniqueIdGenerator;
+
+    /**
+     * @param HttpClientInterface        $httpClient
+     * @param string                     $apiEndPoint
+     * @param Struct\StructHydrator      $structHydrator
+     * @param OpenSSLVerifier            $openSSLVerifier
+     * @param UniqueIdGeneratorInterface $uniqueIdGenerator
      */
     public function __construct(
         HttpClientInterface $httpClient,
         $apiEndPoint,
         Struct\StructHydrator $structHydrator,
-        OpenSSLVerifier $openSSLVerifier
+        OpenSSLVerifier $openSSLVerifier,
+        UniqueIdGeneratorInterface $uniqueIdGenerator
     ) {
         $this->httpClient = $httpClient;
         $this->apiEndPoint = $apiEndPoint;
         $this->structHydrator = $structHydrator;
         $this->openSSLVerifier = $openSSLVerifier;
+        $this->uniqueIdGenerator = $uniqueIdGenerator;
     }
 
     /**
      * @param string $shopwareId
      * @param string $password
-     * @return AccessTokenStruct
+     *
      * @throws \Exception
+     *
+     * @return AccessTokenStruct
      */
     public function getAccessToken($shopwareId, $password)
     {
@@ -93,7 +101,7 @@ class StoreClient
             '/accesstokens',
             [
                 'shopwareId' => $shopwareId,
-                'password'   => $password
+                'password' => $password,
             ]
         );
 
@@ -102,10 +110,12 @@ class StoreClient
 
     /**
      * @param string $resource
-     * @param array $params
-     * @param array $headers
-     * @return array
+     * @param array  $params
+     * @param array  $headers
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function doGetRequest($resource, $params = [], $headers = [])
     {
@@ -120,11 +130,13 @@ class StoreClient
 
     /**
      * @param AccessTokenStruct $accessToken
-     * @param string $resource
-     * @param array $params
-     * @param array $headers
-     * @return array
+     * @param string            $resource
+     * @param array             $params
+     * @param array             $headers
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function doAuthGetRequest(
         AccessTokenStruct $accessToken,
@@ -146,8 +158,10 @@ class StoreClient
      * @param $resource
      * @param array $params
      * @param array $headers
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function doGetRequestRaw($resource, $params = [], $headers = [])
     {
@@ -162,11 +176,13 @@ class StoreClient
 
     /**
      * @param AccessTokenStruct $accessToken
-     * @param string $resource
-     * @param array $params
-     * @param array $headers
-     * @return array
+     * @param string            $resource
+     * @param array             $params
+     * @param array             $headers
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function doAuthGetRequestRaw(
         AccessTokenStruct $accessToken,
@@ -180,15 +196,18 @@ class StoreClient
             $headers,
             $accessToken
         );
+
         return $response->getBody();
     }
 
     /**
      * @param string $resource
-     * @param array $params
-     * @param array $headers
-     * @return array
+     * @param array  $params
+     * @param array  $headers
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function doPostRequest($resource, $params, $headers = [])
     {
@@ -197,15 +216,18 @@ class StoreClient
             $params,
             $headers
         );
+
         return json_decode($response->getBody(), true);
     }
 
     /**
      * @param AccessTokenStruct $accessToken
-     * @param string $resource
-     * @param array $params
-     * @return array
+     * @param string            $resource
+     * @param array             $params
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function doAuthPostRequest(
         AccessTokenStruct $accessToken,
@@ -226,8 +248,10 @@ class StoreClient
      * @param AccessTokenStruct $accessToken
      * @param $resource
      * @param $params
-     * @return Response
+     *
      * @throws \Exception
+     *
+     * @return Response
      */
     public function doAuthPostRequestRaw(
         AccessTokenStruct $accessToken,
@@ -249,19 +273,46 @@ class StoreClient
      */
     public function doPing()
     {
-        $response = $this->httpClient->get($this->apiEndPoint.'/ping', ['timeout' => 7]);
+        $response = $this->httpClient->get($this->apiEndPoint . '/ping', ['timeout' => 7]);
         $this->verifyResponseSignature($response);
 
         return json_decode($response->getBody(), true) ?: false;
     }
 
     /**
+     * @param string $eventName
+     * @param array  $additionalData
+     *
+     * @return array|false
+     */
+    public function doTrackEvent($eventName, $additionalData = [])
+    {
+        $payload = [
+            'additionalData' => $additionalData,
+            'instanceId' => $this->uniqueIdGenerator->getUniqueId(),
+            'event' => $eventName,
+        ];
+
+        try {
+            $response = $this->httpClient->post($this->apiEndPoint . '/tracking/events', ['timeout' => 7], json_encode($payload));
+            $this->verifyResponseSignature($response);
+        } catch (RequestException $ex) {
+            return false;
+        }
+
+        return json_decode($response->getBody(), true) ?: false;
+    }
+
+    /**
      * @param $resource
-     * @param array $params
-     * @param array $headers
+     * @param array                  $params
+     * @param array                  $headers
      * @param accessTokenStruct|null $token
-     * @return Response
+     *
      * @throws \Exception
+     *
+     * @return Response
+     *
      * @internal param null|string $secret
      */
     private function getRequest($resource, $params, $headers = [], AccessTokenStruct $token = null)
@@ -292,12 +343,14 @@ class StoreClient
 
     /**
      * @param $resource
-     * @param array $params
-     * @param array $headers
+     * @param array             $params
+     * @param array             $headers
      * @param AccessTokenStruct $token
-     * @return Response
+     *
      * @throws StoreException
      * @throws \Exception
+     *
+     * @return Response
      */
     private function postRequest($resource, $params = [], $headers = [], AccessTokenStruct $token = null)
     {
@@ -332,6 +385,7 @@ class StoreClient
      * by SBP about what happened
      *
      * @param RequestException $requestException
+     *
      * @throws \Exception
      * @throws SbpServerException
      * @throws AuthenticationException
@@ -354,10 +408,9 @@ class StoreClient
         }
 
         $httpCode = $data['error'];
-        $sbpCode  = $data['code'];
+        $sbpCode = $data['code'];
 
         switch ($sbpCode) {
-
             case 'BinariesException-0':       //Link not found
             case 'BinariesException-1':       //Deserialization failure
             case 'BinariesException-2':       //Upload file is invalid
@@ -373,11 +426,9 @@ class StoreClient
             case 'UsersException-5':          //Deserialization failed
             case 'UserShopsException-8':      //Could not find software version.
                 throw new SbpServerException($sbpCode, 'server_error', $httpCode, $requestException);
-
             case 'BinariesException-10': //Shopware version not given
             case 'BinariesException-12': //Shopware version is invalid
                 throw new SbpServerException($sbpCode, 'shopware_version', $httpCode, $requestException);
-
             case 'BinariesException-11':      //no fitting binary found
                 throw new LicenceException($sbpCode, 'no_fitting_binary', $httpCode, $requestException);
             case 'BinariesException-13':
@@ -398,7 +449,6 @@ class StoreClient
                 throw new SbpServerException($sbpCode, 'no_version_for_provided_shopware_version', $httpCode, $requestException);
             case 'BinariesException-21':
                 throw new SbpServerException($sbpCode, 'no_version_for_provided_shopware_version', $httpCode, $requestException);
-
             case 'UsersException-4':          //Unauthorized
             case 'OrdersException-0':         //Order authentication failed
             case 'PluginLicensesException-8': //Unauthorized
@@ -408,51 +458,37 @@ class StoreClient
             case 'LicenseUpgradesException-0': //Given token is invalid.
             case 'LdapTokensException-0':     //Authorization failed.
                 throw new AuthenticationException($sbpCode, 'authentication', $httpCode, $requestException);
-
             case 'UsersException-1':      //Invalid parameters for registration.
                 throw new AccountException($sbpCode, 'registration', $httpCode, $requestException);
-
             case 'UsersException-2':      //ShopwareID is already taken
                 throw new AccountException($sbpCode, 'shopware_id_already_taken', $httpCode, $requestException);
-
             case 'UsersException-3':      //User is invalid
                 throw new AccountException($sbpCode, 'invalid_user', $httpCode, $requestException);
-
             case 'UsersException-6':      //Invalid password reset parameters
                 throw new AccountException($sbpCode, 'invalid_password_reset', $httpCode, $requestException);
-
             case 'UserTokensException-3': //Account is banned.
                 throw new AccountException($sbpCode, 'account_banned', $httpCode, $requestException);
-
             case 'OrdersException-1':         //Ordered plugin not found
             case 'PluginLicensesException-1': //Referenced plugin not found.
                 throw new OrderException($sbpCode, 'plugin_not_found', $httpCode, $requestException);
-
             case 'OrdersException-4':         //Insufficient balance
                 throw new OrderException($sbpCode, 'insufficient_balance', $httpCode, $requestException);
-
             case 'OrdersException-3':  //Empty order
             case 'OrdersException-5':  //Order invalid
             case 'OrdersException-6':  //Order position invalid
                 throw new OrderException($sbpCode, 'order_invalid', $httpCode, $requestException);
-
             case 'OrdersException-7':  //Shop version incompatible with license version
                 throw new OrderException($sbpCode, 'incompatible_version', $httpCode, $requestException);
-
             case 'PluginLicensesException-0': //License not found.
                 throw new LicenceException($sbpCode, 'licence_not_found', $httpCode, $requestException);
-
             case 'PluginLicensesException-2': //License is invalid.
             case 'PluginLicensesException-9': //Invalid parameters.
                 throw new LicenceException($sbpCode, 'licence_invalid', $httpCode, $requestException);
-
             case 'PluginLicensesException-3': //Referenced shop not found.
                 throw new LicenceException($sbpCode, 'shop_not_found', $httpCode, $requestException);
-
             case 'PluginLicensesException-4': //License is already ordered for this shop.
             case 'PluginLicensesException-7': //License already ordered with a better price model.
                 throw new LicenceException($sbpCode, 'already_ordered', $httpCode, $requestException);
-
             case 'DomainVerificationException-0':   //Invalid domain.
                 throw new DomainVerificationException($sbpCode, 'invalid_domain', $httpCode, $requestException);
             case 'DomainVerificationException-1':   //Unauthorized.

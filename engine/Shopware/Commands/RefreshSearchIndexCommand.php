@@ -24,11 +24,9 @@
 
 namespace Shopware\Commands;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class RefreshSearchIndexCommand extends ShopwareCommand
 {
@@ -39,7 +37,7 @@ class RefreshSearchIndexCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:refresh:search:index')
-            ->setDescription('refreshes and regenerates the search index')
+            ->setDescription('Refreshes and regenerates the search index')
             ->setHelp('The <info>%command.name%</info> regenerates the search index')
             ->addOption(
                 'clear-table',
@@ -57,18 +55,18 @@ class RefreshSearchIndexCommand extends ShopwareCommand
     {
         $clearTable = $input->getOption('clear-table');
         if ($clearTable) {
-            $output->writeln("Deleting the search index...");
+            $output->writeln('Deleting the search index...');
 
             /** @var \Doctrine\DBAL\Connection $connection */
             $connection = $this->container->get('dbal_connection');
             $connection->delete('s_search_index', ['*']);
             $connection->delete('s_search_keywords', ['*']);
         }
-        $output->writeln("Creating the search index. This may take a while depending on the shop size.");
+        $output->writeln('Creating the search index. This may take a while depending on the shop size.');
         /* @var $indexer \Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface; */
         $indexer = $this->container->get('shopware_searchdbal.search_indexer');
         $indexer->build();
 
-        $output->writeln("The search index was created successfully.");
+        $output->writeln('The search index was created successfully.');
     }
 }

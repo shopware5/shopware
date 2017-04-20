@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Configurator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Group extends Extendable implements \JsonSerializable
@@ -131,7 +131,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSelected()
     {
@@ -139,7 +139,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $selected
+     * @param bool $selected
      */
     public function setSelected($selected)
     {
@@ -147,7 +147,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

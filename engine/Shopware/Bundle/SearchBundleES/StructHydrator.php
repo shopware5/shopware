@@ -25,20 +25,19 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group as PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option as PropertyOption;
-use Shopware\Bundle\StoreFrontBundle\Struct\Media;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail;
 
 /**
  * Class StructHydrator
- * @package Shopware\Bundle\ESIndexingBundle\Service
  */
 class StructHydrator
 {
     /**
      * @param array $data
+     *
      * @return PropertyGroup
      */
     public function createPropertyGroup($data)
@@ -55,11 +54,13 @@ class StructHydrator
 
         $group->setOptions($options);
         $group->addAttributes($this->createAttributes($data['attributes']));
+
         return $group;
     }
 
     /**
      * @param array $data
+     *
      * @return PropertyOption
      */
     public function createPropertyOption($data)
@@ -73,11 +74,13 @@ class StructHydrator
             $option->setMedia($this->createMedia($data['media']));
         }
         $option->addAttributes($this->createAttributes($data['attributes']));
+
         return $option;
     }
 
     /**
      * @param array $data
+     *
      * @return Media
      */
     public function createMedia($data)
@@ -98,11 +101,13 @@ class StructHydrator
 
         $media->setThumbnails($thumbnails);
         $media->addAttributes($this->createAttributes($data['attributes']));
+
         return $media;
     }
 
     /**
      * @param array $data
+     *
      * @return Thumbnail
      */
     public function createThumbnail($data)
@@ -114,11 +119,13 @@ class StructHydrator
             $data['maxHeight']
         );
         $thumbnail->addAttributes($this->createAttributes($data['attributes']));
+
         return $thumbnail;
     }
 
     /**
      * @param array $data
+     *
      * @return Attribute[]
      */
     public function createAttributes($data)
@@ -127,6 +134,7 @@ class StructHydrator
         foreach ($data as $key => $value) {
             $attributes[$key] = new Attribute($value);
         }
+
         return $attributes;
     }
 }

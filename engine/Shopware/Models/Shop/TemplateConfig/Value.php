@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Shop\TemplateConfig;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -34,7 +35,23 @@ use Shopware\Models\Shop\Shop;
 class Value extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var Element
+     * @ORM\ManyToOne(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *      inversedBy="values"
+     * )
+     * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
+     */
+    protected $element;
+
+    /**
+     * @var Shop
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    protected $shop;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -49,27 +66,10 @@ class Value extends ModelEntity
     private $elementId;
 
     /**
-     * @var Element $element
-     * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      inversedBy="values"
-     * )
-     * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
-     */
-    protected $element;
-
-    /**
-     * @var integer $shopId
+     * @var int
      * @ORM\Column(name="shop_id", type="integer", nullable=false)
      */
     private $shopId;
-
-    /**
-     * @var Shop
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
-     */
-    protected $shop;
 
     /**
      * @var array
@@ -124,7 +124,6 @@ class Value extends ModelEntity
     {
         return $this->shop;
     }
-
 
     /**
      * @return int

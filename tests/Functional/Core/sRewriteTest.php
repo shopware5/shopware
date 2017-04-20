@@ -24,9 +24,10 @@
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class sRewriteTest extends PHPUnit_Framework_TestCase
+class sRewriteTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var sRewriteTable

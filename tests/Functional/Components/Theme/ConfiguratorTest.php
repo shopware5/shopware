@@ -56,7 +56,7 @@ class ConfiguratorTest extends Base
         $names = $this->invokeMethod(
             $configurator,
             'getContainerNames',
-            array($container)
+            [$container]
         );
 
         $this->assertArrayHasKey('fields', $names);
@@ -79,14 +79,14 @@ class ConfiguratorTest extends Base
         $entityManager = $this->getEntityManager();
 
         $containers = new \Doctrine\Common\Collections\ArrayCollection();
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; ++$i) {
             $layout = new \Shopware\Models\Shop\TemplateConfig\Layout();
             $layout->setName('container' . $i);
             $containers->add($layout);
         }
 
         $elements = new \Doctrine\Common\Collections\ArrayCollection();
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; ++$i) {
             $layout = new \Shopware\Models\Shop\TemplateConfig\Element();
             $layout->setName('field' . $i);
             $elements->add($layout);
@@ -105,19 +105,18 @@ class ConfiguratorTest extends Base
         $eventManager = $this->getEventManager();
         $eventManager->expects($this->once())
             ->method('filter')
-            ->willReturn(array(
-                'containers' => array('container1', 'container4'),
-                'fields' => array('field1', 'field3', 'field4')
-            ));
-
+            ->willReturn([
+                'containers' => ['container1', 'container4'],
+                'fields' => ['field1', 'field3', 'field4'],
+            ]);
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $entityManager,
                 $this->getUtilClass(),
                 $this->getFormPersister(),
-                $eventManager
-            ))
+                $eventManager,
+            ])
             ->getMock();
 
         $container = new \Shopware\Components\Form\Container\TabContainer('container1');
@@ -128,15 +127,14 @@ class ConfiguratorTest extends Base
         $tab->addElement(new \Shopware\Components\Form\Field\Text('field3'));
         $tab->addElement(new \Shopware\Components\Form\Field\Text('field4'));
 
-
         $this->invokeMethod(
             $configurator,
             'removeUnused',
-            array(
+            [
                 $containers,
                 $elements,
-                $container
-            )
+                $container,
+            ]
         );
     }
 
@@ -151,11 +149,12 @@ class ConfiguratorTest extends Base
         $this->invokeMethod(
             $configurator,
             'validateConfig',
-            array($container)
+            [$container]
         );
 
         $this->assertTrue(true, 'validateConfig doesn\'t throw an exception');
     }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Field Shopware\Components\Form\Field\Text requires a configured name
@@ -173,7 +172,7 @@ class ConfiguratorTest extends Base
         $this->invokeMethod(
             $configurator,
             'validateConfig',
-            array($container)
+            [$container]
         );
     }
 
@@ -188,16 +187,16 @@ class ConfiguratorTest extends Base
             ->method('flush');
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array($entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()))
+            ->setConstructorArgs([$entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()])
             ->getMock();
 
         $this->invokeMethod(
             $configurator,
             'synchronizeSets',
-            array(
+            [
                 $theme,
-                $template
-            )
+                $template,
+            ]
         );
 
         $this->assertCount(2, $template->getConfigSets());
@@ -213,7 +212,7 @@ class ConfiguratorTest extends Base
     {
         $existing = new \Doctrine\Common\Collections\ArrayCollection();
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; ++$i) {
             $set = new \Shopware\Models\Shop\TemplateConfig\Set();
             $set->setName('set' . $i);
             $existing->add($set);
@@ -234,7 +233,7 @@ class ConfiguratorTest extends Base
             ->with($this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Set'));
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array($entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()))
+            ->setConstructorArgs([$entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()])
             ->getMock();
 
         $theme = $this->getResponsiveTheme();
@@ -242,10 +241,10 @@ class ConfiguratorTest extends Base
         $this->invokeMethod(
             $configurator,
             'synchronizeSets',
-            array(
+            [
                 $theme,
-                $template
-            )
+                $template,
+            ]
         );
     }
 }

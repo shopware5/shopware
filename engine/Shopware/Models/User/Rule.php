@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\User;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware rule model represents a acl rule in shopware.
@@ -37,7 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Rule extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -48,7 +48,7 @@ class Rule extends ModelEntity
     /**
      * The role property is the owning side of the association between rule and permission.
      *
-     * @var $role \Shopware\Models\User\Role
+     * @var \Shopware\Models\User\Role
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="rules", fetch="EAGER")
      * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
      */
@@ -57,7 +57,7 @@ class Rule extends ModelEntity
     /**
      * The resource property is the owning side of the association between rule and permission.
      *
-     * @var $resource \Shopware\Models\User\Resource
+     * @var \Shopware\Models\User\Resource
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Resource", fetch="EAGER")
      * @ORM\JoinColumn(name="resourceID", referencedColumnName="id", nullable=true)
      */
@@ -66,7 +66,7 @@ class Rule extends ModelEntity
     /**
      * The privilege property is the owning side of the association between rule and permission.
      *
-     * @var $privilege \Shopware\Models\User\Privilege
+     * @var \Shopware\Models\User\Privilege
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\Privilege", fetch="EAGER")
      * @ORM\JoinColumn(name="privilegeID", referencedColumnName="id", nullable=true)
      */
@@ -74,19 +74,22 @@ class Rule extends ModelEntity
 
     /**
      * @ORM\Column(name="privilegeID", type="integer", nullable=true)
-     * @var int $privilegeId
+     *
+     * @var int
      */
     private $privilegeId;
 
     /**
      * @ORM\Column(name="roleID", type="integer", nullable=true)
-     * @var int $roleId
+     *
+     * @var int
      */
     private $roleId;
 
     /**
      * @ORM\Column(name="resourceID", type="integer", nullable=true)
-     * @var int $resourceId
+     *
+     * @var int
      */
     private $resourceId;
 

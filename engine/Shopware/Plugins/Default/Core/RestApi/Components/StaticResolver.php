@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\RestApi\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StaticResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
@@ -51,15 +51,16 @@ class StaticResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
     /**
      * Resolve username/realm to password/hash/etc.
      *
-     * @param  string $username Username
-     * @param  string $realm    Authentication Realm
-     * @return string|false User's shared secret, if the user is found in the
-     *         realm, false otherwise.
+     * @param string $username Username
+     * @param string $realm    Authentication Realm
+     *
+     * @return string|false user's shared secret, if the user is found in the
+     *                      realm, false otherwise
      */
     public function resolve($username, $realm)
     {
         $repository = $this->modelManager->getRepository('Shopware\Models\User\User');
-        $user       = $repository->findOneBy(array('username' => $username, 'active' => true));
+        $user = $repository->findOneBy(['username' => $username, 'active' => true]);
 
         if (!$user) {
             return false;

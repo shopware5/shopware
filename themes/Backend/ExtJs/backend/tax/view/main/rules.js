@@ -36,8 +36,8 @@
  */
 //{block name="backend/tax/view/main/states"}
 Ext.define('Shopware.apps.Tax.view.main.Rules', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.tax-rules',
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.tax-rules',
     autoScroll:true,
     disabled: true,
     autoHeight: true,
@@ -65,8 +65,8 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
      *
      * @return void
      */
-	initComponent: function() {
-		var me = this;
+    initComponent: function() {
+        var me = this;
         me.store = me.ruleStore;
         me.store.grid = me;
         me.dockedItems = this.createDockedToolBar();
@@ -173,15 +173,15 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         }
         );
 
-		// Define the columns and renderers
-		this.columns = [
+        // Define the columns and renderers
+        this.columns = [
 
-		{
-			header: '{s name=ruleslist/colname}Name{/s}',
-			dataIndex: 'name',
-			width: 200,
+        {
+            header: '{s name=ruleslist/colname}Name{/s}',
+            dataIndex: 'name',
+            width: 200,
             field: 'textfield'
-		},
+        },
         {
             xtype: 'booleancolumn',
             header: '{s name=ruleslist/colactive}Enabled{/s}',
@@ -194,12 +194,12 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
             }
         },
         {
-			header: '{s name=ruleslist/colarea}Area{/s}',
-			dataIndex: 'areaId',
-			flex: 1,
+            header: '{s name=ruleslist/colarea}Area{/s}',
+            dataIndex: 'areaId',
+            flex: 1,
             editor: this.areaCombo,
             renderer: this.areaRenderer
-		},
+        },
         {
             header: '{s name=ruleslist/colcountry}Country{/s}',
             dataIndex: 'countryId',
@@ -226,37 +226,37 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
            }
         },
         {
-			xtype: 'actioncolumn',
-			width: 50,
-			items: [{
-				iconCls: 'sprite-minus-circle',
-				cls: 'delete',
-				tooltip: '{s name=ruleslist/colactiondelete}Delete this rule{/s}',
+            xtype: 'actioncolumn',
+            width: 50,
+            items: [{
+                iconCls: 'sprite-minus-circle',
+                cls: 'delete',
+                tooltip: '{s name=ruleslist/colactiondelete}Delete this rule{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRule', view, rowIndex, colIndex, item);
                 }
-			}]
-		}];
+            }]
+        }];
 
         var notice = Shopware.Notification.createBlockMessage('You have not defined a fallback tax rule.', 'warning');
         notice.hide();
-		// Toolbar
-		this.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-			dock: 'top',
+        // Toolbar
+        this.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'top',
             ui: 'shopware-ui',
-		    items: [{
-				iconCls: 'sprite-plus-circle',
-				text: '{s name=ruleslist/addrule}Add tax rule{/s}',
-				action: 'addRule'
-			}, notice
-			]
-		});
+            items: [{
+                iconCls: 'sprite-plus-circle',
+                text: '{s name=ruleslist/addrule}Add tax rule{/s}',
+                action: 'addRule'
+            }, notice
+            ]
+        });
 
 
-		this.dockedItems = Ext.clone(this.dockedItems);
-		this.dockedItems.push(this.toolbar);
+        this.dockedItems = Ext.clone(this.dockedItems);
+        this.dockedItems.push(this.toolbar);
 
-		this.callParent();
+        this.callParent();
     },
     areaRenderer: function (value){
 

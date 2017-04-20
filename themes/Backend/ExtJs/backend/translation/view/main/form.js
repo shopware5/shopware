@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.Translation.view.main.Form',
 /** @lends Ext.form.Panel# */
 {
-	extend: 'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     alias: 'widget.translation-main-form',
     bodyPadding: 10,
     title: '{s name=form_title}Translatable fields{/s}',
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
                     currentField.height = "100";
                     break;
             }
-			currentField.hidden = false;
+            currentField.hidden = false;
             items.push(currentField);
         });
         me.items = items;

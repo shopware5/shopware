@@ -44,7 +44,7 @@ class Backup
     /**
      * @var array
      */
-    protected $affectedTables = array();
+    protected $affectedTables = [];
 
     /**
      * @var string
@@ -57,6 +57,20 @@ class Backup
     protected $backupPath;
 
     protected $backupBaseName = 'me-backup-';
+
+    /**
+     * @param $dqlHelper DqlHelper
+     * @param $config \Shopware_Components_Config
+     *
+     * @throws \RuntimeException
+     */
+    public function __construct($dqlHelper, $config)
+    {
+        $this->dqlHelper = $dqlHelper;
+        $this->config = $config;
+
+        $this->setupBackupDir();
+    }
 
     /**
      * @return DqlHelper
@@ -75,26 +89,13 @@ class Backup
     }
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $config \Shopware_Components_Config
-     * @throws \RuntimeException
-     */
-    public function __construct($dqlHelper, $config)
-    {
-        $this->dqlHelper = $dqlHelper;
-        $this->config = $config;
-
-        $this->setupBackupDir();
-    }
-
-    /**
      * Make sure a valid backup dir is available
      *
      * @throws \RuntimeException
      */
     public function setupBackupDir()
     {
-        $this->backupPath = Shopware()->DocPath() . 'files/backup';
+        $this->backupPath = Shopware()->DocPath() . 'files/backup/multi_edit';
 
         $this->backupPath = rtrim($this->backupPath, '/\\') . '/';
 
@@ -119,6 +120,7 @@ class Backup
      *
      * @param $offset
      * @param $limit
+     *
      * @return array
      */
     public function getList($offset, $limit)
@@ -132,112 +134,10 @@ class Backup
 
         $backups = $paginator->getIterator()->getArrayCopy();
 
-        return array(
+        return [
             'totalCount' => $totalCount,
-            'data' => $backups
-        );
-    }
-
-    /**
-     * Builds an array of tables and columns, we need to backup
-     *
-     * @param array $operations Array of operations
-     */
-    protected function buildAffectedTableArray($operations)
-    {
-        $prefixes = array();
-        $fields = array();
-        // Create a assoc array of tables and their fields
-        foreach ($operations as $operation) {
-            list($prefix, $field) = explode('.', $operation['column']);
-            $prefix = ucfirst(strtolower($prefix));
-            $prefixes[] = $prefix;
-
-            $fields[$prefix][] = $field;
-        }
-
-        $tables = array();
-        // Build a list of tables affected by the given operations array
-        // Associate columns which are affected by the given operations array
-        foreach ($this->getDqlHelper()->getColumnsForProductListing() as $config) {
-            $prefix = ucfirst(strtolower($config['entity']));
-            // Only check for prefix, if prefix array was set
-            // Else, all default tables will be exported
-            if ($prefixes && !in_array($prefix, $prefixes)) {
-                continue;
-            }
-            if ($config['editable']) {
-                if (in_array($config['field'], $fields[$prefix])) {
-                    // We always need the id field
-                    $tables[$config['table']]['prefix'] = $prefix;
-                    $tables[$config['table']]['columns']['id'] = 'id';
-                    $tables[$config['table']]['columns'][$config['columnName']] = $config['columnName'];
-                }
-            }
-        }
-        $this->affectedTables = $tables;
-    }
-
-    /**
-     * Returns an array of tables we need to backup
-     *
-     * @return array
-     */
-    protected function getAffectedTables()
-    {
-        return array_keys($this->affectedTables);
-    }
-
-    /**
-     * Returns a prefix for a given table
-     *
-     * @param $table
-     * @return mixed
-     * @throws \RuntimeException
-     */
-    protected function getPrefixFromTable($table)
-    {
-        $prefix =  $this->affectedTables[$table]['prefix'];
-
-        if (!$prefix) {
-            throw new \RuntimeException("Empty prefix for {$table}");
-        }
-
-        return $prefix;
-    }
-
-    /**
-     * Return an array of columns which needs to be backed up for a given table
-     *
-     * @param $table
-     * @return mixed
-     * @throws \RuntimeException
-     */
-    protected function getAffectedColumns($table)
-    {
-        $columns =  $this->affectedTables[$table]['columns'];
-
-        if (!$columns) {
-            throw new \RuntimeException("Empty column for {$table}");
-        }
-
-        return $columns;
-    }
-
-    /**
-     * Returns a string from a given operations array
-     *
-     * @param $operations
-     * @return string
-     */
-    protected function operationsToString($operations)
-    {
-        $out = array();
-        foreach ($operations as $operation) {
-            $out[] = implode(" ", $operation);
-        }
-
-        return implode("\n", $out);
+            'data' => $backups,
+        ];
     }
 
     /**
@@ -245,10 +145,10 @@ class Backup
      * Depending on $newBackup a existing file will be appended or overwritten. The name of the backup is choosen
      * depending on $id.
      *
-     * @param string  $detailIds
-     * @param array   $operations
-     * @param string  $newBackup
-     * @param integer $id
+     * @param string $detailIds
+     * @param array  $operations
+     * @param string $newBackup
+     * @param int    $id
      */
     public function create($detailIds, $operations, $newBackup, $id)
     {
@@ -301,39 +201,16 @@ class Backup
     }
 
     /**
-     * Creates a backup model for a given backup
-     *
-     * @param $path
-     * @param $filterString
-     * @param $operations
-     * @param $items
-     */
-    protected function saveBackup($path, $filterString, $operations, $items)
-    {
-        $backup = new \Shopware\Models\MultiEdit\Backup();
-
-        $backup->setFilterString($filterString);
-        $backup->setOperationString($this->operationsToString($operations));
-        $backup->setItems($items);
-        $backup->setPath($path);
-        $backup->setHash(sha1_file($path));
-        $backup->setSize(filesize($path));
-
-        $backup->setDate(new \DateTime());
-
-        $this->getDqlHelper()->getEntityManager()->persist($backup);
-        $this->getDqlHelper()->getEntityManager()->flush($backup);
-    }
-
-    /**
      * Restores a backup from zip archive. Will only run one sql file per query
      *
      * @param $id
      * @param $offset
-     * @return array
+     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
-    public function restore($id, $offset=0)
+    public function restore($id, $offset = 0)
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
         /** @var \Shopware\Models\MultiEdit\Backup $backup */
@@ -347,7 +224,7 @@ class Backup
         $dir = dirname($path);
 
         if ($offset == 0) {
-            $zip = new \ZipArchive;
+            $zip = new \ZipArchive();
             $zip->open($path);
             $success = $zip->extractTo($dir);
             if (!$success) {
@@ -357,10 +234,10 @@ class Backup
         }
 
         // Get list of datasql files
-        $dataFiles = $this->getDirectoryList($dir . '/', array('datasql'));
+        $dataFiles = $this->getDirectoryList($dir . '/', ['datasql']);
 
         if (!empty($dataFiles)) {
-            $tables = array();
+            $tables = [];
 
             // Group by table
             foreach ($dataFiles as $file) {
@@ -376,7 +253,7 @@ class Backup
             $footerPath = $dir . '/' . $table . '.footersql';
 
             // Insert
-            $query = file_get_contents($headerPath) . file_get_contents($dataPath). file_get_contents($footerPath);
+            $query = file_get_contents($headerPath) . file_get_contents($dataPath) . file_get_contents($footerPath);
             $this->getDqlHelper()->getDb()->exec($query);
 
             $numFiles = count($dataFiles);
@@ -395,19 +272,21 @@ class Backup
             }
         }
 
-        return array(
+        return [
             'totalCount' => $numFiles + $offset,
-            'offset' => $offset+1,
-            'done' => $numFiles == 1
-        );
+            'offset' => $offset + 1,
+            'done' => $numFiles == 1,
+        ];
     }
 
     /**
      * Deletes a given backup
      *
      * @param $id
-     * @return boolean
+     *
      * @throws \RuntimeException
+     *
+     * @return bool
      */
     public function delete($id)
     {
@@ -446,7 +325,7 @@ class Backup
         $path = $this->backupPath;
 
         $folders = scandir($path);
-        $resultFolders = array();
+        $resultFolders = [];
         foreach ($folders as $key => $folder) {
             $folderPath = $path . $folder . '/';
             // Remove non-folders and non-backup folders
@@ -456,7 +335,7 @@ class Backup
         }
 
         foreach ($resultFolders as $folder) {
-            $zips = $this->getDirectoryList($folder, array("zip"));
+            $zips = $this->getDirectoryList($folder, ['zip']);
             $dataFiles = $this->getDirectoryList($folder);
 
             // If no zip archive exists in the backup dir…
@@ -483,12 +362,170 @@ class Backup
     }
 
     /**
+     * Try do determine the data type of the value in order to backup it properly
+     *
+     * @param $value
+     *
+     * @return null|int
+     */
+    public function getDataTypeForExport($value)
+    {
+        // Non-numeric values needs to be encoded as string (default)
+        // so returning null here.
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        // If the value casted to float differs from the value casted to int,
+        // use float as type
+        if ((float) $value != (int) $value) {
+            return \Zend_Db::FLOAT_TYPE;
+        // Else encode it as int
+        }
+
+        return \Zend_Db::INT_TYPE;
+    }
+
+    /**
+     * Builds an array of tables and columns, we need to backup
+     *
+     * @param array $operations Array of operations
+     */
+    protected function buildAffectedTableArray($operations)
+    {
+        $prefixes = [];
+        $fields = [];
+        // Create a assoc array of tables and their fields
+        foreach ($operations as $operation) {
+            list($prefix, $field) = explode('.', $operation['column']);
+            $prefix = ucfirst(strtolower($prefix));
+            $prefixes[] = $prefix;
+
+            $fields[$prefix][] = $field;
+        }
+
+        $tables = [];
+        // Build a list of tables affected by the given operations array
+        // Associate columns which are affected by the given operations array
+        foreach ($this->getDqlHelper()->getColumnsForProductListing() as $config) {
+            $prefix = ucfirst(strtolower($config['entity']));
+            // Only check for prefix, if prefix array was set
+            // Else, all default tables will be exported
+            if ($prefixes && !in_array($prefix, $prefixes)) {
+                continue;
+            }
+            if ($config['editable']) {
+                if (in_array($config['field'], $fields[$prefix])) {
+                    // We always need the id field
+                    $tables[$config['table']]['prefix'] = $prefix;
+                    $tables[$config['table']]['columns']['id'] = 'id';
+                    $tables[$config['table']]['columns'][$config['columnName']] = $config['columnName'];
+                }
+            }
+        }
+        $this->affectedTables = $tables;
+    }
+
+    /**
+     * Returns an array of tables we need to backup
+     *
+     * @return array
+     */
+    protected function getAffectedTables()
+    {
+        return array_keys($this->affectedTables);
+    }
+
+    /**
+     * Returns a prefix for a given table
+     *
+     * @param $table
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    protected function getPrefixFromTable($table)
+    {
+        $prefix = $this->affectedTables[$table]['prefix'];
+
+        if (!$prefix) {
+            throw new \RuntimeException("Empty prefix for {$table}");
+        }
+
+        return $prefix;
+    }
+
+    /**
+     * Return an array of columns which needs to be backed up for a given table
+     *
+     * @param $table
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    protected function getAffectedColumns($table)
+    {
+        $columns = $this->affectedTables[$table]['columns'];
+
+        if (!$columns) {
+            throw new \RuntimeException("Empty column for {$table}");
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Returns a string from a given operations array
+     *
+     * @param $operations
+     *
+     * @return string
+     */
+    protected function operationsToString($operations)
+    {
+        $out = [];
+        foreach ($operations as $operation) {
+            $out[] = implode(' ', $operation);
+        }
+
+        return implode("\n", $out);
+    }
+
+    /**
+     * Creates a backup model for a given backup
+     *
+     * @param $path
+     * @param $filterString
+     * @param $operations
+     * @param $items
+     */
+    protected function saveBackup($path, $filterString, $operations, $items)
+    {
+        $backup = new \Shopware\Models\MultiEdit\Backup();
+
+        $backup->setFilterString($filterString);
+        $backup->setOperationString($this->operationsToString($operations));
+        $backup->setItems($items);
+        $backup->setPath($path);
+        $backup->setHash(sha1_file($path));
+        $backup->setSize(filesize($path));
+
+        $backup->setDate(new \DateTime());
+
+        $this->getDqlHelper()->getEntityManager()->persist($backup);
+        $this->getDqlHelper()->getEntityManager()->flush($backup);
+    }
+
+    /**
      * Dumps a given table to disc - as only needed columns are exported, this is quite fast
      *
      * @param $table
      * @param $name
      * @param $ids
      * @param $newBackup
+     *
      * @throws \RuntimeException
      */
     protected function dumpTable($table, $name, $ids, $newBackup)
@@ -527,9 +564,9 @@ class Backup
         $result = $this->getDqlHelper()->getDb()->fetchAll($sql);
 
         // Prepare the data (quoting)
-        $output = array();
+        $output = [];
         foreach ($result as $values) {
-            $vals = array();
+            $vals = [];
             foreach ($values as $value) {
                 // Special quoting for numbers
                 $type = $this->getDataTypeForExport($value);
@@ -544,33 +581,10 @@ class Backup
     }
 
     /**
-     * Try do determine the data type of the value in order to backup it properly
-     *
-     * @param $value
-     * @return null|int
-     */
-    public function getDataTypeForExport($value)
-    {
-        // Non-numeric values needs to be encoded as string (default)
-        // so returning null here.
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        // If the value casted to float differs from the value casted to int,
-        // use float as type
-        if ((float) $value != (int) $value) {
-            return \Zend_Db::FLOAT_TYPE;
-        // Else encode it as int
-        } else {
-            return \Zend_Db::INT_TYPE;
-        }
-    }
-
-    /**
      * Returns output directory for a given name and takes care for directory permissions
      *
      * @param $name
+     *
      * @return string
      */
     protected function getOutputPath($name)
@@ -593,6 +607,7 @@ class Backup
      * Compresses the backup and delete old uncompressed files
      *
      * @param $name
+     *
      * @return string
      */
     protected function compressBackup($name)
@@ -617,8 +632,10 @@ class Backup
      * Zips the backup directory content
      *
      * @param $name
-     * @return bool|string
+     *
      * @throws \RuntimeException
+     *
+     * @return bool|string
      */
     protected function createZip($name)
     {
@@ -647,11 +664,12 @@ class Backup
      * Return a list of files with a certain extension
      *
      * @param $path
-     * @param  array $findExtension
-     * @param  array $blacklistName
+     * @param array $findExtension
+     * @param array $blacklistName
+     *
      * @return array
      */
-    protected function getDirectoryList($path, $findExtension = array('datasql', 'headersql', 'footersql'), $blacklistName =  array())
+    protected function getDirectoryList($path, $findExtension = ['datasql', 'headersql', 'footersql'], $blacklistName = [])
     {
         $files = scandir($path);
         foreach ($files as $key => &$file) {

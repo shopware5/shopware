@@ -50,7 +50,7 @@ class DomainBacklogSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'product_stock_was_changed' => 'onProductStockWasChanged'
+            'product_stock_was_changed' => 'onProductStockWasChanged',
         ];
     }
 
@@ -59,6 +59,12 @@ class DomainBacklogSubscriber implements SubscriberInterface
      */
     public function onProductStockWasChanged(EventArgs $eventArgs)
     {
+        if (!$this->container->getParameter('shopware.es.enabled')) {
+            return;
+        }
+        if (!$this->container->getParameter('shopware.es.write_backlog')) {
+            return;
+        }
         $backlog = new Backlog(ORMBacklogSubscriber::EVENT_VARIANT_UPDATED, ['number' => $eventArgs->get('number')]);
         $this->container->get('shopware_elastic_search.backlog_processor')->add([$backlog]);
     }

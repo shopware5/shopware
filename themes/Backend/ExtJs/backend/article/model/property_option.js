@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.PropertyOption', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/property_option/fields"}{/block}
+        //{block name="backend/article/model/property_option/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'propertyValues' }

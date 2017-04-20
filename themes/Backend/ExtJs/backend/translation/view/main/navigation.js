@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.Translation.view.main.Navigation',
 /** @lends Ext.tree.Panel */
 {
-	extend: 'Ext.tree.Panel',
+    extend: 'Ext.tree.Panel',
     alias: 'widget.translation-main-navigation',
     rootVisible: false,
     singleExpand: false,

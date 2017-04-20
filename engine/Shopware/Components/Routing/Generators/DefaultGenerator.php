@@ -24,15 +24,15 @@
 
 namespace Shopware\Components\Routing\Generators;
 
-use Shopware\Components\Routing\GeneratorInterface;
-use Shopware\Components\Routing\Context;
 use Enlight_Controller_Dispatcher_Default as EnlightDispatcher;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\GeneratorInterface;
 
 /**
  * @see \Enlight_Controller_Router_Default
  *
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DefaultGenerator implements GeneratorInterface
@@ -89,6 +89,10 @@ class DefaultGenerator implements GeneratorInterface
         }
         if (count($params) > 0 || $action != $this->dispatcher->getDefaultAction()) {
             $route[] = $action;
+        }
+
+        if (array_key_exists('_seo', $params)) {
+            unset($params['_seo']);
         }
 
         foreach ($params as $key => $value) {

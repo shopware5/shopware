@@ -44,9 +44,9 @@ Ext.define('Shopware.apps.RiskManagement.model.Risk', {
     * @array
     */
     fields: [
-		//{block name="backend/risk_management/model/risk/fields"}{/block}
-		{ name: 'description', type: 'string' },
-		{ name: 'value', type: 'string' }
+        //{block name="backend/risk_management/model/risk/fields"}{/block}
+        { name: 'description', type: 'string' },
+        { name: 'value', type: 'string' }
     ]
 });
 //{/block}

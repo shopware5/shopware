@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
+
 /**
  * .git/hooks/pre-commit
  *
  * This pre-commit hooks will check for PHP errors (lint), and make sure the
  * code is PSR-2 compliant.
  */
-
 class PreCommitChecks
 {
     /**
@@ -20,28 +20,23 @@ class PreCommitChecks
     public function run()
     {
         $fileList = $this->getCommittedFileList();
-
         if ($this->isRebase()) {
             echo 'Not on branch' . PHP_EOL;
-            return (int) 0;
+            return (int)0;
         }
-
         $beforeRef = $this->getRef();
         $this->stashTree();
         $afterRef = $this->getRef();
-
         if ($beforeRef == $afterRef) {
             echo 'No Changes' . PHP_EOL;
-            return (int) 0;
+            return (int)0;
         }
-
         echo 'Running PHP lint' . PHP_EOL;
         if (!$this->phpLint($fileList)) {
             echo 'ERROR: There are some PHP syntax errors!' . PHP_EOL;
         }
-
         if ($this->isPHPCSFixerAvailable()) {
-            echo 'Checking code style' . PHP_EOL;
+            echo 'Checking php code style' . PHP_EOL;
             if (!$this->checkCodeStyle($fileList)) {
                 echo "ERROR: Your commit does not comply with Shopware's coding standards." . PHP_EOL;
             }
@@ -50,19 +45,27 @@ class PreCommitChecks
             $this->error = true;
         }
 
-        echo "Checking for duplicate migration numbers." . PHP_EOL;
-        if (($duplicateMigrationId = $this->hasDuplicateMigrations()) !== false) {
-            echo "ERROR: You are using the migration number ".$duplicateMigrationId." multiple times." . PHP_EOL;
-            $this->error = true;
+        if ($this->isESLintAvailable()) {
+            echo 'Checking javascript code style ' . PHP_EOL;
+            if (!$this->checkESLint()) {
+                echo "ERROR: Your commit does not comply with Shopware's coding standards." . PHP_EOL;
+                $this->error = true;
+            }
+        } else {
+            echo 'NOTICE: ./themes/node_modules/eslint/bin/eslint.js not found. Skipping javascript code style check ' . PHP_EOL;
         }
 
+        echo "Checking for duplicate migration numbers." . PHP_EOL;
+        if (($duplicateMigrationId = $this->hasDuplicateMigrations()) !== false) {
+            echo "ERROR: You are using the migration number " . $duplicateMigrationId . " multiple times." . PHP_EOL;
+            $this->error = true;
+        }
         if ($this->error) {
             echo "If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation" . PHP_EOL;
         }
-
         $this->unstashTree();
 
-        exit((int) $this->error);
+        exit((int)$this->error);
     }
 
     /**
@@ -73,8 +76,18 @@ class PreCommitChecks
         $output = [];
         $return = 0;
         exec('command -v ./vendor/bin/php-cs-fixer >/dev/null 2>&1', $output, $return);
+        return !(bool)$return;
+    }
 
-        return !(bool) $return;
+    /**
+     * @return bool
+     */
+    public function isESLintAvailable()
+    {
+        $output = [];
+        $return = 0;
+        exec('command -v ./themes/node_modules/eslint/bin/eslint.js >/dev/null 2>&1', $output, $return);
+        return !(bool)$return;
     }
 
     /**
@@ -87,10 +100,8 @@ class PreCommitChecks
         exec('git rev-parse --verify HEAD 2> /dev/null', $output, $return);
         // diff against HEAD or an empty tree object
         $against = $return == 0 ? 'HEAD' : '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
-
         $fileList = [];
         exec("git diff --cached --name-only --diff-filter=ACM {$against} | grep -e '\.php$'", $fileList);
-
         return $fileList;
     }
 
@@ -102,24 +113,21 @@ class PreCommitChecks
     {
         $succeed = true;
         $misses = [];
-
         foreach ($files as $file) {
             $output = [];
             $return = null;
-            exec("./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run " . escapeshellarg($file). ' 2>&1', $output, $return);
+            exec("./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run " . escapeshellarg($file) . ' 2>&1', $output, $return);
             if ($return != 0) {
                 $misses[$file] = "./vendor/bin/php-cs-fixer fix -v " . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }
         }
-
         if ($succeed === false) {
-            echo "Code style error in folling files:" . PHP_EOL . implode(PHP_EOL, array_keys($misses)) . PHP_EOL . PHP_EOL;
-            echo "To fix, run: " . PHP_EOL . implode(PHP_EOL, $misses). PHP_EOL;
+            echo "Code style error in following files:" . PHP_EOL . implode(PHP_EOL, array_keys($misses)) . PHP_EOL . PHP_EOL;
+            echo "To fix, run: " . PHP_EOL . implode(PHP_EOL, $misses) . PHP_EOL;
             echo PHP_EOL;
         }
-
         return $succeed;
     }
 
@@ -130,7 +138,6 @@ class PreCommitChecks
     private function phpLint(array $files)
     {
         $succeed = true;
-
         foreach ($files as $file) {
             $output = [];
             $return = 0;
@@ -142,8 +149,28 @@ class PreCommitChecks
                 $succeed = false;
             }
         }
-
         return $succeed;
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkESLint()
+    {
+        $output = [];
+        $return = 0;
+        exec("./themes/node_modules/eslint/bin/eslint.js " .
+            "--ignore-path themes/.eslintignore themes/Frontend/Responsive/frontend/_public/src/js",
+            $output,
+            $return
+        );
+        $return = !(bool)$return;
+
+        if (!$return) {
+            echo implode(PHP_EOL, $output) . PHP_EOL;
+        }
+
+        return $return;
     }
 
     /**
@@ -190,11 +217,10 @@ class PreCommitChecks
      */
     private function hasDuplicateMigrations()
     {
-        exec('find ./_sql/migrations -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
+        exec('find ./_sql/migrations -maxdepth 1 -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
         if (count($output)) {
             return current($output);
         }
-
         return false;
     }
 }

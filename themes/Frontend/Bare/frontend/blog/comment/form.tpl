@@ -1,11 +1,11 @@
 {namespace name="frontend/blog/comments"}
 
 {block name='frontend_blog_comments_form'}
-	<div class="blog--comments-form">
+    <div class="blog--comments-form">
 
-		{block name='frontend_blog_comments_form_headline'}
+        {block name='frontend_blog_comments_form_headline'}
             <div class="comments--actions">
-			    <a class="btn is--primary is--icon-right btn--create-entry"
+                <a class="btn is--primary is--icon-right btn--create-entry"
                    title="{s name="BlogHeaderWriteComment"}{/s}"
                    rel="nofollow"
                    data-collapse-panel="true"
@@ -32,7 +32,7 @@
             </div>
         {/block}
 
-		<form method="post" class="comment--collapse-target{if $sErrorFlag} collapse--soft-show{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}#blog--comments-start">
+        <form method="post" class="comment--collapse-target{if $sErrorFlag} collapse--soft-show{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}#blog--comments-start">
 
             <div class="form--comment-add">
 
@@ -59,17 +59,17 @@
                     </div>
                 {/block}
 
-				{* Summary *}
-				{block name='frontend_blog_comments_input_summary'}
-					<div class="blog--comments-summary">
-						<input name="headline"
-							   type="text"
-							   placeholder="{"{s name='BlogLabelSummary'}{/s}"|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
-							   required="required" aria-required="true"
-							   value="{$sFormData.headline|escape}"
-							   class="input--field{if $sErrorFlag.headline} has--error{/if}" />
-					</div>
-				{/block}
+                {* Summary *}
+                {block name='frontend_blog_comments_input_summary'}
+                    <div class="blog--comments-summary">
+                        <input name="headline"
+                               type="text"
+                               placeholder="{"{s name='BlogLabelSummary'}{/s}"|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+                               required="required" aria-required="true"
+                               value="{$sFormData.headline|escape}"
+                               class="input--field{if $sErrorFlag.headline} has--error{/if}" />
+                    </div>
+                {/block}
 
                 {* Voting *}
                 {block name='frontend_blog_comments_input_voting'}
@@ -130,6 +130,6 @@
 
             </div>
 
-		</form>
-	</div>
+        </form>
+    </div>
 {/block}

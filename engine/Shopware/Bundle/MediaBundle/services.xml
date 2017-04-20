@@ -27,6 +27,7 @@
         </service>
         <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
             <argument type="service" id="service_container" />
+            <argument type="collection" />
             <argument>%shopware.cdn%</argument>
         </service>
 
@@ -38,5 +39,42 @@
             <argument>%shopware.cdn.strategy%</argument>
         </service>
 
+        <!-- Optimizer -->
+        <service id="shopware_media.optimizer_service" class="Shopware\Bundle\MediaBundle\OptimizerService">
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware_media.cache_optimizer_service" class="Shopware\Bundle\MediaBundle\CacheOptimizerService"
+                 decorates="shopware_media.optimizer_service" public="false">
+            <argument type="service" id="shopware_media.cache_optimizer_service.inner" />
+        </service>
+
+        <service id="shopware_media.optimizer.jpegoptim" class="Shopware\Bundle\MediaBundle\Optimizer\JpegoptimOptimizer">
+            <tag name="shopware_media.optimizer" priority="100" />
+        </service>
+
+        <service id="shopware_media.optimizer.jpegtran" class="Shopware\Bundle\MediaBundle\Optimizer\JpegtranOptimizer">
+            <tag name="shopware_media.optimizer" priority="90" />
+        </service>
+
+        <service id="shopware_media.optimizer.pngout" class="Shopware\Bundle\MediaBundle\Optimizer\PngoutOptimizer">
+            <tag name="shopware_media.optimizer" priority="100" />
+        </service>
+
+        <service id="shopware_media.optimizer.optipng" class="Shopware\Bundle\MediaBundle\Optimizer\OptipngOptimizer">
+            <tag name="shopware_media.optimizer" priority="90" />
+        </service>
+
+        <service id="shopware_media.optimizer.pngcrush" class="Shopware\Bundle\MediaBundle\Optimizer\PngcrushOptimizer">
+            <tag name="shopware_media.optimizer" priority="80" />
+        </service>
+
+        <!-- Media Adapters -->
+        <service id="shopware_media.adapter.local" class="Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory">
+            <tag name="shopware_media.adapter" />
+        </service>
+        <service id="shopware_media.adapter.ftp" class="Shopware\Bundle\MediaBundle\Adapters\FtpAdapterFactory">
+            <tag name="shopware_media.adapter" />
+        </service>
     </services>
 </container>

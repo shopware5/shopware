@@ -36,7 +36,7 @@
  */
 //{block name="backend/payment/view/main/window"}
 Ext.define('Shopware.apps.Payment.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=payment_title}Payments{/s}',
     cls: Ext.baseCSSPrefix + 'payment-window',
     alias: 'widget.payment-main-window',

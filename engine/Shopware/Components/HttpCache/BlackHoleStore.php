@@ -32,7 +32,7 @@ use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
  * Dummy Storage
  *
  * @category  Shopware
- * @package   Shopware\Components\HttpCache
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BlackHoleStore implements StoreInterface

@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorOption', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/configurator_option/fields"}{/block}
+        //{block name="backend/article/model/configurator_option/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'groupId', type: 'int' },
         { name: 'active', type: 'boolean', defaultValue: false },

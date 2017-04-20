@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.UserManager.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Define references for the different parts of our application. The
@@ -53,10 +53,10 @@ Ext.define('Shopware.apps.UserManager.controller.Main', {
      *
      * @object
      */
-	refs: [
-		{ ref: 'globalToolbar', selector: 'usermanager-main-toolbar' },
+    refs: [
+        { ref: 'globalToolbar', selector: 'usermanager-main-toolbar' },
         { ref: 'navigation', selector: 'usermanager-main-navigation' }
-	],
+    ],
 
     /**
      * Contains the component snippets
@@ -69,16 +69,16 @@ Ext.define('Shopware.apps.UserManager.controller.Main', {
         information4: '{s name=resource/information_4}To change the approval of the role, you have to activate or deactivate the desired knot and click the button Assign selected privileges to selected role.{/s}'
     },
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
 
-		var me = this;
+        var me = this;
 
         // Binds the neccessary event listeners
         me.control({
@@ -99,8 +99,8 @@ Ext.define('Shopware.apps.UserManager.controller.Main', {
 
         me.appContent = me.mainWindow.appContent;
 
-		me.callParent(arguments);
-	},
+        me.callParent(arguments);
+    },
 
     /**
      * Event listener which replaces the main viewport with

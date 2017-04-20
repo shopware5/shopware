@@ -24,22 +24,22 @@
 
 namespace Shopware\Components\Snippet;
 
-use Shopware;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Shopware;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
-use Shopware\Components\Snippet\Writer\DatabaseWriter;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Snippet
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseHandler
 {
     /**
-     * @var $kernelRoot
+     * @var
      */
     protected $kernelRoot;
 
@@ -84,11 +84,11 @@ class DatabaseHandler
      *
      * @param null   $snippetsDir
      * @param bool   $force
-     * @param string $namespacePrefix Allows to prefix the snippet namespace.
+     * @param string $namespacePrefix allows to prefix the snippet namespace
      */
     public function loadToDatabase($snippetsDir = null, $force = false, $namespacePrefix = '')
     {
-        $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
+        $snippetsDir = $snippetsDir ?: $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
             if ($snippetsDir == ($this->kernelRoot . '/snippets/')) {
                 $this->printWarning('<info>No snippets folder found in Shopware core, skipping</info>');
@@ -99,16 +99,16 @@ class DatabaseHandler
 
         $localeRepository = $this->em->getRepository('Shopware\Models\Shop\Locale');
 
-        $inputAdapter = new \Enlight_Config_Adapter_File(array(
+        $inputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
-        ));
+        ]);
 
         $databaseWriter = new DatabaseWriter($this->em->getConnection());
         $databaseWriter->setForce($force);
 
         $finder = new Finder();
         $finder->files()->in($snippetsDir);
-        $defaultLocale = $localeRepository->findOneBy(array('locale' => 'en_GB'));
+        $defaultLocale = $localeRepository->findOneBy(['locale' => 'en_GB']);
 
         $snippetCount = $this->em->getConnection()->fetchArray('SELECT * FROM s_core_snippets LIMIT 1');
         $databaseWriter->setUpdate((bool) $snippetCount);
@@ -123,16 +123,16 @@ class DatabaseHandler
 
             $this->printNotice('<info>Importing ' . $namespace . ' namespace</info>');
 
-            $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
+            $namespaceData = new \Enlight_Components_Snippet_Namespace([
                 'adapter' => $inputAdapter,
-                'name'    => $namespace,
-            ));
+                'name' => $namespace,
+            ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
                 if ($index == 'default') {
                     $locale = $defaultLocale;
                 } else {
-                    $locale = $localeRepository->findOneBy(array('locale' => $index));
+                    $locale = $localeRepository->findOneBy(['locale' => $index]);
                 }
 
                 $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
@@ -147,8 +147,9 @@ class DatabaseHandler
     /**
      * Dumps all snippets from database into the provided $snippetsDir
      *
-     * @param  string|null $snippetsDir
-     * @param  string      $localeName
+     * @param string|null $snippetsDir
+     * @param string      $localeName
+     *
      * @throws \Exception
      */
     public function dumpFromDatabase($snippetsDir, $localeName)
@@ -165,15 +166,15 @@ class DatabaseHandler
             throw new \Exception(\sprintf('Locale "%s" not found.', $localeName));
         }
 
-        $outputAdapter = new \Enlight_Config_Adapter_File(array(
+        $outputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir . '/',
-        ));
-        $inputAdapter = new \Enlight_Config_Adapter_DbTable(array(
+        ]);
+        $inputAdapter = new \Enlight_Config_Adapter_DbTable([
             'db' => $this->db,
             'table' => 's_core_snippets',
             'namespaceColumn' => 'namespace',
-            'sectionColumn' => array('localeID', 'shopID')
-        ));
+            'sectionColumn' => ['localeID', 'shopID'],
+        ]);
 
         $namespaces = array_map(
             function ($result) {
@@ -188,18 +189,18 @@ class DatabaseHandler
             return;
         }
 
-        $data = array();
+        $data = [];
 
         foreach ($namespaces as $namespace) {
             if (!array_key_exists($namespace, $data)) {
                 $data[$namespace] = true;
-                $content = new \Enlight_Components_Snippet_Namespace(array(
+                $content = new \Enlight_Components_Snippet_Namespace([
                     'adapter' => $inputAdapter,
                     'name' => $namespace,
-                    'section' => array(
-                        $locale->getId()
-                    )
-                ));
+                    'section' => [
+                        $locale->getId(),
+                    ],
+                ]);
 
                 $content->setSection($locale->getLocale());
                 $outputAdapter->write($content, true);
@@ -211,32 +212,32 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and removes them from the database.
      *
-     * @param null    $snippetsDir
-     * @param boolean $removeDirty
+     * @param null $snippetsDir
+     * @param bool $removeDirty
      */
     public function removeFromDatabase($snippetsDir = null, $removeDirty = false)
     {
-        $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
+        $snippetsDir = $snippetsDir ?: $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
             return;
         }
 
         $localeRepository = $this->em->getRepository('Shopware\Models\Shop\Locale');
 
-        $inputAdapter = new \Enlight_Config_Adapter_File(array(
+        $inputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
-        ));
+        ]);
 
-        $outputAdapter = new \Enlight_Config_Adapter_DbTable(array(
+        $outputAdapter = new \Enlight_Config_Adapter_DbTable([
             'db' => $this->db,
             'table' => 's_core_snippets',
             'namespaceColumn' => 'namespace',
-            'sectionColumn' => array('shopID', 'localeID')
-        ));
+            'sectionColumn' => ['shopID', 'localeID'],
+        ]);
 
         $finder = new Finder();
         $finder->files()->in($snippetsDir);
-        $defaultLocale = $localeRepository->findOneBy(array('locale' => 'en_GB'));
+        $defaultLocale = $localeRepository->findOneBy(['locale' => 'en_GB']);
 
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
@@ -248,19 +249,19 @@ class DatabaseHandler
 
             $this->printNotice('<info>Processing ' . $namespace . ' namespace</info>');
 
-            $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
+            $namespaceData = new \Enlight_Components_Snippet_Namespace([
                 'adapter' => $inputAdapter,
-                'name'    => $namespace,
-            ));
+                'name' => $namespace,
+            ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
                 if ($index == 'default') {
                     $locale = $defaultLocale;
                 } else {
-                    $locale = $localeRepository->findOneBy(array('locale' => $index));
+                    $locale = $localeRepository->findOneBy(['locale' => $index]);
                 }
 
-                $namespaceData->setSection(array(1, $locale->getId()))->read();
+                $namespaceData->setSection([1, $locale->getId()])->read();
                 $namespaceData->setData($values);
                 $outputAdapter->delete($namespaceData, array_keys($values), $removeDirty);
 

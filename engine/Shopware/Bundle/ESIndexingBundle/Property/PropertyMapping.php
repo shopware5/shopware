@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * Class PropertyMapping
- * @package Shopware\Bundle\ESIndexingBundle\Property
  */
 class PropertyMapping implements MappingInterface
 {
@@ -70,10 +69,10 @@ class PropertyMapping implements MappingInterface
                 'options' => [
                     'properties' => [
                         'id' => ['type' => 'long'],
-                        'name' => $this->fieldMapping->getLanguageField($shop)
-                    ]
-                ]
-            ]
+                        'name' => $this->fieldMapping->getLanguageField($shop),
+                    ],
+                ],
+            ],
         ];
     }
 }

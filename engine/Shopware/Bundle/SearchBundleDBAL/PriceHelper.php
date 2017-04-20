@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceHelper implements PriceHelperInterface
@@ -51,7 +51,7 @@ class PriceHelper implements PriceHelperInterface
     private $config;
 
     /**
-     * @param Connection $connection
+     * @param Connection                  $connection
      * @param \Shopware_Components_Config $config
      */
     public function __construct(Connection $connection, \Shopware_Components_Config $config)
@@ -61,12 +61,12 @@ class PriceHelper implements PriceHelperInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSelection(Struct\ProductContextInterface $context)
     {
         $fallback = $context->getFallbackCustomerGroup();
-        $current  = $context->getCurrentCustomerGroup();
+        $current = $context->getCurrentCustomerGroup();
         $currency = $context->getCurrency();
 
         $priceField = 'defaultPrice.price';
@@ -94,33 +94,19 @@ class PriceHelper implements PriceHelperInterface
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
 
             //multiplied with the product tax if the current customer group should see gross prices
-            ($current->displayGrossPrices() ? " * (( ".$taxCase." + 100) / 100)" : '') .
+            ($current->displayGrossPrices() ? ' * (( ' . $taxCase . ' + 100) / 100)' : '') .
 
             //multiplied with the percentage discount of the current customer group
-            ($discount ? " * " . (100 - (float) $discount) / 100 : '') .
+            ($discount ? ' * ' . (100 - (float) $discount) / 100 : '') .
 
             //multiplied with the shop currency factor
-            ($currency->getFactor() ? " * " . $currency->getFactor() : '') .
+            ($currency->getFactor() ? ' * ' . $currency->getFactor() : '') .
 
         ', 2)';
     }
 
     /**
-     * Builds the tax cases for the price selection query
-     * @param Struct\ProductContextInterface $context
-     * @return string
-     */
-    private function buildTaxCase(Struct\ProductContextInterface $context)
-    {
-        $cases = [];
-        foreach ($context->getTaxRules() as $rule) {
-            $cases[] = ' WHEN ' . $rule->getId() . ' THEN ' . $rule->getTax();
-        }
-        return '(CASE tax.id ' . implode(' ', $cases) . ' END)';
-    }
-
-    /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function joinPrices(
         QueryBuilder $query,
@@ -152,7 +138,7 @@ class PriceHelper implements PriceHelperInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function joinDefaultPrices(QueryBuilder $query, Struct\ShopContextInterface $context)
     {
@@ -194,7 +180,7 @@ class PriceHelper implements PriceHelperInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function joinAvailableVariant(QueryBuilder $query)
     {
@@ -203,7 +189,7 @@ class PriceHelper implements PriceHelperInterface
         }
 
         $stockCondition = '';
-        if ($this->config->get('hideNoInstock')) {
+        if ($this->config->get('hideNoInStock')) {
             $stockCondition = 'AND (product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)';
         }
 
@@ -216,5 +202,22 @@ class PriceHelper implements PriceHelperInterface
         );
 
         $query->addState(self::STATE_INCLUDES_AVAILABLE_VARIANT);
+    }
+
+    /**
+     * Builds the tax cases for the price selection query
+     *
+     * @param Struct\ProductContextInterface $context
+     *
+     * @return string
+     */
+    private function buildTaxCase(Struct\ProductContextInterface $context)
+    {
+        $cases = [];
+        foreach ($context->getTaxRules() as $rule) {
+            $cases[] = ' WHEN ' . $rule->getId() . ' THEN ' . $rule->getTax();
+        }
+
+        return '(CASE tax.id ' . implode(' ', $cases) . ' END)';
     }
 }

@@ -26,10 +26,11 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Article\Image;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ArticleTest extends TestCase
@@ -49,7 +50,7 @@ class ArticleTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $testData = array(
+        $testData = [
             'name' => 'Testartikel',
             'description' => 'Test description',
             'descriptionLong' => 'Test descriptionLong',
@@ -59,124 +60,122 @@ class ArticleTest extends TestCase
             'keywords' => 'test, testarticle',
             'metaTitle' => 'this is a test title with umlauts äöüß',
             'filterGroupId' => 1,
-            'propertyValues' => array(
-                array(
+            'propertyValues' => [
+                [
                     'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
                     'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption' . uniqid(rand())
-                    )
-                )
-            ),
-            'mainDetail' => array(
+                    'option' => [
+                        'name' => 'neueOption' . uniqid(rand()),
+                    ],
+                ],
+            ],
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'attribute' => array(
+                'attribute' => [
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
-                ),
+                ],
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'to' => 20,
                         'price' => 500,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                    ),
-                )
-            ),
-            'configuratorSet' => array(
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
                 'name' => 'MeinKonf',
-                'groups' => array(
-                    array(
+                'groups' => [
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array('name' => 'Gelb'),
-                            array('name' => 'grün')
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'grün'],
+                        ],
+                    ],
+                    [
                         'name' => 'Gräße',
-                        'options' => array(
-                            array('name' => 'L'),
-                            array('name' => 'XL')
-                        )
-                    ),
-                )
-            ),
-            'variants' => array(
-                array(
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
                     'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
-                    'attribute' => array(
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
-                    'configuratorOptions' => array(
-                        array(
+                    ],
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Gelb',
-                            'group' => 'Farbe'
-                        ),
-                        array(
+                            'group' => 'Farbe',
+                        ],
+                        [
                             'option' => 'XL',
-                            'group' => 'Größe'
-                        )
-
-                    ),
+                            'group' => 'Größe',
+                        ],
+                    ],
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
-
-                )
-            ),
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
             'supplierId' => 2,
-            'similar' => array(
-                array('id' => 5),
-                array('id' => 6),
-            ),
-            'categories' => array(
-                array('id' => 15),
-                array('id' => 10),
-            ),
-            'related' => array(
-                array('id' => 3, 'cross' => true),
-                array('id' => 4),
-            ),
-            'links' => array(
-                array('name' => 'foobar', 'link' => 'http://example.org'),
-                array('name' => 'Video', 'link' => 'http://example.org'),
-            ),
-        );
+            'similar' => [
+                ['id' => 5],
+                ['id' => 6],
+            ],
+            'categories' => [
+                ['id' => 15],
+                ['id' => 10],
+            ],
+            'related' => [
+                ['id' => 3, 'cross' => true],
+                ['id' => 4],
+            ],
+            'links' => [
+                ['name' => 'foobar', 'link' => 'http://example.org'],
+                ['name' => 'Video', 'link' => 'http://example.org'],
+            ],
+        ];
 
         $article = $this->resource->create($testData);
 
@@ -200,7 +199,7 @@ class ArticleTest extends TestCase
         $propertyValues = $article->getPropertyValues()->getValues();
         $this->assertEquals(count($propertyValues), count($testData['propertyValues']));
         foreach ($propertyValues as $propertyValue) {
-            $this->assertContains($propertyValue->getValue(), array("grün", "testWert"));
+            $this->assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
         $this->assertEquals($testData['taxId'], $article->getTax()->getId());
@@ -234,23 +233,23 @@ class ArticleTest extends TestCase
             'keywords' => 'test, testarticle',
             'tax' => 19,
             'categories' => [
-                array('id' => 15),
-                array('id' => 10),
+                ['id' => 15],
+                ['id' => 10],
             ],
             'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 // create new unit
-                'unit' => array(
+                'unit' => [
                     'name' => 'newunit',
-                    'unit' => 'newunit'
-                ),
+                    'unit' => 'newunit',
+                ],
                 'prices' => [
                     [
                         'customerGroupKey' => 'EK',
                         'price' => 999,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         $article = $this->resource->create($testData);
@@ -286,130 +285,128 @@ class ArticleTest extends TestCase
      */
     public function testCreateWithImageShouldCreateThumbnails()
     {
-        $testData = array(
+        $testData = [
             'name' => 'Test article with images',
             'description' => 'Test description',
             'active' => true,
             'filterGroupId' => 1,
-            'propertyValues' => array(
-                array(
+            'propertyValues' => [
+                [
                     'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
                     'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption' . uniqid(rand())
-                    )
-                )
-            ),
-            'images' => array(
-                array(
-                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
-                ),
-                array(
-                    'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
-                ),
-                array(
-                    'link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'
-                )
-            ),
-            'mainDetail' => array(
+                    'option' => [
+                        'name' => 'neueOption' . uniqid(rand()),
+                    ],
+                ],
+            ],
+            'images' => [
+                [
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
+                ],
+                [
+                    'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'),
+                ],
+                [
+                    'link' => 'file://' . __DIR__ . '/fixtures/variant-image.png',
+                ],
+            ],
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'attribute' => array(
+                'attribute' => [
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
-                ),
+                ],
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'to' => 20,
                         'price' => 500,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                    ),
-                )
-            ),
-            'configuratorSet' => array(
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
                 'name' => 'MeinKonf',
-                'groups' => array(
-                    array(
+                'groups' => [
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array('name' => 'Gelb'),
-                            array('name' => 'grün')
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'grün'],
+                        ],
+                    ],
+                    [
                         'name' => 'Gräße',
-                        'options' => array(
-                            array('name' => 'L'),
-                            array('name' => 'XL')
-                        )
-                    ),
-                )
-            ),
-            'variants' => array(
-                array(
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
                     'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
-                    'attribute' => array(
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
-                    'images' => array(
-                        array(
-                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
-                        )
-                    ),
-                    'configuratorOptions' => array(
-                        array(
+                    ],
+                    'images' => [
+                        [
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
+                        ],
+                    ],
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Gelb',
-                            'group' => 'Farbe'
-                        ),
-                        array(
+                            'group' => 'Farbe',
+                        ],
+                        [
                             'option' => 'XL',
-                            'group' => 'Größe'
-                        )
-
-                    ),
+                            'group' => 'Größe',
+                        ],
+                    ],
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
-
-                )
-            ),
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
             'supplierId' => 2,
-        );
+        ];
 
         $article = $this->resource->create($testData);
 
@@ -439,6 +436,7 @@ class ArticleTest extends TestCase
 
     /**
      * @depends testCreateWithImageShouldCreateThumbnails
+     *
      * @param int $id
      */
     public function testFlipArticleMainVariantShouldBeSuccessful($id)
@@ -446,60 +444,59 @@ class ArticleTest extends TestCase
         $originalArticle = $this->resource->getOne($id);
         $mainVariantNumber = $originalArticle['mainDetailId'];
 
-        $testData = array(
-            'mainDetail' => array(
+        $testData = [
+            'mainDetail' => [
                 'number' => $mainVariantNumber,
                 'inStock' => 15,
                 'unitId' => 1,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 1,
                         'to' => 20,
                         'price' => 500,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                    ),
-                )
-            ),
-            'variants' => array(
-                array(
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
                     'number' => $mainVariantNumber,
                     'inStock' => 15,
                     'unitId' => 1,
                     'isMain' => true,
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'EK',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    ),
-                    'configuratorOptions' => array(
-                        array(
+                        ],
+                    ],
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Gelb',
-                            'group' => 'Farbe'
-                        ),
-                        array(
+                            'group' => 'Farbe',
+                        ],
+                        [
                             'option' => 'XL',
-                            'group' => 'Größe'
-                        )
-
-                    ),
-                ),
-            ),
-        );
+                            'group' => 'Größe',
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $article = $this->resource->update($id, $testData);
 
@@ -510,18 +507,20 @@ class ArticleTest extends TestCase
      * Test that updating an Article with images generates thumbnails
      *
      * @depends testCreateWithImageShouldCreateThumbnails
+     *
      * @param int $id
+     *
      * @return int
      */
     public function testUpdateWithImageShouldCreateThumbnails($id)
     {
-        $testData = array(
-            'images' => array(
-                array(
-                    'link' => 'https://cdn.shopware.de/github/readme_screenshot.png'
-                )
-            ),
-        );
+        $testData = [
+            'images' => [
+                [
+                    'link' => 'https://cdn.shopware.de/github/readme_screenshot.png',
+                ],
+            ],
+        ];
 
         $article = $this->resource->update($id, $testData);
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
@@ -548,125 +547,123 @@ class ArticleTest extends TestCase
      */
     public function testCreateWithImageShouldCreateThumbnailsWithRightProportions()
     {
-        $testData = array(
+        $testData = [
             'name' => 'Test article with images and right proportions',
             'description' => 'Test description',
             'active' => true,
             'filterGroupId' => 1,
-            'propertyValues' => array(
-                array(
+            'propertyValues' => [
+                [
                     'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
                     'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption' . uniqid(rand())
-                    )
-                )
-            ),
-            'images' => array(
-                array(
-                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
-                )
-            ),
-            'mainDetail' => array(
+                    'option' => [
+                        'name' => 'neueOption' . uniqid(rand()),
+                    ],
+                ],
+            ],
+            'images' => [
+                [
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
+                ],
+            ],
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'attribute' => array(
+                'attribute' => [
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
-                ),
+                ],
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 1,
                         'to' => 20,
                         'price' => 500,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                    ),
-                )
-            ),
-            'configuratorSet' => array(
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
                 'name' => 'MeinKonf',
-                'groups' => array(
-                    array(
+                'groups' => [
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array('name' => 'Gelb'),
-                            array('name' => 'grün')
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'grün'],
+                        ],
+                    ],
+                    [
                         'name' => 'Gräße',
-                        'options' => array(
-                            array('name' => 'L'),
-                            array('name' => 'XL')
-                        )
-                    ),
-                )
-            ),
-            'variants' => array(
-                array(
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
                     'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
-                    'attribute' => array(
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
-                    'images' => array(
-                        array(
-                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
-                        )
-                    ),
-                    'configuratorOptions' => array(
-                        array(
+                    ],
+                    'images' => [
+                        [
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
+                        ],
+                    ],
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Gelb',
-                            'group' => 'Farbe'
-                        ),
-                        array(
+                            'group' => 'Farbe',
+                        ],
+                        [
                             'option' => 'XL',
-                            'group' => 'Größe'
-                        )
-
-                    ),
+                            'group' => 'Größe',
+                        ],
+                    ],
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
-
-                )
-            ),
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
             'supplierId' => 2,
-        );
+        ];
 
         $article = $this->resource->create($testData);
 
@@ -674,12 +671,12 @@ class ArticleTest extends TestCase
         $this->assertGreaterThan(0, $article->getId());
         $this->assertCount(2, $article->getImages());
 
-        $proportionalSizes = array(
+        $proportionalSizes = [
             '200x200',
             '600x600',
             '1280x1280',
-            '140x140'
-        );
+            '140x140',
+        ];
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
@@ -710,7 +707,7 @@ class ArticleTest extends TestCase
      */
     public function testCreateWithVariantsAndNewConfiguratorSetShouldBeSuccessful()
     {
-        $testData = array(
+        $testData = [
             'name' => 'Test article',
             'description' => 'Test description',
             'descriptionLong' => 'Long test description',
@@ -720,164 +717,164 @@ class ArticleTest extends TestCase
             'keywords' => 'test, testarticle',
             'metaTitle' => 'this is a test title with umlauts äöüß',
             'filterGroupId' => 1,
-            'propertyValues' => array(
-                array(
+            'propertyValues' => [
+                [
                     'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
                     'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption' . uniqid(rand())
-                    )
-                )
-            ),
-            'mainDetail' => array(
+                    'option' => [
+                        'name' => 'neueOption' . uniqid(rand()),
+                    ],
+                ],
+            ],
+            'mainDetail' => [
                 'number' => 'swConfigSetMainTest' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'attribute' => array(
+                'attribute' => [
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
-                ),
+                ],
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 1,
                         'to' => 20,
                         'price' => 500,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                    ),
-                )
-            ),
-            'configuratorSet' => array(
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
                 'name' => 'NewConfigSet',
-                'groups' => array(
-                    array(
+                'groups' => [
+                    [
                         'name' => 'Group1',
-                        'options' => array(
-                            array('name' => 'Opt11'),
-                            array('name' => 'Opt12')
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'Opt11'],
+                            ['name' => 'Opt12'],
+                        ],
+                    ],
+                    [
                         'name' => 'Group2',
-                        'options' => array(
-                            array('name' => 'Opt21'),
-                            array('name' => 'Opt22'),
-                            array('name' => 'Opt23'),
-                            array('name' => 'Opt24'),
-                            array('name' => 'Opt25'),
-                            array('name' => 'Opt26'),
-                            array('name' => 'Opt27')
-                        )
-                    ),
-                )
-            ),
-            'variants' => array(
-                array(
+                        'options' => [
+                            ['name' => 'Opt21'],
+                            ['name' => 'Opt22'],
+                            ['name' => 'Opt23'],
+                            ['name' => 'Opt24'],
+                            ['name' => 'Opt25'],
+                            ['name' => 'Opt26'],
+                            ['name' => 'Opt27'],
+                        ],
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
                     'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
-                    'attribute' => array(
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
-                    'configuratorOptions' => array(
-                        array(
+                    ],
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Opt11',
-                            'group' => 'Group1'
-                        ),
-                        array(
+                            'group' => 'Group1',
+                        ],
+                        [
                             'option' => 'Opt23',
-                            'group' => 'Group2'
-                        ),
-                        array(
+                            'group' => 'Group2',
+                        ],
+                        [
                             'option' => 'Opt24',
-                            'group' => 'Group2'
-                        )
-                    ),
+                            'group' => 'Group2',
+                        ],
+                    ],
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
                     'inStock' => 18,
                     // create another new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
-                    'attribute' => array(
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
-                    'configuratorOptions' => array(
-                        array(
+                    ],
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Opt12',
-                            'group' => 'Group1'
-                        ),
-                        array(
+                            'group' => 'Group1',
+                        ],
+                        [
                             'option' => 'Opt27',
-                            'group' => 'Group2'
-                        )
-                    ),
+                            'group' => 'Group2',
+                        ],
+                    ],
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
-                )
-            ),
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
             'supplierId' => 2,
-            'categories' => array(
-                array('id' => 15),
-                array('id' => 10),
-            ),
-            'links' => array(
-                array('name' => 'foobar', 'link' => 'http://example.org'),
-                array('name' => 'Video', 'link' => 'http://example.org'),
-            ),
-        );
+            'categories' => [
+                ['id' => 15],
+                ['id' => 10],
+            ],
+            'links' => [
+                ['name' => 'foobar', 'link' => 'http://example.org'],
+                ['name' => 'Video', 'link' => 'http://example.org'],
+            ],
+        ];
 
         $article = $this->resource->create($testData);
 
@@ -901,7 +898,7 @@ class ArticleTest extends TestCase
         $propertyValues = $article->getPropertyValues()->getValues();
         $this->assertEquals(count($propertyValues), count($testData['propertyValues']));
         foreach ($propertyValues as $propertyValue) {
-            $this->assertContains($propertyValue->getValue(), array("grün", "testWert"));
+            $this->assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
         $this->assertEquals($testData['taxId'], $article->getTax()->getId());
@@ -913,7 +910,7 @@ class ArticleTest extends TestCase
         $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
 
         $groups = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group')->findBy(
-                array('name' => array('Group1', 'Group2'))
+                ['name' => ['Group1', 'Group2']]
             );
 
         foreach ($groups as $group) {
@@ -977,10 +974,10 @@ class ArticleTest extends TestCase
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
         // required field name is missing
-        $testData = array(
+        $testData = [
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
-        );
+        ];
 
         $this->resource->create($testData);
     }
@@ -994,23 +991,23 @@ class ArticleTest extends TestCase
         $article = $this->resource->getOne($id);
         $number = $article->getMainDetail()->getNumber();
 
-        $testData = array(
+        $testData = [
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
             // update supplier id
             'supplierId' => 3,
             // categories should be replaced
-            'categories' => array(
-                array('id' => 16),
-            ),
+            'categories' => [
+                ['id' => 16],
+            ],
             'filterGroupId' => 1,
             // values should be replaced
-            'propertyValues' => array(),
+            'propertyValues' => [],
             // related is not included, therefore it stays untouched
 
             // similar is set to empty array, therefore it should be cleared
-            'similar' => array(),
-        );
+            'similar' => [],
+        ];
 
         $article = $this->resource->updateByNumber($number, $testData);
 
@@ -1041,23 +1038,23 @@ class ArticleTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
+        $testData = [
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
             // update supplier id
             'supplierId' => 3,
             // categories should be replaced
-            'categories' => array(
-                array('id' => 16),
-            ),
+            'categories' => [
+                ['id' => 16],
+            ],
             'filterGroupId' => 1,
             // values should be replaced
-            'propertyValues' => array(),
+            'propertyValues' => [],
             // related is not included, therefore it stays untouched
 
             // similar is set to empty array, therefore it should be cleared
-            'similar' => array(),
-        );
+            'similar' => [],
+        ];
 
         $article = $this->resource->update($id, $testData);
 
@@ -1090,11 +1087,11 @@ class ArticleTest extends TestCase
     public function testUpdateWithInvalidDataShouldThrowValidationException($id)
     {
         // required field name is blank
-        $testData = array(
+        $testData = [
             'name' => ' ',
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
-        );
+        ];
 
         $this->resource->update($id, $testData);
     }
@@ -1104,7 +1101,7 @@ class ArticleTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -1112,7 +1109,7 @@ class ArticleTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**
@@ -1149,16 +1146,16 @@ class ArticleTest extends TestCase
     {
         $this->resource->update(
             2,
-            array(
-                "images" => array(
-                    array(
-                        "articleId" => 2,
-                        "mediaId" => 25,
-                        "main" => 0,
-                        "position" => 10000,
-                    ),
-                ),
-            )
+            [
+                'images' => [
+                    [
+                        'articleId' => 2,
+                        'mediaId' => 25,
+                        'main' => 0,
+                        'position' => 10000,
+                    ],
+                ],
+            ]
         );
         $article = $this->resource->getOne(2);
 
@@ -1177,132 +1174,132 @@ class ArticleTest extends TestCase
         }
 
         $article = $this->resource->create(
-            array(
+            [
                 'name' => 'Turnschuhe',
                 'active' => true,
                 'tax' => 19,
                 'supplier' => 'Turnschuhe Inc.',
-                'categories' => array(
-                    array('id' => 15),
-                ),
-                'mainDetail' => array(
+                'categories' => [
+                    ['id' => 15],
+                ],
+                'mainDetail' => [
                     'number' => 'turn',
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
-        $updateArticle = array(
-            'configuratorSet' => array(
-                'groups' => array(
-                    array(
+        $updateArticle = [
+            'configuratorSet' => [
+                'groups' => [
+                    [
                         'name' => 'Größe',
-                        'options' => array(
-                            array('name' => 'S'),
-                            array('name' => 'M')
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'S'],
+                            ['name' => 'M'],
+                        ],
+                    ],
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array('name' => 'grün'),
-                            array('name' => 'blau')
-                        )
-                    ),
-                )
-            ),
+                        'options' => [
+                            ['name' => 'grün'],
+                            ['name' => 'blau'],
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
-            'variants' => array(
-                array(
+            'variants' => [
+                [
                     'isMain' => true,
                     'number' => 'turn',
                     'inStock' => 15,
                     'addtionnaltext' => 'S / grün',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'grün'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'S'],
+                        ['group' => 'Farbe', 'option' => 'grün'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 1999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.1',
                     'inStock' => 15,
                     'addtionnaltext' => 'S / blau',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'blau'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'S'],
+                        ['group' => 'Farbe', 'option' => 'blau'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.2',
                     'inStock' => 15,
                     'addtionnaltext' => 'M / grün',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'grün'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'M'],
+                        ['group' => 'Farbe', 'option' => 'grün'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.3',
                     'inStock' => 15,
                     'addtionnaltext' => 'M / blau',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'blau'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'M'],
+                        ['group' => 'Farbe', 'option' => 'blau'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                )
-            )
-        );
-        /**@var $article \Shopware\Models\Article\Article */
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        /** @var $article \Shopware\Models\Article\Article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name don't match");
 
-        /**@var $variant \Shopware\Models\Article\Detail */
+        /** @var $variant \Shopware\Models\Article\Detail */
         foreach ($updated->getDetails() as $variant) {
             $this->assertTrue(
                 in_array(
                     $variant->getNumber(),
-                    array('turn', 'turn.1', 'turn.2', 'turn.3'),
+                    ['turn', 'turn.1', 'turn.2', 'turn.3'],
                     'Variant number dont match'
                 )
             );
 
             $this->assertCount(2, $variant->getConfiguratorOptions(), 'Configurator option count dont match');
 
-            /**@var $option \Shopware\Models\Article\Configurator\Option */
+            /** @var $option \Shopware\Models\Article\Configurator\Option */
             foreach ($variant->getConfiguratorOptions() as $option) {
-                $this->assertTrue(in_array($option->getName(), array('M', 'S', 'blau', 'grün')));
+                $this->assertTrue(in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
             }
         }
 
@@ -1325,130 +1322,130 @@ class ArticleTest extends TestCase
         }
 
         $article = $this->resource->create(
-            array(
+            [
                 'name' => 'Turnschuhe',
                 'active' => true,
                 'tax' => 19,
                 'supplier' => 'Turnschuhe Inc.',
-                'categories' => array(
-                    array('id' => 15),
-                ),
-                'mainDetail' => array(
+                'categories' => [
+                    ['id' => 15],
+                ],
+                'mainDetail' => [
                     'number' => 'turn',
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
-        $updateArticle = array(
-            'configuratorSet' => array(
-                'groups' => array(
-                    array(
+        $updateArticle = [
+            'configuratorSet' => [
+                'groups' => [
+                    [
                         'name' => 'Größe',
-                        'options' => array(
-                            array('name' => 'S', 'position' => 123),
-                            array('name' => 'M', 'position' => 4)
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'S', 'position' => 123],
+                            ['name' => 'M', 'position' => 4],
+                        ],
+                    ],
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array('name' => 'grün', 'position' => 99),
-                            array('name' => 'blau', 'position' => 11)
-                        )
-                    ),
-                )
-            ),
+                        'options' => [
+                            ['name' => 'grün', 'position' => 99],
+                            ['name' => 'blau', 'position' => 11],
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
-            'variants' => array(
-                array(
+            'variants' => [
+                [
                     'isMain' => true,
                     'number' => 'turn',
                     'inStock' => 15,
                     'addtionnaltext' => 'S / grün',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'grün'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'S'],
+                        ['group' => 'Farbe', 'option' => 'grün'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 1999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.1',
                     'inStock' => 15,
                     'addtionnaltext' => 'S / blau',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'blau'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'S'],
+                        ['group' => 'Farbe', 'option' => 'blau'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.2',
                     'inStock' => 15,
                     'addtionnaltext' => 'M / grün',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'grün'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'M'],
+                        ['group' => 'Farbe', 'option' => 'grün'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.3',
                     'inStock' => 15,
                     'addtionnaltext' => 'M / blau',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'blau'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'M'],
+                        ['group' => 'Farbe', 'option' => 'blau'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                )
-            )
-        );
-        /**@var $article \Shopware\Models\Article\Article */
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        /** @var $article \Shopware\Models\Article\Article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name doesn't match");
 
-        /**@var $variant \Shopware\Models\Article\Detail */
+        /** @var $variant \Shopware\Models\Article\Detail */
         foreach ($updated->getDetails() as $variant) {
             $this->assertTrue(
                 in_array(
                     $variant->getNumber(),
-                    array('turn', 'turn.1', 'turn.2', 'turn.3'),
+                    ['turn', 'turn.1', 'turn.2', 'turn.3'],
                     'Variant number dont match'
                 )
             );
 
-            /**@var $option \Shopware\Models\Article\Configurator\Option */
+            /** @var $option \Shopware\Models\Article\Configurator\Option */
             foreach ($variant->getConfiguratorOptions() as $option) {
-                $this->assertTrue(in_array($option->getName(), array('M', 'S', 'blau', 'grün')));
+                $this->assertTrue(in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
 
                 switch ($option->getName()) {
                     case 'M':
@@ -1489,115 +1486,115 @@ class ArticleTest extends TestCase
         }
 
         $article = $this->resource->create(
-            array(
+            [
                 'name' => 'Turnschuhe',
                 'active' => true,
                 'tax' => 19,
                 'supplier' => 'Turnschuhe Inc.',
-                'categories' => array(
-                    array('id' => 15),
-                ),
-                'mainDetail' => array(
+                'categories' => [
+                    ['id' => 15],
+                ],
+                'mainDetail' => [
                     'number' => 'turn',
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
-        $updateArticle = array(
-            'configuratorSet' => array(
+        $updateArticle = [
+            'configuratorSet' => [
                 'type' => 2,
-                'groups' => array(
-                    array(
+                'groups' => [
+                    [
                         'name' => 'Größe',
-                        'options' => array(
-                            array('name' => 'S', 'position' => 123),
-                            array('name' => 'M', 'position' => 4)
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'S', 'position' => 123],
+                            ['name' => 'M', 'position' => 4],
+                        ],
+                    ],
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array('name' => 'grün', 'position' => 99),
-                            array('name' => 'blau', 'position' => 11)
-                        )
-                    ),
-                )
-            ),
+                        'options' => [
+                            ['name' => 'grün', 'position' => 99],
+                            ['name' => 'blau', 'position' => 11],
+                        ],
+                    ],
+                ],
+            ],
             'taxId' => 1,
-            'variants' => array(
-                array(
+            'variants' => [
+                [
                     'isMain' => true,
                     'number' => 'turn',
                     'inStock' => 15,
                     'addtionnaltext' => 'S / grün',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'grün'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'S'],
+                        ['group' => 'Farbe', 'option' => 'grün'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 1999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.1',
                     'inStock' => 15,
                     'addtionnaltext' => 'S / blau',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'blau'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'S'],
+                        ['group' => 'Farbe', 'option' => 'blau'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.2',
                     'inStock' => 15,
                     'addtionnaltext' => 'M / grün',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'grün'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'M'],
+                        ['group' => 'Farbe', 'option' => 'grün'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'isMain' => false,
                     'number' => 'turn.3',
                     'inStock' => 15,
                     'addtionnaltext' => 'M / blau',
-                    'configuratorOptions' => array(
-                        array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'blau'),
-                    ),
-                    'prices' => array(
-                        array(
+                    'configuratorOptions' => [
+                        ['group' => 'Größe', 'option' => 'M'],
+                        ['group' => 'Farbe', 'option' => 'blau'],
+                    ],
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'EK',
                             'price' => 999,
-                        ),
-                    )
-                )
-            )
-        );
-        /**@var $article \Shopware\Models\Article\Article */
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        /** @var $article \Shopware\Models\Article\Article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getConfiguratorSet()->getType(), 2, "ConfiguratorSet.Type doesn't match");
 
@@ -1609,43 +1606,40 @@ class ArticleTest extends TestCase
         }
     }
 
-    /**
-     *
-     */
     public function testCreateUseConfiguratorId()
     {
         $configurator = $this->getSimpleConfiguratorSet(2, 5);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
         $variantNumber = 'swVariant' . uniqid(rand());
 
-        $testData = array(
+        $testData = [
             'name' => 'Testartikel',
             'description' => 'Test description',
             'descriptionLong' => 'Test descriptionLong',
             'active' => true,
             'taxId' => 1,
             'supplierId' => 1,
-            'mainDetail' => array(
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'prices' => array(
-                    array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
-                )
-            ),
-            'variants' => array(
-                array(
+                'prices' => [
+                    ['customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400],
+                ],
+            ],
+            'variants' => [
+                [
                     'number' => $variantNumber,
                     'inStock' => 15,
                     'unitId' => 1,
-                    'prices' => array(
-                        array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
-                    ),
-                    'configuratorOptions' => $variantOptions
-                )
-            ),
-            'configuratorSet' => $configurator
-        );
+                    'prices' => [
+                        ['customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400],
+                    ],
+                    'configuratorOptions' => $variantOptions,
+                ],
+            ],
+            'configuratorSet' => $configurator,
+        ];
 
         $article = $this->resource->create($testData);
 
@@ -1666,18 +1660,18 @@ class ArticleTest extends TestCase
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
 
         $id = Shopware()->Db()->fetchOne(
-            "SELECT articleID FROM s_articles_details WHERE ordernumber = ?",
-            array($variantNumber)
+            'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
+            [$variantNumber]
         );
 
-        $data = array(
-            'variants' => array(
-                array(
+        $data = [
+            'variants' => [
+                [
                     'number' => $variantNumber,
-                    'configuratorOptions' => $variantOptions
-                )
-            )
-        );
+                    'configuratorOptions' => $variantOptions,
+                ],
+            ],
+        ];
 
         $this->resource->update($id, $data);
 
@@ -1693,10 +1687,10 @@ class ArticleTest extends TestCase
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(
-            array(
+            [
                 'media.id as mediaId',
-                '2 as main'
-            )
+                '2 as main',
+            ]
         )->from('Shopware\Models\Media\Media', 'media')->addOrderBy('media.id', 'ASC')->setFirstResult(
                 5
             )->setMaxResults(4);
@@ -1717,7 +1711,7 @@ class ArticleTest extends TestCase
 
         $mainFlagExists = false;
 
-        /**@var $image \Shopware\Models\Article\Image */
+        /** @var $image \Shopware\Models\Article\Image */
         foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $mainFlagExists = true;
@@ -1725,6 +1719,7 @@ class ArticleTest extends TestCase
             }
         }
         $this->assertTrue($mainFlagExists);
+
         return $article->getId();
     }
 
@@ -1738,14 +1733,14 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($articleId);
 
-        $updateImages = array();
+        $updateImages = [];
         $newId = null;
         foreach ($article['images'] as $image) {
             if ($image['main'] !== 1) {
-                $updateImages['images'][] = array(
+                $updateImages['images'][] = [
                     'id' => $image['id'],
-                    'main' => 1
-                );
+                    'main' => 1,
+                ];
                 $newId = $image['id'];
                 break;
             }
@@ -1778,14 +1773,14 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($articleId);
 
-        $updateImages = array();
+        $updateImages = [];
         $lastMainId = null;
 
         foreach ($article['images'] as $image) {
-            $newImageData = array(
+            $newImageData = [
                 'id' => $image['id'],
-                'main' => $image['main']
-            );
+                'main' => $image['main'],
+            ];
 
             if ($image['main'] == 1) {
                 $lastMainId = $image['id'];
@@ -1807,7 +1802,7 @@ class ArticleTest extends TestCase
         $this->assertCount(4, $article->getImages());
 
         $hasMain = false;
-        /**@var $image \Shopware\Models\Article\Image */
+        /** @var $image \Shopware\Models\Article\Image */
         foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
@@ -1824,18 +1819,18 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $definedTranslation = array(
-            array(
+        $definedTranslation = [
+            [
                 'shopId' => 2,
                 'name' => 'English-Name',
                 'description' => 'English-Description',
                 'descriptionLong' => 'English-DescriptionLong',
                 'keywords' => 'English-Keywords',
-                'packUnit' => 'English-PackUnit'
-            )
-        );
+                'packUnit' => 'English-PackUnit',
+            ],
+        ];
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 20; ++$i) {
             $definedTranslation[0]['__attribute_attr' . $i] = 'English-Attr' . $i;
         }
 
@@ -1853,7 +1848,7 @@ class ArticleTest extends TestCase
         $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 20; ++$i) {
             $attr = '__attribute_attr' . $i;
             $this->assertEquals($definedTranslation[$attr], $savedTranslation[$attr]);
         }
@@ -1863,11 +1858,11 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $data['images'] = array(
-            array(
-                'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
-            )
-        );
+        $data['images'] = [
+            [
+                'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'),
+            ],
+        ];
 
         $model = $this->resource->create($data);
         $this->resource->setResultMode(
@@ -1897,23 +1892,23 @@ class ArticleTest extends TestCase
 
         $createdIds = Shopware()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
-            array(
-                ':articleId' => $article->getId()
-            )
+            [
+                ':articleId' => $article->getId(),
+            ]
         );
 
-        $data = array(
-            '__options_images' => array('replace' => true),
-            'images' => $this->getImagesForNewArticle(100)
-        );
+        $data = [
+            '__options_images' => ['replace' => true],
+            'images' => $this->getImagesForNewArticle(100),
+        ];
 
         $this->resource->update($article->getId(), $data);
 
         $updateIds = Shopware()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
-            array(
-                ':articleId' => $article->getId()
-            )
+            [
+                ':articleId' => $article->getId(),
+            ]
         );
 
         foreach ($updateIds as $id) {
@@ -1928,18 +1923,18 @@ class ArticleTest extends TestCase
         $data['images'] = $this->getImagesForNewArticle();
         $article = $this->resource->create($data);
 
-        $data = array(
-            '__options_images' => array('replace' => false),
-            'images' => $this->getImagesForNewArticle(40)
-        );
+        $data = [
+            '__options_images' => ['replace' => false],
+            'images' => $this->getImagesForNewArticle(40),
+        ];
 
         $this->resource->update($article->getId(), $data);
 
         $updateIds = Shopware()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
-            array(
-                ':articleId' => $article->getId()
-            )
+            [
+                ':articleId' => $article->getId(),
+            ]
         );
 
         $this->assertCount(10, $updateIds);
@@ -1951,17 +1946,17 @@ class ArticleTest extends TestCase
         $data['images'] = $this->getImagesForNewArticle();
         $article = $this->resource->create($data);
 
-        $data = array(
-            'images' => $this->getImagesForNewArticle(40)
-        );
+        $data = [
+            'images' => $this->getImagesForNewArticle(40),
+        ];
 
         $this->resource->update($article->getId(), $data);
 
         $updateIds = Shopware()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
-            array(
-                ':articleId' => $article->getId()
-            )
+            [
+                ':articleId' => $article->getId(),
+            ]
         );
 
         $this->assertCount(10, $updateIds);
@@ -1972,14 +1967,14 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
         $images = $this->getImagesForNewArticle();
         foreach ($images as &$image) {
-            $image['attribute'] = array(
-                'attribute1' => 'attr1'
-            );
+            $image['attribute'] = [
+                'attribute1' => 'attr1',
+            ];
         }
         $data['images'] = $images;
         $article = $this->resource->create($data);
 
-        /**@var $image \Shopware\Models\Article\Image */
+        /** @var $image \Shopware\Models\Article\Image */
         foreach ($article->getImages() as $image) {
             $this->assertInstanceOf('\Shopware\Models\Attribute\ArticleImage', $image->getAttribute());
             $this->assertEquals('attr1', $image->getAttribute()->getAttribute1());
@@ -1991,21 +1986,21 @@ class ArticleTest extends TestCase
     public function testCreateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('values', 'option'))->from('Shopware\Models\Property\Value', 'values')->innerJoin(
+        $builder->select(['values', 'option'])->from('Shopware\Models\Property\Value', 'values')->innerJoin(
                 'values.option',
                 'option'
             )->setFirstResult(0)->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
-        $properties = array();
+        $properties = [];
         foreach ($databaseValues as $value) {
             $valueIds[] = $value['id'];
             $optionIds[] = $value['option']['id'];
-            $properties[] = array(
+            $properties[] = [
                 'value' => $value['value'],
-                'option' => array(
-                    'name' => $value['option']['name']
-                )
-            );
+                'option' => [
+                    'name' => $value['option']['name'],
+                ],
+            ];
         }
         $data = $this->getSimpleTestData();
         $data['propertyValues'] = $properties;
@@ -2026,16 +2021,16 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
 
         $optionName = 'newOption' . uniqid(rand());
-        $properties = array(
-            array(
-                'option' => array('name' => $optionName),
-                'value' => 'testValue'
-            ),
-            array(
-                'option' => array('name' => $optionName),
-                'value' => 'anotherTestValue'
-            )
-        );
+        $properties = [
+            [
+                'option' => ['name' => $optionName],
+                'value' => 'testValue',
+            ],
+            [
+                'option' => ['name' => $optionName],
+                'value' => 'anotherTestValue',
+            ],
+        ];
 
         $data['propertyValues'] = $properties;
         $data['filterGroupId'] = 1;
@@ -2047,7 +2042,7 @@ class ArticleTest extends TestCase
         $article = $this->resource->getOne($articleId);
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('option'))->from('Shopware\Models\Property\Option', 'option')->where(
+        $builder->select(['option'])->from('Shopware\Models\Property\Option', 'option')->where(
                 'option.name = :optionName'
             )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
@@ -2058,12 +2053,12 @@ class ArticleTest extends TestCase
         $this->resource->delete($articleId);
 
         //delete test values in s_filter_values
-        $sql = "DELETE FROM `s_filter_values` WHERE `optionId` = ?";
-        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+        $sql = 'DELETE FROM `s_filter_values` WHERE `optionId` = ?';
+        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_relations
-        $sql = "DELETE FROM `s_filter_relations` WHERE `optionId` = ?";
-        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+        $sql = 'DELETE FROM `s_filter_relations` WHERE `optionId` = ?';
+        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_options
         $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
@@ -2074,34 +2069,34 @@ class ArticleTest extends TestCase
     public function testUpdateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('values', 'option'))->from('Shopware\Models\Property\Value', 'values')->innerJoin(
+        $builder->select(['values', 'option'])->from('Shopware\Models\Property\Value', 'values')->innerJoin(
                 'values.option',
                 'option'
             )->setFirstResult(0)->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
-        $properties = array();
+        $properties = [];
         foreach ($databaseValues as $value) {
             $valueIds[] = $value['id'];
             $optionIds[] = $value['option']['id'];
-            $properties[] = array(
+            $properties[] = [
                 'value' => $value['value'],
-                'option' => array(
-                    'name' => $value['option']['name']
-                )
-            );
+                'option' => [
+                    'name' => $value['option']['name'],
+                ],
+            ];
         }
-        $update = array(
+        $update = [
             'propertyValues' => $properties,
-            'filterGroupId' => 1
-        );
+            'filterGroupId' => 1,
+        ];
         $data = $this->getSimpleTestData();
         $this->resource->setResultMode(
             Resource::HYDRATE_OBJECT
         );
         $article = $this->resource->create($data);
-        /**@var \$article Shopware\Models\Article\Article */
+        /** @var \$article Shopware\Models\Article\Article */
         $article = $this->resource->update($article->getId(), $update);
-        /**@var $value \Shopware\Models\Property\Value */
+        /** @var $value \Shopware\Models\Property\Value */
         foreach ($article->getPropertyValues() as $value) {
             $this->assertTrue(in_array($value->getId(), $valueIds));
             $this->assertTrue(in_array($value->getOption()->getId(), $optionIds));
@@ -2113,26 +2108,26 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
         $article = $this->resource->create($data);
 
-        $update = array(
-            'mainDetail' => array(
+        $update = [
+            'mainDetail' => [
                 'number' => $article->getMainDetail()->getNumber(),
-                '__options_prices' => array('replace' => false),
-                'prices' => array(
-                    array(
+                '__options_prices' => ['replace' => false],
+                'prices' => [
+                    [
                         'customerGroupKey' => 'H',
                         'from' => 1,
                         'to' => '10',
                         'price' => 200,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'H',
                         'from' => 11,
                         'to' => '-',
                         'price' => 100,
-                    )
-                )
-            )
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $article = $this->resource->update($article->getId(), $update);
         $this->assertCount(3, $article->getMainDetail()->getPrices());
@@ -2141,27 +2136,27 @@ class ArticleTest extends TestCase
     public function testUpdateWithMultiplePropertiesAndNewGroup()
     {
         $optionName = 'newOption' . uniqid(rand());
-        $properties = array(
-            array(
-                'option' => array('name' => $optionName),
-                'value' => 'testValue'
-            ),
-            array(
-                'option' => array('name' => $optionName),
-                'value' => 'anotherTestValue'
-            )
-        );
+        $properties = [
+            [
+                'option' => ['name' => $optionName],
+                'value' => 'testValue',
+            ],
+            [
+                'option' => ['name' => $optionName],
+                'value' => 'anotherTestValue',
+            ],
+        ];
 
-        $update = array(
+        $update = [
             'propertyValues' => $properties,
-            'filterGroupId' => 1
-        );
+            'filterGroupId' => 1,
+        ];
         $data = $this->getSimpleTestData();
         $this->resource->setResultMode(
             Resource::HYDRATE_OBJECT
         );
         $article = $this->resource->create($data);
-        /**@var $article \Shopware\Models\Article\Article */
+        /** @var $article \Shopware\Models\Article\Article */
         $article = $this->resource->update($article->getId(), $update);
 
         $articleId = $article->getId();
@@ -2171,7 +2166,7 @@ class ArticleTest extends TestCase
         $article = $this->resource->getOne($article->getId());
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('option'))->from('Shopware\Models\Property\Option', 'option')->where(
+        $builder->select(['option'])->from('Shopware\Models\Property\Option', 'option')->where(
                 'option.name = :optionName'
             )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
@@ -2182,12 +2177,12 @@ class ArticleTest extends TestCase
         $this->resource->delete($articleId);
 
         //delete test values in s_filter_values
-        $sql = "DELETE FROM `s_filter_values` WHERE `optionId` = ?";
-        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+        $sql = 'DELETE FROM `s_filter_values` WHERE `optionId` = ?';
+        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_relations
-        $sql = "DELETE FROM `s_filter_relations` WHERE `optionId` = ?";
-        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+        $sql = 'DELETE FROM `s_filter_relations` WHERE `optionId` = ?';
+        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_options
         $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
@@ -2207,7 +2202,7 @@ class ArticleTest extends TestCase
             'Shopware\Models\Media\Media',
             0,
             1,
-            array('id as mediaId')
+            ['id as mediaId']
         );
 
         $configurator = $this->getSimpleConfiguratorSet(1, 2);
@@ -2215,7 +2210,7 @@ class ArticleTest extends TestCase
 
         $usedOption = $this->getOptionsForImage($configurator, 1, 'name');
         foreach ($images as &$image) {
-            $image['options'] = array($usedOption);
+            $image['options'] = [$usedOption];
         }
 
         $create['images'] = $images;
@@ -2224,11 +2219,11 @@ class ArticleTest extends TestCase
 
         $article = $this->resource->create($create);
 
-        /**@var $image \Shopware\Models\Article\Image */
+        /** @var $image \Shopware\Models\Article\Image */
         foreach ($article->getImages() as $image) {
             $this->assertCount(1, $image->getMappings());
 
-            /**@var $mapping \Shopware\Models\Article\Image\Mapping */
+            /** @var $mapping \Shopware\Models\Article\Image\Mapping */
             foreach ($image->getMappings() as $mapping) {
                 $this->assertCount(1, $mapping->getRules());
             }
@@ -2238,7 +2233,7 @@ class ArticleTest extends TestCase
 
         $article = $this->resource->getOne($article->getId());
 
-        /**@var $variant \Shopware\Models\Article\Detail */
+        /** @var $variant \Shopware\Models\Article\Detail */
         foreach ($article->getDetails() as $variant) {
             foreach ($variant->getConfiguratorOptions() as $option) {
                 if ($option->getName() == $usedOption[0]['name']) {
@@ -2246,121 +2241,6 @@ class ArticleTest extends TestCase
                 }
             }
         }
-    }
-
-    private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id')
-    {
-        if (!is_int($optionCount)) {
-            $optionCount = rand(1, count($configuratorSet['groups']) - 1);
-        }
-
-        $options = array();
-        foreach ($configuratorSet['groups'] as $group) {
-            $id = rand(0, count($group['options']) - 1);
-            $option = $group['options'][$id];
-            $options[] = array(
-                $property => $option[$property]
-            );
-            if (count($options) == $optionCount) {
-                return $options;
-            }
-        }
-        return $options;
-    }
-
-    /**
-     * Helper function which creates all variants for
-     * the passed groups with options.
-     * @param $groups
-     * @param array $groupMapping
-     * @param array $optionMapping
-     * @return array
-     */
-    private function createConfiguratorVariants(
-        $groups,
-        $groupMapping = array('key' => 'groupId', 'value' => 'id'),
-        $optionMapping = array('key' => 'option', 'value' => 'name')
-    ) {
-        $options = array();
-
-        $groupArrayKey = $groupMapping['key'];
-        $groupValuesKey = $groupMapping['value'];
-        $optionArrayKey = $optionMapping['key'];
-        $optionValuesKey = $optionMapping['value'];
-
-        foreach ($groups as $group) {
-            $groupOptions = array();
-            foreach ($group['options'] as $option) {
-                $groupOptions[] = array(
-                    $groupArrayKey => $group[$groupValuesKey],
-                    $optionArrayKey => $option[$optionValuesKey]
-                );
-            }
-            $options[] = $groupOptions;
-        }
-
-        $combinations = $this->combinations($options);
-        $combinations = $this->cleanUpCombinations($combinations);
-
-        $variants = array();
-        foreach ($combinations as $combination) {
-            $variant = $this->getSimpleVariantData();
-            $variant['configuratorOptions'] = $combination;
-            $variants[] = $variant;
-        }
-        return $variants;
-    }
-
-    /**
-     * Combinations merge the result of dimensional arrays not perfectly
-     * so we have to clean up the first array level.
-     * @param $combinations
-     * @return mixed
-     */
-    protected function cleanUpCombinations($combinations)
-    {
-        foreach ($combinations as &$combination) {
-            $combination[] = array(
-                'option' => $combination['option'],
-                'groupId' => $combination['groupId']
-            );
-            unset($combination['groupId']);
-            unset($combination['option']);
-        }
-
-        return $combinations;
-    }
-
-    /**
-     * Helper function which combines all array elements
-     * of the passed arrays.
-     *
-     * @param $arrays
-     * @param int $i
-     * @return array
-     */
-    protected function combinations($arrays, $i = 0)
-    {
-        if (!isset($arrays[$i])) {
-            return array();
-        }
-        if ($i == count($arrays) - 1) {
-            return $arrays[$i];
-        }
-
-        // get combinations from subsequent arrays
-        $tmp = $this->combinations($arrays, $i + 1);
-
-        $result = array();
-
-        // concat each array from tmp with each element from $arrays[$i]
-        foreach ($arrays[$i] as $v) {
-            foreach ($tmp as $t) {
-                $result[] = is_array($t) ? array_merge(array($v), $t) : array($v, $t);
-            }
-        }
-
-        return $result;
     }
 
     public function testCategoryReplacement()
@@ -2419,29 +2299,6 @@ class ArticleTest extends TestCase
         );
     }
 
-    private function getImagesForNewArticle($offset = 10, $limit = 5)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(
-            array(
-                'media.id as mediaId',
-                '2 as main'
-            )
-        )->from('Shopware\Models\Media\Media', 'media', 'media.id')->addOrderBy('media.id', 'ASC')->setFirstResult(
-                $offset
-            )->setMaxResults($limit);
-
-        /**
-         * Get random images.
-         * Only want to check if the main flag will be used.
-         */
-        $images = $builder->getQuery()->getArrayResult();
-        $keys = array_keys($images);
-        $images[$keys[0]]['main'] = 1;
-
-        return $images;
-    }
-
     public function testArticleDefaultPriceBehavior()
     {
         $data = $this->getSimpleTestData();
@@ -2450,7 +2307,7 @@ class ArticleTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-        /**@var $price \Shopware\Models\Article\Price */
+        /** @var $price \Shopware\Models\Article\Price */
         $price = $article->getMainDetail()->getPrices()->first();
 
         $this->assertEquals(
@@ -2472,14 +2329,14 @@ class ArticleTest extends TestCase
         $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
 
         $data = $this->getSimpleTestData();
-        $similar = array();
+        $similar = [];
         foreach ($articles as $article) {
             $model = Shopware()->Models()->find(
                 'Shopware\Models\Article\Article',
                 $article['id']
             );
 
-            $similar[] = array('number' => $model->getMainDetail()->getNumber());
+            $similar[] = ['number' => $model->getMainDetail()->getNumber()];
         }
 
         $data['similar'] = $similar;
@@ -2494,14 +2351,14 @@ class ArticleTest extends TestCase
         $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
 
         $data = $this->getSimpleTestData();
-        $similar = array();
+        $similar = [];
         foreach ($articles as $article) {
             $model = Shopware()->Models()->find(
                 'Shopware\Models\Article\Article',
                 $article['id']
             );
 
-            $similar[] = array('number' => $model->getMainDetail()->getNumber());
+            $similar[] = ['number' => $model->getMainDetail()->getNumber()];
         }
 
         $data['related'] = $similar;
@@ -2515,25 +2372,25 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $data['downloads'] = array(
-            array('link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'))
-        );
+        $data['downloads'] = [
+            ['link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')],
+        ];
 
         $article = $this->resource->create($data);
 
         $this->assertCount(1, $article->getDownloads());
 
-        $downloads = array(
-            array('id' => $article->getDownloads()->first()->getId()),
-            array('link' => 'file://' . __DIR__ . '/fixtures/variant-image.png')
-        );
+        $downloads = [
+            ['id' => $article->getDownloads()->first()->getId()],
+            ['link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'],
+        ];
 
         $update = $this->resource->update(
             $article->getId(),
-            array(
+            [
                 'downloads' => $downloads,
-                '__options_downloads' => array('replace' => false)
-            )
+                '__options_downloads' => ['replace' => false],
+            ]
         );
 
         $this->assertCount(2, $update->getDownloads());
@@ -2543,30 +2400,30 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $data['categories'] = Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 5, 10");
+        $data['categories'] = Shopware()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
 
         $first = $data['categories'][3];
         $second = $data['categories'][4];
 
-        $ids = array($first['id'], $second['id']);
+        $ids = [$first['id'], $second['id']];
 
-        $data['seoCategories'] = array(
-            array('shopId' => 1, 'categoryId' => $first['id']),
-            array('shopId' => 2, 'categoryId' => $second['id']),
-        );
+        $data['seoCategories'] = [
+            ['shopId' => 1, 'categoryId' => $first['id']],
+            ['shopId' => 2, 'categoryId' => $second['id']],
+        ];
 
         $article = $this->resource->create($data);
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        /**@var $article \Shopware\Models\Article\Article */
+        /** @var $article \Shopware\Models\Article\Article */
         $article = $this->resource->getOne($article->getId());
 
         $this->assertCount(2, $article->getSeoCategories());
 
         foreach ($article->getSeoCategories() as $category) {
             $this->assertContains($category->getCategory()->getId(), $ids);
-            $this->assertContains($category->getShop()->getId(), array(1, 2));
+            $this->assertContains($category->getShop()->getId(), [1, 2]);
         }
     }
 
@@ -2578,7 +2435,7 @@ class ArticleTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-        /**@var $price \Shopware\Models\Article\Price */
+        /** @var $price \Shopware\Models\Article\Price */
         $price = $article->getMainDetail()->getPrices()->first();
 
         $net = 400 / (($article->getTax()->getTax() + 100) / 100);
@@ -2593,15 +2450,381 @@ class ArticleTest extends TestCase
 
         $data = $this->resource->getOne(
             $article->getId(),
-            array(
-                'considerTaxInput' => true
-            )
+            [
+                'considerTaxInput' => true,
+            ]
         );
 
         $price = $data['mainDetail']['prices'][0];
 
         $this->assertEquals(400, $price['price']);
         $this->assertEquals($net, $price['net']);
+    }
+
+    public function testAssignCategoriesByPathShouldBeSuccessful()
+    {
+        // Delete previous data
+        try {
+            $id = $this->resource->getIdFromNumber('hollo-1');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+        // Associate three kinds of categories with the article:
+        // category by id, category by path, new category by path
+        $article = $this->resource->create(
+            [
+                'name' => 'Hähnchenschnitzel Hollo',
+                'active' => true,
+                'tax' => 19,
+                'supplier' => 'Onkel Tom',
+                'categories' => [
+                    ['path' => 'Deutsch|Genusswelten|Tees und Zubehör|Tees'],
+                    ['path' => 'Deutsch|Genusswelten|Tees und Zubehör|Süßstoff'],
+                    ['id' => 16],
+                ],
+                'mainDetail' => [
+                    'number' => 'hollo-1',
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'EK',
+                            'price' => 4.99,
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $ids = array_map(
+            function ($category) {
+                return $category->getId();
+            },
+            $article->getCategories()->toArray()
+        );
+        $ids = array_flip($ids);
+        $this->assertArrayHasKey(12, $ids);
+        $this->assertArrayHasKey(16, $ids);
+        $this->assertCount(3, $ids);
+    }
+
+    public function testBatchModeShouldBeSuccessful()
+    {
+        $createNew = $this->getSimpleTestData();
+        $updateExistingByNumber = [
+            'mainDetail' => [
+                'number' => 'SW10003',
+            ],
+            'keywords' => 'newKeyword1',
+        ];
+        $updateExistingById = [
+            'id' => 3,
+            'keywords' => 'newKeyword2',
+        ];
+
+        $result = $this->resource->batch(
+            [
+                'new' => $createNew,
+                'existingByNumber' => $updateExistingByNumber,
+                'existingById' => $updateExistingById,
+            ]
+        );
+
+        $this->assertEquals('newKeyword1', $result['existingByNumber']['data']['keywords']);
+        $this->assertEquals('newKeyword2', $result['existingById']['data']['keywords']);
+        $this->assertEquals('Testartikel', $result['new']['data']['name']);
+    }
+
+    public function testBatchDeleteShouldBeSuccessful()
+    {
+        $result = $this->resource->batch(
+            [
+                $this->getSimpleTestData(),
+                $this->getSimpleTestData(),
+                $this->getSimpleTestData(),
+            ]
+        );
+
+        $delete = [];
+        foreach ($result as $item) {
+            $delete[] = $item['data'];
+        }
+
+        $result = $this->resource->batchDelete($delete);
+
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testCategoryAssignment()
+    {
+        $number = 'CategoryAssignment' . uniqid(rand());
+
+        $data = $this->getSimpleTestData();
+        $data['mainDetail']['number'] = $number;
+
+        $categories = Shopware()->Db()->fetchAll('SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2');
+        $data['categories'] = $categories;
+
+        $article = $this->resource->create($data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            'SELECT categoryID FROM s_articles_categories WHERE articleID = ?',
+            [$article->getId()]
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            'SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?',
+            [$article->getId()]
+        );
+
+        $this->assertCount(2, $normal);
+        $this->assertCount(4, $denormalized);
+
+        foreach ($categories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains($category['id'], $denormalized);
+        }
+
+        $rewriteCategories = Shopware()->Db()->fetchAll(
+            'SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2, 2'
+        );
+        $data = [
+            'categories' => $rewriteCategories,
+        ];
+
+        $this->resource->update($article->getId(), $data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            'SELECT categoryID FROM s_articles_categories WHERE articleID = ?',
+            [$article->getId()]
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            'SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?',
+            [$article->getId()]
+        );
+
+        $this->assertCount(2, $normal);
+        $this->assertCount(4, $denormalized);
+
+        foreach ($rewriteCategories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains(
+                $category['id'],
+                $denormalized,
+                'Denormalized array contains not the expected category id'
+            );
+        }
+
+        $additionally = Shopware()->Db()->fetchAll('SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2');
+        $data = [
+            '__options_categories' => ['replace' => false],
+            'categories' => $additionally,
+        ];
+        $this->resource->update($article->getId(), $data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            'SELECT categoryID FROM s_articles_categories WHERE articleID = ?',
+            [$article->getId()]
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            'SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?',
+            [$article->getId()]
+        );
+
+        $this->assertCount(4, $normal);
+        $this->assertCount(8, $denormalized);
+
+        foreach ($rewriteCategories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains(
+                $category['id'],
+                $denormalized,
+                'Denormalized array contains not the expected category id'
+            );
+        }
+
+        foreach ($additionally as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains(
+                $category['id'],
+                $denormalized,
+                'Denormalized array contains not the expected category id'
+            );
+        }
+    }
+
+    public function testVariantImagesOnArticleCreate()
+    {
+        $data = [
+            'descriptionLong' => 'test1',
+            'name' => 'test1',
+            'active' => true,
+            'configuratorSet' => [
+                'type' => 2,
+                'groups' => [
+                    [
+                        'name' => 'New1',
+                        'options' => [
+                            ['name' => 'NewVal1'],
+                            ['name' => 'Newval2'],
+                        ],
+                    ],
+                ],
+            ],
+            'taxId' => 1,
+            'mainDetail' => [
+                'number' => uniqid(rand()),
+                'active' => true,
+                'prices' => [
+                    [
+                        'price' => 0.0,
+                        'pseudoPrice' => 0.0,
+                        'customerGroupKey' => 'EK',
+                    ],
+                ],
+                'configuratorOptions' => [
+                    [
+                        'group' => 'New1',
+                        'option' => 'NewVal1',
+                    ],
+                ],
+                'shippingTime' => 7.0,
+                'width' => 0,
+                'inStock' => 2,
+            ],
+            'filterGroupId' => null,
+            'images' => [
+                    [
+                        'position' => 0,
+                        'main' => 1,
+                        'mediaId' => 2,
+                        'description' => '147quad1809 603994396334907 1063748094 n',
+                        'options' => [
+                            [
+                                [
+                                    'name' => 'NewVal1',
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'position' => 0,
+                        'main' => 2,
+                        'mediaId' => 3,
+                        'description' => 'IMG 7228',
+                        'options' => [
+                            [
+                                [
+                                    'name' => 'Newval2',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            'lastStock' => true,
+            'variants' => [
+                [
+                    'number' => uniqid(rand()) . '.1',
+                    'active' => true,
+                    'prices' => [
+                        [
+                            'price' => 0.0,
+                            'pseudoPrice' => 0.0,
+                            'customerGroupKey' => 'EK',
+                        ],
+                    ],
+                    'configuratorOptions' => [
+                        [
+                            'group' => 'New1',
+                            'option' => 'Newval2',
+                        ],
+                    ],
+                    'shippingTime' => 7.0,
+                    'width' => 0,
+                    'isMain' => 0,
+                    'inStock' => 2,
+                ],
+            ],
+        ];
+
+        $article = $this->resource->create($data);
+
+        /** @var Image $image */
+        foreach ($article->getImages() as $image) {
+            $media = $image->getMedia();
+
+            $this->assertCount(1, $image->getMappings());
+
+            /** @var Image\Mapping $mapping */
+            $mapping = array_shift($image->getMappings()->getValues());
+
+            $this->assertCount(1, $mapping->getRules());
+
+            /** @var Image\Rule $rule */
+            $rule = array_shift($mapping->getRules()->getValues());
+
+            if ($media->getId() === 2) {
+                $this->assertEquals('NewVal1', $rule->getOption()->getName());
+            } elseif ($media->getId() === 3) {
+                $this->assertEquals('Newval2', $rule->getOption()->getName());
+            }
+        }
+    }
+
+    /**
+     * Combinations merge the result of dimensional arrays not perfectly
+     * so we have to clean up the first array level.
+     *
+     * @param $combinations
+     *
+     * @return mixed
+     */
+    protected function cleanUpCombinations($combinations)
+    {
+        foreach ($combinations as &$combination) {
+            $combination[] = [
+                'option' => $combination['option'],
+                'groupId' => $combination['groupId'],
+            ];
+            unset($combination['groupId']);
+            unset($combination['option']);
+        }
+
+        return $combinations;
+    }
+
+    /**
+     * Helper function which combines all array elements
+     * of the passed arrays.
+     *
+     * @param $arrays
+     * @param int $i
+     *
+     * @return array
+     */
+    protected function combinations($arrays, $i = 0)
+    {
+        if (!isset($arrays[$i])) {
+            return [];
+        }
+        if ($i == count($arrays) - 1) {
+            return $arrays[$i];
+        }
+
+        // get combinations from subsequent arrays
+        $tmp = $this->combinations($arrays, $i + 1);
+
+        $result = [];
+
+        // concat each array from tmp with each element from $arrays[$i]
+        foreach ($arrays[$i] as $v) {
+            foreach ($tmp as $t) {
+                $result[] = is_array($t) ? array_merge([$v], $t) : [$v, $t];
+            }
+        }
+
+        return $result;
     }
 
     protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
@@ -2621,12 +2844,12 @@ class ArticleTest extends TestCase
         $article = $this->resource->create($data);
         $this->assertCount(count($createdEntities), $article->$getter());
 
-        $updatedEntity = $this->getEntityOffset($entity, 20, 5, array('id'));
+        $updatedEntity = $this->getEntityOffset($entity, 20, 5, ['id']);
 
-        $update = array(
-            $replaceKey => array('replace' => $replace),
-            $arrayKey => $updatedEntity
-        );
+        $update = [
+            $replaceKey => ['replace' => $replace],
+            $arrayKey => $updatedEntity,
+        ];
         $article = $this->resource->update($article->getId(), $update);
 
         if ($replace == true) {
@@ -2636,39 +2859,129 @@ class ArticleTest extends TestCase
         }
     }
 
+    private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id')
+    {
+        if (!is_int($optionCount)) {
+            $optionCount = rand(1, count($configuratorSet['groups']) - 1);
+        }
+
+        $options = [];
+        foreach ($configuratorSet['groups'] as $group) {
+            $id = rand(0, count($group['options']) - 1);
+            $option = $group['options'][$id];
+            $options[] = [
+                $property => $option[$property],
+            ];
+            if (count($options) == $optionCount) {
+                return $options;
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * Helper function which creates all variants for
+     * the passed groups with options.
+     *
+     * @param $groups
+     * @param array $groupMapping
+     * @param array $optionMapping
+     *
+     * @return array
+     */
+    private function createConfiguratorVariants(
+        $groups,
+        $groupMapping = ['key' => 'groupId', 'value' => 'id'],
+        $optionMapping = ['key' => 'option', 'value' => 'name']
+    ) {
+        $options = [];
+
+        $groupArrayKey = $groupMapping['key'];
+        $groupValuesKey = $groupMapping['value'];
+        $optionArrayKey = $optionMapping['key'];
+        $optionValuesKey = $optionMapping['value'];
+
+        foreach ($groups as $group) {
+            $groupOptions = [];
+            foreach ($group['options'] as $option) {
+                $groupOptions[] = [
+                    $groupArrayKey => $group[$groupValuesKey],
+                    $optionArrayKey => $option[$optionValuesKey],
+                ];
+            }
+            $options[] = $groupOptions;
+        }
+
+        $combinations = $this->combinations($options);
+        $combinations = $this->cleanUpCombinations($combinations);
+
+        $variants = [];
+        foreach ($combinations as $combination) {
+            $variant = $this->getSimpleVariantData();
+            $variant['configuratorOptions'] = $combination;
+            $variants[] = $variant;
+        }
+
+        return $variants;
+    }
+
+    private function getImagesForNewArticle($offset = 10, $limit = 5)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(
+            [
+                'media.id as mediaId',
+                '2 as main',
+            ]
+        )->from('Shopware\Models\Media\Media', 'media', 'media.id')->addOrderBy('media.id', 'ASC')->setFirstResult(
+                $offset
+            )->setMaxResults($limit);
+
+        /**
+         * Get random images.
+         * Only want to check if the main flag will be used.
+         */
+        $images = $builder->getQuery()->getArrayResult();
+        $keys = array_keys($images);
+        $images[$keys[0]]['main'] = 1;
+
+        return $images;
+    }
+
     private function getSimpleTestData()
     {
-        return array(
+        return [
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,
-            'mainDetail' => array(
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 1,
                         'to' => '-',
                         'price' => 400,
-                    )
-                )
-            ),
+                    ],
+                ],
+            ],
             'taxId' => 1,
-            'supplierId' => 2
-        );
+            'supplierId' => 2,
+        ];
     }
 
-    private function getEntityOffset($entity, $offset = 0, $limit = 10, $fields = array('id'))
+    private function getEntityOffset($entity, $offset = 0, $limit = 10, $fields = ['id'])
     {
         if (!empty($fields)) {
-            $selectFields = array();
+            $selectFields = [];
             foreach ($fields as $field) {
                 $selectFields[] = 'alias.' . $field;
             }
         } else {
-            $selectFields = array('alias');
+            $selectFields = ['alias'];
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -2680,7 +2993,7 @@ class ArticleTest extends TestCase
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('groups.id', 'groups.name'))->from(
+        $builder->select(['groups.id', 'groups.name'])->from(
                 'Shopware\Models\Article\Configurator\Group',
                 'groups'
             )->setFirstResult(0)->setMaxResults($groupLimit)->orderBy('groups.position', 'ASC');
@@ -2688,7 +3001,7 @@ class ArticleTest extends TestCase
         $groups = $builder->getQuery()->getArrayResult();
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('options.id', 'options.name'))->from(
+        $builder->select(['options.id', 'options.name'])->from(
                 'Shopware\Models\Article\Configurator\Option',
                 'options'
             )->where('options.groupId = :groupId')->setFirstResult(0)->setMaxResults($optionLimit)->orderBy(
@@ -2701,233 +3014,41 @@ class ArticleTest extends TestCase
             $group['options'] = $builder->getQuery()->getArrayResult();
         }
 
-        return array(
+        return [
             'name' => 'Test-Set',
-            'groups' => $groups
-        );
+            'groups' => $groups,
+        ];
     }
 
     private function getSimpleVariantData()
     {
-        return array(
+        return [
             'number' => 'swTEST' . uniqid(rand()),
             'inStock' => 100,
             'unitId' => 1,
-            'prices' => array(
-                array(
+            'prices' => [
+                [
                     'customerGroupKey' => 'EK',
                     'from' => 1,
                     'to' => '-',
                     'price' => 400,
-                ),
-            )
-        );
-    }
-
-    public function testAssignCategoriesByPathShouldBeSuccessful()
-    {
-        // Delete previous data
-        try {
-            $id = $this->resource->getIdFromNumber('hollo-1');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (\Exception $e) {
-        }
-        // Associate three kinds of categories with the article:
-        // category by id, category by path, new category by path
-        $article = $this->resource->create(
-            array(
-                'name' => 'Hähnchenschnitzel Hollo',
-                'active' => true,
-                'tax' => 19,
-                'supplier' => 'Onkel Tom',
-                'categories' => array(
-                    array('path' => 'Deutsch|Genusswelten|Tees und Zubehör|Tees'),
-                    array('path' => 'Deutsch|Genusswelten|Tees und Zubehör|Süßstoff'),
-                    array('id' => 16)
-                ),
-                'mainDetail' => array(
-                    'number' => 'hollo-1',
-                    'prices' => array(
-                        array(
-                            'customerGroupKey' => 'EK',
-                            'price' => 4.99,
-                        ),
-                    )
-                ),
-            )
-        );
-        $ids = array_map(
-            function ($category) {
-                return $category->getId();
-            },
-            $article->getCategories()->toArray()
-        );
-        $ids = array_flip($ids);
-        $this->assertArrayHasKey(12, $ids);
-        $this->assertArrayHasKey(16, $ids);
-        $this->assertCount(3, $ids);
-    }
-
-    public function testBatchModeShouldBeSuccessful()
-    {
-        $createNew = $this->getSimpleTestData();
-        $updateExistingByNumber = array(
-            'mainDetail' => array(
-                'number' => 'SW10003'
-            ),
-            'keywords' => 'newKeyword1'
-        );
-        $updateExistingById = array(
-            'id' => 3,
-            'keywords' => 'newKeyword2'
-        );
-
-        $result = $this->resource->batch(
-            array(
-                'new' => $createNew,
-                'existingByNumber' => $updateExistingByNumber,
-                'existingById' => $updateExistingById,
-            )
-        );
-
-        $this->assertEquals('newKeyword1', $result['existingByNumber']['data']['keywords']);
-        $this->assertEquals('newKeyword2', $result['existingById']['data']['keywords']);
-        $this->assertEquals('Testartikel', $result['new']['data']['name']);
-    }
-
-    public function testBatchDeleteShouldBeSuccessful()
-    {
-        $result = $this->resource->batch(
-            array(
-                $this->getSimpleTestData(),
-                $this->getSimpleTestData(),
-                $this->getSimpleTestData()
-            )
-        );
-
-        $delete = array();
-        foreach ($result as $item) {
-            $delete[] = $item['data'];
-        }
-
-        $result = $this->resource->batchDelete($delete);
-
-        $this->assertEquals(3, count($result));
+                ],
+            ],
+        ];
     }
 
     private function getVariantOptionsOfSet($configuratorSet)
     {
-        $options = array();
+        $options = [];
         foreach ($configuratorSet['groups'] as $group) {
             $id = rand(0, count($group['options']) - 1);
             $option = $group['options'][$id];
-            $options[] = array(
+            $options[] = [
                 'optionId' => $option['id'],
-                'groupId' => $group['id']
-            );
+                'groupId' => $group['id'],
+            ];
         }
+
         return $options;
-    }
-
-    public function testCategoryAssignment()
-    {
-        $number = 'CategoryAssignment' . uniqid(rand());
-
-        $data = $this->getSimpleTestData();
-        $data['mainDetail']['number'] = $number;
-
-        $categories = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
-        $data['categories'] = $categories;
-
-        $article = $this->resource->create($data);
-
-        $normal = Shopware()->Db()->fetchCol(
-            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
-            array($article->getId())
-        );
-
-        $denormalized = Shopware()->Db()->fetchCol(
-            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
-            array($article->getId())
-        );
-
-        $this->assertCount(2, $normal);
-        $this->assertCount(4, $denormalized);
-
-        foreach ($categories as $category) {
-            $this->assertContains($category['id'], $normal);
-            $this->assertContains($category['id'], $denormalized);
-        }
-
-        $rewriteCategories = Shopware()->Db()->fetchAll(
-            "SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2, 2"
-        );
-        $data = array(
-            'categories' => $rewriteCategories
-        );
-
-        $this->resource->update($article->getId(), $data);
-
-        $normal = Shopware()->Db()->fetchCol(
-            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
-            array($article->getId())
-        );
-
-        $denormalized = Shopware()->Db()->fetchCol(
-            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
-            array($article->getId())
-        );
-
-        $this->assertCount(2, $normal);
-        $this->assertCount(4, $denormalized);
-
-        foreach ($rewriteCategories as $category) {
-            $this->assertContains($category['id'], $normal);
-            $this->assertContains(
-                $category['id'],
-                $denormalized,
-                "Denormalized array contains not the expected category id"
-            );
-        }
-
-        $additionally = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
-        $data = array(
-            '__options_categories' => array('replace' => false),
-            'categories' => $additionally
-        );
-        $this->resource->update($article->getId(), $data);
-
-        $normal = Shopware()->Db()->fetchCol(
-            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
-            array($article->getId())
-        );
-
-        $denormalized = Shopware()->Db()->fetchCol(
-            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
-            array($article->getId())
-        );
-
-        $this->assertCount(4, $normal);
-        $this->assertCount(8, $denormalized);
-
-        foreach ($rewriteCategories as $category) {
-            $this->assertContains($category['id'], $normal);
-            $this->assertContains(
-                $category['id'],
-                $denormalized,
-                "Denormalized array contains not the expected category id"
-            );
-        }
-
-        foreach ($additionally as $category) {
-            $this->assertContains($category['id'], $normal);
-            $this->assertContains(
-                $category['id'],
-                $denormalized,
-                "Denormalized array contains not the expected category id"
-            );
-        }
     }
 }

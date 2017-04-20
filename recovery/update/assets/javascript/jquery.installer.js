@@ -114,6 +114,7 @@
     $(document).ready(function() {
         // Set js class on the html tag
         $('html').removeClass('no-js').addClass('js');
+        $.updateMenu();
 
         var $button = $('#start-ajax').click(function() {
             startProgress(progressConfig);
@@ -183,6 +184,15 @@
         });
 
     });
+
+    $.updateMenu = function() {
+        var $currentListEntry = $('.navigation--list .navigation--entry.is--active'),
+            beforeElements = $currentListEntry.prevAll();
+
+        $.each(beforeElements, function(index, value) {
+            $(value).addClass('is--complete');
+        });
+    };
 
     $.checkForm = function(form) {
         var inputs = form.find('input'),

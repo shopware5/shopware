@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * References to components

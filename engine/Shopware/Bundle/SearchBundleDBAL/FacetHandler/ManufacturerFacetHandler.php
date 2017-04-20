@@ -24,22 +24,22 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\SearchBundle\Condition;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerFacetHandler implements FacetHandlerInterface
@@ -50,7 +50,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
     private $manufacturerService;
 
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -65,14 +65,14 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param ManufacturerServiceInterface $manufacturerService
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param ManufacturerServiceInterface         $manufacturerService
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
@@ -87,8 +87,9 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
 
     /**
      * @param FacetInterface|Facet\PriceFacet $facet
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param Criteria                        $criteria
+     * @param ShopContextInterface            $context
+     *
      * @return ValueListFacetResult
      */
     public function generateFacet(
@@ -108,7 +109,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         $query->groupBy('product.id');
         $query->select('DISTINCT product.supplierID as id');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $ids = $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -126,8 +127,17 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function supportsFacet(FacetInterface $facet)
+    {
+        return $facet instanceof Facet\ManufacturerFacet;
+    }
+
+    /**
      * @param Manufacturer[] $manufacturers
-     * @param int[] $activeIds
+     * @param int[]          $activeIds
+     *
      * @return ValueListFacetResult
      */
     private function createFacetResult($manufacturers, $activeIds)
@@ -160,6 +170,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
 
     /**
      * @param Criteria $criteria
+     *
      * @return int[]
      */
     private function getActiveIds($criteria)
@@ -168,17 +179,9 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
             return [];
         }
 
-        /**@var $condition Condition\ManufacturerCondition*/
+        /** @var $condition Condition\ManufacturerCondition */
         $condition = $criteria->getCondition('manufacturer');
 
         return $condition->getManufacturerIds();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsFacet(FacetInterface $facet)
-    {
-        return ($facet instanceof Facet\ManufacturerFacet);
     }
 }

@@ -30,7 +30,6 @@ use Shopware\Models\Banner\Banner;
  * This controller is used to create, update, delete and get banner data from the database.
  * Any prior live shopping code has been removed. Only non live shopping banners are used by this controller.
  * The frontend part is handled direct in engine/core/class/sMarketing.php in the method sBanner().
- *
  */
 class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_ExtJs
 {
@@ -52,14 +51,14 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     /**
      * Contains the user role who is executing this controller
      *
-     * @var String
+     * @var string
      */
     private $userRole;
 
     /**
      * Name of the default resource (Name of this controller)
      *
-     * @var String
+     * @var string
      */
     private $defaultResource;
 
@@ -71,41 +70,23 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     private $namespace;
 
     /**
-     * Method to define acl dependencies in backend controllers
-     * <code>
-     * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
-     * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
-     * </code>
-     */
-    protected function initAcl()
-    {
-        $this->namespace = Shopware()->Snippets()->getNamespace('backend/banner/banner');
-        $this->addAclPermission('getAllBannersAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
-        $this->addAclPermission('getListAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
-        $this->addAclPermission('getBannerAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
-        $this->addAclPermission('deleteBannerAction', 'delete', $this->namespace->get('no_delete_rights', 'Delete access denied.'));
-        $this->addAclPermission('updateBannerAction', 'update', $this->namespace->get('no_update_rights', 'Update access denied.'));
-        $this->addAclPermission('createBannerAction', 'create', $this->namespace->get('no_create_rights', 'Create access denied.'));
-    }
-
-    /**
      * Reads all known categories into an array to show it in the category treepanel
      */
     public function getListAction()
     {
         /** @var $filter array */
-        $filter = $this->Request()->getParam('filter', array());
+        $filter = $this->Request()->getParam('filter', []);
         $node = (int) $this->Request()->getParam('node');
         $preselectedNodes = $this->Request()->getParam('preselected');
 
         if (empty($filter)) {
             $node = !empty($node) ? $node : 1;
-            $filter[] = array('property' => 'c.parentId', 'value' => $node);
+            $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
 
         $query = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getListQuery(
             $filter,
-            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start'),
             false
@@ -126,16 +107,15 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             }
         }
 
-        $this->View()->assign(array(
-            'success' => true, 'data' => $data, 'total' => $count
-        ));
+        $this->View()->assign([
+            'success' => true, 'data' => $data, 'total' => $count,
+        ]);
     }
 
     /**
      * Default init method
      *
      * @codeCoverageIgnore
-     * @return void
      */
     public function init()
     {
@@ -152,19 +132,18 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * Basis Method to gather banner information.
      *
      * If the parameter is set true, every banner will be counted as shown
-     *
      */
     public function getAllBanners()
     {
         $params = $this->Request()->getParams();
-        $filter = (empty($params["categoryId"])) ? "" : $params["categoryId"];
+        $filter = (empty($params['categoryId'])) ? '' : $params['categoryId'];
 
-        $query   = $this->repository->getBanners($filter);
+        $query = $this->repository->getBanners($filter);
         $banners = $query->getArrayResult();
 
         // restructures the data to better fit extjs model
         $nodes = $this->prepareBannerData($banners);
-        $this->View()->assign(array('success' => !empty($nodes), 'data' => $nodes));
+        $this->View()->assign(['success' => !empty($nodes), 'data' => $nodes]);
     }
 
     /**
@@ -172,62 +151,12 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      *
      * This call will have NO impact on the generated statistic - this method
      * should be uses for backend operations only!
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getAllBannersAction()
     {
         $this->getAllBanners();
-    }
-
-    /**
-     * Build an array and reformats the date for a banner.
-     * If the second parameter is set true, every banner will be tracked.
-     *
-     * @param $banners
-     * @return array|null
-     */
-    private function prepareBannerData($banners)
-    {
-        $cnt   = 0;
-        $nodes = null;
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        foreach ($banners as $banner) {
-            // we have to split the datetime to date and time
-            if (!empty($banner['validFrom'])) {
-                $banner['validFromDate'] = $banner['validFrom']->format('d.m.Y');
-                $banner['validFromTime'] = $banner['validFrom']->format('H:i');
-            }
-            // we have to split the datetime to date and time
-            if (!empty($banner['validTo'])) {
-                $banner['validToDate'] = $banner['validTo']->format('d.m.Y');
-                $banner['validToTime'] = $banner['validTo']->format('H:i');
-            }
-
-            $banner['image'] = $mediaService->getUrl($banner['image']);
-
-            $nodes[$cnt++] = $banner;
-        }
-        return $nodes;
-    }
-
-    /**
-     * Transforms a ISO Date in to an easy processable dateTime Object.
-     *
-     * @param $date
-     * @param $time
-     * @return DateTime
-     */
-    private function prepareDateAndTime($date, $time)
-    {
-        // do not convert empty dates - this would cause the date to become the current date
-        if (empty($date)) {
-            return null;
-        }
-        $datePart = new \DateTime($date);
-        $timePart = new \DateTime($time);
-        // Fill the timePart with the datePart
-        return $timePart->setDate($datePart->format('Y'), $datePart->format('m'), $datePart->format('d'));
     }
 
     /**
@@ -263,14 +192,15 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // check if there are more than one media is submitted
         if (false !== strpos($this->Request()->get('media-manager-selection'), ',')) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
                 'errorMsg' => $this
                     ->namespace
-                    ->get('error_more_than_one_file', 'More then one file has been submitted - just one is allowed here.')));
+                    ->get('error_more_than_one_file', 'More then one file has been submitted - just one is allowed here.'), ]);
+
             return;
         }
-        $errorMsg   = null;
+        $errorMsg = null;
         $createMode = false;
 
         // add or edit detection
@@ -278,22 +208,22 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // Collecting form data
         if (!empty($tmpId)) {
-            $id             = (int) $tmpId;
+            $id = (int) $tmpId;
         } else {
-            $createMode     = true;
+            $createMode = true;
         }
         unset($tmpId);
         // Check if we are allowed to create a new db entry
         if (!$this->_isAllowed('create') && $createMode) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'data' => $this->namespace->get('no_create_rights', 'Create access denied.')));
+                'data' => $this->namespace->get('no_create_rights', 'Create access denied.'), ]);
         }
         // Check if we are allowed to update a db entry
         if (!$this->_isAllowed('update')) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'errorMsg' => $this->namespace->get('no_update_rights', 'Update access denied.')));
+                'errorMsg' => $this->namespace->get('no_update_rights', 'Update access denied.'), ]);
         }
 
         $params = $this->Request()->getParams();
@@ -312,9 +242,10 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         } else {
             // check if there are none files submitted
             if (empty($mediaManagerData)) {
-                $this->View()->assign(array(
+                $this->View()->assign([
                     'success' => false,
-                    'errorMsg' => $this->namespace->get('no_banner_selected', 'No banner has been selected.')));
+                    'errorMsg' => $this->namespace->get('no_banner_selected', 'No banner has been selected.'), ]);
+
                 return;
             }
             $bannerModel = new Banner();
@@ -336,10 +267,10 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             Shopware()->Models()->persist($bannerModel);
             Shopware()->Models()->flush();
             $params['id'] = $bannerModel->getId();
-            $this->View()->assign(array('success' => 'true', 'data' => $params));
+            $this->View()->assign(['success' => 'true', 'data' => $params]);
         } catch (Exception $e) {
             $errorMsg = $e->getMessage();
-            $this->View()->assign(array('success' => 'false', 'errorMsg' => $errorMsg));
+            $this->View()->assign(['success' => 'false', 'errorMsg' => $errorMsg]);
         }
     }
 
@@ -348,22 +279,93 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * If there is no ID parameter given, it will look if there is a parameter banners available
      *
      * e.g. id=1 or banners[[id => 1], [id => 2], [id => 3]]
-     *
      */
     public function deleteBannerAction()
     {
-        $multipleBanner    = $this->Request()->getPost('banners');
-        $bannerRequestData = empty($multipleBanner) ? array(array("id" => $this->Request()->id)) : $multipleBanner;
+        $multipleBanner = $this->Request()->getPost('banners');
+        $bannerRequestData = empty($multipleBanner) ? [['id' => $this->Request()->id]] : $multipleBanner;
         try {
             foreach ($bannerRequestData as $banner) {
-                $model = Shopware()->Models()->find('Shopware\Models\Banner\Banner', $banner["id"]);
+                $model = Shopware()->Models()->find('Shopware\Models\Banner\Banner', $banner['id']);
                 Shopware()->Models()->remove($model);
             }
             Shopware()->Models()->flush();
-            $this->View()->assign(array('success' => true));
+            $this->View()->assign(['success' => true]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * Method to define acl dependencies in backend controllers
+     * <code>
+     * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
+     * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
+     * </code>
+     */
+    protected function initAcl()
+    {
+        $this->namespace = Shopware()->Snippets()->getNamespace('backend/banner/banner');
+        $this->addAclPermission('getAllBannersAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
+        $this->addAclPermission('getListAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
+        $this->addAclPermission('getBannerAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
+        $this->addAclPermission('deleteBannerAction', 'delete', $this->namespace->get('no_delete_rights', 'Delete access denied.'));
+        $this->addAclPermission('updateBannerAction', 'update', $this->namespace->get('no_update_rights', 'Update access denied.'));
+        $this->addAclPermission('createBannerAction', 'create', $this->namespace->get('no_create_rights', 'Create access denied.'));
+    }
+
+    /**
+     * Build an array and reformats the date for a banner.
+     * If the second parameter is set true, every banner will be tracked.
+     *
+     * @param $banners
+     *
+     * @return array|null
+     */
+    private function prepareBannerData($banners)
+    {
+        $cnt = 0;
+        $nodes = null;
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        foreach ($banners as $banner) {
+            // we have to split the datetime to date and time
+            if (!empty($banner['validFrom'])) {
+                $banner['validFromDate'] = $banner['validFrom']->format('d.m.Y');
+                $banner['validFromTime'] = $banner['validFrom']->format('H:i');
+            }
+            // we have to split the datetime to date and time
+            if (!empty($banner['validTo'])) {
+                $banner['validToDate'] = $banner['validTo']->format('d.m.Y');
+                $banner['validToTime'] = $banner['validTo']->format('H:i');
+            }
+
+            $banner['image'] = $mediaService->getUrl($banner['image']);
+
+            $nodes[$cnt++] = $banner;
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Transforms a ISO Date in to an easy processable dateTime Object.
+     *
+     * @param $date
+     * @param $time
+     *
+     * @return DateTime
+     */
+    private function prepareDateAndTime($date, $time)
+    {
+        // do not convert empty dates - this would cause the date to become the current date
+        if (empty($date)) {
+            return null;
+        }
+        $datePart = new \DateTime($date);
+        $timePart = new \DateTime($time);
+        // Fill the timePart with the datePart
+        return $timePart->setDate($datePart->format('Y'), $datePart->format('m'), $datePart->format('d'));
     }
 
     /**
@@ -374,11 +376,13 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     private function defaultCheck()
     {
         if (!$this->Request()->isPost()) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'errorMsg' => $this->namespace->get('wrong_transmit_method', 'Wrong transmit method.')));
+                'errorMsg' => $this->namespace->get('wrong_transmit_method', 'Wrong transmit method.'), ]);
+
             return false;
         }
+
         return true;
     }
 }

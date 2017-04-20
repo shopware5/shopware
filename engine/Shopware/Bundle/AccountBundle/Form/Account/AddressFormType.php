@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Shopware\Models\Attribute\CustomerAddress as AddressAttribute;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\FormBundle\Transformer\EntityTransformer;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Attribute\CustomerAddress as AddressAttribute;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
@@ -58,7 +58,7 @@ class AddressFormType extends AbstractType
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param ModelManager $models
+     * @param ModelManager                $models
      */
     public function __construct(\Shopware_Components_Config $config, ModelManager $models)
     {
@@ -73,7 +73,7 @@ class AddressFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Address::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
@@ -87,20 +87,28 @@ class AddressFormType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            array_walk_recursive($data, function (&$item, $key) {
+                $item = strip_tags($item);
+            });
+            $event->setData($data);
+        });
+
         $builder->add('salutation', SalutationType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('title', TextType::class);
@@ -109,32 +117,32 @@ class AddressFormType extends AbstractType
         $builder->add('vatId', TextType::class);
 
         $builder->add('street', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('zipcode', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('city', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('country', IntegerType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
         $builder->add('state', IntegerType::class);
 
         $builder->add('phone', TextType::class, [
-            'constraints' => $this->getPhoneConstraints()
+            'constraints' => $this->getPhoneConstraints(),
         ]);
 
         $builder->add('additionalAddressLine1', TextType::class, [
-            'constraints' => $this->getAdditionalAddressline1Constraints()
+            'constraints' => $this->getAdditionalAddressline1Constraints(),
         ]);
 
         $builder->add('additionalAddressLine2', TextType::class, [
-            'constraints' => $this->getAdditionalAddressline2Constraints()
+            'constraints' => $this->getAdditionalAddressline2Constraints(),
         ]);
 
         // convert IDs to entities
@@ -142,14 +150,14 @@ class AddressFormType extends AbstractType
         $builder->get('state')->addModelTransformer(new EntityTransformer($this->models, State::class));
 
         $builder->add('attribute', AttributeFormType::class, [
-            'data_class' => AddressAttribute::class
+            'data_class' => AddressAttribute::class,
         ]);
 
         //dynamic field which contains multiple values
         //used for extendable data which has not to persist over attributes
         $builder->add('additional', null, [
             'compound' => true,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
 
         // default additional fields

@@ -22,31 +22,46 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Shopware Log Controller
  *
  * This controller handles all actions made by the user or the server in the log module or the backend.
  * It reads all logs, creates new ones or deletes them.
  */
-class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Sets the ACL-rights for the log-module
      */
     public function initAcl()
     {
-        $this->addAclPermission("getLogs", "read", "You're not allowed to see the logs.");
-        $this->addAclPermission("deleteLogs", "delete", "You're not allowed to delete the logs.");
+        $this->addAclPermission('getLogs', 'read', "You're not allowed to see the logs.");
+        $this->addAclPermission('deleteLogs', 'delete', "You're not allowed to delete the logs.");
+        $this->addAclPermission('downloadLogFile', 'system', "You're not allowed to see the system logs.");
+        $this->addAclPermission('getLogFileList', 'system', "You're not allowed to see the system logs.");
+        $this->addAclPermission('getLogList', 'system', "You're not allowed to see the system logs.");
     }
 
     /**
-     * Disable template engine for all actions
-     *
-     * @return void
+     * {@inheritdoc}
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'downloadLogFile',
+        ];
+    }
+
+    /**
+     * Disable template engine for some actions
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load'))) {
+        if ($this->Request()->getActionName() == 'downloadLogFile') {
+            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        } elseif (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -62,7 +77,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $limit = $this->Request()->get('limit');
 
         //order data
-        $order = (array) $this->Request()->getParam('sort', array());
+        $order = (array) $this->Request()->getParam('sort', []);
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(
@@ -81,13 +96,13 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             $filter = $filter[0];
 
             $builder->where('log.user LIKE ?1')
-                    ->orWhere('log.text LIKE ?1')
-                    ->orWhere('log.date LIKE ?1')
-                    ->orWhere('log.ipAddress LIKE ?1')
-                    ->orWhere('log.key LIKE ?1')
-                    ->orWhere('log.type LIKE ?1');
+                ->orWhere('log.text LIKE ?1')
+                ->orWhere('log.date LIKE ?1')
+                ->orWhere('log.ipAddress LIKE ?1')
+                ->orWhere('log.key LIKE ?1')
+                ->orWhere('log.type LIKE ?1');
 
-            $builder->setParameter(1, '%'. $filter['value'] . '%');
+            $builder->setParameter(1, '%' . $filter['value'] . '%');
         }
         $builder->addOrderBy($order);
 
@@ -96,8 +111,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $result = $builder->getQuery()->getArrayResult();
         $total = Shopware()->Models()->getQueryCount($builder->getQuery());
 
-
-        $this->View()->assign(array('success'=>true, 'data'=>$result, 'total'=>$total));
+        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
     }
 
     /**
@@ -114,7 +128,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             unset($params['_dc']);
 
             if ($params[0]) {
-                $data = array();
+                $data = [];
                 foreach ($params as $values) {
                     $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $values['id']);
 
@@ -128,9 +142,9 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
                 Shopware()->Models()->remove($logModel);
                 Shopware()->Models()->flush();
             }
-            $this->View()->assign(array('success'=>true, 'data'=>$params));
+            $this->View()->assign(['success' => true, 'data' => $params]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
@@ -141,28 +155,190 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     public function createLogAction()
     {
         try {
-            $params = $this->Request()->getParams();
+            $request = $this->Request();
+            $params = $request->getParams();
             $params['key'] = html_entity_decode($params['key']);
 
-            $logModel = new Shopware\Models\Log\Log;
+            $logModel = new Shopware\Models\Log\Log();
 
-            $userAgent = $_SERVER['HTTP_USER_AGENT'];
-            if (empty($userAgent)) {
-                $userAgent = 'Unknown';
-            }
             $logModel->fromArray($params);
-            $logModel->setDate(new \DateTime("now"));
-            $logModel->setIpAddress(getenv("REMOTE_ADDR"));
-            $logModel->setUserAgent($userAgent);
+            $logModel->setDate(new \DateTime('now'));
+            $logModel->setIpAddress($request->getClientIp());
+            $logModel->setUserAgent($request->getServer('HTTP_USER_AGENT', 'Unknown'));
 
             Shopware()->Models()->persist($logModel);
             Shopware()->Models()->flush();
 
             $data = Shopware()->Models()->toArray($logModel);
 
-            $this->View()->assign(array('success'=>true, 'data'=>$data));
+            $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
+    }
+
+    public function downloadLogFileAction()
+    {
+        $logDir = $this->get('kernel')->getLogDir();
+        $files = $this->getLogFiles($logDir);
+
+        $logFile = $this->Request()->getParam('logFile');
+        $logFile = $this->getLogFile($files, $logFile);
+
+        if (!$logFile) {
+            new RuntimeException('Log file not found.');
+        }
+
+        $logFilePath = $logDir . '/' . $this->getLogFile($files, $logFile);
+
+        $response = $this->Response();
+        $response->setHeader('Cache-Control', 'public');
+        $response->setHeader('Content-Type', 'application/octet-stream');
+        $response->setHeader('Content-Description', 'File Transfer');
+        $response->setHeader('Content-Disposition', 'attachment; filename=' . $logFile);
+        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->setHeader('Content-Length', filesize($logFilePath));
+        $response->sendHeaders();
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $out = fopen('php://output', 'wb');
+        $file = fopen($logFilePath, 'rb');
+
+        stream_copy_to_stream($file, $out);
+    }
+
+    public function getLogFileListAction()
+    {
+        $logDir = $this->get('kernel')->getLogDir();
+        $files = $this->getLogFiles($logDir);
+        $defaultFile = $this->getDefaultLogFile($files);
+
+        $files = array_map(function ($file) use ($defaultFile) {
+            return [
+                'name' => $file[0],
+                'channel' => $file['channel'],
+                'environment' => $file['environment'],
+                'date' => $file['date'],
+                'default' => $file[0] == $defaultFile,
+            ];
+        }, $files);
+
+        $start = $this->Request()->getParam('start', 0);
+        $limit = $this->Request()->getParam('limit', 100);
+
+        $count = count($files);
+        $files = array_slice($files, $start, $limit);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $files,
+            'total' => $count,
+        ]);
+    }
+
+    public function getLogListAction()
+    {
+        $logDir = $this->get('kernel')->getLogDir();
+        $files = $this->getLogFiles($logDir);
+
+        $logFile = $this->Request()->getParam('logFile');
+        $logFile = $this->getLogFile($files, $logFile);
+
+        if (!$logFile) {
+            $this->View()->assign([
+                'success' => true,
+                'data' => [],
+                'count' => 0,
+            ]);
+
+            return;
+        }
+
+        $file = $logDir . '/' . $logFile;
+        $start = $this->Request()->getParam('start', 0);
+        $limit = $this->Request()->getParam('limit', 100);
+        $sort = $this->Request()->getParam('sort');
+
+        $reverse = false;
+        if (!isset($sort[0]['direction']) || $sort[0]['direction'] == 'DESC') {
+            $reverse = true;
+        }
+
+        /** @var \Shopware\Components\Log\Parser\LogfileParser $reader */
+        $reader = $this->get('shopware.log.fileparser');
+
+        $data = $reader->parseLogFile(
+            $file,
+            $start,
+            $limit,
+            $reverse
+        );
+        $count = $reader->countLogFile($file);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $data,
+            'count' => $count,
+        ]);
+    }
+
+    /**
+     * Returns an array of all log files in the given directory.
+     *
+     * @param $logDir
+     *
+     * @return array
+     */
+    private function getLogFiles($logDir)
+    {
+        $finder = new Symfony\Component\Finder\Finder();
+        $finder->files()->name('*.log')->in($logDir);
+
+        $matches = [];
+        /** @var \Symfony\Component\Finder\SplFileInfo $file */
+        foreach ($finder as $file) {
+            $name = $file->getBasename();
+            if (preg_match('/^(?P<channel>[^_]+)_(?P<environment>[^-]+)\-(?P<date>[0-9-]+)\.log$/', $name, $match)) {
+                $matches[implode('-', [$match['date'], $match['environment'], $match['channel']])] = $match;
+            }
+        }
+
+        krsort($matches);
+
+        return array_values($matches);
+    }
+
+    /**
+     * Checks whether the specified log file exists in the log directory. If so, he returns it.
+     *
+     * @param $files
+     * @param null $name
+     *
+     * @return false|string
+     */
+    private function getLogFile($files, $name)
+    {
+        foreach ($files as $file) {
+            if ($name == $file[0]) {
+                return $name;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $files
+     *
+     * @return false|string
+     */
+    private function getDefaultLogFile(array $files)
+    {
+        foreach ($files as $file) {
+            return $file[0];
+        }
+
+        return false;
     }
 }

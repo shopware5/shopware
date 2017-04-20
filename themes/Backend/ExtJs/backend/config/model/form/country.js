@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.Country', {
     extend: 'Shopware.apps.Base.model.Country',
 
     fields: [
-		//{block name="backend/config/model/form/country/fields"}{/block}
+        //{block name="backend/config/model/form/country/fields"}{/block}
         { name: 'taxFree', type: 'boolean' },
         { name: 'taxFreeUstId', type: 'boolean' },
         { name: 'forceStateInRegistration', type: 'boolean' },

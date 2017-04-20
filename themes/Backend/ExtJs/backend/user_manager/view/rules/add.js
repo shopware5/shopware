@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
      * Extends the Ext.window.Window component
      * @string
      */
-	extend: 'Ext.window.Window',
+    extend: 'Ext.window.Window',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
         });
 
         /* {if {acl_is_allowed privilege=create}} */
-		this.addBtn = Ext.create('Ext.button.Button', {
+        this.addBtn = Ext.create('Ext.button.Button', {
             text: me.snippets.accept,
             action: 'user-manager-add-model',
             cls: 'primary',
@@ -189,9 +189,9 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
         /* {/if} */
 
         return [
-			this.closeBtn
+            this.closeBtn
         /* {if {acl_is_allowed privilege=create}} */
-			,this.addBtn
+            ,this.addBtn
         /* {/if} */ ];
 
     }

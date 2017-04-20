@@ -31,7 +31,7 @@
 
 //{block name="backend/performance/view/tabs/settings/navigation"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
-	extend: 'Ext.tree.Panel',
+    extend: 'Ext.tree.Panel',
     alias: 'widget.performance-tabs-settings-navigation',
     rootVisible: false,
     title: '{s name=tabs/settings/title}Settings{/s}',
@@ -101,18 +101,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 internalName: 'performance-tabs-settings-customers'
             }]
         }]
-	},
+    },
 
-	/*
-	 * The internalName of each item is the xtype of the corresponding fieldset
-	 *
-	 * If internalName is empty or has no fieldSet associated, all fieldSets will be hidden
-	 */
+    /*
+     * The internalName of each item is the xtype of the corresponding fieldset
+     *
+     * If internalName is empty or has no fieldSet associated, all fieldSets will be hidden
+     */
     listeners: {
-    	itemclick: function(tree, record, item, index, e, eOpts) {
-    		var internalName = record.raw.internalName;
-    		this.fireEvent('itemClicked', internalName)
-    	},
+        itemclick: function(tree, record, item, index, e, eOpts) {
+            var internalName = record.raw.internalName;
+            this.fireEvent('itemClicked', internalName)
+        },
         beforeitemclick: function(tree, record, item, index, e, eOpts) {
             if (record.childNodes.length > 0) {
                 return false;
@@ -126,12 +126,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
      * Initialize the component and define the event fired
      */
     initComponent: function() {
-    	var me = this;
+        var me = this;
 
-    	me.root = Ext.clone(me.data);
-    	me.addEvents('itemClicked');
+        me.root = Ext.clone(me.data);
+        me.addEvents('itemClicked');
 
-    	me.callParent(arguments);
+        me.callParent(arguments);
     }
 
 });

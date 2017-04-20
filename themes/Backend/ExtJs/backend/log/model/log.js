@@ -44,15 +44,15 @@ Ext.define('Shopware.apps.Log.model.Log', {
     * @array
     */
     fields: [
-		//{block name="backend/log/model/log/fields"}{/block}
-		'id',
+        //{block name="backend/log/model/log/fields"}{/block}
+        'id',
         'type',
         'key',
         'text',
-		{ 	name: 'date',
-			type: 'date',
-			dateFormat:'Y-m-d'
-		},
+        {   name: 'date',
+            type: 'date',
+            dateFormat:'Y-m-d'
+        },
         'user',
         'ip_address',
         'user_agent',
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Log.model.Log', {
         api: {
             //read out all articles
             read: '{url controller="log" action="getLogs"}',
-          	destroy: '{url controller="log" action="deleteLogs"}'
+            destroy: '{url controller="log" action="deleteLogs"}'
         },
         /**
         * Configure the data reader

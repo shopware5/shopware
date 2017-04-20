@@ -34,15 +34,16 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "lib-libxml": "*",
-        "symfony/http-kernel": "2.8.6",
-        "symfony/config": "2.8.6",
-        "symfony/class-loader": "2.8.6",
-        "symfony/dependency-injection": "2.8.6",
-        "symfony/validator": "2.8.6",
-        "symfony/filesystem": "2.8.6",
-        "symfony/finder": "2.8.6",
-        "symfony/console": "2.8.6",
-        "symfony/form": "2.8.6",
+        "symfony/http-kernel": "2.8.17",
+        "symfony/config": "2.8.17",
+        "symfony/class-loader": "2.8.17",
+        "symfony/dependency-injection": "2.8.17",
+        "symfony/validator": "2.8.17",
+        "symfony/filesystem": "2.8.17",
+        "symfony/finder": "2.8.17",
+        "symfony/console": "2.8.17",
+        "symfony/form": "2.8.17",
+        "symfony/process": "2.8.17",
         "monolog/monolog": "1.19.0",
         "doctrine/common": "2.6.1",
         "doctrine/dbal": "2.5.4",
@@ -57,15 +58,16 @@
         "ongr/elasticsearch-dsl": "2.0.2",
         "league/flysystem": "1.0.22",
         "paragonie/random_compat": "1.4.1",
-        "cocur/slugify": "2.2"
+        "cocur/slugify": "2.2",
+        "bcremer/line-reader": "^0.2.0"
     },
     "suggest": {
         "ext-apcu": "*",
         "ext-zend-opcache": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.6",
-        "phpunit/dbunit": "~1.4",
+        "phpunit/phpunit": "~5.6||~6.0.5",
+        "phpunit/dbunit": "~2.0|| ~3.0",
         "behat/behat": "~3.1",
         "behat/mink": "~1.7",
         "behat/mink-extension": "~2.1",
@@ -73,7 +75,7 @@
         "behat/mink-selenium2-driver": "~1.3",
         "sensiolabs/behat-page-object-extension": "~2.0.0-rc1",
         "symfony/dom-crawler": "~2.8",
-        "friendsofphp/php-cs-fixer": "^2.0-beta"
+        "friendsofphp/php-cs-fixer": "~2.0"
     },
     "include-path": [
         "engine/Library/"
@@ -103,7 +105,8 @@
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
             "Shopware\\Tests\\Unit\\": "tests/Unit",
             "Shopware\\Tests\\Functional\\": "tests/Functional"
-        }
+        },
+        "files": ["tests/dbunit_shims.php"]
     },
     "config": {
         "autoloader-suffix": "Shopware",

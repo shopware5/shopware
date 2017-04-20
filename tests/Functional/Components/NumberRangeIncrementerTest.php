@@ -29,10 +29,10 @@ use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class NumberRangeIncrementerTest extends \PHPUnit_Framework_TestCase
+class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Doctrine\DBAL\Connection
@@ -61,7 +61,7 @@ class NumberRangeIncrementerTest extends \PHPUnit_Framework_TestCase
             FROM s_order_number
             WHERE name = ?',
             [
-                $rangeName
+                $rangeName,
             ]
         );
         $expectedNumber += 1;

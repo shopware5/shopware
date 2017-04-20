@@ -150,7 +150,7 @@
 
             /**
              * The max height if sizing is set to `content`
-             * 
+             *
              * @type {Number}
              */
             maxHeight: 0,
@@ -299,25 +299,25 @@
             $modalBox.css('display', 'block');
 
             switch (opts.mode) {
-                case 'ajax':
-                    $.ajax(content, {
-                        data: {
-                            isXHR: 1
-                        },
-                        success: function (result) {
-                            me.setContent(result);
-                            $.publish('plugin/swModal/onOpenAjax', me);
-                        }
-                    });
-                    me.options.src = content;
-                    break;
-                case 'iframe':
-                    me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
-                    me.options.src = content;
-                    break;
-                default:
-                    me.setContent(content);
-                    break;
+            case 'ajax':
+                $.ajax(content, {
+                    data: {
+                        isXHR: 1
+                    },
+                    success: function (result) {
+                        me.setContent(result);
+                        $.publish('plugin/swModal/onOpenAjax', me);
+                    }
+                });
+                me.options.src = content;
+                break;
+            case 'iframe':
+                me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
+                me.options.src = content;
+                break;
+            default:
+                me.setContent(content);
+                break;
             }
 
             me.setTransition({
@@ -474,7 +474,7 @@
 
             height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
 
-            if(hasTitle) {
+            if (hasTitle) {
                 headerHeight = window.parseInt(me._$header.css('height'), 10);
                 me._$content.css('height', (height - headerHeight));
             } else {
@@ -621,9 +621,10 @@
          */
         center: function () {
             var me = this,
-                $modalBox = me._$modalBox;
+                $modalBox = me._$modalBox,
+                windowHeight = window.innerHeight || $(window).height();
 
-            $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
+            $modalBox.css('top', (windowHeight - $modalBox.height()) / 2);
 
             $.publish('plugin/swModal/onCenter', [ me ]);
         },
@@ -798,4 +799,3 @@
         }
     });
 })(jQuery, window);
-

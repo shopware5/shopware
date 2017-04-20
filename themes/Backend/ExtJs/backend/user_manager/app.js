@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.UserManager', {
      * sub-application behavior and the event bus
      * @string
      */
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -62,13 +62,13 @@ Ext.define('Shopware.apps.UserManager', {
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.UserManager',
+    name: 'Shopware.apps.UserManager',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-	controllers: [ 'User', 'Main', 'Roles', 'Rules' ],
+    controllers: [ 'User', 'Main', 'Roles', 'Rules' ],
 
     stores: [ 'User', 'UserDetail', 'Detail', 'Roles', 'Locale', 'Rules' ],
 

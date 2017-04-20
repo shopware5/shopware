@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyGateway implements Gateway\PropertyGatewayInterface
@@ -81,9 +81,9 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
-     * @param Hydrator\PropertyHydrator $propertyHydrator
+     * @param Connection                  $connection
+     * @param FieldHelper                 $fieldHelper
+     * @param Hydrator\PropertyHydrator   $propertyHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -99,7 +99,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $valueIds, Struct\ShopContextInterface $context)
     {
@@ -133,11 +133,12 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $this->fieldHelper->addPropertyGroupTranslation($query, $context);
         $this->fieldHelper->addPropertyOptionTranslation($query, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $result = $this->propertyHydrator->hydrateValues($rows);
+
         return $result;
     }
 }

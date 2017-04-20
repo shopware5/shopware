@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Partner;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Standard Export Model Entity
@@ -36,7 +36,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Partner extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Partner", mappedBy="partner", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Partner
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,126 +53,126 @@ class Partner extends ModelEntity
     private $id;
 
     /**
-     * @var string $idCode
+     * @var string
      *
      * @ORM\Column(name="idcode", type="string", length=255, nullable=false)
      */
     private $idCode;
 
     /**
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="date", nullable=false)
      */
     private $date;
 
     /**
-     * @var string $company
+     * @var string
      *
      * @ORM\Column(name="company", type="string", length=255, nullable=false)
      */
     private $company;
 
     /**
-     * @var string $contact
+     * @var string
      *
      * @ORM\Column(name="contact", type="string", length=255, nullable=false)
      */
     private $contact;
 
     /**
-     * @var string $street
+     * @var string
      *
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     private $street;
 
     /**
-     * @var string $zipCode
+     * @var string
      *
      * @ORM\Column(name="zipCode", type="string", length=15, nullable=false)
      */
     private $zipCode;
 
     /**
-     * @var string $city
+     * @var string
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
      */
     private $city;
 
     /**
-     * @var string $phone
+     * @var string
      *
      * @ORM\Column(name="phone", type="string", length=50, nullable=false)
      */
     private $phone;
 
     /**
-     * @var string $fax
+     * @var string
      *
      * @ORM\Column(name="fax", type="string", length=50, nullable=false)
      */
     private $fax;
 
     /**
-     * @var string $countryName
+     * @var string
      *
      * @ORM\Column(name="country", type="string", length=255, nullable=false)
      */
     private $countryName;
 
     /**
-     * @var string $email
+     * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=false)
      */
     private $email;
 
     /**
-     * @var string $web
+     * @var string
      *
      * @ORM\Column(name="web", type="string", length=255, nullable=false)
      */
     private $web;
 
     /**
-     * @var string $profile
+     * @var string
      *
      * @ORM\Column(name="profil", type="text", nullable=false)
      */
     private $profile;
 
     /**
-     * @var float $fix
+     * @var float
      *
      * @ORM\Column(name="fix", type="float", nullable=false)
      */
     private $fix = 0;
 
     /**
-     * @var float $percent
+     * @var float
      *
      * @ORM\Column(name="percent", type="float", nullable=false)
      */
     private $percent = 0;
 
     /**
-     * @var integer $cookieLifeTime
+     * @var int
      *
      * @ORM\Column(name="cookieLifeTime", type="integer", nullable=false)
      */
     private $cookieLifeTime = 0;
 
     /**
-     * @var integer $active
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active = 0;
 
     /**
-     * @var integer $customerId
+     * @var int
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
@@ -179,7 +187,7 @@ class Partner extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -190,6 +198,7 @@ class Partner extends ModelEntity
      * Set idCode
      *
      * @param string $idCode
+     *
      * @return Partner
      */
     public function setIdCode($idCode)
@@ -213,6 +222,7 @@ class Partner extends ModelEntity
      * Set datum
      *
      * @param \DateTime|string $date
+     *
      * @return Partner
      */
     public function setDate($date)
@@ -222,6 +232,7 @@ class Partner extends ModelEntity
         } else {
             $this->date = $date;
         }
+
         return $this;
     }
 
@@ -239,6 +250,7 @@ class Partner extends ModelEntity
      * Set company
      *
      * @param string $company
+     *
      * @return Partner
      */
     public function setCompany($company)
@@ -262,6 +274,7 @@ class Partner extends ModelEntity
      * Set contact
      *
      * @param string $contact
+     *
      * @return Partner
      */
     public function setContact($contact)
@@ -285,6 +298,7 @@ class Partner extends ModelEntity
      * Set street
      *
      * @param string $street
+     *
      * @return Partner
      */
     public function setStreet($street)
@@ -308,6 +322,7 @@ class Partner extends ModelEntity
      * Set zipCode
      *
      * @param string $zipCode
+     *
      * @return Partner
      */
     public function setZipCode($zipCode)
@@ -331,6 +346,7 @@ class Partner extends ModelEntity
      * Set city
      *
      * @param string $city
+     *
      * @return Partner
      */
     public function setCity($city)
@@ -354,6 +370,7 @@ class Partner extends ModelEntity
      * Set phone
      *
      * @param string $phone
+     *
      * @return Partner
      */
     public function setPhone($phone)
@@ -377,6 +394,7 @@ class Partner extends ModelEntity
      * Set fax
      *
      * @param string $fax
+     *
      * @return Partner
      */
     public function setFax($fax)
@@ -400,6 +418,7 @@ class Partner extends ModelEntity
      * Set country
      *
      * @param string $countryName
+     *
      * @return Partner
      */
     public function setCountryName($countryName)
@@ -423,6 +442,7 @@ class Partner extends ModelEntity
      * Set email
      *
      * @param string $email
+     *
      * @return Partner
      */
     public function setEmail($email)
@@ -446,6 +466,7 @@ class Partner extends ModelEntity
      * Set web
      *
      * @param string $web
+     *
      * @return Partner
      */
     public function setWeb($web)
@@ -469,6 +490,7 @@ class Partner extends ModelEntity
      * Set profile
      *
      * @param string $profile
+     *
      * @return Partner
      */
     public function setProfile($profile)
@@ -492,6 +514,7 @@ class Partner extends ModelEntity
      * Set fix
      *
      * @param float $fix
+     *
      * @return Partner
      */
     public function setFix($fix)
@@ -515,6 +538,7 @@ class Partner extends ModelEntity
      * Set percent
      *
      * @param float $percent
+     *
      * @return Partner
      */
     public function setPercent($percent)
@@ -537,7 +561,8 @@ class Partner extends ModelEntity
     /**
      * Set cookieLifeTime
      *
-     * @param integer $cookieLifeTime
+     * @param int $cookieLifeTime
+     *
      * @return Partner
      */
     public function setCookieLifeTime($cookieLifeTime)
@@ -550,7 +575,7 @@ class Partner extends ModelEntity
     /**
      * Get cookieLifeTime
      *
-     * @return integer
+     * @return int
      */
     public function getCookieLifeTime()
     {
@@ -560,7 +585,8 @@ class Partner extends ModelEntity
     /**
      * Set active
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return Partner
      */
     public function setActive($active)
@@ -573,7 +599,7 @@ class Partner extends ModelEntity
     /**
      * Get active
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -592,6 +618,7 @@ class Partner extends ModelEntity
 
     /**
      * Set orders
+     *
      * @param $orders
      */
     public function setOrders($orders)
@@ -601,6 +628,7 @@ class Partner extends ModelEntity
 
     /**
      * Set customerId
+     *
      * @return int
      */
     public function getCustomerId()
@@ -610,10 +638,29 @@ class Partner extends ModelEntity
 
     /**
      * Get customerId
+     *
      * @param int $customerId
      */
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\Partner
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\Partner|array|null $attribute
+     *
+     * @return \Shopware\Models\Partner\Partner
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Partner', 'attribute', 'partner');
     }
 }

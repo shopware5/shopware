@@ -259,7 +259,7 @@
         setZoomPosition: function(x, y) {
             var me = this;
 
-            me.$flyout.css('backgroundPosition', x+'px '+y+'px');
+            me.$flyout.css('backgroundPosition', x + 'px ' + y + 'px');
 
             $.publish('plugin/swImageZoom/onSetZoomPosition', [me, me.$flyout, x, y]);
         },

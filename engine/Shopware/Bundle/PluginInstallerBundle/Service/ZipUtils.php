@@ -26,13 +26,14 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\PluginInstallerBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ZipUtils
 {
     /**
      * @param string $filename
+     *
      * @return \ZipArchive
      */
     public static function openZip($filename)
@@ -50,8 +51,9 @@ class ZipUtils
     }
 
     /**
-     * @param int $retVal
+     * @param int    $retVal
      * @param string $file
+     *
      * @return string
      */
     private static function getErrorMessage($retVal, $file)
@@ -62,9 +64,9 @@ class ZipUtils
             case \ZipArchive::ER_INCONS:
                 return sprintf("Zip archive '%s' is inconsistent.", $file);
             case \ZipArchive::ER_INVAL:
-                return sprintf("Invalid argument (%s)", $file);
+                return sprintf('Invalid argument (%s)', $file);
             case \ZipArchive::ER_MEMORY:
-                return sprintf("Malloc failure (%s)", $file);
+                return sprintf('Malloc failure (%s)', $file);
             case \ZipArchive::ER_NOENT:
                 return sprintf("No such zip file: '%s'", $file);
             case \ZipArchive::ER_NOZIP:
@@ -72,9 +74,9 @@ class ZipUtils
             case \ZipArchive::ER_OPEN:
                 return sprintf("Can't open zip file: %s", $file);
             case \ZipArchive::ER_READ:
-                return sprintf("Zip read error (%s)", $file);
+                return sprintf('Zip read error (%s)', $file);
             case \ZipArchive::ER_SEEK:
-                return sprintf("Zip seek error (%s)", $file);
+                return sprintf('Zip seek error (%s)', $file);
             default:
                 return sprintf("'%s' is not a valid zip archive, got error code: %s", $file, $retVal);
         }

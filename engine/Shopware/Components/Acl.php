@@ -23,6 +23,10 @@
  */
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\User\Privilege;
+use Shopware\Models\User\Resource;
+use Shopware\Models\User\Role;
+use Shopware\Models\User\Rule;
 
 /**
  * Shopware ACL Components
@@ -44,26 +48,16 @@ class Shopware_Components_Acl extends Zend_Acl
     }
 
     /**
-     * Create shopware acl tree
-     */
-    private function initShopwareAclTree()
-    {
-        $this->initAclResources()
-             ->initAclRoles()
-             ->initAclRoleConditions();
-    }
-
-    /**
      * Get all resources from database and add to acl tree
      *
      * @return \Shopware_Components_Acl
      */
     public function initAclResources()
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Resource');
+        $repository = $this->em->getRepository(Resource::class);
         $resources = $repository->findAll();
 
-        /**@var $resource Shopware\Models\User\Resource */
+        /** @var $resource Shopware\Models\User\Resource */
         foreach ($resources as $resource) {
             $this->addResource($resource);
         }
@@ -78,7 +72,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function initAclRoles()
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Role');
+        $repository = $this->em->getRepository(Role::class);
         $roles = $repository->findAll();
 
         /** @var $role \Shopware\Models\User\Role */
@@ -110,7 +104,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function initAclRoleConditions()
     {
-        $rules = $this->em->getRepository('Shopware\Models\User\Rule')->findAll();
+        $rules = $this->em->getRepository(Rule::class)->findAll();
 
         /** @var $rule \Shopware\Models\User\Rule */
         foreach ($rules as $rule) {
@@ -133,23 +127,27 @@ class Shopware_Components_Acl extends Zend_Acl
 
     /**
      * Is the resource identified by $resourceName already in database ?
+     *
      * @param $resourceName
+     *
      * @return bool
      */
     public function hasResourceInDatabase($resourceName)
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Resource');
-        $resource = $repository->findOneBy(array("name" => $resourceName));
+        $repository = $this->em->getRepository(Resource::class);
+        $resource = $repository->findOneBy(['name' => $resourceName]);
 
         return !empty($resource);
     }
 
     /**
      * Create a new resource and optionally privileges, menu item relationships and plugin dependency
+     *
      * @param $resourceName - unique identifier or resource key
-     * @param array|null $privileges - optionally array [a,b,c] of new privileges
-     * @param null $menuItemName - optionally s_core_menu.name item to link to this resource
-     * @param null $pluginID - optionally pluginID that implements this resource
+     * @param array|null $privileges   - optionally array [a,b,c] of new privileges
+     * @param null       $menuItemName - optionally s_core_menu.name item to link to this resource
+     * @param null       $pluginID     - optionally pluginID that implements this resource
+     *
      * @throws Enlight_Exception
      */
     public function createResource($resourceName, array $privileges = null, $menuItemName = null, $pluginID = null)
@@ -159,28 +157,39 @@ class Shopware_Components_Acl extends Zend_Acl
             throw new Enlight_Exception("Resource $resourceName already exists");
         }
 
-        $resource = new \Shopware\Models\User\Resource();
+        $resource = new Resource();
         $resource->setName($resourceName);
         $resource->setPluginId($pluginID);
 
+        if (!empty($privileges)) {
+            $privilegeObjects = [];
+
+            foreach ($privileges as $name) {
+                $privilege = new Privilege();
+                $privilege->setName($name);
+                $privilege->setResource($resource);
+
+                $this->em->persist($privilege);
+
+                $privilegeObjects[] = $privilege;
+            }
+
+            $resource->setPrivileges($privilegeObjects);
+        }
+
         $this->em->persist($resource);
         $this->em->flush();
-
-        if (!empty($privileges)) {
-            foreach ($privileges as $privilege) {
-                $this->createPrivilege($resource->getId(), $privilege);
-            }
-        }
     }
 
     /**
      * Create a privilege in a particular resource
-     * @param int $resourceId
+     *
+     * @param int    $resourceId
      * @param string $name
      */
     public function createPrivilege($resourceId, $name)
     {
-        $privilege = new \Shopware\Models\User\Privilege();
+        $privilege = new Privilege();
         $privilege->setName($name);
         $privilege->setResourceId($resourceId);
 
@@ -190,28 +199,44 @@ class Shopware_Components_Acl extends Zend_Acl
 
     /**
      * Delete resource and its privileges from database
+     *
      * @param $resourceName
+     *
      * @return bool
      */
     public function deleteResource($resourceName)
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Resource');
-        /** @var $resource \Shopware\Models\User\Resource */
-        $resource = $repository->findOneBy(array("name" => $resourceName));
+        $repository = $this->em->getRepository(Resource::class);
+
+        /** @var $resource Resource */
+        $resource = $repository->findOneBy(['name' => $resourceName]);
         if (empty($resource)) {
             return false;
         }
 
         //The mapping table s_core_acl_roles must be cleared manually.
         $this->em->getConnection()->executeUpdate(
-            "DELETE FROM s_core_acl_roles WHERE resourceID = ?",
+            'DELETE FROM s_core_acl_roles WHERE resourceID = ?',
             [$resource->getId()]
         );
 
+        foreach ($resource->getPrivileges() as $privilege) {
+            $this->em->remove($privilege);
+        }
         //The privileges will be removed automatically
         $this->em->remove($resource);
         $this->em->flush();
 
         return true;
+    }
+
+    /**
+     * Create shopware acl tree
+     */
+    private function initShopwareAclTree()
+    {
+        $this->initAclResources()
+            ->initAclRoles()
+            ->initAclRoleConditions();
     }
 }

@@ -259,21 +259,21 @@
              * many parameters.
              */
             switch (args.length) {
-                case 0:
-                    while (++i < len) (event = eventList[i]).callback.call(event.context);
-                    return me;
-                case 1:
-                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
-                    return me;
-                case 2:
-                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
-                    return me;
-                case 3:
-                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
-                    return me;
-                default:
-                    while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
-                    return me;
+            case 0:
+                while (++i < len) (event = eventList[i]).callback.call(event.context);
+                return me;
+            case 1:
+                while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
+                return me;
+            case 2:
+                while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
+                return me;
+            case 3:
+                while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
+                return me;
+            default:
+                while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
+                return me;
             }
         },
 
@@ -398,9 +398,8 @@
             me._checkResize();
             me._browserDetection();
             me._setDeviceCookie();
-
             $($.proxy(me.initQueuedPlugins, me, true));
-
+            $.publish('StateManager/onInit', [ me ]);
             return me;
         },
 
@@ -835,7 +834,7 @@
 
             if (JSON.stringify(currentConfig) === JSON.stringify(me._getPluginConfig(me._previousState, selector, pluginName))) {
                 if (typeof plugin.update === 'function') {
-                    plugin.update.call(plugin, me._currentState, me._previousState);
+                    plugin.update(me._currentState, me._previousState);
                 }
                 return;
             }
@@ -1014,7 +1013,6 @@
                 newPluginConfigs,
                 configKeys,
                 pluginName,
-                pluginConfig,
                 plugin,
                 $el,
                 toSelectors = plugins[toState] || {},
@@ -1038,7 +1036,7 @@
                     pluginName = configKeys[y];
 
                     // When no new state config is available, destroy the old plugin
-                    if (!newPluginConfigs || !(pluginConfig = newPluginConfigs[pluginName])) {
+                    if (!newPluginConfigs || !(newPluginConfigs[pluginName])) {
                         me.destroyPlugin($el, pluginName);
                         continue;
                     }
@@ -1050,7 +1048,7 @@
                             }
 
                             if (typeof plugin.update === 'function') {
-                                plugin.update.call(plugin, fromState, toState);
+                                plugin.update(fromState, toState);
                             }
                         }
                         continue;
@@ -1278,14 +1276,14 @@
             var me = this,
                 detections = {};
 
-            detections['is--opera']     = me._checkUserAgent(/opera/);
-            detections['is--chrome']    = me._checkUserAgent(/\bchrome\b/);
-            detections['is--firefox']   = me._checkUserAgent(/firefox/);
-            detections['is--webkit']    = me._checkUserAgent(/webkit/);
-            detections['is--safari']    = !detections['is--chrome'] && me._checkUserAgent(/safari/);
-            detections['is--ie']        = !detections['is--opera'] && (me._checkUserAgent(/msie/) || me._checkUserAgent(/trident\/7/));
-            detections['is--ie-touch']  = detections['is--ie'] && me._checkUserAgent(/touch/);
-            detections['is--gecko']     = !detections['is--webkit'] && me._checkUserAgent(/gecko/);
+            detections['is--opera'] = me._checkUserAgent(/opera/);
+            detections['is--chrome'] = me._checkUserAgent(/\bchrome\b/);
+            detections['is--firefox'] = me._checkUserAgent(/firefox/);
+            detections['is--webkit'] = me._checkUserAgent(/webkit/);
+            detections['is--safari'] = !detections['is--chrome'] && me._checkUserAgent(/safari/);
+            detections['is--ie'] = !detections['is--opera'] && (me._checkUserAgent(/msie/) || me._checkUserAgent(/trident\/7/));
+            detections['is--ie-touch'] = detections['is--ie'] && me._checkUserAgent(/touch/);
+            detections['is--gecko'] = !detections['is--webkit'] && me._checkUserAgent(/gecko/);
 
             $.each(detections, function(key, value) {
                 if (value) $html.addClass(key);
@@ -1296,9 +1294,9 @@
             var me = this,
                 devices = {
                     'xs': 'mobile',
-                    's' : 'mobile',
-                    'm' : 'tablet',
-                    'l' : 'tablet',
+                    's': 'mobile',
+                    'm': 'tablet',
+                    'l': 'tablet',
                     'xl': 'desktop'
                 };
 
@@ -1536,5 +1534,4 @@
             return (cache[property] = (softError ? property : null));
         }
     });
-
 })(jQuery, window, document);

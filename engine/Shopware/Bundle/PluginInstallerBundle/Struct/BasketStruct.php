@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
- */
 class BasketStruct implements \JsonSerializable
 {
     /**
@@ -70,13 +67,13 @@ class BasketStruct implements \JsonSerializable
     private $taxPrice;
 
     /**
-     * @param DomainStruct[] $domains
-     * @param AddressStruct $address
+     * @param DomainStruct[]         $domains
+     * @param AddressStruct          $address
      * @param BasketPositionStruct[] $positions
-     * @param float $netPrice
-     * @param float $grossPrice
-     * @param float $taxRate
-     * @param float $taxPrice
+     * @param float                  $netPrice
+     * @param float                  $grossPrice
+     * @param float                  $taxRate
+     * @param float                  $taxPrice
      */
     public function __construct($domains, $address, $positions, $netPrice, $grossPrice, $taxRate, $taxPrice)
     {
@@ -90,7 +87,7 @@ class BasketStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

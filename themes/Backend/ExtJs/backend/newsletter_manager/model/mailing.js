@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Mailing', {
      * @array
      */
     fields: [
-		//{block name="backend/newsletter_manager/model/mailing/fields"}{/block}
+        //{block name="backend/newsletter_manager/model/mailing/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'date', type: 'date', dateFormat: 'Y-m-d' },
         { name: 'locked', type: 'date' },

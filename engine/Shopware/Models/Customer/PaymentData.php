@@ -24,11 +24,10 @@
 
 namespace Shopware\Models\Customer;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware payment model represents a payment method information.
  * <br>
  * The Shopware Payment Data model represents a row of the s_core_payment_data.
@@ -43,22 +42,13 @@ use Doctrine\ORM\Mapping as ORM;
 class PaymentData extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="paymentData")
      * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id")
      */
     protected $paymentMean;
 
     /**
-     * @var integer $paymentMeanId
+     * @var int
      *
      * @ORM\Column(name="payment_mean_id", type="integer")
      */
@@ -71,72 +61,78 @@ class PaymentData extends ModelEntity
     protected $customer;
 
     /**
-     * @var boolean $useBillingData
+     * @var bool
      *
      * @ORM\Column(name="use_billing_data", type="boolean", nullable=true)
      */
     protected $useBillingData;
 
     /**
-     * @var string $bankName
+     * @var string
      *
      * @ORM\Column(name="bankname", type="string", length=255, nullable=true)
      */
     protected $bankName;
 
     /**
-     * @var string $bic
+     * @var string
      *
      * @ORM\Column(name="bic", type="string", length=50, nullable=true)
      */
     protected $bic;
 
     /**
-     * @var string $iban
+     * @var string
      *
      * @ORM\Column(name="iban", type="string", length=50, nullable=true)
      */
     protected $iban;
 
     /**
-     * @var string $accountNumber
+     * @var string
      *
      * @ORM\Column(name="account_number", type="string", length=50, nullable=true)
      */
     protected $accountNumber;
 
     /**
-     * @var string $bankCode
+     * @var string
      *
      * @ORM\Column(name="bank_code", type="string", length=50, nullable=true)
      */
     protected $bankCode;
 
     /**
-     * @var string $accountHolder
+     * @var string
      *
      * @ORM\Column(name="account_holder", type="string", length=50, nullable=true)
      */
     protected $accountHolder;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
     protected $createdAt;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
     }
 
-
-
     /**
      * Gets the id of the payment
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -240,7 +236,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @param boolean $useBillingData
+     * @param bool $useBillingData
      */
     public function setUseBillingData($useBillingData)
     {
@@ -248,7 +244,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getUseBillingData()
     {

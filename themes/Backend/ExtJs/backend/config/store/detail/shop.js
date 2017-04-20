@@ -29,8 +29,8 @@
 
 //{block name="backend/config/store/detail/shop"}
 Ext.define('Shopware.apps.Config.store.detail.Shop', {
-	extend: 'Ext.data.Store',
-	model : 'Shopware.apps.Config.model.form.Shop',
+    extend: 'Ext.data.Store',
+    model : 'Shopware.apps.Config.model.form.Shop',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

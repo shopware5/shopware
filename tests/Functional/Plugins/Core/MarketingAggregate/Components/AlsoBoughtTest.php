@@ -28,7 +28,7 @@ use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AlsoBoughtTest extends AbstractMarketing
@@ -39,11 +39,11 @@ class AlsoBoughtTest extends AbstractMarketing
     {
         parent::setUp();
 
-        $this->Db()->query("DELETE FROM s_articles_also_bought_ro ");
+        $this->Db()->query('DELETE FROM s_articles_also_bought_ro ');
 
-        $this->orderData = $this->Db()->fetchAll("SELECT * FROM s_order_details");
+        $this->orderData = $this->Db()->fetchAll('SELECT * FROM s_order_details');
 
-        $this->Db()->query("DELETE FROM s_order_details");
+        $this->Db()->query('DELETE FROM s_order_details');
 
         $this->Db()->query("
             INSERT INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
@@ -75,16 +75,11 @@ class AlsoBoughtTest extends AbstractMarketing
     {
         parent::tearDown();
 
-        $this->Db()->query("DELETE FROM s_order_details");
+        $this->Db()->query('DELETE FROM s_order_details');
 
         foreach ($this->orderData as $orderData) {
-            $this->Db()->insert("s_order_details", $orderData);
+            $this->Db()->insert('s_order_details', $orderData);
         }
-    }
-
-    protected function getAllAlsoBought($condition = '')
-    {
-        return $this->Db()->fetchAll('SELECT * FROM s_articles_also_bought_ro ' . $condition);
     }
 
     public function testInitAlsoBought()
@@ -101,13 +96,18 @@ class AlsoBoughtTest extends AbstractMarketing
                 $combination['related_article_id']
             );
             $updated = $this->getAllAlsoBought(
-                " WHERE article_id = " . $combination['article_id'] .
-                " AND related_article_id = " . $combination['related_article_id']
+                ' WHERE article_id = ' . $combination['article_id'] .
+                ' AND related_article_id = ' . $combination['related_article_id']
             );
             $updated = $updated[0];
 
             $this->assertNotEmpty($updated);
             $this->assertEquals($combination['sales'] + 1, $updated['sales']);
         }
+    }
+
+    protected function getAllAlsoBought($condition = '')
+    {
+        return $this->Db()->fetchAll('SELECT * FROM s_articles_also_bought_ro ' . $condition);
     }
 }

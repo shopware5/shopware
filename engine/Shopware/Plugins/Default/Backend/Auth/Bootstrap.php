@@ -22,20 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\DependencyInjection\Bridge\Db;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Session\PdoSessionHandler;
+
 /**
- *
  * Shopware Auth Plugin
  */
 class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
      * Is set to true if no authentication for the current request is needed
+     *
      * @var bool
      */
     protected $noAuth = false;
 
     /**
      * Disable acl checks in backend controllers
+     *
      * @var bool
      */
     protected $noAcl = false;
@@ -78,6 +83,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Register shopware auth resource
      * create pre-dispatch hook to check backend permissions
+     *
      * @return bool
      */
     public function install()
@@ -87,21 +93,21 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_BackendSession', 'onInitResourceBackendSession');
 
         $form = $this->Form();
-        $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
+        $parent = $this->Forms()->findOneBy(['name' => 'Core']);
         $form->setParent($parent);
         $form->setLabel('Backend');
-        $form->setElement('select', 'backendLocales', array(
+        $form->setElement('select', 'backendLocales', [
             'store' => 'base.Locale',
             'label' => 'Auswählbare Sprachen',
-            'value' => array(1, 2),
+            'value' => [1, 2],
             'required' => true,
-            'multiSelect' => true
-        ));
-        $form->setElement('interval', 'backendTimeout', array(
+            'multiSelect' => true,
+        ]);
+        $form->setElement('interval', 'backendTimeout', [
             'label' => 'Timeout',
             'required' => true,
-            'value' => 7200
-        ));
+            'value' => 7200,
+        ]);
 
         return true;
     }
@@ -118,6 +124,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Returns true if and only if the Role has access to the Resource
      *
      * @param $params
+     *
      * @return bool
      */
     public function isAllowed($params)
@@ -182,8 +189,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * This pre-dispatch event-hook checks backend permissions
      *
      * @param \Enlight_Event_EventArgs $args
+     *
      * @throws Enlight_Controller_Exception
-     * @return void
      */
     public function onPreDispatchBackend(Enlight_Event_EventArgs $args)
     {
@@ -192,7 +199,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->aclResource = strtolower($this->request->getControllerName());
 
         if ($this->request->getModuleName() != 'backend'
-          || in_array($this->aclResource, array('error'))) {
+          || in_array($this->aclResource, ['error'])) {
             return;
         }
 
@@ -200,9 +207,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             if ($this->checkAuth() === null) {
                 if ($this->request->isXmlHttpRequest()) {
                     throw new Enlight_Controller_Exception('Unauthorized', 401);
-                } else {
-                    $this->action->redirect('backend/');
                 }
+                $this->action->redirect('backend/');
             }
         } else {
             $this->initLocale();
@@ -210,8 +216,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * @return null|Shopware_Components_Auth
      * @throws Enlight_Controller_Exception
+     *
+     * @return null|Shopware_Components_Auth
      */
     public function checkAuth()
     {
@@ -240,7 +247,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             if (isset($rules[$actionName])) {
                 $test = $rules[$actionName];
             } else {
-                $test = array('privilege' => 'read');
+                $test = ['privilege' => 'read'];
             }
 
             if (!$this->isAllowed($test)) {
@@ -248,34 +255,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                     $test['errorMessage'] ?: 'Permission denied',
                     401
                 );
-            } else {
-                return $auth;
             }
+
+            return $auth;
         }
+
         return null;
-    }
-
-    /**
-     * Init backend locales
-     */
-    protected function initLocale()
-    {
-        $container = $this->Application()->Container();
-
-        $locale = $this->getCurrentLocale();
-        $container->get('Locale')->setLocale($locale->toString());
-        $container->get('Snippets')->setLocale($locale);
-        $template = $container->get('Template');
-        $baseHash = $this->request->getScheme() . '://'
-                  . $this->request->getHttpHost()
-                  . $this->request->getBaseUrl() . '?'
-                  . Shopware::REVISION;
-        $baseHash = substr(sha1($baseHash), 0, 5);
-        $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
-
-        if ($this->action !== null && $this->action->View()->hasTemplate()) {
-            $this->action->View()->Template()->setCompileId($template->getCompileId());
-        }
     }
 
     /**
@@ -303,7 +288,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $engine->registerPlugin(
             Enlight_Template_Manager::PLUGIN_FUNCTION,
             'acl_is_allowed',
-            array($this, 'isAllowed')
+            [$this, 'isAllowed']
         );
     }
 
@@ -321,7 +306,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             $orderCriteria = '';
             foreach ($browserLocales as $browserLocale) {
                 $orderCriteria .= 'WHEN ' . Shopware()->Db()->quote($browserLocale) . ' THEN ' . $orderIndex . ' ';
-                $orderIndex++;
+                ++$orderIndex;
             }
             $orderCriteria .= 'ELSE ' . $orderIndex . ' END ';
 
@@ -333,9 +318,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                 ORDER BY CASE locale ' . $orderCriteria . ' LIMIT 1';
 
             foreach ($browserLocales as $key => $locale) {
-                $fetchResult = Shopware()->Db()->fetchOne($sql, array(
-                    'browserLocale' => $locale . '%'
-                ));
+                $fetchResult = Shopware()->Db()->fetchOne($sql, [
+                    'browserLocale' => $locale . '%',
+                ]);
 
                 if ($fetchResult) {
                     return $fetchResult;
@@ -362,25 +347,28 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function getLocales()
     {
-        $locales =  $this->Config()->get('backendLocales', array(1));
+        $locales = $this->Config()->get('backendLocales', [1]);
         if ($locales instanceof Enlight_Config) {
             $locales = $locales->toArray();
         }
+
         return $locales;
     }
 
     /**
-     * Initiate shopware auth resource
-     * database adapter by default
-     *
      * @param Enlight_Event_EventArgs $args
+     *
      * @throws Exception
-     * @return null|\Zend_Auth
+     *
+     * @return Enlight_Components_Session_Namespace
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
         $options = $this->getSessionOptions();
-        $this->setSaveHandler($options);
+        $saveHandler = $this->createSaveHandler(Shopware()->Container());
+        if ($saveHandler) {
+            session_set_save_handler($saveHandler);
+        }
 
         Enlight_Components_Session::start($options);
 
@@ -392,7 +380,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * database adapter by default
      *
      * @param Enlight_Event_EventArgs $args
-     * @return null|\Zend_Auth
+     *
+     * @return \Zend_Auth
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
@@ -415,11 +404,34 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => false,
-            'update' => true
-        );
+            'update' => true,
+        ];
+    }
+
+    /**
+     * Init backend locales
+     */
+    protected function initLocale()
+    {
+        $container = $this->Application()->Container();
+
+        $locale = $this->getCurrentLocale();
+        $container->get('Locale')->setLocale($locale->toString());
+        $container->get('Snippets')->setLocale($locale);
+        $template = $container->get('Template');
+        $baseHash = $this->request->getScheme() . '://'
+                  . $this->request->getHttpHost()
+                  . $this->request->getBaseUrl() . '?'
+                  . Shopware::REVISION;
+        $baseHash = substr(sha1($baseHash), 0, 5);
+        $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
+
+        if ($this->action !== null && $this->action->View()->hasTemplate()) {
+            $this->action->View()->Template()->setCompileId($template->getCompileId());
+        }
     }
 
     /**
@@ -460,33 +472,42 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $options = Shopware()->Container()->getParameter('shopware.backendsession');
 
         if (!isset($options['cookie_path']) && $this->request !== null) {
-            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/').'/backend/';
+            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/') . '/backend/';
         }
         if (empty($options['gc_maxlifetime'])) {
             $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
-            $options['gc_maxlifetime'] = (int) $backendTimeout;
+            $options['gc_maxlifetime'] = (int) $backendTimeout ?: PHP_INT_MAX;
         }
+        unset($options['locking']);
 
         return $options;
     }
 
     /**
-     * @param array $options
+     * @param Container $container
+     *
+     * @return \SessionHandlerInterface|null
      */
-    private function setSaveHandler(array $options)
+    private function createSaveHandler(Container $container)
     {
-        if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
-            $config_save_handler = array(
-                'name' => 's_core_sessions_backend',
-                'primary' => 'id',
-                'modifiedColumn' => 'modified',
-                'dataColumn' => 'data',
-                'lifetimeColumn' => 'expiry',
-                'lifetime' => $options['gc_maxlifetime'] ?: PHP_INT_MAX
-            );
-            Enlight_Components_Session::setSaveHandler(
-                new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
-            );
+        $sessionOptions = $container->getParameter('shopware.backendsession');
+        if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
+            return null;
         }
+
+        $dbOptions = $container->getParameter('shopware.db');
+        $conn = Db::createPDO($dbOptions);
+
+        return new PdoSessionHandler(
+            $conn,
+            [
+                'db_table' => 's_core_sessions_backend',
+                'db_id_col' => 'id',
+                'db_data_col' => 'data',
+                'db_expiry_col' => 'expiry',
+                'db_time_col' => 'modified',
+                'lock_mode' => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
+            ]
+        );
     }
 }

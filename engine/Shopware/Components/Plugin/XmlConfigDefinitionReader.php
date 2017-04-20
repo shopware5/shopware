@@ -30,15 +30,17 @@ class XmlConfigDefinitionReader
 {
     /**
      * @param $file string
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function read($file)
     {
         try {
-            $dom = XmlUtils::loadFile($file, __DIR__.'/schema/config.xsd');
+            $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/config.xsd');
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseForm($dom);
@@ -46,6 +48,7 @@ class XmlConfigDefinitionReader
 
     /**
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     private function parseForm(\DOMDocument $xml)
@@ -70,7 +73,7 @@ class XmlConfigDefinitionReader
 
         $elements = [];
 
-        /** @var \DOMElement $entry */
+        /* @var \DOMElement $entry */
         foreach ($elemements as $elemement) {
             $elements[] = $this->parseElement($elemement);
         }
@@ -90,7 +93,7 @@ class XmlConfigDefinitionReader
      */
     private function getChildren(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child;
@@ -102,6 +105,7 @@ class XmlConfigDefinitionReader
 
     /**
      * @param \DOMElement $entry
+     *
      * @return array
      */
     private function parseElement(\DOMElement $entry)
@@ -130,6 +134,10 @@ class XmlConfigDefinitionReader
 
         if ($position = $this->getChildren($entry, 'store')) {
             $element['store'] = $position[0]->nodeValue;
+            $options = $this->getChildren($position[0], 'option');
+            if (!empty($options)) {
+                $element['store'] = $this->extractStoreData($options);
+            }
         }
 
         if ($position = $this->getChildren($entry, 'value')) {
@@ -159,5 +167,32 @@ class XmlConfigDefinitionReader
         }
 
         return $element;
+    }
+
+    /**
+     * Reformats the xml store option nodes to a translatable array
+     *
+     * @param \DOMElement[] $options
+     *
+     * @return array[]
+     */
+    private function extractStoreData($options)
+    {
+        return array_map(function ($item) {
+            $value = $this->getChildren($item, 'value')[0]->nodeValue;
+            /** @var \DOMElement $label */
+            $labels = [];
+            foreach ($this->getChildren($item, 'label') as $label) {
+                $lang = $label->getAttribute('lang') ?: 'en_GB';
+
+                $mapping = ['de' => 'de_DE', 'en' => 'en_GB'];
+                if (array_key_exists($lang, $mapping)) {
+                    $lang = $mapping[$lang];
+                }
+                $labels[$lang] = $label->nodeValue;
+            }
+
+            return [$value, $labels];
+        }, $options);
     }
 }

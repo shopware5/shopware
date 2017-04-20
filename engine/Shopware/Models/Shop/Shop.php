@@ -24,21 +24,20 @@
 
 namespace Shopware\Models\Shop;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Shopware\Components\Theme\Inheritance;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Theme\Inheritance;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
- *
  * @ORM\Table(name="s_core_shops")
  * @ORM\Entity(repositoryClass="Repository")
  */
 class Shop extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -47,159 +46,159 @@ class Shop extends ModelEntity
     protected $id;
 
     /**
-     * @var integer $mainId
+     * @var int
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
     protected $mainId;
 
     /**
-     * @var integer $categoryId
+     * @var int
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
     protected $categoryId;
 
     /**
-     * @var Shop $main
+     * @var Shop
      * @ORM\ManyToOne(targetEntity="Shop", inversedBy="children")
      */
     protected $main;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;
 
     /**
-     * @var string $title
+     * @var string
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     protected $title;
 
     /**
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     protected $position = 0;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
     protected $host;
 
     /**
-     * @var string $basePath
+     * @var string
      * @ORM\Column(name="base_path", type="string", length=255, nullable=true)
      */
     protected $basePath;
 
     /**
-     * @var string $baseUrl
+     * @var string
      * @ORM\Column(name="base_url", type="string", length=255, nullable=true)
      */
     protected $baseUrl;
 
     /**
-     * @var string $hosts
+     * @var string
      * @ORM\Column(name="hosts", type="text", nullable=false)
      */
     protected $hosts = '';
 
     /**
-     * @var boolean $secure
+     * @var bool
      * @ORM\Column(name="secure", type="boolean", nullable=false)
      */
     protected $secure = false;
 
     /**
-     * @var boolean $secure
+     * @var bool
      * @ORM\Column(name="always_secure", type="boolean", nullable=false)
      */
     protected $alwaysSecure = false;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="secure_host", type="string", length=255, nullable=true)
      */
     protected $secureHost;
 
     /**
-     * @var string $secureBasePath
+     * @var string
      * @ORM\Column(name="secure_base_path", type="string", length=255, nullable=true)
      */
     protected $secureBasePath;
 
     /**
-     * @var string $secureBaseUrl
+     * @var string
      */
     protected $secureBaseUrl;
 
     /**
-     * @var $template int
+     * @var int
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
     protected $templateId;
 
     /**
-     * @var Template $template
+     * @var Template
      * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     protected $template;
 
     /**
-     * @var Template $documentTemplate
+     * @var Template
      * @ORM\ManyToOne(targetEntity="Template")
      * @ORM\JoinColumn(name="document_template_id", referencedColumnName="id")
      */
     protected $documentTemplate;
 
     /**
-     * @var \Shopware\Models\Category\Category $category
+     * @var \Shopware\Models\Category\Category
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      */
     protected $category;
 
     /**
-     * @var Locale $locale
+     * @var Locale
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      */
     protected $locale;
 
     /**
-     * @var Currency $currency
+     * @var Currency
      * @ORM\ManyToOne(targetEntity="Currency")
      */
     protected $currency;
 
     /**
-     * @var \Shopware\Models\Customer\Group $customerGroup
+     * @var \Shopware\Models\Customer\Group
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id")
      */
     protected $customerGroup;
 
     /**
-     * @var boolean $default
+     * @var bool
      * @ORM\Column(name="`default`", type="boolean", nullable=false)
      */
     protected $default = false;
 
     /**
-     * @var boolean $active
+     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     protected $active = true;
 
     /**
-     * @var Shop $fallback
+     * @var Shop
      * @ORM\ManyToOne(targetEntity="Shop")
      */
     protected $fallback;
 
     /**
-     * @var boolean $default
+     * @var bool
      * @ORM\Column(name="customer_scope", type="boolean", nullable=false)
      */
     protected $customerScope = false;
@@ -277,7 +276,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -285,7 +284,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param integer $position
+     * @param int $position
      */
     public function setPosition($position)
     {
@@ -501,7 +500,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getSecure()
     {
@@ -509,7 +508,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param boolean $secure
+     * @param bool $secure
      */
     public function setSecure($secure)
     {
@@ -581,7 +580,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getCustomerScope()
     {
@@ -589,7 +588,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param boolean $customerScope
+     * @param bool $customerScope
      */
     public function setCustomerScope($customerScope)
     {
@@ -597,7 +596,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -605,7 +604,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -621,7 +620,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param  Shop[]|\Doctrine\Common\Collections\ArrayCollection $children
+     * @param Shop[]|\Doctrine\Common\Collections\ArrayCollection $children
      */
     public function setChildren($children)
     {
@@ -646,6 +645,7 @@ class Shop extends ModelEntity
 
     /**
      * @param $name
+     *
      * @return mixed
      */
     public function get($name)
@@ -668,11 +668,13 @@ class Shop extends ModelEntity
             case 'fallback':
                 return $this->getFallback() !== null ? $this->getFallback()->getId() : null;
         }
+
         return null;
     }
 
     /**
      * @param null $bootstrap Deprecated since 5.2 will be removed in 5.3
+     *
      * @return DetachedShop
      */
     public function registerResources($bootstrap = null)
@@ -702,14 +704,15 @@ class Shop extends ModelEntity
         /** @var $plugins \Enlight_Plugin_PluginManager */
         $plugins = $container->get('Plugins');
 
-        /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
+        /** @var $pluginNamespace \Shopware_Components_Plugin_Namespace */
         foreach ($plugins as $pluginNamespace) {
             if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
             }
         }
 
-        $container->get('shopware_storefront.context_service')->initializeShopContext();
+        //Initializes the frontend session to prevent output before session started.
+        $container->get('session');
 
         if ($this->getTemplate() !== null) {
             /** @var $templateManager \Enlight_Template_Manager */
@@ -720,12 +723,12 @@ class Shop extends ModelEntity
             if ($template->getVersion() == 3) {
                 $this->registerTheme($template);
             } elseif ($template->getVersion() == 2) {
-                $templateManager->addTemplateDir(array(
+                $templateManager->addTemplateDir([
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
                     'emotion' => '_emotion',
-                    'include_dir' => '.'
-                ));
+                    'include_dir' => '.',
+                ]);
             } else {
                 throw new \Exception(sprintf(
                     'Tried to load unsupported template version %s for template: %s',
@@ -750,23 +753,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Template $template
-     * @throws \Exception
-     */
-    private function registerTheme(Template $template)
-    {
-        /**@var $templateManager \Enlight_Template_Manager*/
-        $templateManager = Shopware()->Container()->get('template');
-
-        /**@var $inheritance Inheritance*/
-        $inheritance = Shopware()->Container()->get('theme_inheritance');
-
-        $path = $inheritance->getTemplateDirectories($template);
-        $templateManager->setTemplateDir($path);
-    }
-
-    /**
-     * @return boolean
+     * @return bool
      */
     public function getAlwaysSecure()
     {
@@ -774,10 +761,27 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param boolean $alwaysSecure
+     * @param bool $alwaysSecure
      */
     public function setAlwaysSecure($alwaysSecure)
     {
         $this->alwaysSecure = $alwaysSecure;
+    }
+
+    /**
+     * @param Template $template
+     *
+     * @throws \Exception
+     */
+    private function registerTheme(Template $template)
+    {
+        /** @var $templateManager \Enlight_Template_Manager */
+        $templateManager = Shopware()->Container()->get('template');
+
+        /** @var $inheritance Inheritance */
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $path = $inheritance->getTemplateDirectories($template);
+        $templateManager->setTemplateDir($path);
     }
 }

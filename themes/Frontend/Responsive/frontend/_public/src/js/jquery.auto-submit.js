@@ -62,12 +62,13 @@
         onChangeSelection: function () {
             var me = this;
 
-            if(me.opts.loadingindicator) {
+            if (me.opts.loadingindicator) {
                 $.loadingIndicator.open({
                     closeOnClick: false
                 });
             }
 
+            $.publish('plugin/swAutoSubmit/onChangeSelection', [ me ]);
             me.$form.submit();
         }
     });

@@ -1,10 +1,33 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\tests\Unit\Controllers\Backend;
 
+use PHPUnit\Framework\TestCase;
 use Shopware_Controllers_Backend_Order;
 
-class OrderTest extends \PHPUnit_Framework_TestCase
+class OrderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,16 +46,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->method = $class->getMethod('resolveSortParameter');
         $this->method->setAccessible(true);
     }
-    
+
     public function testSortByNonePrefixedColumn()
     {
         $sorts = [
-            ['property' => 'orderTime', 'direction' => 'ASC']
+            ['property' => 'orderTime', 'direction' => 'ASC'],
         ];
 
         $this->assertSame(
             [
-                ['property' => 'orders.orderTime', 'direction' => 'ASC']
+                ['property' => 'orders.orderTime', 'direction' => 'ASC'],
             ],
             $this->method->invokeArgs($this->controller, [$sorts])
         );
@@ -42,13 +65,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     {
         $sorts = [
             ['property' => 'orderTime', 'direction' => 'ASC'],
-            ['property' => 'active', 'direction' => 'ASC']
+            ['property' => 'active', 'direction' => 'ASC'],
         ];
 
         $this->assertSame(
             [
                 ['property' => 'orders.orderTime', 'direction' => 'ASC'],
-                ['property' => 'orders.active', 'direction' => 'ASC']
+                ['property' => 'orders.active', 'direction' => 'ASC'],
             ],
             $this->method->invokeArgs($this->controller, [$sorts])
         );
@@ -100,12 +123,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             [
                 ['property' => 'billing.lastName', 'direction' => 'DESC'],
                 ['property' => 'billing.firstName', 'direction' => 'DESC'],
-                ['property' => 'billing.company', 'direction' => 'DESC']
+                ['property' => 'billing.company', 'direction' => 'DESC'],
             ],
             $this->method->invokeArgs($this->controller, [$sorts])
         );
     }
-
 
     public function testCustomerEmailAliasResolvedToAssociatedColumn()
     {
@@ -115,7 +137,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                ['property' => 'customer.email', 'direction' => 'DESC']
+                ['property' => 'customer.email', 'direction' => 'DESC'],
             ],
             $this->method->invokeArgs($this->controller, [$sorts])
         );

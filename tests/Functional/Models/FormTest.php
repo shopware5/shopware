@@ -26,11 +26,22 @@ use Shopware\Models\Form\Form;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
 {
+    /**
+     * @var array
+     */
+    public $testData = [
+        'name' => 'Testform123',
+        'text' => 'This is a Testform',
+        'email' => 'max@mustermann.com',
+        'emailTemplate' => 'Test Email Template',
+        'emailSubject' => 'Test Email Subject',
+        'text2' => 'Test Text2',
+    ];
     /**
      * @var Shopware\Components\Model\ModelManager
      */
@@ -40,18 +51,6 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
      * @var Shopware\Models\User\Repository
      */
     protected $repo;
-
-    /**
-     * @var array
-     */
-    public $testData = array(
-        'name'          => 'Testform123',
-        'text'          => 'This is a Testform',
-        'email'         => 'max@mustermann.com',
-        'emailTemplate' => 'Test Email Template',
-        'emailSubject'  => 'Test Email Subject',
-        'text2'         => 'Test Text2',
-    );
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -71,7 +70,7 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
      */
     protected function tearDown()
     {
-        $form = $this->repo->findOneBy(array('name' => 'Testform123'));
+        $form = $this->repo->findOneBy(['name' => 'Testform123']);
 
         if (!empty($form)) {
             $this->em->remove($form);

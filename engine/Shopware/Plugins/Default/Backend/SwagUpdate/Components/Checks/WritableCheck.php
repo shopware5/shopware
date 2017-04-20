@@ -24,14 +24,14 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
-use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\FileSystem;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class WritableCheck implements CheckInterface
@@ -49,7 +49,7 @@ class WritableCheck implements CheckInterface
     private $fileSystem;
 
     /**
-     * @param FileSystem $fileSystem
+     * @param FileSystem       $fileSystem
      * @param SnippetNamespace $namespace
      */
     public function __construct(FileSystem $fileSystem, SnippetNamespace $namespace)
@@ -71,11 +71,11 @@ class WritableCheck implements CheckInterface
      */
     public function check($requirement)
     {
-        $directories = array();
-        $checkedDirectories = array();
+        $directories = [];
+        $checkedDirectories = [];
 
-        $successMessage = $this->namespace->get('controller/check_writable_success', "The following directories are writeable <br/>%s");
-        $failMessage = $this->namespace->get('controller/check_writable_failure', "The following directories are not writable: <br> %s");
+        $successMessage = $this->namespace->get('controller/check_writable_success', 'The following directories are writeable <br/>%s');
+        $failMessage = $this->namespace->get('controller/check_writable_failure', 'The following directories are not writable: <br> %s');
 
         foreach ($requirement['value'] as $path) {
             $fullPath = rtrim(Shopware()->DocPath($path), '/');
@@ -84,28 +84,28 @@ class WritableCheck implements CheckInterface
             $fixPermissions = true;
             $directories = array_merge(
                 $directories,
-                $this->fileSystem->checkDirectoryPermissions($fullPath, $fixPermissions)
+                $this->fileSystem->checkSingleDirectoryPermissions($fullPath, $fixPermissions)
             );
         }
 
         if (empty($directories)) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message'    => sprintf(
+                'message' => sprintf(
                     $successMessage,
                     implode('<br>', $checkedDirectories)
-                )
-            );
-        } else {
-            return array(
+                ),
+            ];
+        }
+
+        return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
-                'message'    => sprintf(
+                'message' => sprintf(
                     $failMessage,
                     implode('<br>', $directories)
-                )
-            );
-        }
+                ),
+            ];
     }
 }

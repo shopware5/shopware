@@ -41,7 +41,8 @@ class RequirementValidator
 
     /**
      * RequirementValidator constructor.
-     * @param ModelManager $em
+     *
+     * @param ModelManager        $em
      * @param XmlPluginInfoReader $infoReader
      */
     public function __construct(ModelManager $em, XmlPluginInfoReader $infoReader)
@@ -51,8 +52,9 @@ class RequirementValidator
     }
 
     /**
-     * @param string $pluginXmlFile File path to the plugin.xml
+     * @param string $pluginXmlFile   File path to the plugin.xml
      * @param string $shopwareVersion current shopware version
+     *
      * @throws \Exception
      */
     public function validate($pluginXmlFile, $shopwareVersion)
@@ -76,6 +78,7 @@ class RequirementValidator
      * @param string $version
      * @param string $required
      * @param string $operator
+     *
      * @return bool
      */
     private function assertVersion($version, $required, $operator)
@@ -83,33 +86,36 @@ class RequirementValidator
         if ($version == '___VERSION___') {
             return true;
         }
+
         return version_compare($version, $required, $operator);
     }
 
     /**
-     * @param array $compatibility
+     * @param array  $compatibility
      * @param string $shopwareVersion
+     *
      * @throws \Exception
      */
     private function assertShopwareVersion($compatibility, $shopwareVersion)
     {
         if (in_array($shopwareVersion, $compatibility['blacklist'])) {
-            throw new \Exception(sprintf("Shopware version %s is blacklisted by the plugin", $shopwareVersion));
+            throw new \Exception(sprintf('Shopware version %s is blacklisted by the plugin', $shopwareVersion));
         }
 
         $min = $compatibility['minVersion'];
         if (strlen($min) > 0 && !$this->assertVersion($shopwareVersion, $min, '>=')) {
-            throw new \Exception(sprintf("Plugin requires at least Shopware version %s", $min));
+            throw new \Exception(sprintf('Plugin requires at least Shopware version %s', $min));
         }
 
         $max = $compatibility['maxVersion'];
         if (strlen($max) > 0 && !$this->assertVersion($shopwareVersion, $max, '<=')) {
-            throw new \Exception(sprintf("Plugin is only compatible with Shopware version <= %s", $max));
+            throw new \Exception(sprintf('Plugin is only compatible with Shopware version <= %s', $max));
         }
     }
 
     /**
      * @param array[] $requiredPlugins
+     *
      * @throws \Exception
      */
     private function assertRequiredPlugins($requiredPlugins)
@@ -132,17 +138,17 @@ class RequirementValidator
             }
 
             if (in_array($plugin->getVersion(), $requiredPlugin['blacklist'])) {
-                throw new \Exception(sprintf("Required plugin %s with version %s is blacklisted", $plugin->getName(), $plugin->getVersion()));
+                throw new \Exception(sprintf('Required plugin %s with version %s is blacklisted', $plugin->getName(), $plugin->getVersion()));
             }
 
             $min = $requiredPlugin['minVersion'];
             if (strlen($min) > 0 && !$this->assertVersion($plugin->getVersion(), $min, '>=')) {
-                throw new \Exception(sprintf("Version %s of plugin %s is required.", $min, $plugin->getName()));
+                throw new \Exception(sprintf('Version %s of plugin %s is required.', $min, $plugin->getName()));
             }
 
             $max = $requiredPlugin['maxVersion'];
             if (strlen($max) > 0 && !$this->assertVersion($plugin->getVersion(), $max, '<=')) {
-                throw new \Exception(sprintf("Plugin is only compatible with Plugin %s version <= %s", $plugin->getName(), $max));
+                throw new \Exception(sprintf('Plugin is only compatible with Plugin %s version <= %s', $plugin->getName(), $max));
             }
         }
     }

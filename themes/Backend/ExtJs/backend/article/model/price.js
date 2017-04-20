@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.Price', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/price/fields"}{/block}
+        //{block name="backend/article/model/price/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'from', type: 'int' },
         { name: 'to', type: 'string' },

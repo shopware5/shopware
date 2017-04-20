@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Systeminfo.model.Version', {
     extend: 'Ext.data.Model',
 
     fields: [
-		//{block name="backend/systeminfo/model/version/fields"}{/block}
+        //{block name="backend/systeminfo/model/version/fields"}{/block}
         { name: 'name', type: 'string' },
         { name: 'version', type: 'string' },
         { name: 'result', type: 'boolean' }

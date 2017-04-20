@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AttributeHydrator extends Hydrator
@@ -41,6 +41,7 @@ class AttributeHydrator extends Hydrator
 
     /**
      * AttributeHydrator constructor.
+     *
      * @param FieldHelper $fieldHelper
      */
     public function __construct(FieldHelper $fieldHelper)
@@ -50,6 +51,7 @@ class AttributeHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Attribute
      */
     public function hydrate(array $data)
@@ -67,15 +69,16 @@ class AttributeHydrator extends Hydrator
                 $attribute->set($key, $value);
             }
         }
+
         return $attribute;
     }
 
     /**
      * @param Struct\Extendable $struct
-     * @param array $data
-     * @param string $arrayKey
-     * @param string $attributeKey
-     * @param null|string $translationKey
+     * @param array             $data
+     * @param string            $arrayKey
+     * @param string            $attributeKey
+     * @param null|string       $translationKey
      */
     public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {
@@ -88,8 +91,8 @@ class AttributeHydrator extends Hydrator
 
         if ($translationKey) {
             $translationKey = '__' . $translationKey . '_translation';
-            $attribute['translation'] = $data[$translationKey];
-            $attribute['translation_fallback'] = $data[$translationKey . '_fallback'];
+            $attribute['translation'] = !empty($data[$translationKey]) ? $data[$translationKey] : null;
+            $attribute['translation_fallback'] = !empty($data[$translationKey . '_fallback']) ? $data[$translationKey . '_fallback'] : null;
         }
 
         $struct->addAttribute($attributeKey, $this->hydrate($attribute));

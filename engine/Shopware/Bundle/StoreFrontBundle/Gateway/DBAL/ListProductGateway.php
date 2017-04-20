@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ListProductGateway implements Gateway\ListProductGatewayInterface
@@ -66,9 +66,9 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
-     * @param Hydrator\ProductHydrator $hydrator
+     * @param Connection                  $connection
+     * @param FieldHelper                 $fieldHelper
+     * @param Hydrator\ProductHydrator    $hydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -84,7 +84,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($number, Struct\ShopContextInterface $context)
     {
@@ -94,13 +94,13 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $numbers, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery($numbers, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -114,8 +114,9 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     }
 
     /**
-     * @param array $numbers
+     * @param array                       $numbers
      * @param Struct\ShopContextInterface $context
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getQuery(array $numbers, Struct\ShopContextInterface $context)
@@ -135,8 +136,8 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->addSelect($this->fieldHelper->getManufacturerFields())
             ->addSelect($this->fieldHelper->getEsdFields())
             ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd')
-            ->addSelect('(' . $customerGroupQuery->getSQL() .') as __product_blocked_customer_groups')
-            ->addSelect('(' . $availableVariantQuery->getSQL() .') as __product_has_available_variants')
+            ->addSelect('(' . $customerGroupQuery->getSQL() . ') as __product_blocked_customer_groups')
+            ->addSelect('(' . $availableVariantQuery->getSQL() . ') as __product_has_available_variants')
             ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
         ;
         $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
@@ -196,7 +197,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->andWhere('prices.pricegroup = ' . $key)
             ->andWhere('prices.articleID = product.id');
 
-        if ($this->config->get('hideNoInstock')) {
+        if ($this->config->get('hideNoInStock')) {
             $query->andWhere('(product.laststock * priceVariant.instock) >= (product.laststock * priceVariant.minpurchase)');
         }
 
@@ -239,7 +240,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select("COUNT(availableVariant.id)")
+        $query->select('COUNT(availableVariant.id)')
             ->from('s_articles_details', 'availableVariant')
             ->where('availableVariant.articleID = product.id')
             ->andWhere('availableVariant.active = 1')

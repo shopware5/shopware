@@ -25,19 +25,20 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\Collection;
-use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\BatchInterface;
+use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Abstract API Resource Class
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Resource
@@ -92,6 +93,7 @@ abstract class Resource
         if (!$this->container) {
             $this->container = Shopware()->Container();
         }
+
         return $this->container;
     }
 
@@ -104,35 +106,8 @@ abstract class Resource
     }
 
     /**
-     * Returns a new api resource which contains the
-     * same configuration for the model manager and acl
-     * as the current resource.
-     *
-     * @param $name
-     * @return Resource
-     */
-    protected function getResource($name)
-    {
-        $name = ucfirst($name);
-        $class = __NAMESPACE__ . '\\' . $name;
-
-        /** @var $resource \Shopware\Components\Api\Resource\Resource */
-        $resource = new $class();
-        $resource->setManager($this->getManager());
-
-        if ($this->getAcl()) {
-            $resource->setAcl($this->getAcl());
-        }
-
-        if ($this->getRole()) {
-            $resource->setRole($this->getRole());
-        }
-
-        return $resource;
-    }
-
-    /**
      * @param string $privilege
+     *
      * @throws ApiException\PrivilegeException
      */
     public function checkPrivilege($privilege)
@@ -180,7 +155,8 @@ abstract class Resource
 
     /**
      * @param \Shopware_Components_Acl $acl
-     * @return Resource
+     *
+     * @return resource
      */
     public function setAcl(\Shopware_Components_Acl $acl)
     {
@@ -199,7 +175,8 @@ abstract class Resource
 
     /**
      * @param string|\Zend_Acl_Role_Interface $role
-     * @return Resource
+     *
+     * @return resource
      */
     public function setRole($role)
     {
@@ -217,7 +194,7 @@ abstract class Resource
     }
 
     /**
-     * @param boolean $autoFlush
+     * @param bool $autoFlush
      */
     public function setAutoFlush($autoFlush)
     {
@@ -225,7 +202,7 @@ abstract class Resource
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getAutoFlush()
     {
@@ -250,6 +227,7 @@ abstract class Resource
 
     /**
      * @param object $entity
+     *
      * @throws \Shopware\Components\Api\Exception\OrmException
      */
     public function flush($entity = null)
@@ -267,6 +245,141 @@ abstract class Resource
         }
     }
 
+    public function batchDelete($data)
+    {
+        if (!$this instanceof BatchInterface) {
+            throw new BatchInterfaceNotImplementedException('BatchInterface is not implemented by this resource');
+        }
+
+        $results = [];
+        foreach ($data as $key => $datum) {
+            $id = $this->getIdByData($datum);
+
+            try {
+                $results[$key] = [
+                    'success' => true,
+                    'operation' => 'delete',
+                    'data' => $this->delete($id),
+                ];
+                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                    $results[$key]['data'] = Shopware()->Models()->toArray(
+                        $results[$key]['data']
+                    );
+                }
+            } catch (\Exception $e) {
+                if (!$this->getManager()->isOpen()) {
+                    $this->resetEntityManager();
+                }
+                $message = $e->getMessage();
+                if ($e instanceof ApiException\ValidationException) {
+                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
+                }
+
+                $results[$key] = [
+                    'success' => false,
+                    'message' => $message,
+                    'trace' => $e->getTraceAsString(),
+                ];
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * This method will update/create a whole list of entities.
+     * The resource needs to implement BatchInterface for that.
+     *
+     * @param $data
+     *
+     * @throws BatchInterfaceNotImplementedException
+     *
+     * @return array
+     */
+    public function batch($data)
+    {
+        if (!$this instanceof BatchInterface) {
+            throw new BatchInterfaceNotImplementedException('BatchInterface is not implemented by this resource');
+        }
+
+        $results = [];
+        foreach ($data as $key => $datum) {
+            $id = $this->getIdByData($datum);
+
+            try {
+                if ($id) {
+                    $results[$key] = [
+                        'success' => true,
+                        'operation' => 'update',
+                        'data' => $this->update($id, $datum),
+                    ];
+                } else {
+                    $results[$key] = [
+                        'success' => true,
+                        'operation' => 'create',
+                        'data' => $this->create($datum),
+                    ];
+                }
+                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                    $results[$key]['data'] = Shopware()->Models()->toArray(
+                        $results[$key]['data']
+                    );
+                }
+            } catch (\Exception $e) {
+                if (!$this->getManager()->isOpen()) {
+                    $this->resetEntityManager();
+                }
+                $message = $e->getMessage();
+                if ($e instanceof ApiException\ValidationException) {
+                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
+                }
+
+                $results[$key] = [
+                    'success' => false,
+                    'message' => $message,
+                    'trace' => $e->getTraceAsString(),
+                ];
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Returns a new api resource which contains the
+     * same configuration for the model manager and acl
+     * as the current resource.
+     *
+     * @param $name
+     *
+     * @return resource
+     */
+    protected function getResource($name)
+    {
+        try {
+            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
+        } catch (ServiceNotFoundException $e) {
+            $name = ucfirst($name);
+            $class = __NAMESPACE__ . '\\Resource\\' . $name;
+
+            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            $resource = new $class();
+        }
+
+        $resource->setManager($this->getManager());
+
+        if ($this->getAcl()) {
+            $resource->setAcl($this->getAcl());
+        }
+
+        if ($this->getRole()) {
+            $resource->setRole($this->getRole());
+        }
+
+        return $resource;
+    }
+
     /**
      * Helper function which checks the option configuration for the passed collection.
      * If the data property contains the "__options_$optionName" value and this value contains
@@ -276,6 +389,7 @@ abstract class Resource
      * @param $data
      * @param $optionName
      * @param $defaultReplace
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     protected function checkDataReplacement(Collection $collection, $data, $optionName, $defaultReplace)
@@ -296,8 +410,8 @@ abstract class Resource
      * @param Collection|array $collection
      * @param $property
      * @param $value
+     *
      * @throws \Exception
-     * @return null
      */
     protected function getCollectionElementByProperty($collection, $property, $value)
     {
@@ -306,7 +420,7 @@ abstract class Resource
 
             if (!method_exists($entity, $method)) {
                 throw new \Exception(
-                    sprintf("Method %s not found on entity %s", $method, get_class($entity))
+                    sprintf('Method %s not found on entity %s', $method, get_class($entity))
                 );
                 continue;
             }
@@ -314,13 +428,13 @@ abstract class Resource
                 return $entity;
             }
         }
+
         return null;
     }
 
     /**
      * @param Collection $collection
-     * @param array $conditions
-     * @return null
+     * @param array      $conditions
      */
     protected function getCollectionElementByProperties(Collection $collection, array $conditions)
     {
@@ -338,21 +452,22 @@ abstract class Resource
         return null;
     }
 
-
     /**
      * Helper function to execute different findOneBy statements which different conditions
      * until a passed entity instance found.
      *
      * @param $entity
      * @param array $conditions
-     * @return null|ModelEntity
+     *
      * @throws \Exception
+     *
+     * @return null|ModelEntity
      */
     protected function findEntityByConditions($entity, array $conditions)
     {
         $repo = $this->getManager()->getRepository($entity);
         if (!$repo instanceof ModelRepository) {
-            throw new \Exception(sprintf("Passed entity has no configured repository: %s", $entity));
+            throw new \Exception(sprintf('Passed entity has no configured repository: %s', $entity));
         }
 
         foreach ($conditions as $condition) {
@@ -361,9 +476,9 @@ abstract class Resource
                 return $instance;
             }
         }
+
         return null;
     }
-
 
     /**
      * Helper function to resolve one to many associations for an entity.
@@ -381,10 +496,12 @@ abstract class Resource
      * @param $data
      * @param $entityType
      * @param array $conditions
-     * @return null|object
+     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return null|object
      */
-    protected function getOneToManySubElement(Collection $collection, $data, $entityType, $conditions = array('id'))
+    protected function getOneToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {
         foreach ($conditions as $property) {
             if (!isset($data[$property])) {
@@ -394,9 +511,10 @@ abstract class Resource
 
             if (!$item) {
                 throw new ApiException\CustomValidationException(
-                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                    sprintf('%s by %s %s not found', $entityType, $property, $data[$property])
                 );
             }
+
             return $item;
         }
 
@@ -423,10 +541,12 @@ abstract class Resource
      * @param $data
      * @param $entityType
      * @param array $conditions
-     * @return null|object
+     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return null|object
      */
-    protected function getManyToManySubElement(Collection $collection, $data, $entityType, $conditions = array('id'))
+    protected function getManyToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {
         $repo = $this->getManager()->getRepository($entityType);
         foreach ($conditions as $property) {
@@ -439,117 +559,20 @@ abstract class Resource
                 return $item;
             }
 
-            $item = $repo->findOneBy(array($property => $data[$property]));
+            $item = $repo->findOneBy([$property => $data[$property]]);
 
             if (!$item) {
                 throw new ApiException\CustomValidationException(
-                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                    sprintf('%s by %s %s not found', $entityType, $property, $data[$property])
                 );
             }
 
             $collection->add($item);
+
             return $item;
         }
 
         return null;
-    }
-
-    public function batchDelete($data)
-    {
-        if (!$this instanceof BatchInterface) {
-            throw new BatchInterfaceNotImplementedException('BatchInterface is not implemented by this resource');
-        }
-
-        $results = array();
-        foreach ($data as $key => $datum) {
-            $id = $this->getIdByData($datum);
-
-            try {
-                $results[$key] = array(
-                    'success' => true,
-                    'operation' => 'delete',
-                    'data' => $this->delete($id)
-                );
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
-                    $results[$key]['data'] = Shopware()->Models()->toArray(
-                        $results[$key]['data']
-                    );
-                }
-            } catch (\Exception $e) {
-                if (!$this->getManager()->isOpen()) {
-                    $this->resetEntityManager();
-                }
-                $message = $e->getMessage();
-                if ($e instanceof ApiException\ValidationException) {
-                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
-                }
-
-                $results[$key] = array(
-                    'success' => false,
-                    'message' => $message,
-                    'trace' => $e->getTraceAsString()
-                );
-            }
-        }
-
-        return $results;
-    }
-
-    /**
-     * This method will update/create a whole list of entities.
-     * The resource needs to implement BatchInterface for that.
-     *
-     * @param $data
-     * @throws BatchInterfaceNotImplementedException
-     * @return array
-     */
-    public function batch($data)
-    {
-        if (!$this instanceof BatchInterface) {
-            throw new BatchInterfaceNotImplementedException('BatchInterface is not implemented by this resource');
-        }
-
-        $results = array();
-        foreach ($data as $key => $datum) {
-            $id = $this->getIdByData($datum);
-
-            try {
-                if ($id) {
-                    $results[$key] = array(
-                        'success' => true,
-                        'operation' => 'update',
-                        'data' => $this->update($id, $datum)
-                    );
-                } else {
-                    $results[$key] = array(
-                        'success' => true,
-                        'operation' => 'create',
-                        'data' => $this->create($datum)
-                    );
-                }
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
-                    $results[$key]['data'] = Shopware()->Models()->toArray(
-                        $results[$key]['data']
-                    );
-                }
-            } catch (\Exception $e) {
-                if (!$this->getManager()->isOpen()) {
-                    $this->resetEntityManager();
-                }
-                $message = $e->getMessage();
-                if ($e instanceof ApiException\ValidationException) {
-                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
-                }
-
-                $results[$key] = array(
-                    'success' => false,
-                    'message' => $message,
-                    'trace' => $e->getTraceAsString()
-                );
-            }
-        }
-
-        return $results;
     }
 
     /**

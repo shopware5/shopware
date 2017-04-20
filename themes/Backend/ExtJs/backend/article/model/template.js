@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Template', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/template/fields"}{/block}
+        //{block name="backend/article/model/template/fields"}{/block}
         { name: 'id', type: 'string' },
         { name: 'name', type: 'string' }
     ]

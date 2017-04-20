@@ -30,7 +30,6 @@ use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
  * Class GarbageCollectorFactory
- * @package Shopware\Bundle\MediaBundle
  */
 class GarbageCollectorFactory
 {
@@ -51,8 +50,8 @@ class GarbageCollectorFactory
 
     /**
      * @param \Enlight_Event_EventManager $events
-     * @param Connection $connection
-     * @param MediaServiceInterface $mediaService
+     * @param Connection                  $connection
+     * @param MediaServiceInterface       $mediaService
      */
     public function __construct(\Enlight_Event_EventManager $events, Connection $connection, MediaServiceInterface $mediaService)
     {
@@ -98,7 +97,7 @@ class GarbageCollectorFactory
             new MediaPosition('s_cms_static', 'html', 'path', MediaPosition::PARSE_HTML),
             new MediaPosition('s_cms_support', 'text', 'path', MediaPosition::PARSE_HTML),
             new MediaPosition('s_cms_support', 'text2', 'path', MediaPosition::PARSE_HTML),
-            new MediaPosition('s_core_config_mails', 'contentHTML', 'path', MediaPosition::PARSE_HTML)
+            new MediaPosition('s_core_config_mails', 'contentHTML', 'path', MediaPosition::PARSE_HTML),
         ]);
     }
 

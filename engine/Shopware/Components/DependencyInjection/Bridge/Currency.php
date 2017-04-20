@@ -28,14 +28,14 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Currency
 {
     /**
      * @param Container    $container
-     * @param \Zend_Locale      $locale
+     * @param \Zend_Locale $locale
      *
      * @return \Zend_Currency
      */

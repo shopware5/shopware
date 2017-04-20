@@ -21,19 +21,20 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimilarProductsService implements Service\SimilarProductsServiceInterface
@@ -64,10 +65,10 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
 
     /**
      * @param Gateway\SimilarProductsGatewayInterface $gateway
-     * @param Service\ListProductServiceInterface $listProductService
-     * @param \Shopware_Components_Config $config
-     * @param ProductSearchInterface $search
-     * @param StoreFrontCriteriaFactoryInterface $factory
+     * @param Service\ListProductServiceInterface     $listProductService
+     * @param \Shopware_Components_Config             $config
+     * @param ProductSearchInterface                  $search
+     * @param StoreFrontCriteriaFactoryInterface      $factory
      */
     public function __construct(
         Gateway\SimilarProductsGatewayInterface $gateway,
@@ -84,7 +85,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
@@ -94,7 +95,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ProductContextInterface $context)
     {
@@ -143,10 +144,10 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             $criteria->limit($limit);
 
             $condition = new SimilarProductCondition($product->getId(), $product->getName());
-            $sorting = new PopularitySorting();
 
             $criteria->addBaseCondition($condition);
-            $criteria->addSorting($sorting);
+            $criteria->addSorting(new PopularitySorting());
+            $criteria->setFetchCount(false);
 
             /** @var \Shopware\Bundle\SearchBundle\ProductSearchResult $searchResult */
             $searchResult = $this->search->search($criteria, $context);
@@ -154,12 +155,13 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             $fallbackResult[$product->getNumber()] = $searchResult->getProducts();
         }
 
-        return ($result + $fallbackResult);
+        return $result + $fallbackResult;
     }
 
     /**
      * @param Struct\BaseProduct[] $products
-     * @param array $numbers
+     * @param array                $numbers
+     *
      * @return Struct\BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
@@ -177,6 +179,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
 
     /**
      * @param $numbers
+     *
      * @return array
      */
     private function extractNumbers($numbers)

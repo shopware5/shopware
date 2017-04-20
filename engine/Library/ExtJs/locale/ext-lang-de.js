@@ -511,7 +511,7 @@ Ext.onReady(function() {
         saveSuccessMessage: 'Eintrag wurde erfolgreich gespeichert',
         violationErrorTitle: 'Validierung Fehler',
         invalidFormTitle: 'Formularvalidierungs Fehler',
-        invalidFormMessage: 'Das Formular beinhaltet invalidate Daten, bitte prüfen Sie ihre Eingabe.'
+        invalidFormMessage: 'Das Formular beinhaltet invalide Daten, bitte prüfen Sie Ihre Eingabe.'
     });
     Ext.define('Shopware.form.field.de.Media', {
         override: 'Shopware.form.field.Media',

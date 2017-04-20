@@ -33,8 +33,6 @@ use Symfony\Component\HttpKernel\HttpCache\Store as BaseStore;
  * $httpCacheStore = new Shopware\Components\HttpCache\Store($root);
  * $httpCacheStore->purgeByHeader($name);
  * </code>
- *
- * @package   Shopware\Components\HttpCache
  */
 class Store extends BaseStore
 {
@@ -49,7 +47,7 @@ class Store extends BaseStore
     private $lookupOptimization;
 
     /**
-     * @param string $root
+     * @param string   $root
      * @param string[] $cacheCookies
      */
     public function __construct($root, array $cacheCookies, $lookupOptimization)
@@ -58,25 +56,6 @@ class Store extends BaseStore
 
         parent::__construct($root);
         $this->lookupOptimization = $lookupOptimization;
-    }
-
-    /**
-     * Generate custom cache key including
-     * additional state from cookie and headers.
-     *
-     * {@inheritdoc}
-     */
-    protected function generateCacheKey(Request $request)
-    {
-        $uri = $request->getUri();
-
-        foreach ($this->cacheCookies as $cookieName) {
-            if ($request->cookies->has($cookieName)) {
-                $uri .= '&__' . $cookieName . '=' . $request->cookies->get($cookieName);
-            }
-        }
-
-        return 'md' . hash('sha256', $uri);
     }
 
     /**
@@ -110,8 +89,9 @@ class Store extends BaseStore
     /**
      * Purges data for the given Header.
      *
-     * @param  string $name
-     * @param  string|null $value
+     * @param string      $name
+     * @param string|null $value
+     *
      * @return bool
      */
     public function purgeByHeader($name, $value = null)
@@ -176,31 +156,14 @@ class Store extends BaseStore
     }
 
     /**
-     * @param string $path The path of the directory to be iterated over.
-     * @return \RecursiveIteratorIterator
-     */
-    private function createRecursiveFileIterator($path)
-    {
-        $directoryIterator = new \RecursiveDirectoryIterator(
-            $path,
-            \RecursiveDirectoryIterator::SKIP_DOTS
-        );
-
-        return new \RecursiveIteratorIterator(
-            $directoryIterator,
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
-    }
-
-    /**
      * When saving a page, also save the page's cacheKey in an optimized version
      * so we can look it up more quickly
      *
-     * @param Request $request
+     * @param Request  $request
      * @param Response $response
+     *
      * @return string
      */
-
     public function write(Request $request, Response $response)
     {
         $headerKey = parent::write($request, $response);
@@ -222,7 +185,6 @@ class Store extends BaseStore
                 $content = [];
             }
 
-
             // Storing the headerKey and the cacheKey will increase the lookup file size a bit
             // but save a lot of reads when invalidating
             $content[$cacheKey] = $headerKey;
@@ -235,11 +197,72 @@ class Store extends BaseStore
         return $headerKey;
     }
 
+    /**
+     * Generate custom cache key including
+     * additional state from cookie and headers.
+     *
+     * {@inheritdoc}
+     */
+    protected function generateCacheKey(Request $request)
+    {
+        $uri = $this->sortQueryStringParameters($request->getUri());
+
+        foreach ($this->cacheCookies as $cookieName) {
+            if ($request->cookies->has($cookieName)) {
+                $uri .= '&__' . $cookieName . '=' . $request->cookies->get($cookieName);
+            }
+        }
+
+        return 'md' . hash('sha256', $uri);
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string
+     */
+    private function sortQueryStringParameters($url)
+    {
+        $pos = strpos($url, '?');
+        if ($pos === false) {
+            return $url;
+        }
+
+        $urlPath = substr($url, 0, $pos + 1);
+        $queryString = substr($url, $pos + 1);
+
+        $queryParts = [];
+        parse_str($queryString, $queryParts);
+        ksort($queryParts, SORT_STRING);
+
+        $queryString = http_build_query($queryParts);
+
+        return $urlPath . $queryString;
+    }
+
+    /**
+     * @param string $path the path of the directory to be iterated over
+     *
+     * @return \RecursiveIteratorIterator
+     */
+    private function createRecursiveFileIterator($path)
+    {
+        $directoryIterator = new \RecursiveDirectoryIterator(
+            $path,
+            \RecursiveDirectoryIterator::SKIP_DOTS
+        );
+
+        return new \RecursiveIteratorIterator(
+            $directoryIterator,
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
+    }
 
     /**
      * Delete all pages with the given cache id
      *
      * @param $id
+     *
      * @return bool
      */
     private function purgeByShopwareId($id)
@@ -268,7 +291,6 @@ class Store extends BaseStore
 
         return true;
     }
-
 
     /**
      * Loads data for the given key.

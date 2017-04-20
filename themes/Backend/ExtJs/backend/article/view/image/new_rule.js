@@ -99,19 +99,19 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
         title: '{s name=image/rule/title}Create new image mapping{/s}',
         cancel: '{s name=cancel_button}Cancel{/s}',
         save: '{s name=general/save_button}Save{/s}',
-        notice: '{s name=general/notice}Hier haben Sie die Möglichkeit ein weiteres Image Mapping zu hinterlegen. <br>Bitte selektieren sie pro Gruppe nur eine Option. <br>Das Bild wird alle Artikel Varianten zugeordnet, die mit den ausgewählten Optionen erzeugt wurden.{/s}'
+        notice: '{s name=general/notice}Hier haben Sie die Möglichkeit ein weiteres Image Mapping zu hinterlegen. <br>Bitte selektieren Sie pro Gruppe nur eine Option. <br>Das Bild wird alle Artikel Varianten zugeordnet, die mit den ausgewählten Optionen erzeugt wurden.{/s}'
     },
 
     /**
-	 * The initComponent template method is an important initialization step for a Component.
+     * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,
      * with each initComponent method up the hierarchy to Ext.Component being called thereafter.
      * This makes it easy to implement and, if needed, override the constructor logic of the Component at any step in the hierarchy.
      * The initComponent method must contain a call to callParent in order to ensure that the parent class' initComponent method is also called.
-	 *
-	 * @return void
-	 */
+     *
+     * @return void
+     */
     initComponent: function() {
         var me = this;
         me.items = [ me.createNotice(), me.createTree() ];

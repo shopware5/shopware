@@ -23,6 +23,7 @@
 
 {* Include overrides *}
 {include file='ExtJs/overrides/Ext.Base.js'}
+{include file='ExtJs/overrides/Ext.grid.header.Container.js'}
 {include file='ExtJs/overrides/Ext.ClassManager.js'}
 {include file='ExtJs/overrides/Ext.data.proxy.Server.js'}
 {include file='ExtJs/overrides/Ext.app.Application.js'}
@@ -52,6 +53,9 @@
 {include file='ExtJs/overrides/Ext.Timeout.js'}
 {include file='ExtJs/overrides/Ext.Ajax.js'}
 {include file='backend/base/component/Shopware.data.reader.Application.js'}
+{include file='ExtJs/overrides/Ext.form.field.Display.js'}
+{include file='ExtJs/overrides/Ext.String.js'}
+{include file='ExtJs/overrides/Ext.view.Table.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}

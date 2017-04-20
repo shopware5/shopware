@@ -2,23 +2,23 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' append}
-	{$sBreadcrumb[] = ['name'=>"{s name='ChangePaymentTitle'}{/s}", 'link'=>{url}]}
-	{$sActiveAction = 'payment'}
+    {$sBreadcrumb[] = ['name'=>"{s name='ChangePaymentTitle'}{/s}", 'link'=>{url}]}
+    {$sActiveAction = 'payment'}
 {/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="account--change-payment account--content register--content" data-register="true">
+    <div class="account--change-payment account--content register--content" data-register="true">
 
-		{* Payment headline *}
-		{block name="frontend_account_payment_headline"}
-			<div class="account--welcome">
-				<h1 class="panel--title">{s name="PaymentHeadline"}{/s}</h1>
-		    </div>
-		{/block}
+        {* Payment headline *}
+        {block name="frontend_account_payment_headline"}
+            <div class="account--welcome">
+                <h1 class="panel--title">{s name="PaymentHeadline"}{/s}</h1>
+            </div>
+        {/block}
 
-		{* Payment form *}
-		{block name="frontend_account_payment_content"}
+        {* Payment form *}
+        {block name="frontend_account_payment_content"}
             <div class="panel has--border is--rounded">
                 {* Error messages *}
                 {block name="frontend_account_error_messages"}
@@ -56,7 +56,7 @@
                 {/block}
 
             </div>
-		{/block}
+        {/block}
 
-	</div>
+    </div>
 {/block}

@@ -30,7 +30,6 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * Class ConfigLoader
- * @package Shopware\Components\Theme\EventListener
  */
 class ConfigLoader implements SubscriberInterface
 {
@@ -48,30 +47,31 @@ class ConfigLoader implements SubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
             'Enlight_Controller_Action_PostDispatch_Frontend' => 'onDispatch',
-            'Enlight_Controller_Action_PostDispatch_Widgets'  => 'onDispatch',
+            'Enlight_Controller_Action_PostDispatch_Widgets' => 'onDispatch',
         ];
     }
 
     /**
      * @param \Enlight_Event_EventArgs $args
+     *
      * @throws \Exception
      */
     public function onDispatch(\Enlight_Event_EventArgs $args)
     {
-        /**@var $controller \Enlight_Controller_Action*/
+        /** @var $controller \Enlight_Controller_Action */
         $controller = $args->get('subject');
 
-        if (!$controller->View()) {
+        if (!$controller->View() || !$controller->View()->hasTemplate()) {
             return;
         }
 
-        /**@var $shop Shop*/
+        /** @var $shop Shop */
         $shop = $this->container->get('shop');
 
         $templateManager = $this->container->get('template');

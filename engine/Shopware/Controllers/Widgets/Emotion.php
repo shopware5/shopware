@@ -28,13 +28,14 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Model\Query\SqlWalker;
 use Shopware\Models\Emotion\Repository;
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Widgets
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
@@ -45,7 +46,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /**@var $repository Repository */
+        /** @var $repository Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $emotions = $this->getEmotion($repository);
 
@@ -76,7 +77,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 'rows' => $emotion['rows'],
                 'gutter' => $emotion['cellSpacing'],
                 'cellHeight' => $emotion['cellHeight'],
-                'articleHeight' => $emotion['articleHeight']
+                'articleHeight' => $emotion['articleHeight'],
             ];
 
             // The preview only shows the normal size.
@@ -104,14 +105,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $this->View()->loadTemplate('widgets/emotion/' . $emotions[0]['template']['file']);
         }
 
-        $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
+        $this->View()->assign('categoryId', (int) $this->Request()->getParam('categoryId'));
         $this->View()->assign('sEmotions', $emotions, true);
-        $this->View()->assign('Controller', (string)$this->Request()->getParam('controllerName'));
+        $this->View()->assign('Controller', (string) $this->Request()->getParam('controllerName'));
     }
 
     /**
      * Get emotion by category
+     *
      * @param $repository Repository
+     *
      * @return array
      */
     public function getEmotion(Repository $repository)
@@ -136,6 +139,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     /**
      * Action that will be triggered by product slider type top seller
+     *
      * @deprecated use emotionArticleSliderAction instead
      */
     public function emotionTopSellerAction()
@@ -146,6 +150,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     /**
      * Action that will be triggered by product slider type newcomer
+     *
      * @deprecated use emotionArticleSliderAction instead
      */
     public function emotionNewcomerAction()
@@ -159,19 +164,20 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function emotionArticleSliderAction()
     {
-        $category = (int) $this->Request()->getParam("category");
+        $category = (int) $this->Request()->getParam('category');
         if (!$category) {
             $this->Response()->setHttpResponseCode(404);
+
             return;
         }
 
         $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
 
-        $limit = (int) $this->Request()->getParam("limit", 5);
+        $limit = (int) $this->Request()->getParam('limit', 5);
         $sort = $this->Request()->getParam('sort', 'newcomer');
-        $pages = $this->Request()->getParam("pages");
-        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
-        $max = $this->Request()->getParam("max");
+        $pages = $this->Request()->getParam('pages');
+        $offset = (int) $this->Request()->getParam('start', $limit * ($pages - 1));
+        $max = $this->Request()->getParam('max');
 
         if ($limit != 0) {
             $maxPages = round($max / $limit);
@@ -184,14 +190,71 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('articles', $values['values']);
         $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
         $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
-        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
+        $this->View()->assign('pages', $values['pages'] > $maxPages ? $maxPages : $values['pages']);
         $this->View()->assign('sPerPage', $limit);
     }
 
     /**
-     * @param array $element
+     * preview action method
+     *
+     * generates the backend iframe emotion preview
+     */
+    public function previewAction()
+    {
+        $emotionId = $this->Request()->getParam('emotionId');
+
+        $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
+
+        // The user can preview the emotion for every device.
+        $emotion['devices'] = '0,1,2,3,4';
+
+        $viewAssignments['emotion'] = $emotion;
+        $viewAssignments['hasEmotion'] = (!empty($emotion));
+
+        $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
+
+        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
+        $viewAssignments['showListing'] = $showListing;
+
+        $this->View()->assign($viewAssignments);
+
+        //fake to prevent rendering the templates with the widgets module.
+        //otherwise the template engine don't accept to load templates of the `frontend` module
+        $this->Request()->setModuleName('frontend');
+    }
+
+    public function productStreamArticleSliderAction()
+    {
+        $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
+        $limit = (int) $this->Request()->getParam('limit', 5);
+
+        $streamId = $this->Request()->getParam('streamId');
+
+        $pages = $this->Request()->getParam('pages', 1);
+        $offset = (int) $this->Request()->getParam('start', $limit * ($pages - 1));
+
+        $maxPages = 0;
+        $max = $this->Request()->getParam('max');
+        if ($limit != 0) {
+            $maxPages = round($max / $limit);
+        } else {
+            $limit = 0;
+        }
+
+        $values = $this->getProductStream($streamId, $offset, $limit);
+
+        $this->View()->assign('articles', $values['values']);
+        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
+        $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
+        $this->View()->assign('pages', $values['pages'] > $maxPages ? $maxPages : $values['pages']);
+        $this->View()->assign('sPerPage', $limit);
+    }
+
+    /**
+     * @param array      $element
      * @param Repository $repository
-     * @param int $categoryId
+     * @param int        $categoryId
+     *
      * @return array
      */
     protected function handleElement(array &$element, Repository $repository, $categoryId)
@@ -200,20 +263,20 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $elementQuery = $repository->getElementDataQuery($element['id'], $element['componentId']);
         $componentData = $elementQuery->getArrayResult();
 
-        $data = array();
-        $data["objectId"] = md5($element["id"]);
+        $data = [];
+        $data['objectId'] = md5($element['id']);
 
         //we have to iterate the component data to decode the values.
         foreach ($componentData as $entry) {
             switch (strtolower($entry['valueType'])) {
-                case "json":
+                case 'json':
                     if ($entry['value'] != '') {
                         $value = Zend_Json::decode($entry['value']);
                     } else {
                         $value = null;
                     }
                     break;
-                case "string":
+                case 'string':
                 default:
                     $value = $entry['value'];
                     break;
@@ -224,7 +287,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $data = Shopware()->Events()->filter(
             'Shopware_Controllers_Widgets_Emotion_AddElement',
             $data,
-            array('subject' => $this, 'element' => $element)
+            ['subject' => $this, 'element' => $element]
         );
 
         if (!empty($component['convertFunction'])) {
@@ -239,8 +302,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $categoryId
+     * @param int   $categoryId
      * @param array $element
+     *
      * @return array
      */
     private function getArticle($data, $categoryId, $element)
@@ -261,9 +325,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
             if (empty($article['articleID'])) {
                 return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
-            } else {
-                return array_merge($data, $article);
             }
+
+            return array_merge($data, $article);
         }
 
         if ($type == 'random_article') {
@@ -277,11 +341,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Gets a random blog entry from the database
      *
      * @param $category
+     *
      * @return array {Array} $result
      */
     private function getRandomBlogEntry($category)
     {
-        $data = array('entry_amount' => 50);
+        $data = ['entry_amount' => 50];
         $result = $this->getBlogEntry($data, $category);
 
         return $result['entries'][array_rand($result['entries'])];
@@ -292,7 +357,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      *
      * @param $data
      * @param $category
+     *
      * @internal param $ {Array} $data
+     *
      * @return array {Array} $data
      */
     private function getBlogEntry($data, $category)
@@ -318,7 +385,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $builder = Shopware()->Models()->createQueryBuilder();
 
         if (isset($data['blog_entry_selection']) && $data['blog_entry_selection']) {
-            $builder->select(array('blog', 'media', 'mappingMedia'))
+            $builder->select(['blog', 'media', 'mappingMedia'])
                 ->from('Shopware\Models\Blog\Blog', 'blog')
                 ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
                 ->leftJoin('mappingMedia.media', 'media')
@@ -332,7 +399,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 ->setParameter('displayDate', date('Y-m-d H:i:s'))
                 ->setParameter('category', $category->getId());
         } else {
-            $builder->select(array('blog', 'media', 'mappingMedia'))
+            $builder->select(['blog', 'media', 'mappingMedia'])
                 ->from('Shopware\Models\Blog\Blog', 'blog')
                 ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
                 ->leftJoin('mappingMedia.media', 'media')
@@ -362,11 +429,24 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $context->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', '/', $imageDir);
+        $links = [];
+        foreach ($result as $blog) {
+            $links[$blog['id']] = [
+                'controller' => 'blog',
+                'action' => 'detail',
+                'sCategory' => $blog['categoryId'],
+                'blogArticle' => $blog['id'],
+            ];
+        }
+        $urls = $this->get('router')->generateList($links);
 
         foreach ($result as &$entry) {
+            $entry['link'] = null;
+
+            if (array_key_exists($entry['id'], $urls)) {
+                $entry['link'] = $urls[$entry['id']];
+            }
+
             foreach ($entry['media'] as $media) {
                 if (empty($media['mediaId'])) {
                     continue;
@@ -388,14 +468,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data['totalCount'] = count($result);
             $data['entries'] = $result;
         }
+
         return $data;
     }
 
-
     /**
      * Helper function to set the FORCE INDEX path.
+     *
      * @param $query \Doctrine\ORM\Query
      * @param $index String
+     *
      * @return \Doctrine\ORM\Query
      */
     private function getForceIndexQuery($query, $index)
@@ -403,6 +485,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
         $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
         $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+
         return $query;
     }
 
@@ -410,8 +493,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getArticleByNumber($data, $category, $element)
@@ -423,8 +507,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getCategoryTeaser($data, $category, $element)
@@ -434,22 +519,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $builder->select('category.name')
             ->from('Shopware\Models\Category\Category', 'category')
             ->where('category.id = ?1')
-            ->setParameter(1, $data["category_selection"]);
+            ->setParameter(1, $data['category_selection']);
 
         $categoryName = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $data["categoryName"] = $categoryName["name"];
+        $data['categoryName'] = $categoryName['name'];
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         // Second get category image per random, if configured
-        if ($data["image_type"] != "selected_image") {
+        if ($data['image_type'] != 'selected_image') {
             if ($data['blog_category']) {
-                $result = $this->getRandomBlogEntry($data["category_selection"]);
+                $result = $this->getRandomBlogEntry($data['category_selection']);
 
                 $data['image'] = $result['media'];
             } else {
                 // Get random article from selected $category
-                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
+                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data['category_selection'], 0, true);
 
                 $data['image'] = $temp['image'];
                 $data['images'] = $temp['images'];
@@ -470,6 +555,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     /**
      * @param string $number
+     *
      * @return array
      */
     private function articleByNumber($number)
@@ -484,10 +570,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->setMaxResults(1);
 
         $articleId = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $article = array();
+        $article = [];
         if (!empty($articleId['id'])) {
             $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId['id']);
         }
+
         return $article;
     }
 
@@ -495,8 +582,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getBannerMappingLinks($data, $category, $element)
@@ -527,7 +615,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                         if (substr($number, 0, 1) === '/') {
                             $mapping['link'] = $this->Request()->getBaseUrl() . $number;
                         } else {
-                            $mapping['link'] = $this->get('config')->get('baseFile') . "?sViewport=detail&sArticle=" . $numbers[$number];
+                            $mapping['link'] = $this->get('config')->get('baseFile') . '?sViewport=detail&sArticle=' . $numbers[$number];
                             $mapping['ordernumber'] = $number;
                         }
                     }
@@ -538,7 +626,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $mediaId = Shopware()->Db()->fetchOne("SELECT id FROM s_media WHERE path = ?", [$data['file']]);
+        $mediaId = Shopware()->Db()->fetchOne('SELECT id FROM s_media WHERE path = ?', [$data['file']]);
         if ($mediaId) {
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
             $media = $this->get('shopware_storefront.media_service')->get($mediaId, $context);
@@ -549,10 +637,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
             $data = array_merge($mediaData, $data);
 
-            $data['fileInfo'] = array(
+            $data['fileInfo'] = [
                 'width' => $mediaData['width'],
-                'height' => $mediaData['height']
-            );
+                'height' => $mediaData['height'],
+            ];
         }
 
         $data['bannerMapping'] = $mappings;
@@ -564,60 +652,40 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getManufacturerSlider($data, $category, $element)
     {
-        if (empty($data["manufacturer_type"])) {
+        if (empty($data['manufacturer_type'])) {
             return $data;
         }
 
         // Get all manufacturers
-        if ($data["manufacturer_type"] == "manufacturers_by_cat") {
-            $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
+        if ($data['manufacturer_type'] == 'manufacturers_by_cat') {
+            $data['values'] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data['manufacturer_category'], 12);
         } else {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $selectedManufacturers = $data["selected_manufacturers"];
-            $manufacturers = array();
+            $ids = array_column($data['selected_manufacturers'], 'supplierId');
+            $context = $this->get('shopware_storefront.context_service')
+                ->getShopContext();
 
-            foreach ($selectedManufacturers as $k => $manufacturer) {
-                $manufacturers[] = $manufacturer["supplierId"];
-            }
+            $manufacturers = $this->get('shopware_storefront.manufacturer_service')
+                ->getList($ids, $context);
 
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->select('supplier.id', 'supplier.name', 'supplier.image', 'supplier.link', 'supplier.description')
-                ->from('Shopware\Models\Article\Supplier', 'supplier')
-                ->where('supplier.id IN (?1)')
-                ->setParameter(1, $manufacturers);
+            $values = array_map(function (Manufacturer $manufacturer) {
+                return $this->get('legacy_struct_converter')
+                    ->convertManufacturerStruct($manufacturer);
+            }, $manufacturers);
 
-            $data["values"] = $builder->getQuery()->getArrayResult();
-
-            $temporaryValues = array();
-            foreach ($manufacturers as $manufacturer) {
-                foreach ($data["values"] as $value) {
-                    if ($value["id"] == $manufacturer) {
-                        $value['image'] = $mediaService->getUrl($value['image']);
-                        $temporaryValues[] = $value;
-                    }
+            if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
+                foreach ($values as &$value) {
+                    $value['link'] = $value['link'] . '?c=' . (int) $category;
                 }
             }
 
-            $data["values"] = $temporaryValues;
-
-            foreach ($data["values"] as &$value) {
-                $query = array(
-                    'controller' => 'listing',
-                    'action'     => 'manufacturer',
-                    'sSupplier'  => $value['id']
-                );
-                if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
-                    $query['sCategory'] = $category;
-                }
-
-                $value["link"] = Shopware()->Container()->get('router')->assemble($query);
-            }
+            $data['values'] = $values;
         }
 
         return $data;
@@ -627,20 +695,21 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getBannerSlider($data, $category, $element)
     {
-        $data["values"] = $data["banner_slider"];
+        $data['values'] = $data['banner_slider'];
 
         $mediaIds = array_column($data['values'], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $media = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        foreach ($data["values"] as &$value) {
+        foreach ($data['values'] as &$value) {
             if (!empty($value['link'])) {
                 preg_match('/^(http|https):\/\//', $value['link'], $matches);
 
@@ -658,10 +727,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
             $value = array_merge($value, $single);
             $value['path'] = $mediaService->getUrl($value['path']);
-            $value['fileInfo'] = array(
+            $value['fileInfo'] = [
                 'width' => $value['width'],
-                'height' => $value['height']
-            );
+                'height' => $value['height'],
+            ];
         }
 
         return $data;
@@ -671,88 +740,90 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Convert Function called by handleElement()
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getArticleSlider($data, $category, $element)
     {
-        if (!isset($data["article_slider_select"])) {
-            $data["article_slider_select"] = "horizontal";
+        if (!isset($data['article_slider_select'])) {
+            $data['article_slider_select'] = 'horizontal';
         }
 
         // Determinate how many products showing on initial request
-        if ($data["article_slider_select"] == "horizontal") {
+        if ($data['article_slider_select'] == 'horizontal') {
             $perPage = $element['endCol'] - $element['startCol'] + 1;
         } else {
             $perPage = $element['endRow'] - $element['startRow'] + 1;
         }
 
-        $category = (int) $data['article_slider_category'] ? : $category;
+        $category = (int) $data['article_slider_category'] ?: $category;
 
-        $values = array();
+        $values = [];
 
-        $max = $data["article_slider_max_number"];
+        $max = $data['article_slider_max_number'];
         if ($perPage != 0) {
             $maxPages = round($max / $perPage);
         } else {
             $maxPages = 0;
         }
 
-        switch ($data["article_slider_type"]) {
-            case "product_stream":
+        switch ($data['article_slider_type']) {
+            case 'product_stream':
                 $temp = $this->getProductStream($data['article_slider_stream'], 0, $perPage);
-                $values = $temp["values"];
-                $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
+                $values = $temp['values'];
+                $data['pages'] = $temp['pages'] > $maxPages ? $maxPages : $temp['pages'];
 
-                $query = array(
+                $query = [
                     'controller' => 'emotion',
                     'module' => 'widgets',
                     'action' => 'productStreamArticleSlider',
                     'streamId' => $data['article_slider_stream'],
-                );
+                ];
 
-                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
+                $data['ajaxFeed'] = Shopware()->Container()->get('router')->assemble($query);
 
                 break;
-            case "selected_article":
-                foreach ($data["selected_articles"] as &$article) {
-                    $articleId = $article["articleId"];
+            case 'selected_article':
+                foreach ($data['selected_articles'] as &$article) {
+                    $articleId = $article['articleId'];
                     $entry = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
-                    if (!empty($entry["articleID"])) {
+                    if (!empty($entry['articleID'])) {
                         $values[] = $entry;
                     }
                 }
                 break;
-            case "topseller":
-            case "newcomer":
-            case "price_asc":
-            case "price_desc":
+            case 'topseller':
+            case 'newcomer':
+            case 'price_asc':
+            case 'price_desc':
                 $temp = $this->getProductSliderData(
                     $category,
                     0,
                     $perPage,
-                    $data["article_slider_type"]
+                    $data['article_slider_type']
                 );
 
-                $values = $temp["values"];
-                $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
+                $values = $temp['values'];
+                $data['pages'] = $temp['pages'] > $maxPages ? $maxPages : $temp['pages'];
 
-                $query = array(
+                $query = [
                     'controller' => 'emotion',
                     'module' => 'widgets',
                     'action' => 'emotionArticleSlider',
-                    'sort' => $data["article_slider_type"]
-                );
-                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
+                    'sort' => $data['article_slider_type'],
+                ];
+                $data['ajaxFeed'] = Shopware()->Container()->get('router')->assemble($query);
                 break;
             default:
                 // Prevent the slider form endless loading
                 $data['article_slider_type'] = 'selected_article';
+
                 return $data;
         }
 
-        $data["values"] = $values;
+        $data['values'] = $values;
         $data['categoryId'] = $category;
 
         return $data;
@@ -761,10 +832,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     /**
      * Returns a list of top sold products
      *
-     * @param int $category
-     * @param int $offset
-     * @param int $limit
+     * @param int    $category
+     * @param int    $offset
+     * @param int    $limit
      * @param string $sort
+     *
      * @return array
      */
     private function getProductSliderData($category, $offset = 0, $limit, $sort = null)
@@ -802,46 +874,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $pages = 0;
         }
 
-
         if ($pages == 0 && $count > 0) {
             $pages = 1;
         }
 
-        return array("values" => $data, "pages" => $pages);
-    }
-
-    /**
-     * preview action method
-     *
-     * generates the backend iframe emotion preview
-     */
-    public function previewAction()
-    {
-        $emotionId = $this->Request()->getParam('emotionId');
-
-        $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
-
-        // The user can preview the emotion for every device.
-        $emotion['devices'] = '0,1,2,3,4';
-
-        $viewAssignments['emotion'] = $emotion;
-        $viewAssignments['hasEmotion'] = (!empty($emotion));
-
-        $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
-
-
-        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
-        $viewAssignments['showListing'] = $showListing;
-
-        $this->View()->assign($viewAssignments);
-
-        //fake to prevent rendering the templates with the widgets module.
-        //otherwise the template engine don't accept to load templates of the `frontend` module
-        $this->Request()->setModuleName('frontend');
+        return ['values' => $data, 'pages' => $pages];
     }
 
     /**
      * @param $numbers
+     *
      * @return array
      */
     private function getProductIdsByNumbers($numbers)
@@ -854,8 +896,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        /**@var $statement PDOStatement */
+        /** @var $statement PDOStatement */
         $statement = $query->execute();
+
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
@@ -889,42 +932,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $pages = 1;
         }
 
-        return array("values" => $data, "pages" => $pages);
-    }
-
-    public function productStreamArticleSliderAction()
-    {
-        $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
-        $limit = (int) $this->Request()->getParam("limit", 5);
-
-        $streamId = $this->Request()->getParam('streamId');
-
-        $pages = $this->Request()->getParam("pages", 1);
-        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
-
-        $maxPages = 0;
-        $max = $this->Request()->getParam("max");
-        if ($limit != 0) {
-            $maxPages = round($max / $limit);
-        } else {
-            $limit = 0;
-        }
-
-        $values = $this->getProductStream($streamId, $offset, $limit);
-
-        $this->View()->assign('articles', $values['values']);
-        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
-        $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
-        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
-        $this->View()->assign('sPerPage', $limit);
+        return ['values' => $data, 'pages' => $pages];
     }
 
     /**
      * Convert media paths to full qualified paths
      *
      * @param array $data
-     * @param int $category
+     * @param int   $category
      * @param array $element
+     *
      * @return array
      */
     private function getHtml5Video($data, $category, $element)

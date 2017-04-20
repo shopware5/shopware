@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Base.model.Country', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/country/fields"}{/block}
+        //{block name="backend/base/model/country/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'iso', type: 'string' },

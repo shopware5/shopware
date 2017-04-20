@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
@@ -61,8 +61,8 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection                    $connection
+     * @param FieldHelper                   $fieldHelper
      * @param Hydrator\ManufacturerHydrator $manufacturerHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
@@ -86,7 +86,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
@@ -101,7 +101,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 
         $this->fieldHelper->addManufacturerTranslation($query, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -112,6 +112,15 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
             $manufacturers[$id] = $this->manufacturerHydrator->hydrate($row);
         }
 
-        return $manufacturers;
+        //sort elements by provided ids, sorting is defined by other queries like `best term match` or `max articles` or `sort alphanumeric`
+        $sorted = [];
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $manufacturers)) {
+                continue;
+            }
+            $sorted[$id] = $manufacturers[$id];
+        }
+
+        return $sorted;
     }
 }

@@ -36,7 +36,7 @@
  */
 //{block name="backend/voucher/view/main/window"}
 Ext.define('Shopware.apps.Voucher.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/main_title}Voucher administration{/s}',
     alias: 'widget.voucher-main-window',
     border: false,

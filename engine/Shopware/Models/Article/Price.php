@@ -24,12 +24,12 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\LazyFetchModelEntity;
 
 /**
  * @category  Shopware
- * @package   Shopware\Models\Article
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -38,68 +38,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Price extends LazyFetchModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-    /**
-     * @var integer $articleId
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
-     */
-    private $articleId;
-
-    /**
-     * @var integer $articleDetailsId
-     * @ORM\Column(name="articledetailsID", type="integer", nullable=false)
-     */
-    private $articleDetailsId;
-
-    /**
-     * @var string $customerGroupKey
-     * @ORM\Column(name="pricegroup", type="string", length=30, nullable=false)
-     */
-    private $customerGroupKey = '';
-
-    /**
-     * @var integer $from
-     *
-     * @ORM\Column(name="`from`", type="integer", nullable=false)
-     */
-    private $from = 0;
-
-    /**
-     * @var integer $to
-     *
-     * @ORM\Column(name="`to`", type="string", nullable=true)
-     */
-    private $to = 'beliebig';
-
-    /**
-     * @var float $price
-     *
-     * @ORM\Column(name="price", type="float", nullable=false)
-     */
-    private $price = 0;
-
-    /**
-     * @var float $pseudoPrice
-     *
-     * @ORM\Column(name="pseudoprice", type="float", nullable=false)
-     */
-    private $pseudoPrice = 0;
-
-    /**
-     * @var float $percent
-     *
-     * @ORM\Column(name="percent", type="float", nullable=false)
-     */
-    private $percent = 0;
-
-    /**
      * OWNING SIDE
+     *
      * @var \Shopware\Models\Article\Detail
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="prices")
      * @ORM\JoinColumn(name="articledetailsID", referencedColumnName="id")
@@ -108,27 +48,91 @@ class Price extends LazyFetchModelEntity
     protected $detail;
 
     /**
-     * @var \Shopware\Models\Customer\Group $customerGroup
-     *
-     * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Group")
-     * @ORM\JoinColumn(name="pricegroup", referencedColumnName="groupkey")
-     */
-    private $customerGroup;
-
-    /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\ArticlePrice
      */
     protected $attribute;
 
     /**
      * OWNING SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\Article
      */
     protected $article;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    /**
+     * @var int
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     */
+    private $articleId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="articledetailsID", type="integer", nullable=false)
+     */
+    private $articleDetailsId;
+
+    /**
+     * @var string
+     * @ORM\Column(name="pricegroup", type="string", length=30, nullable=false)
+     */
+    private $customerGroupKey = '';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="`from`", type="integer", nullable=false)
+     */
+    private $from = 1;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="`to`", type="string", nullable=true)
+     */
+    private $to = 'beliebig';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="price", type="float", nullable=false)
+     */
+    private $price = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pseudoprice", type="float", nullable=false)
+     */
+    private $pseudoPrice = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="percent", type="float", nullable=false)
+     */
+    private $percent = 0;
+
+    /**
+     * @var \Shopware\Models\Customer\Group
+     *
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Group")
+     * @ORM\JoinColumn(name="pricegroup", referencedColumnName="groupkey")
+     */
+    private $customerGroup;
 
     /**
      * @return \Shopware\Models\Article\Article
@@ -139,7 +143,8 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param  \Shopware\Models\Article\Article|array|null $article
+     * @param \Shopware\Models\Article\Article|array|null $article
+     *
      * @return \Shopware\Models\Article\Price
      */
     public function setArticle($article)
@@ -152,7 +157,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -162,7 +167,8 @@ class Price extends LazyFetchModelEntity
     /**
      * Set customerGroup
      *
-     * @param  \Shopware\Models\Customer\Group $customerGroup
+     * @param \Shopware\Models\Customer\Group $customerGroup
+     *
      * @return Price
      */
     public function setCustomerGroup($customerGroup)
@@ -179,13 +185,14 @@ class Price extends LazyFetchModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->fetchLazy($this->customerGroup, array('key' => $this->customerGroupKey));
+        return $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
     }
 
     /**
      * Set from
      *
-     * @param  integer $from
+     * @param int $from
+     *
      * @return Price
      */
     public function setFrom($from)
@@ -198,7 +205,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get from
      *
-     * @return integer
+     * @return int
      */
     public function getFrom()
     {
@@ -208,7 +215,8 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param  int|null $to
+     * @param int|null $to
+     *
      * @return Price
      */
     public function setTo($to)
@@ -224,7 +232,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get to
      *
-     * @return integer|null
+     * @return int|null
      */
     public function getTo()
     {
@@ -234,7 +242,8 @@ class Price extends LazyFetchModelEntity
     /**
      * Set article detail id
      *
-     * @param  Detail $detail
+     * @param Detail $detail
+     *
      * @return Price
      */
     public function setDetail($detail)
@@ -257,7 +266,8 @@ class Price extends LazyFetchModelEntity
     /**
      * Set price
      *
-     * @param  float $price
+     * @param float $price
+     *
      * @return Price
      */
     public function setPrice($price)
@@ -280,7 +290,8 @@ class Price extends LazyFetchModelEntity
     /**
      * Set pseudoPrice
      *
-     * @param  float $pseudoPrice
+     * @param float $pseudoPrice
+     *
      * @return Price
      */
     public function setPseudoPrice($pseudoPrice)
@@ -303,7 +314,8 @@ class Price extends LazyFetchModelEntity
     /**
      * Set percent
      *
-     * @param  float $percent
+     * @param float $percent
+     *
      * @return Price
      */
     public function setPercent($percent)
@@ -332,7 +344,8 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param  \Shopware\Models\Attribute\ArticlePrice|array|null $attribute
+     * @param \Shopware\Models\Attribute\ArticlePrice|array|null $attribute
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setAttribute($attribute)

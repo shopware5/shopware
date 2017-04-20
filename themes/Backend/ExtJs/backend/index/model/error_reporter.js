@@ -26,10 +26,10 @@
  */
 //{block name="backend/index/model/main/error_reporter"}
 Ext.define('Shopware.apps.Index.model.ErrorReporter', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/index/model/main/error_reporter/fields"}{/block}
-		'id', 'message', 'filename', 'linenumber', 'created' ],
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/index/model/main/error_reporter/fields"}{/block}
+        'id', 'message', 'filename', 'linenumber', 'created' ],
     proxy: {
         type: 'ajax',
         api: {

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 
@@ -43,8 +43,8 @@ class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit_Framework_Tes
             );
         }
 
-        $this->apiBaseUrl =  'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', array(sha1('demo')));
+        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
+        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -56,12 +56,12 @@ class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit_Framework_Tes
         $password = sha1('demo');
 
         $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig(array(
-            'curloptions' => array(
-                CURLOPT_HTTPAUTH    => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD     => "$username:$password"
-            )
-        ));
+        $adapter->setConfig([
+            'curloptions' => [
+                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD => "$username:$password",
+            ],
+        ]);
 
         $client = new Zend_Http_Client();
         $client->setAdapter($adapter);

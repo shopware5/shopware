@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EnlightLoaderTest extends TestCase
@@ -39,7 +39,7 @@ class EnlightLoaderTest extends TestCase
     public function testEnlightLoaderCheckFile()
     {
         $this->assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
-        $this->assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'."\0"));
+        $this->assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php' . "\0"));
     }
 
     /**
@@ -82,5 +82,48 @@ class EnlightLoaderTest extends TestCase
         \Enlight_Loader::setIncludePath($old);
 
         $this->assertFalse($found);
+    }
+
+    /**
+     * Test realpath abstraction
+     *
+     * @dataProvider dataProviderRealpath
+     */
+    public function testRealpath($path, $expected)
+    {
+        $oldCWD = getcwd();
+        chdir(__DIR__);
+
+        $result = \Enlight_Loader::realpath($path);
+        $this->assertEquals($expected, $result);
+
+        chdir($oldCWD);
+    }
+
+    /**
+     * Provide test cases
+     *
+     * @return array
+     */
+    public function dataProviderRealpath()
+    {
+        return [
+            // Nonexisting paths
+            ['/nonexisting', false],
+            ['../nonexisting', false],
+            ['nonexisting', false],
+            [' ', false],
+
+            // Relative paths
+            ['', __DIR__],
+            ['./', __DIR__],
+            ['../', dirname(__DIR__)],
+            ['Bundle/MediaBundle/Strategy/../../', __DIR__ . '/Bundle'],
+
+            // Absolute paths
+            ['/', '/'],
+            [__DIR__ . '/', __DIR__],
+            [__DIR__ . '/tests/..', __DIR__],
+        ];
     }
 }

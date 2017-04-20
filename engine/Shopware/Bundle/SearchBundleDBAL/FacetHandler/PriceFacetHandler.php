@@ -25,19 +25,19 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
-use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
-use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
+use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceFacetHandler implements FacetHandlerInterface
@@ -48,7 +48,7 @@ class PriceFacetHandler implements FacetHandlerInterface
     private $priceHelper;
 
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -68,14 +68,14 @@ class PriceFacetHandler implements FacetHandlerInterface
     private $maxFieldName;
 
     /**
-     * @param PriceHelperInterface $priceHelper
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param PriceHelperInterface                 $priceHelper
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         PriceHelperInterface $priceHelper,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
@@ -97,13 +97,14 @@ class PriceFacetHandler implements FacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof Facet\PriceFacet);
+        return $facet instanceof Facet\PriceFacet;
     }
 
     /**
      * @param FacetInterface|Facet\PriceFacet $facet
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param Criteria                        $criteria
+     * @param ShopContextInterface            $context
+     *
      * @return RangeFacetResult
      */
     public function generateFacet(
@@ -126,9 +127,9 @@ class PriceFacetHandler implements FacetHandlerInterface
         $selection = $this->priceHelper->getSelection($context);
         $this->priceHelper->joinPrices($query, $context);
 
-        $query->select('MIN('. $selection .') as cheapest_price');
+        $query->select('MIN(' . $selection . ') as cheapest_price');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $min = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -138,7 +139,7 @@ class PriceFacetHandler implements FacetHandlerInterface
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $max = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -146,7 +147,7 @@ class PriceFacetHandler implements FacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /**@var $condition PriceCondition */
+        /** @var $condition PriceCondition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $activeMin = $condition->getMinPrice();
             $activeMax = $condition->getMaxPrice();

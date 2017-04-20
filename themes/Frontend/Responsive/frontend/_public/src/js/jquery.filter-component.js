@@ -246,7 +246,7 @@
         /**
          * Closes the component flyout panel.
          */
-        close: function()  {
+        close: function() {
             var me = this;
 
             me.$el.removeClass(me.opts.collapseCls);

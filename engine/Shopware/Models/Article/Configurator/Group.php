@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Article\Configurator;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -36,7 +35,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Group extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var \Shopware\Models\Article\Configurator\Set
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="groups")
+     */
+    protected $sets;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Option", mappedBy="group", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    protected $options;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorGroup", mappedBy="configuratorGroup", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ConfiguratorGroup
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -57,22 +77,10 @@ class Group extends ModelEntity
     private $description = null;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
-
-    /**
-     * @var \Shopware\Models\Article\Configurator\Set
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="groups")
-     */
-    protected $sets;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Option", mappedBy="group", orphanRemoval=true, cascade={"persist"})
-     * @var ArrayCollection
-     */
-    protected $options;
 
     /**
      * Class constructor, initials the array collections for the associations.
@@ -165,10 +173,29 @@ class Group extends ModelEntity
 
     /**
      * @param $options
+     *
      * @return Group
      */
     public function setOptions($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\ConfiguratorGroup|array|null $attribute
+     *
+     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ConfiguratorGroup', 'attribute', 'configuratorGroup');
     }
 }

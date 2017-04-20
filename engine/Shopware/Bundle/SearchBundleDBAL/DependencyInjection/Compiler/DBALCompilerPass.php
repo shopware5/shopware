@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler;
 
 use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DBALCompilerPass implements CompilerPassInterface
@@ -42,7 +42,7 @@ class DBALCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware_search.product_number_search', 'facet_handler_dbal', 3);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_search.product_number_search', 'facet_handler_dbal', 2);
         $this->replaceArgumentWithTaggedServices($container, 'shopware_searchdbal.dbal_query_builder_factory', 'condition_handler_dbal', 2);
         $this->replaceArgumentWithTaggedServices($container, 'shopware_searchdbal.dbal_query_builder_factory', 'sorting_handler_dbal', 3);
     }

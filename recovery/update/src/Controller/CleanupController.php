@@ -25,9 +25,9 @@
 namespace Shopware\Recovery\Update\Controller;
 
 use DirectoryIterator;
-use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Shopware\Recovery\Update\Cleanup;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DummyPluginFinder;
 use Shopware\Recovery\Update\Utils;
@@ -38,7 +38,7 @@ use SplFileInfo;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Update\Controller
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CleanupController
@@ -79,50 +79,56 @@ class CleanupController
     private $conn;
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @param DummyPluginFinder $pluginFinder
+     * @var string
+     */
+    private $backupDirectory;
+
+    /**
+     * @var Cleanup
+     */
+    private $cleanupService;
+
+    /**
+     * @param Request            $request
+     * @param Response           $response
+     * @param DummyPluginFinder  $pluginFinder
      * @param CleanupFilesFinder $filesFinder
-     * @param Slim $app
-     * @param string $shopwarePath
-     * @param \PDO $conn
+     * @param Slim               $app
+     * @param string             $shopwarePath
+     * @param \PDO               $conn
+     * @param string             $backupDir
      */
     public function __construct(
         Request $request,
         Response $response,
         DummyPluginFinder $pluginFinder,
         CleanupFilesFinder $filesFinder,
+        Cleanup $cleanupService,
         Slim $app,
         $shopwarePath,
-        \PDO $conn
+        \PDO $conn,
+        $backupDir
     ) {
         $this->request = $request;
         $this->response = $response;
         $this->app = $app;
         $this->pluginFinder = $pluginFinder;
         $this->filesFinder = $filesFinder;
+        $this->cleanupService = $cleanupService;
         $this->shopwarePath = $shopwarePath;
         $this->conn = $conn;
+        $this->backupDirectory = $backupDir;
     }
 
     public function cleanupOldFiles()
     {
         $_SESSION['DB_DONE'] = true;
 
-        $cleanupList = array_merge(
-            $this->pluginFinder->getDummyPlugins(),
-            $this->filesFinder->getCleanupFiles()
-        );
+        $cleanupList = $this->getCleanupList();
 
         if ($this->request->isPost()) {
             $this->cleanupMedia();
         }
-
-        $cacheDirectoryList = $this->getCacheDirectoryList();
-        $cleanupList = array_merge(
-            $cacheDirectoryList,
-            $cleanupList
-        );
 
         if (count($cleanupList) == 0) {
             $_SESSION['CLEANUP_DONE'] = true;
@@ -162,6 +168,15 @@ class CleanupController
         }
     }
 
+    /**
+     * Deletes outdated folders from earlier shopware versions.
+     */
+    public function deleteOutdatedFolders()
+    {
+        echo $this->cleanupService->cleanup();
+        exit();
+    }
+
     private function cleanupMedia()
     {
         $mediaPath = $this->shopwarePath . '/media/image';
@@ -188,9 +203,9 @@ class CleanupController
             }
 
             if ($isThumbnail) {
-                rename($a->getPathname(), $thumbnailPath . "/" . $a->getFilename());
+                rename($a->getPathname(), $thumbnailPath . '/' . $a->getFilename());
             } else {
-                rename($a->getPathname(), $mediaPath . "/" . $a->getFilename());
+                rename($a->getPathname(), $mediaPath . '/' . $a->getFilename());
             }
         }
     }
@@ -217,7 +232,7 @@ SQL;
             return;
         }
 
-        $sql = "SELECT id FROM `s_core_templates` WHERE version = 3 AND parent_id IS NOT NULL ORDER BY id ASC LIMIT 1";
+        $sql = 'SELECT id FROM `s_core_templates` WHERE version = 3 AND parent_id IS NOT NULL ORDER BY id ASC LIMIT 1';
         $templateId = $this->conn->query($sql)->fetchColumn();
 
         foreach ($affectedShops as $shop) {
@@ -240,62 +255,47 @@ SQL;
      */
     private function updateShopConfig($field, $value, $shopId)
     {
-        $this->conn->prepare("UPDATE `s_core_shops` SET " . $field . " = :newValue WHERE id = :shopId")
+        $this->conn->prepare('UPDATE `s_core_shops` SET ' . $field . ' = :newValue WHERE id = :shopId')
             ->execute([
                 ':newValue' => $value,
-                ':shopId' => $shopId
+                ':shopId' => $shopId,
             ]);
     }
 
     /**
-     * @return DirectoryIterator
+     * @param string $path
+     *
+     * @return array|DirectoryIterator
      */
-    private function getCacheDirectoryIterator()
+    private function getDirectoryIterator($path)
     {
-        $cacheDirectory = $this->shopwarePath . '/var/cache';
-
-        return new DirectoryIterator($cacheDirectory);
-    }
-
-    /**
-     * Deletes outdated cache folders from earlier shopware versions.
-     */
-    public function deleteOutdatedCacheFolders()
-    {
-        /** @var DirectoryIterator $cacheDirectoryIterator */
-        $cacheDirectoryIterator = $this->getCacheDirectoryIterator();
-
-        $endTime = time() + 5;
-        $deletedFileCount = 0;
-
-        foreach ($cacheDirectoryIterator as $directory) {
-            if ($directory->isDot() || $directory->isFile()) {
-                continue;
-            }
-
-            $iterator = new RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($directory->getPath(), FilesystemIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-
-            /** @var $path \SplFileInfo */
-            foreach ($iterator as $path) {
-                if ($path->getFilename() == '.gitkeep') {
-                    continue;
-                }
-
-                $path->isFile() ? @unlink($path->getPathname()) : @rmdir($path->getPathname());
-                $deletedFileCount++;
-
-                if ($endTime < time()) {
-                    echo json_encode(['deletedFiles' => $deletedFileCount, 'ready' => false, 'error' => false]);
-                    exit();
-                }
-            }
+        if (is_dir($path)) {
+            return new DirectoryIterator($path);
         }
 
-        echo json_encode(['deletedFiles' => $deletedFileCount, 'ready' => true, 'error' => false]);
-        exit();
+        return [];
+    }
+
+    private function getCleanupList()
+    {
+        $cleanupList = array_merge(
+            $this->pluginFinder->getDummyPlugins(),
+            $this->filesFinder->getCleanupFiles()
+        );
+
+        $cacheDirectoryList = $this->getCacheDirectoryList();
+        $cleanupList = array_merge(
+            $cacheDirectoryList,
+            $cleanupList
+        );
+
+        $temporaryBackupDirectories = $this->getTemporaryBackupDirectoryList();
+        $cleanupList = array_merge(
+            $temporaryBackupDirectories,
+            $cleanupList
+        );
+
+        return $cleanupList;
     }
 
     /**
@@ -305,10 +305,26 @@ SQL;
      */
     private function getCacheDirectoryList()
     {
-        $cacheDirectories = $this->getCacheDirectoryIterator();
+        $cacheDirectories = $this->getDirectoryIterator($this->shopwarePath . '/var/cache');
 
         $directoryNames = [];
         foreach ($cacheDirectories as $directory) {
+            if ($directory->isDot() || $directory->isFile()) {
+                continue;
+            }
+
+            $directoryNames[] = $directory->getRealPath();
+        }
+
+        return $directoryNames;
+    }
+
+    private function getTemporaryBackupDirectoryList()
+    {
+        $directories = $this->getDirectoryIterator($this->backupDirectory);
+
+        $directoryNames = [];
+        foreach ($directories as $directory) {
             if ($directory->isDot() || $directory->isFile()) {
                 continue;
             }

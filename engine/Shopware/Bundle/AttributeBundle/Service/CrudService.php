@@ -29,7 +29,7 @@ use Shopware\Models\Attribute\Configuration;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CrudService
@@ -59,10 +59,11 @@ class CrudService
 
     /**
      * CrudService constructor.
-     * @param ModelManager $entityManager
+     *
+     * @param ModelManager   $entityManager
      * @param SchemaOperator $schemaOperator
-     * @param TableMapping $tableMapping
-     * @param TypeMapping $typeMapping
+     * @param TableMapping   $tableMapping
+     * @param TypeMapping    $typeMapping
      */
     public function __construct(
         ModelManager $entityManager,
@@ -79,7 +80,8 @@ class CrudService
     /**
      * @param string $table
      * @param string $column
-     * @param bool $updateDependingTables
+     * @param bool   $updateDependingTables
+     *
      * @throws \Exception
      */
     public function delete($table, $column, $updateDependingTables = false)
@@ -87,7 +89,7 @@ class CrudService
         $column = $this->formatColumnName($column);
 
         if (!$this->tableMapping->isTableColumn($table, $column)) {
-            throw new \Exception(sprintf('Table %s has no column with name %s', $table, $column));
+            throw new \RuntimeException(sprintf('Table %s has no column with name %s', $table, $column));
         }
 
         $this->schemaOperator->dropColumn($table, $column);
@@ -96,7 +98,7 @@ class CrudService
 
         $entity = $repository->findOneBy([
             'tableName' => $table,
-            'columnName' => $column
+            'columnName' => $column,
         ]);
 
         if ($entity) {
@@ -108,20 +110,21 @@ class CrudService
             return;
         }
 
-        $tables = $this->tableMapping->getDependingTables($table);
-        foreach ($tables as $table) {
-            $this->delete($table, $column);
+        $dependingTables = $this->tableMapping->getDependingTables($table);
+        foreach ($dependingTables as $dependingTable) {
+            $this->delete($dependingTable, $column);
         }
     }
 
     /**
-     * @param string $table
-     * @param string $columnName
-     * @param string $unifiedType
-     * @param array $data
-     * @param null $newColumnName
-     * @param bool $updateDependingTables
+     * @param string                $table
+     * @param string                $columnName
+     * @param string                $unifiedType
+     * @param array                 $data
+     * @param null|string           $newColumnName
+     * @param bool                  $updateDependingTables
      * @param null|string|int|float $defaultValue
+     *
      * @throws \Exception
      */
     public function update(
@@ -134,32 +137,30 @@ class CrudService
         $defaultValue = null
     ) {
         $columnName = $this->formatColumnName($columnName);
-        $newColumnName = $this->formatColumnName($newColumnName);
+        $newColumnName = $newColumnName ? $this->formatColumnName($newColumnName) : $columnName;
 
         $config = $this->get($table, $columnName);
 
         if (!$config) {
             $this->createAttribute($table, $columnName, $unifiedType, $data, $defaultValue);
-            return;
+        } else {
+            $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data, $defaultValue);
         }
-
-        $newColumnName = $newColumnName?: $columnName;
-
-        $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data, $defaultValue);
 
         if (!$updateDependingTables) {
             return;
         }
 
-        $tables = $this->tableMapping->getDependingTables($table);
-        foreach ($tables as $table) {
-            $this->update($table, $columnName, $unifiedType, $data, $newColumnName, false, $defaultValue);
+        $dependingTables = $this->tableMapping->getDependingTables($table);
+        foreach ($dependingTables as $dependingTable) {
+            $this->update($dependingTable, $columnName, $unifiedType, $data, $newColumnName, false, $defaultValue);
         }
     }
 
     /**
      * @param string $table
      * @param string $columnName
+     *
      * @return ConfigurationStruct|null
      */
     public function get($table, $columnName)
@@ -178,6 +179,7 @@ class CrudService
 
     /**
      * @param string $table
+     *
      * @return ConfigurationStruct[]
      */
     public function getList($table)
@@ -218,6 +220,7 @@ class CrudService
                 $item->setSqlType($this->typeMapping->unifiedToSQL($item->getColumnType()));
                 $item->setEntity($config['entity']);
                 $item->setArrayStore($config['arrayStore']);
+                $item->setElasticSearchType($this->typeMapping->unifiedToElasticSearch($config['columnType']));
                 $item->setDefaultValue($config['defaultValue']);
             }
             $items[] = $item;
@@ -227,6 +230,7 @@ class CrudService
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getColumnName(), $b->getColumnName());
             }
+
             return $a->getPosition() > $b->getPosition();
         });
 
@@ -235,7 +239,7 @@ class CrudService
 
     /**
      * @param int|null $id
-     * @param array $data
+     * @param array    $data
      */
     private function updateConfig($id = null, array $data)
     {
@@ -259,25 +263,27 @@ class CrudService
     }
 
     /**
-     * @param ConfigurationStruct $config
-     * @param string $name
-     * @param string $type
+     * @param ConfigurationStruct   $config
+     * @param string                $name
+     * @param string                $type
      * @param null|string|int|float $defaultValue
+     *
      * @return bool
      */
     private function schemaChanged(ConfigurationStruct $config, $name, $type, $defaultValue = null)
     {
-        return (
+        return
             $config->getColumnType() !== $type
             ||
             $config->getColumnName() !== $name
             ||
             $config->getDefaultValue() != $defaultValue
-        );
+        ;
     }
 
     /**
      * @param string $table
+     *
      * @return array
      */
     private function getTableConfiguration($table)
@@ -293,11 +299,12 @@ class CrudService
     }
 
     /**
-     * @param string $table
-     * @param string $column
-     * @param string $unifiedType
+     * @param string                $table
+     * @param string                $column
+     * @param string                $unifiedType
      * @param null|string|int|float $defaultValue
-     * @param array $data
+     * @param array                 $data
+     *
      * @throws \Exception
      */
     private function createAttribute($table, $column, $unifiedType, array $data = [], $defaultValue = null)
@@ -312,7 +319,7 @@ class CrudService
         $data = array_merge($data, [
             'tableName' => $table,
             'columnName' => $column,
-            'columnType' => $unifiedType
+            'columnType' => $unifiedType,
         ]);
 
         $configId = null;
@@ -324,23 +331,30 @@ class CrudService
     }
 
     /**
-     * @param string $table
-     * @param string $originalColumnName
-     * @param string $newColumnName
-     * @param string $unifiedType
+     * @param string                $table
+     * @param string                $originalColumnName
+     * @param string                $newColumnName
+     * @param string                $unifiedType
      * @param null|string|int|float $defaultValue
-     * @param array $data
+     * @param array                 $data
+     *
      * @throws \Exception
      */
-    private function changeAttribute($table, $originalColumnName, $newColumnName, $unifiedType, array $data = [], $defaultValue = null)
-    {
+    private function changeAttribute(
+        $table,
+        $originalColumnName,
+        $newColumnName,
+        $unifiedType,
+        array $data = [],
+        $defaultValue = null
+    ) {
         $config = $this->get($table, $originalColumnName);
 
         $data = array_merge($data, [
             'tableName' => $table,
             'columnName' => $newColumnName,
             'columnType' => $unifiedType,
-            'defaultValue' => $defaultValue
+            'defaultValue' => $defaultValue,
         ]);
 
         $this->updateConfig($config->getId(), $data);
@@ -366,9 +380,8 @@ class CrudService
     }
 
     /**
-     * @param string $type
+     * @param string                $type
      * @param null|string|int|float $defaultValue
-     * @return null
      */
     private function parseDefaultValue($type, $defaultValue)
     {
@@ -392,6 +405,7 @@ class CrudService
      * Process the column name to handle edge cases
      *
      * @param string $column
+     *
      * @return string
      */
     private function formatColumnName($column)

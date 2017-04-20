@@ -29,17 +29,16 @@ use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 {
     /**
-     * @var \Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory
+     * @var \Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -49,29 +48,21 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $facetHandlers;
 
     /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
-
-    /**
      * @var \Enlight_Event_EventManager
      */
     private $eventManager;
 
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
-     * @param AttributeHydrator $attributeHydrator
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param FacetHandlerInterface[] $facetHandlers
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param \Enlight_Event_EventManager  $eventManager
+     * @param FacetHandlerInterface[]      $facetHandlers
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
-        AttributeHydrator $attributeHydrator,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Enlight_Event_EventManager $eventManager,
         $facetHandlers = []
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->attributeHydrator = $attributeHydrator;
         $this->facetHandlers = $facetHandlers;
         $this->eventManager = $eventManager;
         $this->facetHandlers = $this->registerFacetHandlers();
@@ -86,7 +77,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * to add their own handler classes.
      *
      * @param SearchBundle\Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
+     *
      * @return SearchBundle\ProductNumberSearchResult
      */
     public function search(SearchBundle\Criteria $criteria, ShopContextInterface $context)
@@ -95,26 +87,24 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
         $products = $this->getProducts($query);
 
-        $total = $this->getTotalCount($query);
+        $total = count($products);
+        if ($criteria->fetchCount()) {
+            $total = $this->getTotalCount($query);
+        }
 
         $facets = $this->createFacets($criteria, $context);
 
-        $result = new SearchBundle\ProductNumberSearchResult(
-            $products,
-            intval($total),
-            $facets
-        );
-
-        return $result;
+        return new SearchBundle\ProductNumberSearchResult($products, (int) $total, $facets);
     }
 
     /**
      * @param QueryBuilder $query
+     *
      * @return array
      */
     private function getProducts(QueryBuilder $query)
     {
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -139,6 +129,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * Calculated the total count of the whole search result.
      *
      * @param QueryBuilder $query
+     *
      * @return int
      */
     private function getTotalCount($query)
@@ -148,9 +139,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
     /**
      * @param SearchBundle\Criteria $criteria
-     * @param ShopContextInterface $context
-     * @return SearchBundle\FacetResultInterface[]
+     * @param ShopContextInterface  $context
+     *
      * @throws \Exception
+     *
+     * @return SearchBundle\FacetResultInterface[]
      */
     private function createFacets(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
@@ -193,7 +186,9 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
     /**
      * @param SearchBundle\FacetInterface $facet
+     *
      * @throws \Exception
+     *
      * @return FacetHandlerInterface
      */
     private function getFacetHandler(SearchBundle\FacetInterface $facet)
@@ -204,12 +199,12 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             }
         }
 
-        throw new \Exception(sprintf("Facet %s not supported", get_class($facet)));
+        throw new \Exception(sprintf('Facet %s not supported', get_class($facet)));
     }
 
     /**
      * @param ArrayCollection $objects
-     * @param string $class
+     * @param string          $class
      */
     private function assertCollectionIsInstanceOf(ArrayCollection $objects, $class)
     {

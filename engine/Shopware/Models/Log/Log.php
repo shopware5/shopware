@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Log;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Model Log
@@ -38,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Log extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -47,56 +47,56 @@ class Log extends ModelEntity
     private $id;
 
     /**
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
      */
     private $type;
 
     /**
-     * @var string $key
+     * @var string
      *
      * @ORM\Column(name="`key`", type="string", length=255, nullable=false)
      */
     private $key;
 
     /**
-     * @var string $text
+     * @var string
      *
      * @ORM\Column(name="text", type="text", nullable=false)
      */
     private $text;
 
     /**
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     private $date;
 
     /**
-     * @var string $user
+     * @var string
      *
      * @ORM\Column(name="user", type="string", length=255, nullable=false)
      */
     private $user;
 
     /**
-     * @var string $ipAddress
+     * @var string
      *
      * @ORM\Column(name="ip_address", type="string", length=255, nullable=false)
      */
     private $ipAddress;
 
     /**
-     * @var string $userAgent
+     * @var string
      *
      * @ORM\Column(name="user_agent", type="string", length=255, nullable=false)
      */
     private $userAgent;
 
     /**
-     * @var string $value4
+     * @var string
      *
      * @ORM\Column(name="value4", type="string", length=255, nullable=false)
      */
@@ -105,7 +105,7 @@ class Log extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -116,11 +116,13 @@ class Log extends ModelEntity
      * Set type
      *
      * @param string $type
+     *
      * @return Log
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -138,11 +140,13 @@ class Log extends ModelEntity
      * Set key
      *
      * @param string $key
+     *
      * @return Log
      */
     public function setKey($key)
     {
         $this->key = $key;
+
         return $this;
     }
 
@@ -160,11 +164,13 @@ class Log extends ModelEntity
      * Set text
      *
      * @param string $text
+     *
      * @return Log
      */
     public function setText($text)
     {
         $this->text = $text;
+
         return $this;
     }
 
@@ -182,11 +188,13 @@ class Log extends ModelEntity
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return Log
      */
     public function setDate($date)
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -204,11 +212,13 @@ class Log extends ModelEntity
      * Set user
      *
      * @param string $user
+     *
      * @return Log
      */
     public function setUser($user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -226,11 +236,13 @@ class Log extends ModelEntity
      * Set ip_address
      *
      * @param string $ipAddress
+     *
      * @return Log
      */
     public function setIpAddress($ipAddress)
     {
         $this->ipAddress = $ipAddress;
+
         return $this;
     }
 
@@ -248,11 +260,13 @@ class Log extends ModelEntity
      * Set userAgent
      *
      * @param string $userAgent
+     *
      * @return Log
      */
     public function setUserAgent($userAgent)
     {
         $this->userAgent = $userAgent;
+
         return $this;
     }
 
@@ -270,11 +284,13 @@ class Log extends ModelEntity
      * Set value4
      *
      * @param string $value4
+     *
      * @return Log
      */
     public function setValue4($value4)
     {
         $this->value4 = $value4;
+
         return $this;
     }
 

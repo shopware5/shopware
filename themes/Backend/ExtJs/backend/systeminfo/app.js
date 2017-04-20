@@ -32,24 +32,24 @@
  */
 //{block name="backend/systeminfo/app"}
 Ext.define('Shopware.apps.Systeminfo', {
-	/**
-	* Extends from our special controller, which handles the
-	* sub-application behavior and the event bus
-	* @string
-	*/
+    /**
+    * Extends from our special controller, which handles the
+    * sub-application behavior and the event bus
+    * @string
+    */
     extend : 'Enlight.app.SubApplication',
-	/**
-	* The name of the module. Used for internal purpose
-	* @string
-	*/
-	name: 'Shopware.apps.Systeminfo',
-	/**
-	* Sets the loading path for the sub-application.
-	*
-	* Note that you'll need a "loadAction" in your
-	* controller (server-side)
-	* @string
-	*/
+    /**
+    * The name of the module. Used for internal purpose
+    * @string
+    */
+    name: 'Shopware.apps.Systeminfo',
+    /**
+    * Sets the loading path for the sub-application.
+    *
+    * Note that you'll need a "loadAction" in your
+    * controller (server-side)
+    * @string
+    */
     loadPath : '{url controller="systeminfo" action=load}',
     /**
      * Enable bulk loading
@@ -73,10 +73,10 @@ Ext.define('Shopware.apps.Systeminfo', {
     */
     models: [ 'Config', 'Path', 'File', 'Version', 'Encoder' ],
 
-	/**
-	* Requires controllers for sub-application
-	* @array
-	*/
+    /**
+    * Requires controllers for sub-application
+    * @array
+    */
     controllers : [ 'Systeminfo', 'Main' ],
         /**
      * Returns the main application window for this is expected

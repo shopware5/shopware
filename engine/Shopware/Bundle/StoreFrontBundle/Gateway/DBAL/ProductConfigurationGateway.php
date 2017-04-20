@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductConfigurationGateway implements Gateway\ProductConfigurationGatewayInterface
@@ -61,8 +61,8 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection                    $connection
+     * @param FieldHelper                   $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -86,7 +86,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
@@ -102,7 +102,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $query = $this->getQuery($ids, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
@@ -118,6 +118,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     /**
      * @param $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery($ids, Struct\ShopContextInterface $context)
@@ -132,6 +133,8 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
             ->innerJoin('relations', 's_articles_details', 'variants', 'variants.id = relations.article_id')
             ->innerJoin('relations', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.id = relations.option_id')
             ->innerJoin('configuratorOption', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = configuratorOption.group_id')
+            ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
+            ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
             ->where('relations.article_id IN (:ids)')
             ->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.id')
@@ -139,6 +142,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
         $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
+
         return $query;
     }
 }

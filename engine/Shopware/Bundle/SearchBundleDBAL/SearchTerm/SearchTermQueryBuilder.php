@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
@@ -63,10 +63,10 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
-     * @param KeywordFinderInterface $keywordFinder
-     * @param SearchIndexerInterface $searchIndexer
-     * @param TermHelperInterface $termHelper
+     * @param Connection                  $connection
+     * @param KeywordFinderInterface      $keywordFinder
+     * @param SearchIndexerInterface      $searchIndexer
+     * @param TermHelperInterface         $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -85,20 +85,11 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     }
 
     /**
-     * @return string
-     */
-    private function getRelevanceSelection()
-    {
-        return 'sr.relevance
-        + IF(a.topseller = 1, 50, 0)
-        + IF(a.datum >= DATE_SUB(NOW(),INTERVAL 7 DAY), 25, 0)';
-    }
-
-    /**
      * Required table fields:
      *  - product_id : id of the product, used as join
      *
      * @param $term
+     *
      * @return QueryBuilder|null
      */
     public function buildQuery($term)
@@ -121,8 +112,8 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
         $query->select(
             [
-                "a.id as product_id",
-                "(" . $this->getRelevanceSelection() . ") as ranking"
+                'a.id as product_id',
+                '(' . $this->getRelevanceSelection() . ') as ranking',
             ]
         );
 
@@ -135,10 +126,21 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     }
 
     /**
+     * @return string
+     */
+    private function getRelevanceSelection()
+    {
+        return 'sr.relevance
+        + IF(a.topseller = 1, 50, 0)
+        + IF(a.datum >= DATE_SUB(NOW(),INTERVAL 7 DAY), 25, 0)';
+    }
+
+    /**
      * Generates a single query builder from the provided keywords array.
      *
      * @param Keyword[] $keywords
      * @param $tables
+     *
      * @return QueryBuilder
      */
     private function buildQueryFromKeywords($keywords, $tables)
@@ -180,13 +182,13 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
         $subQuery = $this->connection->createQueryBuilder();
         $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance', 'COUNT(DISTINCT term) as termCount']);
-        $subQuery->from("(" . $tablesSql . ')', 'srd')
+        $subQuery->from('(' . $tablesSql . ')', 'srd')
             ->groupBy('srd.articleID')
             ->orderBy('relevance', 'DESC')
             ->setMaxResults(5000);
 
         $query = $this->connection->createQueryBuilder();
-        $query->from("(" . $subQuery->getSQL() . ')', 'sr')
+        $query->from('(' . $subQuery->getSQL() . ')', 'sr')
             ->innerJoin('sr', 's_articles', 'a', 'a.id = sr.articleID');
 
         return $query;
@@ -201,7 +203,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private function addToleranceCondition(QueryBuilder $query)
     {
         $distance = $this->config->get('fuzzySearchMinDistancenTop', 20);
-        $query->select("MAX(" . $this->getRelevanceSelection() . ") / 100 * $distance");
+        $query->select('MAX(' . $this->getRelevanceSelection() . ") / 100 * $distance");
 
         //calculates the tolerance limit
         if ($distance) {
@@ -236,7 +238,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      * checks if the given result set matches all search terms
      *
      * @param QueryBuilder $query
-     * @param string $term
+     * @param string       $term
      */
     private function addAndSearchLogic($query, $term)
     {

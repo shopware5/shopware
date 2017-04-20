@@ -39,17 +39,19 @@ class ControllerPathListener
      */
     public function addController($event, $path)
     {
-        $this->controllers[$event] = $path;
+        $this->controllers[strtolower($event)] = $path;
     }
 
     /**
      * @param Enlight_Event_EventArgs $args
+     *
      * @return string
      */
     public function getControllerPath(Enlight_Event_EventArgs $args)
     {
-        if (array_key_exists($args->getName(), $this->controllers)) {
-            return $this->controllers[$args->getName()];
+        $name = strtolower($args->getName());
+        if (array_key_exists($name, $this->controllers)) {
+            return $this->controllers[$name];
         }
 
         return null;

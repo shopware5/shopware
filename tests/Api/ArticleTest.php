@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 
@@ -43,8 +43,8 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
             );
         }
 
-        $this->apiBaseUrl =  'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', array(sha1('demo')));
+        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
+        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -56,12 +56,12 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $password = sha1('demo');
 
         $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig(array(
-            'curloptions' => array(
-                CURLOPT_HTTPAUTH    => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD     => "$username:$password"
-            )
-        ));
+        $adapter->setConfig([
+            'curloptions' => [
+                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD => "$username:$password",
+            ],
+        ]);
 
         $client = new Zend_Http_Client();
         $client->setAdapter($adapter);
@@ -113,7 +113,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
 
-        $requestData = array(
+        $requestData = [
             'name' => 'Testartikel',
             'description' => 'Test description',
             'descriptionLong' => 'Test descriptionLong',
@@ -124,192 +124,189 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
             'filterGroupId' => 1,
 
-            'propertyValues' => array(
-                array(
+            'propertyValues' => [
+                [
                     'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
                     'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption'.uniqid(rand())
-                    )
-                )
-            ),
+                    'option' => [
+                        'name' => 'neueOption' . uniqid(rand()),
+                    ],
+                ],
+            ],
 
-            'mainDetail' => array(
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
 
-                'attribute' => array(
+                'attribute' => [
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
-                ),
+                ],
 
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
 
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 1,
                         'to' => 20,
                         'price' => 500,
-                    ),
-                    array(
+                    ],
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                    ),
-                )
-            ),
+                    ],
+                ],
+            ],
 
-            'configuratorSet' => array(
+            'configuratorSet' => [
                 'name' => 'MeinKonf',
-                'groups' => array(
-                    array(
+                'groups' => [
+                    [
                         'name' => 'Farbe',
-                        'options' => array(
-                            array( 'name' => 'Gelb'),
-                            array( 'name' => 'Grün')
-                        )
-                    ),
-                    array(
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'Grün'],
+                        ],
+                    ],
+                    [
                         'name' => 'Gräße',
-                        'options' => array(
-                            array( 'name' => 'L'),
-                            array( 'name' => 'XL')
-                        )
-                    ),
-                )
-            ),
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
 
-            'images' => array(
-                array('link' => 'http://assets.shopware.com/sw_logo_white.png'),
-                array('link' => 'http://assets.shopware.com/sw_logo_white.png')
-            ),
+            'images' => [
+                ['link' => 'http://assets.shopware.com/sw_logo_white.png'],
+                ['link' => 'http://assets.shopware.com/sw_logo_white.png'],
+            ],
 
-            'variants' => array(
-                array(
+            'variants' => [
+                [
                     'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
+                        'name' => 'newUnit',
+                    ],
 
-                    'attribute' => array(
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
+                    ],
 
-                    'configuratorOptions' => array(
-                        array(
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Gelb',
-                            'group' => 'Farbe'
-                        ),
-                        array(
+                            'group' => 'Farbe',
+                        ],
+                        [
                             'option' => 'XL',
-                            'group' => 'Größe'
-                        )
-
-                    ),
+                            'group' => 'Größe',
+                        ],
+                    ],
 
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
                     'purchaseSteps' => 2,
 
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
-                    'unit' => array(
+                    'unit' => [
                         'unit' => 'xyz',
-                        'name' => 'newUnit'
-                    ),
+                        'name' => 'newUnit',
+                    ],
 
-                    'attribute' => array(
+                    'attribute' => [
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
-                    ),
+                    ],
 
-                    'configuratorOptions' => array(
-                        array(
+                    'configuratorOptions' => [
+                        [
                             'option' => 'Grün',
-                            'group' => 'Farbe'
-                        ),
-                        array(
+                            'group' => 'Farbe',
+                        ],
+                        [
                             'option' => 'XL',
-                            'group' => 'Größe'
-                        )
-
-                    ),
+                            'group' => 'Größe',
+                        ],
+                    ],
 
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
                     'purchaseSteps' => 2,
 
-                    'prices' => array(
-                        array(
+                    'prices' => [
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 1,
                             'to' => 20,
                             'price' => 500,
-                        ),
-                        array(
+                        ],
+                        [
                             'customerGroupKey' => 'H',
                             'from' => 21,
                             'to' => '-',
                             'price' => 400,
-                        ),
-                    )
+                        ],
+                    ],
+                ],
+            ],
 
-                )
-            ),
+            'taxId' => 1,
+            'supplierId' => 2,
 
-            'taxId'        => 1,
-            'supplierId'   => 2,
+            'similar' => [
+                ['id' => 5],
+                ['id' => 6],
+            ],
 
-            'similar' => array(
-                array('id' => 5),
-                array('id' => 6),
-            ),
+            'categories' => [
+                ['id' => 15],
+                ['id' => 10],
+            ],
 
-            'categories' => array(
-                array('id' => 15),
-                array('id' => 10),
-            ),
+            'related' => [
+                ['id' => 3, 'cross' => true],
+                ['id' => 4],
+            ],
 
-            'related' => array(
-                array('id' => 3, 'cross' => true),
-                array('id' => 4),
-            ),
-
-            'links' => array(
-                array('name' => 'foobar', 'link' => 'http://example.org'),
-                array('name' => 'Video', 'link' => 'http://example.org'),
-            ),
-        );
+            'links' => [
+                ['name' => 'foobar', 'link' => 'http://example.org'],
+                ['name' => 'Video', 'link' => 'http://example.org'],
+            ],
+        ];
 
         $requestData = Zend_Json::encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -327,7 +324,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -339,9 +336,9 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
 
-        $requestData = array(
-            'test'  => true,
-        );
+        $requestData = [
+            'test' => true,
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -396,11 +393,11 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
 
         // required field name is blank
-        $testData = array(
+        $testData = [
             'name' => ' ',
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
-        );
+        ];
         $requestData = Zend_Json::encode($testData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -426,29 +423,29 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
 
-        $testData = array(
+        $testData = [
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
 
             // update supplier id
-            'supplierId'   => 3,
+            'supplierId' => 3,
 
             // categories should be replaced
-            'categories' => array(
-                array('id' => 16),
-            ),
+            'categories' => [
+                ['id' => 16],
+            ],
 
             'filterGroupId' => 1,
 
             // values should be replaced
-            'propertyValues' => array(
-            ),
+            'propertyValues' => [
+            ],
 
             // related is not included, therefore it stays untouched
 
             // similar is set to empty array, therefore it should be cleared
-            'similar' => array(),
-        );
+            'similar' => [],
+        ];
         $requestData = Zend_Json::encode($testData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -473,18 +470,14 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('data', $result);
 
-
-
         $response = $this->getHttpClient()
                 ->setUri($this->apiBaseUrl . '/articles/' . $id)
                 ->request('GET');
-
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
         $article = $result['data'];
-
 
         $this->assertEquals($id, $article['id']);
         $this->assertEquals($testData['description'], $article['description']);
@@ -503,7 +496,9 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
+     *
      * @param $id
+     *
      * @throws Zend_Http_Client_Exception
      * @throws Zend_Json_Exception
      */
@@ -529,14 +524,14 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         foreach ($variantNumbers as $variantNumber) {
             $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
 
-            $testData = array(
-                'variants' => array(
-                    array(
-                        "number" => $variantNumber,
-                        "isMain" => true
-                    )
-                )
-            );
+            $testData = [
+                'variants' => [
+                    [
+                        'number' => $variantNumber,
+                        'isMain' => true,
+                    ],
+                ],
+            ];
             $requestData = Zend_Json::encode($testData);
 
             $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -548,7 +543,6 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
             $result = Zend_Json::decode($result);
             $this->assertArrayHasKey('success', $result);
             $this->assertTrue($result['success']);
-
 
             $response = $this->getHttpClient()
                 ->setUri($this->apiBaseUrl . '/articles/' . $id)
@@ -578,23 +572,22 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
 
-        $requestData = array(
+        $requestData = [
             '__options_images' => [
-                'replace' => 1
+                'replace' => 1,
             ],
             'images' => [
                 [
-                    'mediaId' => 44
+                    'mediaId' => 44,
                 ],
                 [
-                    'link' => 'http://assets.shopware.com/sw_logo_white.png'
+                    'link' => 'http://assets.shopware.com/sw_logo_white.png',
                 ],
                 [
-                    'mediaId' => 46
+                    'mediaId' => 46,
                 ],
-
-            ]
-        );
+            ],
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -622,17 +615,17 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
 
-        $requestData = array(
+        $requestData = [
             '__options_images' => [
-                'replace' => 1
+                'replace' => 1,
             ],
             'images' => [
                 [
                     'id' => 999999,
-                    'mediaId' => 44
-                ]
-            ]
-        );
+                    'mediaId' => 44,
+                ],
+            ],
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -651,10 +644,13 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
+     *
      * @param $id
-     * @return
+     *
      * @throws Zend_Http_Client_Exception
      * @throws Zend_Json_Exception
+     *
+     * @return
      */
     public function testDeleteArticlesShouldBeSuccessful($id)
     {
@@ -700,9 +696,9 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $id = 99999999;
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
 
-        $requestData = array(
-            'active'  => true,
-        );
+        $requestData = [
+            'active' => true,
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -744,7 +740,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     public function getSimpleArticleData()
     {
-        return array(
+        return [
               'name' => 'Simple test article',
               'description' => 'Test description',
               'descriptionLong' => 'Test descriptionLong',
@@ -755,89 +751,88 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
               'filterGroupId' => 1,
 
-              'propertyValues' => array(
-                  array(
+              'propertyValues' => [
+                  [
                       'value' => 'grün',
-                      'option' => array(
-                          'name' => 'Farbe'
-                      )
-                  ),
-                  array(
+                      'option' => [
+                          'name' => 'Farbe',
+                      ],
+                  ],
+                  [
                       'value' => 'testWert',
-                      'option' => array(
-                          'name' => 'neueOption'.uniqid(rand())
-                      )
-                  )
-              ),
+                      'option' => [
+                          'name' => 'neueOption' . uniqid(rand()),
+                      ],
+                  ],
+              ],
 
-              'mainDetail' => array(
+              'mainDetail' => [
                   'number' => 'swTEST' . uniqid(rand()),
                   'inStock' => 15,
                   'unitId' => 1,
 
-                  'attribute' => array(
+                  'attribute' => [
                       'attr1' => 'Freitext1',
                       'attr2' => 'Freitext2',
-                  ),
+                  ],
 
                   'minPurchase' => 5,
                   'purchaseSteps' => 2,
 
-                  'prices' => array(
-                      array(
+                  'prices' => [
+                      [
                           'customerGroupKey' => 'EK',
                           'from' => 1,
                           'to' => 20,
                           'price' => 500,
-                      ),
-                      array(
+                      ],
+                      [
                           'customerGroupKey' => 'EK',
                           'from' => 21,
                           'to' => '-',
                           'price' => 400,
-                      ),
-                  )
-              ),
+                      ],
+                  ],
+              ],
 
-              'taxId'        => 1,
-              'supplierId'   => 2,
+              'taxId' => 1,
+              'supplierId' => 2,
 
-              'similar' => array(
-                  array('id' => 5),
-                  array('id' => 6),
-              ),
+              'similar' => [
+                  ['id' => 5],
+                  ['id' => 6],
+              ],
 
-              'categories' => array(
-                  array('id' => 15),
-                  array('id' => 10),
-              ),
+              'categories' => [
+                  ['id' => 15],
+                  ['id' => 10],
+              ],
 
-              'related' => array(
-                  array('id' => 3, 'cross' => true),
-                  array('id' => 4),
-              ),
+              'related' => [
+                  ['id' => 3, 'cross' => true],
+                  ['id' => 4],
+              ],
 
-              'links' => array(
-                  array('name' => 'foobar', 'link' => 'http://example.org'),
-                  array('name' => 'Video', 'link' => 'http://example.org'),
-              ),
-          );
+              'links' => [
+                  ['name' => 'foobar', 'link' => 'http://example.org'],
+                  ['name' => 'Video', 'link' => 'http://example.org'],
+              ],
+          ];
     }
 
     public function testBatchModeShouldBeSuccessful()
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
 
-
-        $data = array(
+        $data = [
             $this->getSimpleArticleData(),
             $this->getSimpleArticleData(),
             $this->getSimpleArticleData(),
-            array(
+            [
                 'id' => 2,
-                'keywords' => 'batch test'
-            )
-        );
+                'keywords' => 'batch test',
+            ],
+        ];
 
         $requestData = Zend_Json::encode($data);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');

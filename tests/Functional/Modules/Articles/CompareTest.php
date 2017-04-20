@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Test_TestCase
@@ -51,9 +51,8 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
         parent::setUp();
 
         $this->module = Shopware()->Modules()->Articles();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->module->sDeleteComparisons();
-
+        Shopware()->Container()->get('session')->offsetSet('sessionId', uniqid(rand()));
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';
         $sql = Shopware()->Db()->limit($sql, 5);
         $this->testArticleIds = Shopware()->Db()->fetchCol($sql);
@@ -66,16 +65,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
     {
         parent::tearDown();
         $this->module->sDeleteComparisons();
-    }
-
-    /**
-     * Returns a test article id
-     *
-     * @return int
-     */
-    protected function getTestArticleId()
-    {
-        return array_shift($this->testArticleIds);
     }
 
     /**
@@ -139,5 +128,15 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertEquals(count($this->Module()->sGetComparisonList()), 2);
+    }
+
+    /**
+     * Returns a test article id
+     *
+     * @return int
+     */
+    protected function getTestArticleId()
+    {
+        return array_shift($this->testArticleIds);
     }
 }

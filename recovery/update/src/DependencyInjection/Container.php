@@ -29,11 +29,13 @@ use Shopware\Recovery\Common\DependencyInjection\Container as BaseContainer;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\HttpClient\CurlClient;
 use Shopware\Recovery\Common\SystemLocker;
+use Shopware\Recovery\Update\Cleanup;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\Controller\BatchController;
 use Shopware\Recovery\Update\Controller\CleanupController;
 use Shopware\Recovery\Update\Controller\RequirementsController;
 use Shopware\Recovery\Update\DummyPluginFinder;
+use Shopware\Recovery\Update\FilePermissionChanger;
 use Shopware\Recovery\Update\FilesystemFactory;
 use Shopware\Recovery\Update\PathBuilder;
 use Shopware\Recovery\Update\PluginCheck;
@@ -47,6 +49,8 @@ class Container extends BaseContainer
      */
     public function setup(\Pimple\Container $container)
     {
+        $backupDir = SW_PATH . '/files/backup/auto_update';
+
         $me = $this;
 
         $container['shopware.version'] = function () use ($me) {
@@ -68,10 +72,9 @@ class Container extends BaseContainer
             return new FilesystemFactory(SW_PATH, $ftp);
         };
 
-        $container['path.builder'] = function () use ($me) {
-            $baseDir   = SW_PATH;
+        $container['path.builder'] = function () use ($me, $backupDir) {
+            $baseDir = SW_PATH;
             $updateDir = UPDATE_FILES_PATH;
-            $backupDir = SW_PATH . '/files/backup';
 
             return new PathBuilder($baseDir, $updateDir, $backupDir);
         };
@@ -87,7 +90,7 @@ class Container extends BaseContainer
 
         $container['dump'] = function () use ($me) {
             $snippetsSql = UPDATE_ASSET_PATH . '/snippets.sql';
-            $snippetsSql = file_exists($snippetsSql) ? $snippetsSql :null;
+            $snippetsSql = file_exists($snippetsSql) ? $snippetsSql : null;
 
             if (!$snippetsSql) {
                 return null;
@@ -156,15 +159,17 @@ class Container extends BaseContainer
             );
         };
 
-        $container['controller.cleanup'] = function () use ($me) {
+        $container['controller.cleanup'] = function () use ($me, $backupDir) {
             return new CleanupController(
                 $me->get('slim.request'),
                 $me->get('slim.response'),
                 $me->get('dummy.plugin.finder'),
                 $me->get('cleanup.files.finder'),
+                $me->get('shopware.update.cleanup'),
                 $me->get('app'),
                 SW_PATH,
-                $me->get('db')
+                $me->get('db'),
+                $backupDir
             );
         };
 
@@ -187,6 +192,17 @@ class Container extends BaseContainer
             $themeInstaller = $shopwareContainer->get('theme_installer');
 
             return $themeInstaller;
+        };
+
+        $container['shopware.update.cleanup'] = function ($container) use ($backupDir) {
+            return new Cleanup(SW_PATH, $backupDir);
+        };
+
+        $container['shopware.update.chmod'] = function ($container) {
+            return new FilePermissionChanger([
+                ['chmod' => 0775, 'filePath' => SW_PATH . '/bin/console'],
+                ['chmod' => 0775, 'filePath' => SW_PATH . '/var/cache/clear_cache.sh'],
+            ]);
         };
     }
 }

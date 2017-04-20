@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
      * @array
      */
     fields : [
-		//{block name="backend/banner/model/banner/fields"}{/block}
+        //{block name="backend/banner/model/banner/fields"}{/block}
         { name : 'id',              type: 'int' },
         { name : 'description',     type: 'string' },
         { name : 'validFromDate', type: 'date', dateFormat: 'd.m.Y' },

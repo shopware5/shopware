@@ -48,12 +48,15 @@ class ServiceSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Bootstrap_AfterInitResource_shopware_search.product_number_search'        => ['registerProductNumberSearch', -5000]
+            'Enlight_Bootstrap_AfterInitResource_shopware_search.product_number_search' => ['registerProductNumberSearch', -5000],
         ];
     }
 
     public function registerProductNumberSearch()
     {
+        if (!$this->container->getParameter('shopware.es.enabled')) {
+            return;
+        }
         $this->container->set(
             'shopware_search.product_number_search',
             $this->container->get('shopware_search_es.product_number_search')

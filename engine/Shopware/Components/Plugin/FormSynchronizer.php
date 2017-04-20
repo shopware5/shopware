@@ -27,10 +27,10 @@ namespace Shopware\Components\Plugin;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Config\Form;
-use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Config\ElementTranslation;
+use Shopware\Models\Config\Form;
 use Shopware\Models\Config\FormTranslation;
+use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Locale;
 
 class FormSynchronizer
@@ -62,7 +62,7 @@ class FormSynchronizer
 
     /**
      * @param Plugin $plugin
-     * @param array $config
+     * @param array  $config
      */
     public function synchronize(Plugin $plugin, array $config)
     {
@@ -72,9 +72,9 @@ class FormSynchronizer
 
         foreach ($config['elements'] as $element) {
             $options = [
-                'scope'    => $element['scope'],
-                'label'    => $element['label']['en'],
-                'value'    => $element['value'],
+                'scope' => $element['scope'],
+                'label' => $element['label']['en'],
+                'value' => $element['value'],
                 'required' => $element['isRequired'],
             ] + $element['options'];
 
@@ -127,7 +127,8 @@ class FormSynchronizer
 
     /**
      * Removes no more existing form elements and their translations
-     * @param Plugin $plugin
+     *
+     * @param Plugin   $plugin
      * @param string[] $names
      */
     private function removeNotExistingElements(Plugin $plugin, $names)
@@ -172,6 +173,7 @@ class FormSynchronizer
      * Returns plugin form
      *
      * @param Plugin $plugin
+     *
      * @return Form
      */
     private function getForm(Plugin $plugin)
@@ -188,6 +190,7 @@ class FormSynchronizer
 
     /**
      * @param Plugin $plugin
+     *
      * @return Form
      */
     private function initForm(Plugin $plugin)
@@ -201,7 +204,7 @@ class FormSynchronizer
 
         /** @var Form $parent */
         $parent = $this->formRepository->findOneBy([
-            'name' => strpos($plugin->getName(), 'Payment') !== false ? 'Payment' : 'Other'
+            'name' => strpos($plugin->getName(), 'Payment') !== false ? 'Payment' : 'Other',
         ]);
 
         $form->setParent($parent);
@@ -234,7 +237,7 @@ class FormSynchronizer
      * </code>
      *
      * @param array $translations
-     * @param Form $form
+     * @param Form  $form
      */
     private function addFormTranslations(array $translations, Form $form)
     {
@@ -248,7 +251,7 @@ class FormSynchronizer
             }
 
             /** @var Locale $locale */
-            $locale = $this->localeRepository->findOneBy(array('locale' => $localeCode));
+            $locale = $this->localeRepository->findOneBy(['locale' => $localeCode]);
             if (empty($locale)) {
                 continue;
             }
@@ -295,9 +298,10 @@ class FormSynchronizer
     }
 
     /**
-     * @param Form $form
+     * @param Form   $form
      * @param string $translationArray
      * @param Locale $locale
+     *
      * @return array
      */
     private function addFormTranslation(Form $form, $translationArray, Locale $locale)

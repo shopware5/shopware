@@ -28,7 +28,7 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Backend_ExtJs
@@ -47,7 +47,7 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
             $this->View()->assign([
                 'success' => true,
                 'data' => array_values($result->getData()),
-                'total' => $result->getCount()
+                'total' => $result->getCount(),
             ]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => true, 'message' => $e->getMessage()]);
@@ -56,6 +56,7 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
 
     /**
      * @param Request $request
+     *
      * @return SearchCriteria
      */
     private function createCriteria(Request $request)

@@ -2,11 +2,215 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.22
+* Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
+* Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
+* Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
+
+## 5.2.21
+
+[View all changes from v5.2.20...v5.2.21](https://github.com/shopware/shopware/compare/v5.2.20...v5.2.21)
+
+* Updated Symfony to version 2.8.17
+* Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
+* Added support for creating new orders using the `Order` API resource
+* Added option `allowHtml` for ExtJS grid columns and display form fields in order to allow unescaped html output. Default value is: `false`
+* Added optional `Guzzle` client config parameter to `Shopware\Components\HttpClient\GuzzleFactory::createClient` method
+* Added events `sendRequestSuccess` and `sendRequestFailure` to `_sendRequest` in `themes/Backend/ExtJs/backend/category/controller/article_mapping.js`
+* Deprecated duplicate block `frontend_blog_detail_comments` in `frontend/blog/detail.tpl`, use `frontend_blog_detail_comments_count` and `frontend_blog_detail_comments_list` instead. 
+* Changed CSRF validation method in `engine/Shopware/Components/CSRFTokenValidator` from session validation to cookie validation.
+* Removed `invalidateToken` from `engine/Shopware/Components/CSRFTokenValidator`
+* Added opt-in for CSRF GET protection. Implement `engine/Shopware/Components/CSRFTGetProtectionAware` and return the controller actons which should be protected via `getCSRFProtectedActions`.
+* Added CSRF specific error message.
+* Changed behaviour of plugin installer to show the correct translated label and description in plugin manager and basic settings (new 5.2 plugin system only, see [DevDocs](https://developers.shopware.com/developers-guide/plugin-system/#plugin-metadata))
+
+## 5.2.20
+
+[View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
+
+* Reverted shopware/shopware#821 which added left joins for basket attributes in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+
+## 5.2.19
+
+[View all changes from v5.2.18...v5.2.19](https://github.com/shopware/shopware/compare/v5.2.18...v5.2.19)
+
+* Changed the loading of backend widgets to disable widgets of deactivated plugins
+* Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
+* Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
+* Added left join of `s_order_basket_attributes` in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+* Added event `blog-save-successfully` to `onSaveBlogArticle()` method in `themes/Backend/ExtJs/backend/blog/controller/blog.js`
+* Added event `customer-address-save-successfully` to `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `customer-save-successfully` to  `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `site-save-successfully` to `onSaveSite()` method in `themes/Backend/ExtJs/backend/site/controller/form.js`
+* Added event `supplier-save-successfully` to `onSupplierSave()` method in `themes/Backend/ExtJs/backend/supplier/controller/main.js`
+* Added the possibility to add a Theme info tab. Add a folder with the name "info" to your theme folder. Add a html file to the folder with the required language iso like "en_EN.html". The HTML content of the file is the content of the tab.
+* Changed internal loop variable name `positions` in `themes/Frontend/Bare/documents/index.tpl` to fix typo
+* Added configuration option `ShopwarePlugins` to `plugin_directories` in the `engine/Shopware/Configs/Default.php` to make the path of the plugin system directory configurable
+* Support for custom CSS files in themes added to Grunt tasks
+* Added command option `shopId` for `sw:theme:cache:generate`
+
+## 5.2.18
+
+[View all changes from v5.2.17...v5.2.18](https://github.com/shopware/shopware/compare/v5.2.17...v5.2.18)
+
+* Fixed invalid permissions after running media optimizer on some hosting systems
+* Fixed session error in exports
+
+## 5.2.17
+
+[View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
+
+* Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
+* Changed default `session.gc_divisor` to `200`. To decrease session garbage collection probability.
+* Added console command `sw:session:cleanup` to cleanup expired sessions.
+* Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
+* Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
+* Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
+* Added command `sw:media:optimize` to optimize media files without quality loss.
+* Added new Smarty blocks to `documents/index.tpl`
+    * `document_index_address`
+    * `document_index_address_sender`
+    * `document_index_address_base`
+* Added `s_article_configurator_options_attributes` and `s_article_configurator_groups_attributes`
+* Added new plugin config element type `button`
+* Changed `\Enlight_Controller_Plugins_ViewRenderer_Bootstrap::setNoRender` resets now the view template to prevent `PostDispatchSecure` events
+* Changed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService::getList` fetch now the seo urls for each manufacturer
+* Removed duplicated initialisation of `\Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface`.
+* Added `_seo` parameter for smarty url plugin which allows to prevent s_core_rewrite_url query for none seo urls
+* Removed unnecessary `/widget/index/menu` call in `themes/Frontend/Bare/frontend/index/topbar-navigation.tpl` and `themes/Frontend/Bare/frontend/index/footer_minimal.tpl`. The `widgets/index/menu.tpl` template is now included directly.
+* Added `\Shopware\Components\Theme\PathResolver::getDirectoryByArray` function which allows to load theme inheritances without doctrine models
+* Added api resources to dependency injection container
+
+### Media Optimizer
+
+The service `shopware_media.optimizer_service` optimizes files using external tools. Further external tools can be implemented using the interface `Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface` and the dependency injection tag `shopware_media.optimizer`.
+
+### Api resources
+The api resources are now available in the dependency injection container using the namespace `shopware.api`. It is now possible to add your own resources as services or decorate others in your plugins `services.xml`.
+```
+/** Register new resource as service */
+<service id="shopware.api.example" class="SwagExampleApi\Components\Api\Resource\Example" />
+
+/** Replace existing resource service */
+<service 
+    id="swag_example_plugin.article_api"
+    class="SwagExampleApi\Components\Api\Resource\Article"
+    decorates="shopware.api.article"
+    public="false"
+    shared="false">
+</service>
+```
+
+## 5.2.16
+
+[View all changes from v5.2.15...v5.2.16](https://github.com/shopware/shopware/compare/v5.2.15...v5.2.16)
+
+* Improved form input filtering
+
+## 5.2.15
+
+[View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.14...v5.2.15)
+
+* Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
+* Added cronjob registration via `Resources/cronjob.xml` file
+* Removed call to `strip_tags` in inputfilter on all request parameters.
+    * Please make sure untrusted input is escaped in plugins 
+
+## 5.2.14
+
+[View all changes from v5.2.13...v5.2.14](https://github.com/shopware/shopware/compare/v5.2.13...v5.2.14)
+
+### Add property "valueField" to the media field.
+* The shopping world element "Media field" supports now to change the value field. All possible properties you can find in the file: `themes/Backend/ExtJs/backend/media_manager/model/media.js`
+
+ Example:
+ 
+```php
+ $emotionElement->createMediaField([
+     'name' => 'preview_image',
+     'fieldLabel' => 'The preview image',
+     'valueField' => 'virtualPath'
+ ]);
+ ```
+
+## 5.2.13
+
+[View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
+
+* Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
+* Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
+* Added the missing requirement of the php function `parse_ini_file` to the system info and the installer
+* Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
+* Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
+* Changed parsing of JSON `POST`ed to the REST API to not remove top-level `NULL` values
+* Changed frontendsession to a locking session handler
+    * Added new configuration parameter `session.locking` which is `true` by default
+    * The session handler can be overwritten by replacing the `session.save_handler`-Service. A instance of `\SessionHandlerInterface` has to be returned.
+* Changed return value of `sArticles::sGetArticleById()` to provide an additional text if none is given and display the cover image by default when using the selection configurator
+* Changed url parameter in last seen articles to deeplink to an article variant instead of the article
+* Added console command `sw:rebuild:seo:index` to rebuild the SEO index on demand
+
+### Autoloading of plugin resources
+
+Plugin resources inside of the `PluginName/Resources/frontend` directory are now loaded automatically on theme compilation when using the new plugin system.
+
+Example:
+
+- `custom/plugins/SwagResourceTest/Resources/frontend/css/**.css`
+- `custom/plugins/SwagResourceTest/Resources/frontend/js/**.js`
+- `custom/plugins/SwagResourceTest/Resources/frontend/less/all.less`
+
+## 5.2.12
+
+[View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
+
 ## 5.2.11
+
+[View all changes from v5.2.10...v5.2.11](https://github.com/shopware/shopware/compare/v5.2.10...v5.2.11)
+
 * Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
+* Added new Smarty block `frontend_account_order_item_availability` to `frontend/account/order_item_details.tpl`
 * Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
 * Added new blocks in `themes/Frontend/Bare/frontend/account/index.tpl`
 * If shipping address equals billing address show notice instead of same address twice in account index
+* Added container tag `shopware_media.adapter` to register new media adapters
+* Added interface `Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface` to create new adapter factories
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createLocalAdapter()`
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createFtpAdapter()`
+* Deprecated collect event `Shopware_Collect_MediaAdapter_*`, use container tag `shopware_media.adapter` instead. The event will be removed in 5.4.
+
+### Custom stores in plugin configuration
+
+It is now possible to define custom config stores directly inside your plugin's config.xml when using the new plugin system.
+
+A custom config store is defined like this:
+
+```
+<store>
+    <option>
+        <value>1</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label lang="en">English display value</label>
+    </option>
+    <option>
+        <value>two</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label>English display value (locale en via fallback)</label>
+    </option>
+    <option>
+        <value>3</value>
+        <label>Single display value (locale en via fallback)</label>
+    </option>
+</store>
+```
+
+There are two unique constraints:
+* Inside a store, a value tag's value must only occur once
+* Inside an option tag, a label tag's lang attribute value must only occur once
+
+Additionally, the order is fixed. The value tag must be defined before the label tag(s).
+
+There must be at least one option tag and inside each option tag where must be at least one value and one option tag. 
 
 ## 5.2.10
 

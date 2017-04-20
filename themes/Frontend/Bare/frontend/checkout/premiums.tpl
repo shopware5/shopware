@@ -43,17 +43,17 @@
                                                         </div>
                                                     {/if}
 
-													{block name='frontend_checkout_premium_image_element'}
-														<span class="image--element">
-		                                                    {if $premium.sArticle.image.thumbnails}
+                                                    {block name='frontend_checkout_premium_image_element'}
+                                                        <span class="image--element">
+                                                            {if $premium.sArticle.image.thumbnails}
                                                                 <img srcset="{$premium.sArticle.image.thumbnails[0].sourceSet}"
                                                                      alt="{$premium.sArticle.articleName|escape}" />
-															{else}
-																<img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
-																	 alt="{"{s name="PremiumInfoNoPicture"}{/s}"|escape}">
-															{/if}
-														</span>
-													{/block}
+                                                            {else}
+                                                                <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
+                                                                     alt="{"{s name="PremiumInfoNoPicture"}{/s}"|escape}">
+                                                            {/if}
+                                                        </span>
+                                                    {/block}
                                                 </a>
                                             {/block}
 
@@ -63,26 +63,26 @@
                                                         {block name='frontend_checkout_premium_select_article'}
                                                             {if $premium.sVariants && $premium.sVariants|@count > 1}
                                                                 <div class="premium--variant">
-																	<select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium" required>
-																		<option value="">{s name="PremiumInfoSelect"}{/s}</option>
-																		{foreach from=$premium.sVariants item=variant}
-																			<option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
-																		{/foreach}
-																	</select>
-																	{block name='frontend_checkout_premium_info_button_small'}
-																		<button class="premium--button btn is--primary is--align-center" type="submit">
-																			<i class="icon--arrow-right is--large"></i>
-																		</button>
-																	{/block}
-																</div>
+                                                                    <select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium" required>
+                                                                        <option value="">{s name="PremiumInfoSelect"}{/s}</option>
+                                                                        {foreach from=$premium.sVariants item=variant}
+                                                                            <option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
+                                                                        {/foreach}
+                                                                    </select>
+                                                                    {block name='frontend_checkout_premium_info_button_small'}
+                                                                        <button class="premium--button btn is--primary is--align-center" type="submit">
+                                                                            <i class="icon--arrow-right is--large"></i>
+                                                                        </button>
+                                                                    {/block}
+                                                                </div>
                                                             {else}
                                                                 <input type="hidden" name="sAddPremium" value="{$premium.sArticle.ordernumber}"/>
-																{block name='frontend_checkout_premium_info_button'}
-																	<button class="btn is--primary is--align-center is--icon-right" type="submit">
-																		{s name='PremiumActionAdd'}{/s}
-																		<i class="icon--arrow-right"></i>
-																	</button>
-																{/block}
+                                                                {block name='frontend_checkout_premium_info_button'}
+                                                                    <button class="btn is--primary is--align-center is--icon-right" type="submit">
+                                                                        {s name='PremiumActionAdd'}{/s}
+                                                                        <i class="icon--arrow-right"></i>
+                                                                    </button>
+                                                                {/block}
                                                             {/if}
                                                         {/block}
                                                     </form>

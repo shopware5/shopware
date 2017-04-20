@@ -63,7 +63,7 @@ class InstallerTest extends Base
         $themes = $this->invokeMethod(
             $installer,
             'synchronizeThemeDirectories',
-            array($directories)
+            [$directories]
         );
 
         $this->assertCount(2, $themes);

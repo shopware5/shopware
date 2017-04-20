@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Routing\Context;
+
 /**
  * Shopware Cron for article ratings
  */
@@ -29,6 +31,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
 {
     /**
      * Bootstrap Installation method
+     *
      * @return bool
      */
     public function install()
@@ -37,14 +40,16 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             'Shopware_CronJob_ArticleComment',
             'onRun'
         );
+
         return true;
     }
 
     /**
      * @param Enlight_Components_Cron_EventArgs $job
      *
-     * @return void|string
      * @throws \Exception
+     *
+     * @return void|string
      */
     public function onRun(Enlight_Components_Cron_EventArgs $job)
     {
@@ -62,12 +67,13 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $customers = $this->getCustomers($orderIds);
         $positions = $this->getPositions($orderIds);
 
+        $count = 0;
         foreach ($orders as $orderId => $order) {
             if (empty($customers[$orderId]['email']) || count($positions[$orderId]) === 0) {
                 continue;
             }
 
-            /** @var Shopware\Models\Shop\Repository $repository  */
+            /** @var Shopware\Models\Shop\Repository $repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
             $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
@@ -78,25 +84,32 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop->setCurrency($repository->find($order['currencyID']));
             $shop->registerResources();
 
+            $config = Shopware()->Container()->get('config');
+            $mailContext = Context::createFromShop($shop, $config);
             foreach ($positions[$orderId] as &$position) {
-                $position['link'] = Shopware()->Container()->get('router')->assemble(array(
+                $position['link'] = Shopware()->Container()->get('router')->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
-                    'sArticle' => $position['articleID']
-                ));
+                    'sArticle' => $position['articleID'],
+                ], $mailContext);
             }
 
-            $context = array(
+            $context = [
                 'sOrder' => $order,
                 'sUser' => $customers[$orderId],
                 'sArticles' => $positions[$orderId],
-            );
+            ];
 
-            $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
+            $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context, $shop);
             $mail->addTo($customers[$orderId]['email']);
             $mail->send();
+            ++$count;
         }
 
-        return count($order) . ' rating mails was sent.';
+        if ($count <= 0) {
+            return 'No rating mails sent.';
+        }
+
+        return $count . ' rating mail(s) sent.';
     }
 
     /**
@@ -144,25 +157,26 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 c.description as cleared_description,
                 s.description as status_description,
                 p.description as payment_description,
-                d.name 		  as dispatch_description,
-                cu.name 	  as currency_description
+                d.name        as dispatch_description,
+                cu.name       as currency_description
             FROM
                 s_order as o
             LEFT JOIN s_core_states as s
-            ON	(o.status = s.id)
+            ON  (o.status = s.id)
             LEFT JOIN s_core_states as c
-            ON	(o.cleared = c.id)
+            ON  (o.cleared = c.id)
             LEFT JOIN s_core_paymentmeans as p
-            ON	(o.paymentID = p.id)
+            ON  (o.paymentID = p.id)
             LEFT JOIN s_premium_dispatch as d
-            ON	(o.dispatchID = d.id)
+            ON  (o.dispatchID = d.id)
             LEFT JOIN s_core_currencies as cu
-            ON	(o.currency = cu.currency)
+            ON  (o.currency = cu.currency)
 
             WHERE o.status IN (2, 7)
             AND o.ordertime LIKE CONCAT(DATE_SUB(CURDATE(), INTERVAL ? DAY), '%')
         ";
-        return Shopware()->Db()->fetchAssoc($sql, array($sendTime));
+
+        return Shopware()->Db()->fetchAssoc($sql, [$sendTime]);
     }
 
     /**
@@ -246,6 +260,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 ON s.id = sa.shippingID
             WHERE b.orderID IN ($orderIds)
         ";
+
         return Shopware()->Db()->fetchAssoc($sql);
     }
 
@@ -288,10 +303,11 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             ORDER BY orderdetailsID ASC
         ";
         $result = Shopware()->Db()->fetchAll($sql);
-        $rows = array();
+        $rows = [];
         foreach ($result as $row) {
             $rows[$row['orderID']][$row['orderdetailsID']] = $row;
         }
+
         return $rows;
     }
 }

@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Base.model.CustomerGroup', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/customer_group/fields"}{/block}
+        //{block name="backend/base/model/customer_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'key', type: 'string' },
         { name: 'name', type: 'string' },

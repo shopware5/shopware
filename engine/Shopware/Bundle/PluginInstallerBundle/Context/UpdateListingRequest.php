@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class UpdateListingRequest extends BaseRequest
 {
     /**

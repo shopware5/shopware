@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Order.model.Position', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/position/fields"}{/block}
+        //{block name="backend/order/model/position/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'orderId', type:'int' },
         { name: 'mode', type:'int' },

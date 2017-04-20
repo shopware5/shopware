@@ -35,8 +35,8 @@
 //{block name="backend/base/model/country_area"}
 Ext.define('Shopware.apps.Base.model.CountryArea', {
     extend: 'Shopware.data.Model',
-	fields: [
-		//{block name="backend/base/model/country_area/fields"}{/block}
+    fields: [
+        //{block name="backend/base/model/country_area/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'name', type: 'string', convert: function(v) {
             return v.charAt(0).toUpperCase() + v.substr(1);

@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,31 +20,34 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Log
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware - Users store
- *
- * This store contains all users.
- */
-//{block name="backend/log/store/users"}
-Ext.define('Shopware.apps.Log.store.Users', {
+namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
+use Elasticsearch\Client;
+use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2;
+use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
+use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
+
+class TextMappingFactory
+{
     /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Shopware.apps.Base.store.User',
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 2000
-});
-//{/block}
+     * @param Client $client
+     *
+     * @return TextMappingInterface
+     */
+    public static function factory(Client $client)
+    {
+        try {
+            $info = $client->info([]);
+        } catch (\Exception $e) {
+            return new TextMappingES2();
+        }
+
+        if (version_compare($info['version']['number'], '5', '>=')) {
+            return new TextMappingES5();
+        }
+
+        return new TextMappingES2();
+    }
+}

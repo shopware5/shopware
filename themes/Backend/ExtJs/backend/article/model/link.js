@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.Link', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/link/fields"}{/block}
+        //{block name="backend/article/model/link/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'articleId', type: 'int' },
         { name: 'name', type: 'string' },

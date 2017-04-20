@@ -44,9 +44,9 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @object
      */
     snippets: {
-    	upload: {
-	    	text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'
-    	},
+        upload: {
+            text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'
+        },
         success: {
             title: '{s name=media/success/title}Success{/s}',
             mapping: '{s name=media/success/mapping}The image mapping saved successfully{/s}'

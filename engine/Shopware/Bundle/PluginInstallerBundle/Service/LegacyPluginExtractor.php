@@ -24,16 +24,14 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Service
- */
 class LegacyPluginExtractor
 {
     /**
      * Extracts the provided zip file to the provided destination
      *
      * @param \ZipArchive $archive
-     * @param string $destination
+     * @param string      $destination
+     *
      * @throws \Exception
      */
     public function extract($archive, $destination)
@@ -49,6 +47,8 @@ class LegacyPluginExtractor
         $archive->extractTo($destination);
 
         $this->clearOpcodeCache();
+
+        unlink($archive->filename);
     }
 
     /**
@@ -57,6 +57,7 @@ class LegacyPluginExtractor
      * and multiple plugin directories.
      *
      * @param \ZipArchive $archive
+     *
      * @throws \Exception
      */
     private function validatePluginZip(\ZipArchive $archive)
@@ -68,11 +69,11 @@ class LegacyPluginExtractor
 
     /**
      * @param \ZipArchive $archive
-     * @param string $prefix
+     * @param string      $prefix
      */
     private function assertValid(\ZipArchive $archive, $prefix)
     {
-        for ($i = 2; $i < $archive->numFiles; $i++) {
+        for ($i = 2; $i < $archive->numFiles; ++$i) {
             $stat = $archive->statIndex($i);
 
             $this->assertNoDirectoryTraversal($stat['name']);
@@ -82,6 +83,7 @@ class LegacyPluginExtractor
 
     /**
      * @param \ZipArchive $archive
+     *
      * @return string
      */
     private function getLegacyPluginPrefix(\ZipArchive $archive)

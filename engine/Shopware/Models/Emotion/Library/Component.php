@@ -25,13 +25,13 @@
 namespace Shopware\Models\Emotion\Library;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Plugin\Plugin;
 
 /**
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -40,9 +40,30 @@ use Shopware\Models\Plugin\Plugin;
 class Component extends ModelEntity
 {
     /**
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="emotionComponents")
+     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
+     *
+     * @var Plugin
+     */
+    protected $plugin;
+
+    /**
+     * INVERSE SIDE
+     * Contains all the assigned \Shopware\Models\Emotion\Library\Field models.
+     * Each component has a field configuration to configure the component data over the
+     * backend module. For example: The "Article" component has an "id" field
+     * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
+     * backend module) to configure which article has to been displayed.
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $fields;
+    /**
      * Unique identifier field of the grid model.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -54,15 +75,13 @@ class Component extends ModelEntity
      * Contains the name of the grid which can be configured in the
      * backend emotion module.
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
     /**
-     *
-     *
-     * @var string $convertFunction
+     * @var string
      *
      * @ORM\Column(name="convert_function", type="string", length=255, nullable=true)
      */
@@ -70,6 +89,7 @@ class Component extends ModelEntity
     /**
      * Contains the component description which displayed in the backend
      * module of
+     *
      * @var
      * @ORM\Column(name="description", type="text", nullable=false)
      */
@@ -78,7 +98,7 @@ class Component extends ModelEntity
     /**
      * Contains the template file which used to display the component data.
      *
-     * @var string $template
+     * @var string
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=false)
      */
@@ -86,7 +106,8 @@ class Component extends ModelEntity
 
     /**
      * Contains the css class for the component
-     * @var string $cls
+     *
+     * @var string
      * @ORM\Column(name="cls", type="string", length=255, nullable=false)
      */
     private $cls;
@@ -94,7 +115,7 @@ class Component extends ModelEntity
     /**
      * The xType for the backend module.
      *
-     * @var string $xType
+     * @var string
      *
      * @ORM\Column(name="x_type", type="string", length=255, nullable=false)
      */
@@ -102,31 +123,11 @@ class Component extends ModelEntity
 
     /**
      * Contains the plugin id which added this component to the library
-     * @var integer $pluginId
+     *
+     * @var int
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
     private $pluginId = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="emotionComponents")
-     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
-     * @var Plugin
-     */
-    protected $plugin;
-
-
-    /**
-     * INVERSE SIDE
-     * Contains all the assigned \Shopware\Models\Emotion\Library\Field models.
-     * Each component has a field configuration to configure the component data over the
-     * backend module. For example: The "Article" component has an "id" field
-     * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
-     * backend module) to configure which article has to been displayed.
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $fields;
 
     /**
      * Private var that holds the max position value of the form fields
@@ -144,7 +145,6 @@ class Component extends ModelEntity
     {
         $this->fields = new ArrayCollection();
     }
-
 
     /**
      * Contains all the assigned \Shopware\Models\Emotion\Library\Field models.
@@ -168,6 +168,7 @@ class Component extends ModelEntity
      * backend module) to configure which article has to been displayed.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $fields
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setFields($fields)
@@ -210,6 +211,7 @@ class Component extends ModelEntity
     /**
      * Contains the component description which displayed in the backend
      * module of
+     *
      * @return
      */
     public function getDescription()
@@ -220,6 +222,7 @@ class Component extends ModelEntity
     /**
      * Contains the component description which displayed in the backend
      * module of
+     *
      * @param  $description
      */
     public function setDescription($description)
@@ -327,7 +330,6 @@ class Component extends ModelEntity
         $this->plugin = $plugin;
     }
 
-
     /**
      * Generally function to create a new custom emotion component field.
      *
@@ -337,7 +339,7 @@ class Component extends ModelEntity
      */
     public function createField(array $data)
     {
-        $data += array(
+        $data += [
             'fieldLabel' => '',
             'valueType' => '',
             'store' => '',
@@ -349,8 +351,8 @@ class Component extends ModelEntity
             'valueField' => '',
             'allowBlank' => false,
             'translatable' => false,
-            'position' => $this->getMaxPositionValue()
-        );
+            'position' => $this->getMaxPositionValue(),
+        ];
 
         $this->maxFieldPositionValue = max($data['position'], $this->maxFieldPositionValue) + 1;
 
@@ -363,7 +365,6 @@ class Component extends ModelEntity
         return $field;
     }
 
-
     /**
      * Creates a checkbox field for the passed emotion component widget.
      *
@@ -371,25 +372,24 @@ class Component extends ModelEntity
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Checkbox
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createCheckboxField(array $options)
     {
-        $options += array(
-            'xtype' => 'checkboxfield'
-        );
+        $options += [
+            'xtype' => 'checkboxfield',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.ComboBox element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.ComboBox
      *
@@ -403,38 +403,39 @@ class Component extends ModelEntity
      *  - valueField
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $store              Required; Store class which used for the combo class
-     *     @type string $displayField       Required; Field name of the model which displays as text
-     *     @type string $valueField         Required; Identifier field of the combo box
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $store              Required; Store class which used for the combo class
+     *     @var string $displayField       Required; Field name of the model which displays as text
+     *     @var string $valueField         Required; Identifier field of the combo box
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createComboBoxField(array $options)
     {
-        $options += array(
-            'xtype' => 'combobox'
-        );
+        $options += [
+            'xtype' => 'combobox',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.Date element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Date
      *
      * This field type supports the following parameters which can be set
      * as options array value:
+     *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
-     *     @type string $defaultValue       Optional; date string in format Y-m-d
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     *     @var string $defaultValue       Optional; date string in format Y-m-d
      * }
      *
      * @param array $options
@@ -443,25 +444,25 @@ class Component extends ModelEntity
      */
     public function createDateField(array $options)
     {
-        $options += array(
-            'xtype' => 'datefield'
-        );
+        $options += [
+            'xtype' => 'datefield',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.Display element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Display
      *
      * This field type supports the following parameters which can be set
      * as options array value:
+     *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @param array $options
@@ -470,168 +471,164 @@ class Component extends ModelEntity
      */
     public function createDisplayField(array $options)
     {
-        $options += array(
-            'xtype' => 'displayfield'
-        );
+        $options += [
+            'xtype' => 'displayfield',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.Hidden element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Hidden
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createHiddenField(array $options)
     {
-        $options += array(
-            'xtype' => 'hiddenfield'
-        );
+        $options += [
+            'xtype' => 'hiddenfield',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.HtmlEditor element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.HtmlEditor
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createHtmlEditorField(array $options)
     {
-        $options += array(
-            'xtype' => 'htmleditor'
-        );
+        $options += [
+            'xtype' => 'htmleditor',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.Number element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Number
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createNumberField(array $options)
     {
-        $options += array(
-            'xtype' => 'numberfield'
-        );
+        $options += [
+            'xtype' => 'numberfield',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
-     *
      * Creates a Ext.form.field.Radio element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Radio
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createRadioField(array $options)
     {
-        $options += array(
-            'xtype' => 'radiofield'
-        );
+        $options += [
+            'xtype' => 'radiofield',
+        ];
 
         return $this->createField($options);
     }
 
     /**
-     *
      * Creates a Ext.form.field.Text element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Text
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createTextField(array $options)
     {
-        $options += array(
-            'xtype' => 'textfield'
-        );
+        $options += [
+            'xtype' => 'textfield',
+        ];
 
         return $this->createField($options);
     }
-
 
     /**
      * Creates a Ext.form.field.TextArea element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.TextArea
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createTextAreaField(array $options)
     {
-        $options += array(
-            'xtype' => 'textareafield'
-        );
+        $options += [
+            'xtype' => 'textareafield',
+        ];
 
         return $this->createField($options);
     }
-
 
     /**
      * Creates a Ext.form.field.Time element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Time
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
-     *     @type string $defaultValue       Optional; default value as string in format H:i
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     *     @var string $defaultValue       Optional; default value as string in format H:i
      * }
      *
      * @return Field
      */
     public function createTimeField(array $options)
     {
-        $options += array(
-            'xtype' => 'timefield'
-        );
+        $options += [
+            'xtype' => 'timefield',
+        ];
 
         return $this->createField($options);
     }
@@ -640,57 +637,61 @@ class Component extends ModelEntity
      * Creates a code mirror component field.
      *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createCodeMirrorField(array $options)
     {
-        $options += array(
-            'xtype' => 'codemirrorfield'
-        );
+        $options += [
+            'xtype' => 'codemirrorfield',
+        ];
 
         return $this->createField($options);
     }
 
-
     /**
      * Creates a tiny mce component field.
+     *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createTinyMceField(array $options)
     {
-        $options += array(
-            'xtype' => 'tinymce'
-        );
+        $options += [
+            'xtype' => 'tinymce',
+        ];
 
         return $this->createField($options);
     }
 
     /**
      * Creates a media selection component field.
+     *
      * @param array $options {
-     *     @type string $name               Required; Logical name of the component field
-     *     @type string $fieldLabel         Optional; Ext JS form field label.
-     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *
+     *     @var string $name               Required; Logical name of the component field
+     *     @var string $fieldLabel         optional; Ext JS form field label
+     *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
      * @return Field
      */
     public function createMediaField(array $options)
     {
-        $options += array(
-            'xtype' => 'mediafield'
-        );
+        $options += [
+            'xtype' => 'mediafield',
+        ];
 
         return $this->createField($options);
     }
@@ -706,7 +707,7 @@ class Component extends ModelEntity
                 },
                 $this->getFields()->toArray()
             );
-            
+
             $this->maxFieldPositionValue = !empty($positions) ? max($positions) : 0;
         }
 

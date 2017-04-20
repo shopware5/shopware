@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Base.model.OrderStatus', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/order_status/fields"}{/block}
+        //{block name="backend/base/model/order_status/fields"}{/block}
         { name:'id', type: 'int' },
         { name:'name', type: 'string' },
         {

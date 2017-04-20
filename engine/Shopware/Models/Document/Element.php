@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Document;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware document model represents a document.
@@ -40,7 +40,7 @@ class Element extends ModelEntity
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field
      *
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -50,7 +50,7 @@ class Element extends ModelEntity
     /**
      * Contains the name of the document.
      *
-     * @var integer $documentId
+     * @var int
      * @ORM\Column(name="documentID", type="integer", nullable=false)
      */
     private $documentId = '';
@@ -58,7 +58,7 @@ class Element extends ModelEntity
     /**
      * Contains the name of the document.
      *
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name = '';
@@ -66,7 +66,7 @@ class Element extends ModelEntity
     /**
      * Contains the name of the document.
      *
-     * @var string $style
+     * @var string
      * @ORM\Column(name="style", type="string", nullable=false)
      */
     private $style = '';
@@ -74,7 +74,7 @@ class Element extends ModelEntity
     /**
      * Contains the name of the document.
      *
-     * @var string $value
+     * @var string
      * @ORM\Column(name="value", type="string", nullable=false)
      */
     private $value = '';
@@ -84,6 +84,7 @@ class Element extends ModelEntity
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="elements")
      * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Document\Document
      */
     private $document;
@@ -91,7 +92,7 @@ class Element extends ModelEntity
     /**
      * Getter function for the unique id identifier property
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -102,11 +103,13 @@ class Element extends ModelEntity
      * Gets the name of the document.
      *
      * @param string $name
+     *
      * @return \Shopware\Models\Document\Element
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -124,11 +127,13 @@ class Element extends ModelEntity
      * Sets the value for an element.
      *
      * @param string $value
+     *
      * @return \Shopware\Models\Document\Element
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -146,11 +151,13 @@ class Element extends ModelEntity
      * Sets the style for
      *
      * @param string $style
+     *
      * @return \Shopware\Models\Document\Element
      */
     public function setStyle($style)
     {
         $this->style = $style;
+
         return $this;
     }
 
@@ -164,11 +171,13 @@ class Element extends ModelEntity
 
     /**
      * @param \Shopware\Models\Document\Document $document
+     *
      * @return \Shopware\Models\Document\Element
      */
     public function setDocument($document)
     {
         $this->document = $document;
+
         return $this;
     }
 

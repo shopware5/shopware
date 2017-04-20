@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             errorText:'{s name=message/account/error_text}There is an error occurred while saving.{/s}'
         },
 
-		growlMessage:'{s name=message/growlMessage}Customer{/s}'
+        growlMessage:'{s name=message/growlMessage}Customer{/s}'
     },
 
     /**
@@ -345,7 +345,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
             // SW-4322
             form.getForm().getFields().each(function(f){
-          		 if(!f.validate()){
+                 if(!f.validate()){
                     if(f.fieldLabel){
                         missingField = f.fieldLabel;
                     }else if(f.name){
@@ -353,9 +353,9 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage);
                     return false;
-          		 }
+                 }
 
-          	 });
+             });
             return;
         }
 
@@ -389,7 +389,11 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 if (operation.success === true) {
                     if (typeof addressModel !== 'undefined') {
                         addressModel.set('user_id', record.get('id'));
-                        addressModel.save();
+                        addressModel.save({
+                            success: function (result) {
+                                Shopware.app.Application.fireEvent('customer-address-save-successfully', me, result, win, addressModel, form);
+                            }
+                        });
                     }
 
                     number = model.get('number');
@@ -401,6 +405,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     );
 
                     win.attributeForm.saveAttribute(record.get('id'));
+
+                    Shopware.app.Application.fireEvent('customer-save-successfully', me, record, win, form);
 
                     win.destroy();
                     listStore.load();

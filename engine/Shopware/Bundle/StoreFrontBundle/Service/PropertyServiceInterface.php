@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PropertyServiceInterface
@@ -39,8 +39,9 @@ interface PropertyServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Property\Set[]
      */
     public function getList($products, Struct\ShopContextInterface $context);
@@ -51,8 +52,9 @@ interface PropertyServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Property\Set
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

@@ -35,7 +35,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 
 /**
  * Class PluginViewService
- * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
 class PluginViewService
 {
@@ -57,7 +56,7 @@ class PluginViewService
     /**
      * @param PluginLocalService $localPluginService
      * @param PluginStoreService $storePluginService
-     * @param StructHydrator $hydrator
+     * @param StructHydrator     $hydrator
      */
     public function __construct(
         PluginLocalService $localPluginService,
@@ -71,6 +70,7 @@ class PluginViewService
 
     /**
      * @param PluginsByTechnicalNameRequest $context
+     *
      * @return PluginStruct
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
@@ -93,13 +93,14 @@ class PluginViewService
 
     /**
      * @param PluginsByTechnicalNameRequest $context
+     *
      * @return array
      */
     public function getPlugins(PluginsByTechnicalNameRequest $context)
     {
         $localePlugins = $this->localPluginService->getPlugins($context);
 
-        $storePlugins  = $this->storePluginService->getPlugins($context);
+        $storePlugins = $this->storePluginService->getPlugins($context);
 
         $result = [];
         foreach ($context->getTechnicalNames() as $name) {
@@ -116,16 +117,16 @@ class PluginViewService
             }
 
             switch (true) {
-                case ($localPlugin !== null && $storePlugin !== null):
+                case $localPlugin !== null && $storePlugin !== null:
                     $this->hydrator->assignStorePluginStruct($localPlugin, $storePlugin);
                     $result[$name] = $localPlugin;
                     break;
 
-                case ($localPlugin !== null):
+                case $localPlugin !== null:
                     $result[$name] = $localPlugin;
                     break;
 
-                case ($storePlugin !== null): {
+                case $storePlugin !== null: {
                     $result[$name] = $storePlugin;
                     break;
                 }
@@ -137,6 +138,7 @@ class PluginViewService
 
     /**
      * @param ListingRequest $context
+     *
      * @return ListingResultStruct
      */
     public function getStoreListing(ListingRequest $context)
@@ -153,6 +155,7 @@ class PluginViewService
 
     /**
      * @param ListingRequest $context
+     *
      * @return PluginStruct[]
      */
     public function getLocalListing(ListingRequest $context)
@@ -173,6 +176,7 @@ class PluginViewService
 
     /**
      * @param UpdateListingRequest $context
+     *
      * @return UpdateResultStruct
      */
     public function getUpdates(UpdateListingRequest $context)
@@ -196,7 +200,8 @@ class PluginViewService
 
     /**
      * @param PluginStruct[] $plugins
-     * @param BaseRequest $context
+     * @param BaseRequest    $context
+     *
      * @return PluginStruct[]
      */
     private function getAdditionallyStoreData($plugins, BaseRequest $context)
@@ -229,11 +234,13 @@ class PluginViewService
 
             $merged[$key] = $plugin;
         }
+
         return $merged;
     }
 
     /**
      * @param PluginStruct[] $plugins
+     *
      * @return PluginStruct[]
      */
     private function getAdditionallyLocalData($plugins)

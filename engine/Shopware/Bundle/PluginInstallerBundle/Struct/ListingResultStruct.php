@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
- */
 class ListingResultStruct implements \JsonSerializable
 {
     /**
@@ -40,8 +37,8 @@ class ListingResultStruct implements \JsonSerializable
     private $totalCount;
 
     /**
-     * @param PluginStruct[] $plugins Indexed by the technical name
-     * @param int $totalCount
+     * @param PluginStruct[] $plugins    Indexed by the technical name
+     * @param int            $totalCount
      */
     public function __construct($plugins, $totalCount)
     {
@@ -66,7 +63,7 @@ class ListingResultStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

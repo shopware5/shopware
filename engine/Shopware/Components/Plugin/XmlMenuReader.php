@@ -30,14 +30,15 @@ class XmlMenuReader
 {
     /**
      * @param string $file An XML file path
+     *
      * @return array
      */
     public function read($file)
     {
         try {
-            $dom = XmlUtils::loadFile($file, __DIR__.'/schema/menu.xsd');
+            $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/menu.xsd');
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseMenu($dom);
@@ -45,6 +46,7 @@ class XmlMenuReader
 
     /**
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     private function parseMenu(\DOMDocument $xml)
@@ -65,6 +67,7 @@ class XmlMenuReader
 
     /**
      * @param \DOMElement $entry
+     *
      * @return array
      */
     private function parseEntry(\DOMElement $entry)
@@ -94,9 +97,10 @@ class XmlMenuReader
         }
 
         if ($position = $this->getChildren($entry, 'position')) {
-            $menuEntry['position'] = (int)$position[0]->nodeValue;
+            $menuEntry['position'] = (int) $position[0]->nodeValue;
         }
 
+        $menuEntry['children'] = [];
         if ($children = $this->getChildren($entry, 'children')) {
             foreach ($this->getChildren($children[0], 'entry') as $child) {
                 $menuEntry['children'][] = $this->parseEntry($child);
@@ -109,6 +113,7 @@ class XmlMenuReader
     /**
      * @param \DOMNode $node
      * @param $name
+     *
      * @return null|string
      */
     private function getFirstChild(\DOMNode $node, $name)
@@ -130,7 +135,7 @@ class XmlMenuReader
      */
     private function getChildren(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child;

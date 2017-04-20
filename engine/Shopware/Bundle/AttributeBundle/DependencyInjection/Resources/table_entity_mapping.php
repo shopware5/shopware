@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 return [
     's_articles_translations' => [
@@ -18,7 +40,7 @@ return [
         'identifiers' => ['id', 'priceid'],
         'foreignKey' => 'priceid',
         'coreAttributes' => [],
-        'dependingTables' => ['s_article_configurator_template_prices_attributes']
+        'dependingTables' => ['s_article_configurator_template_prices_attributes'],
     ],
     's_articles_img_attributes' => [
         'readOnly' => false,
@@ -26,7 +48,7 @@ return [
         'identifiers' => ['id', 'imageid'],
         'foreignKey' => 'imageid',
         'coreAttributes' => ['attribute1', 'attribute2', 'attribute3'],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_articles_downloads_attributes' => [
         'readOnly' => false,
@@ -34,7 +56,7 @@ return [
         'identifiers' => ['id', 'downloadid'],
         'foreignKey' => 'downloadid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_articles_information_attributes' => [
         'readOnly' => false,
@@ -42,7 +64,7 @@ return [
         'identifiers' => ['id', 'informationid'],
         'foreignKey' => 'informationid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_filter_attributes' => [
         'readOnly' => false,
@@ -50,7 +72,7 @@ return [
         'identifiers' => ['id', 'filterid'],
         'foreignKey' => 'filterid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_filter_options_attributes' => [
         'readOnly' => false,
@@ -58,7 +80,7 @@ return [
         'identifiers' => ['id', 'optionid'],
         'foreignKey' => 'optionid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_filter_values_attributes' => [
         'readOnly' => false,
@@ -66,7 +88,7 @@ return [
         'identifiers' => ['id', 'valueid'],
         'foreignKey' => 'valueid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_articles_esd_attributes' => [
         'readOnly' => false,
@@ -74,7 +96,23 @@ return [
         'identifiers' => ['id', 'esdid'],
         'foreignKey' => 'esdid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
+    ],
+    's_article_configurator_groups_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\ConfiguratorGroup',
+        'identifiers' => ['id', 'groupid'],
+        'foreignKey' => 'groupid',
+        'coreAttributes' => [],
+        'dependingTables' => [],
+    ],
+    's_article_configurator_options_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\ConfiguratorOption',
+        'identifiers' => ['id', 'optionid'],
+        'foreignKey' => 'optionid',
+        'coreAttributes' => [],
+        'dependingTables' => [],
     ],
     's_article_configurator_templates_attributes' => [
         'readOnly' => false,
@@ -82,7 +120,7 @@ return [
         'identifiers' => ['id', 'template_id'],
         'foreignKey' => 'template_id',
         'coreAttributes' => ['attr1', 'attr2', 'attr3', 'attr4', 'attr5', 'attr6', 'attr7', 'attr8', 'attr9', 'attr10', 'attr11', 'attr12', 'attr13', 'attr14', 'attr15', 'attr16', 'attr17', 'attr18', 'attr19', 'attr20'],
-        'dependingTables' => ['s_articles_attributes', 's_articles_translations']
+        'dependingTables' => ['s_articles_attributes', 's_articles_translations'],
     ],
     's_article_configurator_template_prices_attributes' => [
         'readOnly' => false,
@@ -90,7 +128,7 @@ return [
         'identifiers' => ['id', 'template_price_id'],
         'foreignKey' => 'template_price_id',
         'coreAttributes' => [],
-        'dependingTables' => ['s_articles_prices_attributes']
+        'dependingTables' => ['s_articles_prices_attributes'],
     ],
     's_articles_supplier_attributes' => [
         'readOnly' => false,
@@ -98,7 +136,7 @@ return [
         'identifiers' => ['id', 'supplierid'],
         'foreignKey' => 'supplierid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_emarketing_banners_attributes' => [
         'readOnly' => false,
@@ -106,7 +144,15 @@ return [
         'identifiers' => ['id', 'bannerid'],
         'foreignKey' => 'bannerid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
+    ],
+    's_emarketing_partner_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\Partner',
+        'identifiers' => ['id', 'partnerid'],
+        'foreignKey' => 'partnerid',
+        'coreAttributes' => [],
+        'dependingTables' => [],
     ],
     's_blog_attributes' => [
         'readOnly' => false,
@@ -114,7 +160,7 @@ return [
         'identifiers' => ['id', 'blog_id'],
         'foreignKey' => 'blog_id',
         'coreAttributes' => ['attribute1', 'attribute2', 'attribute3', 'attribute4', 'attribute5', 'attribute6'],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_categories_attributes' => [
         'readOnly' => false,
@@ -122,7 +168,7 @@ return [
         'identifiers' => ['id', 'categoryid'],
         'foreignKey' => 'categoryid',
         'coreAttributes' => ['attribute1', 'attribute2', 'attribute3', 'attribute4', 'attribute5', 'attribute6'],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_core_countries_attributes' => [
         'readOnly' => false,
@@ -130,7 +176,7 @@ return [
         'identifiers' => ['id', 'countryid'],
         'foreignKey' => 'countryid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_core_countries_states_attributes' => [
         'readOnly' => false,
@@ -138,7 +184,7 @@ return [
         'identifiers' => ['id', 'stateid'],
         'foreignKey' => 'stateid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_user_attributes' => [
         'readOnly' => false,
@@ -146,7 +192,7 @@ return [
         'identifiers' => ['id', 'userid'],
         'foreignKey' => 'userid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_user_billingaddress_attributes' => [
         'readOnly' => false,
@@ -155,8 +201,8 @@ return [
         'foreignKey' => 'billingid',
         'coreAttributes' => ['text1', 'text2', 'text3', 'text4', 'text5', 'text6'],
         'dependingTables' => [
-            's_user_addresses_attributes', 's_user_shippingaddress_attributes', 's_order_billingaddress_attributes', 's_order_shippingaddress_attributes'
-        ]
+            's_user_addresses_attributes', 's_user_shippingaddress_attributes', 's_order_billingaddress_attributes', 's_order_shippingaddress_attributes',
+        ],
     ],
     's_user_shippingaddress_attributes' => [
         'readOnly' => false,
@@ -165,8 +211,8 @@ return [
         'foreignKey' => 'shippingid',
         'coreAttributes' => ['text1', 'text2', 'text3', 'text4', 'text5', 'text6'],
         'dependingTables' => [
-            's_user_addresses_attributes', 's_user_billingaddress_attributes', 's_order_billingaddress_attributes', 's_order_shippingaddress_attributes'
-        ]
+            's_user_addresses_attributes', 's_user_billingaddress_attributes', 's_order_billingaddress_attributes', 's_order_shippingaddress_attributes',
+        ],
     ],
     's_order_basket_attributes' => [
         'readOnly' => false,
@@ -174,7 +220,7 @@ return [
         'identifiers' => ['id', 'basketid'],
         'foreignKey' => 'basketid',
         'coreAttributes' => ['attribute1', 'attribute2', 'attribute3', 'attribute4', 'attribute5', 'attribute6'],
-        'dependingTables' => ['s_order_details_attributes']
+        'dependingTables' => ['s_order_details_attributes'],
     ],
     's_order_attributes' => [
         'readOnly' => false,
@@ -182,7 +228,7 @@ return [
         'identifiers' => ['id', 'orderid'],
         'foreignKey' => 'orderid',
         'coreAttributes' => ['attribute1', 'attribute2', 'attribute3', 'attribute4', 'attribute5', 'attribute6'],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_order_details_attributes' => [
         'readOnly' => false,
@@ -190,7 +236,7 @@ return [
         'identifiers' => ['id', 'detailid'],
         'foreignKey' => 'detailid',
         'coreAttributes' => ['attribute1', 'attribute2', 'attribute3', 'attribute4', 'attribute5', 'attribute6'],
-        'dependingTables' => ['s_order_basket_attributes']
+        'dependingTables' => ['s_order_basket_attributes'],
     ],
     's_order_billingaddress_attributes' => [
         'readOnly' => false,
@@ -199,8 +245,8 @@ return [
         'foreignKey' => 'billingid',
         'coreAttributes' => ['text1', 'text2', 'text3', 'text4', 'text5', 'text6'],
         'dependingTables' => [
-            's_user_addresses_attributes', 's_user_billingaddress_attributes', 's_user_shippingaddress_attributes', 's_order_shippingaddress_attributes'
-        ]
+            's_user_addresses_attributes', 's_user_billingaddress_attributes', 's_user_shippingaddress_attributes', 's_order_shippingaddress_attributes',
+        ],
     ],
     's_order_shippingaddress_attributes' => [
         'readOnly' => false,
@@ -209,8 +255,8 @@ return [
         'foreignKey' => 'shippingid',
         'coreAttributes' => ['text1', 'text2', 'text3', 'text4', 'text5', 'text6'],
         'dependingTables' => [
-            's_user_addresses_attributes', 's_user_billingaddress_attributes', 's_user_shippingaddress_attributes', 's_order_billingaddress_attributes'
-        ]
+            's_user_addresses_attributes', 's_user_billingaddress_attributes', 's_user_shippingaddress_attributes', 's_order_billingaddress_attributes',
+        ],
     ],
     's_order_documents_attributes' => [
         'readOnly' => false,
@@ -218,7 +264,7 @@ return [
         'identifiers' => ['id', 'documentID'],
         'foreignKey' => 'documentID',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_core_customergroups_attributes' => [
         'readOnly' => false,
@@ -226,7 +272,7 @@ return [
         'identifiers' => ['id', 'customergroupid'],
         'foreignKey' => 'customergroupid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_premium_dispatch_attributes' => [
         'readOnly' => false,
@@ -234,7 +280,7 @@ return [
         'identifiers' => ['id', 'dispatchid'],
         'foreignKey' => 'dispatchid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_product_streams_attributes' => [
         'readOnly' => false,
@@ -242,7 +288,7 @@ return [
         'identifiers' => ['id', 'streamid'],
         'foreignKey' => 'streamid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_emotion_attributes' => [
         'readOnly' => false,
@@ -250,7 +296,7 @@ return [
         'identifiers' => ['id', 'emotionid'],
         'foreignKey' => 'emotionid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_cms_support_attributes' => [
         'readOnly' => false,
@@ -258,7 +304,7 @@ return [
         'identifiers' => ['id', 'cmssupportid'],
         'foreignKey' => 'cmssupportid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_core_config_mails_attributes' => [
         'readOnly' => false,
@@ -266,7 +312,7 @@ return [
         'identifiers' => ['id', 'mailid'],
         'foreignKey' => 'mailid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_media_attributes' => [
         'readOnly' => false,
@@ -274,7 +320,7 @@ return [
         'identifiers' => ['id', 'mediaid'],
         'foreignKey' => 'mediaid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_core_paymentmeans_attributes' => [
         'readOnly' => false,
@@ -282,7 +328,7 @@ return [
         'identifiers' => ['id', 'paymentmeanid'],
         'foreignKey' => 'paymentmeanid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_export_attributes' => [
         'readOnly' => false,
@@ -290,7 +336,7 @@ return [
         'identifiers' => ['id', 'exportid'],
         'foreignKey' => 'exportid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_cms_static_attributes' => [
         'readOnly' => false,
@@ -298,7 +344,7 @@ return [
         'identifiers' => ['id', 'cmsstaticid'],
         'foreignKey' => 'cmsstaticid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_core_auth_attributes' => [
         'readOnly' => false,
@@ -306,7 +352,7 @@ return [
         'identifiers' => ['id', 'authid'],
         'foreignKey' => 'authid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_emarketing_vouchers_attributes' => [
         'readOnly' => false,
@@ -314,7 +360,7 @@ return [
         'identifiers' => ['id', 'voucherid'],
         'foreignKey' => 'voucherid',
         'coreAttributes' => [],
-        'dependingTables' => []
+        'dependingTables' => [],
     ],
     's_user_addresses_attributes' => [
         'readOnly' => false,
@@ -323,7 +369,7 @@ return [
         'foreignKey' => 'address_id',
         'coreAttributes' => ['text1', 'text2', 'text3', 'text4', 'text5', 'text6'],
         'dependingTables' => [
-            's_user_billingaddress_attributes', 's_user_shippingaddress_attributes', 's_order_billingaddress_attributes', 's_order_shippingaddress_attributes'
-        ]
-    ]
+            's_user_billingaddress_attributes', 's_user_shippingaddress_attributes', 's_order_billingaddress_attributes', 's_order_shippingaddress_attributes',
+        ],
+    ],
 ];

@@ -1,105 +1,109 @@
 <?xml version="1.0"?>
 <requirements>
-	<requirement>
-		<name>php</name><group>core</group><required>5.6.4</required>
-	</requirement>
-	<requirement>
-	 	<name>ionCube Loader</name><group>core</group><required>5.0</required>
-		<notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
-	</requirement>
-	<requirement>
-		<name>mod_rewrite</name><group>core</group><required>1</required>
-		<notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
-	</requirement>
-	<requirement>
-	 	<name>mysql</name><group>core</group><required>5.5.0</required><database>1</database>
-	</requirement>
-	<requirement>
-	 	<name>pdo</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>pdo_mysql</name><group>extension</group><required>1</required>
-	</requirement>
     <requirement>
-   	 	<name>mysql_strict_mode</name><group>core</group><required>0</required><database>1</database>
-   	</requirement>
-	<requirement>
-	 	<name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info>
-	</requirement>
-	<requirement>
-	 	<name>gd</name><group>extension</group><required>2.0.0</required>
-	</requirement>
-	<requirement>
-	 	<name>gd_jpg</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>freetype</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>libxml</name><group>extension</group><required>2.6.26</required>
-	</requirement>
-	<requirement>
-	 	<name>curl</name><group>extension</group><required>7.0.0</required>
-	</requirement>
-	<requirement>
-	 	<name>openssl</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>session</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>mbstring</name><group>extension</group><required>1</required>
-	</requirement>
+        <name>php</name><group>core</group><required>5.6.4</required>
+    </requirement>
+    <requirement>
+        <name>ionCube Loader</name><group>core</group><required>5.0</required>
+        <notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
+    </requirement>
+    <requirement>
+        <name>mod_rewrite</name><group>core</group><required>1</required>
+        <notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
+    </requirement>
+    <requirement>
+        <name>mysql</name><group>core</group><required>5.5.0</required><database>1</database>
+    </requirement>
+    <requirement>
+        <name>pdo</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>pdo_mysql</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>mysql_strict_mode</name><group>core</group><required>0</required><database>1</database>
+    </requirement>
+    <requirement>
+        <name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info>
+    </requirement>
+    <requirement>
+        <name>gd</name><group>extension</group><required>2.0.0</required>
+    </requirement>
+    <requirement>
+        <name>gd_jpg</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>freetype</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>libxml</name><group>extension</group><required>2.6.26</required>
+    </requirement>
+    <requirement>
+        <name>curl</name><group>extension</group><required>7.0.0</required>
+    </requirement>
+    <requirement>
+        <name>openssl</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>session</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>mbstring</name><group>extension</group><required>1</required>
+    </requirement>
     <requirement>
         <name>iconv</name><group>extension</group><required>1</required>
     </requirement>
-	<requirement>
-	 	<name>json</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>xml</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>simplexml</name><group>extension</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>ini_set</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>include_path</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>session.auto_start</name><group>config</group><required>0</required>
-	</requirement>
-	<requirement>
-	 	<name>memory_limit</name><group>config</group><required>256M</required>
-	</requirement>
-	<requirement>
-	 	<name>max_execution_time</name><group>config</group><required>30</required>
-	</requirement>
-	<requirement>
-	 	<name>upload_max_filesize</name><group>config</group><required>6M</required>
-	</requirement>
-	<requirement>
-	 	<name>post_max_size</name><group>config</group><required>8M</required>
-	</requirement>
-	<requirement>
-	 	<name>allow_url_fopen</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>file_uploads</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>suhosin.session.cryptua</name><group>config</group><required>0</required>
-	</requirement>
+    <requirement>
+        <name>json</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>xml</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>simplexml</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>ini_set</name><group>config</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>include_path</name><group>config</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>session.auto_start</name><group>config</group><required>0</required>
+    </requirement>
+    <requirement>
+        <name>memory_limit</name><group>config</group><required>256M</required>
+    </requirement>
+    <requirement>
+        <name>max_execution_time</name><group>config</group><required>30</required>
+    </requirement>
+    <requirement>
+        <name>upload_max_filesize</name><group>config</group><required>6M</required>
+    </requirement>
+    <requirement>
+        <name>post_max_size</name><group>config</group><required>8M</required>
+    </requirement>
+    <requirement>
+        <name>allow_url_fopen</name><group>config</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>file_uploads</name><group>config</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>suhosin.session.cryptua</name><group>config</group><required>0</required>
+    </requirement>
     <requirement>
         <name>suhosin.get.max_value_length</name><group>config</group><required>2000</required>
         <notice>When the "suhosin" PHP extension is loaded and the "get.max_value_length" is less than 2000, the Ext JS files cannot be loaded via GET request in the Shopware backend. This means that the Shopware backend can be partially uncached.</notice>
     </requirement>
 	<requirement>
-	 	<name>zip</name><group>extension</group><required>1</required>
+		<name>parse_ini_file</name><group>config</group><required>1</required>
+		<notice>The php function "parse_ini_file" must be enabled to use plugins which provide custom snippets.</notice>
 	</requirement>
-	<requirement>
-	 	<name>ftp</name><group>extension</group><required>1</required>
-	</requirement>
+    <requirement>
+        <name>zip</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>ftp</name><group>extension</group><required>1</required>
+    </requirement>
 </requirements>

@@ -26,9 +26,9 @@ namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
 use Shopware\Bundle\AccountBundle\Constraint\Password;
-use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
@@ -37,6 +37,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\EqualTo;
@@ -44,15 +46,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Form reflects the personal fields for the registration, including auth
- *
- * @package Shopware\Bundle\AccountBundle\Form\Account
  */
 class PersonalFormType extends AbstractType
 {
     const SNIPPET_BIRTHDAY = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'DateFailure',
-        'default' => 'Please enter a valid birthday'
+        'default' => 'Please enter a valid birthday',
     ];
 
     /**
@@ -72,8 +72,8 @@ class PersonalFormType extends AbstractType
 
     /**
      * @param Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $context
+     * @param \Shopware_Components_Config         $config
+     * @param ContextServiceInterface             $context
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
@@ -100,77 +100,94 @@ class PersonalFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Customer::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $whitelist = [
+                'password',
+                'passwordConfirmation',
+            ];
+
+            $data = $event->getData();
+
+            array_walk_recursive($data, function (&$item, $key) use ($whitelist) {
+                if (in_array($key, $whitelist, true)) {
+                    return $item;
+                }
+                $item = strip_tags($item);
+            });
+            $event->setData($data);
+        });
+
         $builder->add('email', EmailType::class, [
             'constraints' => [
-                new FormEmail(['shop' => $this->context->getShopContext()->getShop()])
-            ]
+                new FormEmail(['shop' => $this->context->getShopContext()->getShop()]),
+            ],
         ]);
 
         $builder->add('password', PasswordType::class, [
-            'constraints' => [new Password()]
+            'constraints' => [new Password()],
         ]);
 
         if ($this->config->get('doublepasswordvalidation')) {
             $builder->add('passwordConfirmation', PasswordType::class, [
-                'mapped' => false
+                'mapped' => false,
             ]);
         }
 
         if ($this->config->get('doubleemailvalidation')) {
             $builder->add('emailConfirmation', EmailType::class, [
-                'mapped' => false
+                'mapped' => false,
             ]);
         }
 
         $builder->add('customer_type', TextType::class, [
-            'data' => 'private'
+            'data' => 'private',
         ]);
 
         $builder->add('salutation', SalutationType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
-            'constraints' => $this->getBirthdayConstraints()
+            'constraints' => $this->getBirthdayConstraints(),
         ]);
 
         $builder->add('accountmode', TextType::class, [
-            'empty_data' => Customer::ACCOUNT_MODE_CUSTOMER
+            'empty_data' => Customer::ACCOUNT_MODE_CUSTOMER,
         ]);
 
         $builder->add('dpacheckbox', TextType::class, [
             'mapped' => false,
             'empty_data' => 0,
-            'constraints' => $this->getPrivacyConstraints()
+            'constraints' => $this->getPrivacyConstraints(),
         ]);
 
         $builder->add('attribute', AttributeFormType::class, [
-            'data_class' => CustomerAttribute::class
+            'data_class' => CustomerAttribute::class,
         ]);
 
         $builder->add('additional', null, [
             'compound' => true,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
@@ -183,7 +200,7 @@ class PersonalFormType extends AbstractType
 
         if ($this->config->get('showBirthdayField') && $this->config->get('requireBirthdayField')) {
             $constraints[] = new NotBlank([
-                'message' => $this->getSnippet(self::SNIPPET_BIRTHDAY)
+                'message' => $this->getSnippet(self::SNIPPET_BIRTHDAY),
             ]);
         }
 
@@ -206,6 +223,7 @@ class PersonalFormType extends AbstractType
 
     /**
      * @param array $snippet with namespace, name and default value
+     *
      * @return string
      */
     private function getSnippet(array $snippet)

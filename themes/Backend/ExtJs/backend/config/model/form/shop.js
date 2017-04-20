@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
     extend:'Ext.data.Model',
 
     fields: [
-		//{block name="backend/config/model/form/shop/fields"}{/block}
+        //{block name="backend/config/model/form/shop/fields"}{/block}
         { name: 'id', type:'int', useNull: true, defaultValue: null },
         { name: 'typeSwitch',  persist: false, convert: function(v, record) {
 

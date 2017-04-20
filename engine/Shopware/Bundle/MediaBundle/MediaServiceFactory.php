@@ -27,11 +27,11 @@ namespace Shopware\Bundle\MediaBundle;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
+use Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Class MediaServiceFactory
- * @package Shopware\Bundle\MediaBundle
  */
 class MediaServiceFactory
 {
@@ -46,12 +46,19 @@ class MediaServiceFactory
     private $container;
 
     /**
-     * @param Container $container
-     * @param array $cdnConfig
+     * @var AdapterFactoryInterface[]
      */
-    public function __construct(Container $container, array $cdnConfig)
+    private $adapterFactories = [];
+
+    /**
+     * @param Container $container
+     * @param array     $adapterFactories
+     * @param array     $cdnConfig
+     */
+    public function __construct(Container $container, array $adapterFactories = [], array $cdnConfig)
     {
         $this->container = $container;
+        $this->adapterFactories = $adapterFactories;
         $this->cdnConfig = $cdnConfig;
     }
 
@@ -59,18 +66,20 @@ class MediaServiceFactory
      * Return a new MediaService instance based on the configured storage type
      *
      * @param string $backendName
-     * @return MediaServiceInterface
+     *
      * @throws \Exception
+     *
+     * @return MediaServiceInterface
      */
     public function factory($backendName)
     {
         if (!isset($this->cdnConfig['adapters'][$backendName])) {
-            throw new \Exception("Configuration '".$backendName."' not found");
+            throw new \Exception("Configuration '" . $backendName . "' not found");
         }
 
         // Filesystem
         $config = $this->cdnConfig['adapters'][$backendName];
-        $adapter = $this->collectAdapterByType($config);
+        $adapter = $this->getAdapter($config);
         $filesystem = new Filesystem($adapter, ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
 
         // Strategy
@@ -85,11 +94,13 @@ class MediaServiceFactory
      * Collects third party adapters
      *
      * @param array $config
-     * @return AdapterInterface
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
+     *
+     * @return AdapterInterface
      */
-    private function collectAdapterByType($config)
+    private function getAdapterByCollectEvent($config)
     {
         $adapters = new ArrayCollection();
         $adapters = $this->container->get('events')->collect('Shopware_Collect_MediaAdapter_' . $config['type'], $adapters, ['config' => $config]);
@@ -97,9 +108,25 @@ class MediaServiceFactory
         $adapter = $adapters->first();
 
         if (!$adapter) {
-            throw new \Exception("CDN Adapter '".$config['type']."' not found.");
+            throw new \Exception("CDN Adapter '" . $config['type'] . "' not found.");
         }
 
         return $adapter;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return AdapterInterface
+     */
+    private function getAdapter(array $config)
+    {
+        foreach ($this->adapterFactories as $factory) {
+            if ($factory->getType() === $config['type']) {
+                return $factory->create($config);
+            }
+        }
+
+        return $this->getAdapterByCollectEvent($config);
     }
 }
