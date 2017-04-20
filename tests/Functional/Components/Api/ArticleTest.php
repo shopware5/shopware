@@ -2772,6 +2772,28 @@ class ArticleTest extends TestCase
         }
     }
 
+    public function testArticleCreateWithNoStock()
+    {
+        $data = [
+            'name' => 'article without stock definition',
+            'active' => true,
+            'taxId' => 1,
+            'mainDetail' => [
+                'number' => 'withoutstock' . uniqid(rand()),
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'price' => 999,
+                    ],
+                ],
+            ],
+        ];
+
+        $model = $this->resource->create($data);
+
+        $this->assertSame(0, $model->getMainDetail()->getInStock());
+    }
+
     /**
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
