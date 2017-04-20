@@ -601,3 +601,28 @@ In addition, the emotion template will now be populated with an `Shopware\Bundle
 ```
 {convertEmotion assign=emotion emotion=$emotion}
 ```
+
+### Dropped support for Internet Explorer < 11
+
+* Removed `ie.less` file from the Responsive Theme
+* Removed vendor prefixes `-ms` and  `-o` from all mixins in the Bare and Responsive Theme
+* Removed file `jquery.ie-fixes.js` from the Responsive Theme
+    * Removed `selectivizr`, a CSS3 pseudo-class & attribute selector polyfill
+    * Removed `placeholder` polyfill
+    * Removed `Respond.js` polyfill for `min / max-width` media queries
+* Removed `matchMedia` polyfill from `jquery.state-manager.js`. Use `Modernizr.mq()` for the same functionality
+* Removed `requestAnimationFrame` polyfill from `jquery.state-manager.js`
+* Removed `cancelAnimationFrame` polyfill from `jquery.state-manager.js`
+* Removed cookie based `Storage` polyfill from `jquery.storage-manager.js`
+* Removed `hasLocalStorageSupport` method from `jquery.storage-manager.js`. Use Modernizr to detect the feature
+* Removed `hasSessionStorageSupport` method from `jquery.storage-manager.js`. Use Modernizr to detect the feature
+* Updated Modernizr to version 3.5.0 and removed superfluous options & polyfills
+    * Removed `html5shiv`
+    * Removed option `Input attributes`
+    * Removed option `Form input types`
+    * Removed option `Border radius`
+    * Removed option `Box shadow`
+    * Removed option `CSS gradient`
+    * Removed option `CSS Transforms`
+    * Removed option `CSS Transforms 3D`
+    * Removed option `CSS Transitions`
