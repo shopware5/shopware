@@ -36,56 +36,6 @@ use Shopware\Components\Model\ModelRepository;
 class Repository extends ModelRepository
 {
     /**
-     * Calculates the total count of the getListQuery because getQueryCount and the paginator are to slow with huge data
-     *
-     * @param null $filter
-     * @param null $customerGroup
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getBackendListCountedBuilder($filter = null, $customerGroup = null)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-
-        //add the displayed columns
-        $builder->select([
-            $builder->expr()->count('customer') . ' as customerCount',
-        ]);
-
-        $builder->from($this->getEntityName(), 'customer')
-                ->join('customer.billing', 'billing')
-                ->leftJoin('customer.group', 'customergroups');
-
-        //filter the displayed columns with the passed filter string
-        if (!empty($filter)) {
-            $fullNameExp = $builder->expr()->concat('customer.firstname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.lastname'));
-            $fullNameReversedExp = $builder->expr()->concat('customer.lastname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.firstname'));
-
-            $builder->andWhere('customer.number LIKE ?1')        //Search only the beginning of the customer number.
-                    ->orWhere('customer.firstname LIKE ?2')      //Full text search for the first name of the customer
-                    ->orWhere('customer.lastname LIKE ?2')       //Full text search for the last name of the customer
-                    ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
-                    ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
-                    ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
-                    ->orWhere('customer.firstLogin LIKE ?3')    //Search only for the end of the first login date.
-                    ->orWhere('customergroups.name LIKE ?2')    //Full text search for the customer group
-                    ->orWhere('billing.company LIKE ?2')        //Full text search for the company of the customer
-                    ->orWhere('billing.city LIKE ?2')           //Full text search for the city of the customer
-                    ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
-                    ->setParameter(1, $filter . '%')
-                    ->setParameter(2, '%' . $filter . '%')
-                    ->setParameter(3, '%' . $filter);
-        }
-        //filter the customers with the passed customer group parameter
-        if (!empty($customerGroup)) {
-            $builder->andWhere('customergroups.id = ?4')
-                    ->setParameter(4, $customerGroup);
-        }
-
-        return $builder;
-    }
-
-    /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all data about a single customer.
      *
      * @param $customerId

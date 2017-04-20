@@ -337,6 +337,7 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
 * Removed old customer listing functions:
     * `Shopware\Models\Customer\Repository::getListQueryBuilder` 
     * `Shopware\Models\Customer\Repository::getListQuery`
+    * `Shopware\Models\Customer\Repository::getBackendListCountedBuilder`
     * `Shopware_Controllers_Backend_Customer::getListAction`
     * `Shopware.apps.Customer.model.List`
     * `Shopware.apps.Customer.store.List`
