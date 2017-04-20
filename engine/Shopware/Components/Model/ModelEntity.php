@@ -33,6 +33,17 @@ namespace Shopware\Components\Model;
  */
 abstract class ModelEntity
 {
+    
+    /**
+     * Implementing the __clone interceptor method to set the entities id property 
+     * to null on using the clone method
+     */ 
+    public function __clone(){
+        if($this->id){
+            $this->id = null;
+        }
+    }
+    
     /**
      * Example:
      *
