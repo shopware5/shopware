@@ -140,11 +140,6 @@
             parseDate: null,
 
             /**
-             * Date formatter that transforms a given date object to a string, according to passed format.
-             */
-            formatDate: null,
-
-            /**
              * Submit the parent form of the date picker input on date change.
              */
             autoSubmit: false
