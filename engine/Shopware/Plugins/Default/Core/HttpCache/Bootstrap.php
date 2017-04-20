@@ -300,9 +300,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Do http caching jobs
      *
-     * @param Enlight_Controller_ActionEventArgs $args
+     * @param Enlight_Event_EventArgs $args
      */
-    public function onPreDispatch(\Enlight_Controller_ActionEventArgs $args)
+    public function onPreDispatch(\Enlight_Event_EventArgs $args)
     {
         $this->action = $args->getSubject();
         $this->request = $args->getRequest();
@@ -323,9 +323,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * On post dispatch we try to find affected articleIds displayed during this request
      *
-     * @param \Enlight_Controller_ActionEventArgs $args
+     * @param \Enlight_Event_EventArgs $args
      */
-    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
+    public function onPostDispatch(\Enlight_Event_EventArgs $args)
     {
         $view = $args->getSubject()->View();
 

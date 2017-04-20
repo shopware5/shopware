@@ -708,9 +708,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Event listener of the post dispatch event of the backend and widgets emotion controller
      * to load the plugin emotion template extensions.
      *
-     * @param Enlight_Controller_ActionEventArgs $args
+     * @param Enlight_Event_EventArgs $args
      */
-    public function extendsEmotionTemplates(Enlight_Controller_ActionEventArgs $args)
+    public function extendsEmotionTemplates(Enlight_Event_EventArgs $args)
     {
         /** @var $view Enlight_View_Default */
         $view = $args->getSubject()->View();
