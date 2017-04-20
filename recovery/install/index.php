@@ -63,7 +63,7 @@ if (PHP_SAPI === 'cli') {
 ini_set('max_execution_time', 120);
 
 // Redirect to no mod rewrite path
-if (!isset($_SERVER['MOD_REWRITE']) && isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['REQUEST_URI'])) {
+if (!in_array('mod_rewrite', apache_get_modules()) && isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['REQUEST_URI'])) {
     if (empty($_SERVER['PATH_INFO']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) !== 0) {
         header('Location: ' . $_SERVER['SCRIPT_NAME'], true);
 
