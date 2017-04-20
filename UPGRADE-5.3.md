@@ -135,6 +135,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ```
 
 did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder.
+* Renamed class `ShopwarePlugins\PluginManager\Components\PluginCategoryService` to `Shopware\Bundle\PluginInstallerBundle\Service\PluginCategoryService`
+* Moved plugin PluginManager in core
 
 ### Removals
 

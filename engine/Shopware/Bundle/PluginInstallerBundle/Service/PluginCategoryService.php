@@ -22,14 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugins\PluginManager\Components;
+namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOStatement;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\CategoryStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
+/**
+ * @package Shopware\Bundle\PluginInstallerBundle\Service
+ */
 class PluginCategoryService
 {
     const CATEGORY_HIGHLIGHTS = -1;
