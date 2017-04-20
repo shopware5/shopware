@@ -26,6 +26,7 @@ namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Resource\Media as MediaResource;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Media\Media;
 
 class BannerComponentHandler implements ComponentHandlerInterface
@@ -46,14 +47,15 @@ class BannerComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param MediaService $mediaService
+     * @param Container    $container
      */
-    public function __construct(MediaService $mediaService)
+    public function __construct(MediaService $mediaService, Container $container)
     {
         $this->mediaService = $mediaService;
 
         $mediaResource = new MediaResource();
-        $mediaResource->setContainer(Shopware()->Container());
-        $mediaResource->setManager(Shopware()->Container()->get('models'));
+        $mediaResource->setContainer($container);
+        $mediaResource->setManager($container->get('models'));
 
         $this->mediaResource = $mediaResource;
     }
