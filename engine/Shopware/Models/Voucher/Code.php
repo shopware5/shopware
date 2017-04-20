@@ -80,7 +80,7 @@ class Code extends ModelEntity
     private $voucher;
     /**
      * @var \Shopware\Models\Voucher\Voucher
-     * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Customer")
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
     private $customer;
