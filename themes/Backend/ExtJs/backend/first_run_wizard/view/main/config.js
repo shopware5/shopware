@@ -60,40 +60,46 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
         shopSettings: {
             title: '{s name=config/shopSettings/title}Shop settings{/s}',
             shopName: {
-                label: '{s name=config/shopSettings/shopName/label}{/s}'
+                label: '{s name=config/shopSettings/shopName/label}Shop name{/s}'
             },
             mail: {
-                label: '{s name=config/shopSettings/mail/label}{/s}'
+                label: '{s name=config/shopSettings/mail/label}Your email address{/s}'
             },
             address: {
-                label: '{s name=config/shopSettings/address/label}{/s}'
+                label: '{s name=config/shopSettings/address/label}Address{/s}'
             },
             bankAccount: {
-                label: '{s name=config/shopSettings/bankAccount/label}{/s}'
+                label: '{s name=config/shopSettings/bankAccount/label}Bank account{/s}'
             },
             company: {
-                label: '{s name=config/shopSettings/company/label}{/s}'
+                label: '{s name=config/shopSettings/company/label}Company{/s}'
             }
         },
         themeSettings: {
             title: '{s name=config/themeSettings/title}Theme settings{/s}',
             brandPrimary: {
-                label: '{s name=config/themeSettings/brandPrimaryColor/label}{/s}'
+                label: '{s name=config/themeSettings/brandPrimaryColor/label}Primary color{/s}'
             },
             brandSecondary: {
-                label: '{s name=config/themeSettings/brandSecondaryColor/label}{/s}'
+                label: '{s name=config/themeSettings/brandSecondaryColor/label}Secondary color{/s}'
             },
             desktopLogo: {
-                label: '{s name=config/themeSettings/desktopLogo/label}{/s}'
+                label: '{s name=config/themeSettings/desktopLogo/label}Shop\'s logo (desktop){/s}'
             },
             tabletLandscapeLogo: {
-                label: '{s name=config/themeSettings/tabletLandscapeLogo/label}{/s}'
+                label: '{s name=config/themeSettings/tabletLandscapeLogo/label}Shop\'s logo (tablet landscape){/s}'
             },
             tabletLogo: {
-                label: '{s name=config/themeSettings/tabletLogo/label}{/s}'
+                label: '{s name=config/themeSettings/tabletLogo/label}Shop\'s logo (tablet){/s}'
             },
             mobileLogo: {
-                label: '{s name=config/themeSettings/mobileLogo/label}{/s}'
+                label: '{s name=config/themeSettings/mobileLogo/label}Shop\'s logo (mobile){/s}'
+            }
+        },
+        documentSettings: {
+            title: '{s name=config/documentSettings/title}Document settings{/s}',
+            logo: {
+                label: '{s name=config/documentSettings/logo/label}Logo{/s}'
             }
         }
     },
@@ -117,7 +123,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
                 html: '<p>' + me.snippets.content.message + '</p>'
             },
             me.createShopConfigForm(),
-            me.createThemeConfigForm()
+            me.createThemeConfigForm(),
+            me.createDocumentConfigForm()
         ];
 
         me.callParent(arguments);
@@ -244,6 +251,32 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
         });
 
         return me.shopConfigFieldSet;
+    },
+
+    createDocumentConfigForm: function() {
+        var me = this;
+
+        me.documentLogo = Ext.create('Ext.form.field.TinyMCE', {
+            name: '__document_logo',
+            fieldLabel: me.snippets.documentSettings.logo.label,
+            supportText: me.snippets.documentSettings.logo.support
+        });
+
+        me.documentConfigFieldSet = Ext.create('Ext.form.FieldSet', {
+            cls: Ext.baseCSSPrefix + 'base-field-set',
+            title: me.snippets.documentSettings.title,
+            defaults: {
+                anchor:'95%',
+                labelWidth:150,
+                minWidth:250,
+                xtype:'textfield'
+            },
+            items: [
+                me.documentLogo
+            ]
+        });
+
+        return me.documentConfigFieldSet;
     },
 
     getButtons: function() {

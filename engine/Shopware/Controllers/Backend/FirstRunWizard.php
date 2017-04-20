@@ -25,6 +25,7 @@
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
+use Shopware\Models\Document\Element;
 
 class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs
 {
@@ -133,6 +134,38 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $this->Request()->setParam('elements', $requestElements);
 
+        /**
+         * Save document config
+         */
+        $documentConfigKeys = [
+            'Logo',
+        ];
+
+        $documentConfigKeys = array_map(function ($key) {
+            return '__document_' . strtolower($key);
+        }, $documentConfigKeys);
+
+        $documentConfigValues = array_intersect_key($values, array_flip($documentConfigKeys));
+        $persistElements = [];
+
+        foreach ($documentConfigValues as $key => $value) {
+            $key = str_replace('__document_', '', $key);
+            $elements = Shopware()->Models()->getRepository(Element::class)->findBy(['name' => $key]);
+
+            if (empty($elements)) {
+                continue;
+            }
+
+            foreach ($elements as $element) {
+                $element->setValue($value);
+                $persistElements[] = $element;
+            }
+        }
+
+        if (count($persistElements)) {
+            Shopware()->Models()->flush($persistElements);
+        }
+
         $this->forward('saveForm', 'Config');
     }
 
@@ -217,9 +250,29 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $shopConfigValues[$shopConfig['name']] = $value;
         }
 
+        /**
+         * Load document config values
+         */
+        $documentConfigKeys = [
+            'Logo',
+        ];
+
+        $builder = $this->container->get('models')->createQueryBuilder();
+        $builder->select(['element'])
+            ->from('Shopware\Models\Document\Element', 'element')
+            ->where('element.name IN (:names)')
+            ->setParameter('names', $documentConfigKeys, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
+
+        $documentConfigData = $builder->getQuery()->getArrayResult();
+        $documentConfigValues = [];
+
+        foreach ($documentConfigData as $documentConfig) {
+            $documentConfigValues['__document_' . strtolower($documentConfig['name'])] = $documentConfig['value'];
+        }
+
         $this->View()->assign([
             'success' => true,
-            'data' => array_merge($shopConfigValues, $themeConfigValues),
+            'data' => array_merge($shopConfigValues, $themeConfigValues, $documentConfigValues),
         ]);
     }
 

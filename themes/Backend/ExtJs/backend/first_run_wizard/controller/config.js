@@ -87,7 +87,8 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
             configPanel.mailField,
             configPanel.addressField,
             configPanel.bankAccountField,
-            configPanel.companyField
+            configPanel.companyField,
+            configPanel.documentLogo
         ];
 
         var formValidation = me.validateForm(fields);
@@ -126,6 +127,9 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                     configPanel.addressField.setValue(formData.address);
                     configPanel.bankAccountField.setValue(formData.bankAccount);
                     configPanel.companyField.setValue(formData.company);
+                    configPanel.documentLogo.getEditor().onInit.add(function() {
+                        configPanel.documentLogo.setEditorValue(formData['__document_logo'], configPanel.documentLogo);
+                    });
                 }
             }
         });
