@@ -1194,8 +1194,7 @@ class sExport
         $sql = "
             SELECT
               c.id, c.id as countryID, countryname, countryiso,
-              countryen, c.position, notice,
-              c.shippingfree as shippingfree
+              countryen, c.position, notice
             FROM s_core_countries c
             WHERE $sql
         ";

@@ -1003,7 +1003,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
                     'areaID' => '1',
-                    'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',

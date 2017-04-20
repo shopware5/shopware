@@ -330,6 +330,10 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
     * `.device--tablet-landscape`
     * `.device--desktop`
 * Removed `max-width` rule for `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
+* Removed unused field `s_core_countries.shippingfree` 
+* Removed `__country_shippingfree` field in `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper::getCountryFields`
+* Removed `Shopware\Bundle\StoreFrontBundle\Struct\Country::setShippingFree` and `Shopware\Bundle\StoreFrontBundle\Struct\Country::isShippingFree`
+* Removed `Shopware\Models\Country\Country::$shippingFree`, `Shopware\Models\Country\Country::setShippingFree` and `Shopware\Models\Country\Country::getShippingFree`
 
 ### Deprecations
 
