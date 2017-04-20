@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.CombinedCondit
                 name: 'requestParameter',
                 labelWidth: 150,
                 allowBlank: false,
+                helpText: '{s name="attribute_url"}{/s}',
                 fieldLabel: '{s name="request_parameter"}{/s}',
                 validator: Ext.bind(me.validateParameter, me)
             },
