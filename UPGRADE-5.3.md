@@ -299,6 +299,20 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
 * Removed deprecated template block `frontend_listing_swf_banner` in `themes/Frontend/Bare/frontend/listing/banner.tpl`
 * Removed the jQuery UI date picker integration for new global component
     * `themes/Responsive/frontend/_public/src/js/jquery.ui.datepicker.js`
+* Removed unused styles of the Responsive theme
+    * `.panel--list`
+    * `.panel--arrow`
+    * `.panel--tab-nav`
+    * `.panel--filter-btn`
+    * `.panel--filter-select`
+    * `.js--mobile-tab-panel`
+    * `.ribbon`
+    * `.ribbon--content`
+    * `.device--mobile`
+    * `.device--tablet`
+    * `.device--tablet-portrait`
+    * `.device--tablet-landscape`
+    * `.device--desktop`
 
 ### Deprecations
 
