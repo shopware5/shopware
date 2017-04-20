@@ -2370,7 +2370,7 @@ class sArticles
                 $article['description_long'] = $article['description'];
             }
             $article['description_long'] = $this->sOptimizeText($article['description_long']);
-
+            $article = $this->sGetTranslation($article, $article['id'], 'article');
             $articles[$article['ordernumber']] = $article;
         }
 
