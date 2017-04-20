@@ -5,6 +5,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 ## 5.2.22
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
+* Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
 
 ## 5.2.21
 
