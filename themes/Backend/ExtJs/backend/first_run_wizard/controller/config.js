@@ -77,11 +77,17 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
             configPanel = me.getConfigPanel();
 
         var fields = [
-            configPanel.themeMainLogo,
+            configPanel.themeBrandPrimaryColor,
+            configPanel.themeBrandSecondaryColor,
+            configPanel.themeDesktopLogo,
+            configPanel.themeTabletLandscapeLogo,
+            configPanel.themeTabletLogo,
+            configPanel.themeMobileLogo,
+            configPanel.shopNameField,
+            configPanel.mailField,
             configPanel.addressField,
             configPanel.bankAccountField,
-            configPanel.companyField,
-            configPanel.metaIsFamilyFriendlyField
+            configPanel.companyField
         ];
 
         var formValidation = me.validateForm(fields);
@@ -107,13 +113,19 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                 var result = Ext.JSON.decode(response.responseText);
 
                 if(result.success) {
-                    var formData = result.data
+                    var formData = result.data;
 
-                    configPanel.themeMainLogo.setValue(formData.desktopLogo);
+                    configPanel.themeDesktopLogo.setValue(formData.desktopLogo);
+                    configPanel.themeTabletLandscapeLogo.setValue(formData.tabletLandscapeLogo);
+                    configPanel.themeTabletLogo.setValue(formData.tabletLogo);
+                    configPanel.themeMobileLogo.setValue(formData.mobileLogo);
+                    configPanel.themeBrandPrimaryColor.setValue(formData['brand-primary']);
+                    configPanel.themeBrandSecondaryColor.setValue(formData['brand-secondary']);
+                    configPanel.shopNameField.setValue(formData.shopName);
+                    configPanel.mailField.setValue(formData.mail);
                     configPanel.addressField.setValue(formData.address);
                     configPanel.bankAccountField.setValue(formData.bankAccount);
                     configPanel.companyField.setValue(formData.company);
-                    configPanel.metaIsFamilyFriendlyField.setValue(formData.metaIsFamilyFriendly);
                 }
             }
         });

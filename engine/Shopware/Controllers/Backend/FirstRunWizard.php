@@ -76,6 +76,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          */
         $themeConfigKeys = [
             'desktopLogo',
+            'tabletLandscapeLogo',
+            'tabletLogo',
+            'mobileLogo',
+            'brand-primary',
+            'brand-secondary',
         ];
 
         $themeConfigValues = array_map(function ($configKey) use ($defaultShop, $values) {
@@ -90,23 +95,21 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ->getRepository('Shopware\Models\Shop\Template')
             ->findOneBy(['template' => 'Responsive']);
 
-        $this->container->get('theme_service')->saveConfig(
-            $theme,
-            $themeConfigValues
-        );
+        $this->container->get('theme_service')->saveConfig($theme, $themeConfigValues);
+        $this->container->get('theme_timestamp_persistor')->updateTimestamp($defaultShop->getId(), time());
 
         /**
          * Save shop config
          */
         $shopConfigKeys = [
+            'shopName',
+            'mail',
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly',
         ];
 
         $shopConfigValues = array_intersect_key($values, array_flip($shopConfigKeys));
-        $shopConfigValues['metaIsFamilyFriendly'] = (bool) ($shopConfigValues['metaIsFamilyFriendly'] === 'true');
 
         $requestElements = [];
 
@@ -150,6 +153,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          */
         $themeConfigKeys = [
             'desktopLogo',
+            'tabletLandscapeLogo',
+            'tabletLogo',
+            'mobileLogo',
+            'brand-primary',
+            'brand-secondary',
         ];
 
         $themeConfigData = $this->container->get('theme_service')->getConfig(
@@ -175,10 +183,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          * Load shop config values
          */
         $shopConfigKeys = [
+            'shopName',
+            'mail',
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly',
         ];
 
         $builder = $this->container->get('models')->createQueryBuilder();
