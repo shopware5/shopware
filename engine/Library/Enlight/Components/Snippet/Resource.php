@@ -187,6 +187,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
         while (preg_match($pattern, $source->content, $_block_match, PREG_OFFSET_CAPTURE)) {
             $_block_editable = !empty($_block_match[1][0]);
             $_block_args = $_block_match[2][0];
+            $_block_args = preg_replace('/name=([^\'" ]\S*)/', "name='$1'", $_block_args);
             $_block_default = $_block_match[3][0];
             list($_block_tag, $_block_start) = $_block_match[0];
             $_block_length = strlen($_block_tag);
