@@ -827,9 +827,8 @@ class sRewriteTable
     {
         if ($this->preparedInsert === null) {
             $this->preparedInsert = $this->db->prepare('
-                INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
+                REPLACE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
                 VALUES (?, ?, 1, ?)
-                ON DUPLICATE KEY UPDATE main=1
             ');
         }
 
