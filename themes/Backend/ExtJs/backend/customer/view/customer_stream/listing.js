@@ -54,16 +54,14 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
 
         me.selModel = Ext.create('Ext.selection.CheckboxModel', {
             mode: 'SINGLE',
-            allowDeselect: true,
-            listeners: {
-                selectionchange: me.selectionChanged
-            }
+            allowDeselect: true
         });
         return me.selModel;
     },
 
-    nameRenderer: function (value) {
-        return '<span class="stream-name-column"><i>' + value + '</i></span>';
+    nameRenderer: function (value, meta, record) {
+        var lastIndex = record.get('lastIndexTime');
+        return '<span class="stream-name-column"><b>' + value + '</b></span>';
     }
 });
 // {/block}

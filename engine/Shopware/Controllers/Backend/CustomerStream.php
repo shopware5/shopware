@@ -133,7 +133,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
         $handled = $offset + self::INDEXING_LIMIT;
 
-        $indexer = Shopware()->Container()->get('shopware_bundle_customer_search.customer_stream.search_indexer');
+        $indexer = Shopware()->Container()->get('shopware_customer_search.customer_stream.search_indexer');
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->get('dbal_connection')->createQueryBuilder();

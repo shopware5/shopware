@@ -91,7 +91,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
         $search = Shopware()->Container()->get('shopware_customer_search.customer_number_search');
 
         /** @var SearchIndexer $indexer */
-        $indexer = Shopware()->Container()->get('shopware_bundle_customer_search.customer_stream.search_indexer');
+        $indexer = Shopware()->Container()->get('shopware_customer_search.customer_stream.search_indexer');
         $indexer->clearIndex();
         $indexer->populate($ids);
 
