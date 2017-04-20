@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                     xtype: 'button',
                     text: '{s name=toolbar/export}Export{/s}',
                     name: 'export',
-                    iconCls: 'sprite-export',
+                    iconCls: 'sprite-drive-download',
                     handler: function () {
                         me.fireEvent('exportCSV');
                     }
