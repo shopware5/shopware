@@ -586,7 +586,10 @@ abstract class Resource
                                   ->reset('db_connection')
                                   ->load('models');
 
-        $this->getContainer()->load('db_connection');
+        $kernel = $this->getContainer()->get('kernel');
+        $dbConn = $kernel->getConfig()['db'];
+        $kernel->connection = \Shopware\Components\DependencyInjection\Bridge\Db::createPDO($dbConn);
+        $this->getContainer()->set('db_connection', $kernel->connection);
 
         $this->setManager($this->container->get('models'));
     }

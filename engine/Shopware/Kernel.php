@@ -130,7 +130,7 @@ class Kernel implements HttpKernelInterface
     /**
      * @var \PDO
      */
-    private $connection;
+    public $connection;
 
     /**
      * @param string $environment
