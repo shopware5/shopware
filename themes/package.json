@@ -4,15 +4,19 @@
     "lint": "eslint Frontend/Responsive/frontend/_public/src/js"
   },
   "devDependencies": {
-    "eslint": "^3.13.0",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "grunt": "^0.4.5",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "grunt": "^1.0.1",
     "grunt-chokidar": "^1.0.0",
-    "grunt-contrib-less": "^1.0.1",
-    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-less": "^1.4.1",
+    "grunt-contrib-uglify": "^2.3.0",
     "grunt-file-exists": "^0.1.4",
     "gruntify-eslint": "^3.1.0"
+  },
+  "dependencies": {
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2"
   }
 }
