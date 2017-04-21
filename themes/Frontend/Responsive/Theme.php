@@ -32,6 +32,7 @@ class Theme extends \Shopware\Components\Theme
 {
     /**
      * Defines the extended Theme
+     *
      * @var string
      */
     protected $extend = 'Bare';
@@ -39,6 +40,7 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Defines the human readable theme name
      * which displayed in the backend
+     *
      * @var string
      */
     protected $name = '__theme_name__';
@@ -46,12 +48,14 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Allows to define a description text
      * for the theme
+     *
      * @var string
      */
     protected $description = '__theme_description__';
 
     /**
      * Name of the theme author.
+     *
      * @var string
      */
     protected $author = '__author__';
@@ -74,7 +78,6 @@ class Theme extends \Shopware\Components\Theme
      * @var array
      */
     protected $javascript = [
-
         // Third party plugins / libraries
         'src/js/vendors/modernizr/modernizr.custom.35977.js',
         'vendors/js/jquery/jquery.min.js',
@@ -85,7 +88,6 @@ class Theme extends \Shopware\Components\Theme
         'vendors/js/flatpickr/flatpickr.min.js',
 
         // Shopware specific plugins
-        'src/js/jquery.ie-fixes.js',
         'src/js/jquery.plugin-base.js',
         'src/js/jquery.state-manager.js',
         'src/js/jquery.storage-manager.js',
@@ -136,7 +138,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.address-editor.js',
         'src/js/jquery.datepicker.js',
         'src/js/jquery.cookie-permission.js',
-        'src/js/jquery.shopware-responsive.js'
+        'src/js/jquery.shopware-responsive.js',
     ];
 
     /**
@@ -148,7 +150,7 @@ class Theme extends \Shopware\Components\Theme
         'layout' => 'column',
         'height' => 170,
         'flex' => 0,
-        'defaults' => ['columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0']
+        'defaults' => ['columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0'],
     ];
 
     /**
@@ -157,78 +159,78 @@ class Theme extends \Shopware\Components\Theme
      * @var array
      */
     private $themeColorDefaults = [
-        "brand-primary" => "#D9400B",
-        "brand-primary-light" => "saturate(lighten(@brand-primary,12%), 5%)",
-        "brand-secondary" => "#5F7285",
-        "brand-secondary-dark" => "darken(@brand-secondary, 15%)",
-        "gray" => "#F5F5F8",
-        "gray-light" => "lighten(@gray, 1%)",
-        "gray-dark" => "darken(@gray-light, 10%)",
-        "border-color" => "@gray-dark",
-        "highlight-success" => "#2ECC71",
-        "highlight-error" => "#E74C3C",
-        "highlight-notice" => "#F1C40F",
-        "highlight-info" => "#4AA3DF",
-        "body-bg" => "darken(@gray-light, 5%)",
-        "overlay-bg" => "#000000",
-        "overlay-dark-bg" => "@overlay-bg",
-        "overlay-light-bg" => "#FFFFFF",
-        "overlay-opacity" => "0.7",
-        "text-color" => "@brand-secondary",
-        "text-color-dark" => "@brand-secondary-dark",
-        "link-color" => "@brand-primary",
-        "link-hover-color" => "darken(@link-color, 10%)",
-        "rating-star-color" => "@highlight-notice",
-        "btn-default-top-bg" => "#FFFFFF",
-        "btn-default-bottom-bg" => "@gray-light",
-        "btn-default-hover-bg" => "#FFFFFF",
-        "btn-default-text-color" => "@text-color",
-        "btn-default-hover-text-color" => "@brand-primary",
-        "btn-default-border-color" => "@border-color",
-        "btn-default-hover-border-color" => "@brand-primary",
-        "btn-primary-top-bg" => "@brand-primary-light",
-        "btn-primary-bottom-bg" => "@brand-primary",
-        "btn-primary-hover-bg" => "@brand-primary",
-        "btn-primary-text-color" => "#FFFFFF",
-        "btn-primary-hover-text-color" => "@btn-primary-text-color",
-        "btn-secondary-top-bg" => "@brand-secondary",
-        "btn-secondary-bottom-bg" => "@brand-secondary-dark",
-        "btn-secondary-hover-bg" => "@brand-secondary-dark",
-        "btn-secondary-text-color" => "#FFFFFF",
-        "btn-secondary-hover-text-color" => "@btn-secondary-text-color",
-        "panel-header-bg" => "@gray-light",
-        "panel-header-color" => "@text-color",
-        "panel-border" => "@border-color",
-        "panel-bg" => "#FFFFFF",
-        "label-color" => "@text-color",
-        "input-bg" => "@gray-light",
-        "input-color" => "@brand-secondary",
-        "input-placeholder-color" => "lighten(@text-color, 15%)",
-        "input-border" => "@border-color",
-        "input-focus-bg" => "#FFFFFF",
-        "input-focus-border" => "@brand-primary",
-        "input-focus-color" => "@brand-secondary",
-        "input-error-bg" => "desaturate(lighten(@highlight-error, 38%), 20%)",
-        "input-error-border" => "@highlight-error",
-        "input-error-color" => "@highlight-error",
-        "input-success-bg" => "#FFFFFF",
-        "input-success-border" => "@highlight-success",
-        "input-success-color" => "@brand-secondary-dark",
-        "panel-table-header-bg" => "@panel-bg",
-        "panel-table-header-color" => "@text-color-dark",
-        "table-row-bg" => "#FFFFFF",
-        "table-row-color" => "@brand-secondary",
-        "table-row-highlight-bg" => "darken(@table-row-bg, 4%)",
-        "table-header-bg" => "@brand-secondary",
-        "table-header-color" => "#FFFFFF",
-        "badge-discount-bg" => "@highlight-error",
-        "badge-discount-color" => "#FFFFFF",
-        "badge-newcomer-bg" => "@highlight-notice",
-        "badge-newcomer-color" => "#FFFFFF",
-        "badge-recommendation-bg" => "@highlight-success",
-        "badge-recommendation-color" => "#FFFFFF",
-        "badge-download-bg" => "@highlight-info",
-        "badge-download-color" => "#FFFFFF"
+        'brand-primary' => '#D9400B',
+        'brand-primary-light' => 'saturate(lighten(@brand-primary,12%), 5%)',
+        'brand-secondary' => '#5F7285',
+        'brand-secondary-dark' => 'darken(@brand-secondary, 15%)',
+        'gray' => '#F5F5F8',
+        'gray-light' => 'lighten(@gray, 1%)',
+        'gray-dark' => 'darken(@gray-light, 10%)',
+        'border-color' => '@gray-dark',
+        'highlight-success' => '#2ECC71',
+        'highlight-error' => '#E74C3C',
+        'highlight-notice' => '#F1C40F',
+        'highlight-info' => '#4AA3DF',
+        'body-bg' => 'darken(@gray-light, 5%)',
+        'overlay-bg' => '#000000',
+        'overlay-dark-bg' => '@overlay-bg',
+        'overlay-light-bg' => '#FFFFFF',
+        'overlay-opacity' => '0.7',
+        'text-color' => '@brand-secondary',
+        'text-color-dark' => '@brand-secondary-dark',
+        'link-color' => '@brand-primary',
+        'link-hover-color' => 'darken(@link-color, 10%)',
+        'rating-star-color' => '@highlight-notice',
+        'btn-default-top-bg' => '#FFFFFF',
+        'btn-default-bottom-bg' => '@gray-light',
+        'btn-default-hover-bg' => '#FFFFFF',
+        'btn-default-text-color' => '@text-color',
+        'btn-default-hover-text-color' => '@brand-primary',
+        'btn-default-border-color' => '@border-color',
+        'btn-default-hover-border-color' => '@brand-primary',
+        'btn-primary-top-bg' => '@brand-primary-light',
+        'btn-primary-bottom-bg' => '@brand-primary',
+        'btn-primary-hover-bg' => '@brand-primary',
+        'btn-primary-text-color' => '#FFFFFF',
+        'btn-primary-hover-text-color' => '@btn-primary-text-color',
+        'btn-secondary-top-bg' => '@brand-secondary',
+        'btn-secondary-bottom-bg' => '@brand-secondary-dark',
+        'btn-secondary-hover-bg' => '@brand-secondary-dark',
+        'btn-secondary-text-color' => '#FFFFFF',
+        'btn-secondary-hover-text-color' => '@btn-secondary-text-color',
+        'panel-header-bg' => '@gray-light',
+        'panel-header-color' => '@text-color',
+        'panel-border' => '@border-color',
+        'panel-bg' => '#FFFFFF',
+        'label-color' => '@text-color',
+        'input-bg' => '@gray-light',
+        'input-color' => '@brand-secondary',
+        'input-placeholder-color' => 'lighten(@text-color, 15%)',
+        'input-border' => '@border-color',
+        'input-focus-bg' => '#FFFFFF',
+        'input-focus-border' => '@brand-primary',
+        'input-focus-color' => '@brand-secondary',
+        'input-error-bg' => 'desaturate(lighten(@highlight-error, 38%), 20%)',
+        'input-error-border' => '@highlight-error',
+        'input-error-color' => '@highlight-error',
+        'input-success-bg' => '#FFFFFF',
+        'input-success-border' => '@highlight-success',
+        'input-success-color' => '@brand-secondary-dark',
+        'panel-table-header-bg' => '@panel-bg',
+        'panel-table-header-color' => '@text-color-dark',
+        'table-row-bg' => '#FFFFFF',
+        'table-row-color' => '@brand-secondary',
+        'table-row-highlight-bg' => 'darken(@table-row-bg, 4%)',
+        'table-header-bg' => '@brand-secondary',
+        'table-header-color' => '#FFFFFF',
+        'badge-discount-bg' => '@highlight-error',
+        'badge-discount-color' => '#FFFFFF',
+        'badge-newcomer-bg' => '@highlight-notice',
+        'badge-newcomer-color' => '#FFFFFF',
+        'badge-recommendation-bg' => '@highlight-success',
+        'badge-recommendation-color' => '#FFFFFF',
+        'badge-download-bg' => '@highlight-info',
+        'badge-download-color' => '#FFFFFF',
     ];
 
     /**
@@ -253,7 +255,7 @@ class Theme extends \Shopware\Components\Theme
         'label-font-size' => 14,
         'input-font-size' => 14,
         'btn-font-size' => 14,
-        'btn-icon-size' => 10
+        'btn-icon-size' => 10,
     ];
 
     /**
@@ -270,6 +272,137 @@ class Theme extends \Shopware\Components\Theme
         $container->addTab($tab);
 
         $tab->addElement($this->createBottomTabPanel());
+    }
+
+    /**
+     * Helper function to merge default theme colors with color schemes
+     *
+     * @param ArrayCollection $collection
+     */
+    public function createConfigSets(ArrayCollection $collection)
+    {
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_turquoise__')->setDescription(
+            '__color_scheme_turquoise_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#1db3b8',
+                    'brand-primary-light' => 'lighten(@brand-primary, 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_green__')->setDescription(
+            '__color_scheme_green_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#72a425',
+                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 5%), 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_red__')->setDescription(
+            '__color_scheme_red_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#be0a30',
+                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 10%), 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_pink__')->setDescription(
+            '__color_scheme_pink_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#d31e81',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_gray__')->setDescription(
+            '__color_scheme_gray_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#555555',
+                    'brand-primary-light' => 'lighten(@brand-primary, 10%)',
+                    'brand-secondary' => '#999999',
+                    'brand-secondary-dark' => 'darken(@brand-secondary, 8%)',
+                    'text-color' => '@brand-primary-light',
+                    'text-color-dark' => '@brand-primary',
+                    'link-color' => '@brand-secondary',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_brown__')->setDescription(
+            '__color_scheme_brown_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#613400',
+                    'brand-primary-light' => 'saturate(lighten(@brand-primary,5%), 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_blue__')->setDescription(
+            '__color_scheme_blue_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#009ee0',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_black__')->setDescription(
+            '__color_scheme_black_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#000000',
+                    'brand-primary-light' => 'lighten(@brand-primary, 20%)',
+                    'brand-secondary' => '#555555',
+                    'brand-secondary-dark' => 'darken(@brand-secondary, 10%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_orange__')->setDescription(
+            '__color_scheme_orange_description__'
+        )->setValues($this->themeColorDefaults);
+        $collection->add($set);
     }
 
     private function createBasicFieldSet()
@@ -315,6 +448,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the child-tabs of ("Responsive colors")
+     *
      * @return Form\Container\Tab
      */
     private function createBottomTabPanel()
@@ -323,8 +457,8 @@ class Theme extends \Shopware\Components\Theme
             'bottom_tab_panel',
             [
                 'attributes' => [
-                    'plain' => true
-                ]
+                    'plain' => true,
+                ],
             ]
         );
 
@@ -339,6 +473,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("General")
+     *
      * @return Form\Container\Tab
      */
     private function createGeneralTab()
@@ -348,8 +483,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_general__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -519,6 +654,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Typography")
+     *
      * @return Form\Container\Tab
      */
     private function createTypographyTab()
@@ -638,6 +774,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Buttons & Panels")
+     *
      * @return Form\Container\Tab
      */
     private function createButtonsTab()
@@ -647,8 +784,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_buttons__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -875,6 +1012,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Forms")
+     *
      * @return Form\Container\Tab
      */
     private function createFormsTab()
@@ -884,8 +1022,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_forms__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -1036,6 +1174,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Tables & Badges")
+     *
      * @return Form\Container\Tab
      */
     private function createTablesTab()
@@ -1045,8 +1184,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_tables__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -1180,6 +1319,7 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the main tab ("Responsive configuration")
+     *
      * @return Form\Container\Tab
      */
     private function createMainConfigTab()
@@ -1192,8 +1332,8 @@ class Theme extends \Shopware\Components\Theme
                     'layout' => 'anchor',
                     'autoScroll' => true,
                     'padding' => '0',
-                    'defaults' => ['anchor' => '100%']
-                ]
+                    'defaults' => ['anchor' => '100%'],
+                ],
             ]
         );
 
@@ -1205,8 +1345,8 @@ class Theme extends \Shopware\Components\Theme
                     'padding' => '10',
                     'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
-                ]
+                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%'],
+                ],
             ]
         );
 
@@ -1320,7 +1460,7 @@ class Theme extends \Shopware\Components\Theme
                     ['value' => 1, 'text' => '__lightbox_zoom_factor_none__'],
                     ['value' => 2, 'text' => '__lightbox_zoom_factor_2x__'],
                     ['value' => 3, 'text' => '__lightbox_zoom_factor_3x__'],
-                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__']
+                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__'],
                 ],
                 $this->getLabelAttribute(
                     'lightbox_zoom_factor_description',
@@ -1345,7 +1485,7 @@ class Theme extends \Shopware\Components\Theme
                 true,
                 ['attributes' => [
                     'lessCompatible' => false,
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description'),
                 ]]
             )
         );
@@ -1357,7 +1497,7 @@ class Theme extends \Shopware\Components\Theme
                 true,
                 ['attributes' => [
                     'lessCompatible' => false,
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description')
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description'),
                 ]]
             )
         );
@@ -1372,8 +1512,8 @@ class Theme extends \Shopware\Components\Theme
                     'padding' => '10',
                     'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155]
-                ]
+                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155],
+                ],
             ]
         );
 
@@ -1402,142 +1542,15 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to get the attribute of a checkbox field which shows a description label
+     *
      * @param $snippetName
+     *
      * @return array
      */
     private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
     {
         $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+
         return ['attributes' => [$labelType => $description]];
-    }
-
-    /**
-     * Helper function to merge default theme colors with color schemes
-     * @param ArrayCollection $collection
-     */
-    public function createConfigSets(ArrayCollection $collection)
-    {
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_turquoise__')->setDescription(
-            '__color_scheme_turquoise_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#1db3b8',
-                    'brand-primary-light' => 'lighten(@brand-primary, 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_green__')->setDescription(
-            '__color_scheme_green_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#72a425',
-                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 5%), 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_red__')->setDescription(
-            '__color_scheme_red_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#be0a30',
-                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 10%), 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_pink__')->setDescription(
-            '__color_scheme_pink_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#d31e81'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_gray__')->setDescription(
-            '__color_scheme_gray_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#555555',
-                    'brand-primary-light' => 'lighten(@brand-primary, 10%)',
-                    'brand-secondary' => '#999999',
-                    'brand-secondary-dark' => 'darken(@brand-secondary, 8%)',
-                    'text-color' => '@brand-primary-light',
-                    'text-color-dark' => '@brand-primary',
-                    'link-color' => '@brand-secondary'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_brown__')->setDescription(
-            '__color_scheme_brown_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#613400',
-                    'brand-primary-light' => 'saturate(lighten(@brand-primary,5%), 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_blue__')->setDescription(
-            '__color_scheme_blue_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#009ee0'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_black__')->setDescription(
-            '__color_scheme_black_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#000000',
-                    'brand-primary-light' => 'lighten(@brand-primary, 20%)',
-                    'brand-secondary' => '#555555',
-                    'brand-secondary-dark' => 'darken(@brand-secondary, 10%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_orange__')->setDescription(
-            '__color_scheme_orange_description__'
-        )->setValues($this->themeColorDefaults);
-        $collection->add($set);
     }
 }
