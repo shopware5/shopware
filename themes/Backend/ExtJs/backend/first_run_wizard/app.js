@@ -11,8 +11,7 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.LocalizationInstaller',
         'main.Config',
         'main.DemoData',
-        'main.Recommendation',
-        'main.PremiumListing'
+        'main.Recommendation'
     ],
 
     stores: [

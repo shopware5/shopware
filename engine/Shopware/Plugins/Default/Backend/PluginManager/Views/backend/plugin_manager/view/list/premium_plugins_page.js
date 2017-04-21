@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
 
         Shopware.app.Application.on('plugin-reloaded', function(plugin) {
             me.communityStore.each(function(record, index) {
-                if (record && record.get('technicalName') == plugin.get('technicalName')) {
+                if (record && record.get('technicalName') === plugin.get('technicalName')) {
                     me.communityStore.remove(record);
                 }
             });

@@ -86,8 +86,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         demo_data: 1,
         recommendation: 2,
         config: 3,
-        premium: 4,
-        finish: 5
+        finish: 4
     },
 
     initComponent: function() {
@@ -184,9 +183,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             Ext.create('Shopware.apps.FirstRunWizard.view.main.Config')
         );
         items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.PremiumListing')
-        );
-        items.push(
             Ext.create('Shopware.apps.FirstRunWizard.view.main.Finish')
         );
 
@@ -203,7 +199,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
                 { id: me.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}', disabled: true, needsConnection: true },
                 { id: me.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: true, needsConnection: true },
                 { id: me.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}', disabled: false, needsConnection: false },
-                { id: me.navigationIndex.premium, name: '{s name=premium/content/title}Additional features{/s}', disabled: false, needsConnection: false },
                 { id: me.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}', disabled: false, needsConnection: false }
             ]
         });
