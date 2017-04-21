@@ -32,7 +32,7 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Exception extends Exception
+class Enlight_Exception extends Exception implements Serializable
 {
     /**
      * Constant that a class could not be found
@@ -97,5 +97,33 @@ class Enlight_Exception extends Exception
             }
         }
         return parent::__toString();
+    }
+
+    /**
+     * Custom serialization to ommit the backtrace
+     * That way the exception can be serialized although a class in the trace
+     * required for example a PDO object
+     *
+     * @see Serializable::serialize
+     *
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(array($this->validator, $this->arguments, $this->code, $this->message));
+    }
+
+    /**
+     * Custom unserialization to match the serialization without backtrace
+     *
+     * @see Serializable::unserialize
+     *
+     * @param string $serialized
+     *
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        list($this->validator, $this->arguments, $this->code, $this->message) = unserialize($serialized);
     }
 }
