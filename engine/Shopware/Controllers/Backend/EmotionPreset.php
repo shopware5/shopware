@@ -192,21 +192,34 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     /**
      * @param $path
      *
-     * @return null|string
+     * @return string
      */
     private function getImagePath($path)
     {
         if (empty($path)) {
+            return '';
+        }
+
+        // check if image is base64 encoded
+        if (strpos($path, 'data:image') === 0) {
             return $path;
         }
+
         /** @var MediaService $mediaService */
         $mediaService = $this->container->get('shopware_media.media_service');
 
         if (strpos($path, 'media') === 0) {
-            return $mediaService->getUrl($path);
+            $path = $mediaService->getUrl($path);
         }
 
-        return $this->View()->fetch(sprintf('string:{url file="%s"}', $path));
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+
+        if (!$data || !$type) {
+            return '';
+        }
+
+        return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
 
     /**

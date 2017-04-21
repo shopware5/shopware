@@ -165,6 +165,12 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
                     me.updatePreview(null);
                     return;
                 }
+
+                if (Ext.form.VTypes.url(value) || value.indexOf('data:image') !== -1) {
+                    me.updatePreview(value);
+                    return;
+                }
+
                 params['path'] = value;
 
                 Ext.Ajax.request({
@@ -208,6 +214,29 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
                     ]
                 });
                 return me.buttonContainer;
+            },
+            createPreview: function() {
+                var me = this, value;
+
+                if (!Ext.isDefined(me.value)) {
+                    value = me.noMedia;
+                } else if(Ext.form.VTypes.url(me.value) || me.value.indexOf('data:image') !== -1) {
+                    value = me.value;
+                } else {
+                    value = me.mediaPath + me.value;
+                }
+
+                me.preview = Ext.create('Ext.Img', {
+                    src: value,
+                    height: 100,
+                    width: 97,
+                    maxHeight: 100,
+                    padding: 5,
+                    margin: 5,
+                    style: "border-radius: 6px; border: 1px solid #c4c4c4;"
+                });
+
+                return me.preview;
             }
         });
     },
