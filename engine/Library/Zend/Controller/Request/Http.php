@@ -1060,7 +1060,7 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
         if ($checkProxy && $this->getServer('HTTP_CLIENT_IP') != null) {
             $ip = $this->getServer('HTTP_CLIENT_IP');
         } else if ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
-            $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
+            $ip = array_shift(explode(',', $this->getServer('HTTP_X_FORWARDED_FOR')));
         } else {
             $ip = $this->getServer('REMOTE_ADDR');
         }
