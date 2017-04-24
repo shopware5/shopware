@@ -245,9 +245,9 @@ class Kernel implements HttpKernelInterface
             $headers
         );
 
-        foreach ($response->getCookies() as $cookieName => $cookieContent) {
+        foreach ($response->getCookies() as $cookieContent) {
             $sfCookie = new Cookie(
-                $cookieName,
+                $cookieContent['name'],
                 $cookieContent['value'],
                 $cookieContent['expire'],
                 $cookieContent['path'],

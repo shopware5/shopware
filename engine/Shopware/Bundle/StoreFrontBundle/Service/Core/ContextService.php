@@ -398,6 +398,7 @@ class ContextService implements ContextServiceInterface
 
     /**
      * @param int $customerId
+     *
      * @return array
      */
     private function getStreamsOfCustomerId($customerId)
@@ -409,6 +410,7 @@ class ContextService implements ContextServiceInterface
         $query->setParameter(':customerId', $customerId);
         $streams = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
         sort($streams);
+
         return $streams;
     }
 
@@ -418,9 +420,10 @@ class ContextService implements ContextServiceInterface
     private function getStoreFrontStreamIds()
     {
         $session = $this->container->get('session');
-        if (!$session->offsetExists('sUserId')) {
+        if (!$session->offsetGet('sUserId')) {
             return [];
         }
+
         return $this->getStreamsOfCustomerId($session->offsetGet('sUserId'));
     }
 }

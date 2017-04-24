@@ -25,11 +25,10 @@
 use Doctrine\Common\EventArgs;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
-use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler;
-use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
+use ShopwarePlugins\HttpCache\CacheControl;
+use ShopwarePlugins\HttpCache\CacheIdCollector;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 /**
@@ -40,29 +39,19 @@ use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * @var array
-     */
-    protected $autoNoCacheControllers = [
-        'frontend/checkout' => 'checkout',
-        'frontend/note' => 'checkout',
-        'frontend/detail' => 'detail',
-        'frontend/compare' => 'compare',
-    ];
-
-    /**
      * @var \Enlight_Controller_Action
      */
-    protected $action;
+    private $action;
 
     /**
      * @var Request
      */
-    protected $request;
+    private $request;
 
     /**
      * @var Response
      */
-    protected $response;
+    private $response;
 
     /**
      * @var array
@@ -130,6 +119,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             'onClearHttpCache'
         );
 
+        $this->subscribeEvent('Enlight_Bootstrap_InitResource_http_cache.cache_control', 'initCacheControl');
+        $this->subscribeEvent('Enlight_Bootstrap_InitResource_http_cache.cache_id_collector', 'initCacheIdCollector');
+
         $this->subscribeEvent('Shopware\Models\Article\Price::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Article\Price::postPersist', 'onPostPersist');
 
@@ -154,6 +146,25 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->installForm();
 
         return true;
+    }
+
+    public function initCacheControl(Enlight_Event_EventArgs $args)
+    {
+        return new CacheControl(
+            $this->get('session'),
+            $this->Config()
+        );
+    }
+
+    public function initCacheIdCollector()
+    {
+        return new CacheIdCollector();
+    }
+
+    public function afterInit()
+    {
+        $this->get('loader')->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__);
+        parent::afterInit();
     }
 
     /**
@@ -328,7 +339,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $view = $args->getSubject()->View();
-
         if (!$this->request->isDispatched()
             || $this->response->isException()
             || !$view->hasTemplate()
@@ -443,66 +453,37 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setCacheHeaders()
     {
-        $controllerName = $this->buildControllerName($this->request);
+        /** @var CacheControl $cacheControl */
+        $cacheControl = $this->get('http_cache.cache_control');
 
-        $cacheControllers = $this->getCacheControllers();
-        if (!isset($cacheControllers[$controllerName])) {
+        $shopId = $this->get('shop')->getId();
+        if (!$cacheControl->isCacheableRoute($this->request)) {
             return false;
         }
 
-        if (strpos($this->request->getPathInfo(), '/widgets/index/refreshStatistic') !== false) {
-            return false;
-        }
-
-        if (strpos($this->request->getPathInfo(), '/captcha/index/rand/') !== false) {
-            return false;
-        }
-
-        $allowNoCache = $this->getNoCacheTagsForController($controllerName);
-        $noCacheCookies = $this->getNoCacheTagsFromCookie($this->request);
-        $hasMatchingNoCacheCookie = $this->hasArrayIntersection($allowNoCache, $noCacheCookies);
-
-        if ($this->response->isRedirect()) {
+        if ($cacheControl->useNoCacheControl($this->request, $this->response, $shopId)) {
             $this->response->setHeader('Cache-Control', 'private, no-cache');
 
             return false;
         }
 
-        if ($hasMatchingNoCacheCookie) {
-            $this->response->setHeader('Cache-Control', 'private, no-cache');
+        $cacheTime = (int) $cacheControl->getCacheTime($this->request);
 
-            return false;
-        }
-
-        $allowNoCacheControllers = $this->getAllowNoCacheControllers();
-        if (isset($allowNoCacheControllers[$controllerName]) && $this->request->getQuery('nocache') !== null) {
-            $this->response->setHeader('Cache-Control', 'private, no-cache');
-
-            return false;
-        }
-
-        // Don't cache when using admin session
-        if (Shopware()->Session()->Admin) {
-            return false;
-        }
-
-        // Don't cache filled basket or wishlist
-        if ($controllerName == 'widgets/checkout' && (!empty(Shopware()->Session()->sBasketQuantity) || !empty(Shopware()->Session()->sNotesQuantity))) {
-            $this->response->setHeader('Cache-Control', 'private, no-cache');
-
-            return false;
-        }
-
-        $cacheTime = (int) $cacheControllers[$controllerName];
         $this->request->setParam('__cache', $cacheTime);
         $this->response->setHeader('Cache-Control', 'public, max-age=' . $cacheTime . ', s-maxage=' . $cacheTime);
 
-        if (!empty($allowNoCache)) {
-            $this->response->setHeader('x-shopware-allow-nocache', implode(', ', $allowNoCache));
+        $noCacheTags = $cacheControl->getNoCacheTagsForRequest($this->request, $shopId);
+        if (!empty($noCacheTags)) {
+            $this->response->setHeader('x-shopware-allow-nocache', implode(', ', $noCacheTags));
         }
 
-        $cacheIds = $this->getCacheIdsFromController($this->action);
-        $this->setCacheIdHeader($cacheIds);
+        $cacheCollector = $this->get('http_cache.cache_id_collector');
+
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $this->setCacheIdHeader(
+            $cacheCollector->getCacheIdsFromController($this->action, $context)
+        );
 
         return true;
     }
@@ -512,73 +493,55 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setNoCacheCookie()
     {
-        $controllerName = $this->buildControllerName($this->request);
+        /** @var CacheControl $cacheControl */
+        $cacheControl = $this->get('http_cache.cache_control');
 
-        if (isset($this->autoNoCacheControllers[$controllerName])) {
-            $noCacheTag = $this->autoNoCacheControllers[$controllerName];
-            $this->setNoCacheTag($noCacheTag);
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $additions = $cacheControl->getTagsForNoCacheCookie($this->request, $context);
+        foreach ($additions as $tag) {
+            $this->setNoCacheTag($tag);
         }
 
-        if ($controllerName == 'frontend/checkout' || $controllerName == 'frontend/note') {
-            if (empty(Shopware()->Session()->sBasketQuantity) && empty(Shopware()->Session()->sNotesQuantity)) {
-                // remove checkout-cookie
-                $this->setNoCacheTag('checkout', true);
-            }
-        }
-
-        if ($controllerName == 'frontend/compare' && $this->request->getActionName() == 'delete_all') {
-            // remove compare cookie
-            $this->setNoCacheTag('compare', true);
-        }
-
-        if (!empty(Shopware()->Session()->sNotesQuantity)) {
-            // set checkout-cookie
-            $this->setNoCacheTag('checkout');
-        }
-
-        if ($this->request->getModuleName() == 'frontend' && !empty(Shopware()->Session()->Admin)) {
-            // set admin-cookie if admin session is present
-            $this->setNoCacheTag('admin');
-        }
-
-        if ($controllerName == 'frontend/account' && $this->request->getActionName() === 'logout') {
-            $this->setNoCacheTag('');
+        $removals = $cacheControl->getRemovableCacheTags($this->request, $context);
+        foreach ($removals as $tag) {
+            $this->setNoCacheTag($tag, true);
         }
     }
 
     /**
      * Set or remove given $noCacheTag from cookie
      *
-     * @param string $noCacheTag
+     * @param string $newTag
      * @param bool   $remove
      */
-    public function setNoCacheTag($noCacheTag, $remove = false)
+    public function setNoCacheTag($newTag, $remove = false)
     {
-        static $noCacheTags, $shopId;
+        static $existingTags, $shopId;
 
-        if (!isset($noCacheTags)) {
+        if (!isset($existingTags)) {
             if ($this->request->getCookie('nocache')) {
-                $noCacheTags = $this->request->getCookie('nocache');
-                $noCacheTags = explode(', ', $noCacheTags);
+                $existingTags = $this->request->getCookie('nocache');
+                $existingTags = explode(', ', $existingTags);
             } else {
-                $noCacheTags = [];
+                $existingTags = [];
             }
             $shopId = Shopware()->Shop()->getId();
         }
 
-        if (!empty($noCacheTag)) {
-            $noCacheTag .= '-' . $shopId;
+        if (!empty($newTag)) {
+            $newTag .= '-' . $shopId;
         }
 
-        if (empty($noCacheTag)) {
+        if (empty($newTag)) {
             $newCacheTags = [];
-        } elseif ($remove && in_array($noCacheTag, $noCacheTags)) {
+        } elseif ($remove) {
             // remove $noCacheTag from $newCacheTags
-            $newCacheTags = array_diff($noCacheTags, [$noCacheTag]);
-        } elseif (!$remove && !in_array($noCacheTag, $noCacheTags)) {
+            $newCacheTags = array_diff($existingTags, [$newTag]);
+        } elseif (!$remove && !in_array($newTag, $existingTags)) {
             // add $noCacheTag to $newCacheTags
-            $newCacheTags = $noCacheTags;
-            $newCacheTags[] = $noCacheTag;
+            $newCacheTags = $existingTags;
+            $newCacheTags[] = $newTag;
         }
 
         if (isset($newCacheTags)) {
@@ -642,24 +605,16 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             }
         }
 
-        $targetName = $params['module'] . '/' . $params['controller'];
+        $targetName = strtolower($params['module'] . '/' . $params['controller']);
 
-        $controllerName = $this->buildControllerName($request);
+        /** @var CacheControl $cacheControl */
+        $cacheControl = $this->get('http_cache.cache_control');
 
-        $allowNoCacheControllers = $this->getAllowNoCacheControllers();
-
-        if (isset($this->autoNoCacheControllers[$controllerName])
-            && isset($allowNoCacheControllers[$targetName])
-            && $this->autoNoCacheControllers[$controllerName] == $allowNoCacheControllers[$targetName]
-        ) {
+        if ($cacheControl->useNoCacheParameterForEsi($request, $targetName)) {
             $params['nocache'] = 1;
         }
 
-        $url = sprintf(
-            '%s/?%s',
-            $request->getBaseUrl(),
-            http_build_query($params, null, '&')
-        );
+        $url = sprintf('%s/?%s', $request->getBaseUrl(), http_build_query($params, null, '&'));
 
         return '<esi:include src="' . $url . '" />';
     }
@@ -774,257 +729,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * Returns an array with cachable controllernames.
-     *
-     * Array-Key is controllername
-     * Array-Value is ttl
-     *
-     * <code>
-     * array (
-     *     'frontend/listing'       => '3600',
-     *     'frontend/index'         => '3600',
-     *     'widgets/recommendation' => '14400',
-     * )
-     * </code>
-     *
-     * @return array
-     */
-    protected function getCacheControllers()
-    {
-        $controllers = $this->Config()->get('cacheControllers');
-        if (empty($controllers)) {
-            return [];
-        }
-
-        $result = [];
-        $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
-        $controllers = explode("\n", trim($controllers));
-        foreach ($controllers as $controller) {
-            list($controller, $cacheTime) = explode(' ', $controller);
-            $result[strtolower($controller)] = (int) $cacheTime;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns an mapping array with nocache-tags to controllernames
-     *
-     * Array-Key is controllername
-     * Array-Value is cache tag
-     *
-     * <code>
-     * array (
-     *    'frontend/detail'  => 'price',
-     *    'widgets/checkout' => 'checkout',
-     *    'widgets/compare'  => 'compare',
-     * )
-     * </code>
-     *
-     * @return array
-     */
-    protected function getAllowNoCacheControllers()
-    {
-        $controllers = $this->Config()->get('noCacheControllers');
-        if (empty($controllers)) {
-            return [];
-        }
-
-        $result = [];
-        $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
-        $controllers = explode("\n", trim($controllers));
-        foreach ($controllers as $controller) {
-            list($controller, $tag) = explode(' ', $controller);
-            $result[strtolower($controller)] = $tag;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns an array of affected cacheids for this $controller
-     *
-     * @param \Enlight_Controller_Action $controller
-     *
-     * @return array
-     */
-    protected function getCacheIdsFromController(\Enlight_Controller_Action $controller)
-    {
-        $request = $controller->Request();
-        $view = $controller->View();
-        $controllerName = $this->buildControllerName($request);
-        $cacheIds = [];
-        $articleIds = [];
-
-        switch ($controllerName) {
-            case 'frontend/blog':
-                $categoryId = (int) $request->getParam('sCategory');
-                $cacheIds[] = 'c' . $categoryId;
-
-                $blogPost = $view->getAssign('sArticle');
-                foreach ($blogPost['assignedArticles'] as $article) {
-                    $articleIds[] = $article['id'];
-                }
-
-                break;
-            case 'widgets/listing':
-                $categoryId = (int) $request->getParam('sCategory');
-                if (empty($categoryId)) {
-                    $categoryId = (int) Shopware()->Shop()->get('parentID');
-                }
-                $cacheIds[] = 'c' . $categoryId;
-
-                foreach ($view->getAssign('sArticles') as $article) {
-                    $articleIds[] = $article['articleID'];
-                }
-
-                foreach ($view->getAssign('sCharts') as $article) {
-                    $articleIds[] = $article['articleID'];
-                }
-                break;
-            case 'frontend/index':
-                $categoryId = (int) Shopware()->Shop()->get('parentID');
-                $cacheIds[] = 'c' . $categoryId;
-
-                break;
-            case 'widgets/recommendation':
-                $article = $view->getAssign('sArticle');
-
-                foreach ($article['sRelatedArticles'] as $article) {
-                    $articleIds[] = $article['articleID'];
-                }
-                foreach ($article['sSimilarArticles'] as $article) {
-                    $articleIds[] = $article['articleID'];
-                }
-
-                break;
-            case 'frontend/detail':
-                $articleId = $request->getParam('sArticle', 0);
-                $articleIds[] = $articleId;
-
-                break;
-            case 'widgets/emotion':
-                /** @var \Shopware\Bundle\EmotionBundle\Struct\Emotion $emotion */
-                foreach ($view->getAssign('sEmotions') as $emotion) {
-                    $cacheIds[] = 'e' . $emotion['id'];
-
-                    foreach ($emotion['elements'] as $element) {
-                        if ($element['component']['type'] === ArticleComponentHandler::COMPONENT_NAME) {
-                            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
-                            $product = $element['data']['product'];
-                            if (!$product) {
-                                continue;
-                            }
-                            $articleIds[] = $product->getId();
-                            $articleIds[] = $product->getVariantId();
-                        } elseif ($element['component']['type'] === ArticleSliderComponentHandler::COMPONENT_NAME) {
-                            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products */
-                            $products = $element['data']['products'];
-                            foreach ($products as $product) {
-                                $articleIds[] = $product->getId();
-                                $articleIds[] = $product->getVariantId();
-                            }
-                        }
-                    }
-                }
-
-                break;
-            case 'frontend/listing':
-                foreach ($view->getAssign('sArticles') as $article) {
-                    $articleIds[] = $article['articleID'];
-                }
-
-                break;
-        }
-
-        array_walk($articleIds, function (&$value) {
-            $value = 'a' . $value;
-        });
-
-        $cacheIds = array_merge($cacheIds, $articleIds);
-
-        return $cacheIds;
-    }
-
-    /**
-     * Returns array of nocache-tags in the request cookie
-     *
-     * <code>
-     * array (
-     *     0 => 'detail-1',
-     *     1 => 'checkout-1',
-     * )
-     * </code>
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    protected function getNoCacheTagsFromCookie(Request $request)
-    {
-        $noCacheCookie = $request->getCookie('nocache', false);
-
-        if (false === $noCacheCookie) {
-            return [];
-        }
-
-        $noCacheTags = explode(',', $noCacheCookie);
-        $noCacheTags = array_map('trim', $noCacheTags);
-
-        return $noCacheTags;
-    }
-
-    /**
-     * Returns array of nocache-tags for given $controllerName
-     *
-     * <code>
-     * array (
-     *     0 => 'detail-1',
-     *     1 => 'checkout-1',
-     * )
-     * </code>
-     *
-     * @param string $controllerName
-     *
-     * @return array
-     */
-    protected function getNoCacheTagsForController($controllerName)
-    {
-        $shopId = Shopware()->Shop()->getId();
-        $allowNoCache = [];
-        $autoAdmin = $this->Config()->get('admin');
-
-        if (!empty($autoAdmin)) {
-            $allowNoCache[] = 'admin-' . $shopId;
-        }
-
-        $allowNoCacheControllers = $this->getAllowNoCacheControllers();
-        if (isset($allowNoCacheControllers[$controllerName])) {
-            $allowNoCache[] = $allowNoCacheControllers[$controllerName] . '-' . $shopId;
-        }
-
-        return $allowNoCache;
-    }
-
-    /**
-     * @param $array1
-     * @param $array2
-     *
-     * @return bool
-     */
-    protected function hasArrayIntersection($array1, $array2)
-    {
-        $intersection = array_intersect($array1, $array2);
-
-        return !empty($intersection);
-    }
-
-    /**
      * Clears the cache
      *
      * @return bool
      */
-    protected function clearCache()
+    private function clearCache()
     {
         return $this->invalidate();
     }
@@ -1039,7 +748,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @return bool
      */
-    protected function invalidateCacheId($cacheId)
+    private function invalidateCacheId($cacheId)
     {
         if (!$this->Config()->get('proxyPrune')) {
             return false;
@@ -1167,18 +876,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * @param Request $request
-     *
-     * @return string
-     */
-    private function buildControllerName(Request $request)
-    {
-        $controllerName = strtolower($request->getModuleName() . '/' . $request->getControllerName());
-
-        return $controllerName;
-    }
-
-    /**
      * Add context cookie
      *
      * @param Request  $request
@@ -1186,34 +883,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     private function addContextCookie(Request $request, Response $response)
     {
-        /** @var $session Enlight_Components_Session_Namespace */
-        $session = $this->get('session');
+        /** @var CacheControl $cacheControl */
+        $cacheControl = $this->get('http_cache.cache_control');
 
-        if ($session->offsetGet('sCountry')) {
-            /** @var ShopContextInterface $context */
-            $context = $this->get('shopware_storefront.context_service')->getShopContext();
-            $userContext = sha1(
-                json_encode($context->getTaxRules()) .
-                json_encode($context->getCurrentCustomerGroup()) .
-                json_encode($context->getActiveCustomerStreamIds())
-            );
-            $response->setCookie(
-                'x-cache-context-hash',
-                $userContext,
-                0,
-                $request->getBasePath() . '/',
-                ($request->getHttpHost() == 'localhost') ? null : $request->getHttpHost()
-            );
-        } else {
-            if ($request->getCookie('x-cache-context-hash')) {
-                $response->setCookie(
-                    'x-cache-context-hash',
-                    null,
-                    strtotime('-1 Year', time()),
-                    $request->getBasePath() . '/',
-                    ($request->getHttpHost() == 'localhost') ? null : $request->getHttpHost()
-                );
-            }
-        }
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $cacheControl->setContextCacheKey($request, $context, $response);
     }
 }
