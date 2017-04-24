@@ -30,7 +30,7 @@ use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 
-class StreamIndexer
+class StreamIndexer implements StreamIndexerInterface
 {
     /**
      * @var CustomerStreamCriteriaFactory
