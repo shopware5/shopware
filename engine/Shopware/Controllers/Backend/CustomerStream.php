@@ -23,7 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\CustomerNumberRow;
+use Shopware\Bundle\CustomerSearchBundle\BaseCustomer;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\StreamIndexer;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -236,7 +236,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $streams = $this->fetchStreamsForCustomers($result->getIds());
 
         $data = [];
-        /** @var CustomerNumberRow $row */
+        /** @var BaseCustomer $row */
         foreach ($result->getRows() as $row) {
             $dataRow = $row->getAttribute('search')->toArray();
 

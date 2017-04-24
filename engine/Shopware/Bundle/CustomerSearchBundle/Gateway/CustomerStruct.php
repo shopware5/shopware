@@ -185,11 +185,6 @@ class CustomerStruct extends Extendable
     protected $billingAddress;
 
     /**
-     * @var PaymentStruct
-     */
-    protected $payment;
-
-    /**
      * @return int
      */
     public function getId()

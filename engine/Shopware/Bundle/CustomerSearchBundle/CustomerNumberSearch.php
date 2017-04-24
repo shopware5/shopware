@@ -84,7 +84,7 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
     {
         $rows = [];
         foreach ($result as $row) {
-            $rows[] = new CustomerNumberRow(
+            $rows[] = new BaseCustomer(
                 (int) $row['id'],
                 $row['customernumber'],
                 $row['email'],

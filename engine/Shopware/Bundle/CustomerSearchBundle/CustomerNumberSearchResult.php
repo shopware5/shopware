@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CustomerSearchBundle;
 class CustomerNumberSearchResult
 {
     /**
-     * @var CustomerNumberRow[]
+     * @var BaseCustomer[]
      */
     private $rows;
 
@@ -52,8 +52,8 @@ class CustomerNumberSearchResult
     private $ids = [];
 
     /**
-     * @param CustomerNumberRow[] $rows
-     * @param int                 $total
+     * @param BaseCustomer[] $rows
+     * @param int            $total
      */
     public function __construct(array $rows, $total)
     {
@@ -63,7 +63,7 @@ class CustomerNumberSearchResult
     }
 
     /**
-     * @return CustomerNumberRow[]
+     * @return BaseCustomer[]
      */
     public function getRows()
     {
@@ -103,7 +103,7 @@ class CustomerNumberSearchResult
     }
 
     /**
-     * @param CustomerNumberRow[] $rows
+     * @param BaseCustomer[] $rows
      */
     private function collectData(array $rows)
     {

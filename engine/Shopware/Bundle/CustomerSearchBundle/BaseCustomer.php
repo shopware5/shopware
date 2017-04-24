@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CustomerSearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-class CustomerNumberRow extends Extendable
+class BaseCustomer extends Extendable
 {
     /**
      * @var int
