@@ -151,14 +151,6 @@
             <argument type="service" id="shopware.logaware_reflection_helper" />
         </service>
 
-        <service id="shopware_customer_search.index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\StreamIndexPopulateCommand">
-            <tag name="console.command" />
-        </service>
-
-        <service id="shopware_customer_search.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\SearchIndexPopulateCommand">
-            <tag name="console.command" />
-        </service>
-
         <service id="shopware_customer_search.customer_stream.cron_job_subscriber" class="Shopware\Bundle\CustomerSearchBundle\CustomerStream\CronJobSubscriber">
             <argument id="dbal_connection" type="service"/>
             <argument id="shopware_customer_search.customer_stream.search_indexer" type="service"/>
