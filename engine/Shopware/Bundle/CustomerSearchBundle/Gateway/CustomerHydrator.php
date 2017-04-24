@@ -41,20 +41,13 @@ class CustomerHydrator extends Hydrator
     private $customerGroupHydrator;
 
     /**
-     * @var PaymentHydrator
-     */
-    private $paymentHydrator;
-
-    /**
      * @param AttributeHydrator     $attributeHydrator
      * @param CustomerGroupHydrator $customerGroupHydrator
-     * @param PaymentHydrator       $paymentHydrator
      */
-    public function __construct(AttributeHydrator $attributeHydrator, CustomerGroupHydrator $customerGroupHydrator, PaymentHydrator $paymentHydrator)
+    public function __construct(AttributeHydrator $attributeHydrator, CustomerGroupHydrator $customerGroupHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->customerGroupHydrator = $customerGroupHydrator;
-        $this->paymentHydrator = $paymentHydrator;
     }
 
     public function hydrate(array $data)
