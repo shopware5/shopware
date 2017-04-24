@@ -28,7 +28,7 @@ use Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerInterestsGateway;
 use Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerOrderGateway;
 use Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerService;
 
-class CustomerProvider
+class CustomerProvider implements CustomerProviderInterface
 {
     /**
      * @var CustomerService

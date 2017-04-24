@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CustomerSearchBundle\CustomerStream;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Gateway\InterestsStruct;
 
-class SearchIndexer
+class SearchIndexer implements SearchIndexerInterface
 {
     /**
      * @var Connection

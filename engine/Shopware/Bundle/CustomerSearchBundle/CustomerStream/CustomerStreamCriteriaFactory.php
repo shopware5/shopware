@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\LogawareReflectionHelper;
 use Shopware\Components\ReflectionHelper;
 
-class CustomerStreamCriteriaFactory
+class CustomerStreamCriteriaFactory implements CustomerStreamCriteriaFactoryInterface
 {
     /**
      * @var Connection

@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 
-class CustomerNumberSearch
+class CustomerNumberSearch implements CustomerNumberSearchInterface
 {
     /**
      * @var HandlerRegistry

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\Gateway;
 
-class CustomerService
+class CustomerService implements CustomerServiceInterface
 {
     /**
      * @var CustomerGateway
