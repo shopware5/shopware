@@ -2222,6 +2222,26 @@ class sAdmin
         if (empty($unsubscribe)) {
             $errorFlag = [];
 
+            $captchaName = $this->front->Request()->getPost('captchaName');
+            if (($captchaName !== 'noCaptcha')) {
+                /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+                $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
+
+                try {
+                    $isValid = $captchaValidator->validateByName($captchaName, $this->front->Request());
+                } catch (\Exception $exception) {
+                    // log captchaNotFound Exception
+                    Shopware()->Container()->get('corelogger')->error($exception->getMessage());
+                    $isValid = $captchaValidator->validateByName('nocaptcha', $this->front->Request());
+                }
+
+                if (!$isValid){
+                    return [
+                        'code' => 7
+                    ];
+                }
+            }
+
             $fields = ['newsletter'];
             foreach ($fields as $field) {
                 $fieldData = $this->front->Request()->getPost($field);
@@ -2229,6 +2249,7 @@ class sAdmin
                     $errorFlag[$field] = true;
                 }
             }
+
             if (!empty($errorFlag)) {
                 return [
                     'code' => 5,

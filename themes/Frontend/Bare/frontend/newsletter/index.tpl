@@ -28,9 +28,12 @@
 
         {* Error messages *}
         {block name="frontend_newsletter_error_messages"}
+
             {if $sStatus.code != 0}
                 <div class="newsletter--error-messages">
-                    {if $sStatus.code==3}
+                    {if $sStatus.code === 7}
+                        {include file="frontend/_includes/messages.tpl" type='error' content="{s namespace="widgets/captcha/custom_captcha" name="invalidCaptchaMessage"}{/s}"}
+                    {elseif $sStatus.code==3}
                         {include file="frontend/_includes/messages.tpl" type='success' content=$sStatus.message}
                     {elseif $sStatus.code==5}
                         {include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
@@ -151,6 +154,15 @@
                                 <div class="newsletter--required-info">
                                     {s name='RegisterPersonalRequiredText' namespace="frontend/register/personal_fieldset"}{/s}
                                 </div>
+                            {/block}
+
+                            {* Captcha *}
+                            {block name='frontend_newsletter_form_captcha'}
+                                {$captchaName = {config name=newsletterCaptcha}}
+                                {if $captchaName !== "nocaptcha"}
+                                    {$captchaHasError = $errors.captcha}
+                                    {include file="widgets/captcha/newsletter_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
+                                {/if}
                             {/block}
 
                             {* Submit button *}
