@@ -22,11 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CustomerSearchBundle\Commands;
+namespace Shopware\Commands;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
-use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
