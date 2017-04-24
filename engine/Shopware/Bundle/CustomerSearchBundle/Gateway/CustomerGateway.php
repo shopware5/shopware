@@ -60,7 +60,7 @@ class CustomerGateway
     /**
      * @param int[] $ids
      *
-     * @return CustomerStruct[]
+     * @return Customer[]
      */
     public function getList($ids)
     {

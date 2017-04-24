@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\CustomerStream;
 
 use Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerOrderStruct;
-use Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerStruct;
+use Shopware\Bundle\CustomerSearchBundle\Gateway\Customer;
 use Shopware\Bundle\CustomerSearchBundle\Gateway\InterestsStruct;
 
-class AnalyzedCustomerStruct extends CustomerStruct
+class AnalyzedCustomer extends Customer
 {
     /**
      * @var CustomerOrderStruct
@@ -41,11 +41,11 @@ class AnalyzedCustomerStruct extends CustomerStruct
     protected $interests = [];
 
     /**
-     * @param CustomerStruct $customer
+     * @param Customer $customer
      *
-     * @return AnalyzedCustomerStruct
+     * @return AnalyzedCustomer
      */
-    public static function createFromCustomer(CustomerStruct $customer)
+    public static function createFromCustomer(Customer $customer)
     {
         $self = new self();
         foreach ($customer as $property => $key) {

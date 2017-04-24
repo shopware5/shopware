@@ -70,7 +70,7 @@ class CustomerProvider implements CustomerProviderInterface
 
         $analyzedCustomers = [];
         foreach ($customers as $id => $customer) {
-            $analyzedCustomer = AnalyzedCustomerStruct::createFromCustomer($customer);
+            $analyzedCustomer = AnalyzedCustomer::createFromCustomer($customer);
             $analyzedCustomers[$id] = $analyzedCustomer;
 
             $analyzedCustomer->setOrderInformation($orders[$id]);

@@ -59,7 +59,7 @@ class CustomerHydrator extends Hydrator
 
     public function hydrate(array $data)
     {
-        $customer = new CustomerStruct();
+        $customer = new Customer();
         $customer->setId($data['__customer_id']);
         $customer->setEncoder($data['__customer_encoder']);
         $customer->setEmail($data['__customer_email']);
