@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         var me = this;
 
         me.copySettingsButton = Ext.create('Ext.button.Button', {
-            cls: 'secondary small',
+            cls: 'primary small',
             margin: '5 0 0 160',
             text: '{s name="category/copy_settings_button"}{/s}',
             handler: Ext.bind(copyFunction, me)
