@@ -215,18 +215,18 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         return array_reverse($breadcrumb);
     }
 
-
     /**
      * @param int $categoryId
+     *
      * @return array
      */
     protected function getEmotionConfiguration($categoryId)
     {
         if ($this->Request()->getParam('sPage')) {
             return [
-                'hasEmotion'  => false,
+                'hasEmotion' => false,
                 'showListing' => true,
-                'showListingDevices' => []
+                'showListingDevices' => [],
             ];
         }
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
@@ -239,7 +239,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
             'showListing' => $this->hasListing($emotions),
-            'showListingDevices' => $this->getDevicesWithListing($emotions)
+            'showListingDevices' => $this->getDevicesWithListing($emotions),
         ];
     }
 

@@ -1,86 +1,114 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/bsd-license.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
  * This class is highly based on Zend_Controller_Response_Http
  *
- * @link https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/Http.php
- * @link https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/Abstract.php
+ * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/Http.php
+ * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/Abstract.php
  */
 class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Response_Response
 {
-    /**
-     * @var array Contains all cookies, which have been set by the "setCookie" function.
-     */
-    protected $_cookies = [];
-
-    /**
-     * Body content
-     * @var array
-     */
-    protected $_body = [];
-
-    /**
-     * Exception stack
-     * @var Exception[]
-     */
-    protected $_exceptions = [];
-
-    /**
-     * Array of headers. Each header is an array with keys 'name' and 'value'
-     * @var array
-     */
-    protected $_headers = [];
-
-    /**
-     * Array of raw headers. Each header is a single string, the entire header to emit
-     * @var array
-     */
-    protected $_headersRaw = [];
-
-    /**
-     * HTTP response code to use in headers
-     * @var int
-     */
-    protected $_httpResponseCode = 200;
-
-    /**
-     * Flag; is this response a redirect?
-     * @var boolean
-     */
-    protected $_isRedirect = false;
-
-    /**
-     * Whether or not to render exceptions; off by default
-     * @var boolean
-     */
-    protected $_renderExceptions = false;
-
     /**
      * Flag; if true, when header operations are called after headers have been
      * sent, an exception will be raised; otherwise, processing will continue
      * as normal. Defaults to true.
      *
      * @see canSendHeaders()
-     * @var boolean
+     *
+     * @var bool
      */
     public $headersSentThrowsException = true;
+    /**
+     * @var array contains all cookies, which have been set by the "setCookie" function
+     */
+    protected $_cookies = [];
+
+    /**
+     * Body content
+     *
+     * @var array
+     */
+    protected $_body = [];
+
+    /**
+     * Exception stack
+     *
+     * @var Exception[]
+     */
+    protected $_exceptions = [];
+
+    /**
+     * Array of headers. Each header is an array with keys 'name' and 'value'
+     *
+     * @var array
+     */
+    protected $_headers = [];
+
+    /**
+     * Array of raw headers. Each header is a single string, the entire header to emit
+     *
+     * @var array
+     */
+    protected $_headersRaw = [];
+
+    /**
+     * HTTP response code to use in headers
+     *
+     * @var int
+     */
+    protected $_httpResponseCode = 200;
+
+    /**
+     * Flag; is this response a redirect?
+     *
+     * @var bool
+     */
+    protected $_isRedirect = false;
+
+    /**
+     * Whether or not to render exceptions; off by default
+     *
+     * @var bool
+     */
+    protected $_renderExceptions = false;
+
+    /**
+     * Magic __toString functionality
+     *
+     * Proxies to {@link sendResponse()} and returns response value as string
+     * using output buffering.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        ob_start();
+        $this->sendResponse();
+
+        return ob_get_clean();
+    }
 
     /**
      * {@inheritdoc}
@@ -94,13 +122,16 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         $secure = false,
         $httpOnly = false
     ) {
-        $this->_cookies[$name] = [
+        $key = $name . '-' . $path;
+
+        $this->_cookies[$key] = [
+            'name' => $name,
             'value' => $value,
             'expire' => $expire,
             'path' => $path,
             'domain' => $domain,
             'secure' => $secure,
-            'httpOnly' => $httpOnly
+            'httpOnly' => $httpOnly,
         ];
 
         return $this;
@@ -123,7 +154,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
             $this->canSendHeaders(true);
             foreach ($this->_cookies as $name => $cookie) {
                 setcookie(
-                    $name,
+                    $cookie['name'],
                     $cookie['value'],
                     $cookie['expire'],
                     $cookie['path'],
@@ -145,30 +176,13 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         $this->_exceptions = [];
     }
 
-
-    /**
-     * Normalize a header name
-     *
-     * Normalizes a header name to X-Capitalized-Names
-     *
-     * @param  string $name
-     * @return string
-     */
-    protected function _normalizeHeader($name)
-    {
-        $filtered = str_replace(['-', '_'], ' ', (string) $name);
-        $filtered = ucwords(strtolower($filtered));
-        $filtered = str_replace(' ', '-', $filtered);
-        return $filtered;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function setHeader($name, $value, $replace = false)
     {
         $this->canSendHeaders(true);
-        $name  = $this->_normalizeHeader($name);
+        $name = $this->_normalizeHeader($name);
         $value = (string) $value;
 
         if ($replace) {
@@ -180,9 +194,9 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         }
 
         $this->_headers[] = [
-            'name'    => $name,
-            'value'   => $value,
-            'replace' => $replace
+            'name' => $name,
+            'value' => $value,
+            'replace' => $replace,
         ];
 
         return $this;
@@ -231,7 +245,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function clearHeader($name)
     {
-        if (! count($this->_headers)) {
+        if (!count($this->_headers)) {
             return $this;
         }
 
@@ -254,6 +268,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
             $this->_isRedirect = true;
         }
         $this->_headersRaw[] = (string) $value;
+
         return $this;
     }
 
@@ -271,6 +286,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     public function clearRawHeaders()
     {
         $this->_headersRaw = [];
+
         return $this;
     }
 
@@ -279,7 +295,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function clearRawHeader($headerRaw)
     {
-        if (! count($this->_headersRaw)) {
+        if (!count($this->_headersRaw)) {
             return $this;
         }
 
@@ -316,6 +332,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         }
 
         $this->_httpResponseCode = $code;
+
         return $this;
     }
 
@@ -425,6 +442,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
             $name = (string) $name;
             if (isset($this->_body[$name])) {
                 unset($this->_body[$name]);
+
                 return true;
             }
 
@@ -432,6 +450,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         }
 
         $this->_body = [];
+
         return true;
     }
 
@@ -443,6 +462,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         if (false === $spec) {
             ob_start();
             $this->outputBody();
+
             return ob_get_clean();
         } elseif (true === $spec) {
             return $this->_body;
@@ -466,6 +486,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
             unset($this->_body[$name]);
         }
         $this->_body[$name] = (string) $content;
+
         return $this;
     }
 
@@ -509,9 +530,9 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
             return $this->append($name, $content);
         }
 
-        $ins  = [$name => (string) $content];
+        $ins = [$name => (string) $content];
         $keys = array_keys($this->_body);
-        $loc  = array_search($parent, $keys);
+        $loc = array_search($parent, $keys);
         if (!$before) {
             // Increment location if not inserting before
             ++$loc;
@@ -525,7 +546,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
             $this->_body = $this->_body + $ins;
         } else {
             // Otherwise, insert at location specified
-            $pre  = array_slice($this->_body, 0, $loc);
+            $pre = array_slice($this->_body, 0, $loc);
             $post = array_slice($this->_body, $loc);
             $this->_body = $pre + $ins + $post;
         }
@@ -548,6 +569,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     public function setException(Exception $e)
     {
         $this->_exceptions[] = $e;
+
         return $this;
     }
 
@@ -653,7 +675,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function getExceptionByCode($code)
     {
-        $code       = (int) $code;
+        $code = (int) $code;
         $exceptions = [];
         foreach ($this->_exceptions as $e) {
             if ($code == $e->getCode()) {
@@ -693,6 +715,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
                 $exceptions .= $e->__toString() . "\n";
             }
             echo $exceptions;
+
             return;
         }
 
@@ -700,17 +723,20 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     }
 
     /**
-     * Magic __toString functionality
+     * Normalize a header name
      *
-     * Proxies to {@link sendResponse()} and returns response value as string
-     * using output buffering.
+     * Normalizes a header name to X-Capitalized-Names
+     *
+     * @param string $name
      *
      * @return string
      */
-    public function __toString()
+    protected function _normalizeHeader($name)
     {
-        ob_start();
-        $this->sendResponse();
-        return ob_get_clean();
+        $filtered = str_replace(['-', '_'], ' ', (string) $name);
+        $filtered = ucwords(strtolower($filtered));
+        $filtered = str_replace(' ', '-', $filtered);
+
+        return $filtered;
     }
 }
