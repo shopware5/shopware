@@ -51,7 +51,7 @@ class CustomerService implements CustomerServiceInterface
     /**
      * @param int[] $customerIds
      *
-     * @return CustomerStruct[]
+     * @return Customer[]
      */
     public function getList($customerIds)
     {

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CustomerSearchBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-class CustomerStruct extends Extendable
+class Customer extends Extendable
 {
     /**
      * @var int
