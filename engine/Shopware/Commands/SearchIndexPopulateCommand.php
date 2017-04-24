@@ -22,11 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CustomerSearchBundle\Commands;
+namespace Shopware\Commands;
 
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
-use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -44,7 +43,7 @@ class SearchIndexPopulateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:customer:search:index:populate')
-            ->setDescription('Refreshs the search index for the customer search')
+            ->setDescription('Refreshes the search index for the customer search')
         ;
     }
 
