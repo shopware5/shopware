@@ -112,12 +112,6 @@ class CustomerHydrator extends Hydrator
             $this->attributeHydrator->addAttribute($customer, $data, 'customerAttribute');
         }
 
-        if ($customer->getPaymentId()) {
-            $customer->setPayment(
-                $this->paymentHydrator->hydrate($data)
-            );
-        }
-
         return $customer;
     }
 }

@@ -684,20 +684,4 @@ class CustomerStruct extends Extendable
     {
         $this->billingAddress = $billingAddress;
     }
-
-    /**
-     * @return PaymentStruct
-     */
-    public function getPayment()
-    {
-        return $this->payment;
-    }
-
-    /**
-     * @param PaymentStruct $payment
-     */
-    public function setPayment($payment)
-    {
-        $this->payment = $payment;
-    }
 }
