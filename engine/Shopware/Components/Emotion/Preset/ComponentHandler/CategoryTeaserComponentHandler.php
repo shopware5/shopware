@@ -24,41 +24,11 @@
 
 namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
-use Shopware\Bundle\MediaBundle\MediaService;
-use Shopware\Components\Api\Resource\Media as MediaResource;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Models\Media\Media;
-
-class CategoryTeaserComponentHandler implements ComponentHandlerInterface
+class CategoryTeaserComponentHandler extends AbstractComponentHandler
 {
     const COMPONENT_TYPE = 'emotion-components-category-teaser';
 
     const ELEMENT_DATA_KEY = 'image';
-
-    /**
-     * @var MediaResource
-     */
-    private $mediaResource;
-
-    /**
-     * @var MediaService
-     */
-    private $mediaService;
-
-    /**
-     * @param MediaService $mediaService
-     * @param Container    $container
-     */
-    public function __construct(MediaService $mediaService, Container $container)
-    {
-        $this->mediaService = $mediaService;
-
-        $mediaResource = new MediaResource();
-        $mediaResource->setContainer($container);
-        $mediaResource->setManager($container->get('models'));
-
-        $this->mediaResource = $mediaResource;
-    }
 
     /**
      * {@inheritdoc}
@@ -119,19 +89,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param string $assetPath
-     *
-     * @return Media
-     */
-    private function doAssetImport($assetPath)
-    {
-        $media = $this->mediaResource->internalCreateMediaByFileLink($assetPath, -3);
-        $this->mediaResource->getManager()->flush($media);
-
-        return $media;
-    }
-
-    /**
      * @param array $element
      *
      * @return array
@@ -144,7 +101,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY && !empty($elementData['value'])) {
                 $assetPath = $elementData['value'];
-                $assetHash = uniqid('asset-', false);
+                $assetHash = uniqid('asset-', true);
 
                 $element['assets'][$assetHash] = $this->mediaService->getUrl($assetPath);
                 $elementData['value'] = $assetHash;

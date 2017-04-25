@@ -142,13 +142,13 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             if (isset($componentIdentifiers[$element['componentId']])) {
                 $componentId = $componentIdentifiers[$element['componentId']];
             } else {
-                $componentId = uniqid('preset-component-', false);
+                $componentId = uniqid('preset-component-', true);
                 $componentIdentifiers[$element['componentId']] = $componentId;
             }
 
             $element['componentId'] = $componentId;
             $element['component']['id'] = $componentId;
-            $element['syncKey'] = uniqid('preset-element-', false);
+            $element['syncKey'] = uniqid('preset-element-', true);
 
             if ($requiredPlugins && array_key_exists('pluginId', $element['component'])) {
                 $element['component']['plugin'] = $requiredPlugins[$element['component']['pluginId']];
@@ -181,7 +181,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             if (isset($fieldIdentifiers[$id])) {
                 $generatedId = $fieldIdentifiers[$id];
             } else {
-                $generatedId = uniqid('preset-field-', false);
+                $generatedId = uniqid('preset-field-', true);
                 $fieldIdentifiers[$id] = $generatedId;
             }
 

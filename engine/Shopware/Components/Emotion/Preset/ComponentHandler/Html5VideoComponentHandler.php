@@ -24,35 +24,13 @@
 
 namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
-use Shopware\Bundle\MediaBundle\MediaService;
-use Shopware\Components\Api\Resource\Media;
-use Shopware\Components\DependencyInjection\Container;
-
-class Html5VideoComponentHandler implements ComponentHandlerInterface
+class Html5VideoComponentHandler extends AbstractComponentHandler
 {
-    const TYPE = 'emotion-components-html-video';
-
-    /**
-     * @var MediaService
-     */
-    private $mediaService;
-
-    /**
-     * @var Media
-     */
-    private $mediaResource;
-
-    public function __construct(MediaService $mediaService, Media $mediaResource, Container $container)
-    {
-        $this->mediaService = $mediaService;
-        $this->mediaResource = $mediaResource;
-        $this->mediaResource->setContainer($container);
-        $this->mediaResource->setManager($container->get('models'));
-    }
+    const COMPONENT_TYPE = 'emotion-components-html-video';
 
     public function supports($componentType)
     {
-        return $componentType === self::TYPE;
+        return $componentType === self::COMPONENT_TYPE;
     }
 
     public function import(array $element)
@@ -66,7 +44,7 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
 
     public function export(array $element)
     {
-        if (!array_key_exists('data', $element)) {
+        if (!isset($element['data'])) {
             return $element;
         }
 
@@ -81,52 +59,67 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
     private function prepareElementExport(array $element)
     {
         $element['assets'] = [];
+        $data = $element['data'];
 
         /** @var array $elementData */
-        foreach ($element['data'] as &$field) {
-            $key = $field['key'];
+        foreach ($data as &$elementData) {
+            if (empty(trim($elementData['value']))) {
+                continue;
+            }
 
-            $asset = null;
+            $key = $elementData['key'];
+
+            $assetPath = null;
             switch ($key) {
                 case 'webm_video':
                 case 'ogg_video':
                 case 'h264_video':
                 case 'fallback_picture':
-                    $asset = $this->mediaService->getUrl($field['value']);
+                    $assetPath = $this->mediaService->getUrl($elementData['value']);
             }
 
-            if ($asset === null) {
+            if ($assetPath === null) {
                 continue;
             }
 
-            $element['assets'][$key] = $asset;
+            $assetHash = uniqid('asset-', true);
+            $element['assets'][$assetHash] = $assetPath;
+            $elementData['value'] = $assetHash;
         }
+        unset($elementData);
+
+        $element['data'] = $data;
 
         return $element;
     }
 
-    private function processElementData($element)
+    /**
+     * @param array $element
+     *
+     * @return array
+     */
+    private function processElementData(array $element)
     {
         $assets = $element['assets'];
+        $data = $element['data'];
 
-        foreach ($element['data'] as &$field) {
-            if (!array_key_exists($field['key'], $assets)) {
+        foreach ($data as &$elementData) {
+            if (!array_key_exists($elementData['value'], $assets)) {
                 continue;
             }
 
-            $asset = $assets[$field['key']];
-
+            $asset = $assets[$elementData['value']];
             $media = null;
 
-            switch ($field['key']) {
+            switch ($elementData['key']) {
                 case 'webm_video':
                 case 'ogg_video':
                 case 'h264_video':
-                    $media = $this->mediaResource->internalCreateMediaByFileLink($asset, -7);
+                    $media = $this->doAssetImport($asset, -7);
                     break;
 
                 case 'fallback_picture':
-                    $media = $this->mediaResource->internalCreateMediaByFileLink($asset, -3);
+                    $media = $this->doAssetImport($asset);
                     break;
             }
 
@@ -134,11 +127,11 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
                 continue;
             }
 
-            $this->mediaResource->getManager()->flush($media);
-
-            $field['value'] = $media->getPath();
+            $elementData['value'] = $media->getPath();
         }
+        unset($elementData);
 
+        $element['data'] = $data;
         unset($element['assets']);
 
         return $element;

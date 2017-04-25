@@ -635,6 +635,7 @@
 
         <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
             <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
             <argument type="service" id="service_container" />
 
             <tag name="shopware.emotion.preset_component_handler" />
@@ -642,6 +643,7 @@
 
         <service id="shopware.emotion.preset_bannerslider_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerSliderComponentHandler">
             <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
             <argument type="service" id="service_container" />
 
             <tag name="shopware.emotion.preset_component_handler" />
@@ -649,6 +651,7 @@
 
         <service id="shopware.emotion.preset_categoryteaser_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\CategoryTeaserComponentHandler">
             <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
             <argument type="service" id="service_container" />
 
             <tag name="shopware.emotion.preset_component_handler" />
