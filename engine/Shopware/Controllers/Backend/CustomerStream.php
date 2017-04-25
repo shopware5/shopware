@@ -23,7 +23,6 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\BaseCustomer;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\StreamIndexer;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -235,25 +234,36 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
         $streams = $this->fetchStreamsForCustomers($result->getIds());
 
-        $data = [];
-        /** @var BaseCustomer $row */
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select('*');
+        $query->from('s_customer_search_index', 'search_index');
+        $query->where('search_index.id IN (:ids)');
+        $query->setParameter(':ids', $result->getIds(), Connection::PARAM_INT_ARRAY);
+
+        $dataRows = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+
+        $sorted = [];
         foreach ($result->getRows() as $row) {
-            $dataRow = $row->getAttribute('search')->toArray();
+            $id = $row->getId();
 
-            $dataRow['interests'] = json_decode($dataRow['interests'], true);
+            $data = $dataRows[$id];
+            $data['id'] = $id;
 
-            $dataRow['streams'] = [];
+            $data['interests'] = json_decode($data['interests'], true);
+
+            $data['streams'] = [];
             if (array_key_exists($row->getId(), $streams)) {
-                $dataRow['streams'] = $streams[$row->getId()];
+                $data['streams'] = $streams[$row->getId()];
             }
 
-            $data[] = $dataRow;
+            $sorted[$id] = $data;
         }
 
         $this->View()->assign([
             'success' => true,
             'total' => $result->getTotal(),
-            'data' => array_values($data),
+            'data' => array_values($sorted),
         ]);
     }
 
