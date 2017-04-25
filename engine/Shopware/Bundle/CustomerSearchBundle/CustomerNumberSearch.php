@@ -135,7 +135,7 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
             $handler->handle($sorting, $query);
         }
 
-        $query->addSelect('customer.*');
+        $query->addSelect('customer.id, customer.customernumber, customer.email');
 
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }
