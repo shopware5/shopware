@@ -115,51 +115,90 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             menu.remove(menu.items.items[0]);
 
             menu.add([
-                me.createSortingItem('Kundennummber', 'customernumber'),
-                me.createSortingItem('Kunde seit', 'firstlogin'),
-                me.createSortingItem('Kundengruppe', 'customerGroup'),
-                me.createSortingItem('Kundenname', 'lastname'),
-                me.createSortingItem('Stadt', 'city'),
-                me.createSortingItem('Postleitzahl', 'zipcode'),
-                me.createSortingItem('Straße', 'street'),
-                me.createSortingItem('Gesamtumsatz', 'invoice_amount_sum'),
-                me.createSortingItem('Ø Warenkorb', 'invoice_amount_avg'),
-                me.createSortingItem('Ø Warenwert', 'product_avg'),
-                me.createSortingItem('Anzahl Bestellungen', 'count_orders'),
-                me.createSortingItem('Letzte Bestellung', 'last_order_time'),
-                me.createSortingItem('Interessen', 'interests')
+                me.createSortingItem('Kundennummber', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\NumberSorting'),
+                me.createSortingItem('Kunde seit', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\CustomerSinceSorting'),
+                me.createSortingItem('Kundengruppe', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\CustomerGroupSorting'),
+                me.createSortingItem('Kundenname', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\LastNameSorting'),
+                me.createSortingItem('Stadt', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\CitySorting'),
+                me.createSortingItem('Postleitzahl', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\ZipCodeSorting'),
+                me.createSortingItem('Straße', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\StreetNameSorting'),
+                me.createSortingItem('Gesamtumsatz', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\TotalAmountSorting'),
+                me.createSortingItem('Ø Warenkorb', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\AverageAmountSorting'),
+                me.createSortingItem('Ø Warenwert', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\AverageProductAmountSorting'),
+                me.createSortingItem('Anzahl Bestellungen', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\TotalOrderSorting'),
+                me.createSortingItem('Letzte Bestellung', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\LastOrderSorting')
             ]);
         });
+
+        header.on('headerclick', Ext.bind(me.handleColumnSorting, me));
     },
 
-    createSortingItem: function(text, field) {
+    handleColumnSorting: function(ct, column, e, t, eOpts) {
+        var me = this,
+            colSortClsPrefix = Ext.baseCSSPrefix + 'column-header-sort-',
+            ascCls = colSortClsPrefix + 'ASC',
+            descCls = colSortClsPrefix + 'DESC',
+            ownerHeaderCt = column.getOwnerHeaderCt(),
+            oldSortState = column.mySortState,
+            state = 'ASC',
+            headers = ownerHeaderCt.getGridColumns();
+
+        if (oldSortState === 'ASC') {
+            state = 'DESC';
+        }
+
+        column.addCls(colSortClsPrefix + state);
+
+        switch (state) {
+            case 'DESC':
+                column.removeCls([ascCls]);
+                break;
+            case 'ASC':
+                column.removeCls([descCls]);
+                break;
+        }
+
+        if (ownerHeaderCt && !column.triStateSort) {
+            for (var i = 0; i < headers.length; i++) {
+                if (headers[i] !== column) {
+                    headers[i].removeCls([ascCls, descCls]);
+                }
+            }
+        }
+        column.mySortState = state;
+
+        me.sortingHandler(column.sortingClass, state);
+    },
+    createSortingItem: function(text, sortingClass) {
         var me = this;
 
         return {
             text: text,
-            field: field,
+            sortingClass: sortingClass,
             menu: {
                 items: [
                     { text: 'Aufsteigend',
                         handler: function () {
-                            me.sortingHandler(field, 'asc');
+                            me.sortingHandler(sortingClass, 'ASC');
                         } },
                     { text: 'Absteigend',
                         handler: function () {
-                            me.sortingHandler(field, 'desc');
+                            me.sortingHandler(sortingClass, 'DESC');
                         } }
                 ]
             }
         };
     },
 
-    sortingHandler: function(field, direction) {
+    sortingHandler: function(sortingClass, direction) {
         var me = this;
 
-        me.getStore().sort({
-            property: field,
+        var sorting = { };
+        sorting[sortingClass] = {
             direction: direction
-        });
+        };
+        me.getStore().getProxy().extraParams.sorting = Ext.JSON.encode(sorting);
+        me.getStore().load();
     },
 
     /**
@@ -206,6 +245,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
 
         return [{
             header: 'Information',
+            sortable: false,
+            sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\NumberSorting',
             dataIndex: 'customernumber',
             flex: 2,
             renderer: function (value, meta, record) {
@@ -214,6 +255,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         }, {
             header: 'Kunde',
+            sortable: false,
+            sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\LastNameSorting',
             dataIndex: 'lastname',
             flex: 3,
             renderer: function (v, meta, record) {
@@ -236,6 +279,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         }, {
             header: 'Anschrift',
+            sortable: false,
+            sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\CitySorting',
             dataIndex: 'city',
             flex: 3,
             renderer: function(v, meta, record) {
@@ -249,6 +294,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         }, {
             header: 'Umsatz',
+            sortable: false,
+            sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\TotalAmountSorting',
             dataIndex: 'invoice_amount_sum',
             flex: 2,
             renderer: function(v, meta, record) {
@@ -259,6 +306,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         }, {
             header: 'Bestellungen',
+            sortable: false,
+            sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\TotalOrderSorting',
             dataIndex: 'count_orders',
             renderer: function(v, meta, record) {
                 return '<b>Bestellungen: ' + record.get('count_orders') + '</b>' +
@@ -266,6 +315,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         }, {
             header: 'Top Interessen',
+            sortable: false,
             dataIndex: 'interests',
             flex: 4,
             renderer: function(v, meta, record) {

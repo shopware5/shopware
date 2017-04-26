@@ -31,7 +31,7 @@ class HasTotalOrderAmountCondition implements ConditionInterface
     /**
      * @var float
      */
-    private $minimumOrderAmount;
+    protected $minimumOrderAmount;
 
     /**
      * @param float $minimumOrderAmount

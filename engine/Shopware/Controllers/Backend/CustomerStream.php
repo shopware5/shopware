@@ -23,10 +23,8 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory;
-use Shopware\Bundle\CustomerSearchBundle\CustomerStream\StreamIndexer;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
+use Shopware\Components\CustomerStream\StreamIndexer;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\CustomerStream;
 
@@ -68,9 +66,9 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
 
         /** @var StreamIndexer $indexer */
-        $indexer = $this->get('shopware_customer_search.stream_indexer');
+        $indexer = $this->get('customer_search.dbal.indexing.stream_indexer');
 
-        /** @var CustomerStreamCriteriaFactory $factory */
+        /** @var \Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory $factory */
         $factory = $this->get('shopware_customer_search.stream_criteria_factory');
 
         $criteria = $factory->createCriteria($streamId);
@@ -132,7 +130,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
         $handled = $offset + self::INDEXING_LIMIT;
 
-        $indexer = Shopware()->Container()->get('shopware_customer_search.customer_stream.search_indexer');
+        $indexer = Shopware()->Container()->get('customer_search.dbal.indexing.indexer');
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->get('dbal_connection')->createQueryBuilder();
@@ -217,18 +215,19 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $criteria->offset((int) $request->getParam('start', 0));
         $criteria->limit((int) $request->getParam('limit', 50));
 
-        $sortings = $request->getParam('sort', []);
-        foreach ($sortings as $sorting) {
-            $criteria->addSorting(
-                new SimpleSorting(
-                    $sorting['property'],
-                    $sorting['direction']
-                )
-            );
+        $sortings = json_decode($request->getParam('sorting', []), true);
+
+        if (!empty($sortings)) {
+            $reflectionHelper = $this->container->get('shopware.logaware_reflection_helper');
+            $sortings = $reflectionHelper->unserialize($sortings, '');
+
+            foreach ($sortings as $sorting) {
+                $criteria->addSorting($sorting);
+            }
         }
 
-        /** @var \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch $numberSearch */
-        $numberSearch = $this->get('shopware_customer_search.customer_number_search');
+        /** @var \Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch $numberSearch */
+        $numberSearch = $this->get('customer_search.dbal.number_search');
 
         $result = $numberSearch->search($criteria);
 
@@ -244,7 +243,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $dataRows = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
 
         $sorted = [];
-        foreach ($result->getRows() as $row) {
+        foreach ($result->getCustomers() as $row) {
             $id = $row->getId();
 
             $data = $dataRows[$id];

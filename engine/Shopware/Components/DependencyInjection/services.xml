@@ -566,5 +566,28 @@
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
+
+        <service id="customer_search.dbal.gateway.interests" class="Shopware\Components\CustomerStream\CustomerInterestsGateway">
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="customer_search.dbal.gateway.order" class="Shopware\Components\CustomerStream\CustomerOrderGateway" >
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_customer_search.gateway.customer_order_hydrator" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.customer_order_hydrator" class="Shopware\Components\CustomerStream\CustomerOrderHydrator"/>
+
+
+        <service id="customer_search.dbal.indexing.stream_indexer" class="Shopware\Components\CustomerStream\StreamIndexer">
+            <argument type="service" id="shopware_customer_search.stream_criteria_factory" />
+            <argument type="service" id="customer_search.dbal.number_search" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_customer_search.stream_criteria_factory" class="Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.logaware_reflection_helper" />
+        </service>
     </services>
 </container>

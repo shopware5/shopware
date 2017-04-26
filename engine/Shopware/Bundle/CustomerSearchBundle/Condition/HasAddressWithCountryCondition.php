@@ -31,7 +31,7 @@ class HasAddressWithCountryCondition implements ConditionInterface
     /**
      * @var int[]
      */
-    private $countryIds;
+    protected $countryIds;
 
     /**
      * @param int[] $countryIds

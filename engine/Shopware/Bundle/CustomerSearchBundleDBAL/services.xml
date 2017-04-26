@@ -1,0 +1,151 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="customer_search.dbal.sorting.average_amount_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\AverageAmountSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.average_product_amount_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\AverageProductAmountSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.city_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\CitySortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.customer_group_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\CustomerGroupSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.customer_since_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\CustomerSinceSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.last_name_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\LastNameSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.last_order_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\LastOrderSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.number_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\NumberSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.order_count_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\OrderCountSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.street_name_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\StreetNameSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.total_amount_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\TotalAmountSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.sorting.zip_code_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\ZipCodeSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.has_address_with_country_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasAddressWithCountryConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.has_canceled_orders_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasCanceledOrdersConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.has_order_count_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasOrderCountConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.has_total_order_amount_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasTotalOrderAmountConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.is_customer_since_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsCustomerSinceConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.is_in_customer_group_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsInCustomerGroupConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_at_weekday_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedAtWeekdayConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_in_last_days_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInLastDaysConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_in_shop_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInShopConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_on_device_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedOnDeviceConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_product_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_product_of_category_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfCategoryConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_product_of_manufacturer_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfManufacturerConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_with_delivery_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithDeliveryConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.ordered_with_payment_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithPaymentConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.registered_in_shop_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\RegisteredInShopConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.indexing.cron_job_subscriber" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CronJobSubscriber">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="customer_search.dbal.indexing.indexer" type="service"/>
+            <argument id="customer_search.dbal.indexing.stream_indexer" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service id="customer_search.dbal.indexing.indexer" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="customer_search.dbal.indexing.provider" type="service"/>
+        </service>
+
+        <service id="customer_search.dbal.indexing.provider" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerProvider" >
+            <argument id="customer_search.dbal.gateway.service" type="service"/>
+            <argument id="customer_search.dbal.gateway.order" type="service"/>
+            <argument id="customer_search.dbal.gateway.interests" type="service"/>
+        </service>
+
+        <service id="customer_search.dbal.number_search" class="Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch">
+            <argument id="customer_search.dbal.handler_registry" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+        </service>
+
+        <service id="customer_search.dbal.handler_registry" class="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry">
+            <argument type="collection"/>
+            <argument type="collection"/>
+        </service>
+
+    </services>
+</container>

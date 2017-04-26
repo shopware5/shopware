@@ -31,7 +31,7 @@ class OrderedProductCondition implements ConditionInterface
     /**
      * @var string[]
      */
-    private $numbers;
+    protected $numbers;
 
     /**
      * @param string[] $numbers

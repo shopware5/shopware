@@ -31,7 +31,7 @@ class OrderedAtWeekdayCondition implements ConditionInterface
     /**
      * @var string[]
      */
-    private $weekdays;
+    protected $weekdays;
 
     /**
      * @param string[] $weekdays

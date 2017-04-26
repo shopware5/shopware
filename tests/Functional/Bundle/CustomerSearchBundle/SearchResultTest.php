@@ -55,6 +55,6 @@ class SearchResultTest extends TestCase
         $this->assertContains('test3@example.com', $result->getEmails());
         $this->assertEquals(3, $result->getTotal());
         $this->assertCount(3, $result->getIds());
-        $this->assertCount(3, $result->getRows());
+        $this->assertCount(3, $result->getCustomers());
     }
 }

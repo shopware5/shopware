@@ -31,7 +31,7 @@ class HasOrderCountCondition implements ConditionInterface
     /**
      * @var int
      */
-    private $minimumOrderCount;
+    protected $minimumOrderCount;
 
     /**
      * @param int $minimumOrderCount

@@ -448,5 +448,32 @@
         <service id="shopware_storefront.custom_listing_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator">
             <argument type="service" id="shopware.logaware_reflection_helper" />
         </service>
+
+        <service id="customer_search.dbal.gateway.service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService">
+            <argument id="shopware_customer_search.gateway.customer_gateway" type="service"/>
+            <argument id="shopware_customer_search.gateway.address_gateway" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.customer_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator">
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.address_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressGateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_customer_search.gateway.address_hydrator" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.customer_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_customer_search.gateway.customer_hydrator" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.address_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AddressHydrator">
+            <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+        </service>
     </services>
 </container>
