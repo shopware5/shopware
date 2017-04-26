@@ -31,7 +31,7 @@ class IsInCustomerGroupCondition implements ConditionInterface
     /**
      * @var string[]
      */
-    private $ids;
+    protected $ids;
 
     /**
      * @param int[] $ids

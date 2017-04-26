@@ -31,7 +31,7 @@ class OrderedWithPaymentCondition implements ConditionInterface
     /**
      * @var int[]
      */
-    private $paymentIds;
+    protected $paymentIds;
 
     /**
      * @param int[] $paymentIds

@@ -25,14 +25,13 @@
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CustomerSearchBundle\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
- * @package   Components\DependencyInjection
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class HandlerRegistryCompilerPassTest extends TestCase
@@ -41,7 +40,7 @@ class HandlerRegistryCompilerPassTest extends TestCase
     {
         $container = new ContainerBuilder();
 
-        $parentService = $container->register('shopware_customer_search.handler_registry');
+        $parentService = $container->register('customer_search.dbal.handler_registry');
         $parentService->addArgument([new Reference('existing_service')]);
 
         $services = [
@@ -94,7 +93,7 @@ class HandlerRegistryCompilerPassTest extends TestCase
 
     /**
      * @param ContainerBuilder $container
-     * @param array[] $services
+     * @param array[]          $services
      */
     private function registerServices(ContainerBuilder $container, array $services)
     {

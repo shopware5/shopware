@@ -31,7 +31,7 @@ class IsCustomerSinceCondition implements ConditionInterface
     /**
      * @var \DateTime
      */
-    private $customerSince;
+    protected $customerSince;
 
     /**
      * @param \DateTime|string $customerSince

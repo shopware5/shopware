@@ -1,24 +1,46 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle;
 
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasAddressWithCountryConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasCanceledOrdersConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasOrderCountConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasTotalOrderAmountConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\IsCustomerSinceConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\IsInCustomerGroupConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedAtWeekdayConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedInLastDaysConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedInShopConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedOnDeviceConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedProductConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedProductOfCategoryConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedProductOfManufacturerConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedWithDeliveryConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\OrderedWithPaymentConditionHandler;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\RegisteredInShopConditionHandler;
 use Shopware\Bundle\CustomerSearchBundle\HandlerRegistry;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasAddressWithCountryConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasCanceledOrdersConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasOrderCountConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasTotalOrderAmountConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsCustomerSinceConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsInCustomerGroupConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedAtWeekdayConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInLastDaysConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInShopConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedOnDeviceConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfCategoryConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfManufacturerConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithDeliveryConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithPaymentConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\RegisteredInShopConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\SimpleCondition;
 
 class HandlerRegistryTest extends TestCase
@@ -26,7 +48,7 @@ class HandlerRegistryTest extends TestCase
     public function testCoreHandlersAreRegistered()
     {
         /** @var HandlerRegistry $registry */
-        $registry = Shopware()->Container()->get('shopware_customer_search.handler_registry');
+        $registry = Shopware()->Container()->get('customer_search.dbal.handler_registry');
 
         $handlers = $registry->getConditionHandlers();
         $classes = [];
@@ -58,7 +80,7 @@ class HandlerRegistryTest extends TestCase
     public function testNoneSupportConditionThrowsException()
     {
         /** @var HandlerRegistry $registry */
-        $registry = Shopware()->Container()->get('shopware_customer_search.handler_registry');
+        $registry = Shopware()->Container()->get('customer_search.dbal.handler_registry');
         $registry->getConditionHandler(new SimpleCondition('test'));
     }
 }

@@ -60,7 +60,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand
         }
         $streams = $this->getStreams($streamIds);
 
-        $indexer = $this->container->get('shopware_customer_search.stream_indexer');
+        $indexer = $this->container->get('customer_search.dbal.indexing.stream_indexer');
 
         $helper = new ConsoleProgressHelper($output);
 

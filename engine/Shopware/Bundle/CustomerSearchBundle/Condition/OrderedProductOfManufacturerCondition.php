@@ -31,7 +31,7 @@ class OrderedProductOfManufacturerCondition implements ConditionInterface
     /**
      * @var int[]
      */
-    private $manufacturerIds;
+    protected $manufacturerIds;
 
     /**
      * @param int[] $manufacturerIds

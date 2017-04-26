@@ -31,7 +31,7 @@ class OrderedInLastDaysCondition implements ConditionInterface
     /**
      * @var int
      */
-    private $lastDays;
+    protected $lastDays;
 
     /**
      * @param int $lastDays
