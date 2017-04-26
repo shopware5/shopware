@@ -27,6 +27,7 @@ namespace Shopware\Commands;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Models\ProductFeed\Repository;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateProductFeedCommand extends ShopwareCommand
@@ -39,6 +40,12 @@ class GenerateProductFeedCommand extends ShopwareCommand
         $this
             ->setName('sw:product:feeds:refresh')
             ->setDescription('Refreshes product feed cache files.')
+            ->addOption(
+                'shop',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Get shop context for correct image url'
+            )
             ->setHelp('The <info>%command.name%</info> refreshes the cached product feed files.');
     }
 
@@ -57,6 +64,15 @@ class GenerateProductFeedCommand extends ShopwareCommand
         } elseif (!is_writable($cacheDir)) {
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
         }
+
+        $shopID = $input->getOption('shop');
+
+        $repository = Shopware()->Container()->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        $shop = ($shopID) ? $repository->find($shopID) : $repository->getDefault();
+
+        $context =  \Shopware\Components\Routing\Context::createFromShop($shop, Shopware()->Container()->get('config'));
+        Shopware()->Container()->get('router')->setContext($context);
 
         /** @var $export \sExport */
         $export = $this->container->get('modules')->Export();
