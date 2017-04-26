@@ -214,7 +214,7 @@ class Requirements
      */
     private function checkModRewrite()
     {
-        return isset($_SERVER['MOD_REWRITE']);
+        return in_array('mod_rewrite', apache_get_modules());
     }
 
     /**
