@@ -621,9 +621,13 @@
          */
         center: function () {
             var me = this,
-                $modalBox = me._$modalBox;
+                $modalBox = me._$modalBox,
+                windowHeight = window.innerHeight ? window.innerHeight : $(window).height();
 
-            $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
+            // use window.innerHeight when available for correct results.
+            // @link https://bugs.jquery.com/ticket/6724
+
+            $modalBox.css('top', (windowHeight - $modalBox.height()) / 2);
 
             $.publish('plugin/swModal/onCenter', [ me ]);
         },
