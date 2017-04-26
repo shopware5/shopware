@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             archive: '{s name=formatTypes/archive}-archive{/s}',
             pdf: '{s name=formatTypes/pdf}PDF-document{/s}',
             graphic: '{s name=formatTypes/graphic}-graphic{/s}',
+            vector: '{s name=formatTypes/vector}-vector{/s}',
             unknown: '{s name=formatTypes/unknown}unknown file{/s}'
         },
         fieldsText:{
@@ -81,7 +82,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Initializes the component and sets the neccessary
+     * Initializes the component and sets the necessary
      * toolbars and items.
      *
      * @return void
@@ -158,37 +159,51 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     /**
      * Creates the template for the media view panel
      *
-     * @return [object] generated Ext.XTemplate
+     * @return { object } generated Ext.XTemplate
      */
     createMediaViewTemplate: function() {
+        var me = this;
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<div class="thumb-wrap" id="{name}">',
 
                 // If the type is image, then show the image
-                '<tpl if="type == &quot;IMAGE&quot;">',
+                '<tpl if="this.isImage(type, extension)">',
                 '<div class="thumb">',
                     '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
                 '</div>',
                 '</tpl>',
 
                 // All other types should render an icon
-                '<tpl if="type != &quot;IMAGE&quot;">',
+                '<tpl if="!this.isImage(type, extension)">',
                     '<div class="thumb icon">',
                         '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
                     '</div>',
                 '</tpl>',
                 '<span class="x-editable">{[Ext.util.Format.ellipsis(values.name, 9)]}.{extension}</span></div>',
             '</tpl>',
-            '<div class="x-clear"></div>{/literal}'
+            '<div class="x-clear"></div>{/literal}',
+            {
+                /**
+                 * Member function of the template to check if a certain file is an image.
+                 *
+                 * @param { string }type
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                isImage: function(type, extension) {
+                    return me._isImage(type, extension);
+                }
+            }
         )
     },
 
     /**
-     * Creates the media listing based on an Ext.view.View (know as DataView)
+     * Creates the media listing based on an Ext.view.View (known as DataView)
      * and binds the "Media"-store to it
      *
-     * @return [object] this.dataView - created Ext.view.View
+     * @return { object } this.dataView - created Ext.view.View
      */
     createMediaView: function() {
         var me = this;
@@ -241,7 +256,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * Creates a new upload drop zone which uploads the dropped files
      * to the server and adds them to the active album
      *
-     * @return [object] this.mediaDropZone - created Shopware.app.FileUpload
+     * @return { object } this.mediaDropZone - created Shopware.app.FileUpload
      */
     createDropZone: function() {
         var me = this;
@@ -266,7 +281,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * Note that the template has different member methods
      * which are only callable in the actual template.
      *
-     * @return [object] generated Ext.XTemplate
+     * @return { object } generated Ext.XTemplate
      */
     createInfoPanelTemplate: function() {
         var me = this;
@@ -275,14 +290,14 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 '<div class="media-info-pnl">',
 
                     // If the type is image, then show the image
-                    '<tpl if="type == &quot;IMAGE&quot;">',
-                    '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
-                    '</div>',
+                    '<tpl if="this.isImage(type, extension)">',
+                        '<div class="thumb">',
+                            '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
+                        '</div>',
                     '</tpl>',
 
                     // All other types should render an icon
-                    '<tpl if="type != &quot;IMAGE&quot;">',
+                    '<tpl if="!this.isImage(type, extension)">',
                         '<div class="thumb icon">',
                             '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
                         '</div>',
@@ -319,20 +334,31 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             '</tpl>{/literal}',
             {
                 /**
+                 * Member function of the template to check if a certain file is an image.
+                 *
+                 * @param { string }type
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                isImage: function(type, extension) {
+                    return me._isImage(type, extension);
+                },
+
+                /**
                  * Member function of the template which formats a date string
                  *
-                 * @param [string] value - Date string in the following format: Y-m-d H:i:s
-                 * @return [string] formatted date string
+                 * @param { string } value - Date string in the following format: Y-m-d H:i:s
+                 * @return { string } formatted date string
                  */
                 formatDate: function(value) {
                     return Ext.util.Format.date(value);
                 },
 
                 /**
-                 * Formates the output type
+                 * Formats the output type
                  *
-                 * @param [string] type - Type of the media
-                 * @param [string] extension - File extension of the media
+                 * @param { string } type - Type of the media
+                 * @param { string } extension - File extension of the media
                  */
                 formatDataType: function(type, extension) {
                     var result = '';
@@ -354,6 +380,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                         case 'IMAGE':
                             result = extension + me.snippets.formatTypes.graphic;
                             break;
+                        case 'VECTOR':
+                            result = extension + me.snippets.formatTypes.vector;
+                            break;
                         default:
                             result = me.snippets.formatTypes.unknown;
                             break;
@@ -365,10 +394,10 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Creates a new panel which displays additional informations
+     * Creates a new panel which displays additional information
      * about the selected media.
      *
-     * @return [object] this.infoPanel - generated Ext.panel.Panel
+     * @return { object } this.infoPanel - generated Ext.panel.Panel
      */
     createInfoPanel: function() {
         var me = this;
@@ -410,7 +439,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * contains 2 buttons ("add item" and "delete marked items")
      * and a search field to filter the media view.
      *
-     * @return [object] created Ext.toolbar.Toolbar
+     * @return { object } created Ext.toolbar.Toolbar
      */
     createActionToolbar: function() {
         var me = this;
@@ -418,7 +447,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         if(Ext.isIE) {
             me.addBtn = Ext.create('Shopware.app.FileUpload', {
                 requestURL: '{url controller="mediaManager" action="upload"}',
-                padding: 0,
                 padding: '6 0 0',
                 fileInputConfig: {
                     buttonOnly: true,
@@ -440,7 +468,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     /**
                      * Enable multi selection on the file upload button
                      *
-                     * @param [object] btn - rendered Ext.button.Button
+                     * @param { object } btn - rendered Ext.button.Button
                      * @return void
                      */
                     afterrender: function(btn) {
@@ -518,7 +546,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     /**
      * Creates the paging toolbar for the media view.
      *
-     * @return [object] generated Ext.toolbar.Toolbar
+     * @return { object } generated Ext.toolbar.Toolbar
      */
     createPagingToolbar: function() {
         var me = this;
@@ -600,7 +628,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * unlocks the "delete media(s)" button.
      *
      * @event select
-     * @param [object] rowModel - Associated Ext.selection.RowModel from the Ext.view.View
+     * @param { object } rowModel - Associated Ext.selection.RowModel from the Ext.view.View
      * @return void
      */
     onSelectMedia: function(rowModel) {
@@ -645,8 +673,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * a entry in the "media per page"-combo box.
      *
      * @event select
-     * @param [object] combo - Ext.form.field.ComboBox
-     * @param [array] records - Array of selected entries
+     * @param { object } combo - Ext.form.field.ComboBox
+     * @param { array } records - Array of selected entries
      * @return void
      */
     onChangeMediaQuantity: function(combo, records) {
@@ -664,7 +692,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * Initializes the drag zone for the media view.
      *
      * @event render
-     * @param [object] view - Associated Ext.view.View
+     * @param { object } view - Associated Ext.view.View
      * @return void
      */
     initializeMediaDragZone: function(view) {
@@ -680,8 +708,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
              * (e.g. finding a child by class name). Make sure your returned object has a "ddel" attribute (with an HTML Element) for other functions to work.
              *
              * @private
-             * @param [object] e - Ext.EventImplObj
-             * @return [object] dragData
+             * @param { object } e - Ext.EventImplObj
+             * @return { object } dragData
              */
             getDragData: function(e) {
                 var sourceEl = e.getTarget(view.itemSelector, 10), d;
@@ -733,6 +761,19 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 return this.dragData.repairXY;
             }
         });
+    },
+
+    /**
+     * Simple function to check if a certain file is an image.
+     *
+     * @param { string }type
+     * @param { string } extension
+     * @returns { boolean }
+     *
+     * @private
+     */
+    _isImage: function (type, extension) {
+        return type === 'IMAGE' && !Ext.Array.contains(['tif', 'tiff'], extension);
     }
 });
 //{/block}

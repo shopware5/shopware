@@ -56,6 +56,11 @@ class Media extends ModelEntity
     const TYPE_IMAGE = 'IMAGE';
 
     /**
+     * Flag for a vector media
+     */
+    const TYPE_VECTOR = 'VECTOR';
+
+    /**
      * Flag for a video media
      */
     const TYPE_VIDEO = 'VIDEO';
@@ -131,7 +136,7 @@ class Media extends ModelEntity
      */
     private $typeMapping = [
         '24b' => self::TYPE_IMAGE,
-        'ai' => self::TYPE_IMAGE,
+        'ai' => self::TYPE_VECTOR,
         'bmp' => self::TYPE_IMAGE,
         'cdr' => self::TYPE_IMAGE,
         'gif' => self::TYPE_IMAGE,
@@ -143,7 +148,7 @@ class Media extends ModelEntity
         'png' => self::TYPE_IMAGE,
         'tif' => self::TYPE_IMAGE,
         'tiff' => self::TYPE_IMAGE,
-        'eps' => self::TYPE_IMAGE,
+        'eps' => self::TYPE_VECTOR,
         'pbm' => self::TYPE_IMAGE,
         'psd' => self::TYPE_IMAGE,
         'wbm' => self::TYPE_IMAGE,
@@ -846,6 +851,7 @@ class Media extends ModelEntity
         'sty' => self::TYPE_MUSIC,
         'svd' => self::TYPE_MUSIC,
         'svx' => self::TYPE_MUSIC,
+        'svg' => self::TYPE_VECTOR,
         'sw' => self::TYPE_MUSIC,
         'swa' => self::TYPE_MUSIC,
         'syh' => self::TYPE_MUSIC,
