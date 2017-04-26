@@ -62,7 +62,20 @@ More precise designations are commented inside the document.
 .is--ie .action--sort .sort--select:after {
     line-height: 34px;
 }
+.is--ie .register--login .register--new-customer .new-customer-btn::after {
+    line-height: 16px;
+}
 
+.is--ie {
+    .filter-panel--input input[type='checkbox']:checked ~ .input--state::before,
+    .filter-panel--checkbox input[type='checkbox']:checked ~ .input--state::before,
+    .filter-panel--radio input[type='checkbox']:checked ~ .input--state::before,
+    .filter-panel--input input[type='checkbox']:checked ~ .checkbox--state::before,
+    .filter-panel--checkbox input[type='checkbox']:checked ~ .checkbox--state::before,
+    .filter-panel--radio input[type='checkbox']:checked ~ .checkbox--state::before {
+        line-height: 12px;
+    }
+}
 
 @media screen and (min-width: @tabletViewportWidth) {
 
