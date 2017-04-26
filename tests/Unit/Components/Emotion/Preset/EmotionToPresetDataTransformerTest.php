@@ -77,12 +77,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
             $this->assertArrayNotHasKey('emotionId', $element);
             $this->assertArrayHasKey('syncKey', $element);
             $this->assertContains('preset-element-', $element['syncKey']);
-            $this->assertContains('preset-component-', $element['componentId']);
-
-            foreach ($element['component']['fields'] as $field) {
-                $this->assertContains('preset-field-', $field['id']);
-                $this->assertContains('preset-component-', $field['componentId']);
-            }
+            $this->assertContains('emotion-components-banner', $element['componentId']);
 
             foreach ($element['data'] as $data) {
                 $this->assertArrayNotHasKey('id', $data);
@@ -90,8 +85,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
                 $this->assertArrayNotHasKey('elementId', $data);
                 $this->assertArrayHasKey('key', $data);
                 $this->assertArrayHasKey('valueType', $data);
-                $this->assertContains('preset-field-', $data['fieldId']);
-                $this->assertContains('preset-component-', $data['componentId']);
+                $this->assertContains('emotion-components-banner', $data['componentId']);
             }
 
             foreach ($element['viewports'] as $viewport) {

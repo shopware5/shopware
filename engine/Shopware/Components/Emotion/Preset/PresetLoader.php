@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Emotion\Preset;
 
 class PresetLoader implements PresetLoaderInterface
@@ -79,6 +80,41 @@ class PresetLoader implements PresetLoaderInterface
     }
 
     /**
+     * @param array $elements
+     *
+     * @return array
+     */
+    private function refreshElementData(array $elements)
+    {
+        $collectedComponents = array_column($elements, 'componentId');
+        $collectedComponents = array_keys(array_flip($collectedComponents));
+
+        $components = $this->getComponentData($collectedComponents);
+
+        if ($components) {
+            foreach ($elements as &$element) {
+                $componentIdentifier = $element['componentId'];
+                $element['component'] = $components[$componentIdentifier];
+                $element['componentId'] = $element['component']['id'];
+
+                $fieldMapping = [];
+                foreach ($element['component']['fields'] as $field) {
+                    $fieldMapping[$field['name']] = $field;
+                }
+
+                foreach ($element['data'] as &$data) {
+                    $data['componentId'] = $element['componentId'];
+                    $data['fieldId'] = $fieldMapping[$data['fieldId']]['id'];
+                }
+                unset($data);
+            }
+            unset($element);
+        }
+
+        return $elements;
+    }
+
+    /**
      * Prepares preset data to be shown as preview in ui.
      *
      * @param array $presetData
@@ -123,137 +159,19 @@ class PresetLoader implements PresetLoaderInterface
     }
 
     /**
-     * @param array $elements
-     *
-     * @return array
-     */
-    private function refreshElementData(array $elements)
-    {
-        $collectedComponents = [];
-        $pluginNames = [];
-
-        foreach ($elements as $element) {
-            $component = $element['component'];
-
-            if (array_key_exists('plugin', $component)) {
-                $pluginNames[] = $component['plugin'];
-            }
-
-            $collectedComponents[$component['name']] = [];
-            $collectedComponents[$component['name']]['id'] = $component['id'];
-            $collectedComponents[$component['name']]['fields'] = [];
-
-            foreach ($component['fields'] as $field) {
-                $collectedComponents[$component['name']]['fields'][$field['name']] = $field['id'];
-            }
-        }
-
-        $componentMapping = $this->createComponentMapping($collectedComponents);
-
-        $pluginIds = $this->getPluginIds($pluginNames);
-
-        return $this->processRefresh($elements, $componentMapping, $pluginIds);
-    }
-
-    /**
-     * @param array $elements
-     * @param array $componentMapping
-     * @param array $pluginIds
-     *
-     * @return array
-     */
-    private function processRefresh(array $elements, array $componentMapping, array $pluginIds)
-    {
-        foreach ($elements as &$element) {
-            $componentId = $componentMapping[$element['componentId']]['componentId'];
-
-            if (array_key_exists('plugin', $element['component'])) {
-                $element['component']['pluginId'] = $pluginIds[$element['component']['plugin']];
-            }
-
-            foreach ($element['component']['fields'] as &$field) {
-                $field['id'] = $componentMapping[$element['componentId']][$field['id']];
-                $field['componentId'] = $componentId;
-            }
-            unset($field);
-
-            foreach ($element['data'] as &$data) {
-                $data['componentId'] = $componentId;
-                $data['fieldId'] = $componentMapping[$element['componentId']][$data['fieldId']];
-            }
-            unset($data);
-
-            $element['component']['id'] = $componentId;
-            $element['componentId'] = $componentId;
-        }
-        unset($element);
-
-        return $elements;
-    }
-
-    /**
-     * @param array $componentNames
-     *
-     * @return array
-     */
-    private function getComponentData(array $componentNames)
-    {
-        return $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('component.name, component.id as componentId, field.id as fieldId, field.name as fieldName')
-            ->from('s_library_component', 'component')
-            ->leftJoin('component', 's_library_component_field', 'field', 'field.componentID = component.id')
-            ->where('component.name IN (:names)')
-            ->setParameter('names', $componentNames, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP);
-    }
-
-    /**
-     * @param array $technicalNames
-     *
-     * @return array
-     */
-    private function getPluginIds(array $technicalNames)
-    {
-        return $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('name, id')
-            ->from('s_core_plugins', 'plugin')
-            ->where('name IN (:names)')
-            ->setParameter('names', $technicalNames, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-    }
-
-    /**
      * @param array $collectedComponents
      *
      * @return array
      */
-    private function createComponentMapping(array $collectedComponents)
+    private function getComponentData(array $collectedComponents)
     {
-        $componentNames = array_keys($collectedComponents);
-        $componentData = $this->getComponentData($componentNames);
-
-        $componentMapping = [];
-
-        foreach ($collectedComponents as $componentName => $componentDetail) {
-            $componentFields = $componentData[$componentName];
-            $fields = $componentDetail['fields'];
-
-            $componentMapping[$componentDetail['id']] = [];
-
-            foreach ($componentFields as $field) {
-                if (!isset($componentMapping[$componentDetail['id']]['componentId'])) {
-                    $componentMapping[$componentDetail['id']]['componentId'] = $field['componentId'];
-                }
-                $fields[$field['fieldName']] = $field['fieldId'];
-            }
-
-            $fieldMapping = array_combine($componentDetail['fields'], $fields);
-
-            $componentMapping[$componentDetail['id']] = $componentMapping[$componentDetail['id']] + $fieldMapping;
-        }
-
-        return $componentMapping;
+        return $this->modelManager->createQueryBuilder()
+            ->select('component', 'fields')
+            ->from(Component::class, 'component', 'component.xType')
+            ->leftJoin('component.fields', 'fields')
+            ->where('component.xType IN (:components)')
+            ->setParameter('components', $collectedComponents, Connection::PARAM_STR_ARRAY)
+            ->getQuery()
+            ->getArrayResult();
     }
 }

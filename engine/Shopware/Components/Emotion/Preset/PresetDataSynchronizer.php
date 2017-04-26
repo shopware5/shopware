@@ -178,11 +178,11 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
      */
     private function findComponentHandler(array $element)
     {
-        if (!isset($element['component']['xType'])) {
+        if (!isset($element['componentId'])) {
             return false;
         }
 
-        $componentType = $element['component']['xType'];
+        $componentType = $element['componentId'];
 
         foreach ($this->componentHandlers as $handler) {
             if ($handler->supports($componentType)) {

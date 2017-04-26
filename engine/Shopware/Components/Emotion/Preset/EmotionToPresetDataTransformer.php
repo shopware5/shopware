@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Emotion\Preset;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelManager;
@@ -110,7 +109,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
         $emotionData['active'] = false;
 
         $requiredPlugins = $this->getRequiredPlugins($emotionData['elements']);
-        $emotionData['elements'] = $this->cleanupElements($emotionData['elements'], $requiredPlugins);
+        $emotionData['elements'] = $this->cleanupElements($emotionData['elements']);
         $data['requiredPlugins'] = $requiredPlugins;
         $data['presetData'] = json_encode($emotionData);
 
@@ -119,19 +118,11 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
 
     /**
      * @param array $elements
-     * @param array $requiredPlugins
      *
      * @return array
      */
-    private function cleanupElements(array $elements, array $requiredPlugins)
+    private function cleanupElements(array $elements)
     {
-        if ($requiredPlugins) {
-            $requiredPlugins = $this->getPluginsById($requiredPlugins);
-        }
-
-        $componentIdentifiers = [];
-        $fieldIdentifiers = [];
-
         /** @var array $element */
         foreach ($elements as &$element) {
             unset(
@@ -139,68 +130,32 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
                 $element['emotionId']
             );
 
-            if (isset($componentIdentifiers[$element['componentId']])) {
-                $componentId = $componentIdentifiers[$element['componentId']];
-            } else {
-                $componentId = uniqid('preset-component-', true);
-                $componentIdentifiers[$element['componentId']] = $componentId;
+            $element['componentId'] = $element['component']['xType'];
+            $fieldMapping = [];
+
+            foreach ($element['component']['fields'] as $field) {
+                $fieldMapping[$field['id']] = $field;
             }
 
-            $element['componentId'] = $componentId;
-            $element['component']['id'] = $componentId;
-            $element['syncKey'] = uniqid('preset-element-', true);
-
-            if ($requiredPlugins && array_key_exists('pluginId', $element['component'])) {
-                $element['component']['plugin'] = $requiredPlugins[$element['component']['pluginId']];
-                unset($element['component']['pluginId']);
-            }
-
-            $fieldMapping = $this->createFieldMapping($element['component']['fields'], $fieldIdentifiers, $componentId);
-            $element['component']['fields'] = array_values($fieldMapping);
-            $element['data'] = $this->cleanupElementData($element['data'], $fieldMapping);
+            $element = $this->cleanupElementData($element, $fieldMapping);
             $element['viewports'] = $this->cleanupElementViewports($element['viewports']);
+            $element['syncKey'] = uniqid('preset-element-', true);
+            unset($element['component']);
         }
 
         return $elements;
     }
 
     /**
-     * @param array  $fields
-     * @param array  $fieldIdentifiers
-     * @param string $componentId
-     *
-     * @return array
-     */
-    private function createFieldMapping(array $fields, array &$fieldIdentifiers, $componentId)
-    {
-        $fieldMapping = [];
-
-        foreach ($fields as $field) {
-            $id = $field['id'];
-
-            if (isset($fieldIdentifiers[$id])) {
-                $generatedId = $fieldIdentifiers[$id];
-            } else {
-                $generatedId = uniqid('preset-field-', true);
-                $fieldIdentifiers[$id] = $generatedId;
-            }
-
-            $field['componentId'] = $componentId;
-            $field['id'] = $generatedId;
-            $fieldMapping[$id] = $field;
-        }
-
-        return $fieldMapping;
-    }
-
-    /**
-     * @param array $elementData
+     * @param array $element
      * @param array $fieldMapping
      *
      * @return array
      */
-    private function cleanupElementData(array $elementData, array $fieldMapping)
+    private function cleanupElementData(array $element, array $fieldMapping)
     {
+        $elementData = $element['data'];
+
         foreach ($elementData as &$data) {
             unset(
                 $data['id'],
@@ -210,14 +165,17 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             $field = $fieldMapping[$data['fieldId']];
 
             if ($field) {
-                $data['fieldId'] = $field['id'];
+                $data['fieldId'] = $field['name'];
                 $data['key'] = $field['name'];
                 $data['valueType'] = $field['valueType'];
-                $data['componentId'] = $field['componentId'];
+                $data['componentId'] = $element['componentId'];
             }
         }
+        unset($data);
 
-        return $elementData;
+        $element['data'] = $elementData;
+
+        return $element;
     }
 
     /**
@@ -256,21 +214,5 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
         }
 
         return $pluginIds;
-    }
-
-    /**
-     * @param array $pluginIds
-     *
-     * @return array
-     */
-    private function getPluginsById(array $pluginIds)
-    {
-        return $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('id, name')
-            ->from('s_core_plugins', 'plugin')
-            ->where('plugin.id IN (:ids)')
-            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 }
