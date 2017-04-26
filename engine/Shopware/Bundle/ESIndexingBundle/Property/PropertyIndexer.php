@@ -51,8 +51,8 @@ class PropertyIndexer implements DataIndexerInterface
     private $queryFactory;
 
     /**
-     * @param Client                    $client
-     * @param PropertyQueryFactory      $queryFactory
+     * @param Client $client
+     * @param PropertyQueryFactory $queryFactory
      * @param PropertyProviderInterface $provider
      */
     public function __construct(
@@ -66,12 +66,12 @@ class PropertyIndexer implements DataIndexerInterface
     }
 
     /**
-     * @param ShopIndex               $index
+     * @param ShopIndex $index
      * @param ProgressHelperInterface $progress
      */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
-        $query = $this->queryFactory->createQuery();
+        $query = $this->queryFactory->createQuery(100);
         $progress->start($query->fetchCount(), 'Indexing properties');
 
         while ($ids = $query->fetch()) {
@@ -84,7 +84,7 @@ class PropertyIndexer implements DataIndexerInterface
 
     /**
      * @param ShopIndex $index
-     * @param int[]     $groupIds
+     * @param int[] $groupIds
      */
     public function indexProperties(ShopIndex $index, $groupIds)
     {
@@ -94,7 +94,7 @@ class PropertyIndexer implements DataIndexerInterface
 
         /** @var Group[] $properties */
         $properties = $this->provider->get($index->getShop(), $groupIds);
-        $remove = array_diff($groupIds, array_keys($properties));
+        $remove     = array_diff($groupIds, array_keys($properties));
 
         $documents = [];
         foreach ($properties as $property) {
@@ -108,7 +108,7 @@ class PropertyIndexer implements DataIndexerInterface
 
         $this->client->bulk([
             'index' => $index->getName(),
-            'type' => PropertyMapping::TYPE,
+            'type'  => PropertyMapping::TYPE,
             'body' => $documents,
         ]);
     }
