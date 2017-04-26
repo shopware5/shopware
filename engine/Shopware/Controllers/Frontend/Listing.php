@@ -43,10 +43,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
-    /**
-     * Index action method
-     */
-    public function indexAction()
+    public function listingAction()
     {
         $requestCategoryId = $this->Request()->getParam('sCategory');
 
@@ -60,18 +57,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
 
         $categoryId = $categoryContent['id'];
+
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
-        $emotionConfiguration = $this->getEmotionConfiguration($categoryId);
-
-        $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
-        if ($location) {
-            $this->redirect($location, ['code' => 301]);
-
-            return;
-        }
-
-        $this->View()->assign($emotionConfiguration);
         $this->View()->assign([
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
@@ -79,11 +67,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
             'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
         ]);
-
-        // only show the listing if an emotion viewport is empty or the showListing option is active
-        if (!$emotionConfiguration['showListing']) {
-            return;
-        }
 
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
@@ -137,6 +120,36 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($categoryArticles);
         $this->View()->assign('sortings', $sortings);
+    }
+
+    /**
+     * Index action method
+     */
+    public function indexAction()
+    {
+        $requestCategoryId = $this->Request()->getParam('sCategory');
+
+        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
+        }
+
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
+
+        $categoryId = $categoryContent['id'];
+
+        Shopware()->System()->_GET['sCategory'] = $categoryId;
+
+        $this->View()->assign([
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+            'sCategoryContent' => $categoryContent,
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
+            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
+            'page' => $this->request->getParam('sPage'),
+        ]);
     }
 
     /**
