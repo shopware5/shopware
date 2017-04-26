@@ -5,7 +5,6 @@
             {block name="frontend_index_left_navigation_smartphone"}
                 <div class="navigation--smartphone">
                     <ul class="navigation--list ">
-
                         {* Trigger to close the off canvas menu *}
                         {block name="frontend_index_left_categories_close_menu"}
                             <li class="navigation--entry entry--close-off-canvas">
@@ -14,14 +13,13 @@
                                 </a>
                             </li>
                         {/block}
-
-                        {* Switches for currency and language on mobile devices *}
-                        {block name="frontend_index_left_switches"}
-                            <div class="mobile--switches">
-                                {action module=widgets controller=index action=shopMenu}
-                            </div>
-                        {/block}
                     </ul>
+                    {* Switches for currency and language on mobile devices *}
+                    {block name="frontend_index_left_switches"}
+                        <div class="mobile--switches">
+                            {action module=widgets controller=index action=shopMenu}
+                        </div>
+                    {/block}
                 </div>
             {/block}
 
