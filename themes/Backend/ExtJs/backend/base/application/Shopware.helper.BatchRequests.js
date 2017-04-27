@@ -56,25 +56,23 @@ Ext.define('Shopware.helper.BatchRequests', {
         }
 
         if (requests.length <= 0) {
-            return me.finish();
+            return me.finish(requests);
         }
 
         request = requests.shift();
         return me.prepareRequest(request, requests);
     },
 
-    updateProgressBar: function(request, response) {
-        // request.progressBar.updateProgress(response.progress, response.text, true);
-    },
+    updateProgressBar: function(request, response) { },
 
     /**
      * called when all requests finished
      */
-    finish: function() { },
+    finish: function(requests) { },
+
+    canceled: function() { },
 
     cancel: function() {
         this.cancelProcess = true;
-    },
-
-    canceled: function() { }
+    }
 });

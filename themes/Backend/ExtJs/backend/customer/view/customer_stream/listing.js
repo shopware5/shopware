@@ -59,8 +59,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         return me.selModel;
     },
 
-    nameRenderer: function (value, meta, record) {
-        var lastIndex = record.get('lastIndexTime');
+    nameRenderer: function (value) {
         return '<span class="stream-name-column"><b>' + value + '</b></span>';
     }
 });

@@ -42,7 +42,7 @@ class OrderedWithPaymentConditionHandler implements ConditionHandlerInterface
         /** @var OrderedWithPaymentCondition $condition */
         foreach ($condition->getPaymentIds() as $i => $number) {
             $wheres[] = 'customer.payments LIKE :payment' . $i;
-            $query->setParameter(':payment' . $i, '%||' . $number . '||%');
+            $query->setParameter(':payment' . $i, '%|' . $number . '|%');
         }
         $query->andWhere(implode(' OR ', $wheres));
     }

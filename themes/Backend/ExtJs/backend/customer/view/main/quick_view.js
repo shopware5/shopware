@@ -22,29 +22,51 @@
  *
  * @category   Shopware
  * @package    Customer
- * @subpackage Store
+ * @subpackage Controller
  * @version    $Id$
  * @author shopware AG
  */
+
 // {namespace name=backend/customer/view/main}
-// {block name="backend/product_stream/store/attribute"}
-Ext.define('Shopware.apps.Customer.store.Attribute', {
-    extend: 'Ext.data.Store',
-    fields: [ 'columnName', 'label' ],
-    autoLoad: false,
-    pageSize: 15,
-    proxy: {
-        type: 'ajax',
-        method: 'post',
-        url: '{url controller=AttributeData action=list}',
-        extraParams: {
-            table: 's_user_attributes'
-        },
-        reader: {
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
+// {block name="backend/customer/view/main/quick_view"}
+
+Ext.define('Shopware.apps.Customer.view.main.QuickView', {
+
+    extend: 'Ext.container.Container',
+
+    title: '{s name="quick_view_title"}{/s}',
+
+    layout: 'border',
+
+    cls: 'customer-quick-view',
+
+    initComponent: function() {
+        var me = this;
+
+        me.items = me.createItems();
+
+        me.callParent(arguments);
+    },
+
+    createItems: function() {
+        var me = this;
+
+        me.store = Ext.create('Shopware.apps.Customer.store.QuickView').load();
+
+        me.grid = Ext.create('Shopware.apps.Customer.view.main.CustomerList', {
+            store: me.store,
+            region: 'center',
+            margin: 10
+        });
+
+        me.filter = Ext.create('Shopware.apps.Customer.view.main.CustomerListFilter', {
+            region: 'west',
+            width: 350,
+            margin: '10 0 10 10',
+            gridPanel: me.grid
+        });
+
+        return [me.filter, me.grid];
     }
 });
 // {/block}

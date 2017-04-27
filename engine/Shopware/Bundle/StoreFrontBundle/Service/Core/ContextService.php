@@ -404,9 +404,10 @@ class ContextService implements ContextServiceInterface
     private function getStreamsOfCustomerId($customerId)
     {
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select('stream_id');
-        $query->from('s_customer_streams_mapping');
-        $query->where('customer_id = :customerId');
+        $query->select('mapping.stream_id');
+        $query->from('s_customer_streams_mapping', 'mapping');
+        $query->innerJoin('mapping', 's_customer_streams', 'streams', 'streams.id = mapping.stream_id AND streams.use_for_http_cache = 1');
+        $query->where('mapping.customer_id = :customerId');
         $query->setParameter(':customerId', $customerId);
         $streams = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
         sort($streams);

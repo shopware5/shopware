@@ -35,6 +35,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     name: 'conditions',
     autoScroll: true,
     cls: 'shopware-form customer-stream-condition-panel',
+    bodyCls: 'stream-condition-panel-body',
 
     mixins: {
         formField: 'Ext.form.field.Base',
@@ -45,6 +46,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         type: 'vbox',
         align: 'stretch'
     },
+
+    bodyPadding: '10 0 0',
 
     initComponent: function() {
         var me = this;
@@ -91,6 +94,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     },
 
     createConditionContainer: function(configuration) {
+        var me = this;
+
         var panel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionField', {
             flex: 1,
             name: configuration.conditionClass,
@@ -98,16 +103,28 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         });
 
         return Ext.create('Ext.panel.Panel', {
-            title: configuration.title,
             layout: { type: 'hbox', align: 'stretch' },
             minHeight: 90,
-            conditionClass: configuration.conditionClass,
-            maxHeight: 150,
+            cls: 'condition-container',
+            maxHeight: 190,
             bodyPadding: 10,
-            margin: '10 0 0',
+            header: {
+                cls: 'condition-container-header'
+            },
             closable: true,
+            bodyCls: 'condition-container-body',
+            margin: '0 10 10',
+            title: configuration.title,
+            conditionClass: configuration.conditionClass,
             conditionField: panel,
-            items: [panel]
+            items: [panel],
+            listeners: {
+                close: function() {
+                    Ext.defer(function() {
+                        me.fireEvent('condition-removed', this)
+                    }, 100);
+                }
+            }
         });
     },
 

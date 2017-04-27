@@ -24,11 +24,8 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
-
-
-use Shopware\Components\CustomerStream\CustomerInterestsGateway;
-use Shopware\Components\CustomerStream\CustomerOrderGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService;
+use Shopware\Components\CustomerStream\CustomerOrderGateway;
 
 class CustomerProvider implements CustomerProviderInterface
 {
@@ -38,28 +35,20 @@ class CustomerProvider implements CustomerProviderInterface
     private $customerService;
 
     /**
-     * @var \Shopware\Components\CustomerStream\CustomerOrderGateway
+     * @var CustomerOrderGateway
      */
     private $customerOrderGateway;
 
     /**
-     * @var CustomerInterestsGateway
-     */
-    private $customerInterestsGateway;
-
-    /**
-     * @param CustomerService          $customerService
-     * @param \Shopware\Components\CustomerStream\CustomerOrderGateway     $customerOrderGateway
-     * @param CustomerInterestsGateway $customerInterestsGateway
+     * @param CustomerService      $customerService
+     * @param CustomerOrderGateway $customerOrderGateway
      */
     public function __construct(
         CustomerService $customerService,
-        CustomerOrderGateway $customerOrderGateway,
-        CustomerInterestsGateway $customerInterestsGateway
+        CustomerOrderGateway $customerOrderGateway
     ) {
         $this->customerService = $customerService;
         $this->customerOrderGateway = $customerOrderGateway;
-        $this->customerInterestsGateway = $customerInterestsGateway;
     }
 
     public function get($customerIds)
@@ -68,18 +57,12 @@ class CustomerProvider implements CustomerProviderInterface
 
         $orders = $this->customerOrderGateway->getList($customerIds);
 
-        $interests = $this->customerInterestsGateway->getInterests($customerIds, 360);
-
         $analyzedCustomers = [];
         foreach ($customers as $id => $customer) {
             $analyzedCustomer = AnalyzedCustomer::createFromCustomer($customer);
             $analyzedCustomers[$id] = $analyzedCustomer;
 
             $analyzedCustomer->setOrderInformation($orders[$id]);
-
-            if (array_key_exists($id, $interests)) {
-                $analyzedCustomer->setInterests($interests[$id]);
-            }
         }
 
         return $analyzedCustomers;

@@ -55,7 +55,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref: 'detailWindow', selector: 'customer-detail-window' }
+        { ref: 'detailWindow', selector: 'customer-detail-window' },
+        { ref: 'quickView', selector: 'customer-list' }
     ],
 
     /**
@@ -97,11 +98,9 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
         // listen to different events to handle the user actions.
         me.control({
             'customer-list': {
-                editColumn: me.onEditCustomer,
-                itemdblclick: me.onGridDblClick
-            },
-            'customer-list-main-window button[action=addCustomer]': {
-                click: me.onCreateCustomer
+                edit: me.onEditCustomer,
+                itemdblclick: me.onGridDblClick,
+                create: me.onCreateCustomer
             },
             'customer-detail-window button[action=save-customer]': {
                 click: me.onSaveCustomer
@@ -339,8 +338,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             win = btn.up('window'),
             form = win.down('form'),
             model = form.getRecord(),
-            missingField = '{s name=unknown_field}Unknown field{/s}',
-            listStore = me.subApplication.getStore('List');
+            quickView = me.getQuickView(),
+            missingField = '{s name=unknown_field}Unknown field{/s}';
 
         if (!form.getForm().isValid()) {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
@@ -409,7 +408,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     Shopware.app.Application.fireEvent('customer-save-successfully', me, record, win, form);
 
                     win.destroy();
-                    listStore.load();
+                    quickView.getStore().load();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.password.errorTitle, me.snippets.password.errorText + '<br> ' + rawData.message, me.snippets.growlMessage);
                 }

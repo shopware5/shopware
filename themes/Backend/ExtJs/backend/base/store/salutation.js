@@ -31,6 +31,8 @@
 Ext.define('Shopware.apps.Base.store.Salutation', {
     extend: 'Ext.data.Store',
 
+    idProperty: 'key',
+
     fields: [
         { name: 'key', type: 'string' },
         { name: 'label', type: 'string' }
@@ -44,5 +46,17 @@ Ext.define('Shopware.apps.Base.store.Salutation', {
             root:'data',
             totalProperty:'total'
         }
+    },
+
+    getByKey: function(key) {
+        var salutation = key;
+
+        this.each(function(item) {
+            if (item.get('key') === key) {
+                salutation = item.get('label');
+            }
+        });
+
+        return salutation;
     }
 });

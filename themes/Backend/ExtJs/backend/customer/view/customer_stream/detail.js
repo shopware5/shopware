@@ -38,16 +38,14 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
         return {
             splitFields: false,
             fieldSets: [{
-                title: '{s name=detail/stream_details}Stream details{/s}',
+                title: '{s name=stream_details}{/s}',
                 fields: {
-                    name: '{s name=detail/stream_name}Name:{/s}',
-                    description: '{s name=detail/stream_description}Description:{/s}',
-                    productStreamIds: {
-                        xtype: 'shopware-form-field-product-stream-grid',
-                        height: 300,
-                        store: factory.createEntitySearchStore('Shopware\\Models\\ProductStream\\ProductStream'),
-                        searchStore: factory.createEntitySearchStore('Shopware\\Models\\ProductStream\\ProductStream'),
-                        fieldLabel: '{s name=detail/product_stream}Product stream{/s}'
+                    name: '{s name=stream_name}{/s}',
+                    description: '{s name=stream_description}{/s}',
+                    useForHttpCache: {
+                        fieldLabel: '{s name="use_for_http_cache"}{/s}',
+                        boxLabel: '{s name="use_for_http_cache_support"}{/s}',
+                        helpText: '{s name="use_for_http_cache_help"}{/s}'
                     }
                 }
             }]

@@ -42,7 +42,7 @@ class OrderedInShopConditionHandler implements ConditionHandlerInterface
         $wheres = [];
         foreach ($condition->getShopIds() as $i => $id) {
             $wheres[] = 'customer.shops LIKE :shop' . $i;
-            $query->setParameter(':shop' . $i, '%||' . $id . '||%');
+            $query->setParameter(':shop' . $i, '%|' . $id . '|%');
         }
         $query->andWhere(implode(' OR ', $wheres));
     }

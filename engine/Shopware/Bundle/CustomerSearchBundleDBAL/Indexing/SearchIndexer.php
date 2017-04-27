@@ -55,16 +55,8 @@ class SearchIndexer implements SearchIndexerInterface
     public function populate(array $ids)
     {
         $this->connection->transactional(function () use ($ids) {
-            $this->connection->executeUpdate(
-                'DELETE FROM s_customer_search_index WHERE id IN (:ids)',
-                [':ids' => $ids],
-                [':ids' => Connection::PARAM_INT_ARRAY]
-            );
-
             $insert = $this->createInsertQuery();
-
             $customers = $this->provider->get($ids);
-
             foreach ($customers as $customer) {
                 $insert->execute($this->buildData($customer));
             }
@@ -129,18 +121,9 @@ class SearchIndexer implements SearchIndexerInterface
             'devices' => $this->implodeUnique($customer->getOrderInformation()->getDevices()),
             'deliveries' => $this->implodeUnique($customer->getOrderInformation()->getDispatches()),
             'payments' => $this->implodeUnique($customer->getOrderInformation()->getPayments()),
-            'products' => $this->implodeUnique(
-                array_map(function (Interests $interest) {
-                    return $interest->getProductNumber();
-                }, $customer->getInterests())
-            ),
-            'categories' => $this->getCategories($customer->getInterests()),
-            'manufacturers' => $this->implodeUnique(
-                array_map(function (Interests $interest) {
-                    return $interest->getManufacturerId();
-                }, $customer->getInterests())
-            ),
-            'interests' => json_encode(array_slice($customer->getInterests(), 0, 5)),
+            'products' => $this->implodeUnique($customer->getOrderInformation()->getProducts()),
+            'categories' => $this->implodeUnique($customer->getOrderInformation()->getCategories()),
+            'manufacturers' => $this->implodeUnique($customer->getOrderInformation()->getManufacturers()),
         ];
 
         return $data;
@@ -198,7 +181,7 @@ class SearchIndexer implements SearchIndexerInterface
                 products,
                 categories,
                 manufacturers,
-                interests
+                index_time
             ) VALUES (
                 :id,
                 :email,
@@ -248,7 +231,7 @@ class SearchIndexer implements SearchIndexerInterface
                 :products,
                 :categories,
                 :manufacturers,
-                :interests
+                NOW()
             )
       ');
     }
@@ -259,7 +242,7 @@ class SearchIndexer implements SearchIndexerInterface
             return null;
         }
 
-        return '||' . implode('||', array_keys(array_flip($array))) . '||';
+        return '|' . implode('|', array_keys(array_flip($array))) . '|';
     }
 
     /**
@@ -275,20 +258,5 @@ class SearchIndexer implements SearchIndexerInterface
         }
 
         return $date->format($format);
-    }
-
-    /**
-     * @param Interests[] $interests
-     *
-     * @return null|string
-     */
-    private function getCategories($interests)
-    {
-        $categories = [];
-        foreach ($interests as $interest) {
-            $categories = array_merge($categories, [$interest->getCategoryId()], $interest->getCategoryPath());
-        }
-
-        return $this->implodeUnique($categories);
     }
 }

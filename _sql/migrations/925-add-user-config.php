@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,26 +20,24 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Customer
- * @subpackage List
- * @version    $Id$
- * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
-// {block name="backend/customer/view/list/filter"}
-Ext.define('Shopware.apps.Customer.view.list.Filter', {
-    extend: 'Shopware.listing.FilterPanel',
-    alias: 'widget.customer-filter-panel',
-    title: '{s name=filtering}Filtering{/s}',
+use Shopware\Components\Migrations\AbstractMigration;
 
-    configure: function() {
-        return {
-            controller: 'Customer',
-            model: 'Shopware.apps.Customer.model.List'
-        };
+class Migrations_Migration925 extends AbstractMigration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function up($modus)
+    {
+        $this->addSql('
+CREATE TABLE `s_user_config` (
+`user_id` int(11) NOT NULL,
+`name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`config` longtext COLLATE utf8_unicode_ci NOT NULL,
+PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        ');
     }
-});
-// {/block}
+}

@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\Condition\RegisteredInShopCondition;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -79,8 +78,6 @@ class TestCase extends \Enlight_Components_Test_TestCase
         array $expectedNumbers,
         array $customers
     ) {
-        $criteria->addCondition(new RegisteredInShopCondition([1000]));
-
         $ids = [];
         foreach ($customers as $customer) {
             $ids[] = $this->createCustomer($customer);
@@ -148,6 +145,8 @@ class TestCase extends \Enlight_Components_Test_TestCase
                 $order = array_merge([
                     'ordertime' => (new \DateTime())->format('Y-m-d H:i:s'),
                     'language' => 1,
+                    'subshopID' => 1,
+                    'currencyFactor' => 1,
                 ], $order);
 
                 if (!array_key_exists('details', $order)) {

@@ -35,9 +35,9 @@ class Migrations_Migration923 extends AbstractMigration
 CREATE TABLE `s_customer_streams` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-    `conditions` text COLLATE utf8_unicode_ci,
-    `product_stream_ids` text COLLATE utf8_unicode_ci,
+    `conditions` LONGTEXT COLLATE utf8_unicode_ci,
     `description` text COLLATE utf8_unicode_ci,
+    `use_for_http_cache` int(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
@@ -93,8 +93,8 @@ CREATE TABLE `s_customer_search_index` (
     products LONGTEXT NULL,
     categories LONGTEXT NULL,
     manufacturers LONGTEXT NULL,
-    interests LONGTEXT NULL,
-    index_time datetime NOT NULL
+    index_time datetime NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
 

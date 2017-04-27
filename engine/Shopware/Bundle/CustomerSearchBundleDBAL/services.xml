@@ -133,7 +133,6 @@
         <service id="customer_search.dbal.indexing.provider" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerProvider" >
             <argument id="customer_search.dbal.gateway.service" type="service"/>
             <argument id="customer_search.dbal.gateway.order" type="service"/>
-            <argument id="customer_search.dbal.gateway.interests" type="service"/>
         </service>
 
         <service id="customer_search.dbal.number_search" class="Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch">

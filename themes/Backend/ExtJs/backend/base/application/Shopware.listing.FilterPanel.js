@@ -138,6 +138,8 @@ Ext.define('Shopware.listing.FilterPanel', {
      */
     resetButtonText: '{s name="filter_panel/reset_button_text"}Reset filters{/s}',
 
+    filterFieldStyle: 'background: #fff',
+
     /**
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
@@ -356,7 +358,9 @@ Ext.define('Shopware.listing.FilterPanel', {
 
         me.registerEvents();
 
-        me.gridPanel = me.listingWindow.gridPanel;
+        if (!me.gridPanel) {
+            me.gridPanel = me.listingWindow.gridPanel;
+        }
 
         me.items = me.createItems();
 
@@ -508,6 +512,7 @@ Ext.define('Shopware.listing.FilterPanel', {
             //create filter field container to add a checkbox for each field.
             var container = Ext.create('Shopware.filter.Field', {
                 field: field,
+                style: me.filterFieldStyle,
                 subApp: me.subApp
             });
             field.container = container;
@@ -563,7 +568,8 @@ Ext.define('Shopware.listing.FilterPanel', {
 
         me.toolbar =  Ext.create('Ext.toolbar.Toolbar', {
             items: [ me.createFilterButton(), me.createResetButton() ],
-            dock: 'bottom'
+            dock: 'bottom',
+            margin: '1 0'
         });
         return me.toolbar;
     },

@@ -42,7 +42,7 @@ class OrderedOnDeviceConditionHandler implements ConditionHandlerInterface
         $wheres = [];
         foreach ($condition->getDevices() as $i => $id) {
             $wheres[] = 'customer.devices LIKE :device' . $i;
-            $query->setParameter(':device' . $i, '%||' . $id . '||%');
+            $query->setParameter(':device' . $i, '%|' . $id . '|%');
         }
         $query->andWhere(implode(' OR ', $wheres));
     }

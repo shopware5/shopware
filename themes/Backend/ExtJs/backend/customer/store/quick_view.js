@@ -22,31 +22,28 @@
  *
  * @category   Shopware
  * @package    Customer
- * @subpackage Store
+ * @subpackage Model
  * @version    $Id$
  * @author shopware AG
  */
 
 // {namespace name=backend/customer/view/main}
-// {block name="backend/customer/store/meta_chart"}
-Ext.define('Shopware.apps.Customer.store.MetaChart', {
-    extend: 'Ext.data.Store',
 
-    fields: [
-        { name: 'count_orders', type: 'int' },
-        { name: 'invoice_amount_avg', type: 'float' },
-        { name: 'invoice_amount_max', type: 'float' },
-        { name: 'invoice_amount_min', type: 'float' },
-        { name: 'invoice_amount_sum', type: 'float' },
-        { name: 'product_avg', type: 'float' },
-        { name: 'yearMonth', type: 'string' }
-    ],
-    proxy: {
-        type: 'ajax',
-        url: '{url controller="CustomerStream" action="loadChart"}',
-        reader: {
-            type: 'json',
-            root: 'data'
+/**
+ * Shopware Model - Customer list backend module.
+ *
+ * The order model represents a single data row of the s_order or the Shopware\Models\Order\Order
+ * doctrine mode which contains the head data about a shop order.
+ */
+// {block name="backend/customer/store/quick_view"}
+Ext.define('Shopware.apps.Customer.store.QuickView', {
+    extend: 'Shopware.store.Listing',
+
+    model: 'Shopware.apps.Customer.model.QuickView',
+
+    configure: function() {
+        return {
+            controller: 'CustomerQuickView'
         }
     }
 });

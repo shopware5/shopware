@@ -32,11 +32,12 @@
 Ext.define('Shopware.apps.Customer.view.chart.Chart', {
 
     extend: 'Ext.chart.Chart',
-
+    cls: 'customer-stream-chart',
     shadow: true,
     margin: 30,
     legend: true,
     animate: true,
+    background: '#fff',
 
     initComponent: function () {
         var me = this;
@@ -68,17 +69,24 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             type: 'Numeric',
             position: 'left',
             fields: me.getAxesFields(),
-            label: {
-                renderer: Ext.util.Format.numberRenderer('0,0')
-            },
-            title: '{s name="window/amount"}Amout{/s}',
+            title: '{s name="amount"}{/s}',
             grid: true,
-            minimum: 0
+            minimum: 0,
+            label: {
+                renderer:function (value) {
+                    return Ext.util.Format.currency(value, '€', 2, true);
+                }
+            }
         }, {
             type: 'Category',
             position: 'bottom',
-            title: '{s name="chart_month"}Month{/s}',
-            fields: ['yearMonth']
+            title: '{s name="month"}Month{/s}',
+            fields: ['yearMonth'],
+            label: {
+                renderer:function (value) {
+                    return Ext.util.Format.date(value);
+                }
+            }
         }];
     },
 

@@ -27,7 +27,10 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 // {block name="backend/customer/view/customer_stream/conditions/field/attribute_value"}
+
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeValue', {
     extend: 'Ext.form.FieldContainer',
     layout: { type: 'vbox', align: 'stretch' },
@@ -110,7 +113,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         var me = this;
 
         me.fromField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=attribute/from_text}From{/s}',
+            fieldLabel: '{s name=attribute/from_text}{/s}',
             flex: 1,
             allowBlank: false,
             listeners: {
@@ -128,7 +131,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         me.toField = Ext.create('Ext.form.field.Number', {
             labelWidth: 50,
             allowBlank: false,
-            fieldLabel: '{s name=attribute/to_text}to{/s}',
+            fieldLabel: '{s name=attribute/to_text}{/s}',
             padding: '0 0 0 10',
             flex: 1,
             listeners: {
@@ -144,7 +147,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         var me = this;
 
         me.valueField = Ext.create('Ext.form.field.Text', {
-            fieldLabel: '{s name=attribute/value}Value:{/s}',
+            fieldLabel: '{s name=attribute/value}{/s}',
             allowBlank: false,
             name: 'value'
         });

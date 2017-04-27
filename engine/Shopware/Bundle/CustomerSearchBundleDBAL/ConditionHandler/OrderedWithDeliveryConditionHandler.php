@@ -42,7 +42,7 @@ class OrderedWithDeliveryConditionHandler implements ConditionHandlerInterface
         /** @var OrderedWithDeliveryCondition $condition */
         foreach ($condition->getDispatchIds() as $i => $number) {
             $wheres[] = 'customer.deliveries LIKE :delivery' . $i;
-            $query->setParameter(':delivery' . $i, '%||' . $number . '||%');
+            $query->setParameter(':delivery' . $i, '%|' . $number . '|%');
         }
         $query->andWhere(implode(' OR ', $wheres));
     }
