@@ -27,7 +27,6 @@ namespace Shopware\Components\CustomerStream;
 use Doctrine\DBAL\Connection;
 use PDO;
 
-
 class CustomerInterestsGateway
 {
     /**
@@ -103,7 +102,7 @@ class CustomerInterestsGateway
     {
         $structs = [];
         foreach ($rows as $row) {
-            $struct = new InterestsStruct();
+            $struct = new Interests();
             $struct->setProductId($row['articleID']);
             $struct->setProductNumber($row['number']);
             $struct->setRanking($row['ranking']);

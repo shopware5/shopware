@@ -24,10 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\AddressStruct;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 
 class AddressHydrator extends Hydrator
 {
@@ -54,11 +51,11 @@ class AddressHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return AddressStruct
+     * @return Address
      */
     public function hydrate(array $data)
     {
-        $address = new AddressStruct();
+        $address = new Address();
         $address->setId((int) $data['__address_id']);
         $address->setCompany($data['__address_company']);
         $address->setDepartment($data['__address_department']);
