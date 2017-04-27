@@ -182,53 +182,6 @@ class PriceSortingTest extends TestCase
         return $product;
     }
 
-    protected function getPriceContext($displayGross, $discount = null)
-    {
-        $context = parent::getContext();
-
-        $data = ['key' => 'BAK', 'tax' => $displayGross];
-
-        $context->setFallbackCustomerGroup(
-            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
-        );
-
-        $context->getCurrentCustomerGroup()->setDisplayGrossPrices($displayGross);
-        $context->getCurrentCustomerGroup()->setUseDiscount(($discount !== null));
-        $context->getCurrentCustomerGroup()->setPercentageDiscount($discount);
-
-        return $context;
-    }
-
-    /**
-     * @param $number
-     * @param ShopContext                        $context
-     * @param \Shopware\Models\Category\Category $category
-     * @param array                              $prices
-     *
-     * @return array
-     */
-    protected function getProduct(
-        $number,
-        ShopContext $context,
-        Category $category = null,
-        $prices = []
-    ) {
-        $product = parent::getProduct($number, $context, $category);
-
-        if (!empty($prices)) {
-            $product['mainDetail']['prices'] = [];
-
-            foreach ($prices as $key => $price) {
-                $product['mainDetail']['prices'] = array_merge(
-                    $product['mainDetail']['prices'],
-                    $this->helper->getGraduatedPrices($key, $price)
-                );
-            }
-        }
-
-        return $product;
-    }
-
     protected function search(
         $products,
         $expectedNumbers,
