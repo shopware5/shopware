@@ -31,7 +31,7 @@ class OrderedProductOfCategoryCondition implements ConditionInterface
     /**
      * @var int[]
      */
-    private $categoryIds;
+    protected $categoryIds;
 
     /**
      * @param int[] $categoryIds

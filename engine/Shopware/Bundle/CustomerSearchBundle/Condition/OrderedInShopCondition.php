@@ -31,7 +31,7 @@ class OrderedInShopCondition implements ConditionInterface
     /**
      * @var int[]
      */
-    private $shopIds;
+    protected $shopIds;
 
     /**
      * @param int[] $shopIds

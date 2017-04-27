@@ -31,7 +31,7 @@ class OrderedOnDeviceCondition implements ConditionInterface
     /**
      * @var string[]
      */
-    private $devices;
+    protected $devices;
 
     /**
      * @param string[] $devices

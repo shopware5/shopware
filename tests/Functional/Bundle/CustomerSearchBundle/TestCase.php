@@ -26,9 +26,8 @@ namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\RegisteredInShopCondition;
-use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
-use Shopware\Bundle\CustomerSearchBundle\CustomerStream\SearchIndexer;
+use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
 
 class TestCase extends \Enlight_Components_Test_TestCase
@@ -88,10 +87,10 @@ class TestCase extends \Enlight_Components_Test_TestCase
         }
 
         /** @var CustomerNumberSearch $search */
-        $search = Shopware()->Container()->get('shopware_customer_search.customer_number_search');
+        $search = Shopware()->Container()->get('customer_search.dbal.number_search');
 
-        /** @var SearchIndexer $indexer */
-        $indexer = Shopware()->Container()->get('shopware_customer_search.customer_stream.search_indexer');
+        /** @var \Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer $indexer */
+        $indexer = Shopware()->Container()->get('customer_search.dbal.indexing.indexer');
         $indexer->clearIndex();
         $indexer->populate($ids);
 

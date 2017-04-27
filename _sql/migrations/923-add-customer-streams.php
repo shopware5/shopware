@@ -62,7 +62,6 @@ CREATE TABLE `s_customer_search_index` (
     customerGroupId int(11),
     customerGroup varchar(255) NULL,
     paymentId int(11),
-    payment varchar(255) NULL,
     shop varchar(255) NULL,
     company varchar(255) NULL,
     department varchar(255) NULL,

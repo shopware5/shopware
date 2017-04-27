@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             height: 200,
             iconCls: 'sprite-product-streams',
             listeners: {
-                'selectionchange': function(selModel, selection){
+                'selectionchange': function(selModel, selection) {
                     me.fireEvent('stream-selected', selModel, selection);
                 }
             }

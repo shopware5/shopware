@@ -24,50 +24,34 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle;
 
-class CustomerNumberSearchResult
+class CustomerNumberSearchResult implements \JsonSerializable
 {
     /**
-     * @var CustomerNumberRow[]
+     * @var BaseCustomer[]
      */
-    private $rows;
+    protected $customers;
 
     /**
      * @var int
      */
-    private $total;
+    protected $total;
 
     /**
-     * @var string[]
-     */
-    private $numbers = [];
-
-    /**
-     * @var string[]
-     */
-    private $emails = [];
-
-    /**
-     * @var int[]
-     */
-    private $ids = [];
-
-    /**
-     * @param CustomerNumberRow[] $rows
-     * @param int                 $total
+     * @param BaseCustomer[] $rows
+     * @param int            $total
      */
     public function __construct(array $rows, $total)
     {
-        $this->rows = $rows;
+        $this->customers = $rows;
         $this->total = $total;
-        $this->collectData($rows);
     }
 
     /**
-     * @return CustomerNumberRow[]
+     * @return BaseCustomer[]
      */
-    public function getRows()
+    public function getCustomers()
     {
-        return $this->rows;
+        return $this->customers;
     }
 
     /**
@@ -83,7 +67,9 @@ class CustomerNumberSearchResult
      */
     public function getNumbers()
     {
-        return $this->numbers;
+        return array_map(function (BaseCustomer $customer) {
+            return $customer->getNumber();
+        }, $this->customers);
     }
 
     /**
@@ -91,7 +77,9 @@ class CustomerNumberSearchResult
      */
     public function getEmails()
     {
-        return $this->emails;
+        return array_map(function (BaseCustomer $customer) {
+            return $customer->getEmail();
+        }, $this->customers);
     }
 
     /**
@@ -99,18 +87,13 @@ class CustomerNumberSearchResult
      */
     public function getIds()
     {
-        return $this->ids;
+        return array_map(function (BaseCustomer $customer) {
+            return $customer->getId();
+        }, $this->customers);
     }
 
-    /**
-     * @param CustomerNumberRow[] $rows
-     */
-    private function collectData(array $rows)
+    public function jsonSerialize()
     {
-        foreach ($rows as $row) {
-            $this->ids[] = $row->getId();
-            $this->emails[] = $row->getEmail();
-            $this->numbers[] = $row->getNumber();
-        }
+        return get_object_vars($this);
     }
 }

@@ -31,7 +31,7 @@ class OrderedWithDeliveryCondition implements ConditionInterface
     /**
      * @var int[]
      */
-    private $dispatchIds;
+    protected $dispatchIds;
 
     /**
      * @param int[] $dispatchIds
