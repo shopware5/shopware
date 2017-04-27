@@ -82,6 +82,14 @@
              * @type {Number}
              */
             itemsPerSlide: 1,
+            
+            /**
+            * Turn infinite sliding on and off.
+            *
+            * @property infiniteSlide
+            * @type {Boolean}
+            */
+            infiniteSlide: true,
 
             /**
              * Turn automatic sliding on and off.
@@ -820,6 +828,10 @@
          */
         initInfiniteSlide: function () {
             var me = this;
+            
+            if (!me.opts.infiniteSlide) {
+                return;
+            }
 
             me.cloneItems(0, me.itemsPerPage + me.itemsPerSlide);
 
