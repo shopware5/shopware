@@ -26,7 +26,7 @@ namespace Shopware\Components\CustomerStream;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-class InterestsStruct extends Extendable
+class Interests extends Extendable
 {
     /**
      * @var int

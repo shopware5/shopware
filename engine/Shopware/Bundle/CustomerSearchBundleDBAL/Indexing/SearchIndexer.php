@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\CustomerStream\InterestsStruct;
+use Shopware\Components\CustomerStream\Interests;
 
 class SearchIndexer implements SearchIndexerInterface
 {
@@ -130,13 +130,13 @@ class SearchIndexer implements SearchIndexerInterface
             'deliveries' => $this->implodeUnique($customer->getOrderInformation()->getDispatches()),
             'payments' => $this->implodeUnique($customer->getOrderInformation()->getPayments()),
             'products' => $this->implodeUnique(
-                array_map(function (InterestsStruct $interest) {
+                array_map(function (Interests $interest) {
                     return $interest->getProductNumber();
                 }, $customer->getInterests())
             ),
             'categories' => $this->getCategories($customer->getInterests()),
             'manufacturers' => $this->implodeUnique(
-                array_map(function (InterestsStruct $interest) {
+                array_map(function (Interests $interest) {
                     return $interest->getManufacturerId();
                 }, $customer->getInterests())
             ),
@@ -278,7 +278,8 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param InterestsStruct[] $interests
+     * @param Interests[] $interests
+     *
      * @return null|string
      */
     private function getCategories($interests)

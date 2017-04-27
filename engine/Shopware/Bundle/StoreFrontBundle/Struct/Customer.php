@@ -24,9 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\AddressStruct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class Customer extends Extendable
 {
@@ -176,12 +174,12 @@ class Customer extends Extendable
     protected $age;
 
     /**
-     * @var AddressStruct
+     * @var Address
      */
     protected $shippingAddress;
 
     /**
-     * @var AddressStruct
+     * @var Address
      */
     protected $billingAddress;
 
@@ -650,7 +648,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return AddressStruct
+     * @return Address
      */
     public function getShippingAddress()
     {
@@ -658,7 +656,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param AddressStruct $shippingAddress
+     * @param Address $shippingAddress
      */
     public function setShippingAddress($shippingAddress)
     {
@@ -666,7 +664,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return AddressStruct
+     * @return Address
      */
     public function getBillingAddress()
     {
@@ -674,7 +672,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param AddressStruct $billingAddress
+     * @param Address $billingAddress
      */
     public function setBillingAddress($billingAddress)
     {

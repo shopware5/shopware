@@ -24,13 +24,11 @@
 
 namespace Shopware\Components\CustomerStream;
 
-
-
 class CustomerOrderHydrator
 {
     public function hydrate(array $data)
     {
-        $struct = new CustomerOrderStruct();
+        $struct = new CustomerOrder();
         $struct->setOrderCount((int) $data['count_orders']);
         $struct->setTotalAmount((float) $data['invoice_amount_sum']);
         $struct->setAvgAmount((float) $data['invoice_amount_avg']);

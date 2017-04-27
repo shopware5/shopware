@@ -26,7 +26,6 @@ namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
 
-
 class CustomerOrderGateway
 {
     /**
@@ -52,7 +51,7 @@ class CustomerOrderGateway
     /**
      * @param int[] $customerIds
      *
-     * @return CustomerOrderStruct[] indexed by customer id
+     * @return CustomerOrder[] indexed by customer id
      */
     public function getList($customerIds)
     {
@@ -63,7 +62,7 @@ class CustomerOrderGateway
         $structs = [];
         foreach ($customerIds as $customerId) {
             if (!array_key_exists($customerId, $data)) {
-                $struct = new CustomerOrderStruct();
+                $struct = new CustomerOrder();
             } else {
                 $struct = $this->hydrator->hydrate($data[$customerId]);
             }
