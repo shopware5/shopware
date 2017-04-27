@@ -28,7 +28,7 @@ use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
-use Shopware\Bundle\CustomerSearchBundle\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
+use Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
 use Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
@@ -608,8 +608,8 @@ class Kernel implements HttpKernelInterface
         $loader->load('AccountBundle/services.xml');
         $loader->load('AttributeBundle/services.xml');
         $loader->load('EmotionBundle/services.xml');
-        $loader->load('CustomerSearchBundle/services.xml');
         $loader->load('SearchBundleES/services.xml');
+        $loader->load('CustomerSearchBundleDBAL/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
