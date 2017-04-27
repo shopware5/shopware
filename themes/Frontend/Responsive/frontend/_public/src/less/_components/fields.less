@@ -166,6 +166,11 @@ Creates a styled combobox selection for the basic select element.
             border-color: @brand-primary;
         }
 
+        &:focus::-ms-value {
+            color: @brand-primary;
+            background: none;
+        }
+
         &:disabled {
             .opacity(.5);
             cursor: not-allowed;
