@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCon
             conditionClass: 'Shopware\\Bundle\\SearchBundle\\Condition\\SearchTermCondition',
             items: [{
                 xtype: 'textfield',
-                name: 'searchTerm',
+                name: 'term',
                 allowBlank: false
             }]
         };

@@ -342,7 +342,7 @@ class CustomerOrder extends Extendable
         return $this->products;
     }
 
-    public function setProducts($products): void
+    public function setProducts($products)
     {
         $this->products = $products;
     }
@@ -352,7 +352,7 @@ class CustomerOrder extends Extendable
         return $this->manufacturers;
     }
 
-    public function setManufacturers($manufacturers): void
+    public function setManufacturers($manufacturers)
     {
         $this->manufacturers = $manufacturers;
     }
@@ -362,7 +362,7 @@ class CustomerOrder extends Extendable
         return $this->categories;
     }
 
-    public function setCategories($categories): void
+    public function setCategories($categories)
     {
         $this->categories = $categories;
     }

@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
                 customerGroup: { header: '{s name="column/customer_group"}{/s}' },
                 shop: { header: '{s name="shop"}{/s}' },
                 number: { header: '{s name="column/number"}{/s}' },
-                email: { header: '{s name="email"}{/s}' },
+                email: { header: '{s name="email"}{/s}', renderer: this.mailRenderer },
                 salutation: { header: '{s name="salutation"}{/s}', renderer: this.salutationRenderer },
                 title: { header: '{s name="title"}{/s}' },
                 company: { header: '{s name="company"}{/s}' },
@@ -98,6 +98,10 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
         }
 
         return '{s name="accountModeNormal"}{/s}';
+    },
+
+    mailRenderer: function(value) {
+        return Ext.String.format('<a href="mailto:[0]" data-qtip="[0]">[0]</a>', value);
     },
 
     _onEdit: function(view, rowIndex, colIndex, item, opts, record) {

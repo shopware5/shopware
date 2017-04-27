@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
             flex: 2,
             renderer: function (value, meta, record) {
                 return '<b>' + record.get('customernumber') + '</b> - ' + record.get('customerGroup') +
-                    '<br><i>{s name="first_login"}{/s}: ' + Ext.util.Format.date(record.get('first_login')) + '</i></span>';
+                    '<br><i>{s name="first_login"}{/s}: ' + Ext.util.Format.date(record.get('firstlogin')) + '</i></span>';
             }
         }, {
             header: '{s name="customer"}{/s}',
@@ -216,9 +216,12 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                 }
                 var company = '';
                 if (record.get('company')) {
-                    company = '<br><i>' + record.get('company') + '</i>';
+                    company = '<br>' + record.get('company') + '';
                 }
-                return name + age + company;
+
+                var mail = Ext.String.format('<a href="mailto:[0]" data-qtip="[0]">[0]</a>', record.get('email'));
+
+                return name + age + company + '<br>' + mail;
             }
         }, {
             header: '{s name="address"}{/s}',
@@ -243,9 +246,9 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
             flex: 2,
             renderer: function(v, meta, record) {
                 return '' +
-                    '{s name="invoice_amount_sum"}{/s}: <b>' + record.get('invoice_amount_sum') + '</b>' +
-                    '<br>{s name="average_amount"}{/s}: <b>' + record.get('invoice_amount_avg') + '</b>' +
-                    '<br>{s name="average_product_amount"}{/s}: <b>' + record.get('product_avg') + '</b>';
+                    '{s name="invoice_amount_sum"}{/s}: <b>' + record.get('invoice_amount_sum') * 1 + '</b>' +
+                    '<br>{s name="average_amount"}{/s}: <b>' + record.get('invoice_amount_avg') * 1 + '</b>' +
+                    '<br>{s name="average_product_amount"}{/s}: <b>' + record.get('product_avg') * 1 + '</b>';
             }
         }, {
             header: '{s name="order_header"}{/s}',
@@ -254,7 +257,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
             sortable: false,
             sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\TotalOrderSorting',
             renderer: function(v, meta, record) {
-                return '<b>{s name="count_orders"}{/s}: ' + record.get('count_orders') + '</b>' +
+                return '<b>{s name="count_orders"}{/s}: ' + record.get('count_orders') * 1 + '</b>' +
                     '<br>{s name="last_order_time"}{/s}: ' + Ext.util.Format.date(record.get('last_order_time'));
             }
         }, {
@@ -274,7 +277,23 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
 
                 return names.join('<br>');
             }
-        }];
+        }
+        /* {if {acl_is_allowed privilege=detail}} */
+        , {
+            xtype: 'actioncolumn',
+            width: 30,
+            items: [
+                {
+                    iconCls: 'sprite-pencil',
+                    action: 'editCustomer',
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('edit', record);
+                    }
+                }
+            ]
+        }
+        /* {/if} */
+        ];
     },
 
     /**

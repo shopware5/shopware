@@ -118,6 +118,10 @@
             <tag name="customer_search_condition_handler"/>
         </service>
 
+        <service id="customer_search.dbal.condition.search_term_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SearchTermConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.indexing.cron_job_subscriber" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CronJobSubscriber">
             <argument id="dbal_connection" type="service"/>
             <argument id="customer_search.dbal.indexing.indexer" type="service"/>
@@ -144,6 +148,10 @@
         <service id="customer_search.dbal.handler_registry" class="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry">
             <argument type="collection"/>
             <argument type="collection"/>
+        </service>
+
+        <service id="customer_search.dbal.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundleDBAL\Commands\SearchIndexPopulateCommand">
+            <tag name="console.command"/>
         </service>
 
     </services>

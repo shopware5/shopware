@@ -146,13 +146,11 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             streamChartContainer = streamView.streamChartContainer;
 
         streamChartContainer.removeAll();
-        streamChartContainer.setLoading(true);
 
         var store = streamView.streamListing.getStore();
 
         Ext.create('Shopware.apps.Customer.view.chart.AmountChartFactory').createChart(store, function (chart) {
             streamChartContainer.add(chart);
-            streamChartContainer.setLoading(false);
         });
     },
 

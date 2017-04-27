@@ -103,6 +103,11 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             },
             menu: {
                 items: [{
+                    text: '{s name=view_table}{/s}',
+                    layout: 'table',
+                    iconCls: 'sprite-table',
+                    checked: true
+                }, {
                     text: '{s name=view_chart}{/s}',
                     layout: 'amount_chart',
                     iconCls: 'sprite-chart-up'
@@ -110,11 +115,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                     text: '{s name=view_chart_stream}{/s}',
                     layout: 'stream_chart',
                     iconCls: 'sprite-chart-impressions'
-                }, {
-                    text: '{s name=view_table}{/s}',
-                    layout: 'table',
-                    iconCls: 'sprite-table',
-                    checked: true
                 }]
             }
         })
@@ -375,6 +375,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.saveNewStreamButton.setDisabled(false);
         this.filterPanel.createCondition(handler);
         this.fireEvent('condition-added');
-    },
+    }
 });
 // {/block}

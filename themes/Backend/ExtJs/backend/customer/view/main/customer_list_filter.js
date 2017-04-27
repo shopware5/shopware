@@ -55,23 +55,6 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
             controller: 'CustomerQuickView',
             model: 'Shopware.apps.Customer.model.QuickView',
             fields: {
-                active: {
-                    fieldLabel: '{s name="active"}{/s}'
-                },
-                customerGroup: {
-                    xtype: 'combobox',
-                    displayField: 'name',
-                    valueField: 'id',
-                    store: customerGroupStore,
-                    fieldLabel: '{s name="column/customer_group"}{/s}'
-                },
-                shop: {
-                    fieldLabel: '{s name="shop"}{/s}',
-                    xtype: 'combobox',
-                    displayField: 'name',
-                    valueField: 'id',
-                    store: shopStore
-                },
                 number: {
                     fieldLabel: '{s name="column/number"}{/s}',
                     expression: 'LIKE'
@@ -111,11 +94,11 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     fieldLabel: '{s name="city"}{/s}',
                     expression: 'LIKE'
                 },
-                firstLogin: {
-                    fieldLabel: '{s name="first_login"}{/s}'
+                active: {
+                    fieldLabel: '{s name="active"}{/s}'
                 },
-                lastLogin: {
-                    fieldLabel: '{s name="lastLogin"}{/s}'
+                newsletter: {
+                    fieldLabel: '{s name="newsletter"}{/s}'
                 },
                 accountMode: {
                     xtype: 'combobox',
@@ -124,8 +107,25 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     store: modeStore,
                     fieldLabel: '{s name="column/accountMode"}{/s}',
                 },
-                newsletter: {
-                    fieldLabel: '{s name="newsletter"}{/s}'
+                customerGroup: {
+                    xtype: 'combobox',
+                    displayField: 'name',
+                    valueField: 'id',
+                    store: customerGroupStore,
+                    fieldLabel: '{s name="column/customer_group"}{/s}'
+                },
+                shop: {
+                    fieldLabel: '{s name="shop"}{/s}',
+                    xtype: 'combobox',
+                    displayField: 'name',
+                    valueField: 'id',
+                    store: shopStore
+                },
+                firstLogin: {
+                    fieldLabel: '{s name="first_login"}{/s}'
+                },
+                lastLogin: {
+                    fieldLabel: '{s name="lastLogin"}{/s}'
                 },
                 lockedUntil: {
                     fieldLabel: '{s name="lockedUntil"}{/s}'
