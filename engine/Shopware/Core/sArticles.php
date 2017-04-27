@@ -536,13 +536,13 @@ class sArticles
                     'sViewport' => 'cat',
                     'sCategory' => $id,
                     'sPage' => 1,
-                    'sSupplier' => $supplierValue['id'],
+                    'sSupplier' => $supplierId,
                 ];
             } else {
                 $links[$supplierId] = [
                     'controller' => 'listing',
                     'action' => 'manufacturer',
-                    'sSupplier' => $supplierValue['id'],
+                    'sSupplier' => $supplierId,
                 ];
             }
         }
@@ -550,7 +550,7 @@ class sArticles
         $seoUrls = Shopware()->Container()->get('router')->generateList($links);
         foreach ($getSupplier as &$supplier) {
             $id = $supplier['id'];
-            if (array_key_exists($supplier, $seoUrls)) {
+            if (array_key_exists($id, $seoUrls)) {
                 $supplier['link'] = $seoUrls[$id];
             }
         }
@@ -1519,7 +1519,7 @@ class sArticles
             WHERE ordernumber = :orderNumber
                 AND s_articles.id = s_articles_details.articleID
         ', [
-            'orderNumber' => $orderNumber,
+                'orderNumber' => $orderNumber,
             ]
         );
 
@@ -2125,7 +2125,7 @@ class sArticles
     }
 
     /**
-     * @param $categoryId
+     * @param int $categoryId
      * @param Enlight_Controller_Request_RequestHttp $request
      *
      * @return string
@@ -2134,11 +2134,14 @@ class sArticles
     {
         $params = $this->queryAliasMapper->replaceLongParams($request->getParams());
 
-        unset($params['ordernumber']);
-        unset($params['categoryId']);
-        unset($params['module']);
-        unset($params['controller']);
-        unset($params['action']);
+        unset(
+            $params['__csrf_token'],
+            $params['ordernumber'],
+            $params['categoryId'],
+            $params['module'],
+            $params['controller'],
+            $params['action']
+        );
 
         $params = array_merge(
             $params,

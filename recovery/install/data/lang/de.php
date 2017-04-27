@@ -44,7 +44,7 @@ return [
     'language-selection_select_language' => 'Sprache wählen',
     'language-selection_header' => 'Installation starten',
     'language-selection_info_message' => 'Diese Sprachauswahl bezieht sich lediglich auf den Installationsassistenten. Im Anschluss an die Installation können Sie Ihren Shop natürlich wahlweise in vielen anderen Sprachen betreiben.',
-    'language-selection_welcome_message' => <<<'EOT'
+    'language-selection_welcome_message' => <<<EOT
 <p>
     Sie sind nur noch wenige Klicks davon entfernt, Teil der großen Shopware Community zu werden, welche aktuell aus über 54.000 Onlinehändlern weltweit besteht!
 </p>

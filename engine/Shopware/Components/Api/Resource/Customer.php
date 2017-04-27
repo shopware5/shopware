@@ -163,7 +163,7 @@ class Customer extends Resource
     {
         $this->checkPrivilege('read');
 
-        $builder = $this->getRepository()->createQueryBuilder('customer');
+        $builder = $this->getListQuery();
 
         $builder->addFilter($criteria);
         $builder->addOrderBy($orderBy);

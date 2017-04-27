@@ -24,14 +24,20 @@
                             {block name='frontend_blog_comments_comment_author'}
                                 <div class="meta--author">
 
-                                    {block name='frontned_blog_comments_comment_author_label'}
-                                        <strong class="author--label">
-                                            {s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}
-                                        </strong>
+                                    {block name='frontend_blog_comments_comment_author_label'}
+                                        {* Legacy block with typo. *}
+                                        {block name='frontned_blog_comments_comment_author_label'}
+                                                <strong class="author--label">
+                                                {s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}
+                                                </strong>
+                                        {/block}
                                     {/block}
 
-                                    {block name='frontned_blog_comments_comment_author_name'}
-                                        <span class="author--name" itemprop="creator">{$vote.name}</span>
+                                    {block name='frontend_blog_comments_comment_author_name'}
+                                        {* Legacy block with typo. *}
+                                        {block name='frontned_blog_comments_comment_author_name'}
+                                                <span itemprop="creator" class="author--name">{$vote.name|escapeHtml}</span>
+                                        {/block}
                                     {/block}
 
                                 </div>
@@ -64,13 +70,13 @@
                         <div class="entry--content">
                             {* Comments headline *}
                             {block name='frontend_blog_comments_comment_headline'}
-                                <h3 class="content--headline">{$vote.headline}</h3>
+                                <h3 class="content--headline">{$vote.headline|escapeHtml}</h3>
                             {/block}
 
                             {* Comment *}
                             {block name='frontend_blog_comments_comment_text'}
                                 <p class="content--comment" itemprop="commentText">
-                                    {$vote.comment|nl2br}
+                                    {$vote.comment|escapeHtml|nl2br}
                                 </p>
                             {/block}
                         </div>

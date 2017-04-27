@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Mink;
 
+use Shopware\Tests\Mink\Page\Backend;
+
 class BackendContext extends SubContext
 {
     /**
@@ -31,20 +33,19 @@ class BackendContext extends SubContext
      */
     public function iAmLoggedInToTheBackendAsAnAdminUser()
     {
+        /** @var Backend $page */
         $page = $this->getPage('Backend');
         $page->open();
 
-        $this->spin(function ($context) use ($page) {
-            return $page->verifyLogin();
-        });
+        // See if we already are logged in
+        if ($this->waitIfThereIsText('Marketing', 5)) {
+            return;
+        }
 
-        $this->spin(function ($context) use ($page) {
-            return $page->login('demo', 'demo');
-        });
+        $this->waitForText('Shopware Backend Login', 10);
 
-        $this->spin(function ($context) use ($page) {
-            return $page->verifyIsLoggedIn();
-        });
+        $page->login('demo', 'demo');
+        $this->waitForText('Marketing');
     }
 
     /**

@@ -216,10 +216,10 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
 
     moveMedias: function(view, medias) {
         var me = this;
-        Ext.create(
-            'Shopware.apps.MediaManager.view.BatchMove.BatchMove',
-            { sourceView: view, mediasToMove: medias, mediaGrid: me.getMediaGrid(), mediaView: me.getMediaView() }
-        ).show();
+
+        me.getView('batchMove.BatchMove').create({
+            sourceView: view, mediasToMove: medias, mediaGrid: me.getMediaGrid(), mediaView: me.getMediaView()
+        }).show();
     },
 
     /**
@@ -228,7 +228,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      */
     onReload: function() {
         var me = this, validTypes = me.subApplication.validTypes,
-        store = me.getStore('Media');
+            store = me.getStore('Media');
 
         if(validTypes) {
             var proxy = store.getProxy();

@@ -446,7 +446,7 @@ class Kernel implements HttpKernelInterface
     {
         $initializer = new PluginInitializer(
             $this->connection,
-            $this->getRootDir() . '/custom/plugins'
+            $this->config['plugin_directories']['ShopwarePlugins']
         );
 
         $this->plugins = $initializer->initializePlugins();
@@ -609,10 +609,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('AttributeBundle/services.xml');
         $loader->load('EmotionBundle/services.xml');
         $loader->load('CustomerSearchBundle/services.xml');
-
-        if ($this->isElasticSearchEnabled()) {
-            $loader->load('SearchBundleES/services.xml');
-        }
+        $loader->load('SearchBundleES/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -639,10 +636,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
-
-        if ($this->isElasticSearchEnabled()) {
-            $container->addCompilerPass(new SearchHandlerCompilerPass());
-        }
+        $container->addCompilerPass(new SearchHandlerCompilerPass());
 
         $this->loadPlugins($container);
     }

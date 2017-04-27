@@ -194,9 +194,6 @@ class LegacyPluginInstaller
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function deactivatePlugin(Plugin $plugin)
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
@@ -213,9 +210,6 @@ class LegacyPluginInstaller
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
         /** @var $collection \Shopware_Components_Plugin_Namespace */

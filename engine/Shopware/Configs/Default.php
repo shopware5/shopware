@@ -119,9 +119,9 @@ return array_replace_recursive([
         'apiEndpoint' => 'https://api.shopware.com',
     ],
     'plugin_directories' => [
-        'Default' => $this->AppPath('Plugins_' . 'Default'),
-        'Local' => $this->AppPath('Plugins_' . 'Local'),
-        'Community' => $this->AppPath('Plugins_' . 'Community'),
+        'Default' => $this->AppPath('Plugins_Default'),
+        'Local' => $this->AppPath('Plugins_Local'),
+        'Community' => $this->AppPath('Plugins_Community'),
         'ShopwarePlugins' => $this->DocPath('custom_plugins'),
     ],
     'template' => [

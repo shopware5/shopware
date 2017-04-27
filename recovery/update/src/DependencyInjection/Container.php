@@ -197,5 +197,12 @@ class Container extends BaseContainer
         $container['shopware.update.cleanup'] = function ($container) use ($backupDir) {
             return new Cleanup(SW_PATH, $backupDir);
         };
+
+        $container['shopware.update.chmod'] = function ($container) {
+            return new FilePermissionChanger([
+                ['chmod' => 0775, 'filePath' => SW_PATH . '/bin/console'],
+                ['chmod' => 0775, 'filePath' => SW_PATH . '/var/cache/clear_cache.sh'],
+            ]);
+        };
     }
 }

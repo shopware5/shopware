@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Doctrine\DBAL\Query\QueryBuilder;
-
 /**
  * @category  Shopware
  *
@@ -47,7 +45,7 @@ interface SearchTermQueryBuilderInterface
      *
      * @param $term
      *
-     * @return QueryBuilder|null
+     * @return \Doctrine\DBAL\Query\QueryBuilder|null
      */
     public function buildQuery($term);
 }

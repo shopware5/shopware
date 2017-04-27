@@ -175,9 +175,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $this->get('shopware_storefront.context_service')->getShopContext()
         );
 
-        if ($manufacturer->getCoverFile()) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
+        if ($manufacturer === null) {
+            throw new Enlight_Controller_Exception(
+                'Manufacturer missing, non-existent or invalid',
+                404
+            );
         }
 
         $facets = [];

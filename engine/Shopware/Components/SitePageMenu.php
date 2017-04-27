@@ -80,9 +80,9 @@ class SitePageMenu
             }
 
             $id = (int) $site['id'];
-            if (!empty($site['link'])) {
+            if (!empty($site['link']) && strpos($site['link'], 'shopware.php') !== false) {
                 $links[$id] = $site['link'];
-            } else {
+            } elseif (empty($site['link'])) {
                 $links[$id] = [
                     'controller' => 'custom',
                     'action' => 'index',

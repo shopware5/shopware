@@ -86,6 +86,7 @@ Ext.define('Shopware.apps.MediaManager', {
         'media.View',
         'media.Grid',
         'thumbnail.Main',
+        'batchMove.BatchMove',
         'replace.Window',
         'replace.Grid',
         'replace.Row',

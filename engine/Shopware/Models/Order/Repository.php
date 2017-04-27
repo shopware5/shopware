@@ -59,7 +59,7 @@ class Repository extends ModelRepository
         $builder = $this->getPaymentStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -83,8 +83,8 @@ class Repository extends ModelRepository
             'status.description as description',
         ]);
         $builder->from('Shopware\Models\Order\Status', 'status')
-                ->where('status.group = ?1')
-                ->setParameter(1, 'payment');
+            ->where('status.group = ?1')
+            ->setParameter(1, 'payment');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -113,7 +113,7 @@ class Repository extends ModelRepository
         $builder = $this->getOrderStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -138,7 +138,7 @@ class Repository extends ModelRepository
         ]);
         $builder->from('Shopware\Models\Order\Status', 'status');
         $builder->where('status.group = ?1')
-                ->setParameter(1, 'state');
+            ->setParameter(1, 'state');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -169,7 +169,7 @@ class Repository extends ModelRepository
         $builder = $this->getOrdersQueryBuilder($filters, $orderBy);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -218,30 +218,30 @@ class Repository extends ModelRepository
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.details', 'details')
-                ->leftJoin('orders.documents', 'documents')
-                ->leftJoin('documents.type', 'documentType')
-                ->leftJoin('orders.payment', 'payment')
-                ->leftJoin('orders.paymentStatus', 'paymentStatus')
-                ->leftJoin('orders.orderStatus', 'orderStatus')
-                ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('orders.paymentInstances', 'paymentInstances')
-                ->leftJoin('orders.billing', 'billing')
-                ->leftJoin('billing.country', 'billingCountry')
-                ->leftJoin('billing.state', 'billingState')
-                ->leftJoin('orders.shipping', 'shipping')
-                ->leftJoin('orders.shop', 'shop')
-                ->leftJoin('orders.dispatch', 'dispatch')
-                ->leftJoin('payment.attribute', 'paymentAttribute')
-                ->leftJoin('dispatch.attribute', 'dispatchAttribute')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('details.attribute', 'detailAttribute')
-                ->leftJoin('documents.attribute', 'documentAttribute')
-                ->leftJoin('orders.attribute', 'attribute')
-                ->leftJoin('orders.languageSubShop', 'subShop')
-                ->leftJoin('subShop.locale', 'locale')
-                ->leftJoin('shipping.country', 'shippingCountry')
-                ->leftJoin('shipping.state', 'shippingState');
+            ->leftJoin('orders.documents', 'documents')
+            ->leftJoin('documents.type', 'documentType')
+            ->leftJoin('orders.payment', 'payment')
+            ->leftJoin('orders.paymentStatus', 'paymentStatus')
+            ->leftJoin('orders.orderStatus', 'orderStatus')
+            ->leftJoin('orders.customer', 'customer')
+            ->leftJoin('orders.paymentInstances', 'paymentInstances')
+            ->leftJoin('orders.billing', 'billing')
+            ->leftJoin('billing.country', 'billingCountry')
+            ->leftJoin('billing.state', 'billingState')
+            ->leftJoin('orders.shipping', 'shipping')
+            ->leftJoin('orders.shop', 'shop')
+            ->leftJoin('orders.dispatch', 'dispatch')
+            ->leftJoin('payment.attribute', 'paymentAttribute')
+            ->leftJoin('dispatch.attribute', 'dispatchAttribute')
+            ->leftJoin('billing.attribute', 'billingAttribute')
+            ->leftJoin('shipping.attribute', 'shippingAttribute')
+            ->leftJoin('details.attribute', 'detailAttribute')
+            ->leftJoin('documents.attribute', 'documentAttribute')
+            ->leftJoin('orders.attribute', 'attribute')
+            ->leftJoin('orders.languageSubShop', 'subShop')
+            ->leftJoin('subShop.locale', 'locale')
+            ->leftJoin('shipping.country', 'shippingCountry')
+            ->leftJoin('shipping.state', 'shippingState');
 
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
@@ -279,8 +279,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('detailStatus')
-                ->from('Shopware\Models\Order\DetailStatus', 'detailStatus')
-                ->orderBy('detailStatus.position', 'ASC');
+            ->from('Shopware\Models\Order\DetailStatus', 'detailStatus')
+            ->orderBy('detailStatus.position', 'ASC');
 
         return $builder;
     }
@@ -300,7 +300,7 @@ class Repository extends ModelRepository
         $builder = $this->getOrderStatusHistoryListQueryBuilder($orderId, $orderBy);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -327,11 +327,13 @@ class Repository extends ModelRepository
             'history.paymentStatusId as currentPaymentStatusId',
         ]);
         $builder->from('Shopware\Models\Order\History', 'history')
-                ->leftJoin('history.user', 'user')
-                ->where($builder->expr()->eq('history.orderId', '?1'))
-                ->setParameter(1, $orderId);
+            ->leftJoin('history.user', 'user')
+            ->where($builder->expr()->eq('history.orderId', '?1'))
+            ->setParameter(1, $orderId);
 
-        $builder->addOrderBy($orderBy);
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
 
         return $builder;
     }
@@ -358,7 +360,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['types'])
-                ->from('Shopware\Models\Order\Document\Type', 'types');
+            ->from('Shopware\Models\Order\Document\Type', 'types');
 
         return $builder;
     }
@@ -383,18 +385,18 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
 
         return $builder->select(['voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'])
-                       ->from('Shopware\Models\Voucher\Voucher', 'voucher')
-                       ->join('voucher.codes', 'codes')
-                       ->where(
-                           $builder->expr()->orX(
-                               $builder->expr()->gte('voucher.validTo', $today),
-                               $builder->expr()->isNull('voucher.validTo')
-                           )
-                       )
-                       ->andWhere($builder->expr()->isNull('codes.customerId'))
-                       ->andWhere($builder->expr()->eq('codes.cashed', 0))
-                       ->andWhere($builder->expr()->eq('voucher.modus', 1))
-                       ->getQuery();
+            ->from('Shopware\Models\Voucher\Voucher', 'voucher')
+            ->join('voucher.codes', 'codes')
+            ->where(
+                $builder->expr()->orX(
+                    $builder->expr()->gte('voucher.validTo', $today),
+                    $builder->expr()->isNull('voucher.validTo')
+                )
+            )
+            ->andWhere($builder->expr()->isNull('codes.customerId'))
+            ->andWhere($builder->expr()->eq('codes.cashed', 0))
+            ->andWhere($builder->expr()->eq('voucher.modus', 1))
+            ->getQuery();
     }
 
     /**

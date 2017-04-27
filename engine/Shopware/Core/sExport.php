@@ -167,7 +167,7 @@ class sExport
     }
 
     /**
-     * @param $customerGroup
+     * @param int $customerGroup
      *
      * @return bool
      */
@@ -339,8 +339,8 @@ class sExport
         $this->sCustomergroup = $this->sGetCustomergroup($this->sSettings['customergroupID']);
 
         $this->articleMediaAlbum = $this->getMediaRepository()
-                ->getAlbumWithSettingsQuery(-1)
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+            ->getAlbumWithSettingsQuery(-1)
+            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
@@ -443,15 +443,15 @@ class sExport
 
                 return $this->sSettings['fieldmark'] . $string . $this->sSettings['fieldmark'];
             case 'xml':
-                 if ($char_set != 'UTF-8') {
-                     $string = utf8_decode($string);
-                 }
+                if ($char_set != 'UTF-8') {
+                    $string = utf8_decode($string);
+                }
 
                 return $string;
-               case 'html':
+            case 'html':
                 $string = html_entity_decode($string, ENT_NOQUOTES, $char_set);
 
-                   return htmlspecialchars($string, ENT_QUOTES, $char_set, false);
+                return htmlspecialchars($string, ENT_QUOTES, $char_set, false);
             case 'htmlall':
                 return htmlentities($string, ENT_QUOTES, $char_set);
             case 'url':
@@ -497,19 +497,19 @@ class sExport
                 return str_replace(['@', '.'], [' [AT] ', ' [DOT] '], $string);
 
             case 'nonstd':
-               // escape non-standard chars, such as ms document quotes
-               $_res = '';
-               for ($_i = 0, $_len = strlen($string); $_i < $_len; ++$_i) {
-                   $_ord = ord(substr($string, $_i, 1));
-                   // non-standard char, escape it
-                   if ($_ord >= 126) {
-                       $_res .= '&#' . $_ord . ';';
-                   } else {
-                       $_res .= substr($string, $_i, 1);
-                   }
-               }
+                // escape non-standard chars, such as ms document quotes
+                $_res = '';
+                for ($_i = 0, $_len = strlen($string); $_i < $_len; ++$_i) {
+                    $_ord = ord(substr($string, $_i, 1));
+                    // non-standard char, escape it
+                    if ($_ord >= 126) {
+                        $_res .= '&#' . $_ord . ';';
+                    } else {
+                        $_res .= substr($string, $_i, 1);
+                    }
+                }
 
-               return $_res;
+                return $_res;
         }
     }
 
@@ -518,6 +518,11 @@ class sExport
         return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
     }
 
+    /**
+     * @param string $hash
+     * @param null|string $imageSize
+     * @return null|string
+     */
     public function sGetImageLink($hash, $imageSize = null)
     {
         if (empty($hash)) {
@@ -531,7 +536,7 @@ class sExport
 
         // if no imageSize was set, return the full image
         if (null === $imageSize) {
-            return $mediaService->getUrl($imageDir . $hash);
+            return $this->fixShopHost($mediaService->getUrl($imageDir . $hash), $mediaService->getAdapterType());
         }
 
         // get filename and extension in order to insert thumbnail size later
@@ -541,8 +546,8 @@ class sExport
 
         // get thumbnail sizes
         $sizes = $this->articleMediaAlbum
-                ->getSettings()
-                ->getThumbnailSize();
+            ->getSettings()
+            ->getThumbnailSize();
 
         foreach ($sizes as $key => &$size) {
             if (strpos($size, 'x') === 0) {
@@ -551,7 +556,10 @@ class sExport
         }
 
         if (isset($sizes[$imageSize])) {
-            return $mediaService->getUrl($thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension);
+            return $this->fixShopHost(
+                $mediaService->getUrl($thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension),
+                $mediaService->getAdapterType()
+            );
         }
 
         return '';
@@ -999,6 +1007,12 @@ class sExport
             return;
         }
 
+        $result = Shopware()->Container()->get('events')->filter(
+            'Shopware_Modules_Export_ExportResult_Filter',
+            $result,
+            ['feedId' => $this->sFeedID, 'subject' => $this]
+        );
+
         // Update db with the latest values
         $count = (int) $result->rowCount();
         $this->db->update(
@@ -1353,14 +1367,14 @@ class sExport
 
         try {
             $basket = $this->db->fetchRow($sql, [
-            $article['articleID'],
-            $article['ordernumber'],
-            $article['shippingfree'],
-            $article['price'],
-            $article['netprice'],
-            $article['esd'],
-            $this->sCurrency['factor'],
-        ]);
+                $article['articleID'],
+                $article['ordernumber'],
+                $article['shippingfree'],
+                $article['price'],
+                $article['netprice'],
+                $article['esd'],
+                $this->sCurrency['factor'],
+            ]);
         } catch (Exception $e) {
             echo $e->getMessage();
             exit();
@@ -1735,7 +1749,8 @@ class sExport
               COALESCE (s.base_path, m.base_path) AS base_path,
               COALESCE (s.base_url, m.base_url) AS base_url,
               COALESCE (s.hosts, m.hosts) AS hosts,
-              COALESCE (s.secure, m.secure) AS secure,
+              GREATEST (COALESCE (s.secure, 0), COALESCE (m.secure, 0)) AS secure,
+              GREATEST (COALESCE (s.always_secure, 0), COALESCE (m.always_secure, 0)) AS always_secure,
               COALESCE (s.secure_host, m.secure_host) AS secure_host,
               COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
               COALESCE (s.template_id, m.template_id) AS template_id,
@@ -1746,8 +1761,7 @@ class sExport
               s.fallback_id,
               s.customer_scope,
               s.`default`,
-              s.active,
-              s.always_secure
+              s.active
             FROM s_core_shops s
             LEFT JOIN s_core_shops m
               ON m.id=s.main_id
@@ -1787,5 +1801,27 @@ class sExport
         }
 
         return $this->mediaRepository;
+    }
+
+    /**
+     * Makes sure the given URL contains the correct host for the selected (sub-)shop
+     *
+     * @param string $url
+     * @param string $adapterType
+     * @return string
+     */
+    private function fixShopHost($url, $adapterType)
+    {
+        if ($adapterType !== 'local') {
+            return $url;
+        }
+
+        $url = str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
+
+        if ($this->shopData['always_secure']) {
+            return str_replace('http:', 'https:', $url);
+        }
+
+        return $url;
     }
 }

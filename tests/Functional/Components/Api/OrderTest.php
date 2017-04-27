@@ -51,7 +51,13 @@ class OrderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->order = Shopware()->Db()->fetchRow('SELECT * FROM  `s_order` LIMIT 1');
+        $this->order = Shopware()->Db()->fetchRow('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1');
+        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+    }
+
+    protected function tearDown()
+    {
+        Shopware()->Container()->get('dbal_connection')->rollback();
     }
 
     /**
@@ -187,6 +193,351 @@ class OrderTest extends TestCase
         $this->resource->update('', []);
     }
 
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingShippingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['shipping']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingBillingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['billing']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingCustomerId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['customerId']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownCustomerId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['customerId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownCountryIdInBillingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['billing']['countryId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownStateIdInBillingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['billing']['stateId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownCountryIdInShippingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['shipping']['countryId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownStateIdInShipppingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['shipping']['stateId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownStateIdInDetails()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['details'][0]['statusId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownTaxIdInDetails()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['details'][0]['taxId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingOrderStatusId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['orderStatusId']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownOrderStatusId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['orderStatusId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingPaymentId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['paymentId']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownPaymentId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['paymentId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingPaymentStatusId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['paymentStatusId']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownPaymentStatusId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['paymentStatusId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingDispatchId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['dispatchId']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownDispatchId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['dispatchId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateOrderFailsOnMissingShopId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        unset($order['shopId']);
+
+        $this->resource->create($order);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderFailsOnUnknownShopId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+
+        $order['shopId'] = 4711;
+
+        $this->resource->create($order);
+    }
+
+    public function testCreateOrderByCopy()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $oldOrderNumber = (int) $order['number'];
+
+        $order = $this->filterOrderId($order);
+
+        $newOrder = $this->resource->create($order);
+
+        // Checking some fields in all models
+        $this->assertGreaterThan($this->order['id'], $newOrder->getId());
+        $this->assertNotNull($newOrder->getNumber());
+        $this->assertNotSame((int) $newOrder->getNumber(), $oldOrderNumber);
+        $this->assertEquals($newOrder->getCustomer()->getId(), $order['customer']['id']);
+        $this->assertEquals($newOrder->getInvoiceAmount(), $order['invoiceAmount']);
+        $this->assertEquals($newOrder->getBilling()->getCity(), $order['billing']['city']);
+        $this->assertEquals($newOrder->getShipping()->getCity(), $order['shipping']['city']);
+        $this->assertEquals(count($newOrder->getDetails()), count($order['details']));
+        $this->assertEquals($newOrder->getDetails()[0]->getArticleName(), $order['details'][0]['articleName']);
+        $this->assertEquals((int) $newOrder->getDetails()[0]->getNumber(), ($oldOrderNumber + 1));
+    }
+
     public function testUpdateOrderPositionStatusShouldBeSuccessful()
     {
         // Get existing order
@@ -209,5 +560,24 @@ class OrderTest extends TestCase
             $this->assertEquals($updateArray['details'][$currentId]['status'], $detail['statusId']);
             $this->assertEquals($updateArray['details'][$currentId]['shipped'], $detail['shipped']);
         }
+    }
+
+    /**
+     * @param array $order
+     *
+     * @return array
+     */
+    private function filterOrderId($order)
+    {
+        // Remove order Ids and order numbers
+        unset($order['id']);
+        unset($order['number']);
+
+        foreach ($order['details'] as &$detail) {
+            unset($detail['id']);
+            unset($detail['number']);
+        }
+
+        return $order;
     }
 }

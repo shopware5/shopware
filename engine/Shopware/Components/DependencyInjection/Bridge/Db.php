@@ -43,6 +43,12 @@ class Db
      */
     public static function createPDO(array $dbConfig)
     {
+        if (isset($dbConfig['factory']) && class_exists($dbConfig['factory'])) {
+            $factory = $dbConfig['factory'];
+
+            return $factory::createPDO($dbConfig);
+        }
+
         $password = isset($dbConfig['password']) ? $dbConfig['password'] : '';
         $connectionString = self::buildConnectionString($dbConfig);
 

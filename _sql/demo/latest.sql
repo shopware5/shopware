@@ -7873,22 +7873,22 @@ INSERT INTO `s_order_comparisons` (`id`, `sessionID`, `userID`, `articlename`, `
 TRUNCATE TABLE `s_order_details`;
 INSERT INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
 (42, 15, '20001', 197, 'SW10196', 836.134, 1, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 1, 19, ''),
-(43, 15, '20001', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-(44, 15, '20001', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+(43, 15, '20001', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 1, 19, ''),
+(44, 15, '20001', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 1, 19, ''),
 (178, 52, '0', 227, 'SW10002841', 35.99, 31, 'Aufschlag bei Zahlungsarten', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (179, 52, '0', 145, 'SW10145', 17.99, 1, 'Mütze Vintage Driver', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (180, 52, '0', 248, 'SW100755036993', 74.99, 9, 'Versandkosten nach Gewicht', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-(181, 52, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-(182, 52, '0', 0, 'sw-payment', -180.659, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+(181, 52, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, ''),
+(182, 52, '0', 0, 'sw-payment', -180.659, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, ''),
 (187, 54, '0', 211, 'SW10221', 50, 1, 'Prämienartikel ab 250 Euro Warenkorb Wert', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-(188, 54, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-(189, 54, '0', 1, 'GUTABS', -5, 1, 'Gutschein', 0, 0, 0, '0000-00-00', 2, 0, 0, 19, ''),
-(190, 54, '0', 0, 'sw-payment', -4.3, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+(188, 54, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, ''),
+(189, 54, '0', 1, 'GUTABS', -5, 1, 'Gutschein', 0, 0, 0, '0000-00-00', 2, 0, 1, 19, ''),
+(190, 54, '0', 0, 'sw-payment', -4.3, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 1, 19, ''),
 (201, 57, '20002', 220, 'SW10001', 35.99, 1, 'Versandkostenfreier Artikel', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (202, 57, '20002', 227, 'SW10002841', 35.99, 1, 'Aufschlag bei Zahlungsarten', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (203, 57, '20002', 219, 'SW10185', 54.9, 1, 'Express Versand', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (204, 57, '20002', 197, 'SW10196', 34.99, 2, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 1, 19, ''),
-(205, 57, '20002', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
+(205, 57, '20002', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, '');
 
 TRUNCATE TABLE `s_order_details_attributes`;
 INSERT INTO `s_order_details_attributes` (`id`, `detailID`, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`) VALUES
@@ -7926,7 +7926,7 @@ INSERT INTO `s_order_number` (`id`, `number`, `name`, `desc`) VALUES
 TRUNCATE TABLE `s_order_shippingaddress`;
 INSERT INTO `s_order_shippingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `countryID`, `stateID`) VALUES
 (1, 2, 15, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', 2, 3),
-(2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', 2, 0);
+(2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', 2, 3);
 
 TRUNCATE TABLE `s_order_shippingaddress_attributes`;
 INSERT INTO `s_order_shippingaddress_attributes` (`id`, `shippingID`, `text1`, `text2`, `text3`, `text4`, `text5`, `text6`) VALUES

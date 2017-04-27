@@ -27,6 +27,7 @@ namespace   Shopware\Models\Order;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware order model represents a single order in your shop.
@@ -76,6 +77,8 @@ class Order extends ModelEntity
     protected $customer;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var \Shopware\Models\Payment\Payment
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Payment\Payment")
      * @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
@@ -83,6 +86,8 @@ class Order extends ModelEntity
     protected $payment;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var \Shopware\Models\Dispatch\Dispatch
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Dispatch\Dispatch")
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
@@ -92,6 +97,8 @@ class Order extends ModelEntity
     /**
      * The shop property is the owning side of the association between order and shop.
      * The association is joined over the order userID field and the id field of the shop.
+     *
+     * @Assert\NotBlank
      *
      * @var \Shopware\Models\Shop\Shop
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Shop\Shop")
@@ -117,6 +124,8 @@ class Order extends ModelEntity
     protected $attribute;
 
     /**
+     * @Assert\NotBlank
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="cleared", referencedColumnName="id")
      *
@@ -125,6 +134,8 @@ class Order extends ModelEntity
     protected $paymentStatus;
 
     /**
+     * @Assert\NotBlank
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
      *
@@ -264,6 +275,8 @@ class Order extends ModelEntity
     private $shopId;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var float
      *
      * @ORM\Column(name="invoice_amount", type="float", nullable=false)
@@ -271,6 +284,8 @@ class Order extends ModelEntity
     private $invoiceAmount;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var float
      *
      * @ORM\Column(name="invoice_amount_net", type="float", nullable=false)
@@ -278,6 +293,8 @@ class Order extends ModelEntity
     private $invoiceAmountNet;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var float
      *
      * @ORM\Column(name="invoice_shipping", type="float", nullable=false)
@@ -285,6 +302,8 @@ class Order extends ModelEntity
     private $invoiceShipping;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var float
      *
      * @ORM\Column(name="invoice_shipping_net", type="float", nullable=false)
@@ -327,6 +346,8 @@ class Order extends ModelEntity
     private $internalComment;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var int
      *
      * @ORM\Column(name="net", type="integer", nullable=false)
@@ -334,6 +355,8 @@ class Order extends ModelEntity
     private $net;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var int
      *
      * @ORM\Column(name="taxfree", type="integer", nullable=false)
@@ -369,6 +392,8 @@ class Order extends ModelEntity
     private $trackingCode;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var string
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
@@ -386,6 +411,8 @@ class Order extends ModelEntity
     private $languageSubShop;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=5, nullable=false)
@@ -393,6 +420,8 @@ class Order extends ModelEntity
     private $currency;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var float
      *
      * @ORM\Column(name="currencyfactor", type="float", nullable=false)
@@ -402,7 +431,7 @@ class Order extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="remote_addr", type="string", length=255, nullable=false)
+     * @ORM\Column(name="remote_addr", type="string", length=255, nullable=true)
      */
     private $remoteAddress;
 

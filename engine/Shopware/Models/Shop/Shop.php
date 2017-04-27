@@ -711,6 +711,9 @@ class Shop extends ModelEntity
             }
         }
 
+        //Initializes the frontend session to prevent output before session started.
+        $container->get('session');
+
         if ($this->getTemplate() !== null) {
             /** @var $templateManager \Enlight_Template_Manager */
             $templateManager = $container->get('Template');

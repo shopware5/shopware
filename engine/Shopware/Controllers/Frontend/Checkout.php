@@ -394,7 +394,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
             Shopware()->Session()->unsetAll();
-            $this->get('shopware.csrftoken_validator')->invalidateToken($this->Response());
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
 
@@ -1837,6 +1836,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $address['country'] = json_decode(json_encode($countryStruct), true);
         $address['state'] = json_decode(json_encode($stateStruct), true);
+        $address['attribute'] = $this->get('shopware_attribute.data_loader')->load($sourceTable . '_attributes', $address['id']);
 
         return $address;
     }

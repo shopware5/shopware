@@ -99,7 +99,7 @@ class DatabaseWriter
 
                     // Find the matching value in db, if it exists
                     foreach ($rows as $key => $values) {
-                        if ($values['name'] == $name) {
+                        if (strtolower($values['name']) === strtolower($name)) {
                             $row = $values;
                             unset($rows[$key]);
                             break;

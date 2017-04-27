@@ -56,6 +56,11 @@ class Media extends ModelEntity
     const TYPE_IMAGE = 'IMAGE';
 
     /**
+     * Flag for a vector media
+     */
+    const TYPE_VECTOR = 'VECTOR';
+
+    /**
      * Flag for a video media
      */
     const TYPE_VIDEO = 'VIDEO';
@@ -131,7 +136,7 @@ class Media extends ModelEntity
      */
     private $typeMapping = [
         '24b' => self::TYPE_IMAGE,
-        'ai' => self::TYPE_IMAGE,
+        'ai' => self::TYPE_VECTOR,
         'bmp' => self::TYPE_IMAGE,
         'cdr' => self::TYPE_IMAGE,
         'gif' => self::TYPE_IMAGE,
@@ -143,7 +148,7 @@ class Media extends ModelEntity
         'png' => self::TYPE_IMAGE,
         'tif' => self::TYPE_IMAGE,
         'tiff' => self::TYPE_IMAGE,
-        'eps' => self::TYPE_IMAGE,
+        'eps' => self::TYPE_VECTOR,
         'pbm' => self::TYPE_IMAGE,
         'psd' => self::TYPE_IMAGE,
         'wbm' => self::TYPE_IMAGE,
@@ -846,6 +851,7 @@ class Media extends ModelEntity
         'sty' => self::TYPE_MUSIC,
         'svd' => self::TYPE_MUSIC,
         'svx' => self::TYPE_MUSIC,
+        'svg' => self::TYPE_VECTOR,
         'sw' => self::TYPE_MUSIC,
         'swa' => self::TYPE_MUSIC,
         'syh' => self::TYPE_MUSIC,
@@ -1696,11 +1702,7 @@ class Media extends ModelEntity
             $this->updateAssociations();
 
             //create album thumbnails
-            if ($isAlbumChanged) {
-                $this->createThumbnailsForMovedMedia($changeSet['albumId'][1]);
-            } else {
-                $this->createAlbumThumbnails($this->album);
-            }
+            $this->createAlbumThumbnails($this->album);
         }
 
         //name changed? Then rename the file and set the new path
@@ -1855,8 +1857,9 @@ class Media extends ModelEntity
         if ($this->name !== '') {
             return $this->removeSpecialCharacters($this->name) . '.' . $this->extension;
         }
-            // do whatever you want to generate a unique name
-            return uniqid() . '.' . $this->extension;
+
+        // do whatever you want to generate a unique name
+        return uniqid() . '.' . $this->extension;
     }
 
     /**
@@ -2038,28 +2041,6 @@ class Media extends ModelEntity
         $this->articles = $articles;
     }
 
-    public function removeThumbnails()
-    {
-        $thumbnailSizes = $this->getAllThumbnailSizes();
-
-        $this->removeDefaultThumbnails($this->getFileName());
-        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
-    }
-
-    /**
-     * @param int $newAlbumId
-     */
-    private function createThumbnailsForMovedMedia($newAlbumId)
-    {
-        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
-
-        /** @var Album $album */
-        $album = $albumRepository->find($newAlbumId);
-        if ($album) {
-            $this->createAlbumThumbnails($album);
-        }
-    }
-
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
      *
@@ -2073,6 +2054,14 @@ class Media extends ModelEntity
             Shopware()->Models()->persist($article);
         }
         Shopware()->Models()->flush();
+    }
+
+    public function removeThumbnails()
+    {
+        $thumbnailSizes = $this->getAllThumbnailSizes();
+
+        $this->removeDefaultThumbnails($this->getFileName());
+        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 
     /****************************************************************
