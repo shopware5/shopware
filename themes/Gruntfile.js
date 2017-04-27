@@ -89,7 +89,7 @@ module.exports = function (grunt) {
                     '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js',
                     '../custom/plugins/**/frontend/**/src/js/**/*.js'
                 ],
-                tasks: ['eslint', 'uglify:development'],
+                tasks: ['uglify:development'],
                 options: {
                     spawn: false
                 }
