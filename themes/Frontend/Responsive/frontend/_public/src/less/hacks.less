@@ -100,4 +100,14 @@ More precise designations are commented inside the document.
     .is--ie .action--filter-btn .filter--trigger:after {
         line-height: 16px;
     }
+
+    // IE 11 and Edge browser have issues with text-indent property on select inputs
+    .is--ie .header-main .top-bar--navigation .top-bar--language .select-field select,
+    .is--edge .header-main .top-bar--navigation .top-bar--language .select-field select {
+        font-size: 0;
+
+        option {
+            .unitize(font-size, 14);
+        }
+    }
 }
