@@ -1276,11 +1276,12 @@
             var me = this,
                 detections = {};
 
+            detections['is--edge'] = me._checkUserAgent(/edge\//);
             detections['is--opera'] = me._checkUserAgent(/opera/);
-            detections['is--chrome'] = me._checkUserAgent(/\bchrome\b/);
+            detections['is--chrome'] = !detections['is--edge'] && me._checkUserAgent(/\bchrome\b/);
             detections['is--firefox'] = me._checkUserAgent(/firefox/);
-            detections['is--webkit'] = me._checkUserAgent(/webkit/);
-            detections['is--safari'] = !detections['is--chrome'] && me._checkUserAgent(/safari/);
+            detections['is--webkit'] = !detections['is--edge'] && me._checkUserAgent(/webkit/);
+            detections['is--safari'] = !detections['is--edge'] && !detections['is--chrome'] && me._checkUserAgent(/safari/);
             detections['is--ie'] = !detections['is--opera'] && (me._checkUserAgent(/msie/) || me._checkUserAgent(/trident\/7/));
             detections['is--ie-touch'] = detections['is--ie'] && me._checkUserAgent(/touch/);
             detections['is--gecko'] = !detections['is--webkit'] && me._checkUserAgent(/gecko/);
