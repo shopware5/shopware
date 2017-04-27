@@ -461,6 +461,8 @@
             }
         }
     };
+    
+    $.publish('plugin/swFilterComponent/onInitSpecialComponents', [ specialComponents ]);
 
     /**
      * The actual plugin.
@@ -503,6 +505,7 @@
         init: function() {
             var me = this;
             me.applyDataAttributes();
+            me.specialComponents = specialComponents;
 
             me.type = me.$el.attr('data-filter-type') || me.opts.type;
             me.facetName = me.$el.attr('data-facet-name');
@@ -514,12 +517,12 @@
              * Checks if the type of the component uses
              * any special configuration or methods.
              */
-            if (specialComponents[me.type] !== undefined) {
+            if (me.specialComponents[me.type] !== undefined) {
                 /**
                  * Extends the plugin object with the
                  * corresponding component object.
                  */
-                $.extend(me, specialComponents[me.type]);
+                $.extend(me, me.specialComponents[me.type]);
 
                 /**
                  * Merges the component options into
