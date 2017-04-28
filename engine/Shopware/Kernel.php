@@ -127,6 +127,11 @@ class Kernel implements HttpKernelInterface
     private $plugins = [];
 
     /**
+     * @var string[]
+     */
+    private $activePlugins = [];
+
+    /**
      * @var string
      */
     private $pluginHash;
@@ -451,6 +456,8 @@ class Kernel implements HttpKernelInterface
 
         $this->plugins = $initializer->initializePlugins();
 
+        $this->activePlugins = $initializer->getActivePlugins();
+
         $this->pluginHash = $this->createPluginHash($this->plugins);
     }
 
@@ -638,6 +645,8 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());
+
+        $container->setParameter('active_plugins', $this->activePlugins);
 
         $this->loadPlugins($container);
     }
