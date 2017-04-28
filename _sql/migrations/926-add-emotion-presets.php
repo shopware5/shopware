@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration925 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration926 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
