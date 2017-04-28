@@ -37,4 +37,15 @@ namespace Shopware\Bundle\SearchBundle;
  */
 interface ConditionInterface extends CriteriaPartInterface
 {
+    const OPERATOR_EQ = '=';
+    const OPERATOR_NEQ = '!=';
+    const OPERATOR_LT = '<';
+    const OPERATOR_LTE = '<=';
+    const OPERATOR_GT = '>';
+    const OPERATOR_GTE = '>=';
+    const OPERATOR_IN = 'IN';
+    const OPERATOR_BETWEEN = 'BETWEEN';
+    const OPERATOR_STARTS_WITH = 'STARTS_WITH';
+    const OPERATOR_ENDS_WITH = 'ENDS_WITH';
+    const OPERATOR_CONTAINS = 'CONTAINS';
 }

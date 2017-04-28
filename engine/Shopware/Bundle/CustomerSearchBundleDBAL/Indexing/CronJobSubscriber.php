@@ -67,9 +67,13 @@ class CronJobSubscriber implements SubscriberInterface
 
         $query = $this->createQuery();
 
-        while ($ids = $query->fetch()) {
-            $this->searchIndexer->populate($ids);
-        }
+        $this->connection->transactional(function () use ($query) {
+            $this->connection->executeUpdate('DELETE FROM s_customer_search_index');
+
+            while ($ids = $query->fetch()) {
+                $this->searchIndexer->populate($ids);
+            }
+        });
 
         $streams = $this->fetchStreams();
 

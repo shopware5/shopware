@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCondition', {
 
     getLabel: function() {
-        return '{s name="customer_searchterm_condition"}Search term condition{/s}';
+        return '{s name="customer_searchterm_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
@@ -49,11 +49,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCon
 
     _create: function() {
         return {
-            title: '{s name="customer_searchterm_condition"}Search term condition{/s}',
+            title: '{s name="customer_searchterm_condition"}{/s}',
             conditionClass: 'Shopware\\Bundle\\SearchBundle\\Condition\\SearchTermCondition',
             items: [{
                 xtype: 'textfield',
-                name: 'searchTerm',
+                name: 'term',
                 allowBlank: false
             }]
         };

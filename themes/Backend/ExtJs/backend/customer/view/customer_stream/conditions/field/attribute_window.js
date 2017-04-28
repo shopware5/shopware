@@ -26,8 +26,11 @@
  * @version    $Id$
  * @author shopware AG
  */
-// {namespace name=backend/product_stream/main}
+
+// {namespace name=backend/customer/view/main}
+
 // {block name="backend/customer/view/customer_stream/conditions/field/attribute_window"}
+
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeWindow', {
     extend: 'Ext.window.Window',
     modal: true,
@@ -52,12 +55,13 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
     createItems: function() {
         var me = this;
 
-        var store = Ext.create('Shopware.apps.Customer.store.Attribute');
+        var store = Ext.create('Shopware.store.AttributeConfig');
+        store.getProxy().extraParams.table = 's_user_attributes';
 
         me.attributeCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'attribute',
             labelWidth: 180,
-            fieldLabel: '{s name=select_product_attribute}Select product attribute{/s}',
+            fieldLabel: '{s name=select_attribute}{/s}',
             pageSize: 20,
             store: store,
             valueField: 'columnName',
@@ -66,7 +70,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         });
 
         me.notice = Ext.create('Ext.container.Container', {
-            html: '{s name=attribute/input_text}Please choose a product attribute{/s}',
+            html: '{s name=attribute/input_text}{/s}',
             height: 40
         });
 
@@ -79,7 +83,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
             dock: 'bottom',
             items: ['->', {
                 xtype: 'button',
-                text: '{s name=apply}Apply{/s}',
+                text: '{s name=apply}{/s}',
                 cls: 'primary',
                 handler: function() {
                     if (me.attributeCombo.getValue()) {

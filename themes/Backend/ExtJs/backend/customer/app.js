@@ -67,22 +67,25 @@ Ext.define('Shopware.apps.Customer', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'List', 'Detail', 'Order', 'Main', 'Stream' ],
+    controllers: [ 'Detail', 'Order', 'Main', 'Stream' ],
 
     /**
      * The detail controller knows all form field sets and the detail window component
      * @array
      */
     views: [
+
+        'main.QuickView',
+        'main.StreamView',
+        'main.CustomerList',
+        'main.CustomerListFilter',
+        'main.Window',
+
         'detail.Window',
         'detail.Base',
         'detail.Debit',
         'detail.Comment',
         'detail.Additional',
-        'list.List',
-        'list.Filter',
-        'main.Window',
-        'main.Toolbar',
         'order.List',
         'order.Chart',
         'address.List',
@@ -95,6 +98,7 @@ Ext.define('Shopware.apps.Customer', {
 
         'customer_stream.Detail',
         'customer_stream.Listing',
+        'customer_stream.Preview',
         'customer_stream.ConditionPanel',
         'customer_stream.ConditionField',
         'customer_stream.conditions.HasAddressWithCountryCondition',
@@ -114,8 +118,10 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.conditions.OrderedWithPaymentCondition',
         'customer_stream.conditions.HasTotalOrderAmountCondition',
         'customer_stream.conditions.CustomerAttributeCondition',
+        'customer_stream.conditions.SearchTermCondition',
         'customer_stream.conditions.field.AttributeValue',
-        'customer_stream.conditions.SearchTermCondition'
+        'customer_stream.conditions.field.AttributeWindow',
+        'customer_stream.conditions.field.OperatorField'
     ],
 
     /**
@@ -123,13 +129,13 @@ Ext.define('Shopware.apps.Customer', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores: [ 'Detail', 'MetaChart', 'Orders', 'Chart', 'Batch', 'Address' ],
+    stores: [ 'Detail', 'Orders', 'Chart', 'Batch', 'Address', 'QuickView', 'Preview', 'CustomerStream' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
      * @array
      */
-    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'Order', 'Chart', 'Batch', 'Address' ],
+    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'Order', 'Chart', 'Batch', 'Address', 'QuickView', 'CustomerStream' ],
 
     /**
      * Returns the main application window for this is expected

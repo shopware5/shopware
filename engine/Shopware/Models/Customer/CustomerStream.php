@@ -58,15 +58,15 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var array
-     * @ORM\Column(name="product_stream_ids", type="string", nullable=true)
-     */
-    private $productStreamIds;
-
-    /**
-     * @var array
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="use_for_http_cache", type="boolean", nullable=false)
+     */
+    private $useForHttpCache = true;
 
     /**
      * @return int
@@ -124,13 +124,13 @@ class CustomerStream extends ModelEntity
         $this->conditions = $conditions;
     }
 
-    public function getProductStreamIds()
+    public function isUseForHttpCache()
     {
-        return $this->productStreamIds;
+        return $this->useForHttpCache;
     }
 
-    public function setProductStreamIds($productStreamIds)
+    public function setUseForHttpCache($useForHttpCache)
     {
-        $this->productStreamIds = $productStreamIds;
+        $this->useForHttpCache = $useForHttpCache;
     }
 }

@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string', useNull: true },
         { name: 'conditions', type: 'string' },
-        { name: 'productStreamIds', type: 'string' }
+        { name: 'useForHttpCache', type: 'boolean', defaultValue: true }
     ]
 });
 // {/block}

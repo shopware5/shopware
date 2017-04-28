@@ -42,6 +42,6 @@ class CustomerGroupSortingHandler implements SortingHandlerInterface
         QueryBuilder $query
     ) {
         /* @var SimpleSorting $sorting */
-        $query->addOrderBy('customer.customerGroup', $sorting->getDirection());
+        $query->addOrderBy('customer.customer_group_name', $sorting->getDirection());
     }
 }

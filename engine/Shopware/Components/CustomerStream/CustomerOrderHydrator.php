@@ -29,6 +29,11 @@ class CustomerOrderHydrator
     public function hydrate(array $data)
     {
         $struct = new CustomerOrder();
+
+        if (empty($data)) {
+            return $struct;
+        }
+
         $struct->setOrderCount((int) $data['count_orders']);
         $struct->setTotalAmount((float) $data['invoice_amount_sum']);
         $struct->setAvgAmount((float) $data['invoice_amount_avg']);
@@ -37,12 +42,27 @@ class CustomerOrderHydrator
         $struct->setAvgProductPrice((float) $data['product_avg']);
         $struct->setFirstOrderTime(new \DateTime($data['first_order_time']));
         $struct->setLastOrderTime(new \DateTime($data['last_order_time']));
-        $struct->setPayments(explode(',', $data['selected_payments']));
-        $struct->setShops(explode(',', $data['ordered_in_shops']));
-        $struct->setDevices(explode(',', $data['ordered_with_devices']));
-        $struct->setDispatches(explode(',', $data['selected_dispachtes']));
-        $struct->setWeekdays(explode(',', $data['weekdays']));
+        $struct->setPayments($this->explodeAndFilter($data['selected_payments']));
+        $struct->setShops($this->explodeAndFilter($data['ordered_in_shops']));
+        $struct->setDevices($this->explodeAndFilter($data['ordered_with_devices']));
+        $struct->setDispatches($this->explodeAndFilter($data['selected_dispachtes']));
+        $struct->setWeekdays($this->explodeAndFilter($data['weekdays']));
+
+        if (array_key_exists('product_numbers', $data)) {
+            $struct->setProducts($this->explodeAndFilter($data['product_numbers']));
+        }
+        if (array_key_exists('category_ids', $data)) {
+            $struct->setCategories($this->explodeAndFilter($data['category_ids']));
+        }
+        if (array_key_exists('manufacturer_ids', $data)) {
+            $struct->setManufacturers($this->explodeAndFilter($data['manufacturer_ids']));
+        }
 
         return $struct;
+    }
+
+    private function explodeAndFilter($value)
+    {
+        return array_filter(explode(',', $value));
     }
 }

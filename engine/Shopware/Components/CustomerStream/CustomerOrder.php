@@ -99,6 +99,21 @@ class CustomerOrder extends Extendable
     protected $weekdays;
 
     /**
+     * @var string[]
+     */
+    protected $products;
+
+    /**
+     * @var int[]
+     */
+    protected $manufacturers;
+
+    /**
+     * @var int[]
+     */
+    protected $categories;
+
+    /**
      * @return int
      */
     public function getOrderCount()
@@ -320,5 +335,35 @@ class CustomerOrder extends Extendable
     public function setWeekdays($weekdays)
     {
         $this->weekdays = $weekdays;
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+    public function getManufacturers()
+    {
+        return $this->manufacturers;
+    }
+
+    public function setManufacturers($manufacturers)
+    {
+        $this->manufacturers = $manufacturers;
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
     }
 }

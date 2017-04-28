@@ -38,7 +38,26 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         /* @var HasTotalOrderAmountCondition $condition */
-        $query->andWhere('customer.invoice_amount_sum >= :HasTotalOrderAmountCondition');
+        switch ($condition->getOperator()) {
+            case ConditionInterface::OPERATOR_EQ:
+                $query->andWhere('customer.invoice_amount_sum = :HasTotalOrderAmountCondition');
+                break;
+            case ConditionInterface::OPERATOR_NEQ:
+                $query->andWhere('customer.invoice_amount_sum != :HasTotalOrderAmountCondition');
+                break;
+            case ConditionInterface::OPERATOR_LT:
+                $query->andWhere('customer.invoice_amount_sum < :HasTotalOrderAmountCondition');
+                break;
+            case ConditionInterface::OPERATOR_LTE:
+                $query->andWhere('customer.invoice_amount_sum <= :HasTotalOrderAmountCondition');
+                break;
+            case ConditionInterface::OPERATOR_GT:
+                $query->andWhere('customer.invoice_amount_sum > :HasTotalOrderAmountCondition');
+                break;
+            default:
+                $query->andWhere('customer.invoice_amount_sum >= :HasTotalOrderAmountCondition');
+        }
+
         $query->setParameter(':HasTotalOrderAmountCondition', $condition->getMinimumOrderAmount());
     }
 

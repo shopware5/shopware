@@ -59,13 +59,20 @@ class CustomerOrderGateway
 
         $canceled = $this->getCustomersWithCanceledOrders($customerIds);
 
+        $products = $this->fetchProducts($customerIds);
+
         $structs = [];
         foreach ($customerIds as $customerId) {
-            if (!array_key_exists($customerId, $data)) {
-                $struct = new CustomerOrder();
-            } else {
-                $struct = $this->hydrator->hydrate($data[$customerId]);
+            $customerData = [];
+            if (array_key_exists($customerId, $data)) {
+                $customerData = $data[$customerId];
             }
+
+            if (array_key_exists($customerId, $products)) {
+                $customerData = array_merge($customerData, $products[$customerId]);
+            }
+
+            $struct = $this->hydrator->hydrate($customerData);
 
             $struct->setHasCanceledOrders(in_array($customerId, $canceled));
 
@@ -86,13 +93,13 @@ class CustomerOrderGateway
         $query->addSelect([
             'orders.userID as customer_id',
             'COUNT(DISTINCT orders.id) count_orders',
-            'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
-            'ROUND(AVG(orders.invoice_amount), 2) as invoice_amount_avg',
-            'MIN(orders.invoice_amount) as invoice_amount_min',
-            'MAX(orders.invoice_amount) as invoice_amount_max',
+            'ROUND(SUM(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_sum',
+            'ROUND(AVG(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_avg',
+            'MIN(orders.invoice_amount / orders.currencyFactor) as invoice_amount_min',
+            'MAX(orders.invoice_amount / orders.currencyFactor) as invoice_amount_max',
             'MIN(orders.ordertime) as first_order_time',
             'MAX(orders.ordertime) as last_order_time',
-            'ROUND(AVG(details.price), 2) as product_avg',
+            'ROUND(AVG(details.price / orders.currencyFactor), 2) as product_avg',
             "GROUP_CONCAT(DISTINCT paymentID SEPARATOR ',') as selected_payments",
             "GROUP_CONCAT(DISTINCT orders.dispatchID SEPARATOR ',') as selected_dispachtes",
             "GROUP_CONCAT(DISTINCT orders.subshopID SEPARATOR ',') as ordered_in_shops",
@@ -129,5 +136,28 @@ class CustomerOrderGateway
         $query->groupBy('orders.userID');
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    private function fetchProducts($customerIds)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select([
+            'orders.userID',
+            "GROUP_CONCAT(DISTINCT details.articleordernumber SEPARATOR ',') as product_numbers",
+            "GROUP_CONCAT(DISTINCT categories.categoryID SEPARATOR ',') as category_ids",
+            "GROUP_CONCAT(DISTINCT product.supplierID SEPARATOR ',') as manufacturer_ids",
+        ]);
+        $query->from('s_order', 'orders');
+        $query->innerJoin('orders', 's_core_shops', 'shops', 'shops.id = orders.subshopID');
+        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
+        $query->innerJoin('details', 's_articles', 'product', 'product.id = details.articleID');
+        $query->innerJoin('details', 's_articles_categories_ro', 'mapping', 'mapping.articleID = details.articleID AND shops.category_id = mapping.categoryID');
+        $query->innerJoin('mapping', 's_articles_categories_ro', 'categories', 'categories.articleID = mapping.articleID AND categories.parentCategoryID = mapping.parentCategoryID');
+
+        $query->andWhere('orders.userID IN (:customerIds)');
+        $query->setParameter(':customerIds', $customerIds, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('orders.userID');
+
+        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
     }
 }

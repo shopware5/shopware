@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\CustomerStream\Interests;
 
 class SearchIndexer implements SearchIndexerInterface
 {
@@ -55,16 +54,8 @@ class SearchIndexer implements SearchIndexerInterface
     public function populate(array $ids)
     {
         $this->connection->transactional(function () use ($ids) {
-            $this->connection->executeUpdate(
-                'DELETE FROM s_customer_search_index WHERE id IN (:ids)',
-                [':ids' => $ids],
-                [':ids' => Connection::PARAM_INT_ARRAY]
-            );
-
             $insert = $this->createInsertQuery();
-
             $customers = $this->provider->get($ids);
-
             foreach ($customers as $customer) {
                 $insert->execute($this->buildData($customer));
             }
@@ -90,7 +81,7 @@ class SearchIndexer implements SearchIndexerInterface
             'accountmode' => $customer->getAccountMode(),
             'firstlogin' => $this->formatDate($customer->getFirstLogin()),
             'newsletter' => $customer->isNewsletter(),
-            'shopId' => $customer->getShopId(),
+            'shop_id' => $customer->getShopId(),
             'default_billing_address_id' => $customer->getDefaultBillingAddressId(),
             'title' => $customer->getTitle(),
             'salutation' => $customer->getSalutation(),
@@ -98,10 +89,9 @@ class SearchIndexer implements SearchIndexerInterface
             'lastname' => $customer->getLastname(),
             'birthday' => $this->formatDate($customer->getBirthday()),
             'customernumber' => $customer->getNumber(),
-            'customerGroupId' => $customer->getCustomerGroup()->getId(),
-            'customerGroup' => $customer->getCustomerGroup()->getName(),
-            'paymentId' => $customer->getPaymentId(),
-            'shop' => $customer->getShopId(),
+            'customer_group_id' => $customer->getCustomerGroup()->getId(),
+            'customer_group_name' => $customer->getCustomerGroup()->getName(),
+            'payment_id' => $customer->getPaymentId(),
             'company' => $customer->getBillingAddress()->getCompany(),
             'department' => $customer->getBillingAddress()->getDepartment(),
             'street' => $customer->getBillingAddress()->getStreet(),
@@ -110,10 +100,9 @@ class SearchIndexer implements SearchIndexerInterface
             'phone' => $customer->getBillingAddress()->getPhone(),
             'additional_address_line1' => $customer->getBillingAddress()->getAdditionalAddressLine1(),
             'additional_address_line2' => $customer->getBillingAddress()->getAdditionalAddressLine2(),
-            'countryId' => $customer->getBillingAddress()->getCountryId(),
-            'country' => $customer->getBillingAddress()->getCountry() ? $customer->getBillingAddress()->getCountry()->getName() : '',
-            'stateId' => $customer->getBillingAddress()->getStateId(),
-            'state' => $customer->getBillingAddress()->getState() ? $customer->getBillingAddress()->getState()->getName() : null,
+            'country_id' => $customer->getBillingAddress()->getCountryId(),
+            'country_name' => $customer->getBillingAddress()->getCountry() ? $customer->getBillingAddress()->getCountry()->getName() : '',
+            'state_id' => $customer->getBillingAddress()->getStateId(),
             'age' => $customer->getAge(),
             'count_orders' => $customer->getOrderInformation()->getOrderCount(),
             'product_avg' => $customer->getOrderInformation()->getAvgProductPrice(),
@@ -124,23 +113,14 @@ class SearchIndexer implements SearchIndexerInterface
             'first_order_time' => $this->formatDate($customer->getOrderInformation()->getFirstOrderTime()),
             'last_order_time' => $this->formatDate($customer->getOrderInformation()->getLastOrderTime()),
             'has_canceled_orders' => $customer->getOrderInformation()->hasCanceledOrders(),
-            'weekdays' => $this->implodeUnique($customer->getOrderInformation()->getWeekdays()),
-            'shops' => $this->implodeUnique($customer->getOrderInformation()->getShops()),
-            'devices' => $this->implodeUnique($customer->getOrderInformation()->getDevices()),
-            'deliveries' => $this->implodeUnique($customer->getOrderInformation()->getDispatches()),
-            'payments' => $this->implodeUnique($customer->getOrderInformation()->getPayments()),
-            'products' => $this->implodeUnique(
-                array_map(function (Interests $interest) {
-                    return $interest->getProductNumber();
-                }, $customer->getInterests())
-            ),
-            'categories' => $this->getCategories($customer->getInterests()),
-            'manufacturers' => $this->implodeUnique(
-                array_map(function (Interests $interest) {
-                    return $interest->getManufacturerId();
-                }, $customer->getInterests())
-            ),
-            'interests' => json_encode(array_slice($customer->getInterests(), 0, 5)),
+            'ordered_at_weekdays' => $this->implodeUnique($customer->getOrderInformation()->getWeekdays()),
+            'ordered_in_shops' => $this->implodeUnique($customer->getOrderInformation()->getShops()),
+            'ordered_on_devices' => $this->implodeUnique($customer->getOrderInformation()->getDevices()),
+            'ordered_with_deliveries' => $this->implodeUnique($customer->getOrderInformation()->getDispatches()),
+            'ordered_with_payments' => $this->implodeUnique($customer->getOrderInformation()->getPayments()),
+            'ordered_products' => $this->implodeUnique($customer->getOrderInformation()->getProducts()),
+            'ordered_products_of_categories' => $this->implodeUnique($customer->getOrderInformation()->getCategories()),
+            'ordered_products_of_manufacturer' => $this->implodeUnique($customer->getOrderInformation()->getManufacturers()),
         ];
 
         return $data;
@@ -156,7 +136,7 @@ class SearchIndexer implements SearchIndexerInterface
                 accountmode,
                 firstlogin,
                 newsletter,
-                shopId,
+                shop_id,
                 default_billing_address_id,
                 title,
                 salutation,
@@ -164,10 +144,9 @@ class SearchIndexer implements SearchIndexerInterface
                 lastname,
                 birthday,
                 customernumber,
-                customerGroupId,
-                customerGroup,
-                paymentId,
-                shop,
+                customer_group_id,
+                customer_group_name,
+                payment_id,
                 company,
                 department,
                 street,
@@ -176,10 +155,9 @@ class SearchIndexer implements SearchIndexerInterface
                 phone,
                 additional_address_line1,
                 additional_address_line2,
-                countryId,
-                country,
-                stateId,
-                state,
+                country_id,
+                country_name,
+                state_id,
                 age,
                 count_orders ,
                 invoice_amount_sum,
@@ -189,16 +167,16 @@ class SearchIndexer implements SearchIndexerInterface
                 first_order_time,
                 last_order_time,
                 has_canceled_orders,
-                weekdays,
-                shops,
-                devices,
-                deliveries,
-                payments,
+                ordered_at_weekdays,
+                ordered_in_shops,
+                ordered_on_devices,
+                ordered_with_deliveries,
+                ordered_with_payments,
                 product_avg,
-                products,
-                categories,
-                manufacturers,
-                interests
+                ordered_products,
+                ordered_products_of_categories,
+                ordered_products_of_manufacturer,
+                index_time
             ) VALUES (
                 :id,
                 :email,
@@ -206,7 +184,7 @@ class SearchIndexer implements SearchIndexerInterface
                 :accountmode,
                 :firstlogin,
                 :newsletter,
-                :shopId,
+                :shop_id,
                 :default_billing_address_id,
                 :title,
                 :salutation,
@@ -214,10 +192,9 @@ class SearchIndexer implements SearchIndexerInterface
                 :lastname,
                 :birthday,
                 :customernumber,
-                :customerGroupId,
-                :customerGroup,
-                :paymentId,
-                :shop,
+                :customer_group_id,
+                :customer_group_name,
+                :payment_id,
                 :company,
                 :department,
                 :street,
@@ -226,10 +203,9 @@ class SearchIndexer implements SearchIndexerInterface
                 :phone,
                 :additional_address_line1,
                 :additional_address_line2,
-                :countryId,
-                :country,
-                :stateId,
-                :state,
+                :country_id,
+                :country_name,
+                :state_id,
                 :age,
                 :count_orders,
                 :invoice_amount_sum,
@@ -239,16 +215,16 @@ class SearchIndexer implements SearchIndexerInterface
                 :first_order_time,
                 :last_order_time,
                 :has_canceled_orders,
-                :weekdays,
-                :shops,
-                :devices,
-                :deliveries,
-                :payments,
+                :ordered_at_weekdays,
+                :ordered_in_shops,
+                :ordered_on_devices,
+                :ordered_with_deliveries,
+                :ordered_with_payments,
                 :product_avg,
-                :products,
-                :categories,
-                :manufacturers,
-                :interests
+                :ordered_products,
+                :ordered_products_of_categories,
+                :ordered_products_of_manufacturer,
+                NOW()
             )
       ');
     }
@@ -259,7 +235,7 @@ class SearchIndexer implements SearchIndexerInterface
             return null;
         }
 
-        return '||' . implode('||', array_keys(array_flip($array))) . '||';
+        return '|' . implode('|', array_keys(array_flip($array))) . '|';
     }
 
     /**
@@ -275,20 +251,5 @@ class SearchIndexer implements SearchIndexerInterface
         }
 
         return $date->format($format);
-    }
-
-    /**
-     * @param Interests[] $interests
-     *
-     * @return null|string
-     */
-    private function getCategories($interests)
-    {
-        $categories = [];
-        foreach ($interests as $interest) {
-            $categories = array_merge($categories, [$interest->getCategoryId()], $interest->getCategoryPath());
-        }
-
-        return $this->implodeUnique($categories);
     }
 }

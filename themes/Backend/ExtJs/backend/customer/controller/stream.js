@@ -35,7 +35,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     refs: [
         { ref: 'mainWindow', selector: 'customer-list-main-window' },
-        { ref: 'mainToolbar', selector: 'customer-main-toolbar' }
+        { ref: 'mainToolbar', selector: 'customer-main-toolbar' },
+        { ref: 'streamView', selector: 'stream-view' }
     ],
 
     mixins: {
@@ -46,25 +47,21 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         var me = this;
 
         me.control({
-            'customer-main-toolbar': {
+            'stream-view': {
                 'switch-layout': me.switchLayout,
-                'reload-view': me.reloadView,
-                'create-or-update-stream': me.createOrUpdateStream,
-                'create-stream': me.createStream,
-                'index-search': me.indexSearch,
-                'create-filter-condition': me.createFilterCondition,
-                'reset-conditions': me.resetConditions
-            },
-            'customer-list-main-window': {
-                'switch-layout': me.switchLayout,
-                'reset-conditions': me.resetConditions,
-                'reset-progressbar': me.resetProgressbar,
                 'save-stream-details': me.saveStreamDetails,
-                'customerStream-edit-item': me.editStream,
-                'stream-selected': me.streamSelected
+                'stream-selected': me.streamSelected,
+                'change-auto-index': me.changeAutoIndex,
+                'index-search': me.indexSearch,
+                'save-edited-stream': me.saveEditedStream,
+                'save-as-new-stream': me.saveAsNewStream,
+                'refresh-stream-views': me.reloadView,
+                'check-index-state': me.checkIndexState,
+                'condition-added': me.updateSaveButtons,
+                'reset-progressbar': me.resetProgressbar
             },
-            'customer-list': {
-                'selection-changed': me.onCustomerSelectionChange
+            'customer-stream-condition-panel': {
+                'condition-removed': me.updateSaveButtons
             },
             'customer-stream-listing': {
                 'customerstream-edit-item': me.editStream
@@ -74,157 +71,192 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.callParent(arguments);
     },
 
-    onCustomerSelectionChange: function(selection) {
-        var me = this,
-            toolbar = me.getMainToolbar(),
-            deleteBtn = toolbar.deleteCustomerButton;
+    checkIndexState: function() {
+        var me = this;
+        var streamView = me.getStreamView();
 
-        deleteBtn.setDisabled(selection.length < 1);
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getNotIndexedCount}',
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+
+                if (response.total <= 0) {
+                    streamView.indexSearchButton.setIconCls('sprite-blue-document-search-result');
+                    return;
+                }
+
+                if (me.subApplication.userConfig && me.subApplication.userConfig.autoIndex) {
+                    me.indexSearch();
+                    return;
+                }
+
+                streamView.indexSearchButton.setIconCls('sprite-exclamation');
+
+                var position = streamView.indexSearchButton.getPosition();
+                position[1] = position[1] + 30;
+                position[0] = position[0] - 90;
+                streamView.indexSearchNoticeTooltip.showAt(position);
+            }
+        });
+    },
+
+    changeAutoIndex: function(checkbox, newValue) {
+        var me = this, config = me.subApplication.userConfig;
+
+        checkbox.setDisabled(true);
+        config.autoIndex = newValue;
+
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=save}',
+            params: {
+                config: Ext.JSON.encode(config),
+                name: 'customer_module'
+            },
+            callback: function() {
+                checkbox.setDisabled(false);
+            }
+        });
     },
 
     switchLayout: function (layout) {
         var me = this,
-            window = me.getMainWindow();
+            streamView = me.getStreamView();
 
         switch (layout) {
             case 'table':
-                window.cardContainer.getLayout().setActiveItem(0);
-                window.gridPanel.getStore().load();
+                streamView.cardContainer.getLayout().setActiveItem(0);
+                streamView.gridPanel.getStore().load();
                 break;
 
             case 'amount_chart':
-                window.cardContainer.getLayout().setActiveItem(1);
-                window.metaChartStore.load();
+                streamView.cardContainer.getLayout().setActiveItem(1);
+                streamView.metaChartStore.load();
                 break;
 
             case 'stream_chart':
-                window.cardContainer.getLayout().setActiveItem(2);
+                streamView.cardContainer.getLayout().setActiveItem(2);
                 me.loadStreamChart();
                 break;
         }
     },
 
+    loadStreamChart: function() {
+        var me = this,
+            streamView = me.getStreamView(),
+            streamChartContainer = streamView.streamChartContainer;
+
+        streamChartContainer.removeAll();
+
+        var store = streamView.streamListing.getStore();
+
+        Ext.create('Shopware.apps.Customer.view.chart.AmountChartFactory').createChart(store, function (chart) {
+            streamChartContainer.add(chart);
+        });
+    },
+
     reloadView: function() {
         var me = this,
-            window = me.getMainWindow();
+            streamView = me.getStreamView();
 
-        if (window.filterPanel.getForm().isValid()) {
-            window.listStore.getProxy().extraParams = window.filterPanel.getSubmitData();
-            window.listStore.load();
+        if (streamView.formPanel.getForm().isValid()) {
+            streamView.listStore.getProxy().extraParams = streamView.filterPanel.getSubmitData();
+            streamView.listStore.load();
         }
 
-        window.metaChartStore.load();
+        streamView.metaChartStore.load();
         me.loadStreamChart();
     },
 
-    createOrUpdateStream: function(callback) {
-        var me = this,
-            window = me.getMainWindow(),
-            record = window.formPanel.getForm().getRecord();
-
-        if (record) {
-            me.saveStream(record, callback);
-            return;
-        }
-        me.createStream(callback);
+    saveAsNewStream: function() {
+        this.saveStream(
+            Ext.create('Shopware.apps.Customer.model.CustomerStream', {
+                id: null,
+                name: '{s name=stream/new_stream}{/s}'
+            })
+        );
     },
 
-    createStream: function(callback) {
+    saveEditedStream: function() {
+        var streamView = this.getStreamView();
+        this.saveStream(streamView.formPanel.getForm().getRecord());
+    },
+
+    saveStream: function (record) {
         var me = this;
-        var record = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
-            id: null,
-            name: '{s name=stream/new_stream}New stream{/s}'
-        });
-        me.saveStream(record, callback);
-    },
+        var streamView = this.getStreamView();
 
-    saveStream: function (record, callback) {
-        var me = this,
-            window = me.getMainWindow();
-
-        if (!window.filterPanel.getForm().isValid()) {
+        if (!streamView.formPanel.getForm().isValid()) {
             return;
         }
 
-        var isNew = (record.get('id') === null);
-
-        window.formPanel.getForm().updateRecord(record);
+        streamView.formPanel.getForm().updateRecord(record);
 
         record.save({
             callback: function() {
-                if (isNew) {
-                    window.streamListing.getStore().insert(0, record);
-                }
                 me.preventStreamChanged = true;
-                window.streamListing.selModel.deselectAll(true);
+                streamView.streamListing.selModel.deselectAll(true);
                 me.preventStreamChanged = false;
-                window.streamListing.selModel.select([record], false, true);
-
-                if (isNew) {
-                    me.startPopulate(record);
-                } else {
-                    me.loadStream(record);
-                }
+                streamView.streamListing.selModel.select([record], false, true);
+                me.startPopulate(record);
             }
         });
     },
 
     editStream: function(grid, record) {
-        var me = this,
-            window = me.getMainWindow();
+        var streamView = this.getStreamView();
 
         var detail = Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
             record: record
         });
 
-        window.streamDetailForm.removeAll();
-        window.streamDetailForm.add(detail);
-        window.streamDetailForm.loadRecord(record);
-        window.cardContainer.getLayout().setActiveItem(3);
+        streamView.streamDetailForm.removeAll();
+        streamView.streamDetailForm.add(detail);
+        streamView.streamDetailForm.loadRecord(record);
+        streamView.cardContainer.getLayout().setActiveItem(3);
     },
 
-    streamSelected: function(selModel, selection) {
-        var me = this,
-            window = me.getMainWindow();
+    streamSelected: function(selection) {
+        var me = this;
+        var streamView = me.getStreamView();
 
         if (me.preventStreamChanged) {
             return;
         }
 
         if (selection.length <= 0) {
-            window.resetTitles();
-            me.resetConditions();
+            streamView.resetFilterPanel();
+            streamView.listStore.getProxy().extraParams = { };
+            streamView.listStore.load();
         } else {
             me.loadStream(selection[0]);
         }
+
+        Ext.defer(Ext.bind(me.updateSaveButtons, me), 100);
 
         me.loadChart();
     },
 
     loadStream: function(record) {
-        var me = this,
-            window = me.getMainWindow();
+        var streamView = this.getStreamView();
 
-        window.streamListing.setLoading(true);
+        streamView.streamListing.setLoading(true);
 
-        window.resetFilterPanel();
-        window.formPanel.loadRecord(record);
+        streamView.resetFilterPanel();
 
-        window.streamListing.setLoading(false);
-        window.listStore.getProxy().extraParams = {
+        streamView.formPanel.loadRecord(record);
+
+        streamView.streamListing.setLoading(false);
+        streamView.listStore.getProxy().extraParams = {
             conditions: record.get('conditions')
         };
 
-        me.updateTitles(record);
-
-        window.listStore.load();
+        streamView.listStore.load();
     },
 
     loadChart: function() {
-        var me = this,
-            window = me.getMainWindow(),
-            metaChartStore = window.metaChartStore,
-            record = window.formPanel.getForm().getRecord();
+        var streamView = this.getStreamView();
+        var metaChartStore = streamView.metaChartStore;
+        var record = streamView.formPanel.getForm().getRecord();
 
         metaChartStore.getProxy().extraParams = { };
 
@@ -237,68 +269,10 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         metaChartStore.load();
     },
 
-    loadStreamChart: function() {
-        var me = this,
-            window = me.getMainWindow(),
-            streamChartContainer = window.streamChartContainer;
-
-        streamChartContainer.removeAll();
-        streamChartContainer.setLoading(true);
-
-        var store = window.streamListing.getStore();
-
-        Ext.create('Shopware.apps.Customer.view.chart.AmountChartFactory').createChart(store, function (chart) {
-            streamChartContainer.add(chart);
-            streamChartContainer.setLoading(false);
-        });
-    },
-
-    updateTitles: function (stream) {
-        var me = this,
-            window = me.getMainWindow(),
-            toolbar = me.getMainToolbar(),
-            title = stream.get('name').substr(0, 20);
-
-        if (stream.get('name').length > 20) {
-            title += '...';
-        }
-
-        window.formPanel.setTitle(stream.get('name'));
-        toolbar.saveStreamButton.setText('{s name=save}Save{/s}: ' + title);
-        window.setTitle('{s name=window/customer_list_for}Customer list for{/s} ' + stream.get('name'));
-    },
-
-    startPopulate: function(record) {
-        var me = this,
-            window = me.getMainWindow(),
-            toolbar = me.getMainToolbar();
-
-        toolbar.indexingBar.value = 0;
-        window.formPanel.setDisabled(true);
-
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=loadStream}',
-            params: {
-                streamId: record.get('id')
-            },
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-                me.start([{
-                    text: '{s name=stream/indexing_customers}Indexing customers{/s}',
-                    url: '{url controller=CustomerStream action=indexStream}',
-                    params: {
-                        total: response.total,
-                        streamId: record.get('id')
-                    }
-                }]);
-            }
-        });
-    },
-
     saveStreamDetails: function() {
-        var me = this,
-            window = me.getMainWindow(),
-            streamDetailForm = window.streamDetailForm;
+        var me = this;
+        var streamView = me.getStreamView();
+        var streamDetailForm = streamView.streamDetailForm;
 
         if (!streamDetailForm.getForm().isValid()) {
             return;
@@ -309,24 +283,19 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         record.save({
             callback: function() {
                 me.switchLayout('table');
-                me.updateTitles(record);
             }
         });
     },
 
     startPartialIndexing: function() {
-        var me = this,
-            window = me.getMainWindow(),
-            toolbar = me.getMainToolbar();
+        var me = this;
 
-        toolbar.indexingBar.value = 0;
-        window.formPanel.setDisabled(true);
+        me.initProgressbar();
 
         Ext.Ajax.request({
             url: '{url controller=CustomerStream action=getPartialCount}',
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
-
                 var params = { total: response.total };
 
                 if (response.lastIndexTime) {
@@ -334,83 +303,133 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 }
 
                 me.start([{
-                    text: '{s name=window/analysing_new_customer}Analyse new customer{/s}',
                     url: '{url controller=CustomerStream action=buildSearchIndex}',
                     params: params
                 }]);
-                me.resetProgressbar();
             }
         });
     },
 
-    indexSearch: function() {
-        var me = this,
-            window = me.getMainWindow(),
-            toolbar = me.getMainToolbar();
+    startPopulate: function(record) {
+        var me = this;
 
-        toolbar.indexingBar.value = 0;
-        window.formPanel.setDisabled(true);
+        me.initProgressbar();
 
         Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=getCustomerCount}',
-            params: { },
+            url: '{url controller=CustomerStream action=loadStream}',
+            params: {
+                streamId: record.get('id')
+            },
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
 
                 me.start([{
-                    text: '{s name=stream/analysing_customers}Analysing customers{/s}',
-                    url: '{url controller=CustomerStream action=buildSearchIndex}',
+                    url: '{url controller=CustomerStream action=indexStream}',
                     params: {
-                        total: response.total
+                        total: response.total,
+                        streamId: record.get('id')
                     }
                 }]);
             }
         });
     },
 
-    createFilterCondition: function (handler) {
-        var me = this,
-            window = me.getMainWindow();
+    indexSearch: function() {
+        var me = this;
 
-        window.filterPanel.createCondition(handler);
+        me.initProgressbar();
+
+        me.getSearchIndexingParameters(function(params) {
+            me.start([{
+                url: '{url controller=CustomerStream action=buildSearchIndex}',
+                params: params
+            }]);
+        });
     },
 
-    resetConditions: function() {
-        var me = this,
-            window = me.getMainWindow();
+    getSearchIndexingParameters: function(callback) {
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getNotIndexedCount}',
+            params: { },
+            success: function(operation) {
+                var notIndexed = Ext.decode(operation.responseText);
 
-        window.resetFilterPanel();
-        window.loadListing();
+                Ext.Ajax.request({
+                    url: '{url controller=CustomerStream action=getCustomerCount}',
+                    params: {},
+                    success: function (operation) {
+                        var full = Ext.decode(operation.responseText);
+
+                        if (notIndexed.total > 0 && full.total !== notIndexed.total) {
+                            callback({ total: notIndexed.total });
+                        } else {
+                            callback({ total: full.total, full: true });
+                        }
+                    }
+                });
+            }
+        });
     },
 
     updateProgressBar: function(request, response) {
-        var me = this,
-            toolbar = me.getMainToolbar();
-        toolbar.indexingBar.updateProgress(response.progress, response.text, true);
+        this.getStreamView().indexingBar.updateProgress(response.progress, response.text, true);
+    },
+
+    initProgressbar: function() {
+        this.getStreamView().indexingBar.updateProgress(0);
+        this.getStreamView().indexingBar.show();
+
+        this.getStreamView().indexSearchButton.setDisabled(true);
+        this.getStreamView().leftContainer.setDisabled(true);
     },
 
     resetProgressbar: function () {
-        var me = this,
-            toolbar = me.getMainToolbar();
+        var me = this;
 
         Ext.Ajax.request({
             url: '{url controller=CustomerStream action=getLastFullIndexTime}',
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
                 Ext.defer(function () {
-                    toolbar.indexingBar.updateProgress(0, '{s name=window/last_analyse}Last analyse at: {/s}' + Ext.util.Format.date(response.last_index_time), true);
+                    me.getStreamView().indexingBar.updateProgress(0, '{s name=last_analyse}{/s}' + Ext.util.Format.date(response.last_index_time), true);
                 }, 1000);
             }
         });
+
+        me.getStreamView().indexSearchButton.setDisabled(false);
+        me.getStreamView().leftContainer.setDisabled(false);
+        me.checkIndexState();
     },
 
     finish: function() {
         var me = this,
-            window = me.getMainWindow();
-        window.formPanel.setDisabled(false);
-        window.loadListing();
-        me.resetProgressbar();
-    }
+            streamView = me.getStreamView();
 
+        streamView.listStore.load();
+        streamView.streamListing.getStore().load();
+        me.resetProgressbar();
+    },
+
+    updateSaveButtons: function() {
+        var streamView = this.getStreamView();
+
+        var conditions = streamView.filterPanel.getSubmitData();
+        conditions = Object.keys(Ext.JSON.decode(conditions['conditions']));
+
+        var hasCondition = conditions.length > 0;
+
+        var isNew = true;
+        if (streamView.formPanel.getForm().getRecord()) {
+            isNew = streamView.formPanel.getForm().getRecord().get('id') === null;
+        }
+
+        streamView.saveStreamButton.setDisabled(
+            !hasCondition || isNew
+        );
+
+        streamView.saveNewStreamButton.setDisabled(
+            !hasCondition
+        );
+    }
 });
 // {/block}

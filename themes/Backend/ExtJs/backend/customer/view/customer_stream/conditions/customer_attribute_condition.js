@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     },
 
     supports: function(conditionClass) {
-        return (conditionClass === 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition');
+        return (conditionClass.indexOf('Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition') >= 0);
     },
 
     create: function(callback) {
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     },
 
     _create: function(attribute) {
-        var operatorField = this.createOperatorField();
+        var operatorField = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.OperatorField');
 
         var valueField = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeValue', {
             name: 'value',
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
 
         return {
             title: this.getLabel() + ' [' + attribute + ']',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition|' + attribute,
             items: [
                 { xtype: 'hidden', name: 'field', value: attribute },
                 operatorField,
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     createOperatorField: function () {
         var me = this;
         me.operatorSelection = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: '{s name=attribute/operator}Operator:{/s}',
+            fieldLabel: '{s name=operator}{/s}',
             store: me.createOperatorStore(),
             displayField: 'name',
             valueField: 'value',
@@ -92,17 +92,17 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
         return Ext.create('Ext.data.Store', {
             fields: [ 'name', 'value' ],
             data: [
-                { name: '{s name=attribute_condition/equals}equals{/s}', value: '=' },
-                { name: '{s name=attribute_condition/not_equals}not equals{/s}', value: '!=' },
-                { name: '{s name=attribute_condition/less_than}less than{/s}', value: '<' },
-                { name: '{s name=attribute_condition/less_than_equals}less than equals{/s}', value: '<=' },
-                { name: '{s name=attribute_condition/between}between{/s}', value: 'BETWEEN' },
-                { name: '{s name=attribute_condition/greater_than}greater than{/s}', value: '>' },
-                { name: '{s name=attribute_condition/greater_than_equals}greater than equals{/s}', value: '>=' },
-                { name: '{s name=attribute_condition/in}in{/s}', value: 'IN' },
-                { name: '{s name=attribute_condition/starts_with}starts with{/s}', value: 'STARTS_WITH' },
-                { name: '{s name=attribute_condition/ends_with}ends with{/s}', value: 'ENDS_WITH' },
-                { name: '{s name=attribute_condition/like}like{/s}', value: 'CONTAINS' }
+                { name: '{s name=equals}{/s}', value: '=' },
+                { name: '{s name=not_equals}{/s}', value: '!=' },
+                { name: '{s name=less_than}{/s}', value: '<' },
+                { name: '{s name=less_than_equals}{/s}', value: '<=' },
+                { name: '{s name=between}{/s}', value: 'BETWEEN' },
+                { name: '{s name=greater_than}{/s}', value: '>' },
+                { name: '{s name=greater_than_equals}{/s}', value: '>=' },
+                { name: '{s name=in}{/s}', value: 'IN' },
+                { name: '{s name=starts_with}{/s}', value: 'STARTS_WITH' },
+                { name: '{s name=ends_with}{/s}', value: 'ENDS_WITH' },
+                { name: '{s name=like}{/s}', value: 'CONTAINS' }
             ]
         });
     }

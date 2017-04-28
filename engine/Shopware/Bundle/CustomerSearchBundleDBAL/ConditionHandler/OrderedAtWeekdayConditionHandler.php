@@ -41,8 +41,8 @@ class OrderedAtWeekdayConditionHandler implements ConditionHandlerInterface
         /** @var OrderedAtWeekdayCondition $condition */
         $wheres = [];
         foreach ($condition->getWeekdays() as $i => $id) {
-            $wheres[] = 'customer.weekdays LIKE :weekday' . $i;
-            $query->setParameter(':weekday' . $i, '%||' . $id . '||%');
+            $wheres[] = 'customer.ordered_at_weekdays LIKE :weekday' . $i;
+            $query->setParameter(':weekday' . $i, '%|' . $id . '|%');
         }
         $query->andWhere(implode(' OR ', $wheres));
     }

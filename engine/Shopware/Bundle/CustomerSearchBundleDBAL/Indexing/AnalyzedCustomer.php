@@ -26,7 +26,6 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Components\CustomerStream\CustomerOrder;
-use Shopware\Components\CustomerStream\Interests;
 
 class AnalyzedCustomer extends Customer
 {
@@ -34,11 +33,6 @@ class AnalyzedCustomer extends Customer
      * @var CustomerOrder
      */
     protected $orderInformation;
-
-    /**
-     * @var Interests[]
-     */
-    protected $interests = [];
 
     /**
      * @param Customer $customer
@@ -69,21 +63,5 @@ class AnalyzedCustomer extends Customer
     public function setOrderInformation($orderInformation)
     {
         $this->orderInformation = $orderInformation;
-    }
-
-    /**
-     * @return Interests[]
-     */
-    public function getInterests()
-    {
-        return $this->interests;
-    }
-
-    /**
-     * @param Interests[] $interests
-     */
-    public function setInterests($interests)
-    {
-        $this->interests = $interests;
     }
 }
