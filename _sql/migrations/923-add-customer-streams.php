@@ -94,7 +94,7 @@ CREATE TABLE `s_customer_search_index` (
     categories LONGTEXT NULL,
     manufacturers LONGTEXT NULL,
     interests LONGTEXT NULL,
-    index_time datetime DEFAULT NOW()
+    index_time datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
 
