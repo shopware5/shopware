@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
     registerHandlers: function() {
         return [
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWithCountryCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasCanceledOrdersCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasNewsletterRegistrationCondition'),

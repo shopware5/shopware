@@ -38,11 +38,34 @@ class AgeConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /* @var AgeCondition $condition */
-        $query->andWhere('customer.age >= :MinAgeCondition');
-        $query->andWhere('customer.age <= :MaxAgeCondition');
-//        if(isset($condition->getMinAge()))
-        $query->setParameter(':MinAgeCondition', $condition->getMinAge());
-        $query->setParameter(':MaxAgeCondition', $condition->getMaxAge());
+        /** @var AgeCondition $condition */
+        if (!$condition->getOperator()) {
+            throw new \Exception('AgeCondition class requires a defined operator!');
+        }
+
+        if (!$condition->getOperator()) {
+            throw new \Exception('AgeCondition class requires a defined value!');
+        }
+
+        switch (true) {
+            case $condition->getOperator() === AgeCondition::OPERATOR_BETWEEN:
+                $value = $condition->getValue();
+
+                if (isset($value['min'])) {
+                    $query->andWhere('customer.age >= :Min')
+                        ->setParameter(':Min', $value['min']);
+                }
+
+                if (isset($value['max'])) {
+                    $query->andWhere('customer.age <= :Max')
+                        ->setParameter(':Max', $value['max']);
+                }
+
+                break;
+            default:
+                $query->andWhere('customer.age ' . $condition->getOperator() . ' :Value');
+                $query->setParameter(':Value', $condition->getValue());
+                break;
+        }
     }
 }

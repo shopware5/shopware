@@ -28,7 +28,7 @@
  */
 
 // {namespace name=backend/customer/view/main}
-// {block name="backend/customer/view/customer_stream/conditions/has_canceled_orders_condition"}
+// {block name="backend/customer/view/customer_stream/conditions/has_newsletter_registration_condition"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasNewsletterRegistrationCondition', {
 
     getLabel: function() {

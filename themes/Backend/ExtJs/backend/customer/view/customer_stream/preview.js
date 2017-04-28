@@ -103,7 +103,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                 me.createSortingItem('{s name="average_amount"}{/s}', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\AverageAmountSorting'),
                 me.createSortingItem('{s name="average_product_amount"}{/s}', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\AverageProductAmountSorting'),
                 me.createSortingItem('{s name="count_orders"}{/s}', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\TotalOrderSorting'),
-                me.createSortingItem('{s name="last_order_time"}{/s}', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\LastOrderSorting')
+                me.createSortingItem('{s name="last_order_time"}{/s}', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\LastOrderSorting'),
+                me.createSortingItem('{s name="age"}{/s}', 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\AgeSorting')
             ]);
         });
 

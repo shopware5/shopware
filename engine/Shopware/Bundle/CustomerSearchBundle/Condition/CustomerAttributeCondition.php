@@ -24,67 +24,15 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 
-class AgeCondition implements ConditionInterface
+class CustomerAttributeCondition extends ProductAttributeCondition
 {
-    /**
-     * @var string|array
-     */
-    private $value;
-
-    /**
-     * @var string
-     */
-    private $operator;
-
-    /**
-     * @param string       $operator
-     * @param string|array $value    ['min' => 1, 'max' => 10] for between operator
-     */
-    public function __construct($operator, $value)
-    {
-        $this->value = $value;
-        $this->operator = $operator;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'AgeCondition';
-    }
-
-    /**
-     * @return string|array $value
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param string|array $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOperator()
-    {
-        return $this->operator;
-    }
-
-    /**
-     * @param string $operator
-     */
-    public function setOperator($operator)
-    {
-        $this->operator = $operator;
+        return 'CustomerAttribute_' . parent::getField();
     }
 }

@@ -87,7 +87,7 @@ class ProductAttributeCondition implements ConditionInterface
     }
 
     /**
-     * @return string
+     * @return string|array $value
      */
     public function getValue()
     {
