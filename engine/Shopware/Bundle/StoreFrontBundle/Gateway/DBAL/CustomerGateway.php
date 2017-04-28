@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerGateway
@@ -90,6 +89,7 @@ class CustomerGateway
         $query->addSelect($this->fieldHelper->getCustomerFields());
         $query->addSelect($this->fieldHelper->getCustomerGroupFields());
         $query->addSelect($this->fieldHelper->getPaymentFields());
+        $query->addSelect('campaigns_mailaddresses.id as __campaign_id');
         $query->from('s_user', 'customer');
         $query->where('customer.id IN (:ids)');
         $query->leftJoin('customer', 's_core_customergroups', 'customerGroup', 'customerGroup.groupkey = customer.customergroup');
@@ -97,6 +97,7 @@ class CustomerGateway
         $query->leftJoin('customer', 's_core_paymentmeans', 'payment', 'payment.id = customer.paymentID');
         $query->leftJoin('payment', 's_core_paymentmeans_attributes', 'paymentAttribute', 'payment.id = paymentAttribute.paymentmeanID');
         $query->leftJoin('customer', 's_user_attributes', 'customerAttribute', 'customer.id = customerAttribute.userID');
+        $query->leftJoin('customer', 's_campaigns_mailaddresses', 'campaigns_mailaddresses', 'customer.email = campaigns_mailaddresses.email');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);

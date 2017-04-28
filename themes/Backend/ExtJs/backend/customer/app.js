@@ -103,6 +103,7 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.ConditionField',
         'customer_stream.conditions.HasAddressWithCountryCondition',
         'customer_stream.conditions.HasCanceledOrdersCondition',
+        'customer_stream.conditions.HasNewsletterRegistrationCondition',
         'customer_stream.conditions.IsCustomerSinceCondition',
         'customer_stream.conditions.IsInCustomerGroupCondition',
         'customer_stream.conditions.HasOrderCountCondition',

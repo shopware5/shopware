@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerHydrator extends Hydrator
@@ -61,7 +58,6 @@ class CustomerHydrator extends Hydrator
         $customer->setAccountMode($data['__customer_accountmode']);
         $customer->setConfirmationKey($data['__customer_confirmationkey']);
         $customer->setPaymentId($data['__customer_paymentID']);
-        $customer->setNewsletter($data['__customer_newsletter']);
         $customer->setValidation($data['__customer_validation']);
         $customer->setAffiliate($data['__customer_affiliate']);
         $customer->setPaymentPreset($data['__customer_paymentpreset']);
@@ -104,6 +100,10 @@ class CustomerHydrator extends Hydrator
 
         if (isset($data['__customerAttribute_id'])) {
             $this->attributeHydrator->addAttribute($customer, $data, 'customerAttribute');
+        }
+
+        if (isset($data['__campaign_id'])) {
+            $customer->setNewsletter(1);
         }
 
         return $customer;
