@@ -24,6 +24,7 @@
 
 namespace Shopware\Components;
 
+use PDO;
 use Shopware\Components\Console\Application;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
@@ -43,6 +44,11 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      * @var ContainerInterface
      */
     protected $container;
+
+    /**
+     * @var PDO
+     */
+    private $connection;
 
     /**
      * @var string
@@ -178,6 +184,26 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     final public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Sets a pdo instance
+     *
+     * @param PDO|null $pdo
+     */
+    final public function setConnection(PDO $pdo = null)
+    {
+        $this->connection = $pdo;
+    }
+
+    /**
+     * Returns a pdo instance
+     *
+     * @return PDO
+     */
+    final public function getConnection()
+    {
+        return $this->connection;
     }
 
     /**

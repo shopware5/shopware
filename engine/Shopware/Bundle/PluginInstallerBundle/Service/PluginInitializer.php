@@ -87,6 +87,7 @@ class PluginInitializer
 
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
+            $plugin->setConnection($this->connection);
 
             if (!$plugin instanceof Plugin) {
                 throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));

@@ -276,6 +276,7 @@ class Kernel implements HttpKernelInterface
 
         foreach ($this->getPlugins() as $plugin) {
             $plugin->setContainer($this->container);
+            $plugin->setConnection($this->connection);
 
             if (!$plugin->isActive()) {
                 continue;
