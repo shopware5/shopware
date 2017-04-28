@@ -58,12 +58,52 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
             'customer.last_order_time',
             'customer.products',
         ];
-        $where = array_map(function ($field) {
-            return $field . ' LIKE :searchTerm';
-        }, $fields);
 
         /* @var SearchTermCondition $condition */
-        $query->andWhere(implode(' OR ', $where));
-        $query->setParameter(':searchTerm', '%' . $condition->getTerm() . '%');
+        $terms = $this->splitTerm($condition->getTerm());
+
+        foreach ($terms as $index => $term) {
+            $where = array_map(function ($field) use ($index) {
+                return $field . ' LIKE :searchTerm' . $index;
+            }, $fields);
+
+            $query->andWhere(implode(' OR ', $where));
+
+            $query->setParameter(':searchTerm' . $index, '%' . $term . '%');
+        }
+    }
+
+    /**
+     * Parse a string / search term into a keyword array
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    private function splitTerm($string)
+    {
+        $string = str_replace(
+            ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
+            ['Ue', 'ue', 'ae', 'Ae', 'oe', 'Oe', 'ss'],
+            $string
+        );
+
+        $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
+
+        // Remove not required chars from string
+        $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
+
+        // Parse string into array
+        $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
+
+        if (count($wordsTmp)) {
+            $words = array_unique($wordsTmp);
+        } elseif (!empty($string)) {
+            $words = [$string];
+        } else {
+            return [];
+        }
+
+        return $words;
     }
 }
