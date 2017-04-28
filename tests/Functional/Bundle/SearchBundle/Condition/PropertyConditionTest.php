@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
@@ -9,19 +31,6 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class PropertyConditionTest extends TestCase
 {
-    protected function getProduct(
-        $number,
-        ShopContext $context,
-        Category $category = null,
-        $properties = array()
-    ) {
-        $product = parent::getProduct($number, $context, $category);
-        $product = array_merge($product, $properties);
-
-        return $product;
-    }
-
-
     public function testSinglePropertyConditionWithOneValue()
     {
         $properties = $this->helper->getProperties(3, 4);
@@ -33,25 +42,25 @@ class PropertyConditionTest extends TestCase
          * Group 2:   8, 9, 10, 11
          */
 
-        $first  = $this->createPropertyCombination($properties, array(0, 4));
-        $second = $this->createPropertyCombination($properties, array(1, 5));
-        $third  = $this->createPropertyCombination($properties, array(2, 6));
-        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+        $first = $this->createPropertyCombination($properties, [0, 4]);
+        $second = $this->createPropertyCombination($properties, [1, 5]);
+        $third = $this->createPropertyCombination($properties, [2, 6]);
+        $fourth = $this->createPropertyCombination($properties, [3, 7]);
 
-        $conditions = array();
+        $conditions = [];
 
-        $conditions[] = new PropertyCondition(array(
-            $values[0]['id']
-        ));
+        $conditions[] = new PropertyCondition([
+            $values[0]['id'],
+        ]);
 
         $this->search(
-            array(
+            [
                 'first' => $first,
                 'second' => $second,
                 'third' => $third,
-                'fourth' => $fourth
-            ),
-            array('first'),
+                'fourth' => $fourth,
+            ],
+            ['first'],
             null,
             $conditions
         );
@@ -68,26 +77,26 @@ class PropertyConditionTest extends TestCase
          * Group 2:   8, 9, 10, 11
          */
 
-        $first  = $this->createPropertyCombination($properties, array(0, 4));
-        $second = $this->createPropertyCombination($properties, array(1, 5));
-        $third  = $this->createPropertyCombination($properties, array(2, 6));
-        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+        $first = $this->createPropertyCombination($properties, [0, 4]);
+        $second = $this->createPropertyCombination($properties, [1, 5]);
+        $third = $this->createPropertyCombination($properties, [2, 6]);
+        $fourth = $this->createPropertyCombination($properties, [3, 7]);
 
-        $conditions = array();
+        $conditions = [];
 
-        $conditions[] = new PropertyCondition(array(
+        $conditions[] = new PropertyCondition([
             $values[0]['id'],
-            $values[1]['id']
-        ));
+            $values[1]['id'],
+        ]);
 
         $this->search(
-            array(
+            [
                 'first' => $first,
                 'second' => $second,
                 'third' => $third,
-                'fourth' => $fourth
-            ),
-            array('first', 'second'),
+                'fourth' => $fourth,
+            ],
+            ['first', 'second'],
             null,
             $conditions
         );
@@ -104,32 +113,31 @@ class PropertyConditionTest extends TestCase
          * Group 2:   8, 9, 10, 11
          */
 
-        $first  = $this->createPropertyCombination($properties, array(0, 4));
-        $second = $this->createPropertyCombination($properties, array(1, 5));
-        $third  = $this->createPropertyCombination($properties, array(2, 6));
-        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+        $first = $this->createPropertyCombination($properties, [0, 4]);
+        $second = $this->createPropertyCombination($properties, [1, 5]);
+        $third = $this->createPropertyCombination($properties, [2, 6]);
+        $fourth = $this->createPropertyCombination($properties, [3, 7]);
 
-        $conditions = array();
+        $conditions = [];
 
-        $conditions[] = new PropertyCondition(array(
+        $conditions[] = new PropertyCondition([
             $values[0]['id'],
             $values[1]['id'],
             $values[3]['id'],
-        ));
+        ]);
 
         $this->search(
-            array(
+            [
                 'first' => $first,
                 'second' => $second,
                 'third' => $third,
-                'fourth' => $fourth
-            ),
-            array('first', 'second', 'fourth'),
+                'fourth' => $fourth,
+            ],
+            ['first', 'second', 'fourth'],
             null,
             $conditions
         );
     }
-
 
     public function testTwoPropertyConditionsWithOneValue()
     {
@@ -142,29 +150,29 @@ class PropertyConditionTest extends TestCase
          * Group 2:   8, 9, 10, 11
          */
 
-        $first  = $this->createPropertyCombination($properties, array(0, 4));
-        $second = $this->createPropertyCombination($properties, array(0, 4));
-        $third  = $this->createPropertyCombination($properties, array(2, 6));
-        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+        $first = $this->createPropertyCombination($properties, [0, 4]);
+        $second = $this->createPropertyCombination($properties, [0, 4]);
+        $third = $this->createPropertyCombination($properties, [2, 6]);
+        $fourth = $this->createPropertyCombination($properties, [3, 7]);
 
-        $conditions = array();
+        $conditions = [];
 
-        $conditions[] = new PropertyCondition(array(
-            $values[0]['id']
-        ));
+        $conditions[] = new PropertyCondition([
+            $values[0]['id'],
+        ]);
 
-        $conditions[] = new PropertyCondition(array(
-            $values[4]['id']
-        ));
+        $conditions[] = new PropertyCondition([
+            $values[4]['id'],
+        ]);
 
         $this->search(
-            array(
+            [
                 'first' => $first,
                 'second' => $second,
                 'third' => $third,
-                'fourth' => $fourth
-            ),
-            array('first', 'second'),
+                'fourth' => $fourth,
+            ],
+            ['first', 'second'],
             null,
             $conditions
         );
@@ -181,36 +189,35 @@ class PropertyConditionTest extends TestCase
          * Group 2:   8, 9, 10, 11
          */
 
-        $first  = $this->createPropertyCombination($properties, array(0, 4));
-        $second = $this->createPropertyCombination($properties, array(1, 5));
-        $third  = $this->createPropertyCombination($properties, array(1, 6));
-        $fourth = $this->createPropertyCombination($properties, array(3, 5));
+        $first = $this->createPropertyCombination($properties, [0, 4]);
+        $second = $this->createPropertyCombination($properties, [1, 5]);
+        $third = $this->createPropertyCombination($properties, [1, 6]);
+        $fourth = $this->createPropertyCombination($properties, [3, 5]);
 
-        $conditions = array();
+        $conditions = [];
 
-        $conditions[] = new PropertyCondition(array(
+        $conditions[] = new PropertyCondition([
             $values[0]['id'],
-            $values[1]['id']
-        ));
+            $values[1]['id'],
+        ]);
 
-        $conditions[] = new PropertyCondition(array(
+        $conditions[] = new PropertyCondition([
             $values[4]['id'],
             $values[5]['id'],
-        ));
+        ]);
 
         $this->search(
-            array(
+            [
                 'first' => $first,
                 'second' => $second,
                 'third' => $third,
-                'fourth' => $fourth
-            ),
-            array('first', 'second'),
+                'fourth' => $fourth,
+            ],
+            ['first', 'second'],
             null,
             $conditions
         );
     }
-
 
     public function testTwoPropertyConditionsWithThreeValues()
     {
@@ -223,36 +230,48 @@ class PropertyConditionTest extends TestCase
          * Group 2:   8, 9, 10, 11
          */
 
-        $first  = $this->createPropertyCombination($properties, array(0, 4));
-        $second = $this->createPropertyCombination($properties, array(1, 5));
-        $third  = $this->createPropertyCombination($properties, array(2, 6));
-        $fourth = $this->createPropertyCombination($properties, array(3, 5));
+        $first = $this->createPropertyCombination($properties, [0, 4]);
+        $second = $this->createPropertyCombination($properties, [1, 5]);
+        $third = $this->createPropertyCombination($properties, [2, 6]);
+        $fourth = $this->createPropertyCombination($properties, [3, 5]);
 
-        $conditions = array();
+        $conditions = [];
 
-        $conditions[] = new PropertyCondition(array(
+        $conditions[] = new PropertyCondition([
             $values[0]['id'],
             $values[1]['id'],
-            $values[2]['id']
-        ));
+            $values[2]['id'],
+        ]);
 
-        $conditions[] = new PropertyCondition(array(
+        $conditions[] = new PropertyCondition([
             $values[4]['id'],
             $values[5]['id'],
-            $values[6]['id']
-        ));
+            $values[6]['id'],
+        ]);
 
         $this->search(
-            array(
+            [
                 'first' => $first,
                 'second' => $second,
                 'third' => $third,
-                'fourth' => $fourth
-            ),
-            array('first', 'second', 'third'),
+                'fourth' => $fourth,
+            ],
+            ['first', 'second', 'third'],
             null,
             $conditions
         );
+    }
+
+    protected function getProduct(
+        $number,
+        ShopContext $context,
+        Category $category = null,
+        $properties = []
+    ) {
+        $product = parent::getProduct($number, $context, $category);
+        $product = array_merge($product, $properties);
+
+        return $product;
     }
 
     private function createPropertyCombination($properties, $indexes)
@@ -260,13 +279,14 @@ class PropertyConditionTest extends TestCase
         $combination = $properties;
         unset($combination['all']);
 
-        $values = array();
+        $values = [];
         foreach ($properties['propertyValues'] as $index => $value) {
             if (in_array($index, $indexes)) {
                 $values[] = $value;
             }
         }
         $combination['propertyValues'] = $values;
+
         return $combination;
     }
 }

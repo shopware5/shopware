@@ -28,6 +28,7 @@ use Shopware\Recovery\Common\HttpClient\Client;
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StoreApi
@@ -48,13 +49,14 @@ class StoreApi
      */
     public function __construct(Client $client, $baseUrl)
     {
-        $this->client  = $client;
+        $this->client = $client;
         $this->baseUrl = $baseUrl;
     }
 
     /**
-     * @param  string[] $names
-     * @param  int      $version
+     * @param string[] $names
+     * @param int      $version
+     *
      * @return array
      */
     public function getProductsByNamesAndVersion(array $names, $version)
@@ -66,17 +68,18 @@ class StoreApi
         $requestPayload = [
             'criterion' => [
                 'version' => [
-                    $version
+                    $version,
                 ],
-                'pluginName' => $names
-            ]
+                'pluginName' => $names,
+            ],
         ];
 
         return $this->doRequest($requestPayload);
     }
 
     /**
-     * @param  string[] $names
+     * @param string[] $names
+     *
      * @return array
      */
     public function getProductsByNames(array $names)
@@ -87,29 +90,30 @@ class StoreApi
 
         $requestPayload = [
             'criterion' => [
-                'pluginName' => $names
-            ]
+                'pluginName' => $names,
+            ],
         ];
 
         return $this->doRequest($requestPayload);
     }
 
     /**
-     * @param  array $requestPayload
+     * @param array $requestPayload
+     *
      * @return array
      */
     private function doRequest($requestPayload)
     {
         $queryParams = [
             'method' => 'call',
-            'arg0'   => 'GET',
-            'arg1'   => 'product',
-            'arg2'   => json_encode($requestPayload)
+            'arg0' => 'GET',
+            'arg1' => 'product',
+            'arg2' => json_encode($requestPayload),
         ];
 
         $queryParams = http_build_query($queryParams, null, '&');
 
-        $url = $this->baseUrl . "?" . $queryParams;
+        $url = $this->baseUrl . '?' . $queryParams;
 
         $response = $this->client->post($url);
 

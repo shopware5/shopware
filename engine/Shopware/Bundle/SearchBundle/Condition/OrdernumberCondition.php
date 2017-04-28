@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Condition
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class OrdernumberCondition implements ConditionInterface
@@ -39,19 +39,19 @@ class OrdernumberCondition implements ConditionInterface
     private $ordernumbers;
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'ordernumber';
-    }
-
-    /**
      * @param string[] $ordernumbers
      */
     public function __construct(array $ordernumbers)
     {
         $this->ordernumbers = $ordernumbers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'ordernumber';
     }
 
     /**

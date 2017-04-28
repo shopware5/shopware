@@ -46,14 +46,14 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
 
         $form = $this->Form();
         /** @var \Shopware\Models\Config\Form $parent */
-        $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
+        $parent = $this->Forms()->findOneBy(['name' => 'Core']);
         $form->setParent($parent);
 
-        $form->setElement('boolean', 'sql_protection', array('label' => 'SQL-Injection-Schutz aktivieren', 'value' => true));
-        $form->setElement('boolean', 'xss_protection', array('label' => 'XSS-Schutz aktivieren', 'value' => true));
-        $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true));
-        $form->setElement('boolean', 'strip_tags', array('label' => 'Global strip_tags verwenden', 'value' => true));
-        $form->setElement('textarea', 'own_filter', array('label' => 'Eigener Filter', 'value' => null));
+        $form->setElement('boolean', 'sql_protection', ['label' => 'SQL-Injection-Schutz aktivieren', 'value' => true]);
+        $form->setElement('boolean', 'xss_protection', ['label' => 'XSS-Schutz aktivieren', 'value' => true]);
+        $form->setElement('boolean', 'rfi_protection', ['label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true]);
+        $form->setElement('boolean', 'strip_tags', ['label' => 'Global strip_tags verwenden', 'value' => true]);
+        $form->setElement('textarea', 'own_filter', ['label' => 'Eigener Filter', 'value' => null]);
 
         return true;
     }
@@ -76,7 +76,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
 
         $stripTagsConf = $config->strip_tags;
 
-        $intVars = array('sCategory', 'sContent', 'sCustom');
+        $intVars = ['sCategory', 'sContent', 'sCustom'];
         foreach ($intVars as $parameter) {
             if (!empty($_GET[$parameter])) {
                 $_GET[$parameter] = (int) $_GET[$parameter];
@@ -86,8 +86,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             }
         }
 
-
-        $regex = array();
+        $regex = [];
         if (!empty($config->sql_protection)) {
             $regex[] = $this->sqlRegex;
         }
@@ -108,9 +107,9 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         $regex = '#' . implode('|', $regex) . '#msi';
 
         $userParams = $request->getUserParams();
-        $process = array(
-            &$_GET, &$_POST, &$_COOKIE, &$_REQUEST, &$_SERVER, &$userParams
-        );
+        $process = [
+            &$_GET, &$_POST, &$_COOKIE, &$_REQUEST, &$_SERVER, &$userParams,
+        ];
 
         $whiteList = [
             'frontend/account/login' => [
@@ -169,7 +168,8 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      *
      * @param string $value
      * @param string $regex
-     * @param bool $stripTags
+     * @param bool   $stripTags
+     *
      * @return string
      */
     public static function filterValue($value, $regex, $stripTags = true)
@@ -182,6 +182,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
                 $value = null;
             }
         }
+
         return $value;
     }
 
@@ -192,10 +193,10 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => true,
-            'update' => true
-        );
+            'update' => true,
+        ];
     }
 }

@@ -33,7 +33,7 @@ use Slim\Slim;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Update\Controller
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RequirementsController
@@ -65,15 +65,15 @@ class RequirementsController
      */
     public function __construct(Request $request, Response $response, Container $container, Slim $app)
     {
-        $this->request   = $request;
-        $this->response  = $response;
+        $this->request = $request;
+        $this->response = $response;
         $this->container = $container;
-        $this->app       = $app;
+        $this->app = $app;
     }
 
     public function checkRequirements()
     {
-        $paths = Utils::getPaths(SW_PATH . "/engine/Shopware/Components/Check/Data/Path.xml");
+        $paths = Utils::getPaths(SW_PATH . '/engine/Shopware/Components/Check/Data/Path.xml');
 
         clearstatcache();
         $systemCheckPathResults = Utils::checkPaths($paths, SW_PATH);
@@ -97,8 +97,8 @@ class RequirementsController
         }
 
         $directoriesToDelete = [
-            'engine/Library/Mpdf/tmp'          => false,
-            'engine/Library/Mpdf/ttfontdata'   => false,
+            'engine/Library/Mpdf/tmp' => false,
+            'engine/Library/Mpdf/ttfontdata' => false,
         ];
 
         CommonUtils::clearOpcodeCache();
@@ -119,21 +119,21 @@ class RequirementsController
             }
         }
 
-        if (!$hasErrors && $this->app->request()->get("force") !== "1") {
+        if (!$hasErrors && $this->app->request()->get('force') !== '1') {
             // No errors, skip page except if force parameter is set
-            $this->app->redirect($this->app->urlFor("dbmigration"));
+            $this->app->redirect($this->app->urlFor('dbmigration'));
         }
 
         $isSkippableCheck = $this->app->config('skippable.check');
-        if ($isSkippableCheck && $this->app->request()->get("force") !== "1") {
+        if ($isSkippableCheck && $this->app->request()->get('force') !== '1') {
             // No errors, skip page except if force parameter is set
-            $this->app->redirect($this->app->urlFor("dbmigration"));
+            $this->app->redirect($this->app->urlFor('dbmigration'));
         }
 
         $this->app->render('checks.php', [
             'systemCheckResultsWritePermissions' => $systemCheckPathResults,
-            'filesToDelete'                      => $results,
-            'error'                              => $hasErrors,
+            'filesToDelete' => $results,
+            'error' => $hasErrors,
         ]);
     }
 }

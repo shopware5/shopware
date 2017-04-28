@@ -41,6 +41,7 @@ class Shopware_Controllers_Frontend_Media extends Enlight_Controller_Action
 
         if (!$mediaService->has($requestedImage)) {
             $this->Response()->setHttpResponseCode(404);
+
             return;
         }
 

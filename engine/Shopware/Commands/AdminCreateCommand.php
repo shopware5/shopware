@@ -27,7 +27,6 @@ namespace Shopware\Commands;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\User;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,7 +34,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @category  Shopware
- * @package   Shopware\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AdminCreateCommand extends ShopwareCommand
@@ -47,8 +46,8 @@ class AdminCreateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:admin:create')
-            ->setDescription("Create a new administrator user")
-            ->setHelp("The <info>sw:admin:create</info> command create a new administration user.")
+            ->setDescription('Create a new administrator user')
+            ->setHelp('The <info>sw:admin:create</info> command create a new administration user.')
             ->addOption(
                 'email',
                 null,
@@ -69,7 +68,7 @@ class AdminCreateCommand extends ShopwareCommand
             )
 
             ->addOption(
-                "locale",
+                'locale',
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Locale (default: en_GB)',
@@ -97,22 +96,6 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param string $field
-     * @param string $label
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    private function fillOption($field, $label, InputInterface $input, OutputInterface $output)
-    {
-        $io = new SymfonyStyle($input, $output);
-
-        $input->setOption(
-            $field,
-            $io->ask($label, $input->getOption($field))
-        );
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -127,12 +110,28 @@ class AdminCreateCommand extends ShopwareCommand
         $user->setEmail($input->getOption('email'));
         $user->setUsername($input->getOption('username'));
         $user->setName($input->getOption('name'));
-        $user->setLockedUntil(new \DateTime("2010-01-01 00:00:00"));
+        $user->setLockedUntil(new \DateTime('2010-01-01 00:00:00'));
         $this->setPassword($user, $input->getOption('password'));
 
         $this->persistUser($user);
 
         $io->success(sprintf('Adminuser "%s" was successfully created.', $user->getUsername()));
+    }
+
+    /**
+     * @param string          $field
+     * @param string          $label
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     */
+    private function fillOption($field, $label, InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+
+        $input->setOption(
+            $field,
+            $io->ask($label, $input->getOption($field))
+        );
     }
 
     /**
@@ -151,14 +150,15 @@ class AdminCreateCommand extends ShopwareCommand
 
     /**
      * @param string $locale
+     *
      * @return int
      */
     private function getLocaleIdFromLocale($locale)
     {
-        $locales = array(
+        $locales = [
             'de_de' => 1,
             'en_gb' => 2,
-        );
+        ];
 
         $locale = strtolower($locale);
 
@@ -167,13 +167,13 @@ class AdminCreateCommand extends ShopwareCommand
         }
 
         throw new \RuntimeException(sprintf(
-            "Backend Locale not supported (%s)",
+            'Backend Locale not supported (%s)',
             $locale
         ));
     }
 
     /**
-     * @param User $user
+     * @param User   $user
      * @param string $plainPassword
      */
     private function setPassword(User $user, $plainPassword)
@@ -189,6 +189,7 @@ class AdminCreateCommand extends ShopwareCommand
 
     /**
      * @param User $user
+     *
      * @throws \Exception
      */
     private function persistUser(User $user)

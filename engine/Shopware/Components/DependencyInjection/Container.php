@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Container extends BaseContainer
@@ -41,6 +41,7 @@ class Container extends BaseContainer
 
     /**
      * @param \Shopware $application
+     *
      * @return Container
      */
     public function setApplication(\Shopware $application)
@@ -55,8 +56,9 @@ class Container extends BaseContainer
      * The given name will be used as identifier.
      *
      * @param string $name
-     * @param mixed $resource
+     * @param mixed  $resource
      * @param string $scope
+     *
      * @return Container
      */
     public function set($name, $resource, $scope = 'container')
@@ -66,10 +68,10 @@ class Container extends BaseContainer
         parent::set($name, $resource);
 
         parent::get('events')->notify(
-            'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
-                'subject'  => $this,
-                'resource' => $resource
-            )
+            'Enlight_Bootstrap_AfterRegisterResource_' . $name, [
+                'subject' => $this,
+                'resource' => $resource,
+            ]
         );
 
         return $this;
@@ -78,7 +80,9 @@ class Container extends BaseContainer
     /**
      * Checks if the given resource name is already registered. If not the resource is loaded.
      *t
+     *
      * @param string $name
+     *
      * @return bool
      */
     public function has($name)
@@ -93,6 +97,7 @@ class Container extends BaseContainer
      * Unlike as the hasResource method is, if the resource does not exist the resource will not even loaded.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function initialized($name)
@@ -104,6 +109,7 @@ class Container extends BaseContainer
 
     /**
      * @param $id
+     *
      * @return string
      */
     public function getNormalizedId($id)
@@ -123,9 +129,11 @@ class Container extends BaseContainer
      * set and an \Exception is thrown.
      *
      * @param string $name
-     * @param int $invalidBehavior
-     * @return mixed
+     * @param int    $invalidBehavior
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function get($name, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
@@ -142,8 +150,10 @@ class Container extends BaseContainer
      * Loads the given resource.
      *
      * @param string $name
+     *
      * @throws \Exception
      * @throws \Enlight_Exception
+     *
      * @return bool
      */
     public function load($name)
@@ -158,10 +168,35 @@ class Container extends BaseContainer
     }
 
     /**
-     * @param string $id already normalized
-     * @param int $invalidBehavior
-     * @return mixed
+     * If the given resource is set, the resource and the resource status are removed from the
+     * list properties.
+     *
+     * @param string $name
+     *
+     * @return Container
+     */
+    public function reset($name = null)
+    {
+        if ($name === null) {
+            parent::reset();
+
+            return $this;
+        }
+
+        $name = $this->getNormalizedId($name);
+
+        parent::set($name, null);
+
+        return $this;
+    }
+
+    /**
+     * @param string $id              already normalized
+     * @param int    $invalidBehavior
+     *
      * @throws ServiceCircularReferenceException
+     *
+     * @return mixed
      */
     private function doLoad($id, $invalidBehavior = self::NULL_ON_INVALID_REFERENCE)
     {
@@ -170,7 +205,7 @@ class Container extends BaseContainer
         /** @var \Enlight_Event_EventArgs|null $event */
         $event = $eventManager->notifyUntil(
             'Enlight_Bootstrap_InitResource_' . $id,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         $circularReference = false;
@@ -187,32 +222,11 @@ class Container extends BaseContainer
         } finally {
             if ($circularReference === false) {
                 $eventManager->notify(
-                    'Enlight_Bootstrap_AfterInitResource_' . $id, array('subject' => $this)
+                    'Enlight_Bootstrap_AfterInitResource_' . $id, ['subject' => $this]
                 );
             }
         }
 
         return $this->services[$id];
-    }
-
-    /**
-     * If the given resource is set, the resource and the resource status are removed from the
-     * list properties.
-     *
-     * @param string $name
-     * @return Container
-     */
-    public function reset($name = null)
-    {
-        if ($name === null) {
-            parent::reset();
-            return $this;
-        }
-
-        $name = $this->getNormalizedId($name);
-
-        parent::set($name, null);
-
-        return $this;
     }
 }

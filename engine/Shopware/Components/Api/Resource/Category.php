@@ -32,7 +32,7 @@ use Shopware\Models\Media\Media as MediaModel;
  * Category API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Category extends Resource
@@ -45,12 +45,13 @@ class Category extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Category\Category');
     }
 
-
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Category\Category
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Category\Category
      */
     public function getOne($id)
     {
@@ -79,13 +80,14 @@ class Category extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -100,14 +102,16 @@ class Category extends Resource
         //returns the category data
         $categories = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $categories, 'total' => $totalResult);
+        return ['data' => $categories, 'total' => $totalResult];
     }
 
     /**
      * @param array $params
-     * @return \Shopware\Models\Category\Category
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
+     *
+     * @return \Shopware\Models\Category\Category
      */
     public function create(array $params)
     {
@@ -138,13 +142,15 @@ class Category extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Category\Category
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return \Shopware\Models\Category\Category
      */
     public function update($id, array $params)
     {
@@ -177,9 +183,11 @@ class Category extends Resource
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Category\Category
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Category\Category
      */
     public function delete($id)
     {
@@ -202,48 +210,16 @@ class Category extends Resource
         return $category;
     }
 
-    private function prepareCategoryData($params)
-    {
-        if (!isset($params['name'])) {
-            throw new ApiException\CustomValidationException("A name is required");
-        }
-
-        // in order to have a consistent interface within the REST Api, one might want
-        // to set the parent category by using 'parentId' instead of 'parent'
-        if (isset($params['parentId']) && !isset($params['parent'])) {
-            $params['parent'] = $params['parentId'];
-        }
-
-        if (!empty($params['parent'])) {
-            $params['parent'] = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->find($params['parent']);
-            if (!$params['parent']) {
-                throw new ApiException\CustomValidationException(sprintf("Parent by id %s not found", $params['parent']));
-            }
-        } else {
-            unset($params['parent']);
-        }
-
-        if (!empty($params['attribute'])) {
-            foreach ($params['attribute'] as $key => $value) {
-                if (is_numeric($key)) {
-                    $params['attribute']['attribute'.$key] = $value;
-                    unset($params[$key]);
-                }
-            }
-        }
-
-        return $params;
-    }
-
-
     /**
      * Find a category by a given human readable path.
      * This will step through all categories from top to bottom and return the matching category.
      *
-     * @param string $path              Path of the category to search separated by pipe. Eg. Deutsch|Foo|Bar
-     * @param boolean $create           Should categories be created?
-     * @return null|Category
+     * @param string $path   Path of the category to search separated by pipe. Eg. Deutsch|Foo|Bar
+     * @param bool   $create Should categories be created?
+     *
      * @throws \RuntimeException
+     *
+     * @return null|Category
      */
     public function findCategoryByPath($path, $create = false)
     {
@@ -262,7 +238,7 @@ class Category extends Resource
                 break;
             }
 
-            $categoryModel = $this->getRepository()->findOneBy(array('name' => $categoryName, 'parentId' => $parentId));
+            $categoryModel = $this->getRepository()->findOneBy(['name' => $categoryName, 'parentId' => $parentId]);
             if (!$categoryModel) {
                 if (!$create) {
                     return null;
@@ -293,11 +269,46 @@ class Category extends Resource
         return $categoryModel;
     }
 
+    private function prepareCategoryData($params)
+    {
+        if (!isset($params['name'])) {
+            throw new ApiException\CustomValidationException('A name is required');
+        }
+
+        // in order to have a consistent interface within the REST Api, one might want
+        // to set the parent category by using 'parentId' instead of 'parent'
+        if (isset($params['parentId']) && !isset($params['parent'])) {
+            $params['parent'] = $params['parentId'];
+        }
+
+        if (!empty($params['parent'])) {
+            $params['parent'] = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->find($params['parent']);
+            if (!$params['parent']) {
+                throw new ApiException\CustomValidationException(sprintf('Parent by id %s not found', $params['parent']));
+            }
+        } else {
+            unset($params['parent']);
+        }
+
+        if (!empty($params['attribute'])) {
+            foreach ($params['attribute'] as $key => $value) {
+                if (is_numeric($key)) {
+                    $params['attribute']['attribute' . $key] = $value;
+                    unset($params[$key]);
+                }
+            }
+        }
+
+        return $params;
+    }
+
     /**
-     * @param array $data
+     * @param array         $data
      * @param CategoryModel $categoryModel
-     * @return array
+     *
      * @throws ApiException\CustomValidationException
+     *
+     * @return array
      */
     private function prepareMediaData(array $data, CategoryModel $categoryModel)
     {
@@ -308,7 +319,7 @@ class Category extends Resource
         $media = null;
 
         if (isset($data['media']['link'])) {
-            /**@var $media MediaModel */
+            /** @var $media MediaModel */
             $media = $this->getResource('media')->internalCreateMediaByFileLink(
                 $data['media']['link']
             );
@@ -319,7 +330,7 @@ class Category extends Resource
             );
 
             if (!($media instanceof MediaModel)) {
-                throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $data['media']['mediaId']));
+                throw new ApiException\CustomValidationException(sprintf('Media by mediaId %s not found', $data['media']['mediaId']));
             }
         }
 

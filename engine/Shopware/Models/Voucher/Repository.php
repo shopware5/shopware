@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Voucher;
 
-use Shopware\Components\Model\ModelRepository;
 use Doctrine\ORM\Query;
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the Voucher model (Shopware\Models\Voucher\Voucher).
@@ -39,11 +39,13 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of voucher
      * codes for the passed voucher id.
+     *
      * @param null $voucherId
      * @param null $filter
      * @param null $order
      * @param null $offset
      * @param null $limit
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getVoucherCodeListQuery($voucherId = null, $filter = null, $order = null, $offset = null, $limit = null)
@@ -53,32 +55,35 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getVoucherCodeListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $voucherId
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVoucherCodeListQueryBuilder($voucherId = null, $filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
-            "codes.id as id",
-            "codes.customerId as customerId",
-            "codes.code as code",
-            "codes.cashed as cashed",
-            "customer.firstname as firstName",
-            "customer.lastname as lastName",
-            "customer.number as number"
-        ));
+        $builder->select([
+            'codes.id as id',
+            'codes.customerId as customerId',
+            'codes.code as code',
+            'codes.cashed as cashed',
+            'customer.firstname as firstName',
+            'customer.lastname as lastName',
+            'customer.number as number',
+        ]);
         $builder->from('Shopware\Models\Voucher\Code', 'codes')
-                ->leftJoin("codes.customer", "customer")
-                ->where("codes.voucherId = ?1")
+                ->leftJoin('codes.customer', 'customer')
+                ->where('codes.voucherId = ?1')
                 ->setParameter(1, $voucherId);
         //search for values
         if (!empty($filter)) {
@@ -91,52 +96,64 @@ class Repository extends ModelRepository
         if (!empty($order)) {
             $builder->addOrderBy($order);
         }
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select
      * the count of voucher codes for the passed voucher id.
+     *
      * @param $voucherId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getVoucherCodeCountQuery($voucherId)
     {
         $builder = $this->getVoucherCodeCountQueryBuilder($voucherId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getVoucherCodeCountQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $voucherId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVoucherCodeCountQueryBuilder($voucherId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array($builder->expr()->count("code.id")."as countCode"))
+        $builder->select([$builder->expr()->count('code.id') . 'as countCode'])
                 ->from('Shopware\Models\Voucher\Code', 'code')
-                ->where("code.voucherId = ?1")
+                ->where('code.voucherId = ?1')
                 ->setParameter(1, $voucherId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @param $voucherId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getVoucherCodeDeleteByVoucherIdQuery($voucherId)
     {
         $builder = $this->getVoucherCodeDeleteByVoucherIdQueryBuilder($voucherId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getVoucherCodeDeleteByVoucherIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $voucherId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVoucherCodeDeleteByVoucherIdQueryBuilder($voucherId)
@@ -146,102 +163,121 @@ class Repository extends ModelRepository
                 ->where('code.voucherId = ?1')
                 ->setMaxResults(10000)
                 ->setParameter(1, $voucherId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select all data for the passed
      * voucher id.
+     *
      * @param $voucherId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getVoucherDetailQuery($voucherId)
     {
         $builder = $this->getVoucherDetailQueryBuilder($voucherId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getVoucherDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $voucherId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVoucherDetailQueryBuilder($voucherId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('vouchers', 'attribute'))
+        $builder->select(['vouchers', 'attribute'])
                 ->from('Shopware\Models\Voucher\Voucher', 'vouchers')
                 ->leftJoin('vouchers.attribute', 'attribute')
                 ->where('vouchers.id = ?1')
                 ->setParameter(1, $voucherId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which search for vouchers
      * with the passed voucher code. The passed voucher id will be excluded.
+     *
      * @param      $code
      * @param null $voucherId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getValidateVoucherCodeQuery($code, $voucherId = null)
     {
         $builder = $this->getValidateVoucherCodeQueryBuilder($code, $voucherId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getValidateVoucherCodeQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param      $code
      * @param null $voucherId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getValidateVoucherCodeQueryBuilder($code, $voucherId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('voucher'))
+        $builder->select(['voucher'])
                 ->from($this->getEntityName(), 'voucher')
-                ->where("voucher.voucherCode = ?1")
+                ->where('voucher.voucherCode = ?1')
                 ->setParameter(1, $code);
         if (!empty($voucherId)) {
-            $builder->andWhere($builder->expr()->neq("voucher.id", "?2"))
+            $builder->andWhere($builder->expr()->neq('voucher.id', '?2'))
                     ->setParameter(2, $voucherId);
         }
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which search vouchers
      * with the passed code. The passed voucher id will be excluded.
+     *
      * @param      $code
      * @param null $voucherId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getValidateOrderCodeQuery($code, $voucherId = null)
     {
         $builder = $this->getValidateOrderCodeQueryBuilder($code, $voucherId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getValidateVoucherCodeQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param      $code
      * @param null $voucherId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getValidateOrderCodeQueryBuilder($code, $voucherId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('voucher'))
+        $builder->select(['voucher'])
                 ->from($this->getEntityName(), 'voucher')
-                ->where("voucher.orderCode = ?1")
+                ->where('voucher.orderCode = ?1')
                 ->setParameter(1, $code);
         if (!empty($voucherId)) {
-            $builder->andWhere($builder->expr()->neq("voucher.id", $voucherId));
+            $builder->andWhere($builder->expr()->neq('voucher.id', $voucherId));
         }
+
         return $builder;
     }
 }

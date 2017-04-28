@@ -43,7 +43,7 @@ class OptimizerService implements OptimizerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function optimize($filepath)
     {
@@ -58,7 +58,7 @@ class OptimizerService implements OptimizerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOptimizers()
     {
@@ -66,17 +66,7 @@ class OptimizerService implements OptimizerServiceInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    private function getMimeTypeByFile($filepath)
-    {
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
-
-        return $finfo->file($filepath);
-    }
-
-    /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOptimizerByMimeType($mime)
     {
@@ -87,5 +77,15 @@ class OptimizerService implements OptimizerServiceInterface
         }
 
         throw new OptimizerNotFoundException(sprintf('Optimizer for mime-type "%s" not found.', $mime));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getMimeTypeByFile($filepath)
+    {
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+
+        return $finfo->file($filepath);
     }
 }

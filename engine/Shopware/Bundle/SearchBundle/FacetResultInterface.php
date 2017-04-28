@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface FacetResultInterface
@@ -37,7 +37,7 @@ interface FacetResultInterface
     public function getFacetName();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive();
 

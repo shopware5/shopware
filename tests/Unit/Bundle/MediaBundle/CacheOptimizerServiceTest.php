@@ -42,7 +42,7 @@ class CacheOptimizerServiceTest extends TestCase
     {
         $this->optimizerService = new CacheOptimizerService(
             new OptimizerService([
-                new TestPngOptimizer()
+                new TestPngOptimizer(),
             ])
         );
     }
@@ -114,7 +114,8 @@ class TestPngOptimizer implements OptimizerInterface
      */
     public function isRunnable()
     {
-        $this->callCount++;
+        ++$this->callCount;
+
         return true;
     }
 }

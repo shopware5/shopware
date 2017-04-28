@@ -29,7 +29,7 @@ use SeekableIterator;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Common\Archive
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Adapter implements SeekableIterator, Countable
@@ -59,9 +59,6 @@ abstract class Adapter implements SeekableIterator, Countable
         return $this->count;
     }
 
-    /**
-     *
-     */
     public function rewind()
     {
         $this->position = 0;
@@ -75,9 +72,6 @@ abstract class Adapter implements SeekableIterator, Countable
         return $this->position;
     }
 
-    /**
-     *
-     */
     public function next()
     {
         ++$this->position;

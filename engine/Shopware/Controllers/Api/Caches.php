@@ -20,12 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Api
- * @version    $Id$
- * @author     Benjamin Cremer
  */
 
 class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
@@ -99,6 +93,6 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
 
         $this->resource->delete($id);
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

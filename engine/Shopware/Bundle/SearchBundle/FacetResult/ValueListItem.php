@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\FacetResult
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ValueListItem extends Extendable
@@ -45,14 +45,14 @@ class ValueListItem extends Extendable
     private $label;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $active;
 
     /**
-     * @param int|string $id
-     * @param string $label
-     * @param boolean $active
+     * @param int|string  $id
+     * @param string      $label
+     * @param bool        $active
      * @param Attribute[] $attributes
      */
     public function __construct($id, $label, $active, $attributes = [])
@@ -80,7 +80,7 @@ class ValueListItem extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {

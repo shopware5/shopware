@@ -1,26 +1,49 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace  Shopware\Tests\Mink\Page;
 
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\ArticleBox;
 use Shopware\Tests\Mink\Element\FilterGroup;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
 
 class Listing extends Page implements HelperSelectorInterface
 {
     /**
-     * @var string $basePath
+     * @var string
      */
     protected $basePath = '/listing/index/sCategory/{sCategory}';
 
     /**
-     * @var string $path
+     * @var string
      */
     protected $path = '';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -30,24 +53,25 @@ class Listing extends Page implements HelperSelectorInterface
             'active' => '.is--active',
             'filterActiveProperties' => '.filter--active:not([data-filter-param=reset])',
             'filterShowResults' => 'div.filter--container > form > div.filter--actions > button[type=submit]',
-            'listingBox' => 'div.listing--container'
+            'listingBox' => 'div.listing--container',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
         return [
-            'moreProducts' => ['de' => 'Weitere Artikel in dieser Kategorie', 'en' => 'More articles in this category']
+            'moreProducts' => ['de' => 'Weitere Artikel in dieser Kategorie', 'en' => 'More articles in this category'],
         ];
     }
 
     /**
      * Opens the listing page
+     *
      * @param array $params
-     * @param bool $autoPage
+     * @param bool  $autoPage
      */
     public function openListing(array $params, $autoPage = true)
     {
@@ -66,6 +90,7 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     *
      * @throws \Exception
      */
     public function verifyPage()
@@ -96,8 +121,10 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Sets the article filter
+     *
      * @param FilterGroup $filterGroups
-     * @param array $properties
+     * @param array       $properties
+     *
      * @throws \Exception
      */
     public function filter(FilterGroup $filterGroups, array $properties)
@@ -106,6 +133,73 @@ class Listing extends Page implements HelperSelectorInterface
         $this->resetFilters();
         $this->setFilters($filterGroups, $properties);
         $this->pressShowResults();
+    }
+
+    /**
+     * Checks the view method of the listing. Only $view has to be active
+     *
+     * @param string $view
+     */
+    public function checkView($view)
+    {
+        $elements = array_filter(Helper::findElements($this, ['viewTable', 'viewList'], false));
+
+        if (key($elements) !== $view) {
+            $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);
+            Helper::throwException($message);
+        }
+    }
+
+    /**
+     * Checks, whether an article is in the listing or not, is $negation is true, it checks whether an article is NOT in the listing
+     *
+     * @param string $name
+     * @param bool   $negation
+     */
+    public function checkListing($name, $negation = false)
+    {
+        $result = $this->isArticleInListing($name);
+
+        if ($negation) {
+            $result = !$result;
+        }
+
+        if (!$result) {
+            $message = sprintf(
+                'The article "%s" is%s in the listing, but should%s.',
+                $name,
+                ($negation) ? '' : ' not',
+                ($negation) ? ' not' : ''
+            );
+            Helper::throwException([$message]);
+        }
+    }
+
+    /**
+     * Checks the properties of a product box
+     *
+     * @param ArticleBox $articleBox
+     * @param array      $properties
+     *
+     * @throws \Exception
+     */
+    public function checkArticleBox(ArticleBox $articleBox, array $properties)
+    {
+        $properties = Helper::floatArray($properties, ['price']);
+        $result = Helper::assertElementProperties($articleBox, $properties);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The %s is "%s" (should be "%s")',
+            $result['key'],
+            $result['value'],
+            $result['value2']
+        );
+
+        Helper::throwException($message);
     }
 
     /**
@@ -124,8 +218,10 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Sets the filters
+     *
      * @param FilterGroup $filterGroups
-     * @param array $properties
+     * @param array       $properties
+     *
      * @throws \Exception
      */
     protected function setFilters(FilterGroup $filterGroups, array $properties)
@@ -159,46 +255,10 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
-     * Checks the view method of the listing. Only $view has to be active
-     * @param string $view
-     */
-    public function checkView($view)
-    {
-        $elements = array_filter(Helper::findElements($this, ['viewTable', 'viewList'], false));
-
-        if (key($elements) !== $view) {
-            $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);
-            Helper::throwException($message);
-        }
-    }
-
-    /**
-     * Checks, whether an article is in the listing or not, is $negation is true, it checks whether an article is NOT in the listing
-     * @param string $name
-     * @param bool $negation
-     */
-    public function checkListing($name, $negation = false)
-    {
-        $result = $this->isArticleInListing($name);
-
-        if ($negation) {
-            $result = !$result;
-        }
-
-        if (!$result) {
-            $message = sprintf(
-                'The article "%s" is%s in the listing, but should%s.',
-                $name,
-                ($negation) ? '' : ' not',
-                ($negation) ? ' not' : ''
-            );
-            Helper::throwException([$message]);
-        }
-    }
-
-    /**
      * Checks, if a product is in the listing
+     *
      * @param string $name
+     *
      * @return bool
      */
     private function isArticleInListing($name)
@@ -210,32 +270,8 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
-     * Checks the properties of a product box
-     * @param ArticleBox $articleBox
-     * @param array $properties
-     * @throws \Exception
-     */
-    public function checkArticleBox(ArticleBox $articleBox, array $properties)
-    {
-        $properties = Helper::floatArray($properties, ['price']);
-        $result = Helper::assertElementProperties($articleBox, $properties);
-
-        if ($result === true) {
-            return;
-        }
-
-        $message = sprintf(
-            'The %s is "%s" (should be "%s")',
-            $result['key'],
-            $result['value'],
-            $result['value2']
-        );
-
-        Helper::throwException($message);
-    }
-
-    /**
      * Submits the filters
+     *
      * @throws \Exception
      */
     private function pressShowResults()

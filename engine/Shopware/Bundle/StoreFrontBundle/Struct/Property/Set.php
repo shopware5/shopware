@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Property
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Set extends Extendable implements \JsonSerializable
@@ -59,7 +59,7 @@ class Set extends Extendable implements \JsonSerializable
     protected $name;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $comparable;
 
@@ -75,6 +75,7 @@ class Set extends Extendable implements \JsonSerializable
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -94,6 +95,7 @@ class Set extends Extendable implements \JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return $this
      */
     public function setName($name)
@@ -113,6 +115,7 @@ class Set extends Extendable implements \JsonSerializable
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Property\Group[] $groups
+     *
      * @return $this
      */
     public function setGroups($groups)
@@ -131,7 +134,8 @@ class Set extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $comparable
+     * @param bool $comparable
+     *
      * @return $this
      */
     public function setComparable($comparable)
@@ -158,7 +162,7 @@ class Set extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isComparable()
     {
@@ -166,7 +170,7 @@ class Set extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Order;
 
-use Symfony\Component\Validator\Constraints as Assert;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware order detail model represents a single detail data of an order .
@@ -49,162 +49,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Detail extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $orderId
-     *
-     * @ORM\Column(name="orderID", type="integer", nullable=false)
-     */
-    private $orderId;
-
-    /**
-     * @Assert\NotBlank
-     *
-     * @var integer $articleId
-     *
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
-     */
-    private $articleId;
-
-    /**
-     * @var integer $taxId
-     *
-     * @ORM\Column(name="taxID", type="integer", nullable=false)
-     */
-    private $taxId;
-
-    /**
-     * @Assert\NotBlank
-     *
-     * @var float $taxRate
-     *
-      @ORM\Column(name="tax_rate", type="float", nullable=false)
-     */
-    private $taxRate;
-
-    /**
-     * @var integer $statusId
-     *
-     * @ORM\Column(name="status", type="integer", nullable=false)
-     */
-    private $statusId;
-
-    /**
-     * @var string $number
-     *
-     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
-     */
-    private $number;
-
-    /**
-     * @Assert\NotBlank
-     *
-     * @var string $articleNumber
-     *
-     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
-     */
-    private $articleNumber;
-
-    /**
-     * @Assert\NotBlank
-     *
-     * @var float $price
-     *
-     * @ORM\Column(name="price", type="float", nullable=false)
-     */
-    private $price;
-
-    /**
-     * @Assert\NotBlank
-     *
-     * @var integer $quantity
-     *
-     * @ORM\Column(name="quantity", type="integer", nullable=false)
-     */
-    private $quantity;
-
-    /**
-     * @Assert\NotBlank
-     *
-     * @var string $articleName
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $articleName;
-
-    /**
-     * @var integer $shipped
-     *
-     * @ORM\Column(name="shipped", type="integer", nullable=false)
-     */
-    private $shipped = 0;
-
-    /**
-     * @var integer $shippedGroup
-     *
-     * @ORM\Column(name="shippedgroup", type="integer", nullable=false)
-     */
-    private $shippedGroup = 0;
-
-    /**
-     * @var \DateTime $releaseDate
-     *
-     * @ORM\Column(name="releasedate", type="date", nullable=true)
-     */
-    private $releaseDate = null;
-
-    /**
-     * @var integer $mode
-     *
-     * @ORM\Column(name="modus", type="integer", nullable=false)
-     */
-    private $mode = 0;
-
-    /**
-     * @var integer $esdArticle
-     *
-     * @ORM\Column(name="esdarticle", type="integer", nullable=false)
-     */
-    private $esdArticle = 0;
-
-    /**
-     * @var string $config
-     *
-     * @ORM\Column(name="config", type="text", nullable=false)
-     */
-    private $config = '';
-
-    /**
-     * @var string $ean
-     *
-     * @ORM\Column(name="ean", type="string", length=255, nullable=true)
-     */
-    private $ean;
-
-    /**
-     * @var string $unit
-     *
-     * @ORM\Column(name="unit", type="string", length=255, nullable=true)
-     */
-    private $unit;
-
-    /**
-     * @var string $packUnit
-     *
-     * @ORM\Column(name="pack_unit", type="string", length=255, nullable=true)
-     */
-    private $packUnit;
-
-    /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="details")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Order\Order
      */
     protected $order;
@@ -214,6 +61,7 @@ class Detail extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\DetailStatus")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Order\Status
      */
     protected $status;
@@ -221,13 +69,16 @@ class Detail extends ModelEntity
     /**
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Tax\Tax
      */
     protected $tax;
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderDetail", mappedBy="orderDetail", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\OrderDetail
      */
     protected $attribute;
@@ -236,14 +87,167 @@ class Detail extends ModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="orderDetail")
+     *
      * @var \Shopware\Models\Order\Esd
      */
     protected $esd;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="orderID", type="integer", nullable=false)
+     */
+    private $orderId;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @var int
+     *
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     */
+    private $articleId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="taxID", type="integer", nullable=false)
+     */
+    private $taxId;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @var float
+     * @ORM\Column(name="tax_rate", type="float", nullable=false)
+     */
+    private $taxRate;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $statusId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
+     */
+    private $number;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @var string
+     *
+     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
+     */
+    private $articleNumber;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @var float
+     *
+     * @ORM\Column(name="price", type="float", nullable=false)
+     */
+    private $price;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="integer", nullable=false)
+     */
+    private $quantity;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $articleName;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shipped", type="integer", nullable=false)
+     */
+    private $shipped = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shippedgroup", type="integer", nullable=false)
+     */
+    private $shippedGroup = 0;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="releasedate", type="date", nullable=true)
+     */
+    private $releaseDate = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="modus", type="integer", nullable=false)
+     */
+    private $mode = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="esdarticle", type="integer", nullable=false)
+     */
+    private $esdArticle = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="config", type="text", nullable=false)
+     */
+    private $config = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ean", type="string", length=255, nullable=true)
+     */
+    private $ean;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unit", type="string", length=255, nullable=true)
+     */
+    private $unit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pack_unit", type="string", length=255, nullable=true)
+     */
+    private $packUnit;
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -254,11 +258,13 @@ class Detail extends ModelEntity
      * Set number
      *
      * @param string $number
+     *
      * @return Detail
      */
     public function setNumber($number)
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -275,19 +281,21 @@ class Detail extends ModelEntity
     /**
      * Set articleId
      *
-     * @param integer $articleId
+     * @param int $articleId
+     *
      * @return Detail
      */
     public function setArticleId($articleId)
     {
         $this->articleId = $articleId;
+
         return $this;
     }
 
     /**
      * Get articleId
      *
-     * @return integer
+     * @return int
      */
     public function getArticleId()
     {
@@ -298,11 +306,13 @@ class Detail extends ModelEntity
      * Set price
      *
      * @param float $price
+     *
      * @return Detail
      */
     public function setPrice($price)
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -319,19 +329,21 @@ class Detail extends ModelEntity
     /**
      * Set quantity
      *
-     * @param integer $quantity
+     * @param int $quantity
+     *
      * @return Detail
      */
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+
         return $this;
     }
 
     /**
      * Get quantity
      *
-     * @return integer
+     * @return int
      */
     public function getQuantity()
     {
@@ -342,11 +354,13 @@ class Detail extends ModelEntity
      * Set articleName
      *
      * @param string $articleName
+     *
      * @return Detail
      */
     public function setArticleName($articleName)
     {
         $this->articleName = $articleName;
+
         return $this;
     }
 
@@ -363,19 +377,21 @@ class Detail extends ModelEntity
     /**
      * Set shipped
      *
-     * @param integer $shipped
+     * @param int $shipped
+     *
      * @return Detail
      */
     public function setShipped($shipped)
     {
         $this->shipped = $shipped;
+
         return $this;
     }
 
     /**
      * Get shipped
      *
-     * @return integer
+     * @return int
      */
     public function getShipped()
     {
@@ -385,19 +401,21 @@ class Detail extends ModelEntity
     /**
      * Set shippedGroup
      *
-     * @param integer $shippedGroup
+     * @param int $shippedGroup
+     *
      * @return Detail
      */
     public function setShippedGroup($shippedGroup)
     {
         $this->shippedGroup = $shippedGroup;
+
         return $this;
     }
 
     /**
      * Get shippedGroup
      *
-     * @return integer
+     * @return int
      */
     public function getShippedGroup()
     {
@@ -408,11 +426,13 @@ class Detail extends ModelEntity
      * Set releaseDate
      *
      * @param \DateTime $releaseDate
+     *
      * @return Detail
      */
     public function setReleaseDate($releaseDate)
     {
         $this->releaseDate = $releaseDate;
+
         return $this;
     }
 
@@ -429,19 +449,21 @@ class Detail extends ModelEntity
     /**
      * Set mode
      *
-     * @param integer $mode
+     * @param int $mode
+     *
      * @return Detail
      */
     public function setMode($mode)
     {
         $this->mode = $mode;
+
         return $this;
     }
 
     /**
      * Get mode
      *
-     * @return integer
+     * @return int
      */
     public function getMode()
     {
@@ -451,19 +473,21 @@ class Detail extends ModelEntity
     /**
      * Set esdArticle
      *
-     * @param integer $esdArticle
+     * @param int $esdArticle
+     *
      * @return Detail
      */
     public function setEsdArticle($esdArticle)
     {
         $this->esdArticle = $esdArticle;
+
         return $this;
     }
 
     /**
      * Get esdArticle
      *
-     * @return integer
+     * @return int
      */
     public function getEsdArticle()
     {
@@ -474,11 +498,13 @@ class Detail extends ModelEntity
      * Set config
      *
      * @param string $config
+     *
      * @return Detail
      */
     public function setConfig($config)
     {
         $this->config = $config;
+
         return $this;
     }
 
@@ -544,19 +570,20 @@ class Detail extends ModelEntity
      * If the position is deleted, the article stock must be increased based on the ordering quantity.
      * The prePersist and preUpdate function call the calculateOrderAmount function to recalculate the
      * order invoice amount, the after remove function can't handle this logic,
+     *
      * @ORM\PreRemove
      */
     public function afterRemove()
     {
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-        $article = $repository->findOneBy(array('number' => $this->articleNumber));
+        $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         // Do not increase instock for canceled orders
         if ($this->getOrder() && $this->getOrder()->getOrderStatus()->getId() === -1) {
             return;
         }
 
-        /**
+        /*
          * before try to get the article, check if the association field (articleNumber) is not empty
          */
         if (!empty($this->articleNumber) && $article instanceof \Shopware\Models\Article\Detail) {
@@ -567,6 +594,7 @@ class Detail extends ModelEntity
 
     /**
      * If an position is added, the order amount has to be recalculated
+     *
      * @ORM\PrePersist
      */
     public function beforeInsert()
@@ -575,14 +603,15 @@ class Detail extends ModelEntity
 
     /**
      * If an position is added, the stock of the article will be reduced by the ordered quantity.
+     *
      * @ORM\PostPersist
      */
     public function afterInsert()
     {
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-        $article = $repository->findOneBy(array('number' => $this->articleNumber));
+        $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
-        /**
+        /*
          * before try to get the article, check if the association field (articleNumber) is not empty
          */
         if (!empty($this->articleNumber) && $article instanceof \Shopware\Models\Article\Detail) {
@@ -596,6 +625,7 @@ class Detail extends ModelEntity
     /**
      * If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
      * The stock of the new article will be reduced by the (new) ordered quantity.
+     *
      * @ORM\PreUpdate
      */
     public function beforeUpdate()
@@ -616,27 +646,27 @@ class Detail extends ModelEntity
         $quantityDiff = $oldQuantity - $newQuantity;
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-        $article = $repository->findOneBy(array('number' => $this->articleNumber));
+        $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         //If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
         //The stock of the new article will be reduced by the (new) ordered quantity.
         if (!empty($articleChange)) {
-            /**
+            /*
              * before try to get the article, check if the association field (articleNumber) is not empty,
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[0])) {
-                /**@var $oldArticle \Shopware\Models\Article\Detail*/
-                $oldArticle = $repository->findOneBy(array('number' => $articleChange[0]));
+                /** @var $oldArticle \Shopware\Models\Article\Detail */
+                $oldArticle = $repository->findOneBy(['number' => $articleChange[0]]);
             }
 
-            /**
+            /*
              * before try to get the article, check if the association field (articleNumber) is not empty,
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[1])) {
-                /**@var $newArticle \Shopware\Models\Article\Detail*/
-                $newArticle = $repository->findOneBy(array('number' => $articleChange[1]));
+                /** @var $newArticle \Shopware\Models\Article\Detail */
+                $newArticle = $repository->findOneBy(['number' => $articleChange[1]]);
             }
 
             //is the new articleNumber and valid model identifier?
@@ -666,20 +696,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Internal helper function which check if the associated order exist
-     * and recalculate the order amount by using the
-     * Shopware\Models\Order\Order::calculateInvoiceAmount function.
-     */
-    private function calculateOrderAmount()
-    {
-        if ($this->getOrder() instanceof Order) {
-            //recalculates the new amount
-            $this->getOrder()->calculateInvoiceAmount();
-            Shopware()->Models()->persist($this->getOrder());
-        }
-    }
-
-    /**
      * @return \Shopware\Models\Attribute\OrderDetail
      */
     public function getAttribute()
@@ -689,6 +705,7 @@ class Detail extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\OrderDetail|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\OrderDetail
      */
     public function setAttribute($attribute)
@@ -790,5 +807,19 @@ class Detail extends ModelEntity
     public function getPackUnit()
     {
         return $this->packUnit;
+    }
+
+    /**
+     * Internal helper function which check if the associated order exist
+     * and recalculate the order amount by using the
+     * Shopware\Models\Order\Order::calculateInvoiceAmount function.
+     */
+    private function calculateOrderAmount()
+    {
+        if ($this->getOrder() instanceof Order) {
+            //recalculates the new amount
+            $this->getOrder()->calculateInvoiceAmount();
+            Shopware()->Models()->persist($this->getOrder());
+        }
     }
 }

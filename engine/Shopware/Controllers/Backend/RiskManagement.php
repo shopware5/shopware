@@ -38,34 +38,30 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
 
     public function initAcl()
     {
-        $this->addAclPermission("getPayments", "read", "You're not allowed to see the rules.");
-        $this->addAclPermission("createRule", "save", "You're not allowed to save a rule.");
-        $this->addAclPermission("editRule", "save", "You're not allowed to save a rule.");
-        $this->addAclPermission("deleteRule", "delete", "You're not allowed to delete a rule.");
+        $this->addAclPermission('getPayments', 'read', "You're not allowed to see the rules.");
+        $this->addAclPermission('createRule', 'save', "You're not allowed to save a rule.");
+        $this->addAclPermission('editRule', 'save', "You're not allowed to save a rule.");
+        $this->addAclPermission('deleteRule', 'delete', "You're not allowed to delete a rule.");
     }
 
     /**
      * Disable template engine for all actions
-     *
-     * @return void
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load'))) {
+        if (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
 
     /**
      * Function to get all active payment-means and the ruleSets
-     *
-     * @return void
      */
     public function getPaymentsAction()
     {
         try {
             $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->select(array('payment', 'ruleSets'))
+            $builder->select(['payment', 'ruleSets'])
                     ->from('Shopware\Models\Payment\Payment', 'payment');
             $builder->leftJoin('payment.ruleSets', 'ruleSets');
             $builder->where('payment.active=1');
@@ -73,17 +69,15 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             $result = $builder->getQuery()->getArrayResult();
             $total = Shopware()->Models()->getQueryCount($builder->getQuery());
 
-            $this->View()->assign(array('success'=>true, 'data'=>$result, 'total'=>$total));
+            $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
     /**
      * Function to delete a single rule.
      * It is called, when the user clicks on the delete button of a rule.
-     *
-     * @return void
      */
     public function deleteRuleAction()
     {
@@ -95,9 +89,9 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             Shopware()->Models()->remove($ruleModel);
             Shopware()->Models()->flush();
 
-            $this->View()->assign(array('success'=>true, 'data'=>$params));
+            $this->View()->assign(['success' => true, 'data' => $params]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
@@ -106,8 +100,6 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
      * It is called, when the user presses the save-button and he edited at least one ruleSet.
      *
      * It works with both simple arrays and 2-dimensional arrays.
-     *
-     * @return void
      */
     public function editRuleAction()
     {
@@ -120,10 +112,10 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
 
             //2-dimensional array
             if ($params[0]) {
-                $data = array();
+                $data = [];
                 foreach ($params as $values) {
                     /**
-                     * @var $ruleModel Shopware\Models\Payment\RuleSet
+                     * @var Shopware\Models\Payment\RuleSet
                      */
                     $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $values['id']);
 
@@ -133,10 +125,10 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
                     Shopware()->Models()->flush();
                     $data[] = Shopware()->Models()->toArray($ruleModel);
                 }
-                $this->View()->assign(array('success'=>true, 'data'=>$data));
+                $this->View()->assign(['success' => true, 'data' => $data]);
             } else {
                 /**
-                 * @var $ruleModel Shopware\Models\Payment\RuleSet
+                 * @var Shopware\Models\Payment\RuleSet
                  */
                 $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
 
@@ -147,18 +139,16 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
 
                 $data = Shopware()->Models()->toArray($ruleModel);
 
-                $this->View()->assign(array('success'=>true, 'data'=>$data));
+                $this->View()->assign(['success' => true, 'data' => $data]);
             }
         } catch (Exception $e) {
-            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
     /**
      * Function to create a new ruleSet.
      * It is called when the user presses the save-button and at least one rule is new.
-     *
-     * @return void
      */
     public function createRuleAction()
     {
@@ -171,9 +161,9 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             Shopware()->Models()->persist($ruleModel);
             Shopware()->Models()->flush();
 
-            $this->View()->assign(array('success'=>true, 'data'=>Shopware()->Models()->toArray($ruleModel)));
+            $this->View()->assign(['success' => true, 'data' => Shopware()->Models()->toArray($ruleModel)]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 }

@@ -1,9 +1,31 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink;
 
-use Doctrine\DBAL\Connection;
 use Behat\Gherkin\Node\TableNode;
+use Doctrine\DBAL\Connection;
 
 class ExportContext extends SubContext
 {
@@ -40,9 +62,10 @@ class ExportContext extends SubContext
 
     /**
      * @param TableNode $entries
-     * @param string $name
-     * @param string $format
-     * @param string $subshop Anything else than "subshop" will be treated as "shop"
+     * @param string    $name
+     * @param string    $format
+     * @param string    $subshop Anything else than "subshop" will be treated as "shop"
+     *
      * @throws \Exception
      *
      * @Then /^I should see the feed "(?P<name>[^"]*)" with format "(?P<format>[^"]*)" in the "(?P<subshop>[^"]*)" export:$/
@@ -135,6 +158,7 @@ SQL;
 
     /**
      * @param string $content
+     *
      * @return array
      */
     private function parseXml($content)
@@ -144,7 +168,7 @@ SQL;
 
         $result = [];
         foreach ($items as $item) {
-            $result[] = (array)$item;
+            $result[] = (array) $item;
         }
 
         return $result;
@@ -155,6 +179,7 @@ SQL;
      *
      * @param string $content
      * @param string $delimiter
+     *
      * @return array
      */
     private function parseCsv($content, $delimiter)
@@ -173,13 +198,14 @@ SQL;
         }
 
         array_shift($rows);
+
         return $rows;
     }
 
     /**
      * @param TableNode $entries
-     * @param array $export
-     * @param bool $shopType
+     * @param array     $export
+     * @param bool      $shopType
      */
     private function validate(TableNode $entries, $export, $shopType)
     {

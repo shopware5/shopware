@@ -29,7 +29,6 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 
 /**
  * Class PropertyQueryFactory
- * @package Shopware\Bundle\ESIndexingBundle\Property
  */
 class PropertyQueryFactory
 {
@@ -64,6 +63,7 @@ class PropertyQueryFactory
             ->from('s_filter_options', 'propertyGroups')
             ->where('propertyGroups.id > :lastId')
             ->setParameter(':lastId', 0);
+
         return $query;
     }
 }

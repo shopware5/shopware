@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Blog;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Blog Model
@@ -38,116 +37,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Blog extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string $title
-     *
-     * @ORM\Column(name="title", type="string", nullable=false)
-     */
-    private $title;
-
-    /**
-     * @var integer $authorId
-     *
-     * @ORM\Column(name="author_id", type="integer", nullable=true)
-     */
-    private $authorId = null;
-
-    /**
-     * Flag which shows if the blog is active or not. 1= active otherwise inactive
-     *
-     * @var boolean $active
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active;
-
-    /**
-     * @var string $shortDescription
-     *
-     * @ORM\Column(name="short_description", type="string", nullable=false)
-     */
-    private $shortDescription;
-
-    /**
-     * @var string $description
-     *
-     * @ORM\Column(name="description", type="string", nullable=false)
-     */
-    private $description;
-
-    /**
-     * @var integer $views
-     *
-     * @ORM\Column(name="views", type="integer", nullable=true)
-     */
-    private $views = null;
-
-    /**
-     * @var \DateTime $displayDate
-     *
-     * @ORM\Column(name="display_date", type="datetime", nullable=false)
-     */
-    private $displayDate;
-
-    /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="category_id", type="integer", nullable=true)
-     */
-    private $categoryId = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
-    private $category;
-
-    /**
-     * @var string $template
-     *
-     * @ORM\Column(name="template", type="string", nullable=false)
-     */
-    private $template;
-
-    /**
-     * @var string $metaKeyWords
-     *
-     * @ORM\Column(name="meta_keywords", type="string", nullable=true)
-     */
-    private $metaKeyWords;
-
-    /**
-     * @var string $metaDescription
-     *
-     * @ORM\Column(name="meta_description", type="string", nullable=true)
-     */
-    private $metaDescription;
-
-    /**
-     * @var string $metaTitle
-     *
-     * @ORM\Column(name="meta_title", type="string", nullable=true)
-     */
-    private $metaTitle;
-
-    /**
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
+     *
      * @var ArrayCollection
      */
     protected $tags;
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $media;
@@ -164,7 +66,9 @@ class Blog extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\Blog
      */
     protected $attribute;
@@ -173,9 +77,109 @@ class Blog extends ModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Blog\Comment Objects
      */
     protected $comments;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="author_id", type="integer", nullable=true)
+     */
+    private $authorId = null;
+
+    /**
+     * Flag which shows if the blog is active or not. 1= active otherwise inactive
+     *
+     * @var bool
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="short_description", type="string", nullable=false)
+     */
+    private $shortDescription;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", nullable=false)
+     */
+    private $description;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="views", type="integer", nullable=true)
+     */
+    private $views = null;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="display_date", type="datetime", nullable=false)
+     */
+    private $displayDate;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="category_id", type="integer", nullable=true)
+     */
+    private $categoryId = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="template", type="string", nullable=false)
+     */
+    private $template;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="meta_keywords", type="string", nullable=true)
+     */
+    private $metaKeyWords;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="meta_description", type="string", nullable=true)
+     */
+    private $metaDescription;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="meta_title", type="string", nullable=true)
+     */
+    private $metaTitle;
 
     /**
      * INVERSE SIDE
@@ -184,7 +188,6 @@ class Blog extends ModelEntity
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
-
 
     /**
      * Class constructor.
@@ -246,7 +249,7 @@ class Blog extends ModelEntity
     /**
      * Get Active
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -256,7 +259,7 @@ class Blog extends ModelEntity
     /**
      * Set Active
      *
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -406,7 +409,6 @@ class Blog extends ModelEntity
         $this->template = $template;
     }
 
-
     /**
      * Get Media
      *
@@ -421,6 +423,7 @@ class Blog extends ModelEntity
      * Set Media
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $media
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setMedia($media)
@@ -450,6 +453,7 @@ class Blog extends ModelEntity
 
     /**
      * Set the metaKeyWords
+     *
      * @return string
      */
     public function getMetaKeyWords()
@@ -501,6 +505,7 @@ class Blog extends ModelEntity
      * Returns the blog attribute
      *
      * @param \Shopware\Models\Attribute\Blog|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Blog
      */
     public function setAttribute($attribute)
@@ -518,6 +523,7 @@ class Blog extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $comments
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setComments($comments)

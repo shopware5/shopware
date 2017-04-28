@@ -30,7 +30,7 @@ use Shopware\Models\Customer\Customer;
 interface AddressServiceInterface
 {
     /**
-     * @param Address $address
+     * @param Address  $address
      * @param Customer $customer
      */
     public function create(Address $address, Customer $customer);

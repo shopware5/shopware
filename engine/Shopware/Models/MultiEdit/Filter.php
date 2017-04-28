@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware SwagMultiEdit Plugin - Filter Model
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagMultiEdit\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -42,7 +42,7 @@ class Filter extends ModelEntity
     /**
      * Unique identifier
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -79,14 +79,14 @@ class Filter extends ModelEntity
     private $created;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="is_favorite", type="boolean", nullable=false)
      */
     private $isFavorite = false;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="is_simple", type="boolean", nullable=false)
      */
@@ -99,7 +99,6 @@ class Filter extends ModelEntity
     {
         $this->created = $created;
     }
-
 
     /**
      * @return \DateTime
@@ -126,7 +125,7 @@ class Filter extends ModelEntity
     }
 
     /**
-     * @param boolean $isFavorite
+     * @param bool $isFavorite
      */
     public function setIsFavorite($isFavorite)
     {
@@ -134,7 +133,7 @@ class Filter extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsFavorite()
     {
@@ -142,7 +141,7 @@ class Filter extends ModelEntity
     }
 
     /**
-     * @param boolean $is_simple
+     * @param bool $is_simple
      */
     public function setIsSimple($is_simple)
     {
@@ -150,7 +149,7 @@ class Filter extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsSimple()
     {

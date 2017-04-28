@@ -28,7 +28,6 @@ use Shopware\Components\Form\Field;
 
 /**
  * Class Number
- * @package Shopware\Components\Form\Field
  */
 class Number extends Field
 {
@@ -39,6 +38,7 @@ class Number extends Field
 
     /**
      * Requires to set a name for the field
+     *
      * @param $name
      */
     public function __construct($name)

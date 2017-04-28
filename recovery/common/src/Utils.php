@@ -43,6 +43,7 @@ class Utils
 
     /**
      * @param $app \Slim\Slim
+     *
      * @return $this
      */
     public static function getBaseUrl($app)

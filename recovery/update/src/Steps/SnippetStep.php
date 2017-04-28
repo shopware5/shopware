@@ -84,14 +84,14 @@ class SnippetStep
             try {
                 $conn->exec(implode(";\n", $sql));
             } catch (\PDOException $e) {
-                return new ErrorResult("second" . $e->getMessage(), $e, ['query' => $sql]);
+                return new ErrorResult('second' . $e->getMessage(), $e, ['query' => $sql]);
             }
         }
 
         if ($dump->valid()) {
             return new ValidResult($dump->key(), $totalCount);
-        } else {
-            return new FinishResult($dump->key(), $totalCount);
         }
+
+        return new FinishResult($dump->key(), $totalCount);
     }
 }

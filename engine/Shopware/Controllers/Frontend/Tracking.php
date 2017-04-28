@@ -37,25 +37,22 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public static $testRepository;
 
-
-
     /**
      * Disable template engine for all actions and enable JSON Render - spare index and load action
      *
      * @codeCoverageIgnore
-     * @return void
      */
     public function preDispatch()
     {
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
     }
 
-   /**
-    * Tracks how many clicks on a single banner are clicked.
-    * If we have a valid link this action will redirect the browser accordingly
-    *
-    * @return bool
-    */
+    /**
+     * Tracks how many clicks on a single banner are clicked.
+     * If we have a valid link this action will redirect the browser accordingly
+     *
+     * @return bool
+     */
     public function countBannerClickAction()
     {
         $bannerId = $this->Request()->getParam('bannerId', null);
@@ -64,7 +61,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         }
         /** @var $bannerMgn \Shopware\Models\Banner\Repository */
         $bannerMgn = Shopware()->Models()->getRepository(Banner::class);
-        $banner = $bannerMgn->findOneBy(array('id'=>$bannerId));
+        $banner = $bannerMgn->findOneBy(['id' => $bannerId]);
         if (is_null($banner)) {
             return false;
         }
@@ -79,6 +76,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         if (!empty($jumpTarget)) {
             $this->redirect($jumpTarget);
         }
+
         return true;
     }
 
@@ -89,7 +87,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function countBannerViewAction()
     {
-        $bannerId =$this->Request()->getParam('bannerId', null);
+        $bannerId = $this->Request()->getParam('bannerId', null);
         if (is_null($bannerId)) {
             return false;
         }
@@ -102,6 +100,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         } catch (Exception $e) {
             return false;
         }
+
         return true;
     }
 }

@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 /**
  * Interface CSRFGetProtectionAware
- * @package Shopware\Components
  */
 interface CSRFGetProtectionAware
 {

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
@@ -10,6 +32,61 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class PopularitySortingTest extends TestCase
 {
+    public function testAscendingSorting()
+    {
+        $sorting = new PopularitySorting();
+
+        $this->search(
+            [
+                'first' => 3,
+                'second' => 20,
+                'third' => 1,
+            ],
+            ['third', 'first', 'second'],
+            null,
+            [],
+            [],
+            [$sorting]
+        );
+    }
+
+    public function testDescendingSorting()
+    {
+        $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
+
+        $this->search(
+            [
+                'first' => 3,
+                'second' => 20,
+                'third' => 1,
+            ],
+            ['second', 'first', 'third'],
+            null,
+            [],
+            [],
+            [$sorting]
+        );
+    }
+
+    public function testSalesEquals()
+    {
+        $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
+
+        $this->search(
+            [
+                'first' => 3,
+                'second' => 20,
+                'third' => 1,
+                'fourth' => 20,
+            ],
+            ['fourth', 'second', 'first', 'third'],
+            null,
+            [],
+            [],
+            [$sorting]
+        );
+    }
+
     protected function createProduct(
         $number,
         ShopContext $context,
@@ -24,77 +101,21 @@ class PopularitySortingTest extends TestCase
         );
 
         Shopware()->Db()->query(
-            "UPDATE s_articles_top_seller_ro SET sales = ?
-             WHERE article_id = ?",
-            array($sales, $article->getId())
+            'UPDATE s_articles_top_seller_ro SET sales = ?
+             WHERE article_id = ?',
+            [$sales, $article->getId()]
         );
 
         return $article;
-    }
-
-
-    public function testAscendingSorting()
-    {
-        $sorting = new PopularitySorting();
-
-        $this->search(
-            array(
-                'first'  => 3,
-                'second' => 20,
-                'third'  => 1
-            ),
-            array('third', 'first', 'second'),
-            null,
-            array(),
-            array(),
-            array($sorting)
-        );
-    }
-
-    public function testDescendingSorting()
-    {
-        $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
-
-        $this->search(
-            array(
-                'first'  => 3,
-                'second' => 20,
-                'third'  => 1
-            ),
-            array('second', 'first', 'third'),
-            null,
-            array(),
-            array(),
-            array($sorting)
-        );
-    }
-
-    public function testSalesEquals()
-    {
-        $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
-
-        $this->search(
-            array(
-                'first'  => 3,
-                'second' => 20,
-                'third'  => 1,
-                'fourth'  => 20
-            ),
-            array('fourth', 'second', 'first', 'third'),
-            null,
-            array(),
-            array(),
-            array($sorting)
-        );
     }
 
     protected function search(
         $products,
         $expectedNumbers,
         $category = null,
-        $conditions = array(),
-        $facets = array(),
-        $sortings = array(),
+        $conditions = [],
+        $facets = [],
+        $sortings = [],
         $context = null,
         array $configs = []
     ) {

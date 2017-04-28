@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 /**
  * Class CSRFTokenValidationException
- * @package Shopware\Components
  */
 class CSRFTokenValidationException extends \Exception
 {

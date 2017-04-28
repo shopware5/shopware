@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter\ContainerType;
 
-use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\LazyFetchModelEntity;
 
 /**
  * Shopware text model represents a text container type.
@@ -36,9 +36,30 @@ use Doctrine\ORM\Mapping as ORM;
 class Article extends LazyFetchModelEntity
 {
     /**
+     * OWNING SIDE
+     * Owning side of relation between container type 'article' and parent container
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="articles")
+     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Newsletter\Container
+     */
+    protected $container;
+
+    /**
+     * OWNING SIDE
+     * Owning side of the uni-direction relation between article-Container and article ordernumber
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
+     * @ORM\JoinColumn(name="articleordernumber", referencedColumnName="ordernumber")
+     *
+     * @var \Shopware\Models\Article\Detail
+     */
+    protected $articleDetail;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -49,45 +70,25 @@ class Article extends LazyFetchModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var integer $containerId
+     * @var int
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
     private $containerId = null;
 
     /**
-     * OWNING SIDE
-     * Owning side of relation between container type 'article' and parent container
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="articles")
-     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     * @var \Shopware\Models\Newsletter\Container
-     */
-    protected $container;
-
-    /**
      * Ordernumber of the article
      *
-     * @var string $number
+     * @var string
      * @ORM\Column(name="articleordernumber", type="string", length=255 , nullable=false)
      */
     private $number = '';
 
     /**
-     * OWNING SIDE
-     * Owning side of the uni-direction relation between article-Container and article ordernumber
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
-     * @ORM\JoinColumn(name="articleordernumber", referencedColumnName="ordernumber")
-     * @var \Shopware\Models\Article\Detail
-     */
-    protected $articleDetail;
-
-    /**
      * Name of the article
      * "Zufall" for random articles - else the article's name
      *
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", length=16777215 , nullable=false)
      */
     private $name;
@@ -95,7 +96,7 @@ class Article extends LazyFetchModelEntity
     /**
      * Type of the container - "random" or "fix"
      *
-     * @var string $type
+     * @var string
      * @ORM\Column(name="type", type="string", length=255 , nullable=false)
      */
     private $type;
@@ -103,7 +104,7 @@ class Article extends LazyFetchModelEntity
     /**
      * Position of this container
      *
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="string", length=255 , nullable=false)
      */
     private $position;
@@ -118,6 +119,7 @@ class Article extends LazyFetchModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
+     *
      * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)
@@ -195,6 +197,6 @@ class Article extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, array('number' => $this->number));
+        return $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
     }
 }

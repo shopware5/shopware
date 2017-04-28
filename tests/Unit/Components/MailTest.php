@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MailTest extends TestCase

@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\Resource;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyGroupTest extends TestCase
@@ -52,25 +52,23 @@ class PropertyGroupTest extends TestCase
      */
     public function testCreateShouldThrowCustomValidationException()
     {
-        $testData = array(
+        $testData = [
             'position' => 1,
             'comparable' => 1,
-            'sortmode' => 2
-
-        );
+            'sortmode' => 2,
+        ];
 
         $this->resource->create($testData);
     }
 
-
     public function testCreateShouldBeSuccessful()
     {
-        $testData = array(
-            "name" => "Eigenschaft1",
+        $testData = [
+            'name' => 'Eigenschaft1',
             'position' => 1,
             'comparable' => 1,
-            'sortmode' => 0
-        );
+            'sortmode' => 0,
+        ];
 
         $group = $this->resource->create($testData);
 
@@ -141,10 +139,10 @@ class PropertyGroupTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
-            'name'   => uniqid(rand()) . 'testProperty',
-            'sortmode'   => 99,
-        );
+        $testData = [
+            'name' => uniqid(rand()) . 'testProperty',
+            'sortmode' => 99,
+        ];
 
         $group = $this->resource->update($id, $testData);
 
@@ -162,7 +160,7 @@ class PropertyGroupTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -170,7 +168,7 @@ class PropertyGroupTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**

@@ -37,35 +37,36 @@ class sCore
 
     public function __construct($front = null)
     {
-        $this->front = $front ? : Shopware()->Front();
+        $this->front = $front ?: Shopware()->Front();
     }
 
     /**
      * Creates query string for an url based on sVariables and Request GET variables
      *
      * @param array $sVariables Variables that configure the generated url
+     *
      * @return string
      */
     public function sBuildLink($sVariables)
     {
-        $url = array();
-        $allowedCategoryVariables = array("sCategory", "sPage");
+        $url = [];
+        $allowedCategoryVariables = ['sCategory', 'sPage'];
 
         $tempGET = $this->front->Request() ? $this->front->Request()->getParams() : null;
 
         // If viewport is available, this will be the first variable
-        if (!empty($tempGET["sViewport"])) {
-            $url['sViewport'] = $tempGET["sViewport"];
-            if ($url["sViewport"] === "cat") {
+        if (!empty($tempGET['sViewport'])) {
+            $url['sViewport'] = $tempGET['sViewport'];
+            if ($url['sViewport'] === 'cat') {
                 foreach ($allowedCategoryVariables as $allowedVariable) {
                     if (!empty($tempGET[$allowedVariable])) {
                         $url[$allowedVariable] = $tempGET[$allowedVariable];
                         unset($tempGET[$allowedVariable]);
                     }
                 }
-                $tempGET = array();
+                $tempGET = [];
             }
-            unset($tempGET["sViewport"]);
+            unset($tempGET['sViewport']);
         }
 
         // Strip new variables from _GET
@@ -84,7 +85,7 @@ class sCore
         }
 
         if (!empty($url)) {
-            $queryString = '?'.http_build_query($url, "", "&");
+            $queryString = '?' . http_build_query($url, '', '&');
         } else {
             $queryString = '';
         }
@@ -95,8 +96,9 @@ class sCore
     /**
      * Tries to rewrite the provided link using SEO friendly urls
      *
-     * @param string $link The link to rewrite.
-     * @param string $title Title of the link or related element.
+     * @param string $link  the link to rewrite
+     * @param string $title title of the link or related element
+     *
      * @return mixed|string Complete url, rewritten if possible
      */
     public function sRewriteLink($link = null, $title = null)

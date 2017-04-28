@@ -39,7 +39,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 
 /**
  * Class PluginStoreService
- * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
 class PluginStoreService
 {
@@ -54,7 +53,7 @@ class PluginStoreService
     private $hydrator;
 
     /**
-     * @param StoreClient $storeClient
+     * @param StoreClient    $storeClient
      * @param StructHydrator $hydrator
      */
     public function __construct(
@@ -67,18 +66,20 @@ class PluginStoreService
 
     /**
      * @param ListingRequest $context
-     * @return ListingResultStruct
+     *
      * @throws \Exception
+     *
+     * @return ListingResultStruct
      */
     public function getListing(ListingRequest $context)
     {
         $params = [
-            'locale'          => $context->getLocale(),
+            'locale' => $context->getLocale(),
             'shopwareVersion' => $context->getShopwareVersion(),
-            'offset'          => $context->getOffset(),
-            'limit'           => $context->getLimit(),
-            'sort'            => json_encode($context->getSortings()),
-            'filter'          => json_encode($context->getConditions()),
+            'offset' => $context->getOffset(),
+            'limit' => $context->getLimit(),
+            'sort' => json_encode($context->getSortings()),
+            'filter' => json_encode($context->getConditions()),
         ];
 
         $data = $this->storeClient->doGetRequest(
@@ -96,6 +97,7 @@ class PluginStoreService
 
     /**
      * @param PluginsByTechnicalNameRequest $context
+     *
      * @return PluginStruct
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
@@ -107,14 +109,15 @@ class PluginStoreService
 
     /**
      * @param PluginsByTechnicalNameRequest $context
+     *
      * @return PluginStruct[]
      */
     public function getPlugins(PluginsByTechnicalNameRequest $context)
     {
         $params = [
-            'locale'          => $context->getLocale(),
+            'locale' => $context->getLocale(),
             'shopwareVersion' => $context->getShopwareVersion(),
-            'technicalNames'  => $context->getTechnicalNames()
+            'technicalNames' => $context->getTechnicalNames(),
         ];
 
         $data = $this->storeClient->doGetRequest(
@@ -125,11 +128,12 @@ class PluginStoreService
         return $this->hydrator->hydrateStorePlugins($data);
     }
 
-
     /**
      * @param UpdateListingRequest $context
-     * @return UpdateResultStruct
+     *
      * @throws \Exception
+     *
+     * @return UpdateResultStruct
      */
     public function getUpdates(UpdateListingRequest $context)
     {
@@ -139,10 +143,10 @@ class PluginStoreService
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain(),
                 'locale' => $context->getLocale(),
-                'plugins' => $context->getPlugins()
+                'plugins' => $context->getPlugins(),
             ]
         );
-        
+
         $plugins = $this->hydrator->hydrateStorePlugins($result['data']);
         $gtcAcceptanceRequired = isset($result['gtcAcceptanceRequired']) ? $result['gtcAcceptanceRequired'] : false;
         $result = new UpdateResultStruct($plugins, $gtcAcceptanceRequired);
@@ -152,6 +156,7 @@ class PluginStoreService
 
     /**
      * @param PluginLicenceRequest $context
+     *
      * @return LicenceStruct
      */
     public function getPluginLicence(PluginLicenceRequest $context)
@@ -173,8 +178,10 @@ class PluginStoreService
 
     /**
      * @param LicenceRequest $context
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function getLicences(
         LicenceRequest $context
@@ -184,7 +191,7 @@ class PluginStoreService
             '/licenses',
             [
                 'shopwareVersion' => $context->getShopwareVersion(),
-                'domain' => $context->getDomain()
+                'domain' => $context->getDomain(),
             ]
         );
 
@@ -192,8 +199,9 @@ class PluginStoreService
     }
 
     /**
-     * @return CategoryStruct[]
      * @throws \Exception
+     *
+     * @return CategoryStruct[]
      */
     public function getCategories()
     {

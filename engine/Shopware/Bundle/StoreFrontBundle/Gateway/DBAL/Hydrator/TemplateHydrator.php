@@ -31,15 +31,16 @@ class TemplateHydrator extends Hydrator
     public function hydrate($data)
     {
         $template = new Template();
-        $template->setId((int)$data['__template_id']);
+        $template->setId((int) $data['__template_id']);
         $template->setTemplate($data['__template_template']);
         $template->setName($data['__template_name']);
         $template->setDescription($data['__template_description']);
         $template->setAuthor($data['__template_author']);
         $template->setLicense($data['__template_license']);
-        $template->setVersion((int)$data['__template_version']);
-        $template->setPluginId((int)$data['__template_plugin_id']);
-        $template->setParentId((int)$data['__template_parent_id']);
+        $template->setVersion((int) $data['__template_version']);
+        $template->setPluginId((int) $data['__template_plugin_id']);
+        $template->setParentId((int) $data['__template_parent_id']);
+
         return $template;
     }
 }

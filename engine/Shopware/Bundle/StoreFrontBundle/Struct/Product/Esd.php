@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Esd extends Extendable implements \JsonSerializable
@@ -70,7 +70,7 @@ class Esd extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $hasSerials
+     * @param bool $hasSerials
      */
     public function setHasSerials($hasSerials)
     {
@@ -78,7 +78,7 @@ class Esd extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasSerials()
     {
@@ -118,7 +118,7 @@ class Esd extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

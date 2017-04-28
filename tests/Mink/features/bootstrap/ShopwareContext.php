@@ -1,15 +1,37 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Shopware\Tests\Mink\Page\Homepage;
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Element\CompareColumn;
+use Shopware\Tests\Mink\Page\Homepage;
 
 class ShopwareContext extends SubContext
 {
-    /** @var  FeatureContext */
+    /** @var FeatureContext */
     protected $featureContext;
 
     /** @BeforeScenario */
@@ -85,8 +107,8 @@ class ShopwareContext extends SubContext
         $data = [
             [
                 'field' => 'newsletter',
-                'value' => $email
-            ]
+                'value' => $email,
+            ],
         ];
 
         if ($pageName === 'Index') {
@@ -112,8 +134,8 @@ class ShopwareContext extends SubContext
             $data = [
                 [
                     'field' => 'newsletter',
-                    'value' => $email
-                ]
+                    'value' => $email,
+                ],
             ];
         }
 
@@ -139,12 +161,13 @@ class ShopwareContext extends SubContext
 
                 $confirmationLink = sprintf($mask, $link, $optin['hash']);
                 $session->visit($confirmationLink);
+
                 return;
             }
         }
 
         $query = parse_url($link, PHP_URL_QUERY);
-        $anchor = strpos($link, "#");
+        $anchor = strpos($link, '#');
 
         if ($anchor) {
             $link = substr($link, 0, $anchor);
@@ -253,7 +276,6 @@ class ShopwareContext extends SubContext
 
         $page->checkMappedBanner($banner, $image, $mapping);
     }
-
 
     /**
      * @Given /^the product box on position (\d+) should have the following properties:$/

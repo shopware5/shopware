@@ -29,11 +29,17 @@ use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class KeywordFinder implements KeywordFinderInterface
 {
+    /**
+     * Max keywords that should be considered in search
+     *
+     * @var int
+     */
+    protected $maxKeywords = 5;
     /**
      * @var \Shopware_Components_Config
      */
@@ -50,16 +56,9 @@ class KeywordFinder implements KeywordFinderInterface
     private $termHelper;
 
     /**
-     * Max keywords that should be considered in search
-     *
-     * @var int
-     */
-    protected $maxKeywords = 5;
-
-    /**
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
-     * @param TermHelperInterface $termHelper
+     * @param Connection                  $connection
+     * @param TermHelperInterface         $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -96,6 +95,7 @@ class KeywordFinder implements KeywordFinderInterface
      * For a certain term get matching keywords from keyword index
      *
      * @param string $term
+     *
      * @return Keyword[]
      */
     private function searchMatchingKeywords($term)
@@ -108,6 +108,7 @@ class KeywordFinder implements KeywordFinderInterface
 
     /**
      * @param string $term
+     *
      * @return Keyword[]
      */
     private function findDirectMatches($term)
@@ -135,6 +136,7 @@ class KeywordFinder implements KeywordFinderInterface
 
     /**
      * @param string $term
+     *
      * @return Keyword[]
      */
     private function findFuzzyMatches($term)

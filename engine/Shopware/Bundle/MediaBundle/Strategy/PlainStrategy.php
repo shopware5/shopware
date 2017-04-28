@@ -26,7 +26,6 @@ namespace Shopware\Bundle\MediaBundle\Strategy;
 
 /**
  * Class PlainStrategy
- * @package Shopware\Bundle\MediaBundle\Strategy
  */
 class PlainStrategy implements StrategyInterface
 {
@@ -42,7 +41,7 @@ class PlainStrategy implements StrategyInterface
         preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
 
         if (!empty($matches)) {
-            return $matches[2] . '/' .$matches[3];
+            return $matches[2] . '/' . $matches[3];
         }
 
         return $path;
@@ -64,7 +63,7 @@ class PlainStrategy implements StrategyInterface
         preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
 
         if (!empty($matches)) {
-            $path = $matches[2] . '/' .$matches[3];
+            $path = $matches[2] . '/' . $matches[3];
             if (preg_match('/.*(_[\d]+x[\d]+(@2x)?).(?:.*)$/', $path) && strpos($matches[2], '/thumbnail') === false) {
                 $path = $matches[2] . '/thumbnail/' . $matches[3];
             }
@@ -80,6 +79,6 @@ class PlainStrategy implements StrategyInterface
      */
     public function isEncoded($path)
     {
-        return (bool)preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
+        return (bool) preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
     }
 }

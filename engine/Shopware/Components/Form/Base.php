@@ -21,13 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Form;
 
 use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class Base
- * @package Shopware\Components\Form
  */
 class Base implements Element
 {
@@ -35,7 +35,6 @@ class Base implements Element
      * @var string
      */
     protected $name;
-
 
     /**
      * @param string $name
@@ -66,9 +65,9 @@ class Base implements Element
     {
         $properties = get_class_vars(get_class($this));
 
-        $data = array(
-            'type' => get_class($this)
-        );
+        $data = [
+            'type' => get_class($this),
+        ];
 
         foreach ($properties as $property => $value) {
             $method = 'get' . ucfirst($property);
@@ -80,9 +79,9 @@ class Base implements Element
             $value = $this->$method();
 
             if ($value instanceof \Traversable) {
-                $converted = array();
+                $converted = [];
                 foreach ($value as $item) {
-                    if ($item instanceof Base) {
+                    if ($item instanceof self) {
                         $converted[] = $item->toArray();
                     } else {
                         $converted[] = $item;
@@ -101,6 +100,7 @@ class Base implements Element
      * data by array data.
      *
      * @param array $array
+     *
      * @return $this
      */
     public function fromArray(array $array)
@@ -111,6 +111,7 @@ class Base implements Element
                 $this->$method($value);
             }
         }
+
         return $this;
     }
 }
