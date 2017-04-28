@@ -242,6 +242,8 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         localizationPanel.loadingIndicator.hide();
         localizationPanel.refreshLoadingResultContainer(isConnected);
 
+        localizationPanel.communityStore.load();
+
         wizardWindow.isConnected = isConnected;
         wizardWindow.updateNavigation();
         wizardWindow.navigation.refresh();

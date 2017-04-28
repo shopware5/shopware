@@ -152,8 +152,14 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         me.communityStore.on('load', function(store, records) {
             if (!records || records.length <= 0) {
                 me.content.setVisible(false);
-                me.noResultMessage.setVisible(true);
+
+                if (me.firstRunWizardIsConnected) {
+                    me.noResultMessage.setVisible(true);
+                }
             } else {
+                me.content.setVisible(true);
+                me.noResultMessage.setVisible(false);
+
                 Ext.each(records, function (record) {
                     if (installedLocale &&
                         me.technicalLocalizationPluginNames[installedLocale] === record.data.technicalName) {
