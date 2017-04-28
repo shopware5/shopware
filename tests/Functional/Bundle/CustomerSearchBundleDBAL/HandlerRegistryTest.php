@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
 use Shopware\Bundle\CustomerSearchBundle\HandlerRegistry;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasAddressWithCountryConditionHandler;

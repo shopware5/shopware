@@ -22,18 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\HasAddressWithCountryCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\HasOrderCountCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class HasAddressWithCountryConditionHandlerTest extends TestCase
+class HasOrderCountConditionHandlerTest extends TestCase
 {
-    public function testOneCountry()
+    public function testCustomerHasOneOrder()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new HasAddressWithCountryCondition([2]));
+        $criteria->addCondition(new HasOrderCountCondition(1));
 
         $this->search(
             $criteria,
@@ -42,34 +42,22 @@ class HasAddressWithCountryConditionHandlerTest extends TestCase
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'addresses' => [
-                        ['country_id' => 2],
-                        ['country_id' => 3],
+                    'orders' => [
+                        ['ordernumber' => '123', 'status' => 2],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'addresses' => [
-                        ['country_id' => 4],
-                        ['country_id' => 5],
-                    ],
-                ],
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
-                    'addresses' => [
-                        ['country_id' => 4],
-                    ],
                 ],
             ]
         );
     }
 
-    public function testTwoCountryIds()
+    public function testMultipleCustomerHasOrders()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new HasAddressWithCountryCondition([3, 4]));
+        $criteria->addCondition(new HasOrderCountCondition(2));
 
         $this->search(
             $criteria,
@@ -78,24 +66,25 @@ class HasAddressWithCountryConditionHandlerTest extends TestCase
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'addresses' => [
-                        ['country_id' => 2],
-                        ['country_id' => 3],
+                    'orders' => [
+                        ['ordernumber' => '1', 'status' => 2],
+                        ['ordernumber' => '2', 'status' => 2],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'addresses' => [
-                        ['country_id' => 4],
-                        ['country_id' => 5],
+                    'orders' => [
+                        ['ordernumber' => '4', 'status' => 2],
+                        ['ordernumber' => '5', 'status' => 2],
+                        ['ordernumber' => '6', 'status' => 2],
                     ],
                 ],
                 [
                     'email' => 'test3@example.com',
                     'number' => 'number3',
-                    'addresses' => [
-                        ['country_id' => 5],
+                    'orders' => [
+                        ['ordernumber' => '7', 'status' => 2],
                     ],
                 ],
             ]

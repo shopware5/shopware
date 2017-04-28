@@ -22,39 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithPaymentCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInLastDaysCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class OrderedWithPaymentConditionHandlerTest extends TestCase
+class OrderedInLastDaysConditionHandlerTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $paymentId;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->connection->insert('s_core_paymentmeans', [
-            'name' => 'unittest',
-        ]);
-
-        $this->paymentId = $this->connection->lastInsertId('s_core_paymentmeans');
-    }
-
-    public function testSinglePayment()
+    public function testSingleDay()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedWithPaymentCondition([$this->paymentId])
+            new OrderedInLastDaysCondition(5)
         );
 
         $this->search(
             $criteria,
-            ['number1'],
+            ['number1', 'number3'],
             [
                 [
                     'email' => 'test1@example.com',
@@ -62,8 +47,8 @@ class OrderedWithPaymentConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '1',
+                            'ordertime' => (new \DateTime())->format('Y-m-d'),
                             'status' => 2,
-                            'paymentID' => $this->paymentId,
                         ],
                     ],
                 ],
@@ -73,8 +58,19 @@ class OrderedWithPaymentConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '2',
+                            'ordertime' => (new \DateTime())->sub(new \DateInterval('P10D'))->format('Y-m-d'),
                             'status' => 2,
-                            'paymentID' => -1,
+                        ],
+                    ],
+                ],
+                [
+                    'email' => 'test3@example.com',
+                    'number' => 'number3',
+                    'orders' => [
+                        [
+                            'ordernumber' => '3',
+                            'ordertime' => (new \DateTime())->sub(new \DateInterval('P4D'))->format('Y-m-d'),
+                            'status' => 2,
                         ],
                     ],
                 ],

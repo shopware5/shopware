@@ -22,41 +22,40 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\IsInCustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
 
-class IsInCustomerGroupConditionHandlerTest extends TestCase
+class PaginationTest extends TestCase
 {
-    public function testSingleCustomerGroup()
+    public function testPagination()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(
-            new IsInCustomerGroupCondition([1])
-        );
+        $criteria->offset(0);
+        $criteria->limit(1);
 
-        $this->search(
+        $result = $this->search(
             $criteria,
-            ['number1', 'number2'],
+            ['number1'],
             [
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
-                    'customergroup' => 'H',
-                ],
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'customergroup' => 'EK',
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'customergroup' => 'EK',
+                ],
+                [
+                    'email' => 'test3@example.com',
+                    'number' => 'number3',
                 ],
             ]
         );
+
+        $this->assertContains('test1@example.com', $result->getEmails());
+        $this->assertEquals(3, $result->getTotal());
+        $this->assertCount(1, $result->getIds());
+        $this->assertCount(1, $result->getCustomers());
     }
 }

@@ -41,7 +41,7 @@ class OrderedProductConditionHandler implements ConditionHandlerInterface
         $wheres = [];
         /** @var OrderedProductCondition $condition */
         foreach ($condition->getNumbers() as $i => $number) {
-            $wheres[] = 'customer.products LIKE :product' . $i;
+            $wheres[] = 'customer.ordered_products LIKE :product' . $i;
             $query->setParameter(':product' . $i, '%|' . $number . '|%');
         }
         $query->andWhere(implode(' OR ', $wheres));

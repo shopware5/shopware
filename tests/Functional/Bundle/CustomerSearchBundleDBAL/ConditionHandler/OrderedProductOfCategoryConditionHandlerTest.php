@@ -22,24 +22,66 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInLastDaysCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfCategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Models\Article\Article;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-class OrderedInLastDaysConditionHandlerTest extends TestCase
+class OrderedProductOfCategoryConditionHandlerTest extends TestCase
 {
-    public function testSingleDay()
+    /**
+     * @var int
+     */
+    private $categoryId;
+
+    /**
+     * @var Article
+     */
+    private $sw1;
+
+    /**
+     * @var Article
+     */
+    private $sw2;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $helper = new Helper();
+        $category = $helper->createCategory();
+        $this->categoryId = $category->getId();
+
+        $this->sw1 = $helper->createArticle(
+            array_merge(
+                $helper->getSimpleProduct('SW1'),
+                ['categories' => [['id' => $category->getId()]]]
+            )
+        );
+
+        $this->sw2 = $helper->createArticle(
+            array_merge(
+                $helper->getSimpleProduct('SW2'),
+                ['categories' => [['id' => $category->getId()]]]
+            )
+        );
+    }
+
+    public function testSingleProduct()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedInLastDaysCondition(5)
+            new OrderedProductOfCategoryCondition([
+                $this->categoryId,
+            ])
         );
 
         $this->search(
             $criteria,
-            ['number1', 'number3'],
+            ['number1', 'number2'],
             [
                 [
                     'email' => 'test1@example.com',
@@ -47,8 +89,10 @@ class OrderedInLastDaysConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '1',
-                            'ordertime' => (new \DateTime())->format('Y-m-d'),
                             'status' => 2,
+                            'details' => [
+                                ['articleordernumber' => 'SW1', 'modus' => 0, 'articleID' => $this->sw1->getId()],
+                            ],
                         ],
                     ],
                 ],
@@ -58,8 +102,10 @@ class OrderedInLastDaysConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '2',
-                            'ordertime' => (new \DateTime())->sub(new \DateInterval('P10D'))->format('Y-m-d'),
                             'status' => 2,
+                            'details' => [
+                                ['articleordernumber' => 'SW2', 'modus' => 0, 'articleID' => $this->sw2->getId()],
+                            ],
                         ],
                     ],
                 ],
@@ -69,8 +115,11 @@ class OrderedInLastDaysConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '3',
-                            'ordertime' => (new \DateTime())->sub(new \DateInterval('P4D'))->format('Y-m-d'),
                             'status' => 2,
+                            'details' => [
+                                ['articleordernumber' => 'SW200', 'modus' => 0],
+                                ['articleordernumber' => 'SW100', 'modus' => 1],
+                            ],
                         ],
                     ],
                 ],

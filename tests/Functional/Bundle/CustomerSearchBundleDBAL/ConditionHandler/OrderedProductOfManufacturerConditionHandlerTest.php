@@ -22,20 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfCategoryCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Models\Article\Article;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-class OrderedProductOfCategoryConditionHandlerTest extends TestCase
+class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
 {
     /**
      * @var int
      */
-    private $categoryId;
+    private $manufacturerId;
 
     /**
      * @var Article
@@ -52,30 +52,32 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
         parent::setUp();
 
         $helper = new Helper();
-        $category = $helper->createCategory();
-        $this->categoryId = $category->getId();
+
+        $manufacturer = $helper->createManufacturer($helper->getManufacturerData());
+
+        $this->manufacturerId = $manufacturer->getId();
 
         $this->sw1 = $helper->createArticle(
             array_merge(
                 $helper->getSimpleProduct('SW1'),
-                ['categories' => [['id' => $category->getId()]]]
+                ['supplierId' => $manufacturer->getId(), 'categories' => [['id' => 3]]]
             )
         );
 
         $this->sw2 = $helper->createArticle(
             array_merge(
                 $helper->getSimpleProduct('SW2'),
-                ['categories' => [['id' => $category->getId()]]]
+                ['supplierId' => $manufacturer->getId(), 'categories' => [['id' => 3]]]
             )
         );
     }
 
-    public function testSingleProduct()
+    public function testSingleManufacturer()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedProductOfCategoryCondition([
-                $this->categoryId,
+            new OrderedProductOfManufacturerCondition([
+                $this->manufacturerId,
             ])
         );
 
@@ -91,7 +93,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '1',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW1', 'modus' => 0, 'articleID' => $this->sw1->getId()],
+                                ['articleID' => $this->sw1->getId(), 'articleordernumber' => $this->sw1->getMainDetail()->getNumber(), 'modus' => 0],
                             ],
                         ],
                     ],
@@ -104,7 +106,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '2',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW2', 'modus' => 0, 'articleID' => $this->sw2->getId()],
+                                ['articleID' => $this->sw2->getId(), 'articleordernumber' => $this->sw2->getMainDetail()->getNumber(), 'modus' => 0],
                             ],
                         ],
                     ],
@@ -117,8 +119,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '3',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW200', 'modus' => 0],
-                                ['articleordernumber' => 'SW100', 'modus' => 1],
+                                ['articleordernumber' => $this->sw2->getMainDetail()->getNumber(), 'modus' => 1, 'articleID' => $this->sw2->getId()],
                             ],
                         ],
                     ],

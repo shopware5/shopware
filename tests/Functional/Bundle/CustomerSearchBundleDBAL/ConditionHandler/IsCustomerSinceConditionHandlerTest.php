@@ -22,87 +22,71 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedAtWeekdayCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\IsCustomerSinceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class OrderedAtWeekdayConditionHandlerTest extends TestCase
+class IsCustomerSinceConditionHandlerTest extends TestCase
 {
-    public function testSingleDay()
+    public function testDateTime()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedAtWeekdayCondition([
-                'monday',
-            ])
+            new IsCustomerSinceCondition(
+                new \DateTime('2016-02-16')
+            )
         );
 
         $this->search(
             $criteria,
-            ['number1', 'number3'],
+            ['number2', 'number3'],
             [
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'orders' => [
-                        ['ordernumber' => '1', 'ordertime' => '2016-12-26', 'status' => 2],
-                    ],
+                    'firstlogin' => '2016-02-15',
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'orders' => [
-                        ['ordernumber' => '2', 'ordertime' => '2016-12-13', 'status' => 2],
-                    ],
+                    'firstlogin' => '2016-02-16',
                 ],
                 [
                     'email' => 'test3@example.com',
                     'number' => 'number3',
-                    'orders' => [
-                        ['ordernumber' => '3', 'ordertime' => '2016-12-27', 'status' => 2],
-                        ['ordernumber' => '4', 'ordertime' => '2016-12-19', 'status' => 2],
-                    ],
+                    'firstlogin' => '2016-02-17',
                 ],
             ]
         );
     }
 
-    public function testDifferentDays()
+    public function testWithStringDate()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedAtWeekdayCondition([
-                'monday', 'tuesday',
-            ])
+            new IsCustomerSinceCondition('2016-02-16')
         );
 
         $this->search(
             $criteria,
-            ['number1', 'number3'],
+            ['number2', 'number3'],
             [
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'orders' => [
-                        ['ordernumber' => '1', 'ordertime' => '2016-12-05', 'status' => 2],
-                    ],
+                    'firstlogin' => '2016-02-15',
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'orders' => [
-                        ['ordernumber' => '2', 'ordertime' => '2016-12-14', 'status' => 2],
-                    ],
+                    'firstlogin' => '2016-02-16',
                 ],
                 [
                     'email' => 'test3@example.com',
                     'number' => 'number3',
-                    'orders' => [
-                        ['ordernumber' => '3', 'ordertime' => '2016-12-26', 'status' => 2],
-                        ['ordernumber' => '4', 'ordertime' => '2016-12-27', 'status' => 2],
-                    ],
+                    'firstlogin' => '2016-02-17',
                 ],
             ]
         );

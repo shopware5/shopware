@@ -22,62 +22,39 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithDeliveryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
 
-class OrderedWithDeliveryConditionHandlerTest extends TestCase
+class SearchResultTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $dispatchId;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->connection->insert('s_premium_dispatch', [
-            'name' => 'unittest',
-        ]);
-        $this->dispatchId = $this->connection->lastInsertId('s_premium_dispatch');
-    }
-
-    public function testSingleDispatch()
+    public function testResultCollection()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(
-            new OrderedWithDeliveryCondition([$this->dispatchId])
-        );
-
-        $this->search(
+        $result = $this->search(
             $criteria,
-            ['number1'],
+            ['number1', 'number2', 'number3'],
             [
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'orders' => [
-                        [
-                            'ordernumber' => '1',
-                            'status' => 2,
-                            'dispatchID' => $this->dispatchId,
-                        ],
-                    ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'orders' => [
-                        [
-                            'ordernumber' => '2',
-                            'status' => 2,
-                            'dispatchID' => -1,
-                        ],
-                    ],
+                ],
+                [
+                    'email' => 'test3@example.com',
+                    'number' => 'number3',
                 ],
             ]
         );
+
+        $this->assertContains('test1@example.com', $result->getEmails());
+        $this->assertContains('test2@example.com', $result->getEmails());
+        $this->assertContains('test3@example.com', $result->getEmails());
+        $this->assertEquals(3, $result->getTotal());
+        $this->assertCount(3, $result->getIds());
+        $this->assertCount(3, $result->getCustomers());
     }
 }

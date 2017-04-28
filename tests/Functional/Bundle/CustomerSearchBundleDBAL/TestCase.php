@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;

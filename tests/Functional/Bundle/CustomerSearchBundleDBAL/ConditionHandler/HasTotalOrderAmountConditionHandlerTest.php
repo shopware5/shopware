@@ -22,20 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInShopCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\HasTotalOrderAmountCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class OrderedInShopConditionHandlerTest extends TestCase
+class HasTotalOrderAmountConditionHandlerTest extends TestCase
 {
-    public function testSingleShop()
+    public function testWithSingleCustomer()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(
-            new OrderedInShopCondition([3])
-        );
+        $criteria->addCondition(new HasTotalOrderAmountCondition(600));
 
         $this->search(
             $criteria,
@@ -45,51 +43,49 @@ class OrderedInShopConditionHandlerTest extends TestCase
                     'email' => 'test1@example.com',
                     'number' => 'number1',
                     'orders' => [
-                        ['ordernumber' => '1', 'status' => 2, 'subshopID' => 3],
+                        ['invoice_amount' => 100, 'status' => 2, 'ordernumber' => '1'],
+                        ['invoice_amount' => 200, 'status' => 2, 'ordernumber' => '2'],
+                        ['invoice_amount' => 300, 'status' => 2, 'ordernumber' => '3'],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
                     'orders' => [
-                        ['ordernumber' => '2', 'status' => 2, 'subshopID' => 2],
+                        ['invoice_amount' => 100, 'status' => 2, 'ordernumber' => '4'],
+                        ['invoice_amount' => 200, 'status' => 2, 'ordernumber' => '5'],
+                        ['invoice_amount' => 250, 'status' => 2, 'ordernumber' => '6'],
                     ],
                 ],
             ]
         );
     }
 
-    public function testMultipleShops()
+    public function testWithCanceledOrders()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(
-            new OrderedInShopCondition([1, 3])
-        );
+        $criteria->addCondition(new HasTotalOrderAmountCondition(200));
 
         $this->search(
             $criteria,
-            ['number1', 'number2'],
+            ['number1'],
             [
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
                     'orders' => [
-                        ['ordernumber' => '1', 'status' => 2, 'subshopID' => 1],
+                        ['invoice_amount' => 100, 'status' => 2, 'ordernumber' => '1'],
+                        ['invoice_amount' => 200, 'status' => 2, 'ordernumber' => '2'],
+                        ['invoice_amount' => 300, 'status' => 2, 'ordernumber' => '3'],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
                     'orders' => [
-                        ['ordernumber' => '2', 'status' => 2, 'subshopID' => 1],
-                        ['ordernumber' => '3', 'status' => 2, 'subshopID' => 3],
-                    ],
-                ],
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
-                    'orders' => [
-                        ['ordernumber' => '4', 'status' => 2, 'subshopID' => 2],
+                        ['invoice_amount' => 100, 'status' => 2, 'ordernumber' => '4'],
+                        ['invoice_amount' => 200, 'status' => -1, 'ordernumber' => '5'],
+                        ['invoice_amount' => 500, 'status' => -1, 'ordernumber' => '6'],
                     ],
                 ],
             ]

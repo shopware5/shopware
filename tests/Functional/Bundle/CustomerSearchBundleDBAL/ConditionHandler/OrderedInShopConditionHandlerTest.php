@@ -22,19 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedOnDeviceCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInShopCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class OrderedOnDeviceConditionHandlerTest extends TestCase
+class OrderedInShopConditionHandlerTest extends TestCase
 {
-    public function testDesktopDevice()
+    public function testSingleShop()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedOnDeviceCondition(['desktop'])
+            new OrderedInShopCondition([3])
         );
 
         $this->search(
@@ -45,32 +45,25 @@ class OrderedOnDeviceConditionHandlerTest extends TestCase
                     'email' => 'test1@example.com',
                     'number' => 'number1',
                     'orders' => [
-                        ['ordernumber' => '1', 'status' => 2, 'deviceType' => 'desktop'],
+                        ['ordernumber' => '1', 'status' => 2, 'subshopID' => 3],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
                     'orders' => [
-                        ['ordernumber' => '2', 'status' => 2, 'deviceType' => 'mobile'],
-                    ],
-                ],
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
-                    'orders' => [
-                        ['ordernumber' => '3', 'status' => 2],
+                        ['ordernumber' => '2', 'status' => 2, 'subshopID' => 2],
                     ],
                 ],
             ]
         );
     }
 
-    public function testMobileAndDesktopDevice()
+    public function testMultipleShops()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new OrderedOnDeviceCondition(['desktop', 'mobile'])
+            new OrderedInShopCondition([1, 3])
         );
 
         $this->search(
@@ -81,22 +74,22 @@ class OrderedOnDeviceConditionHandlerTest extends TestCase
                     'email' => 'test1@example.com',
                     'number' => 'number1',
                     'orders' => [
-                        ['ordernumber' => '1', 'status' => 2, 'deviceType' => 'desktop'],
+                        ['ordernumber' => '1', 'status' => 2, 'subshopID' => 1],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
                     'orders' => [
-                        ['ordernumber' => '2', 'status' => 2, 'deviceType' => 'mobile'],
+                        ['ordernumber' => '2', 'status' => 2, 'subshopID' => 1],
+                        ['ordernumber' => '3', 'status' => 2, 'subshopID' => 3],
                     ],
                 ],
                 [
                     'email' => 'test3@example.com',
                     'number' => 'number3',
                     'orders' => [
-                        ['ordernumber' => '3', 'status' => 2],
-                        ['ordernumber' => '4', 'status' => 2, 'deviceType' => 'tablet'],
+                        ['ordernumber' => '4', 'status' => 2, 'subshopID' => 2],
                     ],
                 ],
             ]

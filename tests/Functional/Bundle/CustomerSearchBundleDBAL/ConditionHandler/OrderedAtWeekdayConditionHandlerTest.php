@@ -22,69 +22,86 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\HasOrderCountCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedAtWeekdayCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class HasOrderCountConditionHandlerTest extends TestCase
+class OrderedAtWeekdayConditionHandlerTest extends TestCase
 {
-    public function testCustomerHasOneOrder()
+    public function testSingleDay()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new HasOrderCountCondition(1));
-
-        $this->search(
-            $criteria,
-            ['number1'],
-            [
-                [
-                    'email' => 'test1@example.com',
-                    'number' => 'number1',
-                    'orders' => [
-                        ['ordernumber' => '123', 'status' => 2],
-                    ],
-                ],
-                [
-                    'email' => 'test2@example.com',
-                    'number' => 'number2',
-                ],
-            ]
+        $criteria->addCondition(
+            new OrderedAtWeekdayCondition([
+                'monday',
+            ])
         );
-    }
-
-    public function testMultipleCustomerHasOrders()
-    {
-        $criteria = new Criteria();
-        $criteria->addCondition(new HasOrderCountCondition(2));
 
         $this->search(
             $criteria,
-            ['number1', 'number2'],
+            ['number1', 'number3'],
             [
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
                     'orders' => [
-                        ['ordernumber' => '1', 'status' => 2],
-                        ['ordernumber' => '2', 'status' => 2],
+                        ['ordernumber' => '1', 'ordertime' => '2016-12-26', 'status' => 2],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
                     'orders' => [
-                        ['ordernumber' => '4', 'status' => 2],
-                        ['ordernumber' => '5', 'status' => 2],
-                        ['ordernumber' => '6', 'status' => 2],
+                        ['ordernumber' => '2', 'ordertime' => '2016-12-13', 'status' => 2],
                     ],
                 ],
                 [
                     'email' => 'test3@example.com',
                     'number' => 'number3',
                     'orders' => [
-                        ['ordernumber' => '7', 'status' => 2],
+                        ['ordernumber' => '3', 'ordertime' => '2016-12-27', 'status' => 2],
+                        ['ordernumber' => '4', 'ordertime' => '2016-12-19', 'status' => 2],
+                    ],
+                ],
+            ]
+        );
+    }
+
+    public function testDifferentDays()
+    {
+        $criteria = new Criteria();
+        $criteria->addCondition(
+            new OrderedAtWeekdayCondition([
+                'monday', 'tuesday',
+            ])
+        );
+
+        $this->search(
+            $criteria,
+            ['number1', 'number3'],
+            [
+                [
+                    'email' => 'test1@example.com',
+                    'number' => 'number1',
+                    'orders' => [
+                        ['ordernumber' => '1', 'ordertime' => '2016-12-05', 'status' => 2],
+                    ],
+                ],
+                [
+                    'email' => 'test2@example.com',
+                    'number' => 'number2',
+                    'orders' => [
+                        ['ordernumber' => '2', 'ordertime' => '2016-12-14', 'status' => 2],
+                    ],
+                ],
+                [
+                    'email' => 'test3@example.com',
+                    'number' => 'number3',
+                    'orders' => [
+                        ['ordernumber' => '3', 'ordertime' => '2016-12-26', 'status' => 2],
+                        ['ordernumber' => '4', 'ordertime' => '2016-12-27', 'status' => 2],
                     ],
                 ],
             ]

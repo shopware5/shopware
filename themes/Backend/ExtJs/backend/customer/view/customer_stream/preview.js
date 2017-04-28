@@ -232,7 +232,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
             renderer: function(v, meta, record) {
                 var lines = [
                     record.get('street'),
-                    [record.get('zipcode'), record.get('city'), record.get('country')].join(' '),
+                    [record.get('zipcode'), record.get('city'), record.get('country_name')].join(' '),
                     record.get('additional_address_line1'),
                     record.get('additional_address_line2')
                 ];

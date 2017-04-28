@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\DependencyInjection\Compiler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass;

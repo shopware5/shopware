@@ -56,7 +56,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
             'customer.additional_address_line2',
             'customer.first_order_time',
             'customer.last_order_time',
-            'customer.products',
+            'customer.ordered_products',
         ];
 
         /* @var SearchTermCondition $condition */

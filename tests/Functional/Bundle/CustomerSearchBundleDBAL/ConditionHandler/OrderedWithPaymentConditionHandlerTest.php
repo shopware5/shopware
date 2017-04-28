@@ -22,40 +22,63 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
+use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithPaymentCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class PaginationTest extends TestCase
+class OrderedWithPaymentConditionHandlerTest extends TestCase
 {
-    public function testPagination()
+    /**
+     * @var int
+     */
+    private $paymentId;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->connection->insert('s_core_paymentmeans', [
+            'name' => 'unittest',
+        ]);
+
+        $this->paymentId = $this->connection->lastInsertId('s_core_paymentmeans');
+    }
+
+    public function testSinglePayment()
     {
         $criteria = new Criteria();
-        $criteria->offset(0);
-        $criteria->limit(1);
+        $criteria->addCondition(
+            new OrderedWithPaymentCondition([$this->paymentId])
+        );
 
-        $result = $this->search(
+        $this->search(
             $criteria,
             ['number1'],
             [
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
+                    'orders' => [
+                        [
+                            'ordernumber' => '1',
+                            'status' => 2,
+                            'paymentID' => $this->paymentId,
+                        ],
+                    ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                ],
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
+                    'orders' => [
+                        [
+                            'ordernumber' => '2',
+                            'status' => 2,
+                            'paymentID' => -1,
+                        ],
+                    ],
                 ],
             ]
         );
-
-        $this->assertContains('test1@example.com', $result->getEmails());
-        $this->assertEquals(3, $result->getTotal());
-        $this->assertCount(1, $result->getIds());
-        $this->assertCount(1, $result->getCustomers());
     }
 }

@@ -22,71 +22,39 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\IsCustomerSinceCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\IsInCustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class IsCustomerSinceConditionHandlerTest extends TestCase
+class IsInCustomerGroupConditionHandlerTest extends TestCase
 {
-    public function testDateTime()
+    public function testSingleCustomerGroup()
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new IsCustomerSinceCondition(
-                new \DateTime('2016-02-16')
-            )
+            new IsInCustomerGroupCondition([1])
         );
 
         $this->search(
             $criteria,
-            ['number2', 'number3'],
+            ['number1', 'number2'],
             [
+                [
+                    'email' => 'test3@example.com',
+                    'number' => 'number3',
+                    'customergroup' => 'H',
+                ],
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'firstlogin' => '2016-02-15',
+                    'customergroup' => 'EK',
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'firstlogin' => '2016-02-16',
-                ],
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
-                    'firstlogin' => '2016-02-17',
-                ],
-            ]
-        );
-    }
-
-    public function testWithStringDate()
-    {
-        $criteria = new Criteria();
-        $criteria->addCondition(
-            new IsCustomerSinceCondition('2016-02-16')
-        );
-
-        $this->search(
-            $criteria,
-            ['number2', 'number3'],
-            [
-                [
-                    'email' => 'test1@example.com',
-                    'number' => 'number1',
-                    'firstlogin' => '2016-02-15',
-                ],
-                [
-                    'email' => 'test2@example.com',
-                    'number' => 'number2',
-                    'firstlogin' => '2016-02-16',
-                ],
-                [
-                    'email' => 'test3@example.com',
-                    'number' => 'number3',
-                    'firstlogin' => '2016-02-17',
+                    'customergroup' => 'EK',
                 ],
             ]
         );

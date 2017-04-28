@@ -22,18 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
+namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Condition\HasCanceledOrdersCondition;
+use Shopware\Bundle\CustomerSearchBundle\Condition\HasAddressWithCountryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
-class HasCanceledOrdersConditionHandlerTest extends TestCase
+class HasAddressWithCountryConditionHandlerTest extends TestCase
 {
-    public function testWithOneCanceledOrder()
+    public function testOneCountry()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new HasCanceledOrdersCondition());
+        $criteria->addCondition(new HasAddressWithCountryCondition([2]));
 
         $this->search(
             $criteria,
@@ -42,25 +42,34 @@ class HasCanceledOrdersConditionHandlerTest extends TestCase
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'orders' => [
-                        ['status' => -1, 'ordernumber' => '1'],
+                    'addresses' => [
+                        ['country_id' => 2],
+                        ['country_id' => 3],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'orders' => [
-                        ['status' => 2, 'ordernumber' => '2'],
+                    'addresses' => [
+                        ['country_id' => 4],
+                        ['country_id' => 5],
+                    ],
+                ],
+                [
+                    'email' => 'test3@example.com',
+                    'number' => 'number3',
+                    'addresses' => [
+                        ['country_id' => 4],
                     ],
                 ],
             ]
         );
     }
 
-    public function testWithMultipleOrders()
+    public function testTwoCountryIds()
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new HasCanceledOrdersCondition());
+        $criteria->addCondition(new HasAddressWithCountryCondition([3, 4]));
 
         $this->search(
             $criteria,
@@ -69,29 +78,24 @@ class HasCanceledOrdersConditionHandlerTest extends TestCase
                 [
                     'email' => 'test1@example.com',
                     'number' => 'number1',
-                    'orders' => [
-                        ['status' => 2, 'ordernumber' => '1'],
-                        ['status' => 12, 'ordernumber' => '2'],
-                        ['status' => 4, 'ordernumber' => '3'],
-                        ['status' => 0, 'ordernumber' => '4'],
-                        ['status' => -1, 'ordernumber' => '10'],
-                        ['status' => -1, 'ordernumber' => '5'],
+                    'addresses' => [
+                        ['country_id' => 2],
+                        ['country_id' => 3],
                     ],
                 ],
                 [
                     'email' => 'test2@example.com',
                     'number' => 'number2',
-                    'orders' => [
-                        ['status' => -1, 'ordernumber' => '6'],
+                    'addresses' => [
+                        ['country_id' => 4],
+                        ['country_id' => 5],
                     ],
                 ],
                 [
                     'email' => 'test3@example.com',
                     'number' => 'number3',
-                    'orders' => [
-                        ['status' => 3, 'ordernumber' => '6'],
-                        ['status' => 4, 'ordernumber' => '7'],
-                        ['status' => 5, 'ordernumber' => '8'],
+                    'addresses' => [
+                        ['country_id' => 5],
                     ],
                 ],
             ]
