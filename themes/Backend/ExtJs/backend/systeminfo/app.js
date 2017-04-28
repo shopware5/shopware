@@ -61,17 +61,17 @@ Ext.define('Shopware.apps.Systeminfo', {
     * Required views for controller
     * @array
     */
-    views: [ 'main.Window','systeminfo.Configlist', 'systeminfo.Pathlist', 'systeminfo.Filelist', 'systeminfo.Versionlist','systeminfo.Phpinfo', 'systeminfo.Encoder' ],
+    views: [ 'main.Window','systeminfo.Configlist', 'systeminfo.Pathlist', 'systeminfo.Filelist', 'systeminfo.Versionlist','systeminfo.Phpinfo', 'systeminfo.Encoder', 'systeminfo.Optimizerlist' ],
     /**
     * Required stores for controller
     * @array
     */
-    stores: [ 'Configs', 'Paths', 'Files', 'Versions', 'Encoder' ],
+    stores: [ 'Configs', 'Paths', 'Files', 'Versions', 'Encoder', 'Optimizers' ],
     /**
     * Required models for controller
     * @array
     */
-    models: [ 'Config', 'Path', 'File', 'Version', 'Encoder' ],
+    models: [ 'Config', 'Path', 'File', 'Version', 'Encoder', 'Optimizer' ],
 
     /**
     * Requires controllers for sub-application

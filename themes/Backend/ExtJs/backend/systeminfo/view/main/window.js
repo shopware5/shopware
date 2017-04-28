@@ -103,6 +103,13 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                 },{
                     xtype: 'container',
                     layout: 'fit',
+                    title: '{s name=window/tabpanel/optimizer_tab/title}Optimizer{/s}',
+                    items:[{
+                        xtype: 'systeminfo-main-optimizerlist'
+                    }]
+                },{
+                    xtype: 'container',
+                    layout: 'fit',
                     overflowY: 'hidden',
                     title: '{s name=window/tabpanel/info_tab/title}PHP-Info{/s}',
                     items:[{

@@ -38,6 +38,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $this->addAclPermission('getFileList', 'read', "You're not allowed to open the module.");
         $this->addAclPermission('getVersionList', 'read', "You're not allowed to open the module.");
         $this->addAclPermission('getEnconder', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('getOptimizers', 'read', "You're not allowed to open the module.");
         $this->addAclPermission('info', 'read', "You're not allowed to open the module.");
     }
 
@@ -158,6 +159,24 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             apache_setenv('HTTP_COOKIE', null);
         }
         phpinfo();
+    }
+
+    public function getOptimizersAction()
+    {
+        $optimizers = $this->get('shopware_media.optimizer_service')->getOptimizers();
+        $optimizerResult = [];
+
+        foreach ($optimizers as $optimizer) {
+            $optimizerResult[] = [
+                'name' => $optimizer->getName(),
+                'mimeTypes' => $optimizer->getSupportedMimeTypes(),
+                'runnable' => $optimizer->isRunnable()
+            ];
+        }
+
+        $this->View()->success = true;
+        $this->View()->data = $optimizerResult;
+        $this->View()->total = count($optimizerResult);
     }
 
     /**
