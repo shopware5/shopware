@@ -34,11 +34,18 @@ class HasTotalOrderAmountCondition implements ConditionInterface
     protected $minimumOrderAmount;
 
     /**
-     * @param float $minimumOrderAmount
+     * @var string
      */
-    public function __construct($minimumOrderAmount)
+    protected $operator;
+
+    /**
+     * @param float  $minimumOrderAmount
+     * @param string $operator
+     */
+    public function __construct($minimumOrderAmount, $operator = ConditionInterface::OPERATOR_GTE)
     {
         $this->minimumOrderAmount = $minimumOrderAmount;
+        $this->operator = $operator;
     }
 
     /**
@@ -52,5 +59,10 @@ class HasTotalOrderAmountCondition implements ConditionInterface
     public function getName()
     {
         return 'HasTotalOrderAmountCondition';
+    }
+
+    public function getOperator()
+    {
+        return $this->operator;
     }
 }

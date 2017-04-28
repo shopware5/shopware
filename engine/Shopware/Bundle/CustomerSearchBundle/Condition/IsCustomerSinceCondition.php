@@ -34,14 +34,21 @@ class IsCustomerSinceCondition implements ConditionInterface
     protected $customerSince;
 
     /**
-     * @param \DateTime|string $customerSince
+     * @var string
      */
-    public function __construct($customerSince)
+    protected $operator;
+
+    /**
+     * @param \DateTime|string $customerSince
+     * @param string           $operator
+     */
+    public function __construct($customerSince, $operator = ConditionInterface::OPERATOR_GTE)
     {
         if (!$customerSince instanceof \DateTime) {
             $customerSince = new \DateTime($customerSince);
         }
         $this->customerSince = $customerSince;
+        $this->operator = $operator;
     }
 
     public function getName()
@@ -55,5 +62,10 @@ class IsCustomerSinceCondition implements ConditionInterface
     public function getCustomerSince()
     {
         return $this->customerSince;
+    }
+
+    public function getOperator()
+    {
+        return $this->operator;
     }
 }

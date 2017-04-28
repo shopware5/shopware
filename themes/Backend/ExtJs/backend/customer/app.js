@@ -120,7 +120,8 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.conditions.CustomerAttributeCondition',
         'customer_stream.conditions.SearchTermCondition',
         'customer_stream.conditions.field.AttributeValue',
-        'customer_stream.conditions.field.AttributeWindow'
+        'customer_stream.conditions.field.AttributeWindow',
+        'customer_stream.conditions.field.OperatorField'
     ],
 
     /**

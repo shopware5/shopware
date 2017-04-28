@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     },
 
     supports: function(conditionClass) {
-        return (conditionClass === 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition');
+        return (conditionClass.indexOf('Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition') >= 0);
     },
 
     create: function(callback) {
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     },
 
     _create: function(attribute) {
-        var operatorField = this.createOperatorField();
+        var operatorField = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.OperatorField');
 
         var valueField = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeValue', {
             name: 'value',
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
 
         return {
             title: this.getLabel() + ' [' + attribute + ']',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition|' + attribute,
             items: [
                 { xtype: 'hidden', name: 'field', value: attribute },
                 operatorField,

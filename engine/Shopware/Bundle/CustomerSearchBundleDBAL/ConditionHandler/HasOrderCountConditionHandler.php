@@ -43,7 +43,26 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         /* @var HasOrderCountCondition $condition */
-        $query->andWhere('customer.count_orders >= :HasOrderCountCondition');
+        switch ($condition->getOperator()) {
+            case ConditionInterface::OPERATOR_EQ:
+                $query->andWhere('customer.count_orders = :HasOrderCountCondition');
+                break;
+            case ConditionInterface::OPERATOR_NEQ:
+                $query->andWhere('customer.count_orders != :HasOrderCountCondition');
+                break;
+            case ConditionInterface::OPERATOR_LT:
+                $query->andWhere('customer.count_orders < :HasOrderCountCondition');
+                break;
+            case ConditionInterface::OPERATOR_LTE:
+                $query->andWhere('customer.count_orders <= :HasOrderCountCondition');
+                break;
+            case ConditionInterface::OPERATOR_GT:
+                $query->andWhere('customer.count_orders > :HasOrderCountCondition');
+                break;
+            default:
+                $query->andWhere('customer.count_orders >= :HasOrderCountCondition');
+        }
+
         $query->setParameter(':HasOrderCountCondition', $condition->getMinimumOrderCount());
     }
 }

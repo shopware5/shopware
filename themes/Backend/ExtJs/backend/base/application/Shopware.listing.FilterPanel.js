@@ -521,7 +521,7 @@ Ext.define('Shopware.listing.FilterPanel', {
         });
 
         var sorting = record.fields.keys;
-        if (configFields && configFields.length > 0) {
+        if (configFields && Object.keys(configFields).length > 0) {
             sorting = Object.keys(configFields);
         }
 

@@ -360,9 +360,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     success: function (operation) {
                         var full = Ext.decode(operation.responseText);
 
-                        if (full.total === notIndexed.total) {
-                            callback({ total: full.total, full: true });
-                        } else if (notIndexed.total > 0) {
+                        if (notIndexed.total > 0 && full.total !== notIndexed.total) {
                             callback({ total: notIndexed.total });
                         } else {
                             callback({ total: full.total, full: true });

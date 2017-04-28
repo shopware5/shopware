@@ -52,8 +52,14 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.IsCustomerSin
             title: '{s name="is_customer_since_condition_label"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsCustomerSinceCondition',
             items: [{
+                xtype: 'condition-operator-selection',
+                allowedOperators: ['=', '!=', '<', '<=', '>', '>='],
+                name: 'operator',
+                value: '>='
+            },{
                 xtype: 'datefield',
                 name: 'customerSince',
+                fieldLabel: '{s name="since"}{/s}',
                 allowBlank: false
             }]
         };

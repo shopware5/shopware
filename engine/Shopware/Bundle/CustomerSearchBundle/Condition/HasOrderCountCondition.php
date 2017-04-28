@@ -34,11 +34,18 @@ class HasOrderCountCondition implements ConditionInterface
     protected $minimumOrderCount;
 
     /**
-     * @param int $minimumOrderCount
+     * @var string
      */
-    public function __construct($minimumOrderCount)
+    protected $operator;
+
+    /**
+     * @param int    $minimumOrderCount
+     * @param string $operator
+     */
+    public function __construct($minimumOrderCount, $operator = ConditionInterface::OPERATOR_GTE)
     {
         $this->minimumOrderCount = $minimumOrderCount;
+        $this->operator = $operator;
     }
 
     public function getName()
@@ -52,5 +59,10 @@ class HasOrderCountCondition implements ConditionInterface
     public function getMinimumOrderCount()
     {
         return $this->minimumOrderCount;
+    }
+
+    public function getOperator()
+    {
+        return $this->operator;
     }
 }

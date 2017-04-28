@@ -32,7 +32,8 @@
 
 Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
     extend: 'Shopware.listing.FilterPanel',
-    alias:  'widget.product-listing-filter-panel',
+    alias:  'widget.customer-listing-filter-panel',
+    cls: 'customer-listing-filter-panel detail-view',
     width: 270,
     filterFieldStyle: '',
     collapsible: true,
