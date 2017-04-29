@@ -67,12 +67,12 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
         $shopID = $input->getOption('shop');
 
-        $repository = Shopware()->Container()->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
 
         $shop = ($shopID) ? $repository->find($shopID) : $repository->getDefault();
 
-        $context =  \Shopware\Components\Routing\Context::createFromShop($shop, Shopware()->Container()->get('config'));
-        Shopware()->Container()->get('router')->setContext($context);
+        $context =  \Shopware\Components\Routing\Context::createFromShop($shop, $this->container->get('config'));
+        $this->container->get('router')->setContext($context);
 
         /** @var $export \sExport */
         $export = $this->container->get('modules')->Export();
