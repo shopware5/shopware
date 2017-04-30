@@ -4,6 +4,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.23
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
+* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
 
 ## 5.2.22
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
