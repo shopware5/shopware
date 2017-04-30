@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Assert\Assertion;
 use Shopware\Components\Model\CategoryDenormalization;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,12 +44,23 @@ class RebuildCategoryTreeCommand extends ShopwareCommand
         $this
             ->setName('sw:rebuild:category:tree')
             ->setDescription('Rebuild the category tree')
-             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Offset to start with.')
-             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Categories to build per batch. Default: 3000')
+            ->addOption(
+                'offset',
+                'o',
+                InputOption::VALUE_REQUIRED,
+                'Offset to start with. Default: 0'
+            )
+            ->addOption(
+                'limit',
+                'l',
+                InputOption::VALUE_REQUIRED,
+                'Categories to build per batch. Default: 3000'
+            )
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command will rebuild your category tree.
 EOF
-            );
+            )
+        ;
     }
 
     /**
@@ -56,8 +68,11 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $progress = $input->getOption('offset');
-        $limit = $input->getOption('limit') ?: 1000;
+        $progress = $input->getOption('offset') ?: 0;
+        $limit = $input->getOption('limit') ?: 3000;
+
+        Assertion::integerish($progress);
+        Assertion::integerish($limit);
 
         /** @var CategoryDenormalization $component */
         $component = Shopware()->Container()->get('CategoryDenormalization');

@@ -4,6 +4,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.23
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
+* Made the values for the optional options `limit` and `offset` mandatory, added an value check and set the default limit to 3000 as suggested by the documentation for the `sw:rebuild:category:tree` command
 
 ## 5.2.22
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
