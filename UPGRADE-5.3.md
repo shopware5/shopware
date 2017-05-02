@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Models\Order\Repository::getDetails()`
 * Added method `Shopware\Models\Order\Repository::getPayments()`
 * Added responsive helper css/less classes in `_mixins/visibility-helper.less`
+* Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::getFilesystem()` for direct access to the media filesystem
 * Added config element `liveMigration` to enable or disable the media live migration
 * Added config element `displayListingBuyButton` to display listing buy button
 * Added service `shopware_search.batch_product_search` and `shopware_search.batch_product_number_search` for optimized product queries
