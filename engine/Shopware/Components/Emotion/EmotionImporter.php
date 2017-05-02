@@ -163,7 +163,7 @@ class EmotionImporter implements EmotionImporterInterface
                 || !$plugin['installed']
                 || version_compare($plugin['currentVersion'], $requiredPlugin['version'], '>=')
             ) {
-                $missingPlugins[] = sprintf('%s (%s)', $plugin['plugin_label'], $requiredPlugin['version']);
+                $missingPlugins[] = sprintf('%s (%s)', $requiredPlugin['name'], $requiredPlugin['version']);
             }
         }
 
