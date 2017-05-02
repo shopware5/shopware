@@ -171,8 +171,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             me.storeListing.show();
         });
 
-        me.communityStore.load();
-
         me.content = Ext.create('Ext.container.Container', {
             items: [
                 me.storeListing
