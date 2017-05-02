@@ -38,6 +38,6 @@ class HasNewsletterRegistrationConditionHandler implements ConditionHandlerInter
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->andWhere('customer.newsletter <> 0');
+        $query->andWhere('customer.newsletter != 0');
     }
 }

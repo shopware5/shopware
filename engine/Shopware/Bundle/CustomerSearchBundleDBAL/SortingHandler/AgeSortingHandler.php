@@ -26,7 +26,6 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler;
 
 use Shopware\Bundle\CustomerSearchBundle\Sorting\AgeSorting;
 use Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
@@ -37,11 +36,9 @@ class AgeSortingHandler implements SortingHandlerInterface
         return $sorting instanceof AgeSorting;
     }
 
-    public function handle(
-        SortingInterface $sorting,
-        QueryBuilder $query
-    ) {
-        /* @var SimpleSorting $sorting */
+    public function handle(SortingInterface $sorting, QueryBuilder $query)
+    {
+        /* @var AgeSorting $sorting */
         $query->addOrderBy('customer.age', $sorting->getDirection());
     }
 }

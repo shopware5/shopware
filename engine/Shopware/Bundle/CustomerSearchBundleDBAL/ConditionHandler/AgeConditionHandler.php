@@ -52,19 +52,19 @@ class AgeConditionHandler implements ConditionHandlerInterface
                 $value = $condition->getValue();
 
                 if (isset($value['min'])) {
-                    $query->andWhere('customer.age >= :Min')
-                        ->setParameter(':Min', $value['min']);
+                    $query->andWhere('customer.age >= :minAge')
+                        ->setParameter(':minAge', $value['min']);
                 }
 
                 if (isset($value['max'])) {
-                    $query->andWhere('customer.age <= :Max')
-                        ->setParameter(':Max', $value['max']);
+                    $query->andWhere('customer.age <= :maxAge')
+                        ->setParameter(':maxAge', $value['max']);
                 }
 
                 break;
             default:
-                $query->andWhere('customer.age ' . $condition->getOperator() . ' :Value');
-                $query->setParameter(':Value', $condition->getValue());
+                $query->andWhere('customer.age ' . $condition->getOperator() . ' :ageValue');
+                $query->setParameter(':ageValue', $condition->getValue());
                 break;
         }
     }

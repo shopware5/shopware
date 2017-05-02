@@ -26,7 +26,6 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler;
 
 use Shopware\Bundle\CustomerSearchBundle\Sorting\NumberSorting;
 use Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
@@ -37,11 +36,9 @@ class NumberSortingHandler implements SortingHandlerInterface
         return $sorting instanceof NumberSorting;
     }
 
-    public function handle(
-        SortingInterface $sorting,
-        QueryBuilder $query
-    ) {
-        /* @var SimpleSorting $sorting */
+    public function handle(SortingInterface $sorting, QueryBuilder $query)
+    {
+        /* @var NumberSorting $sorting */
         $query->addOrderBy('customer.customernumber', $sorting->getDirection());
     }
 }

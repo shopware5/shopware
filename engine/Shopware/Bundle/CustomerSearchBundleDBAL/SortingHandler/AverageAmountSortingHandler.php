@@ -26,7 +26,6 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler;
 
 use Shopware\Bundle\CustomerSearchBundle\Sorting\AverageAmountSorting;
 use Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
@@ -37,11 +36,9 @@ class AverageAmountSortingHandler implements SortingHandlerInterface
         return $sorting instanceof AverageAmountSorting;
     }
 
-    public function handle(
-        SortingInterface $sorting,
-        QueryBuilder $query
-    ) {
-        /* @var SimpleSorting $sorting */
+    public function handle(SortingInterface $sorting, QueryBuilder $query)
+    {
+        /* @var AverageAmountSorting $sorting */
         $query->addOrderBy('customer.invoice_amount_avg', $sorting->getDirection());
     }
 }

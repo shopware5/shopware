@@ -28,11 +28,6 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasNewsletterRegistrationCondition implements ConditionInterface
 {
-    /**
-     * @var int[]
-     */
-    protected $countryIds;
-
     public function getName()
     {
         return 'HasNewsletterRegistrationCondition';

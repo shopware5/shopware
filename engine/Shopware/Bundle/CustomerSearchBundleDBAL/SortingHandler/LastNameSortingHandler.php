@@ -26,7 +26,6 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler;
 
 use Shopware\Bundle\CustomerSearchBundle\Sorting\LastNameSorting;
 use Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
@@ -37,11 +36,9 @@ class LastNameSortingHandler implements SortingHandlerInterface
         return $sorting instanceof LastNameSorting;
     }
 
-    public function handle(
-        SortingInterface $sorting,
-        QueryBuilder $query
-    ) {
-        /* @var SimpleSorting $sorting */
+    public function handle(SortingInterface $sorting, QueryBuilder $query)
+    {
+        /* @var LastNameSorting $sorting */
         $query->addOrderBy('customer.lastname', $sorting->getDirection());
     }
 }

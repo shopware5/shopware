@@ -73,6 +73,7 @@ class CustomerHydrator extends Hydrator
         $customer->setFirstname($data['__customer_firstname']);
         $customer->setLastname($data['__customer_lastname']);
         $customer->setNumber($data['__customer_customernumber']);
+        $customer->setNewsletter((bool) $data['__active_campaign']);
 
         if ($data['__customer_birthday']) {
             $customer->setBirthday(new \DateTime($data['__customer_birthday']));
@@ -100,10 +101,6 @@ class CustomerHydrator extends Hydrator
 
         if (isset($data['__customerAttribute_id'])) {
             $this->attributeHydrator->addAttribute($customer, $data, 'customerAttribute');
-        }
-
-        if (isset($data['__campaign_id'])) {
-            $customer->setNewsletter(1);
         }
 
         return $customer;
