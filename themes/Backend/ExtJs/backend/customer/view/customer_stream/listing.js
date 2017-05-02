@@ -59,6 +59,21 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         return me.selModel;
     },
 
+    createActionColumnItems: function() {
+        var me = this, items = me.callParent(arguments);
+
+        items = Ext.Array.insert(items, 0, [
+            {
+                iconCls: 'sprite-arrow-circle-315',
+                tooltip: '{s name="index_stream"}{/s}',
+                handler: function(view, rowIndex, colIndex, item, opts, record) {
+                    me.fireEvent('index-stream', record);
+                }
+            }
+        ]);
+        return items;
+    },
+
     nameRenderer: function (value) {
         return '<span class="stream-name-column"><b>' + value + '</b></span>';
     }

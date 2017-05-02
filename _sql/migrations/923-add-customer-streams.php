@@ -99,7 +99,7 @@ SQL;
         $this->addSql($sql);
 
         $this->addSql('
-            ALTER TABLE `s_emotion` ADD `customer_stream_id` int(11) unsigned NULL DEFAULT NULL;
+            ALTER TABLE `s_emotion` ADD `customer_stream_ids` LONGTEXT NULL DEFAULT NULL;
         ');
 
         $this->addSql('

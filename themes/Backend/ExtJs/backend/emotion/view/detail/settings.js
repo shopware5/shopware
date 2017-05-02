@@ -541,16 +541,20 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         var me = this;
 
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
-        me.customerStreamSelection = Ext.create('Shopware.form.field.SingleSelection', {
-            name: 'customerStreamId',
+        me.customerStreamSelection = Ext.create('Shopware.form.field.Grid', {
+            name: 'customerStreamIds',
             labelWidth: 100,
-            fieldLabel: '{s name="customer_streams"}{/s}',
-            store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
+            height: 150,
+            fieldLabel: 'Customer Streams',
+            store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
         });
 
         me.replacementSelection = Ext.create('Shopware.form.field.EmotionGrid', {
             name: 'replacement',
+            fieldLabel: 'Ersetzt',
             labelWidth: 100,
+            height: 150,
             helpText: '{s name="replacement_help"}{/s}',
             helpTitle: '',
             store: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion"),
@@ -559,7 +563,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         return Ext.create('Ext.form.FieldSet', {
             collapsible: true,
-            title: '{s name="customize_field_set"}{/s}',
+            title: 'Individualisierung',
             collapsed: true,
             items: [me.customerStreamSelection, me.replacementSelection]
         });

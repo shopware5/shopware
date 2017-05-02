@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Customer', {
         'main.CustomerList',
         'main.CustomerListFilter',
         'main.Window',
+        'main.Wizard',
 
         'detail.Window',
         'detail.Base',

@@ -64,7 +64,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'condition-removed': me.updateSaveButtons
             },
             'customer-stream-listing': {
-                'customerstream-edit-item': me.editStream
+                'customerstream-edit-item': me.editStream,
+                'index-stream': me.indexStream
             }
         });
 
@@ -197,7 +198,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 streamView.streamListing.selModel.deselectAll(true);
                 me.preventStreamChanged = false;
                 streamView.streamListing.selModel.select([record], false, true);
-                me.startPopulate(record);
+                me.indexStream(record);
             }
         });
     },
@@ -310,7 +311,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         });
     },
 
-    startPopulate: function(record) {
+    indexStream: function(record) {
         var me = this;
 
         me.initProgressbar();
@@ -378,6 +379,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     initProgressbar: function() {
         this.getStreamView().indexingBar.updateProgress(0);
         this.getStreamView().indexingBar.show();
+        this.getStreamView().indexingBar.removeCls('empty');
 
         this.getStreamView().indexSearchButton.setDisabled(true);
         this.getStreamView().leftContainer.setDisabled(true);
@@ -392,6 +394,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 var response = Ext.decode(operation.responseText);
                 Ext.defer(function () {
                     me.getStreamView().indexingBar.updateProgress(0, '{s name=last_analyse}{/s}' + Ext.util.Format.date(response.last_index_time), true);
+                    me.getStreamView().indexingBar.addCls('empty');
                 }, 1000);
             }
         });

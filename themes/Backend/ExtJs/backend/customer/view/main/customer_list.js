@@ -64,9 +64,9 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
                 customerGroup: { header: '{s name="column/customer_group"}{/s}' },
                 shop: { header: '{s name="shop"}{/s}' },
                 number: { header: '{s name="column/number"}{/s}' },
-                email: { header: '{s name="email"}{/s}', renderer: this.mailRenderer },
+                email: { header: '{s name="email"}{/s}', renderer: this.mailRenderer, flex: 2 },
                 salutation: { header: '{s name="salutation"}{/s}', renderer: this.salutationRenderer },
-                title: { header: '{s name="title"}{/s}' },
+                title: { header: '{s name="title"}{/s}', width: 70 },
                 company: { header: '{s name="company"}{/s}' },
                 firstname: { header: '{s name="column/first_name"}{/s}' },
                 lastname: { header: '{s name="column/last_name"}{/s}' },
@@ -75,7 +75,6 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
                 firstLogin: { header: '{s name="first_login"}{/s}' },
                 lastLogin: { header: '{s name="lastLogin"}{/s}' },
                 accountMode: { header: '{s name="column/accountMode"}{/s}', renderer: this.accountModeRenderer },
-                newsletter: { header: '{s name="newsletter"}{/s}' },
                 lockedUntil: { header: '{s name="lockedUntil"}{/s}' },
                 birthday: { header: '{s name="birthday"}{/s}' }
             }

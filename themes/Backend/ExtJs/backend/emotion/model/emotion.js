@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'categoriesNames', type: 'string' },
         { name: 'categories', type: 'array' },
         { name: 'mode', type: 'string', defaultValue: 'fluid' },
-        { name: 'customerStreamId', type: 'int', useNull: true, defaultValue: null },
+        { name: 'customerStreamIds', type: 'string', useNull: true, defaultValue: null },
         { name: 'replacement', type: 'string', useNull: true, defaultValue: null },
         { name: 'emotionGroup', persist: false },
         { name: 'selectedCategory', persist: false }

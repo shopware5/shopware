@@ -39,3 +39,7 @@
   margin: 10px 0 10px 5px;
   border-bottom: 1px solid #a4b5c0;
 }
+
+.customer-stream-view .x-progress.x-progress-default.empty .x-progress-bar {
+    display: none;
+}

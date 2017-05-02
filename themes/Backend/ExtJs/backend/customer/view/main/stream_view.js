@@ -154,11 +154,15 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
     createProgressBar: function() {
         var me = this;
 
-        return me.indexingBar = Ext.create('Ext.ProgressBar', {
+        me.indexingBar = Ext.create('Ext.ProgressBar', {
             value: 0,
             height: 20,
             width: 360
         });
+
+        me.indexingBar.addCls('empty');
+
+        return me.indexingBar;
     },
 
     createItems: function() {
