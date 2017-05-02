@@ -325,18 +325,31 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                                 '<span>{width} x {height} Pixel</span>',
                             '</p>',
                         '</tpl>',
-                        '<p>',
-                            '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
-                            '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
-                        '</p>',
+
+                        '<tpl if="this.allowInBrowserRendering(extension)">',
+                            '<p>',
+                                '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
+                                '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
+                            '</p>',
+                        '</tpl>',
                     '</div>',
                 '</div>',
             '</tpl>{/literal}',
             {
                 /**
-                 * Member function of the template to check if a certain file is an image.
+                 * Checks if this file type is allowed to be rendered inside of the browser
                  *
-                 * @param { string }type
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                allowInBrowserRendering: function(extension) {
+                    return !Ext.Array.contains(['svg'], extension.toLowerCase());
+                },
+
+                /**
+                 * Member function of the template to check if a certain file is an image
+                 *
+                 * @param { string } type
                  * @param { string } extension
                  * @returns { boolean }
                  */
