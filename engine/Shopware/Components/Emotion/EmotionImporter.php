@@ -147,7 +147,7 @@ class EmotionImporter implements EmotionImporterInterface
                 'plugin.label as plugin_label',
                 'plugin.active',
                 'plugin.installation_date IS NOT NULL as installed',
-                'plugin.version as current_version',
+                'plugin.version as currentVersion',
             ])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name IN (:names)')
@@ -161,7 +161,7 @@ class EmotionImporter implements EmotionImporterInterface
                 || !$plugin['plugin_exists']
                 || !$plugin['active']
                 || !$plugin['installed']
-                || version_compare($plugin['currentVersion'], $requiredPlugin['version'], '>=')
+                || version_compare($plugin['currentVersion'], $requiredPlugin['version'], '<')
             ) {
                 $missingPlugins[] = sprintf('%s (%s)', $requiredPlugin['name'], $requiredPlugin['version']);
             }
