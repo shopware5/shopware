@@ -108,8 +108,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             me.generalFieldSet,
             me.landingPageFieldSet,
             me.deviceFieldset,
-            me.timingFieldSet,
-            me.customerFieldSet
+            me.customerFieldSet,
+            me.timingFieldSet
         ];
 
         me.addEvents(
@@ -541,30 +541,30 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         var me = this;
 
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
-        me.customerStreamSelection = Ext.create('Shopware.form.field.Grid', {
+        me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
             name: 'customerStreamIds',
             labelWidth: 100,
             height: 150,
-            fieldLabel: 'Customer Streams',
+            fieldLabel: '{s name="customer_streams"}{/s}',
+            helpText: '{s name="customer_streams_help"}{/s}',
             store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream"),
             searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
         });
 
         me.replacementSelection = Ext.create('Shopware.form.field.EmotionGrid', {
             name: 'replacement',
-            fieldLabel: 'Ersetzt',
+            fieldLabel: '{s name="replacement"}{/s}',
             labelWidth: 100,
             height: 150,
             helpText: '{s name="replacement_help"}{/s}',
-            helpTitle: '',
             store: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion"),
             searchStore: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion")
         });
 
         return Ext.create('Ext.form.FieldSet', {
             collapsible: true,
-            title: 'Individualisierung',
-            collapsed: true,
+            title: '{s name="individualisation"}{/s}',
+            collapsed: false,
             items: [me.customerStreamSelection, me.replacementSelection]
         });
     }

@@ -20,33 +20,33 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Customer
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
 // {namespace name=backend/customer/view/main}
 
-// {block name="backend/customer/model/customer_stream"}
-Ext.define('Shopware.apps.Customer.model.CustomerStream', {
-    extend: 'Shopware.data.Model',
+Ext.define('Shopware.form.field.CustomerStreamSingleSelection', {
+    extend: 'Shopware.form.field.SingleSelection',
+    alias: 'widget.shopware-form-field-customer-stream-single-selection',
 
-    configure: function() {
-        return {
-            controller: 'CustomerStream'
-        };
-    },
+    getComboConfig: function() {
+        var me = this;
+        var config = me.callParent(arguments);
 
-    fields: [
-        // {block name="backend/customer/model/customer_stream/fields"}{/block}
-        { name: 'id', type: 'int', useNull: true },
-        { name: 'customer_count', type: 'int' },
-        { name: 'name', type: 'string' },
-        { name: 'description', type: 'string', useNull: true },
-        { name: 'conditions', type: 'string' },
-        { name: 'useForHttpCache', type: 'boolean', defaultValue: true }
-    ]
+        config.tpl = Ext.create('Ext.XTemplate',
+            '<tpl for=".">',
+                '<div class="x-boundlist-item">{literal}{name} - {customer_count}{/literal} {s name="customer_count_suffix"}{/s}</div>',
+            '</tpl>'
+        );
+        config.displayTpl = Ext.create('Ext.XTemplate',
+            '<tpl for=".">',
+                '{literal}{name} - {customer_count}{/literal} {s name="customer_count_suffix"}{/s}',
+            '</tpl>'
+        );
+        return config;
+    }
 });
-// {/block}

@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Voucher.model.Detail', {
         { name : 'restrictArticles', type : 'string' },
         { name : 'strict', type : 'int' },
         { name : 'shopId', type : 'int', useNull:true },
+        { name : 'customerStreamIds', type : 'string', useNull:true, defaultValue: null },
         { name : 'taxConfig', type : 'string', useNull:true }
 
     ],

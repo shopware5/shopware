@@ -20,33 +20,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Customer
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
-
-// {block name="backend/customer/model/customer_stream"}
-Ext.define('Shopware.apps.Customer.model.CustomerStream', {
-    extend: 'Shopware.data.Model',
-
-    configure: function() {
-        return {
-            controller: 'CustomerStream'
-        };
-    },
-
-    fields: [
-        // {block name="backend/customer/model/customer_stream/fields"}{/block}
-        { name: 'id', type: 'int', useNull: true },
-        { name: 'customer_count', type: 'int' },
-        { name: 'name', type: 'string' },
-        { name: 'description', type: 'string', useNull: true },
-        { name: 'conditions', type: 'string' },
-        { name: 'useForHttpCache', type: 'boolean', defaultValue: true }
-    ]
+Ext.define('Shopware.attribute.CustomerStreamFieldHandler', {
+    extend: 'Shopware.attribute.AbstractEntityFieldHandler',
+    entity: "Shopware\\Models\\Customer\\CustomerStream",
+    singleSelectionClass: 'Shopware.form.field.CustomerStreamSingleSelection',
+    multiSelectionClass: 'Shopware.form.field.CustomerStreamGrid'
 });
-// {/block}

@@ -107,6 +107,10 @@ SQL;
         ');
 
         $this->addSql('
+            ALTER TABLE `s_emarketing_vouchers` ADD `customer_stream_ids` LONGTEXT NULL DEFAULT NULL;
+        ');
+
+        $this->addSql('
 CREATE TABLE `s_customer_streams_mapping` (
   `stream_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,

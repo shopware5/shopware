@@ -226,6 +226,36 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign('data', array_values($chart));
     }
 
+    protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
+    {
+        $data = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
+
+        $ids = array_column($data['data'], 'id');
+        if (empty($ids)) {
+            return $data;
+        }
+
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select(['stream_id', 'COUNT(customer_id)']);
+        $query->from('s_customer_streams_mapping', 'mapping');
+        $query->where('mapping.stream_id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('stream_id');
+
+        $counts = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        foreach ($data['data'] as &$row) {
+            $id = (int) $row['id'];
+            if (!array_key_exists($id, $counts)) {
+                $row['customer_count'] = 0;
+            } else {
+                $row['customer_count'] = $counts[$id];
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * @param array $conditions
      *

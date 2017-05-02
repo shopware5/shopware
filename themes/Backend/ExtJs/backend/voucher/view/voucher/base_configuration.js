@@ -381,6 +381,10 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
      * creates all fields for the restriction form on the right side
      */
     createRestrictionFormRight:function () {
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+
+        var store = factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream");
+
         return [
             {
                 xtype:'combobox',
@@ -409,6 +413,13 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 minChars:0,
                 valueField:'id',
                 displayField:'name'
+            },
+            {
+                xtype: 'shopware-form-field-customer-stream-grid',
+                fieldLabel: '{s name="restrict_customer_streams"}{/s}',
+                store: store,
+                searchStore: store,
+                name: 'customerStreamIds'
             }
         ]
     },

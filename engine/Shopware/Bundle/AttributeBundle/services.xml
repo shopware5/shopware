@@ -210,5 +210,23 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="shopware_attribute.customer_stream_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Customer\CustomerStream</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.customer_stream_reader" />
+            <argument type="service" id="shopware_attribute.customer_stream_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.customer_stream_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
+            <argument>Shopware\Models\Customer\CustomerStream</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.customer_stream_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CustomerStreamReader">
+            <argument>Shopware\Models\Customer\CustomerStream</argument>
+            <argument type="service" id="models" />
+        </service>
+
     </services>
 </container>

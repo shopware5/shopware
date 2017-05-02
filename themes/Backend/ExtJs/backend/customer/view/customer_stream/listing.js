@@ -74,8 +74,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         return items;
     },
 
-    nameRenderer: function (value) {
-        return '<span class="stream-name-column"><b>' + value + '</b></span>';
+    nameRenderer: function (value, meta, record) {
+        return '<span class="stream-name-column"><b>' + value + '</b> - '+ record.get('customer_count') +' {s name="customer_count_suffix"}{/s}</span>';
     }
 });
 // {/block}
