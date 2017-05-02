@@ -111,6 +111,10 @@ SQL;
         ');
 
         $this->addSql('
+            ALTER TABLE `s_user` ADD `login_token` VARCHAR(250) NULL DEFAULT NULL;
+        ');
+
+        $this->addSql('
 CREATE TABLE `s_customer_streams_mapping` (
   `stream_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,

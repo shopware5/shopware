@@ -567,16 +567,16 @@
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
 
+        <service id="shopware.customer_stream.repository" class="Shopware\Models\Customer\CustomerStreamRepository" >
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
         <service id="customer_search.dbal.gateway.order" class="Shopware\Components\CustomerStream\CustomerOrderGateway" >
             <argument id="dbal_connection" type="service"/>
             <argument id="shopware_customer_search.gateway.customer_order_hydrator" type="service"/>
         </service>
 
         <service id="shopware_customer_search.gateway.customer_order_hydrator" class="Shopware\Components\CustomerStream\CustomerOrderHydrator"/>
-
-        <service id="shopware.customer_stream.repository" class="Shopware\Models\Customer\CustomerStreamRepository" >
-            <argument id="dbal_connection" type="service"/>
-        </service>
 
         <service id="customer_search.dbal.indexing.stream_indexer" class="Shopware\Components\CustomerStream\StreamIndexer">
             <argument type="service" id="shopware_customer_search.stream_criteria_factory" />
@@ -664,5 +664,10 @@
             <tag name="shopware.emotion.preset_component_handler" />
         </service>
 
+        <service id="shopware.components.customer_stream.cookie_subscriber" class="Shopware\Components\CustomerStream\CookieSubscriber" >
+            <argument id="dbal_connection" type="service"/>
+            <argument id="service_container" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
     </services>
 </container>
