@@ -292,10 +292,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
             $fileSystem->remove($file->getPathname());
 
-            throw new Exception(sprintf(
-                'Uploaded file %s is no zip file',
-                $name
-            ));
+            $this->View()->assign([
+                'success' => false,
+                'message' => sprintf(
+                    'Uploaded file %s is no zip file',
+                    $name
+                ),
+            ]);
+
+            return;
         }
         $downloadPath = $this->container->getParameter('kernel.root_dir') . '/files/downloads/';
 

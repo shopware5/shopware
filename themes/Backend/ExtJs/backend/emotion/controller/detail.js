@@ -210,10 +210,15 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     me.importEmotion(action.result.filePath);
                 }
             },
-            failure: function() {
+            failure: function(form, action) {
+                var msg =  '{s name=emotion/emotion_import_failure_message}{/s}';
+                if (action.result.message) {
+                    msg = action.result.message;
+                }
+
                 return Shopware.Notification.createGrowlMessage(
                     '{s name=emotion/emotion_import_failure}{/s}',
-                    '{s name=emotion/emotion_import_failure_message}{/s}'
+                    msg
                 );
             }
         });
