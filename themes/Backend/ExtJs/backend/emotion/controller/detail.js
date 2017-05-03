@@ -559,6 +559,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 '{s name=error/not_all_required_fields_filled_preset}{/s}'
             );
         }
+        win.setLoading('{s name=preset/saving_as_preset}{/s}');
 
         values = form.getForm().getValues();
         values.thumbnail = values.preview;
@@ -574,6 +575,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             method: 'POST',
             callback: function(operation, success, response) {
                 var result = Ext.JSON.decode(response.responseText);
+                win.setLoading(false);
 
                 if (!success) {
                     return Shopware.Notification.createGrowlMessage(
