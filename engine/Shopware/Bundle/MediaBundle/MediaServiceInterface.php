@@ -181,5 +181,5 @@ interface MediaServiceInterface
     /**
      * @return FilesystemInterface
      */
-    public function getAdapter();
+    public function getFilesystem();
 }
