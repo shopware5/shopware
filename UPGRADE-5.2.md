@@ -266,6 +266,7 @@ There must be at least one option tag and inside each option tag where must be a
 * getOne function of customer api resource contains now the country and state data for billing and shipping address
 * Changed `jquery.search::onKeyboardNavigation()` method to provide more extension possibilities.
 * Deprecated the execution shopware.php via CLI. Please use the command line tool in `bin/console` instead.
+* Added filter event `Shopware_Modules_Admin_SaveRegister_FilterFormErrors` in `Shopware_Controllers_Frontend_Register` to filter form validation errors
 
 ## 5.2.6
 

@@ -130,6 +130,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             !empty($errors['billing'])
         );
 
+        $errors = $eventManager->filter(
+            'Shopware_Modules_Admin_SaveRegister_FilterFormErrors',
+            $errors,
+            [
+                'subject' => $this,
+                'postData' => $data
+            ]
+        );
+
         if ($errors['occurred']) {
             unset($data['register']['personal']['password']);
             unset($data['register']['personal']['passwordConfirmation']);
