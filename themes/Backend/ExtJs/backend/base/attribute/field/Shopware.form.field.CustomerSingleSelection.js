@@ -40,18 +40,18 @@ Ext.define('Shopware.form.field.CustomerSingleSelection', {
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
                 '<tpl if="company">',
-                    '<div class="x-boundlist-item">{literal}<b>{number}</b> - {firstName} {lastName} ({company}) - <i>{customerGroup}</i>{/literal}</div>',
+                    '<div class="x-boundlist-item">{literal}<b>{number}</b> - {firstname} {lastname} ({company}) - <i>{customerGroup}</i>{/literal}</div>',
                 '<tpl else>',
-                    '<div class="x-boundlist-item">{literal}<b>{number}</b> - {firstName} {lastName} - <i>{customerGroup}</i>{/literal}</div>',
+                    '<div class="x-boundlist-item">{literal}<b>{number}</b> - {firstname} {lastname} - <i>{customerGroup}</i>{/literal}</div>',
                 '</tpl>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
                 '<tpl if="company">',
-                    '{literal}{number} - {firstName} {lastName} ({company}) - {customerGroup}{/literal}',
+                    '{literal}{number} - {firstname} {lastname} ({company}) - {customerGroup}{/literal}',
                 '<tpl else>',
-                    '{literal}{number} - {firstName} {lastName} - {customerGroup}{/literal}',
+                    '{literal}{number} - {firstname} {lastname} - {customerGroup}{/literal}',
                 '</tpl>',
             '</tpl>'
         );

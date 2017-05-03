@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.CanceledOrder.model.Order', {
      * @array
      */
     associations:[
-        { type:'hasMany', model:'Shopware.apps.CanceledOrder.model.Customer', name:'getCustomer', associationKey:'customer' },
+        { type:'hasMany', model:'Shopware.apps.Base.model.Customer', name:'getCustomer', associationKey:'customer' },
         { type:'hasMany', model:'Shopware.apps.CanceledOrder.model.Position', name:'getPositions', associationKey:'details' },
         { type:'hasMany', model:'Shopware.apps.Base.model.Payment', name:'getPayment', associationKey:'payment' }
     ]
