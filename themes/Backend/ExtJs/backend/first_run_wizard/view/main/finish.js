@@ -102,6 +102,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
                 'icon': 'forum',
                 'text': '{s name="finish/tile/forum"}Shopware-Forum{/s}',
                 'description': '{s name="finish/tile/forumDescription"}Wir leben eine offene Community. Deswegen kannst Du Dich in unserem Forum mit unserer weltweiten Community zu Shopware oder zu allgemeinen eCommerce-Themen austauschen. Ein Archiv von tausenden Beiträgen liefert Dir wertvolle Infos und Antworten auf Deine Fragen.{/s}'
+            },
+            {
+                'link': '{s name="finish/links/docs"}http://community.shopware.com/Doku_cat_938.html{/s}',
+                'icon': 'help',
+                'text': '{s name="finish/tile/docs"}Shopware-Dokumentation{/s}',
+                'description': '{s name="finish/tile/docsDescription"}Von der Installation über die Anwendung bis hin zur Entwicklung, Anpassung und Erweiterung von Shopware findest Du in der Doku alles, was Du für Deine tägliche Arbeit mit Shopware benötigst.{/s}'
             }
 
         ],
