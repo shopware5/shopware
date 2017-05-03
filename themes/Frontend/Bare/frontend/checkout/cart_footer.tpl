@@ -19,28 +19,30 @@
         <div class="table--aggregation">
             {* Add product using a voucher *}
             {block name='frontend_checkout_cart_footer_add_voucher'}
-                <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
-
-                    {block name='frontend_checkout_cart_footer_add_voucher_trigger'}
-                        <input type="checkbox" id="add-voucher--trigger" class="add-voucher--checkbox">
-                    {/block}
-
-                    {block name='frontend_checkout_cart_footer_add_voucher_label'}
-                        <label for="add-voucher--trigger" class="add-voucher--label">{s name="CheckoutFooterVoucherTrigger"}{/s}</label>
-                    {/block}
-
-                    <div class="add-voucher--panel is--hidden block-group">
-                        {block name='frontend_checkout_cart_footer_add_voucher_field'}
-                            <input type="text" class="add-voucher--field is--medium block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline'}{/s}"|escape}" />
+                {if {config name=commentvoucherarticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
+                    <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
+    
+                        {block name='frontend_checkout_cart_footer_add_voucher_trigger'}
+                            <input type="checkbox" id="add-voucher--trigger" class="add-voucher--checkbox">
                         {/block}
-
-                        {block name='frontend_checkout_cart_footer_add_voucher_button'}
-                            <button type="submit" class="add-voucher--button is--medium btn is--primary is--center block">
-                                <i class="icon--arrow-right"></i>
-                            </button>
+    
+                        {block name='frontend_checkout_cart_footer_add_voucher_label'}
+                            <label for="add-voucher--trigger" class="add-voucher--label">{s name="CheckoutFooterVoucherTrigger"}{/s}</label>
                         {/block}
-                    </div>
-                </form>
+    
+                        <div class="add-voucher--panel is--hidden block-group">
+                            {block name='frontend_checkout_cart_footer_add_voucher_field'}
+                                <input type="text" class="add-voucher--field is--medium block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline'}{/s}"|escape}" />
+                            {/block}
+    
+                            {block name='frontend_checkout_cart_footer_add_voucher_button'}
+                                <button type="submit" class="add-voucher--button is--medium btn is--primary is--center block">
+                                    <i class="icon--arrow-right"></i>
+                                </button>
+                            {/block}
+                        </div>
+                    </form>
+                {/if}    
             {/block}
 
             {* Shipping costs pre-calculation *}
