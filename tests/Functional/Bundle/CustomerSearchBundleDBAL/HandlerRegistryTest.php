@@ -44,6 +44,7 @@ use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfMa
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithDeliveryConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithPaymentConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\RegisteredInShopConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SalutationConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SearchTermConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\SimpleCondition;
 
@@ -80,6 +81,7 @@ class HandlerRegistryTest extends TestCase
         $this->assertContains(OrderedWithPaymentConditionHandler::class, $classes);
         $this->assertContains(RegisteredInShopConditionHandler::class, $classes);
         $this->assertContains(SearchTermConditionHandler::class, $classes);
+        $this->assertContains(SalutationConditionHandler::class, $classes);
     }
 
     /**
