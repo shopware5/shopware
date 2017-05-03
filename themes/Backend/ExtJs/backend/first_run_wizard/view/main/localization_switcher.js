@@ -169,7 +169,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
                         marginTop: '5px'
                     },
                     handler: function() {
-                        me.preventDefault();
                         me.fireEvent('switchLanguage', elem.get('id'));
                     }
                 })
