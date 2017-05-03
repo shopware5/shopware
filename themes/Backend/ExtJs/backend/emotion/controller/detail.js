@@ -243,7 +243,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         presetData: result.presetData
                     });
 
-                    me.importAssets(preset, function() {
+                    me.importAssets(preset, function(success) {
                         me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
 
                         if (!success) {
@@ -782,7 +782,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             success: function(response) {
                 var result = Ext.JSON.decode(response.responseText);
 
-                return Ext.callback(importCallback, scope, [result.success, outerCallback, presetId, index, elements]);
+                if (!result.success) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=preset/assets_import_element_failure}{/s}',
+                        Ext.String.format('{s name=preset/assets_import_element_failure_message}{/s}', elements[index]['componentId'])
+                    );
+                }
+
+                return Ext.callback(importCallback, scope, [true, outerCallback, presetId, index, elements]);
             },
             failure: function() {
                 return Ext.callback(importCallback, scope, [false]);

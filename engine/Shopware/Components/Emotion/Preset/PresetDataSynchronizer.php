@@ -88,7 +88,12 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
             throw new PresetAssetImportException('Element handler not found. Import not possible.');
         }
 
-        $element = $handler->import($element);
+        try {
+            $element = $handler->import($element);
+        } catch (\Exception $e) {
+            throw new PresetAssetImportException($e->getMessage());
+        }
+
         $this->synchronizeData($preset, $element);
     }
 
