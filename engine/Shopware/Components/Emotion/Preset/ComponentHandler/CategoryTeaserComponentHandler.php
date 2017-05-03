@@ -50,6 +50,9 @@ class CategoryTeaserComponentHandler extends AbstractComponentHandler
         return $this->processElementData($element);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function export(array $element)
     {
         if (!isset($element['data'])) {

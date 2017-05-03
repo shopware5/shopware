@@ -28,11 +28,17 @@ class Html5VideoComponentHandler extends AbstractComponentHandler
 {
     const COMPONENT_TYPE = 'emotion-components-html-video';
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($componentType)
     {
         return $componentType === self::COMPONENT_TYPE;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function import(array $element)
     {
         if (!isset($element['data'], $element['assets'])) {
@@ -42,6 +48,9 @@ class Html5VideoComponentHandler extends AbstractComponentHandler
         return $this->processElementData($element);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function export(array $element)
     {
         if (!isset($element['data'])) {
