@@ -24,21 +24,21 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Sorting\OrderCountSorting;
+use Shopware\Bundle\CustomerSearchBundle\Sorting\AgeSorting;
 use Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
-class OrderCountSortingHandler implements SortingHandlerInterface
+class AgeSortingHandler implements SortingHandlerInterface
 {
     public function supports(SortingInterface $sorting)
     {
-        return $sorting instanceof OrderCountSorting;
+        return $sorting instanceof AgeSorting;
     }
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
-        /* @var OrderCountSorting $sorting */
-        $query->addOrderBy('customer.count_orders', $sorting->getDirection());
+        /* @var AgeSorting $sorting */
+        $query->addOrderBy('customer.age', $sorting->getDirection());
     }
 }

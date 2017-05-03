@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerGateway
@@ -90,6 +89,7 @@ class CustomerGateway
         $query->addSelect($this->fieldHelper->getCustomerFields());
         $query->addSelect($this->fieldHelper->getCustomerGroupFields());
         $query->addSelect($this->fieldHelper->getPaymentFields());
+        $query->addSelect('(SELECT 1 FROM s_campaigns_mailaddresses campaign_mail WHERE campaign_mail.email = customer.email LIMIT 1) as __active_campaign');
         $query->from('s_user', 'customer');
         $query->where('customer.id IN (:ids)');
         $query->leftJoin('customer', 's_core_customergroups', 'customerGroup', 'customerGroup.groupkey = customer.customergroup');

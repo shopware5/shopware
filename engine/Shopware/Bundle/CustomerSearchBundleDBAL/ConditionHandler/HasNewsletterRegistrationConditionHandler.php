@@ -22,23 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler;
+namespace Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\Sorting\OrderCountSorting;
-use Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\CustomerSearchBundle\Condition\HasNewsletterRegistrationCondition;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
-class OrderCountSortingHandler implements SortingHandlerInterface
+class HasNewsletterRegistrationConditionHandler implements ConditionHandlerInterface
 {
-    public function supports(SortingInterface $sorting)
+    public function supports(ConditionInterface $condition)
     {
-        return $sorting instanceof OrderCountSorting;
+        return $condition instanceof HasNewsletterRegistrationCondition;
     }
 
-    public function handle(SortingInterface $sorting, QueryBuilder $query)
+    public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /* @var OrderCountSorting $sorting */
-        $query->addOrderBy('customer.count_orders', $sorting->getDirection());
+        $query->andWhere('customer.newsletter != 0');
     }
 }

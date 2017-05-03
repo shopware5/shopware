@@ -6,6 +6,10 @@
 
     <services>
 
+        <service id="customer_search.dbal.sorting.age_sorting_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\AgeSortingHandler">
+            <tag name="customer_search_sorting_handler"/>
+        </service>
+
         <service id="customer_search.dbal.sorting.average_amount_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\AverageAmountSortingHandler">
             <tag name="customer_search_sorting_handler"/>
         </service>
@@ -54,11 +58,23 @@
             <tag name="customer_search_sorting_handler"/>
         </service>
 
+        <service id="customer_search.dbal.condition.age_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\AgeConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.customer_attribute_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\CustomerAttributeConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.has_address_with_country_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasAddressWithCountryConditionHandler">
             <tag name="customer_search_condition_handler"/>
         </service>
 
         <service id="customer_search.dbal.condition.has_canceled_orders_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasCanceledOrdersConditionHandler">
+            <tag name="customer_search_condition_handler"/>
+        </service>
+
+        <service id="customer_search.dbal.condition.has_newsletter_registration" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNewsletterRegistrationConditionHandler">
             <tag name="customer_search_condition_handler"/>
         </service>
 

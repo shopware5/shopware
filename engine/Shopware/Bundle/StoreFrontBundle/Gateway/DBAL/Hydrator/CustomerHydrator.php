@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerHydrator extends Hydrator
@@ -61,7 +58,6 @@ class CustomerHydrator extends Hydrator
         $customer->setAccountMode($data['__customer_accountmode']);
         $customer->setConfirmationKey($data['__customer_confirmationkey']);
         $customer->setPaymentId($data['__customer_paymentID']);
-        $customer->setNewsletter($data['__customer_newsletter']);
         $customer->setValidation($data['__customer_validation']);
         $customer->setAffiliate($data['__customer_affiliate']);
         $customer->setPaymentPreset($data['__customer_paymentpreset']);
@@ -77,6 +73,7 @@ class CustomerHydrator extends Hydrator
         $customer->setFirstname($data['__customer_firstname']);
         $customer->setLastname($data['__customer_lastname']);
         $customer->setNumber($data['__customer_customernumber']);
+        $customer->setNewsletter((bool) $data['__active_campaign']);
 
         if ($data['__customer_birthday']) {
             $customer->setBirthday(new \DateTime($data['__customer_birthday']));

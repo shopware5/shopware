@@ -22,23 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
+namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
-use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class ProductAttributeCondition implements ConditionInterface
+class AgeCondition implements ConditionInterface
 {
-    /**
-     * @var string
-     */
-    private $field;
-
     /**
      * @var string|array
      */
@@ -50,14 +39,11 @@ class ProductAttributeCondition implements ConditionInterface
     private $operator;
 
     /**
-     * @param string       $field
      * @param string       $operator
      * @param string|array $value    ['min' => 1, 'max' => 10] for between operator
      */
-    public function __construct($field, $operator, $value)
+    public function __construct($operator, $value)
     {
-        Assertion::string($field);
-        $this->field = $field;
         $this->value = $value;
         $this->operator = $operator;
     }
@@ -67,23 +53,7 @@ class ProductAttributeCondition implements ConditionInterface
      */
     public function getName()
     {
-        return 'product_attribute_' . $this->field;
-    }
-
-    /**
-     * @return string
-     */
-    public function getField()
-    {
-        return $this->field;
-    }
-
-    /**
-     * @param string $field
-     */
-    public function setField($field)
-    {
-        $this->field = $field;
+        return 'AgeCondition';
     }
 
     /**
