@@ -38,7 +38,7 @@
                     <?php if ($hasSchema): ?>
                         <a href="<?= $menuHelper->getNextUrl() ?>" id="skip-import" class="btn btn-default btn-arrow-right"><?= $t->t('database-import_skip_import') ?></a>
                     <?php endif; ?>
-                    <button type="submit" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t('forward') ?></button>
+                    <a href="<?= $menuHelper->getNextUrl() ?>" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t('forward') ?></a>
                 </div>
             </form>
         </div>
@@ -48,7 +48,5 @@
         </div>
     </div>
 </div>
-
-
 
 <?php $app->render('_footer.php') ?>
