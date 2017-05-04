@@ -182,6 +182,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             navController.displayLocalPluginPage();
         }
 
+        if (me.subApplication.action == 'Listing' && me.subApplication.params.filter) {
+            Shopware.app.Application.fireEvent('load-store-listing', me.subApplication.params.filter);
+            return;
+        }
+
         if (me.subApplication.action == 'PremiumPlugins') {
             Shopware.app.Application.fireEvent('display-premium-plugins');
             return;

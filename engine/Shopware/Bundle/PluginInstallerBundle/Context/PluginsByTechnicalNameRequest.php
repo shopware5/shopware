@@ -32,9 +32,9 @@ class PluginsByTechnicalNameRequest extends BaseRequest
     private $technicalNames;
 
     /**
-     * @param string $technicalNames
+     * @param array  $technicalNames
      * @param string $locale
-     * @param array  $shopwareVersion
+     * @param string $shopwareVersion
      */
     public function __construct($locale, $shopwareVersion, $technicalNames)
     {
