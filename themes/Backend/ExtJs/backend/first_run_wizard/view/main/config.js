@@ -83,23 +83,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             brandSecondary: {
                 label: '{s name=config/themeSettings/brandSecondaryColor/label}Secondary color{/s}'
             },
-            desktopLogo: {
-                label: '{s name=config/themeSettings/desktopLogo/label}Shop\'s logo (desktop){/s}'
-            },
-            tabletLandscapeLogo: {
-                label: '{s name=config/themeSettings/tabletLandscapeLogo/label}Shop\'s logo (tablet landscape){/s}'
-            },
-            tabletLogo: {
-                label: '{s name=config/themeSettings/tabletLogo/label}Shop\'s logo (tablet){/s}'
-            },
-            mobileLogo: {
-                label: '{s name=config/themeSettings/mobileLogo/label}Shop\'s logo (mobile){/s}'
-            }
-        },
-        documentSettings: {
-            title: '{s name=config/documentSettings/title}Document settings{/s}',
             logo: {
-                label: '{s name=config/documentSettings/logo/label}Logo{/s}'
+                label: '{s name=config/themeSettings/logo/label}Shop\'s logo{/s}'
             }
         }
     },
@@ -123,8 +108,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
                 html: '<p>' + me.snippets.content.message + '</p>'
             },
             me.createShopConfigForm(),
-            me.createThemeConfigForm(),
-            me.createDocumentConfigForm()
+            me.createThemeConfigForm()
         ];
 
         me.callParent(arguments);
@@ -147,33 +131,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
 
         me.themeDesktopLogo = Ext.create('Shopware.form.field.Media', {
             name: 'desktopLogo',
-            fieldLabel: me.snippets.themeSettings.desktopLogo.label,
-            supportText: me.snippets.themeSettings.desktopLogo.support,
-            valueField: 'path',
-            minimizable: false
-        });
-
-        me.themeTabletLandscapeLogo = Ext.create('Shopware.form.field.Media', {
-            name: 'tabletLandscapeLogo',
-            fieldLabel: me.snippets.themeSettings.tabletLandscapeLogo.label,
-            supportText: me.snippets.themeSettings.tabletLandscapeLogo.support,
-            valueField: 'path',
-            minimizable: false
-        });
-
-        me.themeTabletLogo = Ext.create('Shopware.form.field.Media', {
-            name: 'tabletLogo',
-            fieldLabel: me.snippets.themeSettings.tabletLogo.label,
-            supportText: me.snippets.themeSettings.tabletLogo.support,
-            valueField: 'path',
-            minimizable: false
-        });
-
-        me.themeMobileLogo = Ext.create('Shopware.form.field.Media', {
-            name: 'mobileLogo',
-            fieldLabel: me.snippets.themeSettings.mobileLogo.label,
-            supportText: me.snippets.themeSettings.mobileLogo.support,
-            valueField: 'path',
+            fieldLabel: me.snippets.themeSettings.logo.label,
+            valueField: 'virtualPath',
             minimizable: false
         });
 
@@ -189,10 +148,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             items: [
                 me.themeBrandPrimaryColor,
                 me.themeBrandSecondaryColor,
-                me.themeDesktopLogo,
-                me.themeTabletLandscapeLogo,
-                me.themeTabletLogo,
-                me.themeMobileLogo
+                me.themeDesktopLogo
             ]
         });
 
@@ -251,32 +207,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
         });
 
         return me.shopConfigFieldSet;
-    },
-
-    createDocumentConfigForm: function() {
-        var me = this;
-
-        me.documentLogo = Ext.create('Ext.form.field.TinyMCE', {
-            name: '__document_logo',
-            fieldLabel: me.snippets.documentSettings.logo.label,
-            supportText: me.snippets.documentSettings.logo.support
-        });
-
-        me.documentConfigFieldSet = Ext.create('Ext.form.FieldSet', {
-            cls: Ext.baseCSSPrefix + 'base-field-set',
-            title: me.snippets.documentSettings.title,
-            defaults: {
-                anchor:'95%',
-                labelWidth:150,
-                minWidth:250,
-                xtype:'textfield'
-            },
-            items: [
-                me.documentLogo
-            ]
-        });
-
-        return me.documentConfigFieldSet;
     },
 
     getButtons: function() {

@@ -72,6 +72,14 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $values = $this->Request()->getParams();
         $defaultShop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
 
+        if (strpos($values['desktopLogo'], 'media/') === 0) {
+            $values['tabletLandscapeLogo'] = $values['desktopLogo'];
+            $values['tabletLogo'] = $values['desktopLogo'];
+            $values['mobileLogo'] = $values['desktopLogo'];
+            $values['emailheaderhtml'] = $values['desktopLogo'];
+            $values['__document_logo'] = $values['desktopLogo'];
+        }
+
         /**
          * Save theme config
          */
@@ -96,6 +104,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ->getRepository('Shopware\Models\Shop\Template')
             ->findOneBy(['template' => 'Responsive']);
 
+        $themeConfigValues = array_filter($themeConfigValues, function ($config) {
+            return !empty($config['value']);
+        });
+
         $this->container->get('theme_service')->saveConfig($theme, $themeConfigValues);
         $this->container->get('theme_timestamp_persistor')->updateTimestamp($defaultShop->getId(), time());
 
@@ -108,6 +120,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'address',
             'bankAccount',
             'company',
+            'emailheaderhtml',
         ];
 
         $shopConfigValues = array_intersect_key($values, array_flip($shopConfigKeys));
@@ -118,6 +131,17 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $element = Shopware()->Models()
                 ->getRepository('Shopware\Models\Config\Element')
                 ->findOneBy(['name' => $configName]);
+
+            if ($configName === 'emailheaderhtml') {
+                if (empty($configValue)) {
+                    continue;
+                }
+
+                $configValue = sprintf(
+                    "<div>\n<img src=\"{media path='%s'}\" style=\"max-height: 20mm\" alt=\"Logo\"><br />",
+                    $configValue
+                );
+            }
 
             $requestElements[] = [
                 'id' => $element->getId(),
@@ -152,8 +176,19 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $key = str_replace('__document_', '', $key);
             $elements = Shopware()->Models()->getRepository(Element::class)->findBy(['name' => $key]);
 
-            if (empty($elements)) {
+            if (empty($elements) || empty($value)) {
                 continue;
+            }
+
+            if ($key === 'logo') {
+                $hash = \Shopware\Components\Random::getAlphanumericString(16);
+                $value = sprintf(
+                    '<p><img id="tinymce-editor-image-%s" class="tinymce-editor-image tinymce-editor-image-%s" src="{media path=\'%s\'}" style="max-height: 20mm;" data-src="%s" /></p>',
+                    $hash,
+                    $hash,
+                    $value,
+                    $value
+                );
             }
 
             foreach ($elements as $element) {
@@ -186,9 +221,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          */
         $themeConfigKeys = [
             'desktopLogo',
-            'tabletLandscapeLogo',
-            'tabletLogo',
-            'mobileLogo',
             'brand-primary',
             'brand-secondary',
         ];
@@ -250,29 +282,9 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $shopConfigValues[$shopConfig['name']] = $value;
         }
 
-        /**
-         * Load document config values
-         */
-        $documentConfigKeys = [
-            'Logo',
-        ];
-
-        $builder = $this->container->get('models')->createQueryBuilder();
-        $builder->select(['element'])
-            ->from('Shopware\Models\Document\Element', 'element')
-            ->where('element.name IN (:names)')
-            ->setParameter('names', $documentConfigKeys, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
-
-        $documentConfigData = $builder->getQuery()->getArrayResult();
-        $documentConfigValues = [];
-
-        foreach ($documentConfigData as $documentConfig) {
-            $documentConfigValues['__document_' . strtolower($documentConfig['name'])] = $documentConfig['value'];
-        }
-
         $this->View()->assign([
             'success' => true,
-            'data' => array_merge($shopConfigValues, $themeConfigValues, $documentConfigValues),
+            'data' => array_merge($shopConfigValues, $themeConfigValues),
         ]);
     }
 

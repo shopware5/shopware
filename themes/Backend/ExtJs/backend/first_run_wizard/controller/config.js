@@ -80,15 +80,11 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
             configPanel.themeBrandPrimaryColor,
             configPanel.themeBrandSecondaryColor,
             configPanel.themeDesktopLogo,
-            configPanel.themeTabletLandscapeLogo,
-            configPanel.themeTabletLogo,
-            configPanel.themeMobileLogo,
             configPanel.shopNameField,
             configPanel.mailField,
             configPanel.addressField,
             configPanel.bankAccountField,
-            configPanel.companyField,
-            configPanel.documentLogo
+            configPanel.companyField
         ];
 
         var formValidation = me.validateForm(fields);
@@ -117,9 +113,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                     var formData = result.data;
 
                     configPanel.themeDesktopLogo.setValue(formData.desktopLogo);
-                    configPanel.themeTabletLandscapeLogo.setValue(formData.tabletLandscapeLogo);
-                    configPanel.themeTabletLogo.setValue(formData.tabletLogo);
-                    configPanel.themeMobileLogo.setValue(formData.mobileLogo);
                     configPanel.themeBrandPrimaryColor.setValue(formData['brand-primary']);
                     configPanel.themeBrandSecondaryColor.setValue(formData['brand-secondary']);
                     configPanel.shopNameField.setValue(formData.shopName);
@@ -127,9 +120,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                     configPanel.addressField.setValue(formData.address);
                     configPanel.bankAccountField.setValue(formData.bankAccount);
                     configPanel.companyField.setValue(formData.company);
-                    configPanel.documentLogo.getEditor().onInit.add(function() {
-                        configPanel.documentLogo.setEditorValue(formData['__document_logo'], configPanel.documentLogo);
-                    });
                 }
             }
         });
