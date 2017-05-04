@@ -294,16 +294,18 @@ class ModelManager extends EntityManager
     /**
      * Shopware helper function to extend an attribute table.
      *
-     * @param string $table  Full table name. Example: "s_user_attributes"
-     * @param string $prefix Column prefix. The prefix and column parameter will be the column name. Example: "swag".
-     * @param string $column The column name
-     * @param string $type   Full type declaration. Example: "VARCHAR( 5 )" / "DECIMAL( 10, 2 )"
+     * @param string $table    Full table name. Example: "s_user_attributes"
+     * @param string $prefix   Column prefix. The prefix and column parameter will be the column name. Example: "swag".
+     * @param string $column   The column name
+     * @param string $type     Full type declaration. Example: "VARCHAR( 5 )" / "DECIMAL( 10, 2 )"
+     * @param bool   $nullable Deprecated and unused
+     * @param null   $default  Default value of the column
      *
      * @throws \InvalidArgumentException
      *
      * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead
      */
-    public function addAttribute($table, $prefix, $column, $type)
+    public function addAttribute($table, $prefix, $column, $type, $nullable = true, $default = null)
     {
         if (empty($table)) {
             throw new \InvalidArgumentException('No table name passed');
@@ -326,7 +328,7 @@ class ModelManager extends EntityManager
 
         /** @var CrudService $crudService */
         $crudService = Shopware()->Container()->get('shopware_attribute.crud_service');
-        $crudService->update($table, $prefixedColumn, $type);
+        $crudService->update($table, $prefixedColumn, $type, [], null, false, $default);
     }
 
     /**
