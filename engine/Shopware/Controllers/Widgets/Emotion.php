@@ -38,23 +38,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
-    public function configAction()
-    {
-        $categoryId = (int) $this->Request()->getParam('categoryId');
-
-        $config = $this->getEmotionConfiguration($categoryId);
-
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
-
-        $config = array_merge($config, [
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'sCategoryContent' => $categoryContent,
-            'Controller' => 'listing',
-        ]);
-
-        $this->View()->assign($config);
-    }
-
     /**
      * The getEmotions function selects all emotions for the passed category id
      * and sets the result into the view variable "sEmotions".
@@ -208,83 +191,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
         $this->View()->assign('pages', $values['pages'] > $maxPages ? $maxPages : $values['pages']);
         $this->View()->assign('sPerPage', $limit);
-    }
-
-    /**
-     * @param int $categoryId
-     *
-     * @return array
-     */
-    protected function getEmotionConfiguration($categoryId)
-    {
-        if ($this->Request()->getParam('sPage')) {
-            return [
-                'hasEmotion' => false,
-                'showListing' => true,
-                'showListingDevices' => [],
-            ];
-        }
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-
-        /** @var \Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration $service */
-        $service = $this->get('shopware_emotion.store_front_emotion_device_configuration');
-        $emotions = $service->getCategoryConfiguration($categoryId, $context);
-
-        return [
-            'emotions' => $emotions,
-            'hasEmotion' => !empty($emotions),
-            'showListing' => $this->hasListing($emotions),
-            'showListingDevices' => $this->getDevicesWithListing($emotions),
-        ];
-    }
-
-    /**
-     * Determines if the product listing has to be loaded/shown at all
-     *
-     * @param array $emotions
-     *
-     * @return bool
-     */
-    private function hasListing(array $emotions)
-    {
-        if (empty($emotions)) {
-            return true;
-        }
-
-        $showListing = (bool) max(array_column($emotions, 'showListing'));
-        if ($showListing) {
-            return true;
-        }
-
-        $devices = $this->getDevicesWithListing($emotions);
-
-        return !empty($devices);
-    }
-
-    /**
-     * Filters the device types down to which have to show the product listing
-     *
-     * @param array $emotions
-     *
-     * @return int[]
-     */
-    private function getDevicesWithListing(array $emotions)
-    {
-        $visibleDevices = [0, 1, 2, 3, 4];
-        $permanentVisibleDevices = [];
-
-        foreach ($emotions as $emotion) {
-            // always show the listing in the emotion viewports when the option "show listing" is active
-            if ($emotion['showListing']) {
-                $permanentVisibleDevices = array_merge($permanentVisibleDevices, $emotion['devicesArray']);
-            }
-
-            $visibleDevices = array_diff($visibleDevices, $emotion['devicesArray']);
-        }
-
-        $visibleDevices = array_merge($permanentVisibleDevices, $visibleDevices);
-
-        return array_values($visibleDevices);
     }
 
     /**

@@ -66,11 +66,8 @@ class CookieSubscriber implements SubscriberInterface
         if (!$this->container->initialized('session')) {
             return;
         }
+        
 
-        $session = $this->container->get('session');
-        if (!$login = $request->getCookie('shopware-login')) {
-            return;
-        }
         if (!$token = $request->getCookie('shopware-login-token')) {
             return;
         }
@@ -80,9 +77,8 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        if (hash_equals($this->getUserHash($id), $login)) {
-            $session->offsetSet('auto-user', $id);
-        }
+        $session = $this->container->get('session');
+//        $session->offsetSet('auto-user', $id);
     }
 
     public function afterLogin(\Enlight_Event_EventArgs $args)
@@ -107,14 +103,6 @@ class CookieSubscriber implements SubscriberInterface
         $expire = time() + 365 * 24 * 60 * 60;
 
         $response->setCookie(
-            'shopware-login',
-            $this->getUserHash($id),
-            $expire,
-            $request->getBasePath() . '/',
-            ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()
-        );
-
-        $response->setCookie(
             'shopware-login-token',
             $token,
             $expire,
@@ -123,13 +111,5 @@ class CookieSubscriber implements SubscriberInterface
         );
 
         $this->connection->update('s_user', ['login_token' => $token], ['id' => $id]);
-    }
-
-    private function getUserHash($id)
-    {
-        $loginHash = $this->connection->fetchAssoc('SELECT id, email, firstlogin, customernumber FROM s_user WHERE id = :id', [':id' => $id]);
-        $loginHash = json_encode($loginHash);
-
-        return bin2hex($loginHash);
     }
 }

@@ -544,6 +544,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
             name: 'customerStreamIds',
             labelWidth: 100,
+            fieldLabelConfig: 'as_empty_text',
             height: 150,
             fieldLabel: '{s name="customer_streams"}{/s}',
             helpText: '{s name="customer_streams_help"}{/s}',
@@ -555,6 +556,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'replacement',
             fieldLabel: '{s name="replacement"}{/s}',
             labelWidth: 100,
+            fieldLabelConfig: 'as_empty_text',
             height: 150,
             helpText: '{s name="replacement_help"}{/s}',
             store: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion"),

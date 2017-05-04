@@ -19,20 +19,22 @@
                     </div>
                 {/foreach}
 
-                {block name="frontend_listing_list_promotion_link_show_listing"}
+                {if !$isHomePage}
+                    {block name="frontend_listing_list_promotion_link_show_listing"}
 
-                    {$showListingCls = "emotion--show-listing"}
+                        {$showListingCls = "emotion--show-listing"}
 
-                    {foreach $showListingDevices as $device}
-                        {$showListingCls = "{$showListingCls} hidden--{$emotionViewports[$device]}"}
-                    {/foreach}
+                        {foreach $showListingDevices as $device}
+                            {$showListingCls = "{$showListingCls} hidden--{$emotionViewports[$device]}"}
+                        {/foreach}
 
-                    <div class="{$showListingCls}{if $fullscreen} is--align-center{/if}">
-                        <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
-                            {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
-                        </a>
-                    </div>
-                {/block}
+                        <div class="{$showListingCls}{if $fullscreen} is--align-center{/if}">
+                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
+                                {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
+                            </a>
+                        </div>
+                    {/block}
+                {/if}
             </div>
         {/block}
     {/if}
@@ -52,7 +54,7 @@
         {/if}
 
         <div class="{$listingCssClass}">
-            {action module=frontend controller=listing action=listing params=$ajaxCountUrlParams}
+            {action module=frontend controller=listing action=listing params=$params}
         </div>
     {/if}
 {/block}

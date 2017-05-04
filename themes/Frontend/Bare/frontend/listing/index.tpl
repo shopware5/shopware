@@ -17,7 +17,7 @@
 {* Main content *}
 {block name='frontend_index_content'}
     <div class="content listing--content">
-        {action module=widgets controller=emotion action=config categoryId=$sCategoryContent.id sPage=$page}
+        {action controller=listing action=layout params=$params}
     </div>
 {/block}
 

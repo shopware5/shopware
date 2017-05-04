@@ -43,6 +43,55 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
+    /**
+     * Index action method
+     */
+    public function indexAction()
+    {
+        $requestCategoryId = $this->Request()->getParam('sCategory');
+
+        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
+        }
+
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
+
+        $categoryId = $categoryContent['id'];
+
+        Shopware()->System()->_GET['sCategory'] = $categoryId;
+
+        $this->View()->assign([
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+            'sCategoryContent' => $categoryContent,
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
+            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
+            'page' => $this->Request()->getParam('sPage'),
+            'params' => $this->Request()->getParams()
+        ]);
+    }
+
+    public function layoutAction()
+    {
+        $categoryId = (int) $this->Request()->getParam('sCategory');
+
+        $config = $this->getEmotionConfiguration($categoryId);
+
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+
+        $config = array_merge($config, [
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sCategoryContent' => $categoryContent,
+            'Controller' => 'listing',
+            'params' => $this->Request()->getParams()
+        ]);
+
+        $this->View()->assign($config);
+    }
+
     public function listingAction()
     {
         $requestCategoryId = $this->Request()->getParam('sCategory');
@@ -120,36 +169,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($categoryArticles);
         $this->View()->assign('sortings', $sortings);
-    }
-
-    /**
-     * Index action method
-     */
-    public function indexAction()
-    {
-        $requestCategoryId = $this->Request()->getParam('sCategory');
-
-        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
-            throw new Enlight_Controller_Exception(
-                'Listing category missing, non-existent or invalid for the current shop',
-                404
-            );
-        }
-
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
-
-        $categoryId = $categoryContent['id'];
-
-        Shopware()->System()->_GET['sCategory'] = $categoryId;
-
-        $this->View()->assign([
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryContent' => $categoryContent,
-            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
-            'page' => $this->request->getParam('sPage'),
-        ]);
     }
 
     /**
@@ -244,17 +263,24 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'showListingDevices' => [],
             ];
         }
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var StoreFrontEmotionDeviceConfiguration $service */
-        $service = $this->get('shopware_emotion.store_front_emotion_device_configuration');
+        $service = $this->container->get('shopware_emotion.store_front_emotion_device_configuration');
         $emotions = $service->getCategoryConfiguration($categoryId, $context);
+
+        $isHomePage = $context->getShop()->getCategory()->getId() === $categoryId;
+
+        $devicesWithListing = $this->getDevicesWithListing($emotions);
+        if ($isHomePage) {
+            $devicesWithListing = [];
+        }
 
         return [
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
-            'showListing' => $this->hasListing($emotions),
-            'showListingDevices' => $this->getDevicesWithListing($emotions),
+            'showListing' => $this->hasListing($emotions) && !$isHomePage,
+            'showListingDevices' => $devicesWithListing,
+            'isHomePage' => $isHomePage
         ];
     }
 

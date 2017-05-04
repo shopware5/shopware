@@ -141,6 +141,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
         var me = this;
 
         return {
+            emptyText: me.emptyText,
             helpText: me.helpText,
             helpTitle: me.helpTitle,
             valueField: 'id',

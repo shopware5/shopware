@@ -1,20 +1,20 @@
 {* Banner *}
 {block name="frontend_listing_index_banner"}
-    {if !$hasEmotion}
+    {if !$hasEmotion && !$isHomePage}
         {include file='frontend/listing/banner.tpl'}
     {/if}
 {/block}
 
 {* Category headline *}
 {block name="frontend_listing_index_text"}
-    {if !$hasEmotion}
+    {if !$hasEmotion && !$isHomePage}
         {include file='frontend/listing/text.tpl'}
     {/if}
 {/block}
 
 {* Topseller *}
 {block name="frontend_listing_index_topseller"}
-    {if !$hasEmotion && {config name=topSellerActive}}
+    {if !$hasEmotion && {config name=topSellerActive}  && !$isHomePage}
         {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
     {/if}
 {/block}
@@ -26,7 +26,7 @@
 
 {* Tagcloud *}
 {block name="frontend_listing_index_tagcloud"}
-    {if {config name=show namespace=TagCloud }}
+    {if {config name=show namespace=TagCloud } && !$isHomePage}
         {action module=widgets controller=listing action=tag_cloud sController=listing sCategory=$sCategoryContent.id}
     {/if}
 {/block}

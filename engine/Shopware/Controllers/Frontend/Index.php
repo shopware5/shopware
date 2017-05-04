@@ -43,15 +43,9 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /** @var StoreFrontEmotionDeviceConfiguration $service */
-        $service = $this->get('shopware_emotion.store_front_emotion_device_configuration');
-        $emotions = $service->getCategoryConfiguration($categoryId, $context);
-
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
         $this->View()->assign([
-            'emotions' => $emotions,
-            'hasEmotion' => !empty($emotions),
             'sCategoryContent' => $categoryContent,
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
         ]);

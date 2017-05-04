@@ -99,6 +99,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
         me.control({
             'customer-list': {
                 edit: me.onEditCustomer,
+                create: me.onCreateCustomer,
                 itemdblclick: me.onGridDblClick
             },
             'customer-detail-window button[action=save-customer]': {

@@ -463,19 +463,5 @@ class CacheControl
             $request->getBasePath() . '/',
             ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()
         );
-
-        $hash = sha1(
-            json_encode($context->getTaxRules()) .
-            json_encode($context->getCurrentCustomerGroup()) .
-            json_encode($context->getActiveCustomerStreamIds())
-        );
-
-        $response->setCookie(
-            'x-cache-context-hash',
-            $hash,
-            0,
-            $request->getBasePath() . '/widgets/emotion/config',
-            ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()
-        );
     }
 }
