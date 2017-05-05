@@ -54,13 +54,13 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
                 xtype: 'container',
                 border: false,
                 style: 'font-weight: 700; line-height: 20px;',
-                html: '<h1>{s name=finish/content/title}Fertig{/s}</h1>'
+                html: '<h1>{s name=finish/content/almost_ready}Fast fertig!{/s}</h1>'
             },
             {
                 xtype: 'container',
                 border: false,
                 style: 'margin-bottom: 20px;',
-                html: '<p>{s name=finish/content/message}Erstelle Dir jetzt Deine persönliche ShopwareID. Die ShopwareID ist Dein Benutzername, den Du anschließend für die Registrierung auf verschiedenen Shopware-Plattformen benötigst. Eine Übersicht der wichtigsten Shopware Plattformen und deren Vorteile für Dich findest Du hier:{/s}</p>',
+                html: '<p>{s name=finish/content/message}Erstelle Dir jetzt Deinen eigenen <a href=\"https://account.shopware.com/\">Shopware-Account</a>. Diesen benötigst Du, um Dich anschließend auf verschiedenen Shopware-Plattformen einzuloggen. Eine Übersicht der wichtigsten Shopware-Plattformen und deren Vorteile für Dich findest Du hier:{/s}</p>',
                 width: '100%'
             },
             {
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
                 xtype: 'container',
                 border: false,
                 html: Ext.String.format(
-                    '<p>{s name=finish/shopware_id/text}{/s}</p>',
+                    '<p>{s name=finish/shopware_id/text}Lege Dir Deinen Shopware-Account in wenigen Schritten an: <a href=\"[0]\" target=\"_blank\">Jetzt Shopware-Account erstellen</a>{/s}</p>',
                     '{s name="finish/links/account"}https://account.shopware.com/{/s}'
                 ),
                 width: '100%'

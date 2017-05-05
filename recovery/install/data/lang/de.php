@@ -102,12 +102,12 @@ EOT
     'migration_counter_text_snippets' => 'Textbausteine werden aktualisiert',
     'migration_update_success' => 'Datenbank erfolgreich importiert!',
 
-    'edition_header' => 'Hast Du eine  Shopware -Lizenz erworben?',
+    'edition_header' => 'Hast Du eine Shopware-Lizenz erworben?',
     'edition_info' => 'Shopware gibt es in einer kostenlosen <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition </a> sowie in kostenpflichtigen <a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus und Enterprise Editionen</a>.',
-    'edition_ce' => 'Nein, ich möchte die kostenfreie <a href="https://de.shopware.com/versionen/" target="_blank"> Community Edition </a> verwenden.',
-    'edition_cm' => 'Ja, ich habe eine kostenpflichtige Shopware -Lizenz(<a href="https://de.shopware.com/versionen/" target="_blank"> Professional, Professional Plusoder Enterprise</a>).',
-    'edition_license' => 'Dann trage hier Deinen Lizenzschlüssel ein. Diesen findest Du in Deinem Shopware Account unter "Lizenzen" -> "Produktlizenzen" -> "Details / Download":',
-    'edition_license_error' => 'Für die Installation einer kostenpflichtigen Shopware Version ist eine gültige Lizenz erforderlich.',
+    'edition_ce' => 'Nein, ich möchte die kostenfreie <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition</a> verwenden.',
+    'edition_cm' => 'Ja, ich habe eine kostenpflichtige Shopware-Lizenz (<a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus oder Enterprise</a>).',
+    'edition_license' => 'Dann trage hier Deinen Lizenzschlüssel ein. Diesen findest Du in Deinem Shopware-Account unter "Lizenzen" &rarr; "Produktlizenzen" &rarr; "Details / Download":',
+    'edition_license_error' => 'Für die Installation einer kostenpflichtigen Shopware-Version ist eine gültige Lizenz erforderlich.',
 
     'configuration_header' => 'Shop Grundeinrichtung',
     'configuration_sconfig_text' => 'Fast geschafft! Jetzt musst Du nur noch einige grundlegende Einstellungen für Deinen Shop festlegen, dann ist die Installation abgeschlossen. Alles was Du hier einträgst, kannst Du natürlich nachträglich wieder ändern!',
