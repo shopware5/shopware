@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
@@ -58,10 +57,17 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
-
         $categoryId = $categoryContent['id'];
-
         Shopware()->System()->_GET['sCategory'] = $categoryId;
+
+        $emotionConfiguration = $this->getEmotionConfiguration($categoryId);
+
+        $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
+        if ($location) {
+            $this->redirect($location, ['code' => 301]);
+
+            return;
+        }
 
         $this->View()->assign([
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
@@ -70,7 +76,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
             'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
             'page' => $this->Request()->getParam('sPage'),
-            'params' => $this->Request()->getParams()
+            'params' => $this->Request()->getParams(),
         ]);
     }
 
@@ -86,7 +92,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sCategoryContent' => $categoryContent,
             'Controller' => 'listing',
-            'params' => $this->Request()->getParams()
+            'params' => $this->Request()->getParams(),
         ]);
 
         $this->View()->assign($config);
@@ -280,7 +286,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'hasEmotion' => !empty($emotions),
             'showListing' => $this->hasListing($emotions) && !$isHomePage,
             'showListingDevices' => $devicesWithListing,
-            'isHomePage' => $isHomePage
+            'isHomePage' => $isHomePage,
         ];
     }
 
