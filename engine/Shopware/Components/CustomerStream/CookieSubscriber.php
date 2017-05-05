@@ -66,9 +66,15 @@ class CookieSubscriber implements SubscriberInterface
         if (!$this->container->initialized('session')) {
             return;
         }
-        
 
+        $session = $this->container->get('session');
         if (!$token = $request->getCookie('shopware-login-token')) {
+            $session->offsetSet('auto-user', null);
+
+            return;
+        }
+
+        if ($session->offsetGet('auto-user')) {
             return;
         }
 
@@ -77,8 +83,7 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        $session = $this->container->get('session');
-//        $session->offsetSet('auto-user', $id);
+        $session->offsetSet('auto-user', $id);
     }
 
     public function afterLogin(\Enlight_Event_EventArgs $args)
@@ -101,6 +106,9 @@ class CookieSubscriber implements SubscriberInterface
         $token = Uuid::uuid4();
 
         $expire = time() + 365 * 24 * 60 * 60;
+
+        $session = $this->container->get('session');
+        $session->offsetSet('auto-user', null);
 
         $response->setCookie(
             'shopware-login-token',
