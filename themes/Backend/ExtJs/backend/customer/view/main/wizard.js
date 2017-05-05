@@ -1,4 +1,34 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage Main
+ * @version    $Id$
+ * @author shopware AG
+ */
 
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/main/wizard"}
 Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     extend: 'Ext.window.Window',
     layout: 'fit',
@@ -24,8 +54,14 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         var me = this;
         var layout = me.cardContainer.getLayout();
 
+        me.nextButton.setText('{s name="next"}{/s}');
+
         if (layout.getNext()) {
             layout.next();
+
+            if (!layout.getNext()) {
+                me.nextButton.setText('{s name="finish"}{/s}');
+            }
         } else {
             me.finish();
         }
@@ -65,12 +101,10 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         return Ext.create('Ext.container.Container', {
             html: '' +
             '<h1 style="padding-bottom: 15px; font-size: 22px;">' +
-                'Kundenübersicht' +
+                '{s name="wizard_customer_quick_view_headline"}{/s}' +
             '</h1>' +
             '<div style="float:left; width: 25%; margin-right: 10px;">' +
-                '<p>Die Kundenübersicht bietet einen Schnellzugriff auf alle registrierten Kunden.</p>' +
-                '<p>Dort befinden sich alle relevanten Kundendaten sowie ein Link zur Kontaktaufnahme mit dem Kunden per eMail.</p>' +
-                '<p>Neben der Freitext-Suche befindet sich auf der linken Seite eine einfache Filtermöglichkeit, mit der Du schnell nach bestimmten Kunden suchen kannst.</p>' +
+                '{s name="wizard_customer_quick_view_text"}{/s}' +
             '</div>' +
             '<div style="float: left;">' +
                 '<img src="{link file="backend/_resources/images/customer_stream/quick_view.png"}" />' +
@@ -81,12 +115,10 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         return Ext.create('Ext.container.Container', {
             html: '' +
             '<h1 style="padding-bottom: 15px; font-size: 22px;">' +
-                'Customer Stream Übersicht' +
+                '{s name="wizard_stream_view_headline"}{/s}' +
             '</h1>' +
             '<div style="float:left; width: 25%; margin-right: 10px;">' +
-                '<p>Mit den Customer Streams kannst Du Kunden nach bestimmten Kriterien gruppieren.</p>' +
-                '<p>Für diese Gruppierungen kannst Du anschließend Auswertungen erstellen, Marketing-Kampagnen umsetzen, individuelle Shop-Inhalte erzeugen und vieles mehr.</p>' +
-                '<p>Damit das Arbeiten mit den Customer Streams für Dich angenehm und schnell ist und Du schnellstmöglich Ergebnisse zur Verwendung und Filterung in den Streams erhältst, werden die Kundendaten täglich neu analysiert.</p>' +
+                '{s name="wizard_stream_view_text"}{/s}' +
             '</div>' +
             '<div style="float: left;">' +
                 '<img src="{link file="backend/_resources/images/customer_stream/stream_view.png"}" />' +
@@ -98,12 +130,10 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         return Ext.create('Ext.container.Container', {
             html: '' +
             '<h1 style="padding-bottom: 15px; font-size: 22px;">' +
-                'Verwendbarkeit' +
+                '{s name="wizard_usage_headline"}{/s}' +
             '</h1>' +
             '<div style="float:left; width: 25%; margin-right: 10px;">' +
-                '<p>Die Customer Streams bieten eine starke Wiederverwendbarkeit in Deinem Shop.</p>' +
-                '<p>So kannst Du zum Beispiel eigene Einkaufswelten pro Customer Stream definieren, um auf die individuellen Wünsche Deiner Kunden einzugehen.</p>' +
-                '<p>Des Weiteren ist es Dir so möglich, Gutscheine für bestimmte Kunden einzuschränken oder Newsletter an die verschiedenen Streams zu versenden.</p>' +
+                '{s name="wizard_usage_text"}{/s}' +
             '</div>' +
             '<div style="float: left;">' +
             '<img src="{link file="backend/_resources/images/customer_stream/ekw_usage.png"}" />' +
@@ -115,29 +145,23 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         var me = this;
 
         me.nextButton = Ext.create('Ext.button.Button', {
-            text: 'Next',
+            text: '{s name="next"}{/s}',
             cls: 'primary',
             handler: Ext.bind(me.nextPage, me)
         });
 
         me.previousButton = Ext.create('Ext.button.Button', {
-            text: 'Back',
+            text: '{s name="back"}{/s}',
             cls: 'secondary',
             handler: Ext.bind(me.previousPage, me)
-        });
-
-        me.finishButton = Ext.create('Ext.button.Button', {
-            text: 'Understood!',
-            cls: 'primary',
-            hidden: true,
-            handler: Ext.bind(me.finish, me)
         });
 
         return [{
             xtype: 'toolbar',
             dock: 'bottom',
             ui: 'shopware-ui',
-            items: ['->', me.previousButton, me.nextButton, me.finishButton]
+            items: ['->', me.previousButton, me.nextButton]
         }];
     }
 });
+// {/block}
