@@ -68,7 +68,7 @@ class CookieSubscriber implements SubscriberInterface
         }
 
         $session = $this->container->get('session');
-        if (!$token = $request->getCookie('shopware-login-token')) {
+        if (!$token = $request->getCookie('slt')) {
             $session->offsetSet('auto-user', null);
 
             return;
@@ -111,7 +111,7 @@ class CookieSubscriber implements SubscriberInterface
         $session->offsetSet('auto-user', null);
 
         $response->setCookie(
-            'shopware-login-token',
+            'slt',
             $token,
             $expire,
             $request->getBasePath() . '/',
