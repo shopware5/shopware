@@ -381,6 +381,7 @@ label.width-auto {
 }
 
 .btn-new-line {
+    clear: both;
     display: block;
     margin-top: 5px;
 }
