@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 /**
  * Shopware Payment Controller
  *
@@ -63,7 +65,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function createPaymentUniqueId()
     {
-        return md5(uniqid(mt_rand(), true));
+        return Random::getAlphanumericString(32);
     }
 
     /**

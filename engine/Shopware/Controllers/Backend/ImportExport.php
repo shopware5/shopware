@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Random;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\ContactData;
 use Shopware\Models\Newsletter\Group;
@@ -3334,7 +3335,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             case 'file':
                 $counter = 1;
                 if ($baseFilename === null) {
-                    $filename = md5(uniqid(rand(), true));
+                    $filename = Random::getAlphanumericString(32);
                 } else {
                     $filename = $baseFilename;
                 }
@@ -3344,7 +3345,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         $filename = "$counter-$baseFilename";
                         ++$counter;
                     } else {
-                        $filename = md5(uniqid(rand(), true));
+                        $filename = Random::getAlphanumericString(32);
                     }
                 }
 

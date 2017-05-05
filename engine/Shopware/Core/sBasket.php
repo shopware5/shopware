@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Components\Random;
 
 /**
  * Shopware Class that handles cart operations
@@ -1199,7 +1200,7 @@ class sBasket
         $uniqueId = $this->front->Request()->getCookie('sUniqueID');
 
         if (!empty($cookieData) && empty($uniqueId)) {
-            $uniqueId = md5(uniqid(rand()));
+            $uniqueId = Random::getAlphanumericString(32);
             $this->front->Response()->setCookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/');
         }
 
