@@ -66,7 +66,8 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
             iconCls: 'customers--customer-list',
             handler: function () {
                 Shopware.app.Application.addSubApplication({
-                    name: 'Shopware.apps.Customer'
+                    name: 'Shopware.apps.Customer',
+                    action: 'customer_stream'
                 });
             }
         };

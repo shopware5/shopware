@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     layout: 'fit',
     autoShow: false,
     modal: true,
-    cls: 'plugin-manager-loading-mask',
+    cls: 'plugin-manager-loading-mask customer-wizard',
     bodyPadding: 20,
     header: false,
     width: 1400,
@@ -111,6 +111,7 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
             '</div>'
         });
     },
+
     createSecondPage: function() {
         return Ext.create('Ext.container.Container', {
             html: '' +

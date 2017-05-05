@@ -53,7 +53,8 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.tabPanel = Ext.create('Ext.tab.Panel', {
             flex: 1,
-            items: tabs
+            items: tabs,
+            activeTab: (me.subApp.action && me.subApp.action === 'customer_stream') ? 1: 0
         });
 
         return [me.tabPanel];

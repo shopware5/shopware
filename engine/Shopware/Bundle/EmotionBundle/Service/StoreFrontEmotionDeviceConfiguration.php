@@ -48,7 +48,7 @@ class StoreFrontEmotionDeviceConfiguration
      *
      * @return array
      */
-    public function getCategoryConfiguration($categoryId, ShopContextInterface $context)
+    public function getCategoryConfiguration($categoryId, ShopContextInterface $context, $withStreams = false)
     {
         $configurations = $this->deviceConfiguration->get($categoryId);
 
@@ -57,7 +57,7 @@ class StoreFrontEmotionDeviceConfiguration
         }
 
         //no active stream detected? display only emotions without customer stream configuration
-        if (empty($context->getActiveCustomerStreamIds())) {
+        if (empty($context->getActiveCustomerStreamIds()) || $withStreams === false) {
             return array_filter($configurations, function ($config) {
                 return $config['customer_stream_ids'] === null;
             });

@@ -145,6 +145,8 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
 
         if ($handled >= $total) {
+            $indexer->cleanupIndex();
+
             $this->View()->assign([
                 'success' => true,
                 'finish' => true,
@@ -236,8 +238,6 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         }
 
         $counts = $this->container->get('shopware.customer_stream.repository')->fetchStreamsCustomerCount($ids);
-
-        $counts = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($data['data'] as &$row) {
             $id = (int) $row['id'];
