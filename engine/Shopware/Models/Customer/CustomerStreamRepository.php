@@ -84,6 +84,23 @@ class CustomerStreamRepository
     }
 
     /**
+     * @param int[] $streamIds
+     *
+     * @return array
+     */
+    public function fetchStreamsCustomerCount(array $streamIds)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['stream_id', 'COUNT(customer_id)']);
+        $query->from('s_customer_streams_mapping', 'mapping');
+        $query->where('mapping.stream_id IN (:ids)');
+        $query->setParameter(':ids', $streamIds, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('stream_id');
+
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
      * @return int
      */
     public function getNotIndexedCount()

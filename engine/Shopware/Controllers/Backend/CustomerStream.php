@@ -235,12 +235,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             return $data;
         }
 
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select(['stream_id', 'COUNT(customer_id)']);
-        $query->from('s_customer_streams_mapping', 'mapping');
-        $query->where('mapping.stream_id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-        $query->groupBy('stream_id');
+        $counts = $this->container->get('shopware.customer_stream.repository')->fetchStreamsCustomerCount($ids);
 
         $counts = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 

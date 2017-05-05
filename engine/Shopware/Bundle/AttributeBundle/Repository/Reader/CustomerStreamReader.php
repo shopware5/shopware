@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
-use Doctrine\DBAL\Connection;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Customer\CustomerStreamRepository;
 
 /**
  * @category  Shopware
@@ -33,11 +34,30 @@ use Doctrine\DBAL\Connection;
  */
 class CustomerStreamReader extends GenericReader
 {
+    /**
+     * @var CustomerStreamRepository
+     */
+    private $repository;
+
+    /**
+     * @param string                   $entity
+     * @param ModelManager             $entityManager
+     * @param CustomerStreamRepository $repository
+     */
+    public function __construct($entity, ModelManager $entityManager, CustomerStreamRepository $repository)
+    {
+        parent::__construct($entity, $entityManager);
+        $this->repository = $repository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getList($identifiers)
     {
         $data = parent::getList($identifiers);
 
-        $counts = $this->getCustomerCounts($identifiers);
+        $counts = $this->repository->fetchStreamsCustomerCount($identifiers);
 
         foreach ($data as &$row) {
             $id = (int) $row['id'];
@@ -49,17 +69,5 @@ class CustomerStreamReader extends GenericReader
         }
 
         return $data;
-    }
-
-    private function getCustomerCounts($ids)
-    {
-        $query = $this->entityManager->getConnection()->createQueryBuilder();
-        $query->select(['stream_id', 'COUNT(customer_id)']);
-        $query->from('s_customer_streams_mapping', 'mapping');
-        $query->where('mapping.stream_id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-        $query->groupBy('stream_id');
-
-        return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 }
