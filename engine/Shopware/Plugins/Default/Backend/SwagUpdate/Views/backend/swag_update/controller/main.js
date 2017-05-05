@@ -247,11 +247,15 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
     onStartEvent: function(win) {
         var me = this;
 
+        win.setLoading('{s name=check_file_permission/message}Preparing...{/s}');
+
         Ext.Ajax.request({
             url: '{url controller=SwagUpdate action=isUpdateAllowed}',
             async: true,
             timeout: 180000,
             success: function(response) {
+                win.setLoading(false);
+
                 if (!response || !response.responseText) {
                     return;
                 }

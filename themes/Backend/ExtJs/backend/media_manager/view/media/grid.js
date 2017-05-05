@@ -67,6 +67,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             'archive': '{s name=grid/types/archive}Archive{/s}',
             'pdf': '{s name=grid/types/pdf}PDF{/s}',
             'image': '{s name=grid/types/image}Image{/s}',
+            'vector': '{s name=grid/types/vector}Vector{/s}',
             'unknown': '{s name=grid/types/unknown}Unknown{/s}'
         }
     },
@@ -190,8 +191,16 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
            case 'pdf':
                result = '<div class="sprite-blue-document-pdf-text" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+           case 'vector':
+               result = '<div class="sprite-blue-document-illustrator" style="height:16px; width:16px;display:inline-block"></div>';
+            break;
            case 'image':
-               result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, me.selectedPreviewSize, record.get('name'));
+               if (Ext.Array.contains(['tif', 'tiff'], record.data.extension)) {
+                   result = '<div class="sprite-blue-document-image" style="height:16px; width:16px;display:inline-block"></div>';
+               } else {
+                   result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, me.selectedPreviewSize, record.get('name'));
+               }
+
                break;
            default:
                result = '<div class="sprite-blue-document-text" style="height:16px; width:16px;display:inline-block"></div>';
@@ -247,28 +256,24 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
      * @returns { String } Formatted output
      */
     typeRenderer: function(value) {
-        var me = this, result = '', type = value.toLowerCase();
+        var result = '',
+            type = value.toLowerCase();
 
         switch(type) {
+            case 'pdf': // Explicit fall-throughs
             case 'video':
-                result = me.snippets.types[type];
-                break;
             case 'music':
-                result = me.snippets.types[type];
-                break;
             case 'archive':
-                result = me.snippets.types[type];
-                break;
-            case 'pdf':
-                result = me.snippets.types[type];
-                break;
             case 'image':
-                result = me.snippets.types[type];
+            case 'vector':
+                result = this.snippets.types[type];
                 break;
+
             default:
-                result = me.snippets.types['unknown'];
+                result = this.snippets.types['unknown'];
                 break;
         }
+
         return result;
     }
 });

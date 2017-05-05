@@ -300,56 +300,69 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         var me = this;
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-            '<div class="media-info-pnl">',
+                '<div class="media-info-pnl">',
 
-            // If the type is image, then show the image
-            '<tpl if="this.isImage(type, extension)">',
-                '<div class="thumb">',
-                    '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
+                    // If the type is image, then show the image
+                    '<tpl if="this.isImage(type, extension)">',
+                        '<div class="thumb">',
+                            '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
+                        '</div>',
+                    '</tpl>',
+
+                    // All other types should render an icon
+                    '<tpl if="!this.isImage(type, extension)">',
+                        '<div class="thumb icon">',
+                            '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
+                        '</div>',
+                    '</tpl>',
+                    '<div class="base-info">',
+                        '<p>',
+                            '<strong>Download:</strong>',
+                            '<a class="link" target="_blank" href="{/literal}{url controller=MediaManager action=download}{literal}?mediaId={id}" title="{name}">{name}</a>',
+                        '</p>',
+                        '<p>',
+                            '<strong>'+me.snippets.mediaInfo.name+'</strong>',
+                            '<input type="text" disabled="disabled" value="{name}" />',
+                        '</p>',
+                        '<p>',
+                            '<strong>'+me.snippets.mediaInfo.uploadedon+'</strong>',
+                            '<span>{[this.formatDate(values.created)]}</span>',
+                        '</p>',
+                        '<p>',
+                            '<strong>'+me.snippets.mediaInfo.type+'</strong>',
+                            '<span>{[this.formatDataType(values.type, values.extension)]}</span>',
+                        '</p>',
+                        '<tpl if="width">',
+                            '<p>',
+                                '<strong>'+me.snippets.mediaInfo.resolution+'</strong>',
+                                '<span>{width} x {height} Pixel</span>',
+                            '</p>',
+                        '</tpl>',
+
+                        '<tpl if="this.allowInBrowserRendering(extension)">',
+                            '<p>',
+                                '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
+                                '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
+                            '</p>',
+                        '</tpl>',
+                    '</div>',
                 '</div>',
-            '</tpl>',
-
-            // All other types should render an icon
-            '<tpl if="!this.isImage(type, extension)">',
-            '<div class="thumb icon">',
-            '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
-            '</div>',
-            '</tpl>',
-            '<div class="base-info">',
-            '<p>',
-            '<strong>Download:</strong>',
-            '<a class="link" target="_blank" href="{/literal}{url controller=MediaManager action=download}{literal}?mediaId={id}" title="{name}">{name}</a>',
-            '</p>',
-            '<p>',
-            '<strong>'+me.snippets.mediaInfo.name+'</strong>',
-            '<input type="text" disabled="disabled" value="{name}" />',
-            '</p>',
-            '<p>',
-            '<strong>'+me.snippets.mediaInfo.uploadedon+'</strong>',
-            '<span>{[this.formatDate(values.created)]}</span>',
-            '</p>',
-            '<p>',
-            '<strong>'+me.snippets.mediaInfo.type+'</strong>',
-            '<span>{[this.formatDataType(values.type, values.extension)]}</span>',
-            '</p>',
-            '<tpl if="width">',
-            '<p>',
-            '<strong>'+me.snippets.mediaInfo.resolution+'</strong>',
-            '<span>{width} x {height} Pixel</span>',
-            '</p>',
-            '</tpl>',
-            '<p>',
-            '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
-            '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
-            '</p>',
-            '</div>',
-            '</div>',
             '</tpl>{/literal}',
             {
                 /**
-                 * Member function of the template to check if a certain file is an image.
+                 * Checks if this file type is allowed to be rendered inside of the browser
                  *
-                 * @param { string }type
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                allowInBrowserRendering: function(extension) {
+                    return !Ext.Array.contains(['svg'], extension.toLowerCase());
+                },
+
+                /**
+                 * Member function of the template to check if a certain file is an image
+                 *
+                 * @param { string } type
                  * @param { string } extension
                  * @returns { boolean }
                  */
