@@ -44,19 +44,19 @@ class HandlerRegistryCompilerPassTest extends TestCase
         $parentService->addArgument([new Reference('existing_service')]);
 
         $services = [
-            'my_service1' => ['customer_search_condition_handler' => ['priority' => 100]],
-            'my_service2' => ['customer_search_condition_handler' => ['priority' => 200]],
-            'my_service3' => ['customer_search_condition_handler' => ['priority' => -501]],
-            'my_service4' => ['customer_search_condition_handler' => []],
-            'my_service5' => ['customer_search_condition_handler' => ['priority' => -1]],
-            'my_service6' => ['customer_search_condition_handler' => ['priority' => -500]],
-            'my_service7' => ['customer_search_condition_handler' => ['priority' => -499]],
-            'my_service8' => ['customer_search_condition_handler' => ['priority' => 1]],
-            'my_service9' => ['customer_search_condition_handler' => ['priority' => -2]],
-            'my_service10' => ['customer_search_condition_handler' => ['priority' => -1000]],
-            'my_service11' => ['customer_search_condition_handler' => ['priority' => -1001]],
-            'my_service12' => ['customer_search_condition_handler' => ['priority' => -1002]],
-            'my_service13' => ['customer_search_condition_handler' => ['priority' => -1003]],
+            'my_service1' => ['customer_search.condition_handler' => ['priority' => 100]],
+            'my_service2' => ['customer_search.condition_handler' => ['priority' => 200]],
+            'my_service3' => ['customer_search.condition_handler' => ['priority' => -501]],
+            'my_service4' => ['customer_search.condition_handler' => []],
+            'my_service5' => ['customer_search.condition_handler' => ['priority' => -1]],
+            'my_service6' => ['customer_search.condition_handler' => ['priority' => -500]],
+            'my_service7' => ['customer_search.condition_handler' => ['priority' => -499]],
+            'my_service8' => ['customer_search.condition_handler' => ['priority' => 1]],
+            'my_service9' => ['customer_search.condition_handler' => ['priority' => -2]],
+            'my_service10' => ['customer_search.condition_handler' => ['priority' => -1000]],
+            'my_service11' => ['customer_search.condition_handler' => ['priority' => -1001]],
+            'my_service12' => ['customer_search.condition_handler' => ['priority' => -1002]],
+            'my_service13' => ['customer_search.condition_handler' => ['priority' => -1003]],
         ];
         $this->registerServices($container, $services);
 

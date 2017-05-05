@@ -22,9 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\CustomerStream;
+namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Doctrine\DBAL\Connection;
+
 
 class CustomerOrderGateway
 {

@@ -63,10 +63,10 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
 
         /** @var StreamIndexer $indexer */
-        $indexer = $this->get('customer_search.dbal.indexing.stream_indexer');
+        $indexer = $this->get('shopware.customer_stream.stream_indexer');
 
         /** @var \Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory $factory */
-        $factory = $this->get('shopware_customer_search.stream_criteria_factory');
+        $factory = $this->get('shopware.customer_stream.criteria_factory');
 
         $criteria = $factory->createCriteria($streamId);
 
