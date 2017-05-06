@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 class BannerSliderComponentHandler extends AbstractComponentHandler
 {
     const COMPONENT_TYPE = 'emotion-components-banner-slider';
@@ -41,40 +43,41 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
     /**
      * {@inheritdoc}
      */
-    public function import(array $element)
-    {
-        if (!isset($element['data'], $element['assets'])) {
-            return $element;
-        }
-
-        return $this->processElementData($element);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function export(array $element)
+    public function import(array $element, ParameterBag $syncData)
     {
         if (!isset($element['data'])) {
             return $element;
         }
 
-        $element = $this->prepareElementExport($element);
+        return $this->processElementData($element, $syncData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function export(array $element, ParameterBag $syncData)
+    {
+        if (!isset($element['data'])) {
+            return $element;
+        }
+
+        $element = $this->prepareElementExport($element, $syncData);
 
         return $element;
     }
 
     /**
-     * @param array $element
+     * @param array        $element
+     * @param ParameterBag $syncData
      *
      * @return array
      */
-    private function processElementData(array $element)
+    private function processElementData(array $element, ParameterBag $syncData)
     {
         $data = $element['data'];
-        $assets = $element['assets'];
+        $assets = $syncData->get('assets', []);
+        $importedAssets = $syncData->get('importedAssets', []);
 
-        /** @var array $elementData */
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
                 $sliders = json_decode($elementData['value'], true);
@@ -83,7 +86,17 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
                 }
 
                 foreach ($sliders as $key => &$slide) {
-                    $media = $this->doAssetImport($assets[$slide['path']]);
+                    if (!array_key_exists($slide['path'], $assets)) {
+                        break;
+                    }
+                    if (!array_key_exists($slide['path'], $importedAssets)) {
+                        $assetPath = $assets[$slide['path']];
+
+                        $media = $this->doAssetImport($assetPath);
+                        $importedAssets[$slide['path']] = $media->getId();
+                    } else {
+                        $media = $this->getMediaById($importedAssets[$slide['path']]);
+                    }
 
                     $slide['path'] = $media->getPath();
                     $slide['mediaId'] = $media->getId();
@@ -96,20 +109,21 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
         }
         unset($elementData);
 
+        $syncData->set('importedAssets', $importedAssets);
         $element['data'] = $data;
-        unset($element['assets']);
 
         return $element;
     }
 
     /**
-     * @param array $element
+     * @param array        $element
+     * @param ParameterBag $syncData
      *
      * @return array
      */
-    private function prepareElementExport(array $element)
+    private function prepareElementExport(array $element, ParameterBag $syncData)
     {
-        $element['assets'] = [];
+        $assets = $syncData->get('assets', []);
         $data = $element['data'];
 
         /** @var array $elementData */
@@ -121,9 +135,13 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
                 }
 
                 foreach ($sliders as $key => &$slide) {
-                    $assetHash = uniqid('asset-', true);
-                    $element['assets'][$assetHash] = $this->mediaService->getUrl($slide['path']);
-                    $slide['path'] = $assetHash;
+                    $media = $this->getMediaByPath($slide['path']);
+
+                    if ($media) {
+                        $assetHash = md5($media->getId());
+                        $assets[$assetHash] = $this->mediaService->getUrl($slide['path']);
+                        $slide['path'] = $assetHash;
+                    }
                 }
                 unset($slide);
                 $elementData['value'] = json_encode($sliders);
@@ -133,6 +151,7 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
         }
         unset($elementData);
 
+        $syncData->set('assets', $assets);
         $element['data'] = $data;
 
         return $element;

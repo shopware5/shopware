@@ -30,6 +30,7 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface;
 use Shopware\Components\Slug\SlugInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class EmotionExporter implements EmotionExporterInterface
 {
@@ -117,12 +118,13 @@ class EmotionExporter implements EmotionExporterInterface
         $preset = $this->createHiddenPreset($emotionData);
         $preset = $this->synchronizer->prepareAssetExport($preset);
 
-        $presetData = $preset->getPresetData();
-        $collectedAssets = $this->collectElementAssets($presetData);
+        $presetData = json_decode($preset->getPresetData(), true);
+        $syncData = new ParameterBag($presetData['syncData']);
+        $assets = $syncData->get('assets', []);
 
         $zip->addEmptyDir('images');
 
-        foreach ($collectedAssets as $key => &$path) {
+        foreach ($assets as $key => &$path) {
             $fileContent = $this->mediaService->read($path);
             $zipPath = 'images/' . basename($path);
 
@@ -131,10 +133,12 @@ class EmotionExporter implements EmotionExporterInterface
         }
         unset($path);
 
+        $syncData->set('assets', $assets);
+        $presetData['syncData'] = $syncData->all();
+
         $exportData = [
             'requiredPlugins' => json_decode($preset->getRequiredPlugins(), true),
-            'presetData' => $presetData,
-            'assets' => $collectedAssets,
+            'presetData' => json_encode($presetData),
         ];
 
         $zip->addFromString('emotion.json', json_encode($exportData));
@@ -165,27 +169,5 @@ class EmotionExporter implements EmotionExporterInterface
         ];
 
         return $this->presetResource->create($presetData);
-    }
-
-    /**
-     * @param string $presetData
-     *
-     * @return array
-     */
-    private function collectElementAssets($presetData)
-    {
-        $assets = [];
-        $decodedData = json_decode($presetData, true);
-
-        if (array_key_exists('elements', $decodedData)) {
-            foreach ($decodedData['elements'] as $element) {
-                if (is_array($element['assets'])) {
-                    $assets[] = $element['assets'];
-                }
-            }
-            $assets = array_merge(...$assets);
-        }
-
-        return $assets;
     }
 }
