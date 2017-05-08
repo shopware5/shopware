@@ -2145,12 +2145,11 @@ class Repository extends ModelRepository
             'notification.date as date',
             'notification.send as notified',
             'notification.articleNumber as orderNumber',
-            'billing.customerId as customerId',
-            "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as name",
+            'customer.id as customerId',
+            "CONCAT(CONCAT(customer.firstname, ' '), customer.lastname) as name",
         ])
                 ->from('Shopware\Models\Article\Notification', 'notification')
                 ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageId = notification.language')
-                ->leftJoin('customer.billing', 'billing')
                 ->where('notification.articleNumber = :orderNumber')
                 ->setParameter('orderNumber', $articleOrderNumber);
 
@@ -2159,8 +2158,8 @@ class Repository extends ModelRepository
             $builder->andWhere('(
                         notification.mail LIKE :search
                         OR notification.articleNumber LIKE :search
-                        OR billing.lastName LIKE :search
-                        OR billing.firstName LIKE :search
+                        OR customer.lastname LIKE :search
+                        OR customer.firstname LIKE :search
                     )')
                     ->setParameter('search', $filter[0]['value']);
         }

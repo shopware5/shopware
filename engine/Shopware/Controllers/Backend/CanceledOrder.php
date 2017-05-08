@@ -47,8 +47,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             ->from('Shopware\Models\Order\Order', 'orders')
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.payment', 'payment')
-            ->leftJoin('customer.billing', 'billing')
-            ->leftJoin('customer.shipping', 'shipping')
+            ->leftJoin('customer.defaultBillingAddress', 'billing')
+            ->leftJoin('customer.defaultShippingAddress', 'shipping')
             ->where('orders.id = ?1')
             ->setParameter(1, $orderId);
 
@@ -595,14 +595,14 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->leftJoin('orders.details', 'details')
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('orders.payment', 'payment')
-                ->leftJoin('customer.billing', 'billing')
+                ->leftJoin('customer.defaultBillingAddress', 'billing')
                 ->where("orders.status = ?1 AND orders.orderTime >= ?2 AND orders.orderTime <= DATE_ADD(?3, 1, 'DAY')")
                 ->setParameter(1, -1)
                 ->setParameter(2, $startDate)
                 ->setParameter(3, $endDate);
 
         if ($filter !== null) {
-            $builder->andWhere('billing.lastName LIKE ?4 OR billing.firstName LIKE ?4 OR payment.description LIKE ?4 OR orders.invoiceAmount LIKE ?4')
+            $builder->andWhere('customer.lastname LIKE ?4 OR customer.firstname LIKE ?4 OR payment.description LIKE ?4 OR orders.invoiceAmount LIKE ?4')
                     ->setParameter(4, $filter . '%');
         }
 

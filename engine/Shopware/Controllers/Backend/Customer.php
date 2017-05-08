@@ -683,7 +683,23 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         if (empty($data['billing'])) {
-            $data['billing'] = $this->fetchAddress($data['default_billing_address_id']);
+            $billingAddress = $this->fetchAddress($data['default_billing_address_id']);
+
+            if ($billingAddress) {
+                $data['billing'] = new \Shopware\Models\Customer\Billing();
+                $data['billing']->fromAddress($billingAddress);
+                $data['billing'] = $this->container->get('models')->toArray($data['billing']);
+            }
+        }
+
+        if (empty($data['shipping'])) {
+            $shippingAddress = $this->fetchAddress($data['default_shipping_address_id']);
+
+            if ($shippingAddress) {
+                $data['shipping'] = new \Shopware\Models\Customer\Shipping();
+                $data['shipping']->fromAddress($shippingAddress);
+                $data['shipping'] = $this->container->get('models')->toArray($data['shipping']);
+            }
         }
 
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
@@ -771,7 +787,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * @param int $id
      *
-     * @return array|null
+     * @return Address|null
      */
     private function fetchAddress($id)
     {
@@ -783,6 +799,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
 
-        return $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        return $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
     }
 }
