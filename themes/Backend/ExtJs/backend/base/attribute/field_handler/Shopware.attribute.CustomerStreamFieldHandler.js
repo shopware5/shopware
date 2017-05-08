@@ -35,3 +35,5 @@ Ext.define('Shopware.attribute.CustomerStreamFieldHandler', {
     singleSelectionClass: 'Shopware.form.field.CustomerStreamSingleSelection',
     multiSelectionClass: 'Shopware.form.field.CustomerStreamGrid'
 });
+
+//{/block}
