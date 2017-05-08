@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.IsCustomerSin
                 name: 'operator',
                 value: '>='
             },{
-                xtype: 'datefield',
+                xtype: 'base-element-datefield',
                 name: 'customerSince',
                 fieldLabel: '{s name="since"}{/s}',
                 allowBlank: false

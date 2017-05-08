@@ -42,6 +42,7 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
     fields: [
         // {block name="backend/customer/model/customer_stream/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
+        { name: 'customer_count', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string', useNull: true },
         { name: 'conditions', type: 'string' },

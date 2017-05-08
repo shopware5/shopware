@@ -63,10 +63,10 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
 
         /** @var StreamIndexer $indexer */
-        $indexer = $this->get('customer_search.dbal.indexing.stream_indexer');
+        $indexer = $this->get('shopware.customer_stream.stream_indexer');
 
         /** @var \Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory $factory */
-        $factory = $this->get('shopware_customer_search.stream_criteria_factory');
+        $factory = $this->get('shopware.customer_stream.criteria_factory');
 
         $criteria = $factory->createCriteria($streamId);
 
@@ -145,6 +145,8 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
 
         if ($handled >= $total) {
+            $indexer->cleanupIndex();
+
             $this->View()->assign([
                 'success' => true,
                 'finish' => true,
@@ -224,6 +226,29 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             ->fetchAmountPerStreamChart();
 
         $this->View()->assign('data', array_values($chart));
+    }
+
+    protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
+    {
+        $data = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
+
+        $ids = array_column($data['data'], 'id');
+        if (empty($ids)) {
+            return $data;
+        }
+
+        $counts = $this->container->get('shopware.customer_stream.repository')->fetchStreamsCustomerCount($ids);
+
+        foreach ($data['data'] as &$row) {
+            $id = (int) $row['id'];
+            if (!array_key_exists($id, $counts)) {
+                $row['customer_count'] = 0;
+            } else {
+                $row['customer_count'] = $counts[$id];
+            }
+        }
+
+        return $data;
     }
 
     /**

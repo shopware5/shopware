@@ -284,6 +284,7 @@
 
             me.applyDataAttributes();
 
+            $('.sidebar-filter--loader').appendTo('.sidebar-filter--content');
             me.$filterForm = $(me.opts.filterFormSelector);
             me.$filterComponents = me.$filterForm.find(me.opts.filterComponentSelector);
             me.$filterTrigger = me.$el.find(me.opts.filterTriggerSelector);
@@ -1135,6 +1136,7 @@
                 me.$listing.attr('data-pages', pages);
                 me.$listing.data('plugin_swInfiniteScrolling').destroy();
                 StateManager.addPlugin(me.opts.listingSelector, 'swInfiniteScrolling');
+                StateManager.addPlugin('*[data-add-article="true"]', 'swAddArticle');
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [me, html, pages]);
             } else {
                 me.updatePagination(response);

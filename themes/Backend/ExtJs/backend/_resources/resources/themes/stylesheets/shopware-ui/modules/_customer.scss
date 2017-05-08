@@ -39,3 +39,28 @@
   margin: 10px 0 10px 5px;
   border-bottom: 1px solid #a4b5c0;
 }
+
+.customer-stream-view .x-progress.x-progress-default.empty .x-progress-bar {
+  display: none;
+}
+
+.customer-wizard {
+  .headline {
+    padding-bottom: 15px;
+    font-size: 22px;
+  }
+
+  .description {
+    float: left;
+    width: 25%;
+    margin-right: 10px;
+  }
+
+  .image {
+    float: left;
+  }
+
+  .x-toolbar-shopware-ui {
+    background: #f9fafa;
+  }
+}

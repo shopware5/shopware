@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\CustomerStream;
+namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 class CustomerOrderHydrator
 {

@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
-use Shopware\Components\CustomerStream\CustomerOrder;
 
 class AnalyzedCustomer extends Customer
 {
@@ -50,7 +49,7 @@ class AnalyzedCustomer extends Customer
     }
 
     /**
-     * @return \Shopware\Components\CustomerStream\CustomerOrder
+     * @return \Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrder
      */
     public function getOrderInformation()
     {

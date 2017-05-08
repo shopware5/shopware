@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,25 +19,21 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-namespace Shopware\Bundle\CustomerSearchBundleDBAL;
+//{block name="backend/base/attribute/field_handler/Shopware.attribute.CustomerStreamFieldHandler"}
 
-use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+Ext.define('Shopware.attribute.CustomerStreamFieldHandler', {
+    extend: 'Shopware.attribute.AbstractEntityFieldHandler',
+    entity: "Shopware\\Models\\Customer\\CustomerStream",
+    singleSelectionClass: 'Shopware.form.field.CustomerStreamSingleSelection',
+    multiSelectionClass: 'Shopware.form.field.CustomerStreamGrid'
+});
 
-interface SortingHandlerInterface
-{
-    /**
-     * @param SortingInterface $sorting
-     *
-     * @return bool
-     */
-    public function supports(SortingInterface $sorting);
-
-    /**
-     * @param SortingInterface $sorting
-     * @param QueryBuilder     $query
-     */
-    public function handle(SortingInterface $sorting, QueryBuilder $query);
-}
+//{/block}

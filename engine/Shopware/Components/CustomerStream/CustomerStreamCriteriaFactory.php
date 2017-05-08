@@ -25,10 +25,8 @@
 namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\LogawareReflectionHelper;
-
 
 class CustomerStreamCriteriaFactory implements CustomerStreamCriteriaFactoryInterface
 {

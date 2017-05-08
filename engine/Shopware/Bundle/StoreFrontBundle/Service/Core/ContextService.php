@@ -420,11 +420,26 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontStreamIds()
     {
-        $session = $this->container->get('session');
-        if (!$session->offsetGet('sUserId')) {
+        $customerId = $this->getStoreFrontCustomerId();
+
+        if (!$customerId) {
             return [];
         }
 
-        return $this->getStreamsOfCustomerId($session->offsetGet('sUserId'));
+        return $this->getStreamsOfCustomerId($customerId);
+    }
+
+    private function getStoreFrontCustomerId()
+    {
+        $session = $this->container->get('session');
+        if ($session->offsetGet('sUserId')) {
+            return (int) $session->offsetGet('sUserId');
+        }
+
+        if ($session->offsetGet('auto-user')) {
+            return (int) $session->offsetGet('auto-user');
+        }
+
+        return null;
     }
 }

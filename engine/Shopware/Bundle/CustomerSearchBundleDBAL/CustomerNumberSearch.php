@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\BaseCustomer;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
-
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;

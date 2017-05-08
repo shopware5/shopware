@@ -67,6 +67,16 @@ class SearchIndexer implements SearchIndexerInterface
         $this->connection->executeUpdate('DELETE FROM s_customer_search_index');
     }
 
+    public function cleanupIndex()
+    {
+        $this->connection->executeUpdate('
+            DELETE search_index FROM s_customer_search_index search_index
+            LEFT JOIN s_user customer
+                ON customer.id = search_index.id
+            WHERE customer.id IS NULL
+        ');
+    }
+
     /**
      * @param $customer
      *

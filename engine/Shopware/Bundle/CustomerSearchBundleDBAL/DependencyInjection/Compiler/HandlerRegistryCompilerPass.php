@@ -37,7 +37,7 @@ class HandlerRegistryCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->replaceArgumentWithTaggedServices($container, 'customer_search.dbal.handler_registry', 'customer_search_condition_handler', 0);
-        $this->replaceArgumentWithTaggedServices($container, 'customer_search.dbal.handler_registry', 'customer_search_sorting_handler', 1);
+        $this->replaceArgumentWithTaggedServices($container, 'customer_search.dbal.handler_registry', 'customer_search.condition_handler', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'customer_search.dbal.handler_registry', 'customer_search.sorting_handler', 1);
     }
 }

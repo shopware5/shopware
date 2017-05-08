@@ -47,6 +47,8 @@ Ext.define('Shopware.form.field.Grid', {
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body shopware-multi-selection-form-item-body',
     separator: '|',
     allowBlank: true,
+    
+    fieldLabelConfig: 'default',
 
     /**
      * @required
@@ -80,6 +82,11 @@ Ext.define('Shopware.form.field.Grid', {
 
         me.store = me.initializeStore();
         me.items = me.createItems();
+
+        if (me.fieldLabelConfig !== 'default') {
+            me.fieldLabel = '';
+        }
+
         me.callParent(arguments);
     },
 
@@ -244,7 +251,13 @@ Ext.define('Shopware.form.field.Grid', {
             margin = '0 25 0 0';
         }
 
+        var emptyText = '';
+        if (me.fieldLabelConfig === 'as_empty_text') {
+            emptyText = me.fieldLabel;
+        }
+
         return {
+            emptyText: emptyText,
             helpText: me.helpText,
             helpTitle: me.helpTitle,
             store: me.searchStore,

@@ -316,10 +316,10 @@ class Emotion extends ModelEntity
     private $previewSecret;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="customer_stream_id", type="integer", nullable=true)
+     * @var string
+     * @ORM\Column(name="customer_stream_ids", type="string", nullable=true)
      */
-    private $customerStreamId;
+    private $customerStreamIds;
 
     /**
      * @var string|null
@@ -913,22 +913,6 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return int|null
-     */
-    public function getCustomerStreamId()
-    {
-        return $this->customerStreamId;
-    }
-
-    /**
-     * @param int|null $customerStreamId
-     */
-    public function setCustomerStreamId($customerStreamId)
-    {
-        $this->customerStreamId = $customerStreamId;
-    }
-
-    /**
      * @return string|null
      */
     public function getReplacement()
@@ -944,4 +928,13 @@ class Emotion extends ModelEntity
         $this->replacement = $replacement;
     }
 
+    public function getCustomerStreamIds()
+    {
+        return $this->customerStreamIds;
+    }
+
+    public function setCustomerStreamIds($customerStreamIds)
+    {
+        $this->customerStreamIds = $customerStreamIds;
+    }
 }

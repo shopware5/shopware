@@ -82,8 +82,10 @@ Ext.define('Shopware.apps.Customer.controller.Main', {
 
         Ext.Ajax.request({
             url: '{url controller=UserConfig action=get}',
-            params: { name: 'customer_module' },
-            callback: function(request, success, response) {
+            params: {
+                name: 'customer_module'
+            },
+            callback: function (request, success, response) {
                 var config = Ext.JSON.decode(response.responseText);
 
                 if (!config || config.length <= 0) {
@@ -92,6 +94,30 @@ Ext.define('Shopware.apps.Customer.controller.Main', {
 
                 me.subApplication.userConfig = config;
 
+                if (!config.showWizard) {
+                    me.mainWindow = me.getView('main.Window').create();
+                    return;
+                }
+
+                var wizard = me.getView('main.Wizard').create();
+                wizard.on('finish', Ext.bind(me.switchWizardConfig, me));
+                wizard.show();
+            }
+        });
+    },
+
+    switchWizardConfig: function() {
+        var me = this, config = me.subApplication.userConfig;
+
+        config.showWizard = false;
+
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=save}',
+            params: {
+                config: Ext.JSON.encode(config),
+                name: 'customer_module'
+            },
+            callback: function() {
                 me.mainWindow = me.getView('main.Window').create();
             }
         });

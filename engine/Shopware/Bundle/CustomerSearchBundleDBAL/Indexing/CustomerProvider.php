@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService;
-use Shopware\Components\CustomerStream\CustomerOrderGateway;
 
 class CustomerProvider implements CustomerProviderInterface
 {

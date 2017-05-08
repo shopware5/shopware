@@ -345,7 +345,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             editable:true,
             allowBlank:true,
             name:'template',
-            queryMode: 'local'
+            queryMode: 'local',
+            helpText: '{s name="template_selection_help"}{/s}'
         });
 
         // add record for default value

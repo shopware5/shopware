@@ -261,6 +261,8 @@
 {include file='backend/base/attribute/field/Shopware.form.field.FormSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomerGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomerSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomerStreamGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomerStreamSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.DispatchGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.PaymentGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.PaymentSingleSelection.js'}
@@ -289,6 +291,7 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PartnerFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.FormFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CustomerFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.CustomerStreamFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.DispatchFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PaymentFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.MailFieldHandler.js'}

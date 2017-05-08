@@ -54,8 +54,7 @@
             {* Layout for the product boxes *}
             {$productBoxLayout = 'basic'}
 
-            {if $sCategoryContent.productBoxLayout !== null &&
-                $sCategoryContent.productBoxLayout !== 'extend'}
+            {if $sCategoryContent.productBoxLayout !== null && $sCategoryContent.productBoxLayout !== 'extend'}
                 {$productBoxLayout = $sCategoryContent.productBoxLayout}
             {/if}
         {/block}

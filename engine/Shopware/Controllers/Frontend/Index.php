@@ -50,6 +50,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
         $this->View()->assign([
+            'hasCustomerStreamEmotion' => $this->container->get('shopware.customer_stream.repository')->hasCustomerStreamEmotions($categoryId),
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
             'sCategoryContent' => $categoryContent,

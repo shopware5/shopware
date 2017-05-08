@@ -147,6 +147,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
 
         me.sortingHandler(column.sortingClass, state);
     },
+
     createSortingItem: function(text, sortingClass) {
         var me = this;
 
@@ -194,7 +195,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
             sortingClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\NumberSorting',
             flex: 2,
             renderer: function (value, meta, record) {
-                return '<b>' + record.get('customernumber') + '</b> - ' + record.get('customerGroup') +
+                return '<b>' + record.get('customernumber') + '</b> - ' + record.get('customer_group_name') +
                     '<br><i>{s name="first_login"}{/s}: ' + Ext.util.Format.date(record.get('firstlogin')) + '</i></span>';
             }
         }, {

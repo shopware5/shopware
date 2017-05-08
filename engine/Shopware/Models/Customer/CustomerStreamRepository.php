@@ -48,6 +48,27 @@ class CustomerStreamRepository
     }
 
     /**
+     * Checks if the provided category id has an configured emotion for some customer streams
+     *
+     * @param int $categoryId
+     *
+     * @return int|bool
+     */
+    public function hasCustomerStreamEmotions($categoryId)
+    {
+        return $this->connection->fetchColumn(
+            'SELECT emotion.id 
+            FROM s_emotion emotion 
+            INNER JOIN s_emotion_categories categories 
+                ON categories.emotion_id = emotion.id 
+                AND categories.category_id = :id
+            WHERE emotion.customer_stream_ids IS NOT NULL   
+            LIMIT 1',
+            [':id' => $categoryId]
+        );
+    }
+
+    /**
      * @param int[] $ids
      *
      * @return array[]
@@ -81,6 +102,23 @@ class CustomerStreamRepository
         }
 
         return $sorted;
+    }
+
+    /**
+     * @param int[] $streamIds
+     *
+     * @return array
+     */
+    public function fetchStreamsCustomerCount(array $streamIds)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['stream_id', 'COUNT(customer_id)']);
+        $query->from('s_customer_streams_mapping', 'mapping');
+        $query->where('mapping.stream_id IN (:ids)');
+        $query->setParameter(':ids', $streamIds, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('stream_id');
+
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**
