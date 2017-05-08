@@ -47,6 +47,13 @@ class CustomerStreamRepository
         $this->connection = $connection;
     }
 
+    /**
+     * Checks if the provided category id has an configured emotion for some customer streams
+     *
+     * @param int $categoryId
+     *
+     * @return int|bool
+     */
     public function hasCustomerStreamEmotions($categoryId)
     {
         return $this->connection->fetchColumn(

@@ -29,6 +29,8 @@
 
 // {namespace name=backend/customer/view/main}
 
+//{block name="backend/base/attribute/field/Shopware.form.field.CustomerStreamSingleSelection"}
+
 Ext.define('Shopware.form.field.CustomerStreamSingleSelection', {
     extend: 'Shopware.form.field.SingleSelection',
     alias: 'widget.shopware-form-field-customer-stream-single-selection',
@@ -50,3 +52,4 @@ Ext.define('Shopware.form.field.CustomerStreamSingleSelection', {
         return config;
     }
 });
+//{/block}

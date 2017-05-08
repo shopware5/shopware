@@ -29,6 +29,8 @@
 
 // {namespace name=backend/customer/view/main}
 
+//{block name="backend/base/attribute/field/Shopware.form.field.CustomerStreamGrid"}
+
 Ext.define('Shopware.form.field.CustomerStreamGrid', {
     extend: 'Shopware.form.field.Grid',
     alias: 'widget.shopware-form-field-customer-stream-grid',
@@ -73,3 +75,4 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
         };
     }
 });
+//{/block}

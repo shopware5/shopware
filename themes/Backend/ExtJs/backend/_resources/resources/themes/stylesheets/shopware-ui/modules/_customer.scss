@@ -44,6 +44,23 @@
   display: none;
 }
 
-.customer-wizard .x-toolbar-shopware-ui {
-  background: #f9fafa;
+.customer-wizard {
+  .headline {
+    padding-bottom: 15px;
+    font-size: 22px;
+  }
+
+  .description {
+    float: left;
+    width: 25%;
+    margin-right: 10px;
+  }
+
+  .image {
+    float: left;
+  }
+
+  .x-toolbar-shopware-ui {
+    background: #f9fafa;
+  }
 }

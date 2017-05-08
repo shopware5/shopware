@@ -251,7 +251,7 @@ Ext.define('Shopware.form.field.Grid', {
             margin = '0 25 0 0';
         }
 
-        emptyText = '';
+        var emptyText = '';
         if (me.fieldLabelConfig === 'as_empty_text') {
             emptyText = me.fieldLabel;
         }

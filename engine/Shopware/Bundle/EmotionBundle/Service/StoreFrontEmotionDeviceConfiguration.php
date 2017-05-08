@@ -45,6 +45,7 @@ class StoreFrontEmotionDeviceConfiguration
     /**
      * @param int                  $categoryId
      * @param ShopContextInterface $context
+     * @param bool                 $withStreams Consider customer stream emotions?
      *
      * @return array
      */

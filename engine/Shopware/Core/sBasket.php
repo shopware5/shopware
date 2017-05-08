@@ -611,9 +611,9 @@ class sBasket
 
         if (!empty($streams)) {
             $context = $this->contextService->getShopContext();
-            $notAllowed = array_intersect($context->getActiveCustomerStreamIds(), $streams);
+            $allowed = array_intersect($context->getActiveCustomerStreamIds(), $streams);
 
-            if (empty($notAllowed)) {
+            if (empty($allowed)) {
                 $message = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureCustomerStreams',
                     'This voucher is not available for you'

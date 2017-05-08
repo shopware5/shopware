@@ -100,13 +100,13 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     createFirstPage: function() {
         return Ext.create('Ext.container.Container', {
             html: '' +
-            '<h1 style="padding-bottom: 15px; font-size: 22px;">' +
+            '<h1 class="headline">' +
                 '{s name="wizard_customer_quick_view_headline"}{/s}' +
             '</h1>' +
-            '<div style="float:left; width: 25%; margin-right: 10px;">' +
+            '<div class="description">' +
                 '{s name="wizard_customer_quick_view_text"}{/s}' +
             '</div>' +
-            '<div style="float: left;">' +
+            '<div class="image">' +
                 '<img src="{link file="backend/_resources/images/customer_stream/quick_view.png"}" />' +
             '</div>'
         });
@@ -115,13 +115,13 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     createSecondPage: function() {
         return Ext.create('Ext.container.Container', {
             html: '' +
-            '<h1 style="padding-bottom: 15px; font-size: 22px;">' +
+            '<h1 class="headline">' +
                 '{s name="wizard_stream_view_headline"}{/s}' +
             '</h1>' +
-            '<div style="float:left; width: 25%; margin-right: 10px;">' +
+            '<div class="description">' +
                 '{s name="wizard_stream_view_text"}{/s}' +
             '</div>' +
-            '<div style="float: left;">' +
+            '<div class="image">' +
                 '<img src="{link file="backend/_resources/images/customer_stream/stream_view.png"}" />' +
             '</div>'
         });
@@ -130,14 +130,14 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     createFinishPage: function() {
         return Ext.create('Ext.container.Container', {
             html: '' +
-            '<h1 style="padding-bottom: 15px; font-size: 22px;">' +
+            '<h1 class="headline">' +
                 '{s name="wizard_usage_headline"}{/s}' +
             '</h1>' +
-            '<div style="float:left; width: 25%; margin-right: 10px;">' +
+            '<div class="description">' +
                 '{s name="wizard_usage_text"}{/s}' +
             '</div>' +
-            '<div style="float: left;">' +
-            '<img src="{link file="backend/_resources/images/customer_stream/ekw_usage.png"}" />' +
+            '<div class="image">' +
+                '<img src="{link file="backend/_resources/images/customer_stream/ekw_usage.png"}" />' +
             '</div>'
         });
     },

@@ -27,6 +27,8 @@
  * @author      shopware AG
  */
 
+//{block name="backend/base/attribute/field_handler/Shopware.attribute.CustomerStreamFieldHandler"}
+
 Ext.define('Shopware.attribute.CustomerStreamFieldHandler', {
     extend: 'Shopware.attribute.AbstractEntityFieldHandler',
     entity: "Shopware\\Models\\Customer\\CustomerStream",
