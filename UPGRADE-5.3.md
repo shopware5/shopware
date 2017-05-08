@@ -88,6 +88,24 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `.checkbox--state`
 * Added new JavaScript method to register callbacks which fire after the main script was loaded asynchronously. Use `document.asyncReady()` to register your callback when using inline script.
 * Added missing dependency `jquery.event.move` to the `package.json` file.
+* Added template switch for `listing/index.tpl` to `listing/customer_stream.tpl` in case that the category contains a shopping world which is restricted to customer streams
+* Added `s_emarketing_vouchers.customer_stream_ids` column to restrict vouchers to customer streams.
+* Added `s_emotion.customer_stream_ids` column to restrict shopping worlds to customer streams.
+* Added database structure for new customer streams feature:
+    * `s_customer_search_index` - indexed search table for fast search access
+    * `s_customer_streams - list of all existing streams (`Shopware\Models\Customer\CustomerStream`)
+    * `s_customer_streams_mapping` - mapping between customer and assigned streams
+* Added new `Shopware\Bundle\CustomerSearchBundle` which defines how customers can be searched
+* Added new `Shopware\Bundle\CustomerSearchBundleDBAL` which allows to search for customers over dbal
+    * Executes an sql search in table `s_customer_search_index`
+* Added console command to generate customer stream search index: `sw:customer:search:index:populate`
+* Added console command to generate customer stream mapping table: `sw:customer:stream:index:populate`
+* Added `$withStreams = false` parameter in `Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration::getCategoryConfiguration` which allows to consider customer streams for category emotions
+* Added flag `$hasCustomerStreamEmotion` in frontend/home/index.tpl to switch between emotions restricted to customer streams and those which are unrestricted
+* Added new route `Shopware_Controllers_Frontend_Listing::layoutAction` which loads the category page layout for customer streams. This route is called over {action ..} in case that the category contains an emotion with customer streams
+* Added new route `Shopware_Controllers_Frontend_Listing::listingAction` which loads the category product listing.This route is called over {action ..} in case that the category contains an emotion with customer streams
+* Added new entity `Shopware\Models\Customer\CustomerStream` for attribute single and multi selection.
+* Added new components for customer stream handling in `Shopware\Components\CustomerStream`
 
 ### Changes
 
@@ -137,22 +155,20 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Change behavior of the tracking url rendering.
     * only the smarty variable **{$offerPosition.trackingcode}** is in use.
     * use now only the url of the tracking service like: https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}
-* Changed text colour and height of `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
+    * ```<a href="https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}" onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');" target="_blank">{$offerPosition.trackingcode}</a>```
+    * did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder.
 
-```xml
-<a href="https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}" onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');" target="_blank">{$offerPosition.trackingcode}</a>
-```
-
-did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder.
+* Changed text color and height of `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 * Change `s_articles_details.instock` definition from `NULL` to `NOT NULL DEFAULT '0'`
 * Upgrade FPDF to 1.8.1 and FPDI to 1.6.1
-
 * Updated the following dependencies:
     * `flatpickr` 2.4.7 to 2.5.7
     * `jquery` 2.1.4 up to 2.2.4
     * `grunt` 0.4.5 up to 1.0.1
     * `grunt-contrib-clean` 0.7.0 up to 1.1.0
     * `grunt-contrib-copy` 0.8.2 up to 1.0.0
+* Refactored backend customer module. Please take a look into the different template files to see what has changed.
+* Backend customer listing is now loaded in `Shopware_Controllers_Backend_CustomerQuickView`
 
 ### Removals
 

@@ -82,7 +82,7 @@ class SearchIndexer implements SearchIndexerInterface
      *
      * @return array
      */
-    protected function buildData(AnalyzedCustomer $customer)
+    private function buildData(AnalyzedCustomer $customer)
     {
         $data = [
             'id' => $customer->getId(),
