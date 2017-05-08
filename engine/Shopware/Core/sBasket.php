@@ -1686,9 +1686,6 @@ class sBasket
             return true;
         }
 
-//        $context = $this->contextService->getShopContext();
-//        if (!empty($voucherData))
-
         if ($voucherData['voucherMode'] == 1) {
             $sql = '
                 SELECT id

@@ -25,10 +25,8 @@
 namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
-
-
+use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 

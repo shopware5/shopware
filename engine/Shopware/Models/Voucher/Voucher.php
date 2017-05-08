@@ -683,7 +683,7 @@ class Voucher extends ModelEntity
         return $this->customerStreamIds;
     }
 
-    public function setCustomerStreamIds($customerStreamIds): void
+    public function setCustomerStreamIds($customerStreamIds)
     {
         $this->customerStreamIds = $customerStreamIds;
     }

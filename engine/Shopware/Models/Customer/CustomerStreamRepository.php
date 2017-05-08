@@ -47,6 +47,20 @@ class CustomerStreamRepository
         $this->connection = $connection;
     }
 
+    public function hasCustomerStreamEmotions($categoryId)
+    {
+        return $this->connection->fetchColumn(
+            'SELECT emotion.id 
+            FROM s_emotion emotion 
+            INNER JOIN s_emotion_categories categories 
+                ON categories.emotion_id = emotion.id 
+                AND categories.category_id = :id
+            WHERE emotion.customer_stream_ids IS NOT NULL   
+            LIMIT 1',
+            [':id' => $categoryId]
+        );
+    }
+
     /**
      * @param int[] $ids
      *

@@ -60,18 +60,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $hasStreamEmotion = $this->container->get('dbal_connection')->fetchColumn(
-            'SELECT emotion.id 
-            FROM s_emotion emotion 
-            INNER JOIN s_emotion_categories categories 
-                ON categories.emotion_id = emotion.id 
-                AND categories.category_id = :id
-            WHERE emotion.customer_stream_ids IS NOT NULL   
-            LIMIT 1',
-            [':id' => $requestCategoryId]
-        );
+        $hasCustomerStreamEmotions = $this->container->get('shopware.customer_stream.repository')
+            ->hasCustomerStreamEmotions($requestCategoryId);
 
-        if ($hasStreamEmotion && !$this->Request()->getParam('sPage')) {
+        if ($hasCustomerStreamEmotions && !$this->Request()->getParam('sPage')) {
             $assign = $this->View()->getAssign();
             $this->View()->loadTemplate('frontend/listing/customer_stream.tpl');
             $this->View()->assign($assign);

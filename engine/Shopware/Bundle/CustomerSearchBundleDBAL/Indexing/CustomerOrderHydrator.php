@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
-
-
 class CustomerOrderHydrator
 {
     public function hydrate(array $data)

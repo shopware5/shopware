@@ -38,7 +38,7 @@ interface SortingHandlerInterface
 
     /**
      * @param SortingInterface $sorting
-     * @param QueryBuilder       $query
+     * @param QueryBuilder     $query
      */
     public function handle(SortingInterface $sorting, QueryBuilder $query);
 }
