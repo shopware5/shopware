@@ -29,6 +29,7 @@ use Shopware\Components\Emotion\Preset\ComponentHandler\ComponentHandlerInterfac
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Preset;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class PresetDataSynchronizer implements PresetDataSynchronizerInterface
 {
@@ -76,6 +77,10 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
             throw new PresetAssetImportException('The preset data of the ' . $preset->getName() . ' preset seems to be invalid.');
         }
 
+        if (empty($presetData['syncData']['assets'])) {
+            return;
+        }
+
         $element = $this->findElementBySyncKey($presetData, $elementSyncKey);
 
         if (!$element) {
@@ -85,14 +90,23 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $handler = $this->findComponentHandler($element);
 
         if (!$handler) {
-            throw new PresetAssetImportException('Element handler not found. Import not possible.');
+            return;
         }
 
+        if (!isset($presetData['syncData']['importedAssets'])) {
+            $presetData['syncData']['importedAssets'] = [];
+        }
+
+        $syncData = new ParameterBag($presetData['syncData']);
+
         try {
-            $element = $handler->import($element);
+            $element = $handler->import($element, $syncData);
         } catch (\Exception $e) {
             throw new PresetAssetImportException($e->getMessage());
         }
+
+        $presetData['syncData'] = $syncData->all();
+        $preset->setPresetData(json_encode($presetData));
 
         $this->synchronizeData($preset, $element);
     }
@@ -104,6 +118,9 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     {
         $presetData = json_decode($preset->getPresetData(), true);
 
+        $presetData['syncData']['assets'] = [];
+        $syncData = new ParameterBag($presetData['syncData']);
+
         foreach ($presetData['elements'] as &$element) {
             $handler = $this->findComponentHandler($element);
 
@@ -111,9 +128,11 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
                 continue;
             }
 
-            $element = $handler->export($element);
+            $element = $handler->export($element, $syncData);
         }
         unset($element);
+
+        $presetData['syncData'] = $syncData->all();
 
         $preset->setPresetData(json_encode($presetData));
         $this->modelManager->flush($preset);

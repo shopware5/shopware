@@ -69,4 +69,24 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
 
         return $media;
     }
+
+    /**
+     * @param $id
+     *
+     * @return null|object
+     */
+    protected function getMediaById($id)
+    {
+        return $this->mediaResource->getRepository()->find($id);
+    }
+
+    /**
+     * @param $path
+     *
+     * @return null|object
+     */
+    protected function getMediaByPath($path)
+    {
+        return $this->mediaResource->getRepository()->findOneBy(['path' => $path]);
+    }
 }

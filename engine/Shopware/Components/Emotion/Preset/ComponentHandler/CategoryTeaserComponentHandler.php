@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 class CategoryTeaserComponentHandler extends AbstractComponentHandler
 {
     const COMPONENT_TYPE = 'emotion-components-category-teaser';
@@ -41,43 +43,55 @@ class CategoryTeaserComponentHandler extends AbstractComponentHandler
     /**
      * {@inheritdoc}
      */
-    public function import(array $element)
-    {
-        if (!isset($element['data'], $element['assets'])) {
-            return $element;
-        }
-
-        return $this->processElementData($element);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function export(array $element)
+    public function import(array $element, ParameterBag $syncData)
     {
         if (!isset($element['data'])) {
             return $element;
         }
 
-        return $this->prepareElementExport($element);
+        return $this->processElementData($element, $syncData);
     }
 
     /**
-     * @param array $element
+     * {@inheritdoc}
+     */
+    public function export(array $element, ParameterBag $syncData)
+    {
+        if (!isset($element['data'])) {
+            return $element;
+        }
+
+        return $this->prepareElementExport($element, $syncData);
+    }
+
+    /**
+     * @param array        $element
+     * @param ParameterBag $syncData
      *
      * @return array
      */
-    private function processElementData(array $element)
+    private function processElementData(array $element, ParameterBag $syncData)
     {
         $data = $element['data'];
-        $assets = $element['assets'];
+        $assets = $syncData->get('assets', []);
+        $importedAssets = $syncData->get('importedAssets', []);
 
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY && !empty($elementData['value'])) {
-                $assetPath = $assets[$elementData['value']];
+                if (!array_key_exists($elementData['value'], $assets)) {
+                    break;
+                }
+                if (!array_key_exists($elementData['value'], $importedAssets)) {
+                    $assetPath = $assets[$elementData['value']];
 
-                $media = $this->doAssetImport($assetPath);
-
+                    if (!$assetPath) {
+                        break;
+                    }
+                    $media = $this->doAssetImport($assetPath);
+                    $importedAssets[$elementData['value']] = $media->getId();
+                } else {
+                    $media = $this->getMediaById($importedAssets[$elementData['value']]);
+                }
                 $elementData['value'] = $media->getPath();
 
                 break;
@@ -85,35 +99,41 @@ class CategoryTeaserComponentHandler extends AbstractComponentHandler
         }
         unset($elementData);
 
+        $syncData->set('importedAssets', $importedAssets);
         $element['data'] = $data;
-        unset($element['assets']);
 
         return $element;
     }
 
     /**
-     * @param array $element
+     * @param array        $element
+     * @param ParameterBag $syncData
      *
      * @return array
      */
-    private function prepareElementExport(array $element)
+    private function prepareElementExport(array $element, ParameterBag $syncData)
     {
-        $element['assets'] = [];
+        $assets = $syncData->get('assets', []);
         $data = $element['data'];
 
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY && !empty($elementData['value'])) {
                 $assetPath = $elementData['value'];
-                $assetHash = uniqid('asset-', true);
+                $media = $this->getMediaByPath($assetPath);
 
-                $element['assets'][$assetHash] = $this->mediaService->getUrl($assetPath);
-                $elementData['value'] = $assetHash;
+                if ($media) {
+                    $assetHash = md5($media->getId());
 
-                break;
+                    $assets[$assetHash] = $this->mediaService->getUrl($assetPath);
+                    $elementData['value'] = $assetHash;
+
+                    break;
+                }
             }
         }
         unset($elementData);
 
+        $syncData->set('assets', $assets);
         $element['data'] = $data;
 
         return $element;

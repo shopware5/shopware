@@ -766,7 +766,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     processAssetImport: function(presetId, index, elements, outerCallback, importCallback, scope) {
         // ignore elements without assets
-        if (Ext.isEmpty(elements) || !elements[index]['assets']) {
+        if (Ext.isEmpty(elements)) {
             return Ext.callback(importCallback, scope, [true, outerCallback, presetId, index, elements]);
         }
         var elementSyncKey = elements[index]['syncKey'];

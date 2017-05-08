@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Exception\EmotionImportException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class EmotionImporter implements EmotionImporterInterface
 {
@@ -69,11 +70,14 @@ class EmotionImporter implements EmotionImporterInterface
             $this->checkRequiredPlugins($emotionData['requiredPlugins']);
         }
 
-        if ($emotionData['assets']) {
-            $emotionData = $this->spreadElementAssets($emotionData, $extractPath);
-        }
+        $presetData = json_decode($emotionData['presetData'], true);
+        $syncData = new ParameterBag($presetData['syncData']);
 
-        $presetData = $emotionData['presetData'];
+        $this->setFilePaths($syncData, $extractPath);
+
+        $presetData['syncData'] = $syncData->all();
+
+        $presetData = json_encode($presetData);
 
         $preset = $this->presetResource->create([
             'name' => pathinfo($filePath, PATHINFO_FILENAME),
@@ -173,27 +177,18 @@ class EmotionImporter implements EmotionImporterInterface
     }
 
     /**
-     * @param $emotionData
-     * @param $extractPath
-     *
-     * @return array
+     * @param ParameterBag $syncData
+     * @param string       $extractPath
      */
-    private function spreadElementAssets($emotionData, $extractPath)
+    private function setFilePaths(ParameterBag $syncData, $extractPath)
     {
-        $assets = $emotionData['assets'];
-        $presetData = json_decode($emotionData['presetData'], true);
+        $assets = $syncData->get('assets', []);
 
-        foreach ($presetData['elements'] as &$element) {
-            if (isset($element['assets'])) {
-                foreach ($element['assets'] as $key => $path) {
-                    $element['assets'][$key] = 'file://' . $extractPath . '/' . $assets[$key];
-                }
-            }
+        foreach ($assets as $key => &$path) {
+            $path = 'file://' . $extractPath . '/' . $path;
         }
-        unset($element);
+        unset($path);
 
-        $emotionData['presetData'] = json_encode($presetData);
-
-        return $emotionData;
+        $syncData->set('assets', $assets);
     }
 }
