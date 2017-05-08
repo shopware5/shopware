@@ -196,10 +196,6 @@ class StructConverter
                 foreach ($element->getData()->get('manufacturers') as $manufacturer) {
                     $manufacturerArray = $this->converter->convertManufacturerStruct($manufacturer);
 
-                    if ($manufacturerArray['image']) {
-                        $manufacturerArray['image'] = $this->mediaService->getUrl($manufacturerArray['image']);
-                    }
-
                     $manufacturerArray['link'] = $this->container->get('config')->get('baseFile') . '?controller=listing&action=manufacturer&sSupplier=' . $manufacturer->getId();
                     $manufacturerArray['website'] = $manufacturer->getLink();
 

@@ -343,6 +343,7 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
     * `Shopware.apps.Customer.model.List`
     * `Shopware.apps.Customer.store.List`
     * Functions only used for backend listing, use CustomerSearchBundle or own query instead.
+* Removed redundant call to mediaService->getUrl() in `engine/Shopware/Bundle/EmotionBundle/Service/StructConverter.php`
 
 ### Deprecations
 
