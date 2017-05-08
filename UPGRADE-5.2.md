@@ -4,6 +4,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.23
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
+* The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
 
 ## 5.2.22
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
