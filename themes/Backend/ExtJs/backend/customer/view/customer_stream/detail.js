@@ -41,12 +41,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
                 title: '{s name=stream_details}{/s}',
                 fields: {
                     name: '{s name=stream_name}{/s}',
-                    description: '{s name=stream_description}{/s}',
-                    useForHttpCache: {
-                        fieldLabel: '{s name="use_for_http_cache"}{/s}',
-                        boxLabel: '{s name="use_for_http_cache_support"}{/s}',
-                        helpText: '{s name="use_for_http_cache_help"}{/s}'
-                    }
+                    description: '{s name=stream_description}{/s}'
                 }
             }]
         };
