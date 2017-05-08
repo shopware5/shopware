@@ -48,13 +48,15 @@ class RebuildCategoryTreeCommand extends ShopwareCommand
                 'offset',
                 'o',
                 InputOption::VALUE_REQUIRED,
-                'Offset to start with. Default: 0'
+                'Offset to start with. Default: 0',
+                0
             )
             ->addOption(
                 'limit',
                 'l',
                 InputOption::VALUE_REQUIRED,
-                'Categories to build per batch. Default: 3000'
+                'Categories to build per batch. Default: 3000',
+                3000
             )
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command will rebuild your category tree.
@@ -68,8 +70,8 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $progress = $input->getOption('offset') ?: 0;
-        $limit = $input->getOption('limit') ?: 3000;
+        $progress = $input->getOption('offset');
+        $limit = $input->getOption('limit');
 
         Assertion::integerish($progress);
         Assertion::integerish($limit);
