@@ -63,12 +63,6 @@ class CustomerStream extends ModelEntity
     private $conditions;
 
     /**
-     * @var bool
-     * @ORM\Column(name="use_for_http_cache", type="boolean", nullable=false)
-     */
-    private $useForHttpCache = true;
-
-    /**
      * @return int
      */
     public function getId()
@@ -122,15 +116,5 @@ class CustomerStream extends ModelEntity
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
-    }
-
-    public function isUseForHttpCache()
-    {
-        return $this->useForHttpCache;
-    }
-
-    public function setUseForHttpCache($useForHttpCache)
-    {
-        $this->useForHttpCache = $useForHttpCache;
     }
 }

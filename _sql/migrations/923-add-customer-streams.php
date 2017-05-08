@@ -37,7 +37,6 @@ CREATE TABLE `s_customer_streams` (
     `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
     `conditions` LONGTEXT COLLATE utf8_unicode_ci,
     `description` text COLLATE utf8_unicode_ci,
-    `use_for_http_cache` int(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
