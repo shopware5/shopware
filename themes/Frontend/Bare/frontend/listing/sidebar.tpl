@@ -7,7 +7,11 @@
                 {$smarty.block.parent}
 
                 <div class="sidebar-filter">
-                    <div class="sidebar-filter--content"></div>
+                    <div class="sidebar-filter--content">
+                        {if $criteria && $facets}
+                            {include file="frontend/listing/actions/action-filter-panel.tpl"}
+                        {/if}
+                    </div>
                 </div>
             </div>
         {/block}
