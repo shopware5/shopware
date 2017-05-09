@@ -133,6 +133,7 @@
 {include file='backend/base/store/category_tree.js'}
 {include file='backend/base/store/customer_group.js'}
 {include file='backend/base/store/dispatch.js'}
+{include file='backend/base/store/doc_type.js'}
 {include file='backend/base/store/payment.js'}
 {include file='backend/base/store/shop.js'}
 {include file='backend/base/store/shop_language.js'}
