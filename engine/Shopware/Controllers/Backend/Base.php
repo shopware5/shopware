@@ -940,6 +940,39 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
+     * Returns a list of document types. Supports store paging, sorting and filtering over the standard ExtJs store
+     * parameters. Each document type has the following fields:
+     * <code>
+     *    [int]      id
+     *    [string]   name
+     *    [string]   template
+     *    [string]   numbers
+     *    [int]      left
+     *    [int]      right
+     *    [int]      top
+     *    [int]      bottom
+     *    [int]      pageBreak
+     * </code>
+     */
+    public function getDocTypesAction()
+    {
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Document\Document');
+        $builder = $repository->createQueryBuilder('d');
+
+        $builder->select('d')
+            ->addFilter((array) $this->Request()->getParam('filter', []))
+            ->addOrderBy((array) $this->Request()->getParam('sort', []))
+            ->setFirstResult($this->Request()->getParam('start'))
+            ->setMaxResults($this->Request()->getParam('limit'));
+
+        $query = $builder->getQuery();
+        $total = Shopware()->Models()->getQueryCount($query);
+        $data = $query->getArrayResult();
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
+    }
+
+    /**
      * Add the table alias to the passed filter and sort parameters.
      *
      * @param array $properties
