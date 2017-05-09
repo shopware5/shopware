@@ -230,18 +230,26 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
     },
 
     getSorting: function() {
-        var settingsPanel = this.getSettingsPanel();
+        var me = this,
+            sort,
+            record,
+            settingsPanel = this.getSettingsPanel();
 
-        var sort = settingsPanel.sortingCombo.store.getById(
+        sort = settingsPanel.sortingCombo.store.getById(
             settingsPanel.sortingCombo.getValue()
         );
 
-        if (!sort) {
-            var r = this.getFormPanel().getForm().getRecord();
-            return r.get('sorting');
+        if (sort) {
+            return sort.get('sortings');
         }
 
-        return sort.get('sortings');
+        record = me.getFormPanel().getForm().getRecord();
+
+        if (record && record.get('sorting').length) {
+            return record.get('sorting');
+        }
+
+        return {};
     },
 
     onDuplicateItem: function(grid, record) {
