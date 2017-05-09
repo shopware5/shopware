@@ -44,7 +44,7 @@
         .addPlugin('#new-customer-action', 'swCollapsePanel', ['xs', 's'])
 
         // Image slider
-        .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
+        .addPlugin('*[data-image-slider="true"]', 'swImageSlider')
 
         // Image zoom
         .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')

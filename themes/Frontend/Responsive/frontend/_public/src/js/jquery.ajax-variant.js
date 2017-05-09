@@ -139,7 +139,7 @@
                     $(me.opts.footerJavascriptInlineSelector).replaceWith($response.filter(me.opts.footerJavascriptInlineSelector));
 
                     StateManager.addPlugin('select:not([data-no-fancy-select="true"])', 'swSelectboxReplacement')
-                        .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
+                        .addPlugin('*[data-image-slider="true"]', 'swImageSlider')
                         .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')
                         .addPlugin('*[data-image-gallery="true"]', 'swImageGallery')
                         .addPlugin('*[data-add-article="true"]', 'swAddArticle')
