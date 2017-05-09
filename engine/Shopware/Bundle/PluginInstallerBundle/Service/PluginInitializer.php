@@ -97,4 +97,13 @@ class PluginInitializer
 
         return $plugins;
     }
+
+    /**
+     * @return array
+     */
+    public function getActivePlugins()
+    {
+        $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL;');
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
 }

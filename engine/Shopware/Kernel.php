@@ -133,6 +133,11 @@ class Kernel implements HttpKernelInterface
     private $connection;
 
     /**
+     * @var PluginInitializer
+     */
+    private $initializer;
+
+    /**
      * @param string $environment
      * @param bool   $debug
      */
@@ -453,12 +458,12 @@ class Kernel implements HttpKernelInterface
 
     protected function initializePlugins()
     {
-        $initializer = new PluginInitializer(
+        $this->initializer = new PluginInitializer(
             $this->connection,
             $this->config['plugin_directories']['ShopwarePlugins']
         );
 
-        $this->plugins = $initializer->initializePlugins();
+        $this->plugins = $this->initializer->initializePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);
     }
@@ -641,6 +646,10 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
+
+        if ($this->initializer) {
+            $container->setParameter('installed_plugins', $this->initializer->getActivePlugins());
+        }
 
         $this->loadPlugins($container);
     }
