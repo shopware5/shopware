@@ -24,18 +24,17 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
-use Shopware\Models\Media\Media;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 interface MediaReplaceServiceInterface
 {
     /**
      * replace the media by the given mediaId with the given file content
      *
-     * @param int          $mediaId
-     * @param UploadedFile $file
+     * @param int  $mediaId
+     * @param File $file
      *
      * @throws \Exception
      */
-    public function replace($mediaId, UploadedFile $file);
+    public function replace($mediaId, File $file);
 }
