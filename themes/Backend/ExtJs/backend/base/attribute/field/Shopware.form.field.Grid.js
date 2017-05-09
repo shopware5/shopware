@@ -320,6 +320,9 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     getSubmitData: function() {
+        if (this.disabled) {
+            return null;
+        }
         var value = { };
         value[this.name] = this.getValue();
         return value;
