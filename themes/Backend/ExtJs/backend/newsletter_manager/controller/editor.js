@@ -216,7 +216,9 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             count, totalCount = 0,
             editor = me.getNewsletterEditor(),
             settingsForm = me.getNewsletterSettings(),
-            newsletterGroups = settingsForm.newsletterGroups, customerGroups = settingsForm.customerGroups,
+            newsletterGroups = settingsForm.newsletterGroups,
+            customerGroups = settingsForm.customerGroups,
+            customerStreamGroups = settingsForm.customerStreamGroups,
             groups = Ext.create('Shopware.apps.NewsletterManager.store.RecipientGroup'),
             content = editor.tinyMce.getEditor().getContent();
 
@@ -226,7 +228,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                 count = checkbox.count,
                 value = checkbox.getValue();
 
-            //todo@dn: set count to the number of users in the given group
             if(value === true) {
                 totalCount += count;
 
@@ -247,7 +248,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                 count = checkbox.count,
                 value = checkbox.getValue();
 
-            //todo@dn: set count to the number of users in the given group
             if(value === true) {
                 totalCount += count;
 
@@ -260,7 +260,27 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                 });
                 groups.add(record);
             }
+        });
 
+        // Iterate the checkboxes and populate the RecipientGroupStore with checked newsletter groups
+        Ext.each(customerStreamGroups, function(checkbox) {
+            var record = checkbox.record,
+                count = checkbox.count,
+                value = checkbox.getValue();
+
+            if(value === true) {
+                totalCount += count;
+
+                record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {
+                    internalId: null,
+                    streamId: record.get('id'),
+                    number: count,
+                    name: record.get('name'),
+                    groupkey: false,
+                    isCustomerGroup: false
+                });
+                groups.add(record);
+            }
         });
 
         var settings = Ext.create('Shopware.apps.NewsletterManager.model.Settings'),
