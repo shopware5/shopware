@@ -26,8 +26,8 @@ class Migrations_Migration927 extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        $sql = <<<'EOD'
-UPDATE s_core_config_elements SET value = 's:360:"frontend/listing 3600
+        $routes = <<<EOD
+frontend/listing 3600
 frontend/index 3600
 frontend/detail 3600
 frontend/campaign 14400
@@ -42,10 +42,13 @@ widgets/emotion 14400
 widgets/recommendation 14400
 widgets/lastArticles 3600
 widgets/campaign 3600
-frontend/listing/layout 0";'
-WHERE name='cacheControllers';
+frontend/listing/layout 0
 EOD;
-        $this->addSql($sql);
+
+        $this->addSql(sprintf(
+            "UPDATE `s_core_config_elements` SET `value` = '%s' WHERE `name` = 'cacheControllers'",
+            serialize($routes)
+        ));
 
         $values = $this->connection->query(
             "SELECT configValues.*
