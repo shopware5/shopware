@@ -27,9 +27,19 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 interface SearchIndexerInterface
 {
     /**
+     * Indexes the provided customer ids into the search index
+     *
      * @param int[] $ids
      */
     public function populate(array $ids);
 
+    /**
+     * Clears the whole search index at once
+     */
     public function clearIndex();
+
+    /**
+     * Removes all customer rows from the generated search index which do not exist anymore
+     */
+    public function cleanupIndex();
 }
