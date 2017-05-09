@@ -135,7 +135,7 @@
         </service>
 
         <service id="customer_search.dbal.condition.salutation_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SalutationConditionHandler">
-            <tag name="customer_search_condition_handler"/>
+            <tag name="customer_search.condition_handler"/>
         </service>
 
         <service id="customer_search.dbal.condition.search_term_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SearchTermConditionHandler">

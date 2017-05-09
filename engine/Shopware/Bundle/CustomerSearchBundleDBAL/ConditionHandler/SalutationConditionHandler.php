@@ -41,6 +41,6 @@ class SalutationConditionHandler implements ConditionHandlerInterface
     {
         $query->andWhere('customer.salutation IN (:salutations)');
         /* @var SalutationCondition $condition */
-        $query->setParameter(':salutations', $condition->getSalutations(), Connection::PARAM_INT_ARRAY);
+        $query->setParameter(':salutations', $condition->getSalutations(), Connection::PARAM_STR_ARRAY);
     }
 }
