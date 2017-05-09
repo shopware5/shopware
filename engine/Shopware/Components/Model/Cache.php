@@ -46,15 +46,22 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     private $prefix;
 
     /**
+     * @var array
+     */
+    private $tags;
+
+    /**
      * @param \Zend_Cache_Core $cache
      * @param string           $prefix
+     * @param array            $tags
      */
-    public function __construct(\Zend_Cache_Core $cache, $prefix = null)
+    public function __construct(\Zend_Cache_Core $cache, $prefix = null, array $tags = [])
     {
         if ($prefix === null) {
             $prefix = 'Shopware_Models_' . \Shopware::REVISION . '_';
         }
 
+        $this->tags = $tags;
         $this->prefix = $prefix;
         $this->cache = $cache;
     }
@@ -94,7 +101,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = false)
     {
-        return $this->cache->save($data, $this->prefix . md5($id), ['Shopware_Models'], $lifeTime);
+        return $this->cache->save($data, $this->prefix . md5($id), $this->tags, $lifeTime);
     }
 
     /**
@@ -116,7 +123,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     protected function doFlush()
     {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['Shopware_Models']);
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $this->tags);
     }
 
     /**

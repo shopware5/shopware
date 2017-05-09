@@ -392,6 +392,31 @@ Captchas are now configurable via backend and can be added using the `captcha` d
 
 For more information, please refer to our [Captcha Documentation](https://developers.shopware.com/developers-guide/implementing-your-own-captcha/).
 
+### Redis backend and doctrine cache
+Redis can now be used as a cache provider for the backend and model caches. Here is an example:
+
+```
+    'model' => [
+        'redisHost' => '127.0.0.1',
+        'redisPort' => 6379,
+        'redisDbIndex' => 0,
+        'cacheProvider' => 'redis',
+    ],
+
+    'cache' => [
+        'backend' => 'redis',
+        'backendOptions' => [
+            'servers' => array(
+                array(
+                    'host' => '127.0.0.1',
+                    'port' => 6379,
+                    'dbindex' => 0,
+                ),
+            ),
+        ],
+    ],
+```
+
 ### Select field replacement
 
 The replacement of the select field elements via JavaScript is deprecated and will be removed in a future release. You can create a styled select field with a simple CSS-only solution by adding a wrapper element.
