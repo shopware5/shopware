@@ -65,13 +65,13 @@ Ext.define('Shopware.apps.MediaManager', {
      * Required controllers for module (subapplication)
      * @array
      */
-    controllers: [ 'Main', 'Album', 'Media', 'Thumbnail' ],
+    controllers: ['Main', 'Album', 'Media', 'Thumbnail'],
 
     /**
      * Requires models for sub-application
      * @array
      */
-    models:['Album', 'Media','Setting'],
+    models: ['Album', 'Media', 'Setting'],
 
     /**
      * Required views for this sub-application
@@ -93,11 +93,13 @@ Ext.define('Shopware.apps.MediaManager', {
         'replace.Upload',
         'replace.FileSelect'
     ],
+
     /**
      * Required stores for sub-application
      * @array
      */
-    stores:['Album', 'Media', 'Setting'],
+    stores:['Album', 'Media'],
+
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

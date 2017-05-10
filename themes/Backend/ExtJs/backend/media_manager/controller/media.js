@@ -69,15 +69,12 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
-     * to display the subapplication
+     * to display the sub-application
      *
      * @return void
      */
     init: function() {
         var me = this;
-
-        me.settingRecord = me.getSettings();
-        me.restoreSettings();
 
         me.control({
             'mediamanager-album-tree': {
@@ -93,7 +90,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 changePreviewSize: me.onChangePreviewSize
             },
             'mediamanager-media-view button[action=mediamanager-media-view-layout]': {
-                'layout-button-click': me.onChangeLayout
+                change: me.onChangeLayout
             },
             'mediamanager-media-view button[action=mediamanager-media-view-delete]': {
                 click: me.onDeleteMedia
@@ -112,9 +109,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             'mediamanager-selection-window textfield[action=mediamanager-selection-window-searchfield]': {
                 change: me.onSearchMedia
             },
-            'mediamanager-media-view combobox[action=perPageComboBox]': {
-                select: me.onSelectPerPage
-            },
             'mediamanager-media-grid': {
                 'showDetail': me.onShowDetails,
                 'edit': me.onGridEditLabel
@@ -122,96 +116,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         });
 
         me.callParent(arguments);
-    },
-
-    getSettings:function() {
-        var me = this,
-            settingStore = me.subApplication.getStore('Setting'),
-            settingRecord = null,
-            grid = me.getMediaGrid(),
-            view = me.getMediaView();
-
-        settingStore.load(function() {
-            if (!settingStore.getAt(0)) {
-                /**
-                 * Initialize the record with default values provided by the view and the mediaGrid.
-                 */
-                settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting', {
-                    displayType: view.selectedLayout,
-                    itemsPerPage: view.mediaStore.pageSize,
-                    tableThumbnailSize: 16,
-                    gridThumbnailSize: 72
-                });
-                settingStore.add(settingRecord);
-            }
-        });
-
-        return settingStore.getAt(0);
-    },
-
-    restoreSettings: function() {
-        var me = this,
-            view = me.getMediaView(),
-            grid = me.getMediaGrid(),
-            displayTypeValue = me.settingRecord.get('displayType'),
-            pageSizeCombo = view.pageSize,
-            thumbnailSize = me.settingRecord.get(displayTypeValue + 'ThumbnailSize'),
-            itemsPerPage = me.settingRecord.get('itemsPerPage'),
-            storeData;
-
-        view.mediaStore.pageSize = itemsPerPage;
-        view.thumbnailSize = thumbnailSize;
-        view.mediaViewContainer.add(view.createMediaView());
-
-        /**
-         * Find the item which matches the settingRecord value
-         */
-        view.displayTypeBtn.menu.items.each(function(item) {
-            if (item.layout == displayTypeValue) {
-                view.displayTypeBtn.setActiveItem(item);
-
-                return false;
-            }
-        });
-
-        /**
-         * Fire the onChangeLayout event
-         */
-        me.onChangeLayout(null, {
-            layout: displayTypeValue
-        });
-
-        grid.columns[1].setWidth(thumbnailSize + 10);
-        grid.selectedPreviewSize = thumbnailSize;
-
-        if (view.hasOwnProperty(displayTypeValue + 'ImageSizes')) {
-            storeData = view[displayTypeValue + 'ImageSizes'];
-
-            view.imageSize.reset();
-            view.imageSize.getStore().loadData(storeData);
-        }
-
-        view.imageSize.setValue(grid.selectedPreviewSize);
-
-        // ItemsPerPage
-        pageSizeCombo.store.each(function(item) {
-            if(item.raw.value == itemsPerPage) {
-                pageSizeCombo.reset();
-                pageSizeCombo.setValue(item.raw.name);
-
-                return false;
-            }
-        });
-    },
-
-    onSelectPerPage: function(combo) {
-        var me = this,
-            settingRecord = me.settingRecord;
-
-        settingRecord.set({
-            'itemsPerPage': parseInt(combo.getValue())
-        });
-        settingRecord.save();
     },
 
     moveMedias: function(view, medias) {
@@ -245,7 +149,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Please note that this code will be used multiple times.
      *
      * @public
-     * @return void
+     * @return string
      */
     setValidTypes: function() {
         var me = this,
@@ -290,8 +194,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      */
     onTreeLoad: function(treeNode) {
         var me = this,
-            mediaView = me.getMediaView(),
-            tree = me.getAlbumTree();
+            mediaView = me.getMediaView();
 
         var url = mediaView.mediaDropZone.requestURL;
         if (url.indexOf('?albumID=') !== -1) {
@@ -317,8 +220,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * insert a value in the search field on the right hand of the module,
      * to search media by their name.
      *
-     * @param [object] field - Ext.form.field.Text
-     * @param [string] value - inserted search value
+     * @param { object } field - Ext.form.field.Text
+     * @param { string } value - inserted search value
      */
     onSearchMedia: function(field, value) {
         var me = this,
@@ -330,7 +233,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         //don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
         store.filters.clear();
         //Only one album available, so the search will only work in this album
-        if(childNodes.length == 1 && !store.getProxy().extraParams.albumID){
+        if(childNodes.length === 1 && !store.getProxy().extraParams.albumID){
             store.getProxy().extraParams.albumID = childNodes[0].getId();
         }
         store.currentPage = 1;
@@ -346,8 +249,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * them into an dataview.
      *
      * @event itemclick
-     * @param [object] view - Ext.tree.Panel
-     * @param [object] record - associated Ext.data.Model of the clicked item
+     * @param { object } view - Ext.tree.Panel
+     * @param { object } record - associated Ext.data.Model of the clicked item
      * @return void
      */
     onChangeMediaAlbum: function(view, record) {
@@ -403,7 +306,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             me.snippets.confirmMsgBox.deleteTitle,
             me.snippets.confirmMsgBox.deleteText,
             function(button){
-                if(button == 'yes'){
+                if(button === 'yes'){
                     me.deleteMedia();
                 }
             },
@@ -461,8 +364,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Edits the name of the media.
      *
      * @event editLabel
-     * @param [object] scope - Scope of the fired event Ext.ux.DataView.LabelEditor
-     * @param [object] editor - Editor field based on Ext.ux.DataView.LabelEditor
+     * @param { object } scope - Scope of the fired event Ext.ux.DataView.LabelEditor
+     * @param { object } editor - Editor field based on Ext.ux.DataView.LabelEditor
+     * @param { object } value
      */
     onEditLabel: function(scope, editor, value) {
         var record = editor.activeRecord,
@@ -490,7 +394,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      *
      * @param { Ext.grid.Panel } grid - The list view panel
      * @param { Array } selection - The selected entries in the list view
-     * @returns { Void|Boolean } Falsy, if no entry is selected. Otherwise `void`
+     * @returns { void|Boolean } Falsy, if no entry is selected. Otherwise `void`
      */
     onShowDetails: function(grid, selection) {
         var me = this, view = me.getMediaView(),
@@ -517,36 +421,17 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      *
      * The method sets the correct active item.
      *
-     * @param { Ext.button.Button } button - The clicked button
+     * @param { ?Ext.button.Button } button - The clicked button
      * @param { Object } item - The configuration of the active layout
-     * @returns { Void }
+     * @returns { void }
      */
     onChangeLayout: function(button, item) {
-        var me = this,
-            view = me.getMediaView(),
-            grid = me.getMediaGrid(),
-            storeData;
+        var view = this.getMediaView();
 
         view.selectedLayout = item.layout;
-        view.thumbnailSize = me.settingRecord.get(view.selectedLayout + 'ThumbnailSize');
-
-        me.settingRecord.set({
-            'displayType': item.layout
-        });
-
-        if (view.hasOwnProperty(view.selectedLayout + 'ImageSizes')) {
-            storeData = view[view.selectedLayout + 'ImageSizes'];
-
-            view.imageSize.getStore().on('datachanged', function() {
-                view.imageSize.setValue(view.thumbnailSize, false);
-            }, null, { single: true });
-
-            view.imageSize.getStore().loadData(storeData);
-        }
-
         view.cardContainer.getLayout().setActiveItem((item.layout === 'grid') ? 0 : 1);
 
-        me.settingRecord.save();
+        view.fireEvent('media-view-layout-changed', view, item.layout);
     },
 
     /**
@@ -568,37 +453,29 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Event listener method which will be fired when the user changes
      * the selected preview size.
      *
-     * The method reloads the store to triggeer the re-rendering of the list view
+     * The method reloads the store to trigger the re-rendering of the list view
      * and resizes the `preview` column.
      *
      * @param { Ext.form.field.ComboBox } field - The field which has fired the event
      * @param { String|Number } newValue - New field value
      * @param { String|Number } value - Last value of the field
-     * @returns { Void|Boolean } Falsy, if the old value is empty or the user hasn't changed
+     * @returns { void|Boolean } Falsy, if the old value is empty or the user hasn't changed
      *          the selected item. Otherwise `void`
      */
     onChangePreviewSize: function(field, newValue, value) {
         var me = this,
             grid = me.getMediaGrid(),
             view = me.getMediaView(),
-            displayType = me.settingRecord.get('displayType'),
             iconSize;
-
-        // Prevents the first event to re-render the list view
-        if (!value || newValue === value) {
-            return false;
-        }
 
         // Cast the passed value to a number
         iconSize = ~~(1 * newValue);
 
-        me.settingRecord.set({
-            [displayType + 'ThumbnailSize']: iconSize
-        });
+        if (!view || iconSize === 0) {
+            return false;
+        }
 
-        me.settingRecord.save();
-
-        //Change the thumbnail size for the table view, sadly we need to recreate the view.
+        // Change the thumbnail size for the table view, sadly we need to recreate the view.
         view.thumbnailSize = iconSize;
         view.mediaViewContainer.removeAll();
 
@@ -615,6 +492,12 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         grid.getView().refresh();
         grid.columns[1].setWidth((iconSize < 50) ? 50 : iconSize + 10);
 
+        // Prevents the first event to re-render the list view
+        if (!value || newValue === value) {
+            return false;
+        }
+
+        view.fireEvent('media-view-preview-size-changed', view, iconSize, view.selectedLayout);
     }
 });
 //{/block}
