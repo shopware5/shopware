@@ -273,7 +273,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
                 }
 
                 if (result.ftpRequired) {
-                    me.getView('Ftp').create().show();
+                    me.getView('Ftp').create({ wrongPermissionCount: result.wrongPermissionCount }).show();
                 } else {
                     me.getView('Progress').create().show();
                 }
