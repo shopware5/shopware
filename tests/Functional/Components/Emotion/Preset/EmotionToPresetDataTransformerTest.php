@@ -81,4 +81,20 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->assertJson($data['presetData']);
         $this->assertInternalType('array', $data['requiredPlugins']);
     }
+
+    public function testGettingRequiredPluginsByIdShouldSucceed()
+    {
+        $this->connection->insert('s_core_plugins', ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '1.0.0']);
+        $pluginId = $this->connection->fetchColumn('SELECT id FROM s_core_plugins');
+
+        $method = new \ReflectionMethod($this->transformer, 'getRequiredPluginsById');
+        $method->setAccessible(true);
+
+        $ids = [$pluginId];
+
+        $result = $method->invoke($this->transformer, $ids);
+
+        $this->assertInternalType('array', $result);
+        $this->assertEquals('SwagLiveShopping', $result[0]['name']);
+    }
 }

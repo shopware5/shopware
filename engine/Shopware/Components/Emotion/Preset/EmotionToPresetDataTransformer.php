@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Emotion\Preset;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelManager;
@@ -204,6 +205,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     private function getRequiredPlugins(array $elements)
     {
         $pluginIds = [];
+        $requiredPlugins = [];
 
         /** @var array $element */
         foreach ($elements as $element) {
@@ -213,6 +215,29 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             }
         }
 
-        return $pluginIds;
+        if (!empty($pluginIds)) {
+            $pluginData = $this->getRequiredPluginsById($pluginIds);
+            $requiredPlugins = array_map(function ($plugin) {
+                return ['name' => $plugin['name'], 'version' => $plugin['version'], 'label' => $plugin['label']];
+            }, $pluginData);
+        }
+
+        return $requiredPlugins;
+    }
+
+    /**
+     * @param array $pluginIds
+     *
+     * @return array
+     */
+    private function getRequiredPluginsById(array $pluginIds)
+    {
+        return $this->modelManager->getConnection()->createQueryBuilder()
+            ->select('name, label, version')
+            ->from('s_core_plugins', 's')
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
