@@ -93,7 +93,14 @@ class CustomerOrderGateway
         $query->addSelect([
             'orders.userID as customer_id',
             'COUNT(DISTINCT orders.id) count_orders',
-            'ROUND(SUM(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_sum',
+            '(
+                SELECT ROUND(SUM(orders2.invoice_amount / orders2.currencyFactor), 2) 
+                FROM s_order orders2 
+                WHERE orders2.userID = orders.userID 
+                AND orders2.status != :cancelStatus
+                AND orders2.ordernumber IS NOT NULL
+                AND orders2.ordernumber != 0
+            ) as invoice_amount_sum',
             'ROUND(AVG(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_avg',
             'MIN(orders.invoice_amount / orders.currencyFactor) as invoice_amount_min',
             'MAX(orders.invoice_amount / orders.currencyFactor) as invoice_amount_max',
