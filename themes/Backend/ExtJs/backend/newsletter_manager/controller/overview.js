@@ -182,6 +182,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             newsletterGroupStore: me.subApplication.newsletterGroupStore,   // available newsletter groups
             customerGroupStore: me.subApplication.customerGroupStore,        // available customer groups
             shopStore: me.subApplication.shopStore,
+            customerStreamStore: me.subApplication.customerStreamStore,
             dispatchStore:  me.getStore('MailDispatch'),
             title: Ext.String.format("{s name=newsletterWindowEditTitle}Editing newsletter '{literal}{0}{/literal}{/s}'", record.get('subject')),
             record: record
@@ -247,6 +248,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             newsletterGroupStore: me.subApplication.newsletterGroupStore,   // available newsletter groups
             customerGroupStore: me.subApplication.customerGroupStore,        // available customer groups
             shopStore: me.subApplication.shopStore,
+            customerStreamStore: me.subApplication.customerStreamStore,
             dispatchStore:  me.getStore('MailDispatch')
         });
 

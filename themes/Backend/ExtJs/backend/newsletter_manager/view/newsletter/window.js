@@ -116,8 +116,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
         return [{
             xtype:'newsletter-manager-newsletter-editor',
             record: me.record
-        },
-        {
+        }, {
             xtype:'newsletter-manager-newsletter-settings',
             senderStore: me.senderStore,
             recipientGroupStore: me.recipientGroupStore,
@@ -125,9 +124,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
             customerGroupStore: me.customerGroupStore,
             shopStore: me.shopStore,
             dispatchStore: me.dispatchStore,
+            customerStreamStore: me.customerStreamStore,
             record: me.record
-        }
-        ];
+        }];
     }
 });
 //{/block}

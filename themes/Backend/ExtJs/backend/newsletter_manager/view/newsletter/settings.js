@@ -180,6 +180,24 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             me.newsletterGroups.push(checkBox);
         });
 
+        me.customerStreamGroups = new Array();
+
+        me.customerStreamStore.each(function(record) {
+            checkBox = Ext.create('Ext.form.field.Checkbox', {
+                boxLabel: record.get('name') + Ext.String.format("{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}", record.get('customer_count')),
+                name: record.get('name'),
+                record: record,
+                count: record.get('customer_count'),
+                value: false
+            });
+            foundStream = groups.findRecord('streamId', record.get('id'), 0, false, false, true);
+            if(foundStream !== null) {
+                checkBox.setValue(true);
+            }
+
+            me.customerStreamGroups.push(checkBox);
+        });
+
         return [
             {
                 xtype: 'checkboxgroup',
@@ -198,6 +216,15 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 columns: 2,
                 vertical: false,
                 name: 'newsletterGroups'
+            },
+            {
+                xtype: 'checkboxgroup',
+                fieldLabel: '{s name=customerStreamGroups}{/s}',
+                labelWidth: 170,
+                items: me.customerStreamGroups,
+                columns: 2,
+                vertical: false,
+                name: 'customerStreams'
             }
         ];
     },
