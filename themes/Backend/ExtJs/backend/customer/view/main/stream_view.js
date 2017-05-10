@@ -42,6 +42,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
     alias: 'widget.stream-view',
 
+    activated: false,
+
     initComponent: function() {
         var me = this;
 
@@ -64,8 +66,11 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.on('activate', function() {
             me.listStore.load();
             me.streamStore.load();
-            me.onCheckIndexState();
-            me.resetProgressbar();
+
+            if (!me.activated) {
+                me.activated = true;
+                me.fireEvent('tab-activated');
+            }
         });
         me.callParent(arguments);
     },
@@ -210,12 +215,13 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.addConditionButton = Ext.create('Ext.button.Split', {
             text: '{s name="add_condition"}{/s}',
-            iconCls: 'sprite-funnel',
+            iconCls: 'sprite-plus-circle-frame',
             menu: me.createConditionsMenu()
         });
 
         me.refreshViewButton = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-arrow-circle-315',
+            text: '{s name=refresh_preview}{/s}',
+            iconCls: 'sprite-arrow-circle-225-left',
             handler: Ext.bind(me.onRefreshView, me)
         });
 
@@ -347,10 +353,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.fireEvent('stream-selected', selection);
     },
 
-    resetProgressbar: function() {
-        this.fireEvent('reset-progressbar');
-    },
-
     onOnChangeAutoIndex: function(checkbox, newValue) {
         this.fireEvent('change-auto-index', checkbox, newValue);
     },
@@ -369,10 +371,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
     onRefreshView: function() {
         this.fireEvent('refresh-stream-views');
-    },
-
-    onCheckIndexState: function() {
-        this.fireEvent('check-index-state');
     },
 
     addCondition: function(handler) {

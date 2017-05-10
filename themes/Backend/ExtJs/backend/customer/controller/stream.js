@@ -36,7 +36,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     refs: [
         { ref: 'mainWindow', selector: 'customer-list-main-window' },
         { ref: 'mainToolbar', selector: 'customer-main-toolbar' },
-        { ref: 'streamView', selector: 'stream-view' }
+        { ref: 'streamView', selector: 'stream-view' },
+        { ref: 'streamListing', selector: 'customer-stream-listing' }
     ],
 
     mixins: {
@@ -56,7 +57,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'save-edited-stream': me.saveEditedStream,
                 'save-as-new-stream': me.saveAsNewStream,
                 'refresh-stream-views': me.reloadView,
-                'check-index-state': me.checkIndexState,
+                'tab-activated': me.onTabActivated,
                 'condition-added': me.updateSaveButtons,
                 'reset-progressbar': me.resetProgressbar
             },
@@ -65,11 +66,71 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             },
             'customer-stream-listing': {
                 'customerstream-edit-item': me.editStream,
-                'index-stream': me.indexStream
+                'index-stream': me.indexStream,
+                'reset-progressbar': me.resetProgressbar
             }
         });
 
         me.callParent(arguments);
+    },
+
+    onTabActivated: function() {
+        var me = this;
+        var store = me.getStreamListing().getStore();
+
+        if (me.subApplication.userConfig && me.subApplication.userConfig.autoIndex) {
+            me.indexSearch(true, function() {
+                if (store.getCount() > 0) {
+                    var streams = store.data.items;
+                    me.refreshWhileFullIndex(streams, streams.length);
+                }
+            });
+            return;
+        }
+
+        me.resetProgressbar();
+    },
+
+    indexStreams: function(stream, streams, total) {
+        var me = this;
+
+        me.indexStream(stream, function() {
+            if (streams.length > 0) {
+                me.refreshWhileFullIndex(streams, total);
+            } else {
+                var streamView = me.getStreamView();
+                streamView.listStore.load();
+                streamView.streamListing.getStore().load();
+                me.resetProgressbar();
+            }
+        });
+    },
+
+    refreshWhileFullIndex: function(streams, total) {
+        var me = this;
+        var next = streams.shift();
+        var node = me.getStreamListing().getView().getNode(next);
+        var nodes = me.getStreamListing().getView().getNodes();
+
+        Ext.each(nodes, function(node) {
+            var el = Ext.get(node);
+            el.removeCls('rotate');
+        });
+
+        var el = Ext.get(node);
+        el.addCls('rotate');
+
+        Ext.defer(function() {
+            me.getStreamView().indexingBar.updateProgress(
+                0,
+                Ext.String.format('{s name="batch_progress"}{/s}', next.get('name'), total - streams.length, total),
+                true
+            );
+
+            Ext.defer(function() {
+                me.indexStreams(next, streams, total);
+            }, 750);
+        }, 500);
     },
 
     checkIndexState: function() {
@@ -83,11 +144,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
                 if (response.total <= 0) {
                     streamView.indexSearchButton.setIconCls('sprite-blue-document-search-result');
-                    return;
-                }
-
-                if (me.subApplication.userConfig && me.subApplication.userConfig.autoIndex) {
-                    me.indexSearch();
                     return;
                 }
 
@@ -169,13 +225,58 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     },
 
     saveAsNewStream: function() {
-        this.saveStream(
-            Ext.create('Shopware.apps.Customer.model.CustomerStream', {
-                id: null,
-                name: '{s name=stream/new_stream}{/s}'
-            })
-        );
+        var me = this;
+
+        var nameField = Ext.create('Ext.form.field.Text', {
+            fieldLabel: '{s name="stream_name"}{/s}',
+            value:  '{s name=stream/new_stream}{/s}',
+            name: 'name',
+            allowBlank: false,
+            anchor: '100%'
+        });
+
+        var form = Ext.create('Ext.form.Panel', {
+            items: [nameField],
+            bodyPadding: 20,
+            border: false,
+            layout: 'anchor',
+            flex: 1
+        });
+
+        var button = Ext.create('Ext.button.Button', {
+            cls: 'primary',
+            text: '{s name="save"}{/s}',
+            handler: function() {
+                if (form.getForm().isValid()) {
+                    var name = nameField.getValue();
+
+                    me.saveStream(
+                        Ext.create('Shopware.apps.Customer.model.CustomerStream', { id: null, name: name })
+                    );
+
+                    window.destroy();
+                }
+            }
+        });
+
+        var window = Ext.create('Ext.window.Window', {
+            modal: true,
+            width: 450,
+            items: [form],
+            title: '{s name="save_new"}{/s}',
+            layout: 'fit',
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                ui: 'shopware-ui',
+                items: ['->', button]
+            }]
+        });
+
+        window.show();
     },
+
+
 
     saveEditedStream: function() {
         var streamView = this.getStreamView();
@@ -311,7 +412,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         });
     },
 
-    indexStream: function(record) {
+    indexStream: function(record, callback) {
         var me = this;
 
         me.initProgressbar();
@@ -323,32 +424,37 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             },
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
-
-                me.start([{
-                    url: '{url controller=CustomerStream action=indexStream}',
-                    params: {
-                        total: response.total,
-                        streamId: record.get('id')
-                    }
-                }]);
+                me.start(
+                    [{
+                        url: '{url controller=CustomerStream action=indexStream}',
+                        params: {
+                            total: response.total,
+                            streamId: record.get('id')
+                        }
+                    }],
+                    callback
+                );
             }
         });
     },
 
-    indexSearch: function() {
+    indexSearch: function(force, callback) {
         var me = this;
 
         me.initProgressbar();
 
-        me.getSearchIndexingParameters(function(params) {
-            me.start([{
-                url: '{url controller=CustomerStream action=buildSearchIndex}',
-                params: params
-            }]);
+        me.getSearchIndexingParameters(force, function(params) {
+            me.start(
+                [{
+                    url: '{url controller=CustomerStream action=buildSearchIndex}',
+                    params: params
+                }],
+                callback
+            );
         });
     },
 
-    getSearchIndexingParameters: function(callback) {
+    getSearchIndexingParameters: function(force, callback) {
         Ext.Ajax.request({
             url: '{url controller=CustomerStream action=getNotIndexedCount}',
             params: { },
@@ -361,7 +467,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     success: function (operation) {
                         var full = Ext.decode(operation.responseText);
 
-                        if (notIndexed.total > 0 && full.total !== notIndexed.total) {
+                        if (force) {
+                            callback({ total: full.total, full: true });
+                        } else if (notIndexed.total > 0 && full.total !== notIndexed.total) {
                             callback({ total: notIndexed.total });
                         } else {
                             callback({ total: full.total, full: true });
@@ -404,13 +512,17 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.checkIndexState();
     },
 
-    finish: function() {
+    finish: function(requests, callback) {
         var me = this,
             streamView = me.getStreamView();
 
-        streamView.listStore.load();
-        streamView.streamListing.getStore().load();
-        me.resetProgressbar();
+        if (Ext.isFunction(callback)) {
+            callback();
+        } else {
+            streamView.listStore.load();
+            streamView.streamListing.getStore().load();
+            me.resetProgressbar();
+        }
     },
 
     updateSaveButtons: function() {

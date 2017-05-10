@@ -67,7 +67,14 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                 iconCls: 'sprite-arrow-circle-315',
                 tooltip: '{s name="index_stream"}{/s}',
                 handler: function(view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('index-stream', record);
+                    var node = me.getView().getNode(record);
+                    var el = Ext.get(node);
+                    el.addCls('rotate');
+
+                    me.fireEvent('index-stream', record, function() {
+                        el.removeCls('rotate');
+                        me.fireEvent('reset-progressbar');
+                    });
                 }
             }
         ]);
