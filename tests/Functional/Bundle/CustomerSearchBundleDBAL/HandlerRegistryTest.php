@@ -25,8 +25,11 @@
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
 use Shopware\Bundle\CustomerSearchBundle\HandlerRegistry;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\AgeConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\CustomerAttributeConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasAddressWithCountryConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasCanceledOrdersConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNewsletterRegistrationConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasOrderCountConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasTotalOrderAmountConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsCustomerSinceConditionHandler;
@@ -41,6 +44,7 @@ use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfMa
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithDeliveryConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithPaymentConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\RegisteredInShopConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SearchTermConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\SimpleCondition;
 
 class HandlerRegistryTest extends TestCase
@@ -56,12 +60,15 @@ class HandlerRegistryTest extends TestCase
             $classes[] = get_class($handler);
         }
 
+        $this->assertContains(AgeConditionHandler::class, $classes);
+        $this->assertContains(CustomerAttributeConditionHandler::class, $classes);
         $this->assertContains(HasAddressWithCountryConditionHandler::class, $classes);
         $this->assertContains(HasCanceledOrdersConditionHandler::class, $classes);
+        $this->assertContains(HasNewsletterRegistrationConditionHandler::class, $classes);
         $this->assertContains(HasOrderCountConditionHandler::class, $classes);
         $this->assertContains(HasTotalOrderAmountConditionHandler::class, $classes);
-        $this->assertContains(IsInCustomerGroupConditionHandler::class, $classes);
         $this->assertContains(IsCustomerSinceConditionHandler::class, $classes);
+        $this->assertContains(IsInCustomerGroupConditionHandler::class, $classes);
         $this->assertContains(OrderedAtWeekdayConditionHandler::class, $classes);
         $this->assertContains(OrderedInLastDaysConditionHandler::class, $classes);
         $this->assertContains(OrderedInShopConditionHandler::class, $classes);
@@ -72,6 +79,7 @@ class HandlerRegistryTest extends TestCase
         $this->assertContains(OrderedWithDeliveryConditionHandler::class, $classes);
         $this->assertContains(OrderedWithPaymentConditionHandler::class, $classes);
         $this->assertContains(RegisteredInShopConditionHandler::class, $classes);
+        $this->assertContains(SearchTermConditionHandler::class, $classes);
     }
 
     /**

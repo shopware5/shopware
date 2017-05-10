@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -164,6 +165,24 @@ class TestCase extends \Enlight_Components_Test_TestCase
                     }
                 }
             }
+        }
+
+        if (array_key_exists('newsletter', $customer)) {
+            foreach ($customer['newsletter'] as $newsletter) {
+                $newsletter = array_merge([
+                    'customer' => 0,
+                    'groupID' => 1,
+                    'lastmailing' => 0,
+                    'lastread' => 0,
+                ], $newsletter);
+                $this->insert('s_campaigns_mailaddresses', $newsletter);
+            }
+        }
+
+        if (array_key_exists('attribute', $customer)) {
+            /** @var DataPersister $persister */
+            $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+            $persister->persist($customer['attribute'], 's_user_attributes', $userId);
         }
 
         return $userId;
