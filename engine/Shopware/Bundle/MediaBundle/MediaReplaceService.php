@@ -113,7 +113,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      */
     private function getExtension(File $file)
     {
-        $extension = $file->guessExtension();
+        $extension = strtolower($file->guessExtension());
 
         switch ($extension) {
             case 'jpeg':
