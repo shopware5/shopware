@@ -657,8 +657,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             record = Ext.create('Shopware.apps.Emotion.model.Emotion'),
             listingView = me.getListingView(),
             window = me.getPresetWindow(),
-            selectedPreset = listingView.selectedPreset,
-            presetData;
+            selectedPreset = listingView.selectedPreset;
 
         if (!selectedPreset) {
             window.close();
@@ -670,7 +669,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         if (!selectedPreset.allowUsage()) {
             // check for required plugins first
             if (!selectedPreset.get('pluginsInstalled')) {
-                return Ext.Msg.alert('{s name=preset/required_plugins_title}{/s}', Ext.String.format('{s name="preset/required_plugins_info"}{/s}'));
+                return me.getRequiredPluginsMessage(selectedPreset.get('requiredPlugins'));
             }
             // check for assset import then
             if (!selectedPreset.get('assetsImported')) {
@@ -687,6 +686,35 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 }
             }, me);
         }
+    },
+
+
+    getRequiredPluginsMessage: function(requiredPlugins) {
+        var i = 0,
+            count = requiredPlugins.length,
+            pluginInfo = [];
+
+        for (i; i < count; i++) {
+            var plugin = requiredPlugins[i];
+
+            if (plugin.active === "0" || plugin.installed === "0") {
+                var info = Ext.String.format('[0] ([1])', plugin.plugin_label || plugin.name, plugin.version);
+
+                pluginInfo.push(info);
+            }
+        }
+
+        return Ext.Msg.confirm(
+           '{s name=preset/required_plugins_title}{/s}',
+            Ext.String.format('{s name="preset/required_plugins_confirmation"}{/s}', pluginInfo.join('<br>')),
+            function(btn) {
+               if (btn === 'yes') {
+                   Shopware.app.Application.addSubApplication({
+                       name: 'Shopware.apps.PluginManager'
+                   });
+               }
+            }
+        );
     },
 
     loadPreset: function(selectedPreset, callback, scope) {

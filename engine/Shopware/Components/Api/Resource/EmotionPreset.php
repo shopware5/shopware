@@ -174,13 +174,6 @@ class EmotionPreset extends Resource
             $data['requiredPlugins'] = [];
         }
 
-        if ($data['requiredPlugins']) {
-            $pluginData = $this->getRequiredPluginsById($data['requiredPlugins']);
-            $data['requiredPlugins'] = array_map(function ($plugin) {
-                return ['name' => $plugin['name'], 'version' => $plugin['version']];
-            }, $pluginData);
-        }
-
         $data['requiredPlugins'] = json_encode($data['requiredPlugins']);
 
         // slugify technical name of preset
@@ -297,22 +290,6 @@ class EmotionPreset extends Resource
         }
 
         return [];
-    }
-
-    /**
-     * @param array $pluginIds
-     *
-     * @return array
-     */
-    private function getRequiredPluginsById(array $pluginIds)
-    {
-        return $this->models->getConnection()->createQueryBuilder()
-            ->select('name, label, version')
-            ->from('s_core_plugins', 's')
-            ->where('s.id IN (:ids)')
-            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
