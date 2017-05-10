@@ -1363,6 +1363,14 @@ class sBasket
         list($queryAdditionalInfo, $quantity) = $this->getAdditionalInfoForUpdateArticle($id, $quantity);
         $queryNewPrice = $this->getPriceForUpdateArticle($id, $quantity, $queryAdditionalInfo);
 
+        $customerGroupId = $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId();
+        if (in_array($customerGroupId, $queryAdditionalInfo['blocked_customer_groups'])) {
+            // if blocked for current customer group, delete article from basket
+            $this->sDeleteArticle($id);
+
+            return false;
+        }
+
         if (empty($queryNewPrice['price']) && empty($queryNewPrice['config'])) {
             // If no price is set for default customer group, delete article from basket
             $this->sDeleteArticle($id);
@@ -2454,17 +2462,22 @@ class sBasket
     private function getAdditionalInfoForUpdateArticle($id, $quantity)
     {
         // Query to get minimum surcharge
-        $queryAdditionalInfo = $this->db->fetchRow('
+        $queryAdditionalInfo = $this->db->fetchRow("
             SELECT s_articles_details.minpurchase, s_articles_details.purchasesteps,
             s_articles_details.maxpurchase, s_articles_details.purchaseunit,
-            pricegroupID,pricegroupActive, s_order_basket.ordernumber, s_order_basket.articleID
+            pricegroupID,pricegroupActive, s_order_basket.ordernumber, s_order_basket.articleID,
+            GROUP_CONCAT(avoid.customergroupID SEPARATOR '|') as blocked_customer_groups
 
             FROM s_articles, s_order_basket, s_articles_details
+              LEFT JOIN s_articles_avoid_customergroups avoid
+                ON avoid.articleID = s_articles_details.articleID
+                
             WHERE s_order_basket.articleID = s_articles.id
             AND s_order_basket.ordernumber = s_articles_details.ordernumber
             AND s_order_basket.id = ?
             AND s_order_basket.sessionID = ?
-            ',
+            GROUP BY s_articles.id
+            ",
             [$id, $this->session->get('sessionId')]
         ) ?: [];
 
@@ -2472,6 +2485,8 @@ class sBasket
         if (!$queryAdditionalInfo['minpurchase']) {
             $queryAdditionalInfo['minpurchase'] = 1;
         }
+
+        $queryAdditionalInfo['blocked_customer_groups'] = array_filter(explode('|', $queryAdditionalInfo['blocked_customer_groups']));
 
         if ($quantity < $queryAdditionalInfo['minpurchase']) {
             $quantity = $queryAdditionalInfo['minpurchase'];
