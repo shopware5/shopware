@@ -1,4 +1,4 @@
-
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,44 +20,37 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-Ext.define('Shopware.apps.Base.store.Salutation', {
-    extend: 'Ext.data.Store',
+namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
-    idProperty: 'key',
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-    fields: [
-        { name: 'id', type: 'string', mapping: 'key' },
-        { name: 'key', type: 'string' },
-        { name: 'label', type: 'string' }
-    ],
+class SalutationCondition implements ConditionInterface
+{
+    /**
+     * @var string[]
+     */
+    protected $salutations;
 
-    proxy:{
-        type:'ajax',
-        url: '{url controller=Base action=getSalutations}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
-        }
-    },
-
-    getByKey: function(key) {
-        var salutation = key;
-
-        this.each(function(item) {
-            if (item.get('key') === key) {
-                salutation = item.get('label');
-            }
-        });
-
-        return salutation;
+    /**
+     * @param string[] $salutations
+     */
+    public function __construct(array $salutations)
+    {
+        $this->salutations = $salutations;
     }
-});
+
+    /**
+     * @return string[]
+     */
+    public function getSalutations()
+    {
+        return $this->salutations;
+    }
+
+    public function getName()
+    {
+        return 'SalutationCondition';
+    }
+}

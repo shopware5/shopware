@@ -215,6 +215,7 @@ Ext.define('Shopware.form.field.Grid', {
     removeItem: function(record) {
         var me = this;
         me.store.remove(record);
+        me.fixLayout();
     },
 
     /**
@@ -237,6 +238,7 @@ Ext.define('Shopware.form.field.Grid', {
         if (!exist) {
             this.store.add(record);
         }
+        me.fixLayout();
         return !exist;
     },
 
@@ -342,6 +344,7 @@ Ext.define('Shopware.form.field.Grid', {
         me.store.removeAll();
         if (!value) {
             me.isValid();
+            me.fixLayout();
             return;
         }
 
@@ -366,8 +369,13 @@ Ext.define('Shopware.form.field.Grid', {
             params: { ids: Ext.JSON.encode(ids) },
             callback: function() {
                 me.isValid();
+                me.fixLayout();
             }
         });
+    },
+
+    fixLayout: function() {
+        this.setHeight(this.getHeight());
     },
 
     getSubmitData: function() {

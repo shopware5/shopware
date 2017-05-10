@@ -44,10 +44,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDevi
     },
 
     load: function(conditionClass, items, callback) {
-        callback(this._create());
+        callback(this._create(items));
     },
 
-    _create: function() {
+    _create: function(filter) {
         var store = Ext.create('Ext.data.Store', {
             fields: ['id', 'label'],
             data: [
@@ -55,6 +55,16 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDevi
                 { id: 'tablet', label: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="tablet"}{/s}' },
                 { id: 'mobile', label: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="mobile"}{/s}' }
             ]
+        });
+        var items = [];
+        if (filter) {
+            Ext.each(filter.devices, function(item) {
+                items.push(store.getById(item));
+            });
+        }
+        var second = Ext.create('Ext.data.Store', {
+            fields: ['id', 'label'],
+            data: items
         });
 
         return {
@@ -67,7 +77,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDevi
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: store,
+                store: second,
                 searchStore: store
             }]
         };

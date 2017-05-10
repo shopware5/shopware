@@ -957,6 +957,15 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $value = $this->getAvailableSalutationKeys();
 
+        $whitelist = $this->Request()->getParam('ids', []);
+
+        if (!empty($whitelist)) {
+            $whitelist = json_decode($whitelist, true);
+            $value = array_filter($value, function ($key) use ($whitelist) {
+                return in_array($key, $whitelist, true);
+            });
+        }
+
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
         $salutations = [];
         foreach ($value as $key) {

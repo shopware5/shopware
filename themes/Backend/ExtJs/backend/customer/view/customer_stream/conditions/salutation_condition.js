@@ -28,15 +28,15 @@
  */
 
 // {namespace name=backend/customer/view/main}
-// {block name="backend/customer/view/customer_stream/conditions/ordered_at_weekday_condition"}
-Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedAtWeekdayCondition', {
+// {block name="backend/customer/view/customer_stream/conditions/salutation_condition"}
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SalutationCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_at_weekday_condition"}{/s}';
+        return '{s name="has_salutation_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\SalutationCondition');
     },
 
     create: function(callback) {
@@ -44,44 +44,23 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedAtWeek
     },
 
     load: function(conditionClass, items, callback) {
-        callback(this._create(items));
+        callback(this._create());
     },
 
-    _create: function(filter) {
-        var store = Ext.create('Ext.data.Store', {
-            fields: ['id', 'label'],
-            data: [
-                { id: 'monday', label: '{s name="monday"}{/s}' },
-                { id: 'tuesday', label: '{s name="tuesday"}{/s}' },
-                { id: 'wednesday', label: '{s name="wednesday"}{/s}' },
-                { id: 'thursday', label: '{s name="thursday"}{/s}' },
-                { id: 'friday', label: '{s name="friday"}{/s}' },
-                { id: 'saturday', label: '{s name="saturday"}{/s}' },
-                { id: 'sunday', label: '{s name="sunday"}{/s}' }
-            ]
-        });
-        var items = [];
-        if (filter) {
-            Ext.each(filter.weekdays, function(item) {
-                items.push(store.getById(item));
-            });
-        }
-        var second = Ext.create('Ext.data.Store', {
-            fields: ['id', 'label'],
-            data: items
-        });
+    _create: function() {
+        var store = Ext.create('Shopware.apps.Base.store.Salutation');
 
         return {
-            title: '{s name="ordered_at_weekday_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition',
+            title: '{s name="has_salutation_condition"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\SalutationCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                name: 'weekdays',
+                name: 'salutations',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: second,
+                store: store,
                 searchStore: store
             }]
         };

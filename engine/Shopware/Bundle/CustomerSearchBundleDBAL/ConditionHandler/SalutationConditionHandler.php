@@ -1,4 +1,4 @@
-
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,44 +20,27 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-Ext.define('Shopware.apps.Base.store.Salutation', {
-    extend: 'Ext.data.Store',
+namespace Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-    idProperty: 'key',
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CustomerSearchBundle\Condition\SalutationCondition;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
-    fields: [
-        { name: 'id', type: 'string', mapping: 'key' },
-        { name: 'key', type: 'string' },
-        { name: 'label', type: 'string' }
-    ],
-
-    proxy:{
-        type:'ajax',
-        url: '{url controller=Base action=getSalutations}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
-        }
-    },
-
-    getByKey: function(key) {
-        var salutation = key;
-
-        this.each(function(item) {
-            if (item.get('key') === key) {
-                salutation = item.get('label');
-            }
-        });
-
-        return salutation;
+class SalutationConditionHandler implements ConditionHandlerInterface
+{
+    public function supports(ConditionInterface $condition)
+    {
+        return $condition instanceof SalutationCondition;
     }
-});
+
+    public function handle(ConditionInterface $condition, QueryBuilder $query)
+    {
+        $query->andWhere('customer.salutation IN (:salutations)');
+        /* @var SalutationCondition $condition */
+        $query->setParameter(':salutations', $condition->getSalutations(), Connection::PARAM_STR_ARRAY);
+    }
+}
