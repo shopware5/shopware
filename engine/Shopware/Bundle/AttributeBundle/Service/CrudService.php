@@ -117,6 +117,12 @@ class CrudService
     }
 
     /**
+     * Translations for different fields (help, support, label) can be configured via snippets.
+     * Snippet namespace         :  backend/attribute_columns
+     * Snippet name label        :  s_articles_attributes_attr1_label
+     * Snippet name support text :  s_articles_attributes_attr1_supportText
+     * Snippet name help text    :  s_articles_attributes_attr1_helpText
+     *
      * @param string                $table
      * @param string                $columnName
      * @param string                $unifiedType

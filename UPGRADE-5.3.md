@@ -106,6 +106,11 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new route `Shopware_Controllers_Frontend_Listing::listingAction` which loads the category product listing.This route is called over {action ..} in case that the category contains an emotion with customer streams
 * Added new entity `Shopware\Models\Customer\CustomerStream` for attribute single and multi selection.
 * Added new components for customer stream handling in `Shopware\Components\CustomerStream`
+* Added translations for attribute labels.  Translations for different fields (help, support, label) can be configured via snippets.
+    * Snippet namespace         :  backend/attribute_columns
+    * Snippet name label        :  s_articles_attributes_attr1_label
+    * Snippet name support text :  s_articles_attributes_attr1_supportText
+    * Snippet name help text    :  s_articles_attributes_attr1_helpText
 
 ### Changes
 

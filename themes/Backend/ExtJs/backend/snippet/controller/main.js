@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         growlMessage: '{s name=title}Snippet{/s}'
     },
 
-        /**
+    /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
      *
@@ -153,15 +153,25 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         me.getStore('Snippet').proxy.extraParams.shopId   = 1;
         me.getStore('Snippet').load();
 
-        me.getStore('Shoplocale').load({
+        var localeStore = me.getStore('Shoplocale');
+        if (me.subApplication.shopId) {
+            localeStore.filter({ property: 'shopId', value: me.subApplication.shopId })
+        }
+
+        localeStore.load({
             callback: function(records) {
-                me.mainWindow = me.getView('main.Window').create({
-                    nSpaceStore:     me.getStore('NSpace'),
-                    snippetStore:    me.getStore('Snippet'),
-                    shoplocaleStore: me.getStore('Shoplocale')
-                });
-                me.subApplication.setAppWindow(me.mainWindow);
-                me.mainWindow.show();
+                if (me.subApplication.action && me.subApplication.action === 'detail') {
+                    var snippet = Ext.create('Shopware.apps.Snippet.model.Snippet', me.subApplication.snippet);
+                    me.onTranslate(snippet);
+                } else {
+                    me.mainWindow = me.getView('main.Window').create({
+                        nSpaceStore:     me.getStore('NSpace'),
+                        snippetStore:    me.getStore('Snippet'),
+                        shoplocaleStore: localeStore
+                    });
+                    me.subApplication.setAppWindow(me.mainWindow);
+                    me.mainWindow.show();
+                }
             }
         });
 
