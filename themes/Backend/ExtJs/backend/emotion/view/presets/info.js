@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
                     '{literal}<div class="screen"><img src="{previewUrl}" alt="{label}" /></div>{/literal}',
                     '<div class="info-item"> <p class="label">{s name=name}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
                     '<div class="info-item"> <p class="label">{s name=description}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
-                    '<tpl if="requiredPlugins">',
+                    '<tpl if="this.hasRequiredPlugins(values.requiredPlugins)">',
                         '<div class="info-item">',
                             '<p class="label" style="margin-bottom: 5px;">{s name=required_plugins}{/s}:</p>',
                             '<ul>',
@@ -87,7 +87,12 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
                         '</div>',
                     '</tpl>',
                 '</div>',
-            '</tpl>'
+            '</tpl>',
+            {
+                hasRequiredPlugins: function(requiredPlugins) {
+                    return requiredPlugins.length > 0;
+                }
+            }
         );
     },
 

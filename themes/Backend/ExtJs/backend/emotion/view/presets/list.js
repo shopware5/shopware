@@ -51,17 +51,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 src: Ext.String.format('{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/emotion_preset_teaser_[0].png"}', Ext.userLanguage !== 'de' ? 'en' : Ext.userLanguage),
                 listeners: {
                     boxready: function(cmp) {
-                        cmp.el.on('click', function() {
-                            Shopware.app.Application.addSubApplication({
-                                name: 'Shopware.apps.PluginManager',
-                                action: 'Listing',
-                                params: {
-                                    filter: [
-                                        { property: 'emotionPreset', value: 1 }
-                                    ]
-                                }
-                            });
-                        });
+                        cmp.el.on('click', me.openPluginManager);
                     }
                 }
             },
@@ -87,6 +77,18 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         me.callParent(arguments);
     },
 
+    openPluginManager: function() {
+        Shopware.app.Application.addSubApplication({
+            name: 'Shopware.apps.PluginManager',
+            action: 'Listing',
+            params: {
+                filter: [
+                    { property: 'emotionPreset', value: 1 }
+                ]
+            }
+        });
+    },
+
     createInfoView: function () {
         var me = this;
 
@@ -97,6 +99,13 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             cls: 'emotion-listing',
             listeners: {
                 render: Ext.bind(me.addGroupHeaderEvent, me),
+                // boxready: function(view) {
+                //     view.getEl().on('click', function() {
+                //         me.openPluginManager();
+                //     }, me, {
+                //         delegate: 'a'
+                //     });
+                // },
                 // because of custom tpl with grouping we cannot trust selection model here
                 // and have to use the data-preset-id attribute
                 itemclick: function(view, record, item, index, e) {
@@ -176,10 +185,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         var me = this,
             targetNode = e.getTarget(null, 10, true),
             selectorElement = targetNode.findParent('div.thumbnail', 50, true),
-            presetId = parseInt(selectorElement.getAttribute('data-preset-id')),
-            selectedRecord = me.store.getById(presetId);
+            presetId = parseInt(selectorElement.getAttribute('data-preset-id'));
 
-        me.selectedPreset = selectedRecord;
+        me.selectedPreset = me.store.getById(presetId);
     },
 
     createTemplate: function () {
@@ -194,12 +202,8 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                         sortedPresets,
                         i, count, output = '';
 
-                    if (values.length <= 0) {
-                        return '';
-                    }
-
                     sortedPresets = {
-                        default: [],
+                        installed: [],
                         custom: []
                     };
 
@@ -208,18 +212,20 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                         if (preset.custom) {
                             sortedPresets['custom'].push(preset);
                         } else {
-                            sortedPresets['default'].push(preset);
+                            sortedPresets['installed'].push(preset);
                         }
                     }
 
                     Ext.Object.each(sortedPresets, function(key, value) {
-                        var name = '{s name=default_shopping_world_presets}{/s}';
+                        var name = '{s name=installed_shopping_world_presets}{/s}';
                         if (key === 'custom') {
-                            name = '{s name=custom_shopping_world_presets}{/s}'
+                            name = '{s name=created_shopping_world_presets}{/s}'
                         }
 
                         if (value.length > 0) {
                             output += me.getPresets(value, name);
+                        } else {
+                            output += me.getTeaserComponent(key, name);
                         }
                     }, me);
 
@@ -237,6 +243,30 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                                    '<div class="x-clear"></div>' +
                                '</div>' +
                            '</div>';
+                },
+                getTeaserComponent: function(group, name) {
+                    var header = '{s name=no_presets_installed}{/s}',
+                        message = Ext.String.format('[0] <br><a href="#">[1]</a>', '{s name=no_presets_installed_message}{/s}', '{s name=discover_now}{/s}');
+
+                    if (group === 'custom') {
+                        header = '{s name=no_presets_created}{/s}';
+                        message = '{s name=no_presets_created_message}{/s}';
+                    }
+
+                    return '<div class="preset--outer-container">' +
+                                '<div class="x-grid-group-hd x-grid-group-hd-collapsible">' +
+                                    '<div class="x-grid-group-title">' + name + '</div>' +
+                                '</div>' +
+                                '<div style="height: 100px;">' +
+                                    '<fieldset style="margin: 20px;" class="x-fieldset x-base-field-set x-fieldset-with-title x-fieldset-with-legend x-fieldset-default">' +
+                                        '<legend class="x-fieldset-header x-fieldset-header-default">' +
+                                            '<div class="x-component x-fieldset-header-text x-component-default">' + header +'</div>' +
+                                            '<div class="x-clear"></div>' +
+                                        '</legend>' +
+                                        '<div class="x-fieldset-body" style="padding: 10px;">'+ message + '</div>' +
+                                    '</fieldset>' +
+                                '</div>' +
+                            '</div>';
                 },
                 getItem: function (values) {
                     var items = [];
