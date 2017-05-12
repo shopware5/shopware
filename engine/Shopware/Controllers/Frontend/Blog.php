@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 /**
  * Shopware Frontend Controller for the Blog
  *
@@ -354,7 +356,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         $breadcrumb[] = ['link' => $blogDetailLink, 'name' => $blogArticleData['title']];
 
-        $this->View()->assign(['sBreadcrumb' => $breadcrumb, 'sArticle' => $blogArticleData, 'rand' => md5(uniqid(rand()))]);
+        $this->View()->assign(['sBreadcrumb' => $breadcrumb, 'sArticle' => $blogArticleData, 'rand' => Random::getAlphanumericString(32)]);
     }
 
     /**
@@ -422,7 +424,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
             if (empty($sErrorFlag)) {
                 if (!empty(Shopware()->Config()->sOPTINVOTE) && empty(Shopware()->Session()->sUserId)) {
-                    $hash = md5(uniqid(rand()));
+                    $hash = Random::getAlphanumericString(32);
 
                     //save comment confirm for the optin
                     $blogCommentModel = new \Shopware\Models\CommentConfirm\CommentConfirm();

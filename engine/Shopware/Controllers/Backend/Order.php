@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Random;
 use Shopware\Models\Order\Billing as Billing;
 use Shopware\Models\Order\Detail as Detail;
 use Shopware\Models\Order\Document\Document as Document;
@@ -1280,7 +1281,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        $hash = md5(uniqid(rand()));
+        $hash = Random::getAlphanumericString(32);
 
         $pdf->Output($hash . '.pdf', 'D');
     }

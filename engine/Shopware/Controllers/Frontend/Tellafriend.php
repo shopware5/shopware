@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 /**
  * @category  Shopware
  *
@@ -125,7 +127,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $this->View()->sComment = $this->Request()->getPost('sComment');
             }
         }
-        $this->View()->rand = md5(uniqid(rand()));
+        $this->View()->rand = Random::getAlphanumericString(32);
         $this->View()->sArticle = $sArticle;
     }
 }

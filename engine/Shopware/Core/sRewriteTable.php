@@ -329,8 +329,8 @@ class sRewriteTable
      * Create rewrite rules for categories
      * Default, deprecated method which updates rewrite URLs depending on the current shop
      *
-     * @param null $offset
-     * @param null $limit
+     * @param int|null $offset
+     * @param int|null $limit
      */
     public function sCreateRewriteTableCategories($offset = null, $limit = null)
     {
@@ -343,7 +343,7 @@ class sRewriteTable
         $categories = $this->modelManager->getRepository('Shopware\Models\Category\Category')
             ->getActiveChildrenList($parentId);
 
-        if (isset($offset) && isset($limit)) {
+        if (isset($offset, $limit)) {
             $categories = array_slice($categories, $offset, $limit);
         }
 
@@ -543,8 +543,8 @@ class sRewriteTable
 
     /**
      * @param ShopContextInterface $context
-     * @param null                 $offset
-     * @param null                 $limit
+     * @param int|null             $offset
+     * @param int|null             $limit
      *
      * @throws Exception
      * @throws SmartyException
@@ -613,9 +613,10 @@ class sRewriteTable
 
     /**
      * @param Shopware_Components_Translation $translator
-     * @param int                             $languageId
-     * @param int                             $fallbackId
+     * @param int                             $shopId
+     * @param int                             $fallbackShopId
      * @param array                           $campaign
+     * @param string                          $routerCampaignTemplate
      *
      * @throws Exception
      * @throws SmartyException
@@ -826,9 +827,8 @@ class sRewriteTable
     {
         if ($this->preparedInsert === null) {
             $this->preparedInsert = $this->db->prepare('
-                INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
+                REPLACE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
                 VALUES (?, ?, 1, ?)
-                ON DUPLICATE KEY UPDATE main=1
             ');
         }
 

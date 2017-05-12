@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
 
@@ -68,7 +69,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $this->View()->forceMail = (int) $this->Request()->getParam('forceMail');
         $this->View()->id = $id;
         $this->View()->sSupport = $this->getContent($id);
-        $this->View()->rand = md5(uniqid(mt_rand(), true));
+        $this->View()->rand = Random::getAlphanumericString(32);
 
         $success = $this->Request()->getParam('success');
         if ($success) {

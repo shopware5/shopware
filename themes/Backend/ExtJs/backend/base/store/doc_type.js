@@ -21,55 +21,32 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    NewsletterManager
+ * @package    Base
  * @subpackage Store
  * @version    $Id$
  * @author shopware AG
  */
 
 /**
- * Shopware Store - newsletter group store
- * Stores the custom newsletter groups
+ * The base store for document types.
  */
-// {block name="backend/newsletter_manager/store/newsletter_group"}
-Ext.define('Shopware.apps.NewsletterManager.store.NewsletterGroup', {
+Ext.define('Shopware.apps.Base.store.DocType', {
     extend: 'Ext.data.Store',
-    // Do not load data, when not explicitly requested
-    autoLoad: false,
-    model: 'Shopware.apps.NewsletterManager.model.NewsletterGroup',
-    remoteFilter: true,
-    remoteSort: true,
 
-    /**
-     * Amount of data loaded at once
-     * @integer
-     */
+    alternateClassName: 'Shopware.store.DocType',
+    storeId: 'base.Payment',
+    model : 'Shopware.apps.Base.model.DocType',
     pageSize: 1000,
+    remoteFilter: true,
 
-    /**
-     * Configure the data communication
-     * @object
-     */
-    proxy: {
-        type: 'ajax',
-
-        /**
-         * Configure the url mapping
-         * @object
-         */
-        api: {
-            read: '{url controller=NewsletterManager action="getNewsletterGroups"}'
-        },
-
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader: {
+    proxy:{
+        type:'ajax',
+        url:'{url action="getDocTypes"}',
+        reader:{
             type: 'json',
             root: 'data',
             totalProperty: 'total'
         }
     }
-});
-// {/block}
+}).create();
+

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Random;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
@@ -365,7 +366,7 @@ class Media extends Resource
 
         $counter = 1;
         if ($baseFileName === null) {
-            $filename = md5(uniqid(rand(), true));
+            $filename = Random::getAlphanumericString(32);
         } else {
             $filename = $baseFileName;
         }
@@ -377,7 +378,7 @@ class Media extends Resource
                 $filename = "$counter-$baseFileName";
                 ++$counter;
             } else {
-                $filename = md5(uniqid(rand(), true));
+                $filename = Random::getAlphanumericString(32);
             }
             $filename = substr($filename, 0, self::FILENAME_LENGTH);
         }

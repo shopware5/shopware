@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 class sBasketTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -1799,7 +1801,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
      */
     public function testsAddNote()
     {
-        $_COOKIE['sUniqueID'] = md5(uniqid('sAddNote', true));
+        $_COOKIE['sUniqueID'] = Random::getAlphanumericString(32);
 
         // Add one article to the basket with low amount
         $randomArticle = $this->db->fetchRow(
@@ -2229,7 +2231,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     private function generateBasketSession()
     {
         // Create session id
-        $sessionId = md5(uniqid('sCheckBasket', true));
+        $sessionId = Random::getAlphanumericString(32);
         $this->module->sSYSTEM->sSESSION_ID = $sessionId;
         $this->session->offsetSet('sessionId', $sessionId);
 

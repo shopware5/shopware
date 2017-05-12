@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 /**
  * @category  Shopware
  *
@@ -152,7 +154,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->sBreadcrumb = $breadcrumb;
         $this->View()->sCategoryInfo = $categoryInfo;
         $this->View()->sArticle = $article;
-        $this->View()->rand = md5(uniqid(rand()));
+        $this->View()->rand = Random::getAlphanumericString(32);
     }
 
     /**
