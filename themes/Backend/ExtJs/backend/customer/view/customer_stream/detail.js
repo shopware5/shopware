@@ -31,17 +31,22 @@
 // {block name="backend/customer/view/customer_stream/detail"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
     extend: 'Shopware.model.Container',
+    alias: 'widget.customer-stream-detail',
 
     configure: function () {
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
-
         return {
             splitFields: false,
             fieldSets: [{
                 title: '{s name=stream_details}{/s}',
                 fields: {
-                    name: '{s name=stream_name}{/s}',
-                    description: '{s name=stream_description}{/s}'
+                    name: {
+                        fieldLabel: '{s name=stream_name}{/s}',
+                        allowBlank: false
+                    },
+                    description: {
+                        xtype: 'textarea',
+                        fieldLabel: '{s name=stream_description}{/s}'
+                    }
                 }
             }]
         };

@@ -1,23 +1,25 @@
 
 Ext.define('Shopware.helper.BatchRequests', {
 
-    start: function(requests) {
+    start: function(requests, callback) {
         this.prepareRequest(
             requests.shift(),
-            requests
+            requests,
+            callback
         );
     },
 
-    prepareRequest: function(request, requests) {
-        this.send(request, requests);
+    prepareRequest: function(request, requests, callback) {
+        this.send(request, requests, callback);
     },
 
     /**
      * Executes the next iteration of the provided request
      * @param request
      * @param requests
+     * @param callback
      */
-    send: function(request, requests) {
+    send: function(request, requests, callback) {
         var me = this;
 
         if (!request.params.hasOwnProperty('iteration')) {
@@ -29,7 +31,7 @@ Ext.define('Shopware.helper.BatchRequests', {
             url: request.url,
             params: request.params,
             success: function(operation) {
-                me.handleResponse(request, operation, requests);
+                me.handleResponse(request, operation, requests, callback);
             }
         });
     },
@@ -40,7 +42,7 @@ Ext.define('Shopware.helper.BatchRequests', {
      * @param operation
      * @param requests
      */
-    handleResponse: function(request, operation, requests) {
+    handleResponse: function(request, operation, requests, callback) {
         var me = this;
         var response = Ext.decode(operation.responseText);
 
@@ -52,15 +54,15 @@ Ext.define('Shopware.helper.BatchRequests', {
         }
 
         if (response.finish == false) {
-            return me.send(request, requests);
+            return me.send(request, requests, callback);
         }
 
         if (requests.length <= 0) {
-            return me.finish(requests);
+            return me.finish(requests, callback);
         }
 
         request = requests.shift();
-        return me.prepareRequest(request, requests);
+        return me.prepareRequest(request, requests, callback);
     },
 
     updateProgressBar: function(request, response) { },
@@ -68,7 +70,11 @@ Ext.define('Shopware.helper.BatchRequests', {
     /**
      * called when all requests finished
      */
-    finish: function(requests) { },
+    finish: function(requests, callback) {
+        if (Ext.isFunction(callback)) {
+            callback();
+        }
+    },
 
     canceled: function() { },
 

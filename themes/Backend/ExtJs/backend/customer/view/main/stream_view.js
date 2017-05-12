@@ -42,6 +42,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
     alias: 'widget.stream-view',
 
+    activated: false,
+
     initComponent: function() {
         var me = this;
 
@@ -64,8 +66,11 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.on('activate', function() {
             me.listStore.load();
             me.streamStore.load();
-            me.onCheckIndexState();
-            me.resetProgressbar();
+
+            if (!me.activated) {
+                me.activated = true;
+                me.fireEvent('tab-activated');
+            }
         });
         me.callParent(arguments);
     },
@@ -107,7 +112,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                     layout: 'table',
                     iconCls: 'sprite-table',
                     checked: true
-                }, {
+                }
+                /*{if {acl_is_allowed resource=customerstream privilege=charts}}*/
+                , {
                     text: '{s name=view_chart}{/s}',
                     layout: 'amount_chart',
                     iconCls: 'sprite-chart-up'
@@ -115,7 +122,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                     text: '{s name=view_chart_stream}{/s}',
                     layout: 'stream_chart',
                     iconCls: 'sprite-chart-impressions'
-                }]
+                }
+                /*{/if}*/
+                ]
             }
         })
     },
@@ -132,6 +141,14 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             name: 'autoIndex',
             inputValue: true,
             uncheckedValue: false,
+            /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
+                hidden: true,
+            /*{/if}*/
+
+            /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+                hidden: true,
+            /*{/if}*/
+
             value: value,
             checked: value,
             listeners: {
@@ -147,6 +164,10 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             iconCls: 'sprite-blue-document-search-result',
             text: '{s name=analyse_customer}{/s}',
             action: 'index',
+            /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
+                hidden: true,
+            /*{/if}*/
+
             handler: Ext.bind(me.onIndexSearch, me)
         });
     },
@@ -193,6 +214,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             text: '{s name="save"}{/s}',
             cls: 'primary',
             disabled: true,
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                hidden: true,
+            /*{/if}*/
             handler: Ext.bind(me.onSaveStream, me)
         });
 
@@ -200,6 +224,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             text: '{s name="save_new"}{/s}',
             cls: 'secondary',
             disabled: true,
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                hidden: true,
+            /*{/if}*/
             handler: Ext.bind(me.onSaveNewStream, me)
         });
 
@@ -210,12 +237,13 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.addConditionButton = Ext.create('Ext.button.Split', {
             text: '{s name="add_condition"}{/s}',
-            iconCls: 'sprite-funnel',
+            iconCls: 'sprite-plus-circle-frame',
             menu: me.createConditionsMenu()
         });
 
         me.refreshViewButton = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-arrow-circle-315',
+            text: '{s name=refresh_preview}{/s}',
+            iconCls: 'sprite-arrow-circle-225-left',
             handler: Ext.bind(me.onRefreshView, me)
         });
 
@@ -347,10 +375,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.fireEvent('stream-selected', selection);
     },
 
-    resetProgressbar: function() {
-        this.fireEvent('reset-progressbar');
-    },
-
     onOnChangeAutoIndex: function(checkbox, newValue) {
         this.fireEvent('change-auto-index', checkbox, newValue);
     },
@@ -369,10 +393,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
     onRefreshView: function() {
         this.fireEvent('refresh-stream-views');
-    },
-
-    onCheckIndexState: function() {
-        this.fireEvent('check-index-state');
     },
 
     addCondition: function(handler) {

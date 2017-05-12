@@ -25,13 +25,11 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\CustomerStream\StreamIndexer;
-use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\CustomerStream;
+use Shopware\Models\Customer\CustomerStreamRepository;
 
 class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_Backend_Application
 {
-    const INDEXING_LIMIT = 100;
-
     protected $model = CustomerStream::class;
 
     public function delete($id)
@@ -60,7 +58,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $total = (int) $this->Request()->getParam('total');
 
         $iteration = (int) $this->Request()->getParam('iteration', 1);
-        $offset = ($iteration - 1) * self::INDEXING_LIMIT;
+        $offset = ($iteration - 1) * CustomerStreamRepository::INDEXING_LIMIT;
 
         /** @var StreamIndexer $indexer */
         $indexer = $this->get('shopware.customer_stream.stream_indexer');
@@ -71,7 +69,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $criteria = $factory->createCriteria($streamId);
 
         $criteria->offset($offset)
-            ->limit(self::INDEXING_LIMIT)
+            ->limit(CustomerStreamRepository::INDEXING_LIMIT)
             ->setFetchCount(false);
 
         if ($criteria->getOffset() === 0) {
@@ -80,7 +78,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
         $indexer->populatePartial($streamId, $criteria);
 
-        $handled = $offset + self::INDEXING_LIMIT;
+        $handled = $offset + CustomerStreamRepository::INDEXING_LIMIT;
 
         $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
 
@@ -122,8 +120,8 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $total = (int) $this->Request()->getParam('total');
         $iteration = (int) $this->Request()->getParam('iteration', 1);
 
-        $offset = ($iteration - 1) * self::INDEXING_LIMIT;
-        $handled = $offset + self::INDEXING_LIMIT;
+        $offset = ($iteration - 1) * CustomerStreamRepository::INDEXING_LIMIT;
+        $handled = $offset + CustomerStreamRepository::INDEXING_LIMIT;
 
         $indexer = $this->container->get('customer_search.dbal.indexing.indexer');
 
@@ -226,6 +224,17 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             ->fetchAmountPerStreamChart();
 
         $this->View()->assign('data', array_values($chart));
+    }
+
+    protected function initAcl()
+    {
+        $this->addAclPermission('delete', 'delete', 'You do not have sufficient rights to delete a customer.');
+        $this->addAclPermission('update', 'save', 'You do not have sufficient rights to update a customer.');
+        $this->addAclPermission('create', 'save', 'You do not have sufficient rights to create a customer.');
+        $this->addAclPermission('indexStream', 'stream_index', 'You do not have sufficient rights to index customer streams.');
+        $this->addAclPermission('buildSearchIndex', 'search_index', 'You do not have sufficient rights to index customer search.');
+        $this->addAclPermission('loadChart', 'charts', 'You do not have sufficient rights to load this data.');
+        $this->addAclPermission('loadAmountPerStreamChart', 'charts', 'You do not have sufficient rights to load this data.');
     }
 
     protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
