@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Document\Document;
 use Shopware\Models\Shop\Locale;
 
 /**
@@ -953,20 +954,25 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      *    [int]      bottom
      *    [int]      pageBreak
      * </code>
+     *
+     * @throws \Exception
      */
     public function getDocTypesAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Document\Document');
+        $modelManager = $this->container->get('models');
+        $repository = $modelManager
+            ->getRepository(Document::class);
+
         $builder = $repository->createQueryBuilder('d');
 
         $builder->select('d')
             ->addFilter((array) $this->Request()->getParam('filter', []))
             ->addOrderBy((array) $this->Request()->getParam('sort', []))
-            ->setFirstResult($this->Request()->getParam('start'))
-            ->setMaxResults($this->Request()->getParam('limit'));
+            ->setFirstResult($this->Request()->getParam('start', 0))
+            ->setMaxResults($this->Request()->getParam('limit', 250));
 
         $query = $builder->getQuery();
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = $modelManager->getQueryCount($query);
         $data = $query->getArrayResult();
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
