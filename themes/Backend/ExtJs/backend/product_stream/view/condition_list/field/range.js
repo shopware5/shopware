@@ -27,14 +27,17 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-//{block name="backend/product_stream/view/condition_list/field/price"}
-Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
+//{block name="backend/product_stream/view/condition_list/field/range"}
+Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
 
     extend: 'Ext.form.FieldContainer',
     layout: { type: 'hbox', align: 'stretch' },
     mixins: [ 'Ext.form.field.Base' ],
     height: 30,
     value: undefined,
+
+    minField: 'minPrice',
+    maxField: 'maxPrice',
 
     initComponent: function() {
         var me = this;
@@ -101,21 +104,21 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
         }
 
 
-        if (value.hasOwnProperty('minPrice')) {
-            me.fromField.setValue(value.minPrice);
+        if (value.hasOwnProperty(me.minField)) {
+            me.fromField.setValue(value[me.minField]);
         }
-        if (value.hasOwnProperty('maxPrice')) {
-            me.toField.setValue(value.maxPrice);
+        if (value.hasOwnProperty(me.maxField)) {
+            me.toField.setValue(value[me.maxField]);
         }
     },
 
     getSubmitData: function() {
         var value = {};
 
-        value[this.name] = {
-            minPrice: this.fromField.getValue(),
-            maxPrice: this.toField.getValue()
-        };
+        value[this.name] = { };
+        value[this.name][this.minField] = this.fromField.getValue();
+        value[this.name][this.maxField] = this.toField.getValue();
+
         return value;
     },
 
@@ -133,7 +136,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
     },
 
     getErrorMessage: function() {
-        return 'Price range requires at least one value';
+        return 'Range requires at least one value';
     }
 });
 //{/block}

@@ -171,6 +171,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
             $minFieldName,
             $maxFieldName,
             [],
+            null,
             'frontend/listing/filter/facet-currency-range.tpl'
         );
     }

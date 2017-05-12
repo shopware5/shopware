@@ -27,16 +27,16 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-//{block name="backend/product_stream/view/condition_list/condition/price"}
-Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Price', {
+//{block name="backend/product_stream/view/condition_list/condition/weight"}
+Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Weight', {
     extend: 'ProductStream.filter.AbstractCondition',
 
     getName: function() {
-        return 'Shopware\\Bundle\\SearchBundle\\Condition\\PriceCondition';
+        return 'Shopware\\Bundle\\SearchBundle\\Condition\\WeightCondition';
     },
 
     getLabel: function() {
-        return '{s name=price_condition}Price condition{/s}';
+        return '{s name=weight_condition}{/s}';
     },
 
     isSingleton: function() {
@@ -59,8 +59,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Price', {
 
     createField: function() {
         return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Range', {
-            minField: 'minPrice',
-            maxField: 'maxPrice',
+            minField: 'minWeight',
+            maxField: 'maxWeight',
             name: 'condition.'+ this.getName(),
             flex: 1
         });

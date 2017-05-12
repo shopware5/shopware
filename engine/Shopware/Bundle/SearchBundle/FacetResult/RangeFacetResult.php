@@ -81,6 +81,11 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     protected $activeMin;
 
     /**
+     * @var string|null
+     */
+    protected $format;
+
+    /**
      * @var null|string
      */
     protected $template;
@@ -95,8 +100,9 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
      * @param float       $activeMax
      * @param string      $minFieldName
      * @param string      $maxFieldName
-     * @param string|null $template
      * @param Attribute[] $attributes
+     * @param string|null $template
+     * @param null|string $format
      */
     public function __construct(
         $facetName,
@@ -109,6 +115,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $minFieldName,
         $maxFieldName,
         $attributes = [],
+        $format = null,
         $template = 'frontend/listing/filter/facet-range.tpl'
     ) {
         $this->facetName = $facetName;
@@ -122,6 +129,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $this->maxFieldName = $maxFieldName;
         $this->attributes = $attributes;
         $this->template = $template;
+        $this->format = $format;
     }
 
     /**
@@ -250,5 +258,13 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getFormat()
+    {
+        return $this->format;
     }
 }

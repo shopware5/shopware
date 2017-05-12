@@ -52,9 +52,9 @@ Ext.define('Shopware.apps.Article.model.Detail', {
         { name: 'active', type: 'int' },
         { name: 'inStock', type: 'int', defaultValue: 0 },
         { name: 'stockMin', type: 'int' },
-        { name: 'weight', type: 'float' },
 
         { name: 'ean', type: 'string', useNull: true },
+        { name: 'weight', type: 'float', useNull: true },
         { name: 'width', type: 'float', useNull: true },
         { name: 'height', type: 'float', useNull: true },
         { name: 'len', type: 'float', useNull: true },

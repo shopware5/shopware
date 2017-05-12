@@ -85,6 +85,7 @@
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="shopware_searchdbal.variant_helper" />
             <tag name="facet_handler_dbal"/>
         </service>
 
@@ -176,6 +177,7 @@
         </service>
 
         <service id="shopware_searchdbal.immediate_delivery_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler">
+            <argument type="service" id="shopware_searchdbal.variant_helper" />
             <tag name="condition_handler_dbal"/>
         </service>
 
@@ -255,8 +257,40 @@
             <argument type="service" id="service_container" />
         </service>
 
+        <service id="shopware_searchdbal.product_dimensions_facet_handler" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler" >
+            <argument id="shopware_searchdbal.dbal_query_builder_factory" type="service"/>
+            <argument id="snippets" type="service"/>
+            <argument id="query_alias_mapper" type="service"/>
+            <argument id="shopware_searchdbal.variant_helper" type="service"/>
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.height_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler" >
+            <argument id="shopware_searchdbal.variant_helper" type="service"/>
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.length_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\LengthConditionHandler" >
+            <argument id="shopware_searchdbal.variant_helper" type="service"/>
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+
+        <service id="shopware_searchdbal.width_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\WidthConditionHandler" >
+            <argument id="shopware_searchdbal.variant_helper" type="service"/>
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.weight_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\WeightConditionHandler" >
+            <argument id="shopware_searchdbal.variant_helper" type="service"/>
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+
+
         <service id="shopware_searchdbal.condition_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
         <service id="shopware_searchdbal.sorting_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
         <service id="shopware_searchdbal.facet_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
+        <service id="shopware_searchdbal.variant_helper" class="Shopware\Bundle\SearchBundleDBAL\VariantHelper" />
     </services>
 </container>

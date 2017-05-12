@@ -31,6 +31,9 @@
                                 {$rangeMax = $facet->getMax()}
                                 {$roundPretty = 'false'}
                                 {$format = ''}
+                                {if $facet->getFormat()}
+                                    {$format = $facet->getFormat()}
+                                {/if}
                                 {$stepCount = 100}
                                 {$stepCurve = 'linear'}
                             {/block}

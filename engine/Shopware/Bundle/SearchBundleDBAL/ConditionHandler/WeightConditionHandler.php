@@ -24,53 +24,50 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
+use Shopware\Bundle\SearchBundle\Condition\WeightCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
+class WeightConditionHandler implements ConditionHandlerInterface
 {
-    const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
-
     /**
      * @var VariantHelper
      */
     private $variantHelper;
 
+    /**
+     * @param VariantHelper $variantHelper
+     */
     public function __construct(VariantHelper $variantHelper)
     {
         $this->variantHelper = $variantHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return $condition instanceof ImmediateDeliveryCondition;
+        return $condition instanceof WeightCondition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        /* @var WeightCondition $condition */
+
         $this->variantHelper->joinVariants($query);
 
-        if (!$query->hasState(self::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS)) {
-            $query->andWhere('allVariants.instock >= allVariants.minpurchase');
-            $query->addState(self::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS);
+        if ($condition->getMinWeight() > 0) {
+            $query->andWhere('allVariants.weight >= :minWeight');
+            $query->setParameter(':minWeight', $condition->getMinWeight());
+        }
+
+        if ($condition->getMaxWeight() > 0) {
+            $query->andWhere('allVariants.weight <= :maxWeight');
+            $query->setParameter(':maxWeight', $condition->getMaxWeight());
         }
     }
 }

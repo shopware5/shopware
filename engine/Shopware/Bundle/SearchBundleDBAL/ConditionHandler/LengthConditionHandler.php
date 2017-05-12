@@ -24,53 +24,50 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
+use Shopware\Bundle\SearchBundle\Condition\LengthCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
+class LengthConditionHandler implements ConditionHandlerInterface
 {
-    const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
-
     /**
      * @var VariantHelper
      */
     private $variantHelper;
 
+    /**
+     * @param VariantHelper $variantHelper
+     */
     public function __construct(VariantHelper $variantHelper)
     {
         $this->variantHelper = $variantHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return $condition instanceof ImmediateDeliveryCondition;
+        return $condition instanceof LengthCondition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        /* @var LengthCondition $condition */
+
         $this->variantHelper->joinVariants($query);
 
-        if (!$query->hasState(self::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS)) {
-            $query->andWhere('allVariants.instock >= allVariants.minpurchase');
-            $query->addState(self::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS);
+        if ($condition->getMinLength() > 0) {
+            $query->andWhere('allVariants.length >= :minLength');
+            $query->setParameter(':minLength', $condition->getMinLength());
+        }
+
+        if ($condition->getMaxLength() > 0) {
+            $query->andWhere('allVariants.length <= :maxLength');
+            $query->setParameter(':maxLength', $condition->getMaxLength());
         }
     }
 }

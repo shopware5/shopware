@@ -122,7 +122,11 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.ReleaseDate'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.VoteAverage'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Sales'),
-            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.SearchTerm')
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.SearchTerm'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Height'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Width'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Length'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Weight')
         ];
     },
 
