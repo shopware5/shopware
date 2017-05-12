@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             action: 'emotion-list-toolbar-add'
         }, {
             text: '{s name=toolbar/add_emotion_from_preset}{/s}',
-            iconCls: 'sprite-pin marketing--shopping-worlds',
+            iconCls: 'sprite-emotion-presets',
             action: 'emotion-list-toolbar-add-preset'
         }, {
             xtype: 'form',
