@@ -157,11 +157,17 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
             handler: Ext.bind(me.previousPage, me)
         });
 
+        me.skipButton = Ext.create('Ext.button.Button', {
+            text: '{s name="skip"}{/s}',
+            cls: 'secondary',
+            handler: Ext.bind(me.finish, me)
+        });
+
         return [{
             xtype: 'toolbar',
             dock: 'bottom',
             ui: 'shopware-ui',
-            items: ['->', me.previousButton, me.nextButton]
+            items: [me.skipButton, '->', me.previousButton, me.nextButton]
         }];
     }
 });
