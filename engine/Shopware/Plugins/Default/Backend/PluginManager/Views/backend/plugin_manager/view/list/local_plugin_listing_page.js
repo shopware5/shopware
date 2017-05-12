@@ -211,6 +211,19 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         return items;
     },
 
+    createPagingbar: function () {
+        var me = this,
+            pagingBar = me.callParent(arguments);
+
+        pagingBar.insert(12, me.createSafeModeCheckbox());
+        pagingBar.insert(13, {
+            xtype: 'tbseparator',
+            cls: 'separator-first'
+        });
+
+        return pagingBar;
+    },
+
     nameRenderer: function(value, metaData, record) {
         var name = record.get('label');
 
@@ -308,6 +321,77 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         });
 
         return me.uploadButton;
+    },
+
+    createSafeModeCheckbox: function () {
+        var me = this;
+
+        me.checkInSafeMode(function (inSafeMode) {
+            var label = '{s name="safe_mode"}Safe Mode{/s}';
+            me.safeModeCheckbox = Ext.create('Ext.form.field.Checkbox', {
+                fieldLabel: label,
+                width: '70px',
+                labelStyle: 'width:65px; margin-top: 2px;',
+                checked: inSafeMode,
+                dock: 'bottom',
+                handler: function () {
+                    me.checkInSafeMode(function (inSafeMode) {
+                        if (inSafeMode) {
+                            me.toggleSafeMode();
+                        } else {
+                            Ext.Msg.confirm(
+                                '{s name="safemodepopup/title"}Attention!{/s}',
+                                '{s name="safemodepopup/detail"}Enabling safe mode, all plugins that are not from shopware AG are disabled. This can severely limit the stability and runability of the shop. Use this mode only if you know exactly what you are doing. When the security mode is exited, the automatically deactivated plugins are activated again. Would you like to enable Safe mode now?{/s}',
+                                function (button) {
+                                    if (button == 'yes') {
+                                        me.toggleSafeMode();
+                                    } else {
+                                        me.safeModeCheckbox.setRawValue(false);
+                                        me.safeModeCheckbox.lastValue = false;
+                                    }
+                                }
+                            );
+                        }
+                    });
+                }
+            });
+        });
+
+        return me.safeModeCheckbox;
+    },
+
+    toggleSafeMode: function () {
+        var me = this,
+            msg = Shopware.Notification;
+
+        me.sendAjaxRequest(
+            '{url controller=PluginManager action=toggleSafeMode}',
+            { },
+            function(response) {
+                var title = '{s name=title/safe_mode}Safe Mode{/s}';
+                if (response.inSafeMode) {
+                    var content = '{s name=content/safe_mode_on}Safe mode has been turned on{/s}';
+                } else {
+                    var content = '{s name=content/safe_mode_off}Safe mode has been turned off{/s}';
+                }
+                msg.createGrowlMessage(title, content);
+                Shopware.app.Application.fireEvent('reload-local-listing');
+            }
+        );
+    },
+
+    checkInSafeMode: function (callback) {
+        Ext.Ajax.request({
+            async: false,
+            url: '{url controller=PluginManager action=isInSafeMode}',
+            method: 'GET',
+            params: { },
+            success: function(operation, opts) {
+                var response = Ext.decode(operation.responseText);
+                var inSafeMode = response.inSafeMode;
+                callback(inSafeMode);
+            }
+        });
     },
 
     createActionColumnItems: function() {

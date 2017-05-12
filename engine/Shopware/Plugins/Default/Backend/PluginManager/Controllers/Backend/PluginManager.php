@@ -309,6 +309,53 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         ]);
     }
 
+    public function toggleSafeModeAction()
+    {
+        $em = $this->container->get('models');
+
+        $plugins = $em->getRepository(Plugin::class)->findAll();
+
+        $pluginsInSafeMode = $this->getPluginsInSafeMode($plugins);
+
+        if ($pluginsInSafeMode) {
+            foreach ($pluginsInSafeMode as $plugin) {
+                $plugin->setActive(true);
+                $plugin->setInSafeMode(false);
+            }
+            $em->flush();
+            $inSafeMode = false;
+        } else {
+            foreach ($plugins as $plugin) {
+                if ($plugin->getAuthor() === 'shopware AG' || $plugin->getActive() === false) {
+                    continue;
+                }
+                $plugin->setActive(false);
+                $plugin->setInSafeMode(true);
+            }
+            $em->flush();
+            $inSafeMode = true;
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'inSafeMode' => $inSafeMode,
+        ]);
+    }
+
+    public function isInSafeModeAction()
+    {
+        $em = $this->container->get('models');
+
+        $plugins = $em->getRepository(Plugin::class)->findAll();
+
+        $inSafeMode = ($this->getPluginsInSafeMode($plugins)) ? true : false;
+
+        $this->View()->assign([
+            'success' => true,
+            'inSafeMode' => $inSafeMode,
+        ]);
+    }
+
     public function detailAction()
     {
         $technicalName = $this->Request()->getParam('technicalName', null);
@@ -899,5 +946,24 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                     echo json_encode(['success' => false, 'error' => $message]);
             }
         });
+    }
+
+    /**
+     * Gets an array of plugins that are in Safe Mode
+     *
+     * @param array $plugins
+     *
+     * @return array
+     */
+    private function getPluginsInSafeMode(array $plugins)
+    {
+        $pluginsInSafeMode = [];
+        foreach ($plugins as $plugin) {
+            if ($plugin->isInSafeMode()) {
+                $pluginsInSafeMode[] = $plugin;
+            }
+        }
+
+        return $pluginsInSafeMode;
     }
 }

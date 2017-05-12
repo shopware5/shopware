@@ -226,6 +226,11 @@ class PluginStruct implements \JsonSerializable
     private $localUpdateAvailable = false;
 
     /**
+     * @var bool
+     */
+    private $inSafeMode;
+
+    /**
      * @var string
      */
     private $link;
@@ -910,5 +915,21 @@ class PluginStruct implements \JsonSerializable
     public function setLowestPrice($lowestPrice)
     {
         $this->lowestPrice = $lowestPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInSafeMode()
+    {
+        return $this->inSafeMode;
+    }
+
+    /**
+     * @param bool $inSafeMode
+     */
+    public function setInSafeMode($inSafeMode)
+    {
+        $this->inSafeMode = $inSafeMode;
     }
 }
