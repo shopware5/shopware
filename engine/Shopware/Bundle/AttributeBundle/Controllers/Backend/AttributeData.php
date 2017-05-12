@@ -106,10 +106,36 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
             });
         }
 
+        if (!$this->Request()->getParam('raw')) {
+            $this->translateColumns($columns);
+        }
+
         $this->View()->assign([
             'success' => true,
             'data' => array_values($columns),
             'total' => 1,
         ]);
+    }
+
+    /**
+     * @param ConfigurationStruct[] $columns
+     */
+    private function translateColumns($columns)
+    {
+        $snippets = $this->container->get('snippets')->getNamespace('backend/attribute_columns');
+
+        foreach ($columns as $column) {
+            $key = $column->getTableName() . '_' . $column->getColumnName() . '_';
+
+            if ($snippet = $snippets->get($key . 'label')) {
+                $column->setLabel($snippet);
+            }
+            if ($snippet = $snippets->get($key . 'supportText')) {
+                $column->setSupportText($snippet);
+            }
+            if ($snippet = $snippets->get($key . 'helpText')) {
+                $column->setHelpText($snippet);
+            }
+        }
     }
 }

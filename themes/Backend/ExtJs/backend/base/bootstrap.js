@@ -168,6 +168,7 @@
 {include file='backend/base/component/Shopware.VTypes.js'}
 {include file='backend/base/component/Shopware.form.field.TinyMCE.js'}
 {include file='backend/base/component/Shopware.form.plugin.Translation.js'}
+{include file='backend/base/component/Shopware.form.plugin.SnippetTranslation.js'}
 {include file='backend/base/component/Shopware.grid.HeaderToolTip.js'}
 {include file='backend/base/component/Shopware.Notification.js'}
 {include file='backend/base/component/Shopware.form.PasswordStrengthMeter.js'}
