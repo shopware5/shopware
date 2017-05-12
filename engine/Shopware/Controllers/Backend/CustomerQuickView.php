@@ -30,6 +30,38 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
     protected $model = Customer::class;
     protected $alias = 'customer';
 
+    public function deleteAction()
+    {
+        if (!$this->_isAllowed('delete', 'customer')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to delete a customer.', 401);
+        }
+        parent::deleteAction();
+    }
+
+    public function save($data)
+    {
+        if (!$this->_isAllowed('save', 'customer')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to update a customer.', 401);
+        }
+        parent::save($data);
+    }
+
+    public function detailAction()
+    {
+        if (!$this->_isAllowed('detail', 'customer')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to delete a customer.', 401);
+        }
+        parent::detailAction();
+    }
+
+    public function listAction()
+    {
+        if (!$this->_isAllowed('read', 'customer')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to view the list of customers.', 401);
+        }
+        parent::listAction();
+    }
+
     public function delete($id)
     {
         $this->get('dbal_connection')->executeQuery(

@@ -226,6 +226,17 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign('data', array_values($chart));
     }
 
+    protected function initAcl()
+    {
+        $this->addAclPermission('delete', 'delete', 'You do not have sufficient rights to delete a customer.');
+        $this->addAclPermission('update', 'save', 'You do not have sufficient rights to update a customer.');
+        $this->addAclPermission('create', 'save', 'You do not have sufficient rights to create a customer.');
+        $this->addAclPermission('indexStream', 'stream_index', 'You do not have sufficient rights to index customer streams.');
+        $this->addAclPermission('buildSearchIndex', 'search_index', 'You do not have sufficient rights to index customer search.');
+        $this->addAclPermission('loadChart', 'charts', 'You do not have sufficient rights to load this data.');
+        $this->addAclPermission('loadAmountPerStreamChart', 'charts', 'You do not have sufficient rights to load this data.');
+    }
+
     protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
     {
         $data = parent::getList($offset, $limit, $sort, $filter, $wholeParams);

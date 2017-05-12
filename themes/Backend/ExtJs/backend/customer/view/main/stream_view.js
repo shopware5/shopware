@@ -112,7 +112,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                     layout: 'table',
                     iconCls: 'sprite-table',
                     checked: true
-                }, {
+                }
+                /*{if {acl_is_allowed resource=customerstream privilege=charts}}*/
+                , {
                     text: '{s name=view_chart}{/s}',
                     layout: 'amount_chart',
                     iconCls: 'sprite-chart-up'
@@ -120,7 +122,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                     text: '{s name=view_chart_stream}{/s}',
                     layout: 'stream_chart',
                     iconCls: 'sprite-chart-impressions'
-                }]
+                }
+                /*{/if}*/
+                ]
             }
         })
     },
@@ -137,6 +141,14 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             name: 'autoIndex',
             inputValue: true,
             uncheckedValue: false,
+            /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
+                hidden: true,
+            /*{/if}*/
+
+            /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+                hidden: true,
+            /*{/if}*/
+
             value: value,
             checked: value,
             listeners: {
@@ -152,6 +164,10 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             iconCls: 'sprite-blue-document-search-result',
             text: '{s name=analyse_customer}{/s}',
             action: 'index',
+            /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
+                hidden: true,
+            /*{/if}*/
+
             handler: Ext.bind(me.onIndexSearch, me)
         });
     },
@@ -198,6 +214,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             text: '{s name="save"}{/s}',
             cls: 'primary',
             disabled: true,
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                hidden: true,
+            /*{/if}*/
             handler: Ext.bind(me.onSaveStream, me)
         });
 
@@ -205,6 +224,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             text: '{s name="save_new"}{/s}',
             cls: 'secondary',
             disabled: true,
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                hidden: true,
+            /*{/if}*/
             handler: Ext.bind(me.onSaveNewStream, me)
         });
 
