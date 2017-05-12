@@ -257,13 +257,13 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                                 '<div class="x-grid-group-hd x-grid-group-hd-collapsible">' +
                                     '<div class="x-grid-group-title">' + name + '</div>' +
                                 '</div>' +
-                                '<div style="height: 100px;">' +
-                                    '<fieldset style="margin: 20px;" class="x-fieldset x-base-field-set x-fieldset-with-title x-fieldset-with-legend x-fieldset-default">' +
+                                '<div class="preset-teaser-container">' +
+                                    '<fieldset class="x-fieldset x-base-field-set x-fieldset-with-title x-fieldset-with-legend x-fieldset-default preset-teaser-fieldset">' +
                                         '<legend class="x-fieldset-header x-fieldset-header-default">' +
                                             '<div class="x-component x-fieldset-header-text x-component-default">' + header +'</div>' +
                                             '<div class="x-clear"></div>' +
                                         '</legend>' +
-                                        '<div class="x-fieldset-body" style="padding: 10px;">'+ message + '</div>' +
+                                        '<div class="x-fieldset-body preset-teaser-fieldset-body">'+ message + '</div>' +
                                     '</fieldset>' +
                                 '</div>' +
                             '</div>';
