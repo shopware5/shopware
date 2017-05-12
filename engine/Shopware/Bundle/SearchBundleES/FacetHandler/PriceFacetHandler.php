@@ -119,8 +119,8 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
 
         $criteriaPart = $this->createFacet(
             $criteria,
-            (float) $data['min'],
-            (float) $data['max']
+            round((float) $data['min'], 2),
+            round((float) $data['max'], 2)
         );
         $result->addFacet($criteriaPart);
     }
@@ -172,6 +172,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
             $maxFieldName,
             [],
             null,
+            2,
             'frontend/listing/filter/facet-currency-range.tpl'
         );
     }

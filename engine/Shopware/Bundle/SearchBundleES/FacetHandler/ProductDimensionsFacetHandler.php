@@ -22,114 +22,82 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
+namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
+use ONGR\ElasticsearchDSL\Aggregation\StatsAggregation;
+use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\HeightCondition;
 use Shopware\Bundle\SearchBundle\Condition\LengthCondition;
 use Shopware\Bundle\SearchBundle\Condition\WeightCondition;
 use Shopware\Bundle\SearchBundle\Condition\WidthCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\HeightFacet;
 use Shopware\Bundle\SearchBundle\Facet\LengthFacet;
 use Shopware\Bundle\SearchBundle\Facet\WeightFacet;
 use Shopware\Bundle\SearchBundle\Facet\WidthFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\QueryAliasMapper;
 
-class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
+class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
-
-    /**
-     * @var \Enlight_Components_Snippet_Namespace
-     */
-    private $snippetNamespace;
-
-    /**
-     * @var VariantHelper
-     */
-    private $variantHelper;
-
-    public function __construct(
-        QueryBuilderFactoryInterface $queryBuilderFactory,
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper,
-        VariantHelper $variantHelper
-    ) {
-        $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
-        $this->variantHelper = $variantHelper;
+    public function supports(CriteriaPartInterface $criteriaPart)
+    {
+        return
+            $criteriaPart instanceof WeightFacet
+            ||
+            $criteriaPart instanceof WidthFacet
+            ||
+            $criteriaPart instanceof LengthFacet
+            ||
+            $criteriaPart instanceof HeightFacet
+        ;
     }
 
-    public function generatePartialFacet(
-        FacetInterface $facet,
-        Criteria $reverted,
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addAggregation(
+            new StatsAggregation($criteriaPart->getName(), $criteriaPart->getName())
+        );
+    }
+
+    public function hydrate(
+        array $elasticResult,
+        ProductNumberSearchResult $result,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        if ($criteria->hasAttribute('product_dimensions_handled')) {
+        if (!isset($elasticResult['aggregations'])) {
             return;
         }
 
-        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
-
-        $this->variantHelper->joinVariants($query);
-
-        $query->select([
-            'MIN(allVariants.height) as minHeight',
-            'MAX(allVariants.height) as maxHeight',
-            'MIN(allVariants.weight) as minWeight',
-            'MAX(allVariants.weight) as maxWeight',
-            'MIN(allVariants.width) as minWidth',
-            'MAX(allVariants.width) as maxWidth',
-            'MIN(allVariants.length) as minLength',
-            'MAX(allVariants.length) as maxLength',
-        ]);
-
-        $query->setMaxResults(1);
-
-        $stats = $query->execute()->fetch(\PDO::FETCH_ASSOC);
-
         $facets = ['width', 'height', 'length', 'weight'];
-        $results = [];
         foreach ($criteria->getFacets() as $criteriaFacet) {
             if (!in_array($criteriaFacet->getName(), $facets, true)) {
                 continue;
             }
-            $facetResult = $this->createRangeFacet($criteriaFacet, $stats, $criteria);
+
+            if (!array_key_exists($criteriaFacet->getName(), $elasticResult['aggregations'])) {
+                continue;
+            }
+
+            $data = $elasticResult['aggregations'][$criteriaFacet->getName()];
+
+            $facetResult = $this->createRangeFacet($criteriaFacet, $data, $criteria);
             if (!$facetResult) {
                 continue;
             }
 
-            $results[] = $facetResult;
+            $result->addFacet($facetResult);
         }
-        $criteria->addAttribute('product_dimensions_handled', new Attribute());
-
-        return $results;
-    }
-
-    public function supportsFacet(FacetInterface $facet)
-    {
-        return
-            $facet instanceof WeightFacet
-            ||
-            $facet instanceof WidthFacet
-            ||
-            $facet instanceof LengthFacet
-            ||
-            $facet instanceof HeightFacet
-        ;
     }
 
     /**
@@ -146,11 +114,8 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         $minField = 'min' . ucfirst($name);
         $maxField = 'max' . ucfirst($name);
 
-        $min = (float) $stats[$minField];
-        $max = (float) $stats[$maxField];
-
-        $min = round($min, $facet->getDigits());
-        $max = round($max, $facet->getDigits());
+        $min = (float) $stats['min'];
+        $max = (float) $stats['max'];
 
         $activeMin = $min;
         $activeMax = $max;
@@ -168,9 +133,6 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
-        $activeMin = round($activeMin, $facet->getDigits());
-        $activeMax = round($activeMax, $facet->getDigits());
-
         $label = $facet->getLabel();
 
         return new RangeFacetResult(
@@ -185,7 +147,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
             $maxField,
             [],
             $facet->getFormat(),
-            $facet->getDigits(),
+            3,
             'frontend/listing/filter/facet-range.tpl'
         );
     }

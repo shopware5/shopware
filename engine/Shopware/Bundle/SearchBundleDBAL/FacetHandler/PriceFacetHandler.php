@@ -179,6 +179,8 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
             $this->minFieldName,
             $this->maxFieldName,
             [],
+            null,
+            2,
             'frontend/listing/filter/facet-currency-range.tpl'
         );
     }

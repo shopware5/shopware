@@ -91,6 +91,11 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     protected $template;
 
     /**
+     * @var int
+     */
+    protected $digits;
+
+    /**
      * @param string      $facetName
      * @param bool        $active
      * @param string      $label
@@ -101,8 +106,9 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
      * @param string      $minFieldName
      * @param string      $maxFieldName
      * @param Attribute[] $attributes
-     * @param string|null $template
      * @param null|string $format
+     * @param int         $digits
+     * @param string|null $template
      */
     public function __construct(
         $facetName,
@@ -116,6 +122,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $maxFieldName,
         $attributes = [],
         $format = null,
+        $digits = 2,
         $template = 'frontend/listing/filter/facet-range.tpl'
     ) {
         $this->facetName = $facetName;
@@ -130,6 +137,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $this->attributes = $attributes;
         $this->template = $template;
         $this->format = $format;
+        $this->digits = $digits;
     }
 
     /**
@@ -266,5 +274,13 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     public function getFormat()
     {
         return $this->format;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDigits()
+    {
+        return $this->digits;
     }
 }

@@ -41,47 +41,63 @@ class ProductAttributeFacet implements FacetInterface
     /**
      * @var string
      */
-    private $field;
+    protected $field;
 
     /**
      * @var string
      */
-    private $mode;
+    protected $mode;
 
     /**
      * @var string
      */
-    private $formFieldName;
+    protected $formFieldName;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string|null
      */
-    private $template;
+    protected $template;
 
     /**
-     * @param string        $field
-     * @param string        $mode
-     * @param string string $formFieldName
-     * @param string        $label
-     * @param string|null   $template
+     * @var string
+     */
+    protected $format;
+
+    /**
+     * @var int
+     */
+    protected $digits;
+
+    /**
+     * @param string $field
+     * @param string $mode
+     * @param $formFieldName
+     * @param string      $label
+     * @param string|null $template
+     * @param string      $format
+     * @param int         $digits
      */
     public function __construct(
         $field,
         $mode,
         $formFieldName,
         $label,
-        $template = null
+        $template = null,
+        $format = '0,00',
+        $digits = 2
     ) {
         $this->field = $field;
         $this->mode = $mode;
         $this->formFieldName = $formFieldName;
         $this->label = $label;
         $this->template = $template;
+        $this->format = $format;
+        $this->digits = $digits;
     }
 
     /**
@@ -130,5 +146,21 @@ class ProductAttributeFacet implements FacetInterface
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDigits()
+    {
+        return $this->digits;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
     }
 }

@@ -31,8 +31,12 @@
                                 {$rangeMax = $facet->getMax()}
                                 {$roundPretty = 'false'}
                                 {$format = ''}
+                                {$digits = 2}
                                 {if $facet->getFormat()}
                                     {$format = $facet->getFormat()}
+                                {/if}
+                                {if $facet->getDigits() >= 0}
+                                    {$digits = $facet->getDigits()}
                                 {/if}
                                 {$stepCount = 100}
                                 {$stepCurve = 'linear'}
@@ -45,6 +49,7 @@
                                  data-stepCount="{$stepCount}"
                                  data-stepCurve="{$stepCurve}"
                                  data-startMin="{$startMin}"
+                                 data-digits="{$digits}"
                                  data-startMax="{$startMax}"
                                  data-rangeMin="{$rangeMin}"
                                  data-rangeMax="{$rangeMax}">

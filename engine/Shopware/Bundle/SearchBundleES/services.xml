@@ -202,5 +202,24 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.width_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\WidthConditionHandler">
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.height_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\HeightConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.length_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\LengthConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.weight_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\WeightConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.product_dimensions_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ProductDimensionsFacetHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
     </services>
 </container>

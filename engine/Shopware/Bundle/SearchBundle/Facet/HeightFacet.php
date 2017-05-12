@@ -39,13 +39,20 @@ class HeightFacet implements FacetInterface
     protected $format;
 
     /**
+     * @var int
+     */
+    protected $digits;
+
+    /**
      * @param string|null $label
      * @param string|null $format
+     * @param int         $digits
      */
-    public function __construct($label = null, $format = null)
+    public function __construct($label = null, $format = null, $digits = 3)
     {
         $this->label = $label;
         $this->format = $format;
+        $this->digits = $digits;
     }
 
     /**
@@ -62,6 +69,14 @@ class HeightFacet implements FacetInterface
     public function getFormat()
     {
         return $this->format;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDigits()
+    {
+        return $this->digits;
     }
 
     public function getName()
