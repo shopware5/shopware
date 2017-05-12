@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         var layout = me.cardContainer.getLayout();
 
         me.nextButton.setText('{s name="next"}{/s}');
+        me.previousButton.show();
 
         if (layout.getNext()) {
             layout.next();
@@ -71,8 +72,14 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         var me = this;
         var layout = me.cardContainer.getLayout();
 
+        me.nextButton.setText('{s name="next"}{/s}');
+
         if (layout.getPrev()) {
             layout.prev();
+        }
+        me.previousButton.show();
+        if (!layout.getPrev()) {
+            me.previousButton.hide();
         }
     },
 
@@ -154,6 +161,7 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
         me.previousButton = Ext.create('Ext.button.Button', {
             text: '{s name="back"}{/s}',
             cls: 'secondary',
+            hidden: true,
             handler: Ext.bind(me.previousPage, me)
         });
 
