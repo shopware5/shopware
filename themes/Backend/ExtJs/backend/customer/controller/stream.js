@@ -224,34 +224,30 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.loadStreamChart();
     },
 
-    saveAsNewStream: function() {
-        var me = this;
-
-        var nameField = Ext.create('Ext.form.field.Text', {
-            fieldLabel: '{s name="stream_name"}{/s}',
-            value:  '{s name=stream/new_stream}{/s}',
-            name: 'name',
-            allowBlank: false,
-            anchor: '100%'
-        });
-
-        var form = Ext.create('Ext.form.Panel', {
-            items: [nameField],
+    createNewStreamForm: function() {
+        return Ext.create('Ext.form.Panel', {
+            items: [{
+                xtype: 'customer-stream-detail',
+                record: Ext.create('Shopware.apps.Customer.model.CustomerStream')
+            }],
             bodyPadding: 20,
             border: false,
             layout: 'anchor',
             flex: 1
         });
+    },
+
+    saveAsNewStream: function() {
+        var me = this;
+        var form = me.createNewStreamForm();
 
         var button = Ext.create('Ext.button.Button', {
             cls: 'primary',
             text: '{s name="save"}{/s}',
             handler: function() {
                 if (form.getForm().isValid()) {
-                    var name = nameField.getValue();
-
                     me.saveStream(
-                        Ext.create('Shopware.apps.Customer.model.CustomerStream', { id: null, name: name })
+                        Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues())
                     );
 
                     window.destroy();
