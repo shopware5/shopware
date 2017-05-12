@@ -99,13 +99,13 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             cls: 'emotion-listing',
             listeners: {
                 render: Ext.bind(me.addGroupHeaderEvent, me),
-                // boxready: function(view) {
-                //     view.getEl().on('click', function() {
-                //         me.openPluginManager();
-                //     }, me, {
-                //         delegate: 'a'
-                //     });
-                // },
+                boxready: function(view) {
+                    view.getEl().on('click', function() {
+                        me.openPluginManager();
+                    }, me, {
+                        delegate: 'a'
+                    });
+                },
                 // because of custom tpl with grouping we cannot trust selection model here
                 // and have to use the data-preset-id attribute
                 itemclick: function(view, record, item, index, e) {
