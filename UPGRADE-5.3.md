@@ -95,6 +95,31 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added route `/frontend/listing/listing` which loads the category product listing. This route is called using `{action ...}` in case that the category contains an emotion with customer streams
 * Added entity `Shopware\Models\Customer\CustomerStream` for attribute single and multi selection.
 * Added translations for attribute labels. See below for more information.
+* Added database structure for new emotion preset feature:
+    * `s_emotion_presets` - contains all installed presets
+    * `s_emotion_preset_translations` - contains presets translations
+* Added models for presets
+    * `Shopware\Models\Emotion\Preset`
+    * `Shopware\Models\Emotion\PresetTranslation`
+* Added classes for handling emotion preset feature
+    * `Shopware\Components\Emotion\EmotionImporter` - handle emotion imports
+    * `Shopware\Components\Emotion\EmotionExporter` - handle emotion exports
+    * `Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer` - transform emotion to preset
+    * `Shopware\Components\Emotion\Preset\PresetDataSynchronizer` - uses component handlers to support import / export of emotions  
+    * `Shopware\Components\Emotion\Preset\PresetInstaller` - installer for preset plugins
+    * `Shopware\Components\Emotion\Preset\PresetLoader` - loads presets and refreshes preset data to match current database
+    * `Shopware\Components\Emotion\Preset\PresetMetaDataInterface` - interface to use for preset plugin development
+* Added API Resource for emotion presets `Shopware\Components\Api\Resource\EmotionPreset`
+* Added backend controller for emotion presets `Shopware\Controllers\Backend\EmotionPresets`
+* Added compiler pass to register emotion component handlers `Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass`
+* Added component handlers for asset import and export of shopping world elements
+    * `Shopware\Components\Emotion\Preset\ComponentHandler\BannderComponentHandler`
+    * `Shopware\Components\Emotion\Preset\ComponentHandler\BannerSliderComponentHandler`
+    * `Shopware\Components\Emotion\Preset\ComponentHandler\CategoryTeaserComponentHandler`
+    * `Shopware\Components\Emotion\Preset\ComponentHandler\Html5VideoComponentHandler`
+* Added new ExtJs views for emotion presets under `themes\backend\emotion\view\preset`
+* Added new service tag for registering emotion preset component handlers `shopware.emotion.preset_component_handler`
+* Added actions to import and export shopping worlds in `Shopware_Controllers_Backend_Emotion`
 
 ### Changes
 
@@ -649,7 +674,8 @@ We implement a basic cookie permission hint. If you want to change the decision 
 
 ### Shopping Worlds
 
-Shopping World have been technically refactored from the ground up to improve the overall performance when adding several elements to a shopping world.
+Shopping World have been technically refactored from the ground up to improve the overall performance when adding several elements to a shopping world. It is now possible to export and import shopping worlds via the backend.
+You can also convert shopping worlds to presets for reusability of configured shopping worlds. Please see Developer Docs article for further information.
 
 #### ComponentHandler
 

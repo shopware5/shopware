@@ -1323,8 +1323,21 @@ div[id^=emotion-detail-window] {
       max-width: 133px;
       height: 98px;
     }
+
     .premium {
       background: theme-image($theme, 'ribbon_blue.png') no-repeat;
+    }
+
+    .preset-teaser-container {
+      height: 150px;
+    }
+
+    .preset-teaser-fieldset {
+      margin: 20px;
+    }
+
+    .preset-teaser-fieldset-body {
+      padding: 10px;
     }
   }
 
