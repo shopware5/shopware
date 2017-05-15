@@ -14,6 +14,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added smarty block `frontend_index_header_meta_description_og` for `og:description` meta tag
 * Added EventEmitter to StateManager constructor
 * Added translation for article `shippingtime` field
+* Added feed-id parameter to sw:product:feeds:refresh to refresh only a specific product feed 
+* Added sw:product:feeds:list command to show all product feeds
 
 ### Changes
 
