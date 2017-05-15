@@ -47,6 +47,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
     public function loadPresetAction()
     {
+        if (!$this->_isAllowed('save', 'emotion')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to load a preset.', 401);
+        }
+
         $id = $this->Request()->getParam('id');
 
         if (!$id) {
@@ -82,6 +86,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      */
     public function saveAction()
     {
+        if (!$this->_isAllowed('save', 'emotion')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to save a preset.', 401);
+        }
+
         $resource = $this->container->get('shopware.api.emotionpreset');
         $transformer = $this->container->get('shopware.emotion.emotion_presetdata_transformer');
         $data = $this->Request()->getParams();
@@ -105,6 +113,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
     public function deleteAction()
     {
+        if (!$this->_isAllowed('delete', 'emotion')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to delete a preset.', 401);
+        }
+
         $id = $this->Request()->getParam('id');
 
         $resource = $this->container->get('shopware.api.emotionpreset');
@@ -120,6 +132,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      */
     public function importAssetAction()
     {
+        if (!$this->_isAllowed('save', 'emotion')) {
+            throw new Enlight_Controller_Exception('You do not have sufficient rights to import assets.', 401);
+        }
+
         $id = $this->Request()->getParam('id');
         $syncKey = $this->Request()->getParam('syncKey');
 

@@ -725,16 +725,20 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     protected function initAcl()
     {
-        $this->addAclPermission('list', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('detail', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('library', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('fill', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('list', 'read', 'Insufficient permissions');
+        $this->addAclPermission('detail', 'read', 'Insufficient permissions');
+        $this->addAclPermission('library', 'read', 'Insufficient permissions');
+        $this->addAclPermission('fill', 'read', 'Insufficient permissions');
 
-        $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
+        $this->addAclPermission('delete', 'delete', 'Insufficient permissions');
 
-        $this->addAclPermission('save', 'save', 'Insufficient Permissions');
+        $this->addAclPermission('save', 'save', 'Insufficient permissions');
+        $this->addAclPermission('updateStatusAndPosition', 'save', 'Insufficient permissions');
+        $this->addAclPermission('upload', 'save', 'Insufficient permissions');
+        $this->addAclPermission('import', 'save', 'Insufficient permissions');
+        $this->addAclPermission('afterImport', 'save', 'Insufficient permissions');
 
-        $this->addAclPermission('duplicate', 'create', 'Insufficient Permissions');
+        $this->addAclPermission('duplicate', 'create', 'Insufficient permissions');
     }
 
     /**
