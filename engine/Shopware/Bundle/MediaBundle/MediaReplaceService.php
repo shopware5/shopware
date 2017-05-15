@@ -27,7 +27,7 @@ namespace Shopware\Bundle\MediaBundle;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Media;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 class MediaReplaceService implements MediaReplaceServiceInterface
 {
@@ -41,8 +41,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     private $thumbnailManager;
 
     /**
-     * MediaReplaceService constructor.
-     *
      * @param MediaServiceInterface $mediaService
      * @param Manager               $thumbnailManager
      * @param ModelManager          $modelManager
@@ -59,22 +57,22 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      *
      * @throws \Exception
      */
-    public function replace($mediaId, UploadedFile $file)
+    public function replace($mediaId, File $file)
     {
-        $media = $this->modelManager->find('Shopware\Models\Media\Media', $mediaId);
+        $media = $this->modelManager->find(Media::class, $mediaId);
 
         if (!$this->validateMediaType($media, $file)) {
-            throw new \Exception(sprintf('To replace the media file, an %s file is required', $media->getType()));
+            throw new \RuntimeException(sprintf('To replace the media file, an %s file is required', $media->getType()));
         }
 
         $fileContent = file_get_contents($file->getRealPath());
 
         $this->mediaService->write($media->getPath(), $fileContent);
 
-        $media->setExtension($file->getClientOriginalExtension());
-        $media->setFileSize($file->getClientSize());
+        $media->setExtension($this->getExtension($file));
+        $media->setFileSize(filesize($file->getRealPath()));
 
-        if ($media->getType() == $media::TYPE_IMAGE) {
+        if ($media->getType() === $media::TYPE_IMAGE) {
             $imageSize = getimagesize($file->getRealPath());
 
             if ($imageSize) {
@@ -91,21 +89,38 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @param Media        $media
-     * @param UploadedFile $file
+     * @param Media $media
+     * @param File  $file
      *
      * @return bool
      */
-    private function validateMediaType(Media $media, UploadedFile $file)
+    private function validateMediaType(Media $media, File $file)
     {
-        $fileInfo = pathinfo($file->getClientOriginalName());
-        $uploadedFileExtension = strtolower($fileInfo['extension']);
+        $uploadedFileExtension = $file->guessExtension();
         $types = $media->getTypeMapping();
 
         if (!array_key_exists($uploadedFileExtension, $types)) {
             $types[$uploadedFileExtension] = Media::TYPE_UNKNOWN;
         }
 
-        return $media->getType() == $types[$uploadedFileExtension];
+        return $media->getType() === $types[$uploadedFileExtension];
+    }
+
+    /**
+     * @param File $file
+     *
+     * @return string
+     */
+    private function getExtension(File $file)
+    {
+        $extension = strtolower($file->guessExtension());
+
+        switch ($extension) {
+            case 'jpeg':
+                $extension = 'jpg';
+                break;
+        }
+
+        return (string) $extension;
     }
 }
