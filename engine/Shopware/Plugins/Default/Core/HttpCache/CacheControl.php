@@ -249,7 +249,7 @@ class CacheControl
     {
         $session = $this->session;
 
-        $country = $session->offsetGet('sCountry');
+        $country = $session->offsetGet('sUserGroup');
 
         //not logged in => reset global context cooky
         if (!$country) {

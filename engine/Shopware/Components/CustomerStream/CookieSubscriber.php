@@ -73,17 +73,17 @@ class CookieSubscriber implements SubscriberInterface
 
             return;
         }
-
         if ($session->offsetGet('auto-user')) {
             return;
         }
 
-        $id = $this->connection->fetchColumn('SELECT id FROM s_user WHERE login_token = :token', [':token' => $token]);
-        if (!$id) {
+        $data = $this->connection->fetchAssoc('SELECT id, customergroup FROM s_user WHERE login_token = :token', [':token' => $token]);
+        if (!$data) {
             return;
         }
 
-        $session->offsetSet('auto-user', $id);
+        $session->offsetSet('sUserGroup', $data['customergroup']);
+        $session->offsetSet('auto-user', $data['id']);
     }
 
     public function afterLogin(\Enlight_Event_EventArgs $args)
