@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     cls: 'plugin-manager-loading-mask customer-wizard',
     bodyPadding: 20,
     header: false,
-    width: 1400,
+    width: 1250,
     height: 540,
 
     initComponent: function() {
