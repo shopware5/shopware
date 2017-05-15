@@ -63,6 +63,12 @@ class CookieSubscriber implements SubscriberInterface
     {
         $request = $args->getRequest();
 
+        $config = $this->container->get('config');
+
+        if (!$config->get('useSltCookie')) {
+            return;
+        }
+
         if (!$this->container->initialized('session')) {
             return;
         }
@@ -77,19 +83,24 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        $data = $this->connection->fetchAssoc('SELECT id, customergroup FROM s_user WHERE login_token = :token', [':token' => $token]);
+        $data = $this->connection->fetchAssoc('SELECT id, customergroup FROM s_user WHERE login_token = :token LIMIT 1', [':token' => $token]);
         if (!$data) {
             return;
         }
 
         $session->offsetSet('sUserGroup', $data['customergroup']);
-        $session->offsetSet('auto-user', $data['id']);
+        $session->offsetSet('auto-user', (int) $data['id']);
     }
 
     public function afterLogin(\Enlight_Event_EventArgs $args)
     {
-        $user = $args->get('user');
+        $config = $this->container->get('config');
 
+        if (!$config->get('useSltCookie')) {
+            return;
+        }
+
+        $user = $args->get('user');
         $id = $user['id'];
 
         if (!$this->container->initialized('front')) {

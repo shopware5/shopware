@@ -94,7 +94,6 @@ Ext.define('Shopware.form.field.SingleSelection', {
                 for (var i = 0; i <= arguments.length; i++) {
                     args.push(arguments[i]);
                 }
-                console.log("event", event);
                 return me.fireEvent.apply(me, args);
             });
         };
