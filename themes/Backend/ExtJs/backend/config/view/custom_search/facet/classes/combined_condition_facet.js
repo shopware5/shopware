@@ -52,8 +52,13 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.CombinedCondit
                 fieldLabel: '{s name="request_parameter"}{/s}',
                 validator: Ext.bind(me.validateParameter, me)
             }, {
-                xtype: 'shopware-form-field-product-stream-single-selection',
+                xtype: 'productstreamselection',
                 store: factory.createEntitySearchStore("Shopware\\Models\\ProductStream\\ProductStream"),
+                name: 'streamId',
+                labelWidth: 150,
+                fieldLabel: '{s name="product_stream"}{/s}',
+                helpText: '{s name="product_stream_help"}{/s}',
+                allowBlank: true,
                 listeners: {
                     'change': function() {
                         me.onChangeStream(this.getValue());
