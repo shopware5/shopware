@@ -11,6 +11,12 @@
                 asyncCallbacks[i].call(document);
             }
         }
+
+        document.asyncReady = function (callback) {
+            if (typeof callback === 'function') {
+                callback.call(document);
+            }
+        }
     });
 </script>
 {/literal}
