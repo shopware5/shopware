@@ -270,7 +270,7 @@ class sCategories
             $articleId,
         ]);
 
-        return $id;
+        return ($id) ? $id : $parentId;
     }
 
     /**
