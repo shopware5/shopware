@@ -27,10 +27,26 @@ namespace Shopware\Commands;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Models\ProductFeed\Repository;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateProductFeedCommand extends ShopwareCommand
 {
+    /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    /**
+     * @var Enlight_Template_Manager
+     */
+    private $sSmarty;
+
+    /**
+     * @var CacheDir
+     */
+    private $cacheDir;
+
     /**
      * {@inheritdoc}
      */
@@ -39,6 +55,12 @@ class GenerateProductFeedCommand extends ShopwareCommand
         $this
             ->setName('sw:product:feeds:refresh')
             ->setDescription('Refreshes product feed cache files.')
+            ->addOption(
+                'feedid',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'ID of the feed to generate'
+            )
             ->setHelp('The <info>%command.name%</info> refreshes the cached product feed files.');
     }
 
@@ -47,50 +69,67 @@ class GenerateProductFeedCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
-        $cacheDir .= '/productexport/';
+        $this->output = $output;
+        $this->cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $this->cacheDir .= '/productexport/';
 
-        if (!is_dir($cacheDir)) {
-            if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
+        if (!is_dir($this->cacheDir)) {
+            if (false === @mkdir($this->cacheDir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $this->cacheDir));
             }
-        } elseif (!is_writable($cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
+        } elseif (!is_writable($this->cacheDir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $this->cacheDir));
         }
+
+        $feedID = (int) $input->getOption('feedid');
 
         /** @var $export \sExport */
         $export = $this->container->get('modules')->Export();
         $export->sSYSTEM = $this->container->get('system');
 
-        $sSmarty = $this->container->get('template');
+        $this->sSmarty = $this->container->get('template');
 
         // prevent notices to clutter generated files
         $this->registerErrorHandler($output);
 
         /** @var Repository $productFeedRepository */
         $productFeedRepository = $this->container->get('models')->getRepository(ProductFeed::class);
-        $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
+        if(empty($feedID)) {
+          $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 
-        /** @var $feedModel ProductFeed */
-        foreach ($activeFeeds as $feedModel) {
-            if ($feedModel->getInterval() == 0) {
-                continue;
-            }
-            $output->writeln(sprintf('Refreshing cache for ' . $feedModel->getName()));
-
-            $export->sFeedID = $feedModel->getId();
-            $export->sHash = $feedModel->getHash();
-            $export->sInitSettings();
-            $export->sSmarty = clone $sSmarty;
-            $export->sInitSmarty();
-
-            $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
-
-            $feedCachePath = $cacheDir . '/' . $fileName;
-            $handleResource = fopen($feedCachePath, 'w');
-            $export->executeExport($handleResource);
+          /** @var $feedModel ProductFeed */
+          foreach ($activeFeeds as $feedModel) {
+              if ($feedModel->getInterval() == 0) {
+                  continue;
+              }
+              $this->generate_feed($export, $feedModel);
+          }
+        } else {
+          $productFeed = $productFeedRepository->find((int) $feedID);
+          if(!empty($productFeed)) {
+            $this->generate_feed($export, $productFeed);
+          } else {
+            throw new \RuntimeException(sprintf("Unable to load feed with id ()%s)\n", $feedID));
+          }
         }
 
-        $output->writeln(sprintf('Product feed cache successfully refreshed'));
+        $this->output->writeln(sprintf('Product feed cache successfully refreshed'));
+    }
+
+    private function generate_feed($export, ProductFeed $feedModel)
+    {
+      $this->output->writeln(sprintf('Refreshing cache for ' . $feedModel->getName()));
+
+      $export->sFeedID = $feedModel->getId();
+      $export->sHash = $feedModel->getHash();
+      $export->sInitSettings();
+      $export->sSmarty = clone $this->sSmarty;
+      $export->sInitSmarty();
+
+      $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
+
+      $feedCachePath = $this->cacheDir . '/' . $fileName;
+      $handleResource = fopen($feedCachePath, 'w');
+      $export->executeExport($handleResource);
     }
 }
