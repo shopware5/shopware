@@ -150,6 +150,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             dock: 'bottom',
             items: [
                 '->',
+                /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
                 {
                     text: '{s name="window/button/save_as_preset"}{/s}',
                     cls: 'secondary',
@@ -157,6 +158,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                         me.fireEvent('saveAsPreset', me.emotion);
                     }
                 },
+                /*{/if}*/
                 {
                     text: me.snippets.saveBtnLabel,
                     cls: 'primary',

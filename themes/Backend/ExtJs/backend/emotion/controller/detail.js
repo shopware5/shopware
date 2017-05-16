@@ -610,7 +610,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         Ext.Ajax.request({
             url: '{url controller="Emotion" action="updateStatusAndPosition"}',
-            params: {
+            jsonData: {
                 id: record.get('id'),
                 active: record.get('active'),
                 position: record.get('position')
@@ -623,8 +623,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                     me.getListing().getStore().load();
                 } else {
-                    message = '';
-                    if (Ext.isDefined(result.emotion) && result.emotion == false) {
+                    message = result.message;
+                    if (!message && Ext.isDefined(result.emotion) && result.emotion == false) {
                         message = me.snippets.emotionNotFoundMsg
                     }
                     Shopware.Notification.createGrowlMessage(
@@ -727,6 +727,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             },
             callback: function(operation, success, response) {
                 var result = Ext.JSON.decode(response.responseText);
+
+                if (!result.success) {
+                    return Shopware.Notification.createGrowlMessage(
+                        me.snippets.errorTitle,
+                        me.snippets.saveErrorMessage + '<br>' + result.message,
+                        me.snippets.growlMessage
+                    );
+                }
 
                 Ext.callback(callback, scope, [result]);
             }

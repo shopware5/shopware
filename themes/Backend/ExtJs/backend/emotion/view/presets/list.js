@@ -68,7 +68,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 me.infoView.getSelectionModel().select(0);
                 me.selectedPreset = me.infoView.getSelectionModel().getSelection()[0];
                 if (me.selectedPreset) {
-                    me.down('#deletebutton').setDisabled(!me.selectedPreset.get('custom'));
+                    if (me.down('#deletebutton')) {
+                        me.down('#deletebutton').setDisabled(!me.selectedPreset.get('custom'));
+                    }
                     me.fireEvent('showpresetdetails', me.selectedPreset);
                 }
             }
@@ -117,7 +119,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                     me.fireEvent('emotionpresetselect');
                 },
                 selectionchange: function(view, selection) {
-                    me.down('#deletebutton').setDisabled(selection.length === 0 || (me.selectedPreset && !me.selectedPreset.get('custom')));
+                    if (me.down('#deletebutton')) {
+                        me.down('#deletebutton').setDisabled(selection.length === 0 || (me.selectedPreset && !me.selectedPreset.get('custom')));
+                    }
                     if (selection.length === 0) {
                         me.selectedPreset = null;
                     }
@@ -134,7 +138,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         me.topToolbar = Ext.create('Ext.Toolbar', {
             dock: 'top',
             ui: 'shopware-ui',
-            items: [{
+            items: [
+            /*{if {acl_is_allowed privilege=delete}}*/
+            {
                 xtype: 'button',
                 itemId: 'deletebutton',
                 iconCls: 'sprite-minus-circle',
@@ -143,7 +149,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 handler: function() {
                     me.fireEvent('deletepreset', me.store, me.selectedPreset);
                 }
-            }, '->', {
+            },
+            /*{/if}*/
+            '->', {
                 xtype: 'textfield',
                 cls: 'searchfield',
                 emptyText: '{s name=search}Search...{/s}',
