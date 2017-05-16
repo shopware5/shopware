@@ -218,7 +218,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             'metaTitle' => $form->getMetaTitle(),
             'metaDescription' => $form->getMetaDescription(),
             'metaKeywords' => $form->getMetaKeywords(),
-            'attribute' => $form->getAttribute(),
+            'attribute' => (array)$form->getAttribute(),
         ];
 
         return array_merge($formData, [
