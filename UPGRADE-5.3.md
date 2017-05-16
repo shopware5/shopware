@@ -476,13 +476,13 @@ Ext.define('Shopware.apps.Vote.view.list.extensions.Filter', {
 
 ### Captcha
 
-Captchas are now configurable via backend and can be added using the `captcha` dependency injection container tag.
+Captchas are now configurable via backend and can be added using the `shopware.captcha` dependency injection container tag.
 
 ```xml
 <service id="shopware.captcha.recaptcha" class="SwagReCaptcha\ReCaptcha">
     <argument type="service" id="guzzle_http_client_factory"/>
     <argument type="service" id="config"/>
-    <tag name="captcha"/>
+    <tag name="shopware.captcha"/>
 </service>
 ```
 
