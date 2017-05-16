@@ -194,7 +194,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['status'])
             ->from('Shopware\Models\Order\Status', 'status')
-            ->andWhere("status.group = 'state'");
+            ->andWhere("status.group = 'state'")
+            ->orderBy( "status.position", "ASC" );
 
         if ($filter !== null) {
             $builder->addFilter($filter);
