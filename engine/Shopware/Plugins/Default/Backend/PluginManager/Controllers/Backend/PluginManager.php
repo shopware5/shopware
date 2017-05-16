@@ -44,6 +44,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
+use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Models\Menu\Menu;
 use Shopware\Models\Plugin\Plugin;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
@@ -317,29 +318,31 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $pluginsInSafeMode = $this->getPluginsInSafeMode($plugins);
 
+        $caches = InstallContext::CACHE_LIST_ALL;
+
+        /** @var InstallerService $installerService */
+        $installerService = $this->get('shopware_plugininstaller.plugin_installer');
+
         if ($pluginsInSafeMode) {
             foreach ($pluginsInSafeMode as $plugin) {
-                $plugin->setActive(true);
                 $plugin->setInSafeMode(false);
+                $installerService->activatePlugin($plugin);
             }
             $em->flush();
-            $inSafeMode = false;
-        } else {
-            foreach ($plugins as $plugin) {
-                if ($plugin->getAuthor() === 'shopware AG' || $plugin->getActive() === false) {
-                    continue;
-                }
-                $plugin->setActive(false);
-                $plugin->setInSafeMode(true);
-            }
-            $em->flush();
-            $inSafeMode = true;
-        }
+            $this->View()->assign(['success' => true, 'inSafeMode' => false, 'caches' => $caches]);
 
-        $this->View()->assign([
-            'success' => true,
-            'inSafeMode' => $inSafeMode,
-        ]);
+            return;
+        }
+        foreach ($plugins as $plugin) {
+            if ($plugin->getSource() === 'Default' || strpos('Swag', $plugin->getName()) === 0 || $plugin->getActive() === false) {
+                continue;
+            }
+            $plugin->setInSafeMode(true);
+            $installerService->deactivatePlugin($plugin);
+        }
+        $em->flush();
+
+        $this->View()->assign(['success' => true, 'inSafeMode' => true, 'caches' => $caches]);
     }
 
     public function isInSafeModeAction()

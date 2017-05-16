@@ -356,7 +356,7 @@ class StructHydrator
         $plugin->setFormId($data['form_id']);
         $plugin->setLocalIcon($data['iconPath']);
         $plugin->setLocalDescription($data['description']);
-        $plugin->setInSafeMode($data['in_safe_mode']);
+        $plugin->setInSafeMode((bool) $data['in_safe_mode']);
 
         if (isset($data['installation_date']) && !empty($data['installation_date'])) {
             $date = new \DateTime($data['installation_date']);

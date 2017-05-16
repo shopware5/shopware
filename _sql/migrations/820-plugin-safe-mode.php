@@ -27,7 +27,7 @@ class Migrations_Migration820 extends Shopware\Components\Migrations\AbstractMig
     public function up($modus)
     {
         $sql = <<<'SQL'
-ALTER TABLE s_core_plugins ADD `in_safe_mode` BOOLEAN DEFAULT FALSE
+ALTER TABLE s_core_plugins ADD `in_safe_mode` Tinyint(1) DEFAULT FALSE
 SQL;
         $this->addSql($sql);
     }
