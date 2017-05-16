@@ -361,7 +361,7 @@ class ModelManager extends EntityManager
 
         /** @var CrudService $crudService */
         $crudService = Shopware()->Container()->get('shopware_attribute.crud_service');
-        $crudService->delete($table, $prefixedColumn, true);
+        $crudService->delete($table, $prefixedColumn, false);
     }
 
     /**
