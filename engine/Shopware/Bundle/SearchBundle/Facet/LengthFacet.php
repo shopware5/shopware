@@ -36,7 +36,7 @@ class LengthFacet implements FacetInterface
     /**
      * @var null|string
      */
-    protected $format;
+    protected $suffix;
 
     /**
      * @var int
@@ -45,13 +45,13 @@ class LengthFacet implements FacetInterface
 
     /**
      * @param string|null $label
-     * @param string|null $format
+     * @param string|null $suffix
      * @param int         $digits
      */
-    public function __construct($label = null, $format = null, $digits = 3)
+    public function __construct($label = null, $suffix = null, $digits = 3)
     {
         $this->label = $label;
-        $this->format = $format;
+        $this->suffix = $suffix;
         $this->digits = $digits;
     }
 
@@ -66,9 +66,9 @@ class LengthFacet implements FacetInterface
     /**
      * @return null|string
      */
-    public function getFormat()
+    public function getSuffix()
     {
-        return $this->format;
+        return $this->suffix;
     }
 
     /**

@@ -38,6 +38,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
 
     minField: 'minPrice',
     maxField: 'maxPrice',
+    decimalPrecision: 2,
 
     initComponent: function() {
         var me = this;
@@ -60,6 +61,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
             fieldLabel: '{s name=from}from{/s}',
             minValue: 0,
             labelWidth: 30,
+            decimalPrecision: me.decimalPrecision,
             flex: 1,
             listeners: {
                 change: function() {
@@ -78,6 +80,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
             fieldLabel: '{s name=to}to{/s}',
             minValue: 0,
             padding: '0 0 0 10',
+            decimalPrecision: me.decimalPrecision,
             flex: 1,
             listeners: {
                 change: function() {

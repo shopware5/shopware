@@ -66,7 +66,7 @@ class ProductAttributeFacet implements FacetInterface
     /**
      * @var string
      */
-    protected $format;
+    protected $suffix;
 
     /**
      * @var int
@@ -79,7 +79,7 @@ class ProductAttributeFacet implements FacetInterface
      * @param $formFieldName
      * @param string      $label
      * @param string|null $template
-     * @param string      $format
+     * @param string      $suffix
      * @param int         $digits
      */
     public function __construct(
@@ -88,7 +88,7 @@ class ProductAttributeFacet implements FacetInterface
         $formFieldName,
         $label,
         $template = null,
-        $format = '0,00',
+        $suffix = '',
         $digits = 2
     ) {
         $this->field = $field;
@@ -96,7 +96,7 @@ class ProductAttributeFacet implements FacetInterface
         $this->formFieldName = $formFieldName;
         $this->label = $label;
         $this->template = $template;
-        $this->format = $format;
+        $this->suffix = $suffix;
         $this->digits = $digits;
     }
 
@@ -159,8 +159,8 @@ class ProductAttributeFacet implements FacetInterface
     /**
      * @return string
      */
-    public function getFormat()
+    public function getSuffix()
     {
-        return $this->format;
+        return $this->suffix;
     }
 }

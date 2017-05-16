@@ -146,7 +146,7 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
             $minField,
             $maxField,
             [],
-            $facet->getFormat(),
+            $facet->getSuffix(),
             3,
             'frontend/listing/filter/facet-range.tpl'
         );

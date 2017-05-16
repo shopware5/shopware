@@ -340,7 +340,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
             'min' . $criteriaPart->getFormFieldName(),
             'max' . $criteriaPart->getFormFieldName(),
             [],
-            $criteriaPart->getFormat(),
+            $criteriaPart->getSuffix(),
             $criteriaPart->getDigits()
         );
     }

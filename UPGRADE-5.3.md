@@ -120,7 +120,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new ExtJs views for emotion presets under `themes\backend\emotion\view\preset`
 * Added new service tag for registering emotion preset component handlers `shopware.emotion.preset_component_handler`
 * Added actions to import and export shopping worlds in `Shopware_Controllers_Backend_Emotion`
-* Added `$suffix` and `$digits` parameter to `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct` 
 * Added condition class `Shopware\Bundle\SearchBundle\Condition\WidthCondition`
 * Added condition class `Shopware\Bundle\SearchBundle\Condition\HeightCondition`
 * Added condition class `Shopware\Bundle\SearchBundle\Condition\LengthCondition`
@@ -180,6 +179,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed database column `s_articles_details.instock` to allow `NULL` values and default to `0`
 * Backend customer listing is now loaded in `Shopware_Controllers_Backend_CustomerQuickView`
 * Refactored backend customer module. Please take a look into the different template files to see what has changed. 
+* Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
 
 ### Removals
 

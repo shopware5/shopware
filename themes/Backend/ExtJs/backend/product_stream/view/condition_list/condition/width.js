@@ -61,6 +61,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Width', {
         return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Range', {
             minField: 'minWidth',
             maxField: 'maxWidth',
+            decimalPrecision: 3,
             name: 'condition.'+ this.getName(),
             flex: 1
         });

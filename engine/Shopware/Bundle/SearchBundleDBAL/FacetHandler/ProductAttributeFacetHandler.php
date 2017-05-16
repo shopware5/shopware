@@ -258,7 +258,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             'min' . $facet->getFormFieldName(),
             'max' . $facet->getFormFieldName(),
             [],
-            $facet->getFormat(),
+            $facet->getSuffix(),
             $facet->getDigits()
         );
     }

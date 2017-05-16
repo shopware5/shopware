@@ -26,6 +26,7 @@ namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Request_Request as Request;
 use Ramsey\Uuid\Uuid;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -55,8 +56,34 @@ class CookieSubscriber implements SubscriberInterface
     {
         return [
             'Shopware_Modules_Admin_Login_Successful' => 'afterLogin',
+            'Shopware_Modules_Admin_Logout_Successful' => 'afterLogout',
             'Enlight_Controller_Front_RouteStartup' => 'checkCookie',
         ];
+    }
+
+    public function afterLogout()
+    {
+        if (!$this->container->initialized('front')) {
+            return;
+        }
+
+        /** @var \Enlight_Controller_Front $controller */
+        $controller = $this->container->get('front');
+
+        $request = $controller->Request();
+
+        if ($this->container->initialized('session')) {
+            $session = $this->container->get('session');
+            $session->offsetSet('auto-user', null);
+        }
+
+        $controller->Response()->setCookie(
+            'slt',
+            null,
+            strtotime('-1 Year'),
+            $request->getBasePath() . '/',
+            $this->getHost($request)
+        );
     }
 
     public function checkCookie(\Enlight_Controller_EventArgs $args)
@@ -126,9 +153,17 @@ class CookieSubscriber implements SubscriberInterface
             $token,
             $expire,
             $request->getBasePath() . '/',
-            ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()
+            $this->getHost($request)
         );
 
         $this->connection->update('s_user', ['login_token' => $token], ['id' => $id]);
+    }
+
+    /**
+     * @param $request
+     */
+    private function getHost(Request $request)
+    {
+        return ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost();
     }
 }

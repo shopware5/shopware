@@ -633,6 +633,8 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
+
+        $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
     }
 
     /**
@@ -1092,7 +1094,7 @@ class sAdmin
         // The -Secure variables don't fall back to the normal values, so we need to do some checks
         if ($shop->getSecure()) {
             if ($shop->getSecureHost() && $shop->getSecurePath()) {
-                $shopUrl = 'https://' . $shop->getSecureHost()  . $shop->getSecurePath();
+                $shopUrl = 'https://' . $shop->getSecureHost() . $shop->getSecurePath();
             } else {
                 $shopUrl = 'https://' . $shop->getHost() . $shop->getPath();
             }
@@ -1101,7 +1103,7 @@ class sAdmin
         $context = [
             'sMAIL' => $email,
             'sShop' => $this->config->get('ShopName'),
-            'sShopURL'  => $shopUrl,
+            'sShopURL' => $shopUrl,
             'sConfig' => $this->config,
         ];
 
@@ -1543,7 +1545,7 @@ class sAdmin
      * @param array  $user
      * @param array  $basket
      * @param string $value
-     * @param integer $paymentID
+     * @param int    $paymentID
      *
      * @return bool
      */
@@ -2236,9 +2238,9 @@ class sAdmin
                     $isValid = $captchaValidator->validateByName('nocaptcha', $this->front->Request());
                 }
 
-                if (!$isValid){
+                if (!$isValid) {
                     return [
-                        'code' => 7
+                        'code' => 7,
                     ];
                 }
             }

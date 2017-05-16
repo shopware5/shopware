@@ -30,11 +30,8 @@
                                 {$rangeMin = $facet->getMin()}
                                 {$rangeMax = $facet->getMax()}
                                 {$roundPretty = 'false'}
-                                {$format = ''}
-                                {$digits = 2}
-                                {if $facet->getSuffix()}
-                                    {$format = "{'0.00'|number:['precision' => 2]} {$facet->getSuffix()}"}
-                                {/if}
+                                {$format = "{'0.00'|number:['precision' => 2]}"}
+                                {$suffix = $facet->getSuffix()}
                                 {if $facet->getDigits() >= 0}
                                     {$digits = $facet->getDigits()}
                                 {/if}
@@ -46,6 +43,7 @@
                                  data-range-slider="true"
                                  data-roundPretty="{$roundPretty}"
                                  data-labelFormat="{$format}"
+                                 data-suffix="{$suffix}"
                                  data-stepCount="{$stepCount}"
                                  data-stepCurve="{$stepCurve}"
                                  data-startMin="{$startMin}"

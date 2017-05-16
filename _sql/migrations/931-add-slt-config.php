@@ -35,7 +35,7 @@ class Migrations_Migration931 extends AbstractMigration
 
         $sql = <<<'SQL'
 INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options)
-VALUES (@parent, 'useSltCookie', 'b:1;";', 'Shopware Login Cookie erstellen', 'Es wird ein Cookie gespeichert, an dem der Benutzer wieder identifiziert werden kann. Dieser wird nur für das Setzen der aktuellen Kundengruppe sowie aktiven Customer Streams verwendet', 'boolean', 1, 0, 0, NULL);
+VALUES (@parent, 'useSltCookie', 'b:1;', 'Shopware Login Cookie erstellen', 'Es wird ein Cookie gespeichert, an dem der Benutzer wieder identifiziert werden kann. Dieser wird nur für das Setzen der aktuellen Kundengruppe sowie aktiven Customer Streams verwendet', 'boolean', 1, 0, 0, NULL);
 SQL;
         $this->addSql($sql);
 

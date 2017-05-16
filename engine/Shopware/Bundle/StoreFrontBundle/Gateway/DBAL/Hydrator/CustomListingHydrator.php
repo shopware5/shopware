@@ -72,6 +72,7 @@ class CustomListingHydrator extends Hydrator
 
     /**
      * @param array $data
+     * @param array $streams
      *
      * @return CustomFacet
      */

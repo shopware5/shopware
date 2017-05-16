@@ -60,11 +60,11 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
                 fieldLabel: '{s name="template_file"}{/s}'
             }, {
                 xtype: 'textfield',
-                name: 'format',
+                name: 'suffix',
                 labelWidth: 150,
                 translatable: true,
-                fieldLabel: '{s name="format"}{/s}',
-                helpText: '{s name="format_help_attribute"}{/s}'
+                fieldLabel: '{s name="suffix"}{/s}',
+                helpText: '{s name="suffix_help_attribute"}{/s}'
             }, {
                 xtype: 'numberfield',
                 name: 'digits',

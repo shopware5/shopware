@@ -184,7 +184,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
             $minField,
             $maxField,
             [],
-            $facet->getFormat(),
+            $facet->getSuffix(),
             $facet->getDigits(),
             'frontend/listing/filter/facet-range.tpl'
         );

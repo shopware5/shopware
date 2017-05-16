@@ -61,6 +61,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Height', {
         return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Range', {
             minField: 'minHeight',
             maxField: 'maxHeight',
+            decimalPrecision: 3,
             name: 'condition.'+ this.getName(),
             flex: 1
         });
