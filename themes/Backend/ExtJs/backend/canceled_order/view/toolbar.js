@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         },
         filter: {
             button: '{s name=filter/button}Filter{/s}',
+            export: '{s name=filter/export}Export{/s}',
             tooltip: '{s name=filter/tooltip}Filter by selected dates{/s}'
         }
     },
@@ -62,7 +63,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         me.items = me.getItems();
 
         // register search event
-        me.addEvents('search', 'filter', 'dateEnter');
+        me.addEvents('search', 'filter', 'dateEnter', 'exportOrders');
 
         me.callParent(arguments);
     },
@@ -110,6 +111,16 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
                 }
             }
         });
+        
+        me.exportOrdersButton =Ext.create('Ext.button.Button', {
+            text: me.snippets.filter.export,
+            iconCls : 'sprite-drive-download',
+            handler: function(){
+
+                me.fireEvent('exportOrders');
+            }
+        });
+        
         return [
             me.fromDate,
             me.toDate,
@@ -122,6 +133,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
                     me.fireEvent('filter', me.fromDate.getValue(), me.toDate.getValue());
                 }
             },
+            me.exportOrdersButton,
             '->',
             me.searchField
         ];

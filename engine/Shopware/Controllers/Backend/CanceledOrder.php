@@ -619,13 +619,88 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $total = $paginator->count();
         $orders = $paginator->getIterator()->getArrayCopy();
 
-        $this->View()->assign([
-            'success' => true,
-            'data' => $orders,
-            'total' => $total,
-        ]);
+        if (strtolower($this->format) == "csv") {
+            foreach ($orders as &$value) {
+
+                /* Filter irrelevant values for export*/
+                unset($value["id"]);
+                unset($value["status"]);
+                unset($value["cleared"]);
+                unset($value["clearedDate"]);
+                unset($value["paymentId"]);
+                unset($value["dispatchId"]);
+                unset($value["number"]);
+                unset($value["temporaryId"]);
+                unset($value["transactionId"]);
+                unset($value["trackingCode"]);
+                unset($value["comment"]);
+                unset($value["customerComment"]);
+                unset($value["internalComment"]);
+                unset($value["remoteAddress"]);
+                unset($value["details"]);
+
+                /* Parse data*/
+                if ($value["orderTime"] instanceof \DateTime) {
+                    $value["orderTime"] = $value["orderTime"]->format("d.m.Y");
+                }
+
+                $value["customerGroup"] = $value["customer"]["groupKey"];
+                $value["customer"] = $value["customer"]["email"];
+
+                $value["payment"] = $value["payment"]["description"];
+            }
+
+            $this->exportCSV($orders);
+        } else {
+            $this->View()->assign([
+                'success' => true,
+                'data' => $orders,
+                'total' => $total,
+            ]);
+        }
     }
 
+    /**
+    * Export Data in CSV format
+    */
+    protected function exportCSV($data)
+    {
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
+
+        echo "\xEF\xBB\xBF";
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, array_keys($data[0]), ";");
+
+        foreach ($data as $value) {
+            fputcsv($fp, $value, ";");
+        }
+
+        fclose($fp);
+    }
+
+    private function getCsvFileName()
+    {
+        $name = $this->Request()->getActionName();
+        if (strpos($name, 'get') == 0) {
+            $name = substr($name, 3);
+        }
+
+        return $this->underscoreToCamelCase($name) . '.csv';
+    }
+
+    private function underscoreToCamelCase($str)
+    {
+        $str[0] = strtolower($str[0]);
+        $func = function ($c) {
+            return '_' . strtolower($c[1]);
+        };
+
+        return preg_replace_callback('/([A-Z])/', $func, $str);
+    }
+    
     /**
      * Delete a order
      * todo@dn: fix naming e.g. deleteOrderAction
