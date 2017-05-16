@@ -677,8 +677,6 @@ class sBasket
             return ['sErrorFlag' => true, 'sErrorMessages' => $sErrorMessages];
         }
 
-        $restrictDiscount = !empty($voucherDetails['strict']);
-
         // If voucher is limited to a specific subshop, filter that and return on failure
         $sErrorMessages = $this->filterSubShopVoucher($voucherDetails);
         if (!empty($sErrorMessages)) {
@@ -720,8 +718,9 @@ class sBasket
         }
 
         // Calculate the amount in the basket
+        $restrictDiscount = empty($voucherDetails['strict']);
         $allowedSupplierId = $voucherDetails['bindtosupplier'];
-        if (!empty($restrictDiscount) && (!empty($restrictedArticles) || !empty($allowedSupplierId))) {
+        if ($restrictDiscount && (!empty($restrictedArticles) || !empty($allowedSupplierId))) {
             $amount = $this->sGetAmountRestrictedArticles($restrictedArticles, $allowedSupplierId);
         } else {
             $amount = $this->sGetAmountArticles();
@@ -1971,7 +1970,7 @@ class sBasket
         $sErrorMessages = [];
 
         if (!empty($voucherDetails['restrictarticles']) && strlen($voucherDetails['restrictarticles']) > 5) {
-            $restrictedArticles = explode(';', $voucherDetails['restrictarticles']);
+            $restrictedArticles = array_filter(explode(';', $voucherDetails['restrictarticles']));
             if (count($restrictedArticles) == 0) {
                 $restrictedArticles[] = $voucherDetails['restrictarticles'];
             }
