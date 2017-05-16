@@ -40,11 +40,11 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.HeightFacet', 
             fieldLabel: '{s name="label"}{/s}'
         }, {
             xtype: 'textfield',
-            name: 'format',
+            name: 'suffix',
             labelWidth: 150,
             translatable: true,
-            fieldLabel: '{s name="format"}{/s}',
-            helpText: '{s name="format_help"}{/s}'
+            fieldLabel: '{s name="suffix"}{/s}',
+            helpText: '{s name="suffix_help"}{/s}'
         }, {
             xtype: 'numberfield',
             name: 'digits',

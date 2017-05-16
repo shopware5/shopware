@@ -178,8 +178,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.WeightFacet'),
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.LengthFacet'),
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.HeightFacet'),
-            Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.WidthFacet'),
-
+            Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.WidthFacet')
         ];
     }
 });

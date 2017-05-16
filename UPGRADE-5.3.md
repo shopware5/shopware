@@ -120,6 +120,17 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new ExtJs views for emotion presets under `themes\backend\emotion\view\preset`
 * Added new service tag for registering emotion preset component handlers `shopware.emotion.preset_component_handler`
 * Added actions to import and export shopping worlds in `Shopware_Controllers_Backend_Emotion`
+* Added `$suffix` and `$digits` parameter to `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct` 
+* Added condition class `Shopware\Bundle\SearchBundle\Condition\WidthCondition`
+* Added condition class `Shopware\Bundle\SearchBundle\Condition\HeightCondition`
+* Added condition class `Shopware\Bundle\SearchBundle\Condition\LengthCondition`
+* Added condition class `Shopware\Bundle\SearchBundle\Condition\WeightCondition`
+* Added facet class `Shopware\Bundle\SearchBundle\Facet\CombinedConditionFacet`
+* Added facet class `Shopware\Bundle\SearchBundle\Facet\WidthFacet` 
+* Added facet class `Shopware\Bundle\SearchBundle\Facet\HeightFacet`
+* Added facet class `Shopware\Bundle\SearchBundle\Facet\LengthFacet`
+* Added facet class `Shopware\Bundle\SearchBundle\Facet\WeightFacet`
+* Added `Shopware\Bundle\SearchBundleDBAL\VariantHelper` which joins all variants for dbal search
 
 ### Changes
 
@@ -168,7 +179,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed text color and height of `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 * Changed database column `s_articles_details.instock` to allow `NULL` values and default to `0`
 * Backend customer listing is now loaded in `Shopware_Controllers_Backend_CustomerQuickView`
-* Refactored backend customer module. Please take a look into the different template files to see what has changed.
+* Refactored backend customer module. Please take a look into the different template files to see what has changed. 
 
 ### Removals
 

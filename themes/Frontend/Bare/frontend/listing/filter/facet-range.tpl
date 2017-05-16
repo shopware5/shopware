@@ -32,8 +32,8 @@
                                 {$roundPretty = 'false'}
                                 {$format = ''}
                                 {$digits = 2}
-                                {if $facet->getFormat()}
-                                    {$format = "{'0.00'|number:['precision' => 2]} {$facet->getFormat()}"}
+                                {if $facet->getSuffix()}
+                                    {$format = "{'0.00'|number:['precision' => 2]} {$facet->getSuffix()}"}
                                 {/if}
                                 {if $facet->getDigits() >= 0}
                                     {$digits = $facet->getDigits()}

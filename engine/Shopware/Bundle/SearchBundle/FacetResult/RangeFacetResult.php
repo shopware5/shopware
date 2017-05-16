@@ -83,7 +83,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     /**
      * @var string|null
      */
-    protected $format;
+    protected $suffix;
 
     /**
      * @var null|string
@@ -106,7 +106,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
      * @param string      $minFieldName
      * @param string      $maxFieldName
      * @param Attribute[] $attributes
-     * @param null|string $format
+     * @param null|string $suffix
      * @param int         $digits
      * @param string|null $template
      */
@@ -121,7 +121,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $minFieldName,
         $maxFieldName,
         $attributes = [],
-        $format = null,
+        $suffix = null,
         $digits = 2,
         $template = 'frontend/listing/filter/facet-range.tpl'
     ) {
@@ -136,7 +136,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $this->maxFieldName = $maxFieldName;
         $this->attributes = $attributes;
         $this->template = $template;
-        $this->format = $format;
+        $this->suffix = $suffix;
         $this->digits = $digits;
     }
 
@@ -271,9 +271,9 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     /**
      * @return null|string
      */
-    public function getFormat()
+    public function getSuffix()
     {
-        return $this->format;
+        return $this->suffix;
     }
 
     /**
