@@ -62,7 +62,8 @@
         "bcremer/line-reader": "^0.2.0",
         "ramsey/uuid": "3.5.2",
         "setasign/fpdf": "1.8.1",
-        "setasign/fpdi": "1.6.1"
+        "setasign/fpdi": "1.6.1",
+        "roave/security-advisories": "dev-master"
     },
     "suggest": {
         "ext-apcu": "*",
