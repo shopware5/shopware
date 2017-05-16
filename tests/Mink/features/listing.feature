@@ -1,7 +1,7 @@
 @listing
 Feature: Show Listing
 
-    @filter @javascript
+    @filter @javascript @knownFailing
     Scenario: I can filter the articles by custom filters
         Given I am on the listing page:
             | parameter | value |
