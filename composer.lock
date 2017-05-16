@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "649b43272a2097f0aaff442245b3919f",
+    "content-hash": "4a0a2c081e0d1afbe4b760d2ee6c19ab",
     "packages": [
         {
             "name": "bcremer/line-reader",
@@ -1185,25 +1185,27 @@
         },
         {
             "name": "ongr/elasticsearch-dsl",
-            "version": "v2.0.2",
+            "version": "v2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ongr-io/ElasticsearchDSL.git",
-                "reference": "dc569d219a8fed08192cf8dacdb69c48c54f7b80"
+                "reference": "a5d77e615efd60acaf55df4e71d69399b712f343"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/dc569d219a8fed08192cf8dacdb69c48c54f7b80",
-                "reference": "dc569d219a8fed08192cf8dacdb69c48c54f7b80",
+                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/a5d77e615efd60acaf55df4e71d69399b712f343",
+                "reference": "a5d77e615efd60acaf55df4e71d69399b712f343",
                 "shasum": ""
             },
             "require": {
+                "paragonie/random_compat": "^2.0",
                 "php": ">=5.4",
                 "symfony/serializer": "~2.7|~3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.4",
-                "satooshi/php-coveralls": "~0.7",
+                "elasticsearch/elasticsearch": "~2.0",
+                "phpunit/phpunit": "^4.4|^5.6",
+                "satooshi/php-coveralls": "~1.0",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
@@ -1229,7 +1231,7 @@
             ],
             "description": "Elasticsearch DSL library",
             "homepage": "http://ongr.io",
-            "time": "2016-07-11T08:15:59+00:00"
+            "time": "2017-01-27T15:04:31+00:00"
         },
         {
             "name": "oyejorge/less.php",
@@ -1295,16 +1297,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v1.4.1",
+            "version": "v2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774"
+                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c7e26a21ba357863de030f0b9e701c7d04593774",
-                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
                 "shasum": ""
             },
             "require": {
@@ -1339,7 +1341,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-03-18T20:34:03+00:00"
+            "time": "2017-03-13T16:27:32+00:00"
         },
         {
             "name": "psr/log",
@@ -3064,21 +3066,21 @@
     "packages-dev": [
         {
             "name": "behat/behat",
-            "version": "v3.3.0",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "15a3a1857457eaa29cdf41564a5e421effb09526"
+                "reference": "44a58c1480d6144b2dc2c2bf02b9cef73c83840d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/15a3a1857457eaa29cdf41564a5e421effb09526",
-                "reference": "15a3a1857457eaa29cdf41564a5e421effb09526",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/44a58c1480d6144b2dc2c2bf02b9cef73c83840d",
+                "reference": "44a58c1480d6144b2dc2c2bf02b9cef73c83840d",
                 "shasum": ""
             },
             "require": {
                 "behat/gherkin": "^4.4.4",
-                "behat/transliterator": "~1.0",
+                "behat/transliterator": "^1.2",
                 "container-interop/container-interop": "^1.1",
                 "ext-mbstring": "*",
                 "php": ">=5.3.3",
@@ -3142,7 +3144,7 @@
                 "symfony",
                 "testing"
             ],
-            "time": "2016-12-25T13:43:52+00:00"
+            "time": "2017-05-15T16:49:16+00:00"
         },
         {
             "name": "behat/gherkin",
