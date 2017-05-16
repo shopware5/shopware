@@ -33,7 +33,7 @@
                                 {$format = ''}
                                 {$digits = 2}
                                 {if $facet->getFormat()}
-                                    {$format = $facet->getFormat()}
+                                    {$format = "{'0.00'|number:['precision' => 2]} {$facet->getFormat()}"}
                                 {/if}
                                 {if $facet->getDigits() >= 0}
                                     {$digits = $facet->getDigits()}

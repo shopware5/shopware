@@ -495,9 +495,7 @@
         roundValue: function(value) {
             var me = this;
 
-            if (value < 5) {
-                value = me.roundTo(value, 0.01);
-            } else if (value < 10) {
+            if (value < 10) {
                 value = me.roundTo(value, 0.10);
             } else if (value < 100) {
                 value = me.roundTo(value, 1);
