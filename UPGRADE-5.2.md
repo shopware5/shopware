@@ -33,6 +33,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Fixed custom datefield format for articles
 * Fixed styling of image slider on tablet landscape view
+* Individual voucher codes are now searchable in voucher overview
 
 ## 5.2.23
 
