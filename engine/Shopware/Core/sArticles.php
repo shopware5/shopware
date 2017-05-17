@@ -134,11 +134,6 @@ class sArticles
     private $legacyStructConverter;
 
     /**
-     * @var \Shopware\Components\Compatibility\LegacyEventManager
-     */
-    private $legacyEventManager;
-
-    /**
      * @var QueryAliasMapper
      */
     private $queryAliasMapper;
@@ -204,7 +199,6 @@ class sArticles
         $this->queryAliasMapper = $container->get('query_alias_mapper');
         $this->frontController = $container->get('front');
         $this->legacyStructConverter = $container->get('legacy_struct_converter');
-        $this->legacyEventManager = $container->get('legacy_event_manager');
         $this->session = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
         $this->productNumberService = $container->get('shopware_storefront.product_number_service');
@@ -454,8 +448,6 @@ class sArticles
         }
 
         $result = $this->getListing($categoryId, $context, $request, $criteria);
-
-        $result = $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId, $this);
 
         return $result;
     }
@@ -2473,8 +2465,6 @@ class sArticles
         $data['sDescriptionKeywords'] = $this->getDescriptionKeywords(
             $data['description_long']
         );
-
-        $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
 
         return $data;
     }

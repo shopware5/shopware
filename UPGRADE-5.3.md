@@ -317,6 +317,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed `modernizr` option `CSS Transforms`
 * Removed `modernizr` option `CSS Transforms 3D`
 * Removed `modernizr` option `CSS Transitions`
+* Removed following legacy events:
+    * `Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd`
+    * `Shopware_Modules_Articles_sGetArticlesByCategory_FilterResult`
+    * `Shopware_Modules_Articles_GetArticleById_FilterResult`
 
 ### Deprecations
 

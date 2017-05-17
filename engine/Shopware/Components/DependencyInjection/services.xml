@@ -352,12 +352,6 @@
             <argument type="service" id="service_container" />
         </service>
 
-        <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">
-            <argument type="service" id="events" />
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
-        </service>
-
         <service id="query_alias_mapper" class="Shopware\Components\QueryAliasMapper">
             <factory class="Shopware\Components\QueryAliasMapper" method="createFromConfig" />
             <argument type="service" id="config" />
