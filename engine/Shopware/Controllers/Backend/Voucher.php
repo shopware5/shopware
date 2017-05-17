@@ -128,6 +128,17 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
                 LIMIT {$offset}, {$limit}
             ";
 
+        $sql = $this->get('events')->filter('Shopware_Controllers_Backend_Voucher_getList_SQL', $sql, [
+            'filter' => $filter,
+            'params' => $this->Request()->getParams(),
+        ]);
+
+        $sqlBindings = $this->get('events')->filter('Shopware_Controllers_Backend_Voucher_getList_Params', $sqlBindings, [
+            'sql'    => $sql,
+            'filter' => $filter,
+            'params' => $this->Request()->getParams(),
+        ]);
+
         $vouchers = Shopware()->Db()->fetchAll($sql, $sqlBindings);
         $sql = 'SELECT FOUND_ROWS()';
         $totalCount = Shopware()->Db()->fetchOne($sql, []);

@@ -2,6 +2,10 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.25
+
+* Added new event `Shopware_Controllers_Backend_Voucher_getList_SQL` and `Shopware_Controllers_Backend_Voucher_getList_Params`
+
 ## 5.2.23
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
 * Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
