@@ -26,6 +26,7 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Theme\Compressor\CompressorInterface;
 use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop;
 
@@ -97,7 +98,7 @@ class Compiler
      * @param PathResolver                $pathResolver
      * @param Inheritance                 $inheritance
      * @param Service                     $service
-     * @param Js                          $jsCompressor
+     * @param CompressorInterface         $jsCompressor
      * @param \Enlight_Event_EventManager $eventManager
      * @param TimestampPersistor          $timestampPersistor
      */
@@ -107,7 +108,7 @@ class Compiler
         PathResolver $pathResolver,
         Inheritance $inheritance,
         Service $service,
-        Js $jsCompressor,
+        CompressorInterface $jsCompressor,
         \Enlight_Event_EventManager $eventManager,
         TimestampPersistor $timestampPersistor
     ) {
