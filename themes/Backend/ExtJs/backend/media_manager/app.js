@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Requires models for sub-application
      * @array
      */
-    models:['Album', 'Media'],
+    models:['Album', 'Media','Setting'],
 
     /**
      * Required views for this sub-application
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Required stores for sub-application
      * @array
      */
-    stores:['Album', 'Media' ],
+    stores:['Album', 'Media', 'Setting'],
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

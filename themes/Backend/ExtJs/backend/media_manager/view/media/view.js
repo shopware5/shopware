@@ -47,14 +47,18 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createInfoPanel: true,
     createDeleteButton: true,
     createMediaQuantitySelection: true,
+    /**
+     * Button section
+     */
     deleteBtn: null,
+    displayTypeBtn: null,
     selectedLayout: 'grid',
-
     snippets: {
         noMediaFound: '{s name=noMediaFound}No Media found{/s}',
         uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
         noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
         moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
+        previewSize: '{s name=previewSizeFieldLabel}Preview size{/s}',
         mediaInfo: {
             name: '{s name=mediaInfo/name}Name:{/s}',
             uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
@@ -528,9 +532,13 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
         /* {/if} */
 
-        toolbar.add({
+        /**
+         * Initialize the display type button
+         */
+
+        me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
+
             showText: true,
-            xtype: 'cycle',
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
             menu: {
@@ -546,6 +554,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 }]
             }
         });
+
+        toolbar.add(me.displayTypeBtn);
 
         toolbar.add(
             '->',
@@ -569,6 +579,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             labelWidth: 110,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
+            action: 'perPageComboBox',
             width: 210,
             listeners: {
                 scope: me,
@@ -590,6 +601,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             displayField: 'name',
             valueField: 'value'
         });
+
         pageSize.setValue(me.mediaStore.pageSize + '');
 
         var toolbar = Ext.create('Ext.toolbar.Paging', {
@@ -600,6 +612,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             toolbar.add('->', pageSize, { xtype: 'tbspacer', width: 6 });
         }
 
+        me.pageSize = pageSize;
+
         // Create the data for the preview image size
         var imageSizeData = [], i = 1;
         for( ; i < 9; i++) {
@@ -609,7 +623,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         // Preview image size selection, especially for the list view
         me.imageSize = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: 'Preview-Größe',
+            fieldLabel: me.snippets.previewSize,
             queryMode: 'local',
             labelWidth: 90,
             width: 190,
@@ -691,6 +705,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return void
      */
     onChangeMediaQuantity: function(combo, records) {
+
         var record = records[0],
             me = this;
 
