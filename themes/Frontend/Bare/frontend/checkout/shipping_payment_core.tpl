@@ -7,10 +7,12 @@
     <form id="shippingPaymentForm" name="shippingPaymentForm" method="post" action="{url controller='checkout' action='saveShippingPayment' sTarget='checkout' sTargetAction='index'}" class="payment">
 
         {* Action top *}
-        {block name='frontend_checkout_shipping_payment_core_buttons'}
-            <div class="confirm--actions table--actions block">
-                <button type="submit" class="btn is--primary is--icon-right is--large right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
-            </div>
+        {block name='frontend_checkout_shipping_payment_core_buttons_top'}
+            {block name='frontend_checkout_shipping_payment_core_buttons'}
+                <div class="confirm--actions table--actions block">
+                    <button type="submit" class="btn is--primary is--icon-right is--large right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
+                </div>
+            {/block}
         {/block}
 
         {* Payment and shipping information *}
@@ -42,10 +44,12 @@
     </div>
 
     {* Action bottom *}
-    {block name='frontend_checkout_shipping_payment_core_buttons'}
-        <div class="confirm--actions table--actions block actions--bottom">
-            <button type="submit" form="shippingPaymentForm" class="btn is--primary is--icon-right is--large right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
-        </div>
+    {block name='frontend_checkout_shipping_payment_core_buttons_bottom'}
+        {block name='frontend_checkout_shipping_payment_core_buttons'}
+            <div class="confirm--actions table--actions block actions--bottom">
+                <button type="submit" form="shippingPaymentForm" class="btn is--primary is--icon-right is--large right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
+            </div>
+        {/block}
     {/block}
 
     {* Benefit and services footer *}
