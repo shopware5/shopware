@@ -17,7 +17,9 @@
 
             me.storage = StorageManager.getStorage('session');
             comment = me.storage.getItem('checkoutComment');
-            me.$el.val(comment);
+            if (comment && comment.length) {
+                me.$el.val(comment);
+            }
 
             me.registerEvents();
         },
@@ -28,13 +30,11 @@
             me._on(me.$el, 'blur', $.proxy(me.storeComment, me));
 
             $.publish('plugin/swStoreCheckoutComment/onRegisterEvents', [ me ]);
-
         },
-        
-        storeComment: function () {
-            var me = this;
 
-            var comment = me.$el.val();
+        storeComment: function () {
+            var me = this,
+                comment = me.$el.val();
 
             me.storage.setItem('checkoutComment', comment);
 

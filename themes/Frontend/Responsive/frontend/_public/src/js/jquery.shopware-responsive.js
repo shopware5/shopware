@@ -121,7 +121,7 @@
         .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
 
         //Checkout Comment Plugin
-        .addPlugin('.user-comment--field', 'swStoreCheckoutComment')
+        .addPlugin('*[data-store-user-comment="true"]', 'swStoreCheckoutComment')
     ;
 
     $(function($) {
