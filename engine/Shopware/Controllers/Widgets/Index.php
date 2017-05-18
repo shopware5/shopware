@@ -48,6 +48,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
         $plugin->updateLog($request, $response);
+
+        /** Setting mime type for jsonp request */
+        $this->Response()->setHeader('Content-type', 'application/javascript', true);
     }
 
     /**
