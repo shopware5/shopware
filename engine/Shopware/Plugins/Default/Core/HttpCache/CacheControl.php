@@ -33,10 +33,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class CacheControl
 {
     const AUTO_NO_CACHE_CONTROLLERS = [
-        'frontend/checkout' => 'checkout',
-        'frontend/note' => 'checkout',
-        'frontend/detail' => 'detail',
-        'frontend/compare' => 'compare',
+        'frontend/checkout' => ['checkout'],
+        'frontend/note' => ['checkout'],
+        'frontend/detail' => ['detail'],
+        'frontend/compare' => ['compare'],
     ];
 
     /**
@@ -148,11 +148,20 @@ class CacheControl
             $tags[] = 'admin-' . $shopId;
         }
 
-        $routeTags = $this->getConfiguredNoCacheTags();
+        $configuredNoCacheTags = $this->getConfiguredNoCacheTags();
 
-        $tag = $this->findRouteValue($routeTags, $request);
-        if ($tag) {
-            $tags[] = $tag . '-' . $shopId;
+        $routeTags = $this->findRouteValue($configuredNoCacheTags, $request);
+
+        if (!$routeTags) {
+            return $tags;
+        }
+
+        foreach ($routeTags as $tag) {
+            if ($tag === 'slt') {
+                $tags[] = 'slt';
+            } else {
+                $tags[] = $tag . '-' . $shopId;
+            }
         }
 
         return $tags;
@@ -177,6 +186,10 @@ class CacheControl
 
         if (!empty($this->session->offsetGet('sBasketQuantity')) || !empty($this->session->offsetGet('sNotesQuantity'))) {
             $tags[] = 'checkout';
+        }
+
+        if ($request->getCookie('slt')) {
+            $tags[] = 'slt';
         }
 
         if (strtolower($request->getModuleName()) === 'frontend' && !empty($this->session->Admin)) {
@@ -204,15 +217,20 @@ class CacheControl
     {
         $action = $this->getActionRoute($request);
 
-        switch (true) {
-            case empty($this->session->offsetGet('sBasketQuantity')) && empty($this->session->offsetGet('sNotesQuantity')):
-                return ['checkout'];
-
-            case $action === 'frontend/compare/delete_all':
-                return ['compare'];
+        $tags = [];
+        if (empty($this->session->offsetGet('sBasketQuantity')) && empty($this->session->offsetGet('sNotesQuantity'))) {
+            $tags[] = 'checkout';
         }
 
-        return [];
+        if ($action === 'frontend/compare/delete_all') {
+            $tags[] = 'compare';
+        }
+
+        if (!$request->getCookie('slt')) {
+            $tags[] = 'slt';
+        }
+
+        return $tags;
     }
 
     /**
@@ -242,7 +260,7 @@ class CacheControl
 
         $autoNoCacheControls = $this->findRouteValue(self::AUTO_NO_CACHE_CONTROLLERS, $request);
 
-        return isset($autoNoCacheControls) && isset($tags[$targetName]) && $autoNoCacheControls == $tags[$targetName];
+        return isset($autoNoCacheControls) && isset($tags[$targetName]) && !empty(array_intersect($autoNoCacheControls, $tags[$targetName]));
     }
 
     public function setContextCacheKey(Request $request, ShopContextInterface $context, Response $response)
@@ -358,9 +376,9 @@ class CacheControl
      *
      * <code>
      * array (
-     *    'frontend/detail'  => 'price',
-     *    'widgets/checkout' => 'checkout',
-     *    'widgets/compare'  => 'compare',
+     *    'frontend/detail'  => ['price'],
+     *    'widgets/checkout' => ['checkout'],
+     *    'widgets/compare'  => ['compare'],
      * )
      * </code>
      *
@@ -378,7 +396,7 @@ class CacheControl
         $controllers = explode("\n", trim($controllers));
         foreach ($controllers as $controller) {
             list($controller, $tag) = explode(' ', $controller);
-            $result[strtolower($controller)] = $tag;
+            $result[strtolower($controller)] = explode(',', $tag);
         }
 
         return $result;

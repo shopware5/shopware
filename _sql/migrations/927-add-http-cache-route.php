@@ -27,22 +27,14 @@ class Migrations_Migration927 extends Shopware\Components\Migrations\AbstractMig
     public function up($modus)
     {
         $routes = <<<EOD
-frontend/listing 3600
-frontend/index 3600
-frontend/detail 3600
-frontend/campaign 14400
-widgets/listing 14400
-frontend/custom 14400
-frontend/sitemap 14400
-frontend/blog 14400
-widgets/index 3600
-widgets/checkout 3600
-widgets/compare 3600
-widgets/emotion 14400
-widgets/recommendation 14400
-widgets/lastArticles 3600
-widgets/campaign 3600
-frontend/listing/layout 0
+frontend/listing price
+frontend/index price
+frontend/detail price
+widgets/lastArticles detail
+widgets/checkout checkout,slt
+widgets/compare compare
+widgets/emotion price
+widgets/listing price
 EOD;
 
         $this->addSql(sprintf(
