@@ -184,10 +184,10 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
 
         me.customerStreamStore.each(function(record) {
             checkBox = Ext.create('Ext.form.field.Checkbox', {
-                boxLabel: record.get('name') + Ext.String.format("{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}", record.get('customer_count')),
+                boxLabel: record.get('name') + Ext.String.format("{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}", record.get('newsletter_count')),
                 name: record.get('name'),
                 record: record,
-                count: record.get('customer_count'),
+                count: record.get('newsletter_count') * 1,
                 value: false
             });
             foundStream = groups.findRecord('streamId', record.get('id'), 0, false, false, true);

@@ -180,6 +180,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
         me.getStore().load();
     },
 
+    renderCurrency: function(value) {
+        return Ext.util.Format.currency(value, '€', 2, true);
+    },
+
     /**
      * Creates the grid columns
      *
@@ -248,9 +252,9 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
             flex: 2,
             renderer: function(v, meta, record) {
                 return '' +
-                    '{s name="invoice_amount_sum"}{/s}: <b>' + record.get('invoice_amount_sum') * 1 + '</b>' +
-                    '<br>{s name="average_amount"}{/s}: <b>' + record.get('invoice_amount_avg') * 1 + '</b>' +
-                    '<br>{s name="average_product_amount"}{/s}: <b>' + record.get('product_avg') * 1 + '</b>';
+                    '{s name="invoice_amount_sum"}{/s}: <b>' + me.renderCurrency(record.get('invoice_amount_sum')) * 1 + '</b>' +
+                    '<br>{s name="average_amount"}{/s}: <b>' + me.renderCurrency(record.get('invoice_amount_avg')) * 1 + '</b>' +
+                    '<br>{s name="average_product_amount"}{/s}: <b>' +  me.renderCurrency(record.get('product_avg')) * 1 + '</b>';
             }
         }, {
             header: '{s name="order_header"}{/s}',

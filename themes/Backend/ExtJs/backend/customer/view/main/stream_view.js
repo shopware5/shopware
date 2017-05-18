@@ -190,7 +190,11 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         var me = this;
 
         me.listStore = Ext.create('Shopware.apps.Customer.store.Preview');
-        me.streamStore = Ext.create('Shopware.apps.Customer.store.CustomerStream');
+        me.streamStore = Ext.create('Shopware.apps.Customer.store.CustomerStream', {
+            sorters: [
+                { property: 'name', direction: 'ASC'}
+            ]
+        });
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.Preview', {
             store: me.listStore,
@@ -287,6 +291,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
             margin: 10,
+            name: 'detail-form',
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'bottom',

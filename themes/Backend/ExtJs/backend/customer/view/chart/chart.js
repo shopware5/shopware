@@ -124,8 +124,8 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
                 layout: 'fit',
                 lineField: field,
                 fieldTitle: title,
-                height: 60,
-                width: 120,
+                height: 45,
+                width: 300,
                 highlight: { size: 7, radius: 7 },
                 renderer: function (storeItem) {
                     var value = storeItem.get(this.lineField);

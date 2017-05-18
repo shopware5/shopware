@@ -254,8 +254,9 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             $id = (int) $row['id'];
             if (!array_key_exists($id, $counts)) {
                 $row['customer_count'] = 0;
+                $row['newsletter_count'] = 0;
             } else {
-                $row['customer_count'] = $counts[$id];
+                $row = array_merge($row, $counts[$id]);
             }
         }
 
