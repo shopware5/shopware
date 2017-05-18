@@ -2990,9 +2990,18 @@ class sAdmin
             || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
             if (empty($dispatch['surcharge_calculation']) && !empty($payment['surcharge'])) {
+                $tax = (float) $basket['max_tax'];
+
+                if (!empty($dispatch['tax_calculation'])) {
+                    $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+                    $taxRule = $context->getTaxRule($dispatch['tax_calculation']);
+                    $tax = $taxRule->getTax();
+                }
+
                 return [
                     'brutto' => $payment['surcharge'],
-                    'netto' => round($payment['surcharge'] * 100 / (100 + $this->config->get('sTAXSHIPPING')), 2),
+                    'netto' => round($payment['surcharge'] * 100 / (100 + $tax), 2),
+                    'tax' => $tax,
                 ];
             }
 

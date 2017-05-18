@@ -277,10 +277,6 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_user['customergroupID']
         );
 
-        if (empty($taxShipping)) {
-            $taxShipping = Shopware()->Config()->sTAXSHIPPING;
-        }
-
         $taxShipping = (float) $taxShipping;
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 

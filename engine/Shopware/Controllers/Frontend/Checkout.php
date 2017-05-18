@@ -992,16 +992,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $result = [];
 
         if (!empty($basket['sShippingcostsTax'])) {
-            $basket['sShippingcostsTax'] = number_format(floatval($basket['sShippingcostsTax']), 2);
+            $basket['sShippingcostsTax'] = number_format((float) $basket['sShippingcostsTax'], 2);
 
             $result[$basket['sShippingcostsTax']] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
             if (empty($result[$basket['sShippingcostsTax']])) {
                 unset($result[$basket['sShippingcostsTax']]);
-            }
-        } elseif ($basket['sShippingcostsWithTax']) {
-            $result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
-            if (empty($result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)])) {
-                unset($result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)]);
             }
         }
 
