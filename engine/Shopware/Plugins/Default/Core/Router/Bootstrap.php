@@ -88,7 +88,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (!$shop->getSecureBasePath()) {
             $shop->setSecureBasePath($shop->getBasePath());
         }
-        if (!$shop->getSecureHost()) {
+        if ($shop->getSecure() && !$shop->getSecureHost()) {
             $shop->setSecureHost($shop->getHost());
         }
 
