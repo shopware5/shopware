@@ -158,6 +158,9 @@ Ext.define('Shopware.apps.Customer', {
         var me = this,
             mainController = me.getController('Main');
 
+        me.currencySign = '{$currency.sign}';
+        me.currencyAtEnd = '{$currency.currencyAtEnd}';
+
         return mainController.mainWindow;
     }
 });

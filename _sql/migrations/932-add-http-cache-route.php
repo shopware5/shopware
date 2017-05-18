@@ -22,24 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration927 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration932 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $routes = <<<EOD
-frontend/listing price
-frontend/index price
-frontend/detail price
-widgets/lastArticles detail
-widgets/checkout checkout,slt
-widgets/compare compare
-widgets/emotion price
-widgets/listing price
-EOD;
+        if ($modus == \Shopware\Components\Migrations\AbstractMigration::MODUS_UPDATE) {
+            return;
+        }
+
+        $tags = implode("\n", [
+            'widgets/lastArticles detail',
+            'widgets/checkout checkout,slt',
+            'widgets/compare compare',
+        ]);
 
         $this->addSql(sprintf(
-            "UPDATE `s_core_config_elements` SET `value` = '%s' WHERE `name` = 'cacheControllers'",
-            serialize($routes)
+            "UPDATE `s_core_config_elements` SET `value` = '%s' WHERE `name` = 'noCacheControllers'",
+            serialize($tags)
         ));
 
         $values = $this->connection->query(
@@ -47,15 +46,23 @@ EOD;
              FROM s_core_config_values configValues
              INNER JOIN s_core_config_elements elements
              ON elements.id = configValues.element_id
-             AND elements.name = 'cacheControllers'"
+             AND elements.name = 'noCacheControllers'"
         )->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($values as $value) {
             $controllers = unserialize($value['value']);
             $controllers = explode("\n", $controllers);
-            $controllers[] = 'frontend/listing/layout 0';
-            $controllers = serialize($controllers);
-            $this->addSql("UPDATE s_core_config_values SET value = '" . $controllers . "' WHERE id = " . $value['id']);
+
+            foreach ($controllers as &$controller) {
+                if ($controller === 'widgets/checkout checkout') {
+                    $controller = 'widgets/checkout checkout,slt';
+                }
+            }
+
+            $this->addSql(sprintf(
+                "UPDATE s_core_config_values SET value = '%s' WHERE id = " . $value['id'],
+                serialize(implode("\n", $controllers))
+            ));
         }
     }
 }

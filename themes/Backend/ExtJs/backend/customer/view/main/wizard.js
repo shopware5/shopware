@@ -105,6 +105,11 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
     },
 
     createFirstPage: function() {
+        var image = '{link file="backend/_resources/images/customer_stream/quick_view.jpg"}';
+        if (Ext.userLanguage === 'de') {
+            image = '{link file="backend/_resources/images/customer_stream/quick_view_de.jpg"}';
+        }
+
         return Ext.create('Ext.container.Container', {
             html: '' +
             '<h1 class="headline">' +
@@ -114,12 +119,17 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
                 '{s name="wizard_customer_quick_view_text"}{/s}' +
             '</div>' +
             '<div class="image">' +
-                '<img src="{link file="backend/_resources/images/customer_stream/quick_view.png"}" />' +
+                '<img src="' + image + '" />' +
             '</div>'
         });
     },
 
     createSecondPage: function() {
+        var image = '{link file="backend/_resources/images/customer_stream/stream_view.jpg"}';
+        if (Ext.userLanguage === 'de') {
+            image = '{link file="backend/_resources/images/customer_stream/stream_view_de.jpg"}';
+        }
+
         return Ext.create('Ext.container.Container', {
             html: '' +
             '<h1 class="headline">' +
@@ -129,12 +139,17 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
                 '{s name="wizard_stream_view_text"}{/s}' +
             '</div>' +
             '<div class="image">' +
-                '<img src="{link file="backend/_resources/images/customer_stream/stream_view.png"}" />' +
+                '<img src="' + image + '" />' +
             '</div>'
         });
     },
 
     createFinishPage: function() {
+        var image = '{link file="backend/_resources/images/customer_stream/ekw_usage.jpg"}';
+        if (Ext.userLanguage === 'de') {
+            image = '{link file="backend/_resources/images/customer_stream/ekw_usage_de.jpg"}';
+        }
+
         return Ext.create('Ext.container.Container', {
             html: '' +
             '<h1 class="headline">' +
@@ -144,7 +159,7 @@ Ext.define('Shopware.apps.Customer.view.main.Wizard', {
                 '{s name="wizard_usage_text"}{/s}' +
             '</div>' +
             '<div class="image">' +
-                '<img src="{link file="backend/_resources/images/customer_stream/ekw_usage.png"}" />' +
+                '<img src="' + image + '" />' +
             '</div>'
         });
     },

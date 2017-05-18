@@ -970,7 +970,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
         $salutations = [];
         foreach ($value as $key) {
-            $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
+            $label = $namespace->get($key, $key);
+            if (empty(trim($label))) {
+                $label = $key;
+            }
+            $salutations[] = ['key' => $key, 'label' => $label];
         }
 
         $this->View()->assign('data', $salutations);

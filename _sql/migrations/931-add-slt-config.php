@@ -41,6 +41,6 @@ SQL;
 
         $this->addSql("SET @parent = (SELECT id FROM s_core_config_elements WHERE name = 'useSltCookie' LIMIT 1);");
 
-        $this->addSql("INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementID, 2, 'Create shopware login cookie', 'A cookie is stored, where the user can be identified again. This cookie is only used for setting the current customer group and the active customer streams');");
+        $this->addSql("INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementID, 2, 'Create shopware login cookie', 'A cookie is stored, where the user can be identified again. This cookie is only used for setting the current customer group and the active Customer Streams');");
     }
 }

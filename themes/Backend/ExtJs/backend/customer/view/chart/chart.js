@@ -63,6 +63,11 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
         return [];
     },
 
+    currencyRenderer: function(value) {
+        value = value * 1;
+        return Ext.util.Format.currency(value, this.subApp.currencySign, 2, (this.subApp.currencyAtEnd == 1));
+    },
+
     createAxes: function () {
         var me = this;
         return [{
@@ -74,7 +79,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             minimum: 0,
             label: {
                 renderer:function (value) {
-                    return Ext.util.Format.currency(value, '€', 2, true);
+                    return me.currencyRenderer(value);
                 }
             }
         }, {
@@ -132,7 +137,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
                     this.setTitle(
                         '<div class="customer-stream-chart-tip">' +
                             '<span class="customer-stream-chart-tip-label">' + this.fieldTitle + ':</span>&nbsp;'+
-                            '<span class="customer-stream-chart-tip-amount">' + Ext.util.Format.currency(value, '€', 2, true) + '</span>' +
+                            '<span class="customer-stream-chart-tip-amount">' + me.currencyRenderer(value) + '</span>' +
                         '</div>'
                     );
                 }

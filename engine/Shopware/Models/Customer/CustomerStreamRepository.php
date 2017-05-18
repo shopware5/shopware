@@ -347,7 +347,6 @@ class CustomerStreamRepository
         ]);
 
         $query->from('s_order', 'orders');
-        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('orders.ordernumber IS NOT NULL');
         $query->andWhere('orders.ordertime >= :orderTime');
@@ -367,8 +366,6 @@ class CustomerStreamRepository
             "DATE_FORMAT(orders.ordertime, '%Y/%m')",
             "DATE_FORMAT(orders.ordertime, '%Y/%m') as yearMonth",
             'COUNT(DISTINCT orders.id) count_orders',
-            'ROUND(SUM(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_sum',
-            'ROUND(AVG(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_avg',
             'MIN(orders.invoice_amount / orders.currencyFactor) as invoice_amount_min',
             'MAX(orders.invoice_amount / orders.currencyFactor) as invoice_amount_max',
             'MIN(orders.ordertime) as first_order_time',
