@@ -57,6 +57,8 @@ class CustomerOrderGateway
     {
         $data = $this->getCustomerOrders($customerIds);
 
+        $amount = $this->fetchAmount($customerIds);
+
         $canceled = $this->getCustomersWithCanceledOrders($customerIds);
 
         $products = $this->fetchProducts($customerIds);
@@ -70,6 +72,10 @@ class CustomerOrderGateway
 
             if (array_key_exists($customerId, $products)) {
                 $customerData = array_merge($customerData, $products[$customerId]);
+            }
+
+            if (array_key_exists($customerId, $amount)) {
+                $customerData = array_merge($customerData, $amount[$customerId]);
             }
 
             $struct = $this->hydrator->hydrate($customerData);
@@ -87,21 +93,38 @@ class CustomerOrderGateway
      *
      * @return array
      */
+    private function fetchAmount($ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->addSelect([
+            'orders.userID as customer_id',
+            'ROUND(SUM(orders.invoice_amount / orders.currencyFactor), 2)  as invoice_amount_sum',
+            'ROUND(AVG(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_avg',
+        ]);
+        $query->from('s_order', 'orders');
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere('orders.ordernumber != 0');
+        $query->andWhere('orders.userID IN (:ids)');
+        $query->setParameter(':cancelStatus', -1);
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('orders.userID');
+
+        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+    }
+
+    /**
+     * @param int[] $ids
+     *
+     * @return array
+     */
     private function getCustomerOrders($ids)
     {
         $query = $this->connection->createQueryBuilder();
         $query->addSelect([
             'orders.userID as customer_id',
             'COUNT(DISTINCT orders.id) count_orders',
-            '(
-                SELECT ROUND(SUM(orders2.invoice_amount / orders2.currencyFactor), 2) 
-                FROM s_order orders2 
-                WHERE orders2.userID = orders.userID 
-                AND orders2.status != :cancelStatus
-                AND orders2.ordernumber IS NOT NULL
-                AND orders2.ordernumber != 0
-            ) as invoice_amount_sum',
-            'ROUND(AVG(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_avg',
+
             'MIN(orders.invoice_amount / orders.currencyFactor) as invoice_amount_min',
             'MAX(orders.invoice_amount / orders.currencyFactor) as invoice_amount_max',
             'MIN(orders.ordertime) as first_order_time',

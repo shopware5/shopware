@@ -228,6 +228,8 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     protected function initAcl()
     {
+        $this->addAclPermission('read', 'list', 'You do not have sufficient rights to delete a customer.');
+        $this->addAclPermission('read', 'detail', 'You do not have sufficient rights to delete a customer.');
         $this->addAclPermission('delete', 'delete', 'You do not have sufficient rights to delete a customer.');
         $this->addAclPermission('update', 'save', 'You do not have sufficient rights to update a customer.');
         $this->addAclPermission('create', 'save', 'You do not have sufficient rights to create a customer.');

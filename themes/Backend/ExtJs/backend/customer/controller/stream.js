@@ -83,6 +83,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 if (store.getCount() > 0) {
                     var streams = store.data.items;
                     me.refreshWhileFullIndex(streams, streams.length);
+                } else {
+                    me.resetProgressbar();
                 }
             });
             return;
