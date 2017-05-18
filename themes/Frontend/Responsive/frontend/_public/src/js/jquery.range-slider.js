@@ -128,6 +128,8 @@
              */
             labelFormat: '',
 
+            suffix: '',
+
             /**
              * Turn pretty rounding for cleaner steps on and off.
              */
@@ -157,6 +159,11 @@
              * The number of steps the slider is divided in.
              */
             stepCount: 100,
+
+            /**
+             * Number of digits for the display value and slide size
+             */
+            digits: 2,
 
             /**
              * Function for calculation
@@ -429,7 +436,7 @@
                 me.$minInputEl.prop('disabled', 'disabled')
                     .trigger('change');
             } else {
-                me.$minInputEl.val(value.toFixed(2))
+                me.$minInputEl.val(value.toFixed(me.opts.digits))
                     .removeAttr('disabled')
                     .trigger('change');
             }
@@ -448,7 +455,7 @@
                 me.$maxInputEl.prop('disabled', 'disabled')
                     .trigger('change');
             } else {
-                me.$maxInputEl.val(value.toFixed(2))
+                me.$maxInputEl.val(value.toFixed(me.opts.digits))
                     .removeAttr('disabled')
                     .trigger('change');
             }
@@ -490,7 +497,11 @@
         roundValue: function(value) {
             var me = this;
 
-            if (value < 10) {
+            if (value < 0.1) {
+                value = me.roundTo(value, 0.001);
+            } else if (value < 1) {
+                value = me.roundTo(value, 0.01);
+            } else if (value < 10) {
                 value = me.roundTo(value, 0.10);
             } else if (value < 100) {
                 value = me.roundTo(value, 1);
@@ -511,17 +522,17 @@
             }
 
             if (!me.opts.labelFormat.length) {
-                return value.toFixed(2);
+                return value.toFixed(me.opts.digits) + ' ' + me.opts.suffix;
             }
 
             value = Math.round(value * 100) / 100;
-            value = value.toFixed(2);
+            value = value.toFixed(me.opts.digits);
 
             if (me.opts.labelFormat.indexOf('0.00') >= 0) {
-                value = me.opts.labelFormat.replace('0.00', value);
+                value = me.opts.labelFormat.replace('0.00', value) + ' ' + me.opts.suffix;
             } else {
                 value = value.replace('.', ',');
-                value = me.opts.labelFormat.replace('0,00', value);
+                value = me.opts.labelFormat.replace('0,00', value) + ' ' + me.opts.suffix;
             }
 
             $.publish('plugin/swRangeSlider/onFormatValue', [ me, value ]);

@@ -45,21 +45,35 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
                 helpText: '{s name="attribute_url"}{/s}',
                 fieldLabel: '{s name="request_parameter"}{/s}',
                 validator: Ext.bind(me.validateParameter, me)
-            },
-            {
+            }, {
                 xtype: 'textfield',
                 labelWidth: 150,
                 allowBlank: false,
                 translatable: true,
                 fieldLabel: '{s name="label"}{/s}',
                 name: 'label'
-            },
-            {
+            }, {
                 xtype: 'textfield',
                 labelWidth: 150,
                 helpText: '{s name="attribute_template"}{/s}',
                 name: 'template',
                 fieldLabel: '{s name="template_file"}{/s}'
+            }, {
+                xtype: 'textfield',
+                name: 'suffix',
+                labelWidth: 150,
+                translatable: true,
+                fieldLabel: '{s name="suffix"}{/s}',
+                helpText: '{s name="suffix_help_attribute"}{/s}'
+            }, {
+                xtype: 'numberfield',
+                name: 'digits',
+                minValue: 0,
+                labelWidth: 150,
+                translatable: true,
+                value: 2,
+                fieldLabel: '{s name="digits"}{/s}',
+                helpText: '{s name="digits_help_attribute"}{/s}'
             }
         ];
     },

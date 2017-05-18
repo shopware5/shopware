@@ -1,16 +1,33 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
-use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
-use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Components\Migrations\AbstractMigration;
 
 class Migrations_Migration918 extends AbstractMigration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up($modus)
     {
@@ -49,7 +66,7 @@ SQL;
 
     private function addCategoryConfig()
     {
-        $this->addSql("ALTER TABLE `s_categories` ADD `facet_ids` TEXT NULL");
+        $this->addSql('ALTER TABLE `s_categories` ADD `facet_ids` TEXT NULL');
     }
 
     private function importDefaultFacets()
@@ -62,14 +79,19 @@ INSERT IGNORE INTO `s_search_custom_facet` (`id`, `unique_key`, `active`, `displ
 (4, 'PriceFacet', 1, 1, 4, 'Preis', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\PriceFacet":{"label":"Preis"}}', 0),
 (5, 'PropertyFacet', 1, 1, 5, 'Eigenschaften', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\PropertyFacet":[]}', 0),
 (6, 'ShippingFreeFacet', 1, 1, 6, 'Versandkostenfrei', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\ShippingFreeFacet":{"label":"Versandkostenfrei"}}', 0),
-(7, 'VoteAverageFacet', 1, 1, 7, 'Bewertungen', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\VoteAverageFacet":{"label":"Bewertung"}}', 0);
+(7, 'VoteAverageFacet', 1, 1, 7, 'Bewertungen', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\VoteAverageFacet":{"label":"Bewertung"}}', 0),
+(8, 'WeightFacet', 0, 1, 8, 'Gewicht', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\WeightFacet":{"label":"Gewicht"}}', 0),
+(9, 'WidthFacet', 0, 1, 9, 'Breite', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\WidthFacet":{"label":"Breite"}}', 0),
+(10, 'HeightFacet', 0, 1, 10, 'Höhe', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\HeightFacet":{"label":"Höhe"}}', 0),
+(11, 'LengthFacet', 0, 1, 11, 'Länge', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\LengthFacet":{"label":"Länge"}}', 0)
+;
 SQL;
         $this->addSql($sql);
     }
 
     private function importFacetTranslations()
     {
-        $shops = $this->connection->query("SELECT id, main_id, locale_id FROM s_core_shops")->fetchAll(PDO::FETCH_ASSOC);
+        $shops = $this->connection->query('SELECT id, main_id, locale_id FROM s_core_shops')->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($shops as $shop) {
             $translationShopId = $shop['main_id'] ?: $shop['id'];
@@ -80,7 +102,7 @@ SQL;
             if (!empty($insert)) {
                 $this->addSql(
                     "INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
-                     VALUES ('custom_facet', '" . serialize($insert) . "', '1', ". $shop['id'] .")"
+                     VALUES ('custom_facet', '" . serialize($insert) . "', '1', " . $shop['id'] . ')'
                 );
             }
         }
@@ -89,6 +111,7 @@ SQL;
     /**
      * @param int $translationShopId
      * @param int $localeId
+     *
      * @return array
      */
     private function getExistingSortingTranslations($translationShopId, $localeId)
@@ -98,7 +121,7 @@ SQL;
              FROM s_core_snippets
              WHERE `name` IN ('category', 'immediate_delivery', 'manufacturer', 'price', 'shipping_free', 'vote_average')
              AND namespace = 'frontend/listing/facet_labels'
-             AND shopID = " . $translationShopId . " AND localeID = " . $localeId
+             AND shopID = " . $translationShopId . ' AND localeID = ' . $localeId
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $insert = [];
@@ -124,6 +147,7 @@ SQL;
                     break;
             }
         }
+
         return $insert;
     }
 
@@ -158,14 +182,14 @@ SQL;
         $value .= ',
 categoryFilter=cf';
 
-        $statement = $this->connection->prepare("UPDATE s_core_config_elements SET value = ? WHERE id = ?");
-        $statement->execute(array(serialize($value), $config['id']));
+        $statement = $this->connection->prepare('UPDATE s_core_config_elements SET value = ? WHERE id = ?');
+        $statement->execute([serialize($value), $config['id']]);
 
-        $statement = $this->connection->prepare("SELECT * FROM s_core_config_values WHERE element_id = ?");
-        $statement->execute(array($config['id']));
+        $statement = $this->connection->prepare('SELECT * FROM s_core_config_values WHERE element_id = ?');
+        $statement->execute([$config['id']]);
         $values = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach($values as $shopValue) {
+        foreach ($values as $shopValue) {
             if (empty($shopValue) || empty($shopValue['value'])) {
                 continue;
             }
@@ -174,9 +198,8 @@ categoryFilter=cf';
             $value .= ',
 categoryFilter=cf';
 
-            $statement = $this->connection->prepare("UPDATE s_core_config_values SET value = ? WHERE id = ?");
-            $statement->execute(array(serialize($value), $shopValue['id']));
-
+            $statement = $this->connection->prepare('UPDATE s_core_config_values SET value = ? WHERE id = ?');
+            $statement->execute([serialize($value), $shopValue['id']]);
         }
     }
 }

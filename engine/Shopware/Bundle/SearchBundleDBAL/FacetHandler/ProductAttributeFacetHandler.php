@@ -61,7 +61,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     * @param CrudService $crudService
+     * @param CrudService                  $crudService
      */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -131,6 +131,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         if ($facet->getTemplate()) {
             $result->setTemplate($facet->getTemplate());
+
             return $result;
         }
 
@@ -255,7 +256,10 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             $activeMin,
             $activeMax,
             'min' . $facet->getFormFieldName(),
-            'max' . $facet->getFormFieldName()
+            'max' . $facet->getFormFieldName(),
+            [],
+            $facet->getSuffix(),
+            $facet->getDigits()
         );
     }
 
@@ -378,27 +382,28 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param string $type
      * @param string $mode
      * @param string $defaultTemplate
+     *
      * @return string
      */
     private function getTypeTemplate($type, $mode, $defaultTemplate)
     {
         switch (true) {
-            case ($type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT):
+            case $type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
 
                 return 'frontend/listing/filter/facet-date-range.tpl';
-            case ($type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
+            case $type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
 
                 return 'frontend/listing/filter/facet-date-multi.tpl';
-            case ($type === TypeMapping::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+            case $type === TypeMapping::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
 
                 return 'frontend/listing/filter/facet-date.tpl';
-            case ($type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT):
+            case $type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
 
                 return 'frontend/listing/filter/facet-datetime-range.tpl';
-            case ($type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
+            case $type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
 
                 return 'frontend/listing/filter/facet-datetime-multi.tpl';
-            case ($type === TypeMapping::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+            case $type === TypeMapping::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
 
                 return 'frontend/listing/filter/facet-datetime.tpl';
             default:

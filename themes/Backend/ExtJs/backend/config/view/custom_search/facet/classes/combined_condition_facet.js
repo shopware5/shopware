@@ -33,6 +33,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.CombinedCondit
 
     createItems: function () {
         var me = this;
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return [
             {
@@ -50,13 +51,38 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.CombinedCondit
                 helpText: '{s name="attribute_url"}{/s}',
                 fieldLabel: '{s name="request_parameter"}{/s}',
                 validator: Ext.bind(me.validateParameter, me)
+            }, {
+                xtype: 'productstreamselection',
+                store: factory.createEntitySearchStore("Shopware\\Models\\ProductStream\\ProductStream"),
+                name: 'streamId',
+                labelWidth: 150,
+                fieldLabel: '{s name="product_stream"}{/s}',
+                helpText: '{s name="product_stream_help"}{/s}',
+                allowBlank: true,
+                listeners: {
+                    'change': function() {
+                        me.onChangeStream(this.getValue());
+                    }
+                }
             },
             me._createConditionPanel()
         ];
     },
 
+    onChangeStream: function(streamId) {
+        var me = this;
+
+        if (streamId) {
+            me.conditionPanel.setDisabled(true);
+            me.conditionPanel.conditionPanel.removeAll();
+        } else {
+            me.conditionPanel.setDisabled(false);
+        }
+
+    },
+
     _createConditionPanel: function() {
-        return Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.ConditionSelection', {
+        return this.conditionPanel = Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.ConditionSelection', {
             name: 'conditions',
             allowBlank: false,
             flex: 1

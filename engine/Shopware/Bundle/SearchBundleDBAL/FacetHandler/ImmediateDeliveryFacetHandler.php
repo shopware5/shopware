@@ -32,6 +32,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -58,6 +59,11 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
+     * @var VariantHelper
+     */
+    private $variantHelper;
+
+    /**
      * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
@@ -65,7 +71,8 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper
+        QueryAliasMapper $queryAliasMapper,
+        VariantHelper $variantHelper
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
@@ -73,6 +80,7 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('immediateDelivery')) {
             $this->fieldName = 'immediateDelivery';
         }
+        $this->variantHelper = $variantHelper;
     }
 
     /**
@@ -93,17 +101,10 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
-        if (!$query->hasState(ImmediateDeliveryConditionHandler::STATE_INCLUDES_ALL_VARIANTS)) {
-            $query->innerJoin(
-                'product',
-                's_articles_details',
-                'allVariants',
-                'allVariants.articleID = product.id
-                 AND allVariants.active = 1
-                 AND allVariants.instock >= allVariants.minpurchase'
-            );
-
-            $query->addState(ImmediateDeliveryConditionHandler::STATE_INCLUDES_ALL_VARIANTS);
+        $this->variantHelper->joinVariants($query);
+        if (!$query->hasState(ImmediateDeliveryConditionHandler::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS)) {
+            $query->andWhere('allVariants.instock >= allVariants.minpurchase');
+            $query->addState(ImmediateDeliveryConditionHandler::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS);
         }
 
         $query->select('product.id')

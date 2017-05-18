@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Facet;
 
+use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Components\ReflectionHelper;
@@ -50,7 +51,7 @@ class CombinedConditionFacet implements FacetInterface
      * @param string       $label
      * @param string       $requestParameter
      */
-    public function __construct($conditions, $label, $requestParameter)
+    public function __construct($conditions, $label, $requestParameter, $stream = null)
     {
         if (is_array($conditions)) {
             $this->conditions = $conditions;
@@ -59,6 +60,19 @@ class CombinedConditionFacet implements FacetInterface
         }
         $this->label = $label;
         $this->requestParameter = $requestParameter;
+
+        if (!$stream) {
+            return;
+        }
+
+        if (!empty($stream['numbers'])) {
+            $numbers = array_filter(explode(',', $stream['numbers']));
+            $this->conditions = [new OrdernumberCondition($numbers)];
+
+            return;
+        }
+
+        $this->conditions = $this->unserialize(json_decode($stream['conditions'], true));
     }
 
     /**

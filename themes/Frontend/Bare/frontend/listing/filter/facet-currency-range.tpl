@@ -8,5 +8,6 @@
     {$roundPretty = 'false'}
     {$format = "{'0'|currency}"}
     {$stepCount = 100}
+    {$digits = 2}
     {$stepCurve = 'linear'}
 {/block}
