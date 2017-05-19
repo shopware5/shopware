@@ -35,7 +35,7 @@
 
                         {* Description container *}
                         {block name="frontend_detail_tabs_content_description"}
-                            <div class="tab--container">
+                            <div class="tab--container" data-containerName="description">
                                 {block name="frontend_detail_tabs_content_description_inner"}
 
                                     {* Description title *}
@@ -72,7 +72,7 @@
                         {* Rating container *}
                         {block name="frontend_detail_tabs_content_rating"}
                             {if !{config name=VoteDisable}}
-                                <div class="tab--container">
+                                <div class="tab--container" data-containerName="rating">
                                     {block name="frontend_detail_tabs_content_rating_inner"}
 
                                         {* Rating title *}
