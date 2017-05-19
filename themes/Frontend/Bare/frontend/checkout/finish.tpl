@@ -238,7 +238,7 @@
                                                 {if $sAddresses.shipping.additional_address_line1}<span class="address--additional-one">{$sAddresses.shipping.additional_address_line1|escapeHtml}</span><br />{/if}
                                                 {if $sAddresses.shipping.additional_address_line2}<span class="address--additional-two">{$sAddresses.shipping.additional_address_line2|escapeHtml}</span><br />{/if}
                                                 {if {config name=showZipBeforeCity}}
-                                                    <span class="address--zipcode">{$sAddresses.shipping.zipcod|escapeHtml}</span> <span class="address--city">{$sAddresses.shipping.city|escapeHtml}</span>
+                                                    <span class="address--zipcode">{$sAddresses.shipping.zipcode|escapeHtml}</span> <span class="address--city">{$sAddresses.shipping.city|escapeHtml}</span>
                                                 {else}
                                                     <span class="address--city">{$sAddresses.shipping.city|escapeHtml}</span> <span class="address--zipcode">{$sAddresses.shipping.zipcode|escapeHtml}</span>
                                                 {/if}<br />
