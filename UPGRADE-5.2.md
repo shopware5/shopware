@@ -345,6 +345,7 @@ There must be at least one option tag and inside each option tag where must be a
     * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
 * Removed synchronizing of plugin information column `changes`
 * Allow root menu elements for plugins. Added attribute `isRootMenu` in `menu.xml` Example: `<entry isRootMenu="true">`
+* Normalized the return value of `Album\Settings` getThumbnailSize to return a empty array instead of a array with an empty string when no size is active
 
 ## 5.2.3
 
