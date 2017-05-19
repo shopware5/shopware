@@ -846,7 +846,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria = $factory->createBaseCriteria([$category], $context);
 
         $criteria->offset($offset)
-            ->limit($limit);
+           ->limit($limit);
 
         switch ($sort) {
             case 'price_asc':
@@ -862,6 +862,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
                 break;
         }
+
+        $criteria = $this->get('events')->filter(
+            'Shopware_Controllers_Widgets_Emotion_GetProductSliderData_Filter_Criteria',
+            $criteria,
+            ['categoryId' => $category, 'sort' => $sort]
+        );
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
