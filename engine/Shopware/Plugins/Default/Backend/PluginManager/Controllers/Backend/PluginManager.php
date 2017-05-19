@@ -362,7 +362,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     public function getAllCachesAction()
     {
         $this->View()->assign([
-            'caches' => InstallContext::CACHE_LIST_ALL
+            'caches' => InstallContext::CACHE_LIST_ALL,
         ]);
     }
 
