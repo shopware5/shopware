@@ -34,10 +34,10 @@ Ext.define('Shopware.apps.MediaManager.model.Setting', {
         //{block name="backend/media_manager/model/setting/fields"}{/block}
         {
             name: 'displayType',
-            type: 'string',
+            type: 'string'
         }, {
             name: 'itemsPerPage',
-            type: 'number',
+            type: 'number'
         }, {
             name: 'tableThumbnailSize',
             type: 'number'
@@ -45,10 +45,6 @@ Ext.define('Shopware.apps.MediaManager.model.Setting', {
             name: 'gridThumbnailSize',
             type: 'number'
         }
-    ],
-    proxy: {
-        type: 'localstorage',
-        id  : 'media-manager-settings'
-    }
+    ]
 });
 //{/block}

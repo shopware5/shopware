@@ -67,7 +67,15 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
             albumStore.getProxy().extraParams.albumId = null;
         }
 
-        if(me.subApplication.layout && me.subApplication.layout == 'small') {
+        me.control({
+            'mediamanager-main-window mediamanager-media-view ': {
+                'media-view-layout-changed': me.onChangeLayout,
+                'media-view-media-quantity-changed': me.onChangeMediaQuantity,
+                'media-view-preview-size-changed': me.onChangePreviewSize
+            }
+        });
+
+        if(me.subApplication.layout && me.subApplication.layout === 'small') {
             me.getView('main.Selection').create({
                 albumStore: albumStore,
                 mediaStore: mediaStore,
@@ -79,14 +87,161 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
                 minimizable: minimizable
             });
         } else {
-            me.mainWindow = me.getView('main.Window').create({
-                albumStore: albumStore,
-                mediaStore: mediaStore,
-                validTypes: me.validTypes
+
+            /**
+             * Initialize the record with default values provided by the view and the mediaGrid.
+             */
+            this.settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting', {
+                displayType: 'grid',
+                itemsPerPage: 20,
+                tableThumbnailSize: 16,
+                gridThumbnailSize: 72
+            });
+
+            // Loading user config from backend
+            Ext.Ajax.request({
+                url: '{url controller=UserConfig action=get}',
+                jsonData: {
+                    name: 'mediamanager-settings'
+                },
+                callback: function (request, success, response) {
+                    var loadedSettings = Ext.JSON.decode(response.responseText);
+
+                    if (!Ext.isEmpty(loadedSettings)) {
+                        me.settingRecord.set(loadedSettings)
+                    }
+
+                    me.mainWindow = me.getView('main.Window').create({
+                        albumStore: albumStore,
+                        mediaStore: mediaStore,
+                        validTypes: me.validTypes
+                    });
+
+                    me.restoreSettings();
+
+                    me.mainWindow.show();
+                }
             });
         }
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Restores the loaded settings into the view.
+     */
+    restoreSettings: function() {
+        var me = this,
+            thumbnailSize = me.settingRecord.get(this.settingRecord.get('displayType') + 'ThumbnailSize'),
+            view = this.mainWindow.down('mediamanager-media-view'),
+            grid = this.mainWindow.down('mediamanager-media-grid');
+
+        // Create subviews
+        view.mediaViewContainer.add(view.createMediaView());
+
+        // Sets the number of items displayed
+        view.mediaStore.pageSize = this.settingRecord.get('itemsPerPage');
+        view.pageSize.store.each(function(item) {
+            if(parseInt(item.raw.value) === parseInt(me.settingRecord.get('itemsPerPage'))) {
+                view.pageSize.reset();
+                view.pageSize.setValue(item.raw.name);
+
+                return false;
+            }
+        });
+
+        // Activates the correct button for the layout
+        view.displayTypeBtn.menu.items.each(function(item) {
+            if (item.layout === me.settingRecord.get('displayType')) {
+                view.displayTypeBtn.setActiveItem(item);
+
+                return false;
+            }
+        });
+
+        // Selects the correct layout
+        view.selectedLayout = this.settingRecord.get('displayType');
+        view.cardContainer.getLayout().setActiveItem((this.settingRecord.get('displayType') === 'grid') ? 0 : 1);
+
+        grid.columns[1].setWidth(thumbnailSize + 10);
+        grid.selectedPreviewSize = thumbnailSize;
+
+        // Loads the list of icon sizes for the layout given
+        if (view.hasOwnProperty(this.settingRecord.get('displayType') + 'ImageSizes')) {
+            view.imageSize.reset();
+            view.imageSize.getStore().loadData(view[this.settingRecord.get('displayType') + 'ImageSizes']);
+        }
+
+        // Sets the configured icon size
+        view.imageSize.setValue(grid.selectedPreviewSize);
+    },
+
+    /**
+     * Stores the user config settings regarding the visual representation of media in the backend.
+     */
+    saveSettings: function() {
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=save}',
+            method: 'POST',
+            jsonData: {
+                name: 'mediamanager-settings',
+                config: Ext.JSON.encode(this.settingRecord.data)
+            }
+        });
+    },
+
+    /**
+     * Changes the list of available icon sizes when the layout is changed.
+     *
+     * @param { Object } view
+     * @param { string } layout
+     */
+    onChangeLayout: function(view, layout) {
+        // This check prevents storing during creation of the window
+        if (this.settingRecord.get('displayType') !== layout) {
+
+            // Load the list of available icon sizes
+            if (view.hasOwnProperty(layout + 'ImageSizes')) {
+                view.imageSize.getStore().loadData(view[layout + 'ImageSizes']);
+                view.imageSize.setValue(this.settingRecord.get(layout + 'ThumbnailSize'));
+            }
+
+            // Store new layout in model
+            this.settingRecord.set('displayType', layout);
+
+            this.saveSettings();
+        }
+    },
+
+    /**
+     * Stores the given new icon size in the settings.
+     *
+     * @param { Object } view
+     * @param { int } newIconSize
+     * @param { String } layout
+     */
+    onChangePreviewSize: function(view, newIconSize, layout) {
+        // This check prevents storing during creation of the window
+        if (layout === this.settingRecord.get('displayType')) {
+            this.settingRecord.set(this.settingRecord.get('displayType') + 'ThumbnailSize', newIconSize);
+
+            this.saveSettings();
+        }
+    },
+
+    /**
+     * Stores the given new number of media per page.
+     *
+     * @param { Object } view
+     * @param { int } itemsPerPage
+     */
+    onChangeMediaQuantity: function(view, itemsPerPage) {
+        // This check prevents storing during creation of the window
+        if (this.settingRecord.set('itemsPerPage') !== itemsPerPage) {
+            this.settingRecord.set('itemsPerPage', itemsPerPage);
+
+            this.saveSettings();
+        }
     }
 });
 //{/block}

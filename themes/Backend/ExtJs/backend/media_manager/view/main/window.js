@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Window', {
     cls: Ext.baseCSSPrefix + 'media-manager-window',
     alias: 'widget.mediamanager-main-window',
     border: false,
-    autoShow: true,
+    autoShow: false,
     layout: 'border',
     height: '90%',
     width: 1124,
@@ -59,8 +59,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Window', {
             store: me.albumStore
         }, {
             xtype: 'mediamanager-media-view',
-            mediaStore: me.mediaStore,
-            settingRecord: this.settingRecord
+            mediaStore: me.mediaStore
         }];
 
         me.callParent(arguments);

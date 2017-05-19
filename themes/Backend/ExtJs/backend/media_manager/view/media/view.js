@@ -804,6 +804,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         me.mediaStore.pageSize = record.get('value');
         me.mediaStore.loadPage(1);
+
+        me.fireEvent('media-view-media-quantity-changed', me, record.get('value'));
     },
 
     /**
