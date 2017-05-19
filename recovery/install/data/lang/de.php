@@ -45,6 +45,10 @@ return [
     'select_language_de' => 'Deutsch',
     'select_language_en' => 'English',
     'select_language_nl' => 'Nederlands',
+    'select_language_it' => 'Italiano',
+    'select_language_fr' => 'Français',
+    'select_language_es' => 'Español',
+    'select_language_pt' => 'Português',
 
     'language-selection_select_language' => 'Sprache Installationsassistent',
     'language-selection_header' => 'Deine Shopware-Installation',

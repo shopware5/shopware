@@ -88,7 +88,6 @@ function selectLanguage(array $allowedLanguages)
     /**
      * Load language file
      */
-    $allowedLanguages = ['de', 'en', 'nl'];
     $selectedLanguage = 'de';
     if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
         $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
@@ -124,8 +123,20 @@ function selectLanguage(array $allowedLanguages)
 function localeForLanguage($language)
 {
     switch (strtolower($language)) {
+        case 'de':
+            return 'de_DE';
         case 'en':
             return 'en_GB';
+        case 'nl':
+            return 'nl_NL';
+        case 'it':
+            return 'it_IT';
+        case 'fr':
+            return 'fr_FR';
+        case 'es':
+            return 'es_ES';
+        case 'pt':
+            return 'pt_PT';
     }
 
     return strtolower($language) . '_' . strtoupper($language);
