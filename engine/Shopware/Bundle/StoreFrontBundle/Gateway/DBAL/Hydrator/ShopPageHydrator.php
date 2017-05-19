@@ -90,13 +90,17 @@ class ShopPageHydrator extends Hydrator
             $shopPage->setChanged(\DateTime::createFromFormat('Y-m-d H:i:s', $data['__page_changed']));
         }
 
+        $shopIds = [];
+
         if (isset($data['__page_shop_ids'])) {
             $shopIds = explode('|', $data['__page_shop_ids']);
             $shopIds = array_keys(array_flip($shopIds));
             $shopIds = array_filter($shopIds);
             $shopIds = array_map('intval', $shopIds);
-            $shopPage->setShopIds($shopIds);
+            
         }
+
+        $shopPage->setShopIds($shopIds);
 
         $this->attributeHydrator->addAttribute($shopPage, $data, 'pageAttribute');
     }
