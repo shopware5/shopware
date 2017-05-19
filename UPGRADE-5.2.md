@@ -56,6 +56,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added configuration option `ShopwarePlugins` to `plugin_directories` in the `engine/Shopware/Configs/Default.php` to make the path of the plugin system directory configurable
 * Support for custom CSS files in themes added to Grunt tasks
 * Added command option `shopId` for `sw:theme:cache:generate`
+* Added path decoding to prevent wrong urls
 
 ## 5.2.18
 

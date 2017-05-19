@@ -84,6 +84,8 @@ class sRewriteTest extends PHPUnit\Framework\TestCase
             ['C’est du français !', 'C-est-du-francais'],
             ['Één jaar', 'Een-jaar'],
             ['tiếng việt rất khó', 'tieng-viet-rat-kho'],
+            ['test &amp; test', 'test-test'],
+            ['test&amp;test', 'test-test'],
         ];
     }
 }

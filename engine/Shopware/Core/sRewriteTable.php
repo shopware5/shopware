@@ -172,7 +172,7 @@ class sRewriteTable
     {
         $parts = explode('/', $path);
         $parts = array_map(function ($path) {
-            return $this->slug->slugify($path);
+            return $this->slug->slugify(html_entity_decode($path));
         }, $parts);
 
         $path = implode('/', $parts);
