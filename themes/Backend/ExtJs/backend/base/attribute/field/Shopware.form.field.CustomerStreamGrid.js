@@ -65,7 +65,7 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
     createModuleIcon: function() {
         return {
             action: 'open-customer',
-            iconCls: 'customers--customer-list',
+            iconCls: 'sprite-customer-streams',
             handler: function () {
                 Shopware.app.Application.addSubApplication({
                     name: 'Shopware.apps.Customer',

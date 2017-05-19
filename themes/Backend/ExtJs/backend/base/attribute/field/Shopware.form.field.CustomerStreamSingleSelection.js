@@ -50,6 +50,39 @@ Ext.define('Shopware.form.field.CustomerStreamSingleSelection', {
             '</tpl>'
         );
         return config;
-    }
+    },
+
+    /**
+     * Adds the stream icon to the combo box field body.
+     */
+    afterRender: function() {
+        var me = this,
+            el = me.getEl(),
+            inputCell = el.select('.x-form-trigger-input-cell', true).first(),
+            iconCell = new Ext.Element(document.createElement('td')),
+            icon = new Ext.Element(document.createElement('span'));
+
+        icon.set({
+            'cls': 'sprite-customer-streams',
+            'style': {
+                display: 'inline-block',
+                width: '16px',
+                height: '16px',
+                margin: '0 4px',
+                position: 'relative',
+                top: '2px'
+            }
+        });
+
+        iconCell.set({
+            'style': { width: '24px' }
+        });
+
+        icon.appendTo(iconCell);
+        iconCell.insertBefore(inputCell);
+
+        me.callParent(arguments);
+    },
+
 });
 //{/block}
