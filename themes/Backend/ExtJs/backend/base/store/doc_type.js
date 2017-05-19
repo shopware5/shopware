@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Base.store.DocType', {
     extend: 'Ext.data.Store',
 
     alternateClassName: 'Shopware.store.DocType',
-    storeId: 'base.Payment',
+    storeId: 'base.DocType',
     model : 'Shopware.apps.Base.model.DocType',
     pageSize: 1000,
     remoteFilter: true,
