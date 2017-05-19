@@ -44,6 +44,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
+use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Models\Menu\Menu;
 use Shopware\Models\Plugin\Plugin;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
@@ -306,6 +307,62 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             'success' => true,
             'data' => array_values($plugins),
             'error' => $error,
+        ]);
+    }
+
+    public function toggleSafeModeAction()
+    {
+        $em = $this->container->get('models');
+
+        $plugins = $em->getRepository(Plugin::class)->findAll();
+
+        $pluginsInSafeMode = $this->getPluginsInSafeMode($plugins);
+
+        $caches = InstallContext::CACHE_LIST_ALL;
+
+        /** @var InstallerService $installerService */
+        $installerService = $this->get('shopware_plugininstaller.plugin_installer');
+
+        if ($pluginsInSafeMode) {
+            foreach ($pluginsInSafeMode as $plugin) {
+                $plugin->setInSafeMode(false);
+                $installerService->activatePlugin($plugin);
+            }
+            $em->flush();
+            $this->View()->assign(['success' => true, 'inSafeMode' => false]);
+
+            return;
+        }
+        foreach ($plugins as $plugin) {
+            if ($plugin->getSource() === 'Default' || strpos('Swag', $plugin->getName()) === 0 || $plugin->getActive() === false) {
+                continue;
+            }
+            $plugin->setInSafeMode(true);
+            $installerService->deactivatePlugin($plugin);
+        }
+        $em->flush();
+
+        $this->View()->assign(['success' => true, 'inSafeMode' => true]);
+    }
+
+    public function isInSafeModeAction()
+    {
+        $em = $this->container->get('models');
+
+        $plugins = $em->getRepository(Plugin::class)->findAll();
+
+        $inSafeMode = ($this->getPluginsInSafeMode($plugins)) ? true : false;
+
+        $this->View()->assign([
+            'success' => true,
+            'inSafeMode' => $inSafeMode,
+        ]);
+    }
+
+    public function getAllCachesAction()
+    {
+        $this->View()->assign([
+            'caches' => InstallContext::CACHE_LIST_ALL,
         ]);
     }
 
@@ -899,5 +956,24 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                     echo json_encode(['success' => false, 'error' => $message]);
             }
         });
+    }
+
+    /**
+     * Gets an array of plugins that are in Safe Mode
+     *
+     * @param array $plugins
+     *
+     * @return array
+     */
+    private function getPluginsInSafeMode(array $plugins)
+    {
+        $pluginsInSafeMode = [];
+        foreach ($plugins as $plugin) {
+            if ($plugin->isInSafeMode()) {
+                $pluginsInSafeMode[] = $plugin;
+            }
+        }
+
+        return $pluginsInSafeMode;
     }
 }

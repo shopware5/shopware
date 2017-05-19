@@ -253,6 +253,12 @@ class Plugin extends ModelEntity
     private $licenses;
 
     /**
+     * @var bool
+     * @ORM\Column(name="in_safe_mode", type="boolean")
+     */
+    private $inSafeMode = false;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -729,5 +735,21 @@ class Plugin extends ModelEntity
     public function setTranslations($translations)
     {
         $this->translations = $translations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInSafeMode()
+    {
+        return $this->inSafeMode;
+    }
+
+    /**
+     * @param bool $inSafeMode
+     */
+    public function setInSafeMode($inSafeMode)
+    {
+        $this->inSafeMode = $inSafeMode;
     }
 }
