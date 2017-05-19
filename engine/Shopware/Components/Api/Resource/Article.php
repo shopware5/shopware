@@ -1069,7 +1069,7 @@ class Article extends Resource implements BatchInterface
         }
 
         // If the main variant was changed,
-        if ($oldMainId && $oldMainId != $newMain->getId()) {
+        if (isset($oldMainId, $newMain) && $oldMainId != $newMain->getId()) {
             $oldMainVariantProcessed = false;
 
             foreach ($variants as &$processedVariant) {
