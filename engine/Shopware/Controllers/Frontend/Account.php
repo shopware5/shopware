@@ -60,7 +60,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
         if (!in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
             && !$this->admin->sCheckUser()) {
-            return $this->forward('index', 'register');
+            return $this->forward('index', 'register', 'frontend', [
+                'sTarget' => $this->Request()->getControllerName(),
+                'sTargetAction' => $this->Request()->getActionName(),
+            ]);
         }
         $userData = $this->admin->sGetUserData();
 

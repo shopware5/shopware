@@ -19,26 +19,26 @@ More precise designations are commented inside the document.
     // Hide the currency and language switcher
     .top-bar { display: none }
 
-	// Logo
-	.logo-main {
-		.unitize-padding(10, 10);
+    // Logo
+    .logo-main {
+        .unitize-padding(10, 10);
 
-		.logo--link {
-			.unitize-height(35, 16);
-			display: inline-block;
+        .logo--link {
+            .unitize-height(35, 16);
+            display: inline-block;
             max-width: 100%;
-		}
+        }
 
-		// Smaller logo for mobile viewports
-		.logo--shop {
-			.unitize-height(35, 16);
-			width: 50%;
-		}
+        // Smaller logo for mobile viewports
+        .logo--shop {
+            .unitize-height(35, 16);
+            width: 50%;
+        }
 
-		.logo--supportinfo { display: none; }
-	}
-
-    .header--navigation { position: relative; }
+        .logo--supportinfo {
+            display: none;
+        }
+    }
 }
 
     // Small Checkout & Registration Header
@@ -87,7 +87,25 @@ More precise designations are commented inside the document.
         }
 
         .cart--link { .unitize-padding(2, 10, 2, 6); }
-        .account--link { .unitize-padding(2, 10, 2, 8); }
+        .account--link {
+            .unitize-padding(2, 10, 2, 8);
+
+            &.account--user-loggedin:after {
+                .unitize-width(16);
+                .unitize-height(16);
+                .unitize(top, -5);
+                .unitize(right, -5);
+                .unitize(line-height, 18);
+                .unitize(font-size, 8);
+                .border-radius(50%);
+                content: @sw-icon-check;
+                display: inline-block;
+                position: absolute;
+                background: @highlight-success;
+                font-family: @sw-icon-fontname;
+                color: #fff;
+            }
+        }
 
         .icon--basket,
         .icon--account {
@@ -140,7 +158,11 @@ More precise designations are commented inside the document.
         }
     }
 
-	.entry--cart {
+    .entry--account {
+        position: relative;
+    }
+
+    .entry--cart {
         .unitize(margin-right, 12);
         position: relative;
     }
@@ -206,6 +228,65 @@ More precise designations are commented inside the document.
 
     .main-search--text {
         display: none
+    }
+}
+
+    // Drowdown menu for account navigation
+.account--dropdown-navigation {
+    display: none;
+    text-align: left;
+
+    .navigation--logout-personalized {
+        display: inline-block;
+    }
+
+    .navigation--logout {
+        display: block;
+        .unitize(padding-left, 23);
+    }
+
+    .navigation--link.link--logout.navigation--personalized {
+        .unitize(line-height, 20);
+        color: @text-color;
+        font-weight: @font-base-weight;
+
+        .icon--logout {
+            position: relative;
+            .unitize(top, 10);
+        }
+
+        &:hover {
+            color: @brand-primary;
+        }
+    }
+
+    &.off-canvas {
+        background: @gray;
+
+        .account--menu,
+        .sidebar--navigation {
+            text-align: left;
+
+            .navigation--entry {
+                display: block;
+                margin: 0;
+
+                .navigation--link.link--logout.navigation--personalized  {
+                    .unitize(padding-top, 9);
+                    .unitize(padding-bottom, 9);
+
+                     [class^="icon--"] {
+                        .unitize-margin(0, 5, 0, 0);
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .account--close-off-canvas {
+            color: #fff;
+            font-weight: bold;
+        }
     }
 }
 
@@ -284,7 +365,7 @@ More precise designations are commented inside the document.
 }
 
 .results--list {
-	.unitize-padding(10, 10);
+    .unitize-padding(10, 10);
     .box-shadow(0 10px 25px -15px #000);
     border-top: 1px solid @border-color;
     border-bottom: 1px solid @border-color;
@@ -308,7 +389,7 @@ More precise designations are commented inside the document.
 
     .list--entry,
     .entry--all-results {
-		display: block;
+        display: block;
     }
 
     .entry--all-results.is--active {
@@ -334,14 +415,16 @@ More precise designations are commented inside the document.
     }
 
     .is--active,
-	.list--entry:hover {
+    .list--entry:hover {
         color: @link-color;
 
         .entry--name,
-		.entry--price { color: @link-color; }
+        .entry--price {
+            color: @link-color;
+        }
     }
 
-	.search-result--link {
+    .search-result--link {
         .unitize-padding(6, 0);
         .clearfix();
         display: block;
@@ -358,8 +441,8 @@ More precise designations are commented inside the document.
 
     .entry--media {
         .unitize-height(30, 16);
-		width: 10%;
-		min-width: 10%;
+        width: 10%;
+        min-width: 10%;
         position: relative;
         text-align: center;
 
@@ -374,16 +457,16 @@ More precise designations are commented inside the document.
         }
     }
 
-	.entry--name {
-		.unitize(padding-left, 10);
-		width: 60%;
-		color: @text-color;
+    .entry--name {
+        .unitize(padding-left, 10);
+        width: 60%;
+        color: @text-color;
 
         // CSS truncating
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-	}
+    }
 
     .entry--price,
     .entry--all-results-number {
@@ -669,13 +752,13 @@ More precise designations are commented inside the document.
             .unitize-padding(0, 0, 0, 10);
             width: 35%;
 
-			.logo--link { .unitize-height(50, 16); }
+            .logo--link { .unitize-height(50, 16); }
 
-			// Larger logo for tablet & desktop viewports
-			.logo--shop {
-				.unitize-height(50, 16);
-				width: 82%
-			}
+            // Larger logo for tablet & desktop viewports
+            .logo--shop {
+                .unitize-height(50, 16);
+                width: 82%
+            }
         }
     }
 
@@ -766,6 +849,63 @@ More precise designations are commented inside the document.
 
     .main-search--form { left: auto; }
 
+    // Drowdown menu for account navigation
+    .account--dropdown-navigation {
+        .unitize-min-width(200);
+        .unitize-max-width(250);
+        .unitize-padding(5, 0);
+        .unitize(top, 45);
+        display: none;
+        position: absolute;
+        right: 0;
+        z-index: @zindex-header-navigation-dropdown;
+        text-align: left;
+
+        .js--is--dropdown-active & {
+            display: block;
+        }
+
+        .navigation--smartphone {
+            display: none;
+        }
+
+        .account--menu {
+            text-align: left;
+            background: #fff;
+
+            &::after {
+                .rotate(135deg);
+                .unitize-width(8);
+                .unitize-height(8);
+                .unitize(right, 18);
+                content: '';
+                display: block;
+                position: absolute;
+                background: #fff;
+                border-color: @border-color;
+                border-width: 0 0 1px 1px;
+                border-style: solid;
+                top: 0;
+            }
+
+            .sidebar--navigation {
+                text-align: left;
+
+                .navigation--entry {
+                    display: block;
+                }
+
+                .navigation--link {
+                    .unitize-padding(3, 0);
+                }
+
+                .link--logout {
+                    .unitize-padding(10, 0, 0, 0);
+                }
+            }
+        }
+    }
+
     .main-search--results {
         .clearfix();
         .unitize-width(450);
@@ -834,7 +974,15 @@ More precise designations are commented inside the document.
         }
 
         .entry--account {
-            .account--link { .unitize(padding-left, 36); }
+
+            .account--link {
+                .unitize(padding-left, 36);
+                &.account--user-loggedin:after {
+                    content: none;
+                    display: none;
+                }
+
+            }
 
             .icon--account {
                 .unitize(left, 8);
@@ -844,7 +992,26 @@ More precise designations are commented inside the document.
             }
         }
 
-        .account--display { display: inline-block; }
+        .account--display {
+            display: inline-block;
+        }
+
+        .account--display.navigation--personalized {
+            .unitize(line-height, 16);
+            .unitize(font-size, 12);
+            .unitize(max-width, 90);
+            .unitize(margin-top, 2);
+            text-align: left;
+
+            .account--display-greeting {
+                display: block;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+        }
+
     }
 }
 
