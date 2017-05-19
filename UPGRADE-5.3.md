@@ -173,13 +173,14 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed the script tag for the generated JavaScript file for asynchronous loading, can be changed in theme configuration
 * Changed the inline script for the statistics update to vanilla JavaScript
 * Changed event name from `plugin/swAjaxProductNavigation/onSetProductState` to `plugin/swAjaxProductNavigation/onGetProductState`
-* Change behavior of the smarty rendering in forms fields comment. See below for more information
-* Change behavior of the tracking url rendering. See below for more information
+* Changed behavior of the smarty rendering in forms fields comment. See below for more information
+* Changed behavior of the tracking url rendering. See below for more information
 * Changed text color and height of `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 * Changed database column `s_articles_details.instock` to allow `NULL` values and default to `0`
 * Backend customer listing is now loaded in `Shopware_Controllers_Backend_CustomerQuickView`
 * Refactored backend customer module. Please take a look into the different template files to see what has changed. 
 * Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
+* Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
 
 ### Removals
 

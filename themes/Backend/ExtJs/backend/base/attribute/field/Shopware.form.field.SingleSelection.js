@@ -149,9 +149,10 @@ Ext.define('Shopware.form.field.SingleSelection', {
             store: me.store,
             allowBlank: me.allowBlank,
             isFormField: false,
+            style: 'margin-right: 0 !important',
             pageSize: me.store.pageSize,
             labelWidth: 180,
-            minChars: 2
+            minChars: 0
         };
     },
 

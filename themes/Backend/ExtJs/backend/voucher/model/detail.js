@@ -33,69 +33,69 @@
  * The Detail model of the voucher module represent a data row of the s_emarketing_vouchers or the
  * Shopware\Models\Voucher\Voucher doctrine model, with some additional data for the additional information panel.
  */
-//{block name="backend/voucher/model/detail"}
+// {block name="backend/voucher/model/detail"}
 Ext.define('Shopware.apps.Voucher.model.Detail', {
     /**
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
-        //{block name="backend/voucher/model/detail/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'description', type : 'string' },
-        { name : 'voucherCode', type : 'string' },
-        { name : 'numberOfUnits', type : 'int' , defaultValue:1 },
-        { name : 'value', type : 'double' },
-        { name : 'minimumCharge', type : 'double' },
-        { name : 'shippingFree'},
-        { name : 'bindToSupplier', type : 'int', useNull:true },
-        { name : 'validFrom', type: 'date', dateFormat: 'd.m.Y' },
-        { name : 'validTo', type: 'date', dateFormat: 'd.m.Y' },
-        { name : 'orderCode', type : 'string' },
-        { name : 'modus', type : 'int' },
-        { name : 'percental', type : 'int' },
-        { name : 'numOrder', type : 'int', defaultValue:1 },
-        { name : 'customerGroup', type : 'int', useNull:true },
-        { name : 'restrictArticles', type : 'string' },
-        { name : 'strict', type : 'int' },
-        { name : 'shopId', type : 'int', useNull:true },
-        { name : 'customerStreamIds', type : 'string', useNull:true, defaultValue: null },
-        { name : 'taxConfig', type : 'string', useNull:true }
+    fields: [
+        // {block name="backend/voucher/model/detail/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'description', type: 'string' },
+        { name: 'voucherCode', type: 'string' },
+        { name: 'numberOfUnits', type: 'int', defaultValue: 1 },
+        { name: 'value', type: 'double' },
+        { name: 'minimumCharge', type: 'double' },
+        { name: 'shippingFree' },
+        { name: 'bindToSupplier', type: 'int', useNull: true },
+        { name: 'validFrom', type: 'date', dateFormat: 'd.m.Y' },
+        { name: 'validTo', type: 'date', dateFormat: 'd.m.Y' },
+        { name: 'orderCode', type: 'string' },
+        { name: 'modus', type: 'int' },
+        { name: 'percental', type: 'int' },
+        { name: 'numOrder', type: 'int', defaultValue: 1 },
+        { name: 'customerGroup', type: 'int', useNull: true },
+        { name: 'restrictArticles', type: 'string' },
+        { name: 'strict', type: 'int' },
+        { name: 'shopId', type: 'int', useNull: true },
+        { name: 'customerStreamIds', type: 'string', useNull: true, defaultValue: null },
+        { name: 'taxConfig', type: 'string', useNull: true }
 
     ],
     /**
     * If the name of the field is 'id' extjs assumes automagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getVoucherDetail}',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getVoucherDetail}',
             create: '{url action=saveVoucher}',
             update: '{url action=saveVoucher}',
-            destroy:'{url action=deleteVoucher targetField=vouchers}'
+            destroy: '{url action=deleteVoucher targetField=vouchers}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     },
     /**
     * Rules to validate the input at the frontend side.
     */
-    validations : [
-        { field : 'description', type : 'length', min : 5 }
+    validations: [
+        { field: 'description', type: 'length', min: 5 }
     ]
 });
-//{/block}
+// {/block}

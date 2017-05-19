@@ -313,22 +313,15 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
 
         //save empty values
-        if (empty($params['validFrom'])) {
-            $params['validFrom'] = null;
-        }
-        if (empty($params['validTo'])) {
-            $params['validTo'] = null;
-        }
-
-        if (empty($params['customerGroup'])) {
-            $params['customerGroup'] = null;
-        }
-        if (empty($params['shopId'])) {
-            $params['shopId'] = null;
-        }
-        if (empty($params['bindToSupplier'])) {
-            $params['bindToSupplier'] = null;
-        }
+        $params = array_merge([
+            'validFrom' => null,
+            'validTo' => null,
+            'customerGroup' => null,
+            'shopId' => null,
+            'bindToSupplier' => null,
+            'customerStreamIds' => null,
+            'restrictedArticles' => null,
+        ], $params);
 
         $voucher->fromArray($params);
         $this->getManager()->persist($voucher);
