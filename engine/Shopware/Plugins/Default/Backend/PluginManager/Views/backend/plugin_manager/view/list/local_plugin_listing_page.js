@@ -348,21 +348,21 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         if (inSafeMode) {
             me.toggleSafeMode();
             return;
-        } else {
-            Ext.Msg.confirm(
-                '{s name="safemodepopup/title"}Attention!{/s}',
-                '{s name="safemodepopup/detail"}Enabling safe mode, all plugins that are not from shopware AG are disabled. This can severely limit the stability and runability of the shop. Use this mode only if you know exactly what you are doing. When the security mode is exited, the automatically deactivated plugins are activated again. Would you like to enable Safe mode now?{/s}',
-                function (button) {
-                    if (button == 'yes') {
-                        me.toggleSafeMode();
-                        return;
-                    } else {
-                        me.safeModeCheckbox.setRawValue(false);
-                        me.safeModeCheckbox.lastValue = false;
-                    }
-                }
-            );
         }
+
+        Ext.Msg.confirm(
+            '{s name="safemodepopup/title"}Attention!{/s}',
+            '{s name="safemodepopup/detail"}Enabling safe mode, all plugins that are not from shopware AG are disabled. This can severely limit the stability and runability of the shop. Use this mode only if you know exactly what you are doing. When the security mode is exited, the automatically deactivated plugins are activated again. Would you like to enable Safe mode now?{/s}',
+            function (button) {
+                if (button == 'yes') {
+                    me.toggleSafeMode();
+                    return;
+                } else {
+                    me.safeModeCheckbox.setRawValue(false);
+                    me.safeModeCheckbox.lastValue = false;
+                }
+            }
+        );
     },
 
     toggleSafeMode: function () {
@@ -384,10 +384,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         } else {
             var content = '{s name=content/safe_mode_off}Safe mode has been turned off{/s}';
         }
+        Shopware.app.Application.fireEvent('clear-all-cache');
         msg.createGrowlMessage(title, content);
         Shopware.app.Application.fireEvent('reload-local-listing');
-
-        me.clearCache(response.caches);
     },
 
     checkInSafeMode: function () {
@@ -504,45 +503,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         });
 
         return items;
-    },
-
-    clearCache: function(caches, callback, scope) {
-        var me = this;
-
-        var message = Ext.String.format(
-            '{s name=clear_cache}This plugin needs a new initialisation in the following caches: [0]Clear cache?{/s}',
-            '<br><br>- ' + caches.join('<br>- ') + '<br><br>'
-        );
-
-        me.confirmMessage(
-            '',
-            message,
-            function() {
-                var params = {};
-
-                Ext.each(caches, function(cacheKey) {
-                    params['cache[' + cacheKey + ']'] = 'on';
-                });
-
-                Ext.Ajax.request({
-                    url:'{url controller="Cache" action="clearCache"}',
-                    method: 'POST',
-                    params: params,
-                    callback: function() {
-                        if (caches.indexOf('theme') >= 0 || caches.indexOf('frontend') >= 0) {
-                            Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
-                        }
-                        if (Ext.isFunction(callback)) {
-                            Ext.callback(callback, scope);
-                        }
-                        me.hideLoadingMask();
-                    }
-                });
-            },
-            function() {
-                Ext.callback(callback, scope);
-            }
-        );
-    },
+    }
 });
 //{/block}

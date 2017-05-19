@@ -329,7 +329,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $installerService->activatePlugin($plugin);
             }
             $em->flush();
-            $this->View()->assign(['success' => true, 'inSafeMode' => false, 'caches' => $caches]);
+            $this->View()->assign(['success' => true, 'inSafeMode' => false]);
 
             return;
         }
@@ -342,7 +342,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
         $em->flush();
 
-        $this->View()->assign(['success' => true, 'inSafeMode' => true, 'caches' => $caches]);
+        $this->View()->assign(['success' => true, 'inSafeMode' => true]);
     }
 
     public function isInSafeModeAction()
@@ -356,6 +356,13 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'inSafeMode' => $inSafeMode,
+        ]);
+    }
+
+    public function getAllCachesAction()
+    {
+        $this->View()->assign([
+            'caches' => InstallContext::CACHE_LIST_ALL
         ]);
     }
 
