@@ -93,7 +93,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         if (!empty($filter)) {
             $searchSQL = 'AND v.description LIKE :filter
                             OR v.vouchercode LIKE :filter
-                            OR v.value LIKE :filter';
+                            OR v.value LIKE :filter
+                            OR (SELECT 1 FROM s_emarketing_voucher_codes WHERE voucherID = v.id AND code LIKE :filter LIMIT 1)';
             $sqlBindings['filter'] = '%' . $filter . '%';
         }
         //sorting data
