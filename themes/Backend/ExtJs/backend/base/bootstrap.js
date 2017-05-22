@@ -133,6 +133,7 @@
 {include file='backend/base/store/category_tree.js'}
 {include file='backend/base/store/customer_group.js'}
 {include file='backend/base/store/dispatch.js'}
+{include file='backend/base/store/doc_type.js'}
 {include file='backend/base/store/payment.js'}
 {include file='backend/base/store/shop.js'}
 {include file='backend/base/store/shop_language.js'}
@@ -171,7 +172,6 @@
 {include file='backend/base/component/Shopware.form.field.CodeMirror.js'}
 {include file='backend/base/component/Shopware.form.field.ArticleSearch.js'}
 {include file='backend/base/component/Shopware.form.field.PagingComboBox.js'}
-{include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 {include file='backend/base/component/Shopware.container.Viewport.js'}
 {include file='backend/base/component/Shopware.DragAndDropSelector.js'}
 {include file='backend/base/component/Shopware.DataView.GooglePreview.js'}
@@ -271,7 +271,7 @@
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ShopGrid.js'}
-
+{include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}

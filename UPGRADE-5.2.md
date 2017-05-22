@@ -2,8 +2,15 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.25
+
+* The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
+
 ## 5.2.23
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
+* Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
+* Added default `limit` of 100 in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyIndexer::populate`
+* Added a base store for `Shopware.apps.Base.model.DocType`
 
 ## 5.2.22
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
@@ -342,6 +349,7 @@ There must be at least one option tag and inside each option tag where must be a
     * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
 * Removed synchronizing of plugin information column `changes`
 * Allow root menu elements for plugins. Added attribute `isRootMenu` in `menu.xml` Example: `<entry isRootMenu="true">`
+* Normalized the return value of `Album\Settings` getThumbnailSize to return a empty array instead of a array with an empty string when no size is active
 
 ## 5.2.3
 

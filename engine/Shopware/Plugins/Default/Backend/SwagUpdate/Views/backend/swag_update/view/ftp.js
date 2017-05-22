@@ -39,6 +39,8 @@ Ext.define('Shopware.apps.SwagUpdate.view.Ftp', {
     width: 360,
     height: 380,
 
+    wrongPermissionCount: 0,
+
     initComponent: function () {
         var me = this;
 
@@ -113,7 +115,10 @@ Ext.define('Shopware.apps.SwagUpdate.view.Ftp', {
         return Ext.create('Ext.container.Container', {
             margin: '0 0 30 0',
             style: 'font-size: 13px;',
-            html: '{s name="ftp/info_text"}Please fill in your ftp credentials.<br>An update without this data isn\'t possible!{/s}'
+            html: Ext.String.format(
+                '{s name="ftp/info_text"}The file permissions of [0] file(s) could not be fixed. A list of affected files can be found in the logs.<br><br>Please fix all file permission problems (recommended) or fill in your ftp credentials.{/s}',
+                me.wrongPermissionCount
+            )
         });
     }
 

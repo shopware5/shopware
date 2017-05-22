@@ -1,4 +1,4 @@
-/*
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -22,28 +22,31 @@
  *
  * @category   Shopware
  * @package    Base
- * @subpackage Component
+ * @subpackage Store
  * @version    $Id$
  * @author shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
-    },
+/**
+ * The base store for document types.
+ */
+Ext.define('Shopware.apps.Base.store.DocType', {
+    extend: 'Ext.data.Store',
 
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return (value === "0000-00-00") ? null : new Date(value);
-        } else {
-            return value;
+    alternateClassName: 'Shopware.store.DocType',
+    storeId: 'base.DocType',
+    model : 'Shopware.apps.Base.model.DocType',
+    pageSize: 1000,
+    remoteFilter: true,
+
+    proxy:{
+        type:'ajax',
+        url:'{url action="getDocTypes"}',
+        reader:{
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
-});
+}).create();
+

@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Document\Document;
 use Shopware\Models\Shop\Locale;
 
 /**
@@ -937,6 +938,44 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         $this->View()->assign('data', $salutations);
+    }
+
+    /**
+     * Returns a list of document types. Supports store paging, sorting and filtering over the standard ExtJs store
+     * parameters. Each document type has the following fields:
+     * <code>
+     *    [int]      id
+     *    [string]   name
+     *    [string]   template
+     *    [string]   numbers
+     *    [int]      left
+     *    [int]      right
+     *    [int]      top
+     *    [int]      bottom
+     *    [int]      pageBreak
+     * </code>
+     *
+     * @throws \Exception
+     */
+    public function getDocTypesAction()
+    {
+        $modelManager = $this->container->get('models');
+        $repository = $modelManager
+            ->getRepository(Document::class);
+
+        $builder = $repository->createQueryBuilder('d');
+
+        $builder->select('d')
+            ->addFilter((array) $this->Request()->getParam('filter', []))
+            ->addOrderBy((array) $this->Request()->getParam('sort', []))
+            ->setFirstResult($this->Request()->getParam('start', 0))
+            ->setMaxResults($this->Request()->getParam('limit', 250));
+
+        $query = $builder->getQuery();
+        $total = $modelManager->getQueryCount($query);
+        $data = $query->getArrayResult();
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**

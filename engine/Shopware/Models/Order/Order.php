@@ -1122,7 +1122,9 @@ class Order extends ModelEntity
         //iterate order details to recalculate the amount.
         /** @var $detail Detail */
         foreach ($this->getDetails() as $detail) {
-            $invoiceAmount += $detail->getPrice() * $detail->getQuantity();
+            $price = round($detail->getPrice(), 2);
+
+            $invoiceAmount += $price * $detail->getQuantity();
 
             $tax = $detail->getTax();
 
@@ -1134,9 +1136,9 @@ class Order extends ModelEntity
             }
 
             if ($this->net) {
-                $invoiceAmountNet += round(($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
+                $invoiceAmountNet += round(($price * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
             } else {
-                $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / (100 + $taxValue) * 100;
+                $invoiceAmountNet += round(($price * $detail->getQuantity()) / (100 + $taxValue) * 100, 2);
             }
         }
 

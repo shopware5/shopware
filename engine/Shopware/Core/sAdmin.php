@@ -25,6 +25,7 @@
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -536,7 +537,7 @@ class sAdmin
 
             $optInNewsletter = $this->config->get('optinnewsletter');
             if ($optInNewsletter) {
-                $hash = md5(uniqid(rand()));
+                $hash = Random::getAlphanumericString(32);
                 $data = serialize(['newsletter' => $email, 'subscribeToNewsletter' => true]);
 
                 $link = $this->front->Router()->assemble([

@@ -247,11 +247,15 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
     onStartEvent: function(win) {
         var me = this;
 
+        win.setLoading('{s name=check_file_permission/message}Preparing...{/s}');
+
         Ext.Ajax.request({
             url: '{url controller=SwagUpdate action=isUpdateAllowed}',
             async: true,
             timeout: 180000,
             success: function(response) {
+                win.setLoading(false);
+
                 if (!response || !response.responseText) {
                     return;
                 }
@@ -269,7 +273,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
                 }
 
                 if (result.ftpRequired) {
-                    me.getView('Ftp').create().show();
+                    me.getView('Ftp').create({ wrongPermissionCount: result.wrongPermissionCount }).show();
                 } else {
                     me.getView('Progress').create().show();
                 }

@@ -7,7 +7,6 @@
 
     {* Product image - Gallery *}
     {block name="frontend_detail_image_box"}
-        {strip}
         <div class="image-slider--container{if !$sArticle.image} no--image{/if}{if !count($sArticle.images)} no--thumbnails{/if}">
             <div class="image-slider--slide">
 
@@ -89,7 +88,6 @@
                 {/foreach}
             </div>
         </div>
-        {/strip}
     {/block}
 
     {* Product image - Dot navigation *}

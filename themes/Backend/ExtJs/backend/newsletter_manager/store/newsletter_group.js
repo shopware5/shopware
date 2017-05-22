@@ -31,14 +31,21 @@
  * Shopware Store - newsletter group store
  * Stores the custom newsletter groups
  */
-//{block name="backend/newsletter_manager/store/newsletter_group"}
+// {block name="backend/newsletter_manager/store/newsletter_group"}
 Ext.define('Shopware.apps.NewsletterManager.store.NewsletterGroup', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.NewsletterManager.model.NewsletterGroup',
+    model: 'Shopware.apps.NewsletterManager.model.NewsletterGroup',
     remoteFilter: true,
     remoteSort: true,
+
+    /**
+     * Amount of data loaded at once
+     * @integer
+     */
+    pageSize: 1000,
+
     /**
      * Configure the data communication
      * @object
@@ -61,8 +68,8 @@ Ext.define('Shopware.apps.NewsletterManager.store.NewsletterGroup', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });
-//{/block}
+// {/block}
