@@ -41,6 +41,16 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
             pagingbar: false,
             toolbar: false,
             displayProgressOnSingleDelete: false,
+
+            /*{if !{acl_is_allowed resource=customerstream privilege=delete}}*/
+                deleteColumn: false,
+            /*{/if}*/
+
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                editColumn: false,
+            /*{/if}*/
+            
+            
             columns: {
                 name: {
                     renderer: me.nameRenderer
@@ -62,6 +72,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     createActionColumnItems: function() {
         var me = this, items = me.callParent(arguments);
 
+        /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+            return items;
+        /*{/if}*/
+        
         items = Ext.Array.insert(items, 0, [
             {
                 iconCls: 'sprite-arrow-circle-315',
@@ -74,6 +88,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                     me.fireEvent('index-stream', record, function() {
                         el.removeCls('rotate');
                         me.fireEvent('reset-progressbar');
+                        me.getStore().load();
                     });
                 }
             }

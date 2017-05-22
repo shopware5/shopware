@@ -44,7 +44,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:customer:stream:index:populate')
-            ->setDescription('Refreshs all customer streams with the saved conditions')
+            ->setDescription('Refreshs all Customer Streams with the saved conditions')
             ->addOption('streamId', null, InputOption::VALUE_OPTIONAL)
         ;
     }
@@ -65,7 +65,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand
         $helper = new ConsoleProgressHelper($output);
 
         foreach ($streams as $stream) {
-            $output->writeln("\n## Indexing customer stream: " . $stream['name'] . ' ##');
+            $output->writeln("\n## Indexing Customer Stream: " . $stream['name'] . ' ##');
             $indexer->populate($stream['id'], $helper);
         }
     }

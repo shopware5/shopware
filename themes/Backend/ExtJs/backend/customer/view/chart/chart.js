@@ -63,6 +63,11 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
         return [];
     },
 
+    currencyRenderer: function(value) {
+        value = value * 1;
+        return Ext.util.Format.currency(value, this.subApp.currencySign, 2, (this.subApp.currencyAtEnd == 1));
+    },
+
     createAxes: function () {
         var me = this;
         return [{
@@ -74,7 +79,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             minimum: 0,
             label: {
                 renderer:function (value) {
-                    return Ext.util.Format.currency(value, '€', 2, true);
+                    return me.currencyRenderer(value);
                 }
             }
         }, {
@@ -84,7 +89,11 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             fields: ['yearMonth'],
             label: {
                 renderer:function (value) {
-                    return Ext.util.Format.date(value);
+                    var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
+                    return Ext.util.Format.date(myDate, 'M, Y');
+                },
+                rotate: {
+                    degrees: 315
                 }
             }
         }];
@@ -108,13 +117,31 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
     createLineSeries: function(field, title) {
         return {
             type: 'line',
-            highlight: { size: 7, radius: 7 },
             axis: 'left',
+            highlight: { size: 7, radius: 7 },
             fill: true,
-            title: title,
             smooth: true,
+            title: title,
             xField: 'yearMonth',
             yField: field,
+            tips: {
+                trackMouse: true,
+                layout: 'fit',
+                lineField: field,
+                fieldTitle: title,
+                height: 45,
+                width: 300,
+                highlight: { size: 7, radius: 7 },
+                renderer: function (storeItem) {
+                    var value = storeItem.get(this.lineField);
+                    this.setTitle(
+                        '<div class="customer-stream-chart-tip">' +
+                            '<span class="customer-stream-chart-tip-label">' + this.fieldTitle + ':</span>&nbsp;'+
+                            '<span class="customer-stream-chart-tip-amount">' + me.currencyRenderer(value) + '</span>' +
+                        '</div>'
+                    );
+                }
+            },
             markerConfig: { type: 'circle', size: 4, radius: 4, 'stroke-width': 0 }
         };
     }

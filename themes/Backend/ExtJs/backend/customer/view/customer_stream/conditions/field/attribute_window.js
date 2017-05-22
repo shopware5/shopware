@@ -32,11 +32,11 @@
 // {block name="backend/customer/view/customer_stream/conditions/field/attribute_window"}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeWindow', {
-    extend: 'Ext.window.Window',
+    extend: 'Enlight.app.Window',
     modal: true,
-    bodyPadding: 10,
-    width: 400,
-
+    width: 600,
+    height: 145,
+    title: '{s name=attribute/input_text}{/s}',
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -69,12 +69,17 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
             displayField: 'label'
         });
 
-        me.notice = Ext.create('Ext.container.Container', {
-            html: '{s name=attribute/input_text}{/s}',
-            height: 40
-        });
-
-        return [me.notice, me.attributeCombo];
+        return [{
+            xtype: 'form',
+            bodyPadding: 20,
+            border: false,
+            items: [me.attributeCombo],
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            flex: 1
+        }];
     },
 
     createToolbar: function() {

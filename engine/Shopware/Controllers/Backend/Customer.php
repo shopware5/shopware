@@ -90,6 +90,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         if (in_array($this->Request()->getActionName(), ['performOrderRedirect'])) {
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         }
+        $currency = Shopware()->Db()->fetchRow(
+            'SELECT templatechar as sign, (symbol_position = 16) currencyAtEnd
+            FROM s_core_currencies
+            WHERE standard = 1'
+        );
+
+        $this->View()->assign('currency', $currency);
+
         parent::init();
     }
 

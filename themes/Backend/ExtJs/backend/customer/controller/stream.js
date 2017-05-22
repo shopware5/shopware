@@ -83,6 +83,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 if (store.getCount() > 0) {
                     var streams = store.data.items;
                     me.refreshWhileFullIndex(streams, streams.length);
+                } else {
+                    me.resetProgressbar();
                 }
             });
             return;
@@ -133,8 +135,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
             Ext.defer(function() {
                 me.indexStreams(next, streams, total);
-            }, 750);
-        }, 500);
+            }, 650);
+        }, 400);
     },
 
     checkIndexState: function() {
@@ -263,10 +265,12 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     saveAsNewStream: function() {
         var me = this;
         var form = me.createNewStreamForm();
+        var streamView = me.getStreamView();
 
-        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+        if (!streamView.formPanel.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage('', '{s name="not_valid_stream"}{/s}');
             return;
-        /*{/if}*/
+        }
 
         var button = Ext.create('Ext.button.Button', {
             cls: 'primary',
@@ -276,7 +280,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     me.saveStream(
                         Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues())
                     );
-
                     window.destroy();
                 }
             }
@@ -296,6 +299,22 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             }]
         });
 
+        window.on('afterrender', function() {
+            var nameField = window.down('textfield[name=name]');
+            nameField.focus(false, 125);
+            nameField.on('specialkey', function(field, event) {
+                if(event.getKey() !== event.ENTER) {
+                    return false;
+                }
+                if (form.getForm().isValid()) {
+                    me.saveStream(
+                        Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues())
+                    );
+                    window.destroy();
+                }
+            });
+        });
+
         window.show();
     },
 
@@ -313,6 +332,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         /*{/if}*/
 
         if (!streamView.formPanel.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage('', '{s name="not_valid_stream"}{/s}');
             return;
         }
 
@@ -320,10 +340,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         record.save({
             callback: function() {
-                me.preventStreamChanged = true;
-                streamView.streamListing.selModel.deselectAll(true);
-                me.preventStreamChanged = false;
-                streamView.streamListing.selModel.select([record], false, true);
                 me.indexStream(record);
             }
         });
@@ -378,6 +394,11 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         };
 
         streamView.listStore.load();
+
+        var active = streamView.cardContainer.getLayout().getActiveItem();
+        if (active.name === 'detail-form') {
+            streamView.cardContainer.getLayout().setActiveItem(0);
+        }
     },
 
     loadChart: function() {
@@ -410,6 +431,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         /*{/if}*/
 
         if (!streamDetailForm.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage('', '{s name="not_valid_stream"}{/s}');
             return;
         }
         var record = streamDetailForm.getRecord();
@@ -521,7 +543,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 Ext.defer(function () {
                     me.getStreamView().indexingBar.updateProgress(0, '{s name=last_analyse}{/s}' + Ext.util.Format.date(response.last_index_time), true);
                     me.getStreamView().indexingBar.addCls('empty');
-                }, 1000);
+                }, 500);
             }
         });
 

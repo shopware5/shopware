@@ -33,6 +33,7 @@ class Migrations_Migration929 extends AbstractMigration
     {
         $this->addSql("INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('customerstream');");
         $this->addSql("SET @resourceId = (SELECT id FROM s_core_acl_resources WHERE name = 'customerstream');");
+        $this->addSql("INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'read');");
         $this->addSql("INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'save');");
         $this->addSql("INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'delete');");
         $this->addSql("INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'search_index');");

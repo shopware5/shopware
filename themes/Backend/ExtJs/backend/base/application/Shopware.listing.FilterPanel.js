@@ -124,7 +124,7 @@ Ext.define('Shopware.listing.FilterPanel', {
      * This container is displayed at the top of the filter panel.
      * @type { String }
      */
-    infoTextSnippet: '{s name="filter_panel/info_text"}Activate the filter fields over the checkbox which displayed for each field. Activated fields will be joined with an AND condition.{/s}',
+    infoTextSnippet: '{s name="filter_panel/info_text"}Activate the filter by clicking the regarding checkbox. These filters will be linked with an AND condition.{/s}',
 
     /**
      * Contains the text for the { @link #filterButton }.

@@ -112,13 +112,20 @@ class CustomerStreamRepository
     public function fetchStreamsCustomerCount(array $streamIds)
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(['stream_id', 'COUNT(customer_id)']);
+        $query->select([
+            'stream_id',
+            'COUNT(customer_id) as customer_count',
+            'SUM(IF(campaign.id IS NULL, 0, 1)) as newsletter_count',
+        ]);
+
         $query->from('s_customer_streams_mapping', 'mapping');
+        $query->leftJoin('mapping', 's_user', 'customer', 'customer.id = mapping.customer_id');
+        $query->leftJoin('mapping', 's_campaigns_mailaddresses', 'campaign', 'campaign.email = customer.email');
         $query->where('mapping.stream_id IN (:ids)');
         $query->setParameter(':ids', $streamIds, Connection::PARAM_INT_ARRAY);
         $query->groupBy('stream_id');
 
-        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 
     /**
@@ -340,7 +347,6 @@ class CustomerStreamRepository
         ]);
 
         $query->from('s_order', 'orders');
-        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('orders.ordernumber IS NOT NULL');
         $query->andWhere('orders.ordertime >= :orderTime');
@@ -360,8 +366,6 @@ class CustomerStreamRepository
             "DATE_FORMAT(orders.ordertime, '%Y/%m')",
             "DATE_FORMAT(orders.ordertime, '%Y/%m') as yearMonth",
             'COUNT(DISTINCT orders.id) count_orders',
-            'ROUND(SUM(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_sum',
-            'ROUND(AVG(orders.invoice_amount / orders.currencyFactor), 2) as invoice_amount_avg',
             'MIN(orders.invoice_amount / orders.currencyFactor) as invoice_amount_min',
             'MAX(orders.invoice_amount / orders.currencyFactor) as invoice_amount_max',
             'MIN(orders.ordertime) as first_order_time',

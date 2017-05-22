@@ -39,10 +39,8 @@ Ext.define('Shopware.apps.Customer.view.chart.MetaChart', {
         me.store = Ext.create('Ext.data.Store', {
             fields: [
                 { name: 'count_orders', type: 'int' },
-                { name: 'invoice_amount_avg', type: 'float' },
                 { name: 'invoice_amount_max', type: 'float' },
                 { name: 'invoice_amount_min', type: 'float' },
-                { name: 'invoice_amount_sum', type: 'float' },
                 { name: 'product_avg', type: 'float' },
                 { name: 'yearMonth', type: 'string' }
             ],
@@ -62,10 +60,8 @@ Ext.define('Shopware.apps.Customer.view.chart.MetaChart', {
     getFields: function () {
         return [
             { name: 'count_orders',       title: '{s name=count_orders}{/s}' },
-            { name: 'invoice_amount_avg', title: '{s name=average_amount}{/s}' },
             { name: 'invoice_amount_max', title: '{s name=max_order}{/s}' },
             { name: 'invoice_amount_min', title: '{s name=min_order}{/s}' },
-            { name: 'invoice_amount_sum', title: '{s name=invoice_amount_sum}{/s}' },
             { name: 'product_avg',        title: '{s name=average_product_amount}{/s}' }
         ];
     }
