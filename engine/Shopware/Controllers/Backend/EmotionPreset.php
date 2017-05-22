@@ -23,6 +23,7 @@
  */
 
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
@@ -34,7 +35,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     {
         $resource = $this->container->get('shopware.api.emotionpreset');
 
-        $presets = $resource->getList($this->getLocale());
+        $presets = $resource->getList($this->getLocale(), false);
 
         $presets = $this->enrichImagePaths($presets);
         $presets = $this->enrichPlugins($presets);
@@ -42,6 +43,33 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $presets,
+        ]);
+    }
+
+    public function previewAction()
+    {
+        $id = $this->Request()->getParam('id');
+
+        if (!$id) {
+            $this->View()->assign([
+                'success' => false,
+            ]);
+
+            return;
+        }
+
+        $previewData = $this->container->get('models')->getRepository(Preset::class)->createQueryBuilder('preset')
+            ->select('preset.presetData, preset.preview')
+            ->where('preset.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult(Query::HYDRATE_ARRAY);
+
+        $previewData['previewUrl'] = $this->getImagePath($previewData['preview']);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $previewData,
         ]);
     }
 

@@ -152,6 +152,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
                 if ($isBlog) {
                     $blog = $this->getRandomBlog($categoryId, $context);
+                    if (!$blog) {
+                        break;
+                    }
                     $media = array_shift($blog->getMedias());
 
                     $element->getData()->set('blog', $blog);
@@ -166,7 +169,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
                 /** @var ListProduct $product */
                 $product = reset($products);
 
-                if (!$product) {
+                if (!$product || !$product->getCover()) {
                     break;
                 }
 

@@ -172,6 +172,9 @@ class StructConverter
                 break;
 
             case ArticleSliderComponentHandler::COMPONENT_NAME:
+                if (!$element->getData()->get('products') || !array_filter($element->getData()->get('products'))) {
+                    break;
+                }
                 $elementArray['data']['categoryId'] = (int) $elementArray['article_slider_category'];
 
                 $products = $this->converter->convertListProductStructList($element->getData()->get('products'));

@@ -70,12 +70,13 @@ class EmotionPreset extends Resource
 
     /**
      * @param string $locale
+     * @param bool   $fetchAll
      *
      * @return array[]
      */
-    public function getList($locale = 'de_DE')
+    public function getList($locale = 'de_DE', $fetchAll = true)
     {
-        return $this->hydrate($this->fetch(), $locale);
+        return $this->hydrate($this->fetch($fetchAll), $locale);
     }
 
     /**
@@ -219,12 +220,20 @@ class EmotionPreset extends Resource
     }
 
     /**
+     * @param bool $fetchAll
+     *
      * @return array[]
      */
-    private function fetch()
+    private function fetch($fetchAll = true)
     {
         $builder = $this->models->createQueryBuilder();
-        $builder->select(['preset', 'translation']);
+
+        if ($fetchAll) {
+            $builder->select(['preset, translation']);
+        } else {
+            $builder->select(['partial preset.{id, name, premium, custom, thumbnail, assetsImported, hidden, requiredPlugins}', 'translation']);
+        }
+
         $builder->from(Preset::class, 'preset', 'preset.id');
         $builder->leftJoin('preset.translations', 'translation');
         $builder->where('preset.hidden = 0');

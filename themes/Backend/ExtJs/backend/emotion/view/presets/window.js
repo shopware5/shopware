@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
 
     showPreview: false,
 
-    height: '80%',
+    height: '82%',
     width: 1200,
 
     layout: 'border',

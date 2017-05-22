@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         me.addEvents('showpresetdetails');
 
         me.store.on('load', function() {
+            me.selectedPreset = null;
             if (me.store.getCount() > 0) {
                 me.infoView.getSelectionModel().select(0);
                 me.selectedPreset = me.infoView.getSelectionModel().getSelection()[0];
@@ -71,9 +72,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                     if (me.down('#deletebutton')) {
                         me.down('#deletebutton').setDisabled(!me.selectedPreset.get('custom'));
                     }
-                    me.fireEvent('showpresetdetails', me.selectedPreset);
                 }
             }
+            me.fireEvent('showpresetdetails', me.selectedPreset);
         });
 
         me.callParent(arguments);
