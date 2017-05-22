@@ -58,7 +58,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
 
-        $fallback = $this->getFallbackLocaleId();
+        $fallback = $this->getFallbackLocaleId($locale->getId());
 
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $locale = $user->locale;
         $language = $locale->toString();
 
-        $fallback = $this->getFallbackLocaleId();
+        $fallback = $this->getFallbackLocaleId($locale->getId());
 
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
@@ -1311,10 +1311,16 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
+     * @param $currentLocaleId
+     *
      * @return int
      */
-    private function getFallbackLocaleId()
+    private function getFallbackLocaleId($currentLocaleId)
     {
+        if ($currentLocaleId === 1) {
+            return 1;
+        }
+
         $fallback = (int) $this->container->get('dbal_connection')->fetchColumn(
             "SELECT id FROM s_core_locales WHERE locale = 'en_GB'"
         );
