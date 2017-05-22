@@ -499,11 +499,13 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $additions = $cacheControl->getTagsForNoCacheCookie($this->request, $context);
+        $additions = array_keys(array_flip($additions));
         foreach ($additions as $tag) {
             $this->setNoCacheTag($tag);
         }
 
         $removals = $cacheControl->getRemovableCacheTags($this->request, $context);
+        $removals = array_keys(array_flip($removals));
         foreach ($removals as $tag) {
             $this->setNoCacheTag($tag, true);
         }
@@ -517,19 +519,18 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setNoCacheTag($newTag, $remove = false)
     {
-        static $existingTags, $shopId;
-
-        if (!isset($existingTags)) {
-            if ($this->request->getCookie('nocache')) {
-                $existingTags = $this->request->getCookie('nocache');
-                $existingTags = explode(', ', $existingTags);
-            } else {
-                $existingTags = [];
-            }
-            $shopId = Shopware()->Shop()->getId();
+        if ($existingTags = $this->getResponseCookie($this->response)) {
+            $existingTags = explode(', ', $existingTags);
+        } elseif ($this->request->getCookie('nocache')) {
+            $existingTags = $this->request->getCookie('nocache');
+            $existingTags = explode(', ', $existingTags);
+        } else {
+            $existingTags = [];
         }
 
-        if (!empty($newTag)) {
+        $shopId = Shopware()->Shop()->getId();
+
+        if (!empty($newTag) && $newTag !== 'slt') {
             $newTag .= '-' . $shopId;
         }
 
@@ -726,6 +727,18 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     public function disableControllerCache()
     {
         $this->response->setHeader('Cache-Control', 'private', true);
+    }
+
+    private function getResponseCookie(Response $response)
+    {
+        $cookies = $response->getCookies();
+        foreach ($cookies as $cookie) {
+            if ($cookie['name'] === 'nocache') {
+                return $cookie['value'];
+            }
+        }
+
+        return null;
     }
 
     /**

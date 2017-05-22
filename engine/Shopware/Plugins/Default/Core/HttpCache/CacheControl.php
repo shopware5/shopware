@@ -181,7 +181,7 @@ class CacheControl
 
         $tags = [];
         if ($auto !== null) {
-            $tags = [$auto];
+            $tags = $auto;
         }
 
         if (!empty($this->session->offsetGet('sBasketQuantity')) || !empty($this->session->offsetGet('sNotesQuantity'))) {
