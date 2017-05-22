@@ -2,13 +2,26 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.24
+
+[View all changes from v5.2.23...v5.2.24](https://github.com/shopware/shopware/compare/v5.2.23...v5.2.24)
+
+* Reverted commit "Fix styling of image slider on tabletlandscape viewport" due styling issues in table landscape mode
+
+
 ## 5.2.23
+
+[View all changes from v5.2.22...v5.2.23](https://github.com/shopware/shopware/compare/v5.2.22...v5.2.23)
+
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
 * Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
 * Added default `limit` of 100 in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyIndexer::populate`
 * Added a base store for `Shopware.apps.Base.model.DocType`
 
 ## 5.2.22
+
+[View all changes from v5.2.21...v5.2.22](https://github.com/shopware/shopware/compare/v5.2.21...v5.2.22)
+
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
 * Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
