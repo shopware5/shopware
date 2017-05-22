@@ -72,57 +72,60 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
                 'media-view-layout-changed': me.onChangeLayout,
                 'media-view-media-quantity-changed': me.onChangeMediaQuantity,
                 'media-view-preview-size-changed': me.onChangePreviewSize
+            },
+            'mediamanager-selection-window mediamanager-media-view ': {
+                'media-view-layout-changed': me.onChangeLayout,
+                'media-view-media-quantity-changed': me.onChangeMediaQuantity,
+                'media-view-preview-size-changed': me.onChangePreviewSize
             }
         });
 
-        if(me.subApplication.layout && me.subApplication.layout === 'small') {
-            me.getView('main.Selection').create({
-                albumStore: albumStore,
-                mediaStore: mediaStore,
-                selectionHandler: me.subApplication.mediaSelectionCallback,
-                eventScope: me.subApplication.eventScope,
-                selectionMode: me.subApplication.selectionMode,
-                validTypes: me.subApplication.validTypes,
-                forceToFront: forceToFront,
-                minimizable: minimizable
-            });
-        } else {
+        /**
+         * Initialize the record with default values provided by the view and the mediaGrid.
+         */
+        this.settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting', {
+            displayType: 'grid',
+            itemsPerPage: 20,
+            tableThumbnailSize: 16,
+            gridThumbnailSize: 72
+        });
 
-            /**
-             * Initialize the record with default values provided by the view and the mediaGrid.
-             */
-            this.settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting', {
-                displayType: 'grid',
-                itemsPerPage: 20,
-                tableThumbnailSize: 16,
-                gridThumbnailSize: 72
-            });
+        // Loading user config from backend
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=get}',
+            jsonData: {
+                name: 'mediamanager-settings'
+            },
+            callback: function (request, success, response) {
+                var loadedSettings = Ext.JSON.decode(response.responseText);
 
-            // Loading user config from backend
-            Ext.Ajax.request({
-                url: '{url controller=UserConfig action=get}',
-                jsonData: {
-                    name: 'mediamanager-settings'
-                },
-                callback: function (request, success, response) {
-                    var loadedSettings = Ext.JSON.decode(response.responseText);
+                if (!Ext.isEmpty(loadedSettings)) {
+                    me.settingRecord.set(loadedSettings)
+                }
 
-                    if (!Ext.isEmpty(loadedSettings)) {
-                        me.settingRecord.set(loadedSettings)
-                    }
-
+                if(me.subApplication.layout && me.subApplication.layout === 'small') {
+                    me.mainWindow = me.getView('main.Selection').create({
+                        albumStore: albumStore,
+                        mediaStore: mediaStore,
+                        selectionHandler: me.subApplication.mediaSelectionCallback,
+                        eventScope: me.subApplication.eventScope,
+                        selectionMode: me.subApplication.selectionMode,
+                        validTypes: me.subApplication.validTypes,
+                        forceToFront: forceToFront,
+                        minimizable: minimizable
+                    });
+                } else {
                     me.mainWindow = me.getView('main.Window').create({
                         albumStore: albumStore,
                         mediaStore: mediaStore,
                         validTypes: me.validTypes
                     });
-
-                    me.restoreSettings();
-
-                    me.mainWindow.show();
                 }
-            });
-        }
+
+                me.restoreSettings();
+                me.mainWindow.show();
+            }
+        });
 
         me.callParent(arguments);
     },
