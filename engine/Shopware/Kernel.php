@@ -177,10 +177,10 @@ class Kernel implements HttpKernelInterface
         /** @var $front \Enlight_Controller_Front * */
         $front = $this->container->get('front');
 
-        $request = $this->transformSymfonyRequestToEnlightRequest($request);
+        $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
 
         if ($front->Request() === null) {
-            $front->setRequest($request);
+            $front->setRequest($enlightRequest);
             $response = $front->dispatch();
         } else {
             $dispatcher = clone $front->Dispatcher();
@@ -191,11 +191,12 @@ class Kernel implements HttpKernelInterface
                 ->clearBody();
 
             $response->setHttpResponseCode(200);
-            $request->setDispatched(true);
-            $dispatcher->dispatch($request, $response);
+            $enlightRequest->setDispatched(true);
+            $dispatcher->dispatch($enlightRequest, $response);
         }
 
         $response = $this->transformEnlightResponseToSymfonyResponse($response);
+        $response->prepare($request);
 
         return $response;
     }
