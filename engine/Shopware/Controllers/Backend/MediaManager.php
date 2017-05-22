@@ -269,7 +269,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->Request()->getParam('id', null)
         );
 
-        $path = $this->Request()->getParam('path', null);
+        $path = $this->Request()->getParam(
+            'path',
+            $this->Request()->getParam('virtualPath', null)
+        );
 
         if (empty($id) && empty($path)) {
             $this->View()->assign(['success' => false, 'error' => 'No id or path passed']);

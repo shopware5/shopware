@@ -25,6 +25,7 @@
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
+use Shopware\Models\Document\Element;
 
 class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs
 {
@@ -71,11 +72,24 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $values = $this->Request()->getParams();
         $defaultShop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
 
+        if (strpos($values['desktopLogo'], 'media/') === 0) {
+            $values['tabletLandscapeLogo'] = $values['desktopLogo'];
+            $values['tabletLogo'] = $values['desktopLogo'];
+            $values['mobileLogo'] = $values['desktopLogo'];
+            $values['emailheaderhtml'] = $values['desktopLogo'];
+            $values['__document_logo'] = $values['desktopLogo'];
+        }
+
         /**
          * Save theme config
          */
         $themeConfigKeys = [
             'desktopLogo',
+            'tabletLandscapeLogo',
+            'tabletLogo',
+            'mobileLogo',
+            'brand-primary',
+            'brand-secondary',
         ];
 
         $themeConfigValues = array_map(function ($configKey) use ($defaultShop, $values) {
@@ -90,23 +104,26 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ->getRepository('Shopware\Models\Shop\Template')
             ->findOneBy(['template' => 'Responsive']);
 
-        $this->container->get('theme_service')->saveConfig(
-            $theme,
-            $themeConfigValues
-        );
+        $themeConfigValues = array_filter($themeConfigValues, function ($config) {
+            return !empty($config['value']);
+        });
+
+        $this->container->get('theme_service')->saveConfig($theme, $themeConfigValues);
+        $this->container->get('theme_timestamp_persistor')->updateTimestamp($defaultShop->getId(), time());
 
         /**
          * Save shop config
          */
         $shopConfigKeys = [
+            'shopName',
+            'mail',
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly',
+            'emailheaderhtml',
         ];
 
         $shopConfigValues = array_intersect_key($values, array_flip($shopConfigKeys));
-        $shopConfigValues['metaIsFamilyFriendly'] = (bool) ($shopConfigValues['metaIsFamilyFriendly'] === 'true');
 
         $requestElements = [];
 
@@ -114,6 +131,17 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $element = Shopware()->Models()
                 ->getRepository('Shopware\Models\Config\Element')
                 ->findOneBy(['name' => $configName]);
+
+            if ($configName === 'emailheaderhtml') {
+                if (empty($configValue)) {
+                    continue;
+                }
+
+                $configValue = sprintf(
+                    "<div>\n<img src=\"{media path='%s'}\" style=\"max-height: 20mm\" alt=\"Logo\"><br />",
+                    $configValue
+                );
+            }
 
             $requestElements[] = [
                 'id' => $element->getId(),
@@ -129,6 +157,49 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         $this->Request()->setParam('elements', $requestElements);
+
+        /**
+         * Save document config
+         */
+        $documentConfigKeys = [
+            'Logo',
+        ];
+
+        $documentConfigKeys = array_map(function ($key) {
+            return '__document_' . strtolower($key);
+        }, $documentConfigKeys);
+
+        $documentConfigValues = array_intersect_key($values, array_flip($documentConfigKeys));
+        $persistElements = [];
+
+        foreach ($documentConfigValues as $key => $value) {
+            $key = str_replace('__document_', '', $key);
+            $elements = Shopware()->Models()->getRepository(Element::class)->findBy(['name' => $key]);
+
+            if (empty($elements) || empty($value)) {
+                continue;
+            }
+
+            if ($key === 'logo') {
+                $hash = \Shopware\Components\Random::getAlphanumericString(16);
+                $value = sprintf(
+                    '<p><img id="tinymce-editor-image-%s" class="tinymce-editor-image tinymce-editor-image-%s" src="{media path=\'%s\'}" style="max-height: 20mm;" data-src="%s" /></p>',
+                    $hash,
+                    $hash,
+                    $value,
+                    $value
+                );
+            }
+
+            foreach ($elements as $element) {
+                $element->setValue($value);
+                $persistElements[] = $element;
+            }
+        }
+
+        if (count($persistElements)) {
+            Shopware()->Models()->flush($persistElements);
+        }
 
         $this->forward('saveForm', 'Config');
     }
@@ -150,6 +221,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          */
         $themeConfigKeys = [
             'desktopLogo',
+            'brand-primary',
+            'brand-secondary',
         ];
 
         $themeConfigData = $this->container->get('theme_service')->getConfig(
@@ -175,10 +248,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          * Load shop config values
          */
         $shopConfigKeys = [
+            'shopName',
+            'mail',
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly',
         ];
 
         $builder = $this->container->get('models')->createQueryBuilder();

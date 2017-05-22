@@ -22,7 +22,7 @@
  */
 
 /**
- * Shopware First Run Wizard - Premium Plugins Tab
+ * Shopware Application
  *
  * @category  Shopware
  * @package   Shopware
@@ -30,24 +30,25 @@
  */
 
 //{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/view/main/premium_listing"}
-Ext.define('Shopware.apps.FirstRunWizard.view.main.PremiumListing', {
-    extend: 'Shopware.apps.PluginManager.view.list.PremiumPluginsPage',
-    createListing: function() {
-        var listing = this.callParent(arguments);
-        listing.width = 632;
-        listing.padding = 0;
-        return listing;
-    },
-    createFilterPanel: function() {
-        var panel = this.callParent(arguments);
-        Ext.each(panel.items.items, function(item) {
-            item.padding = "0 0 15 0";
-        });
+//{block name="backend/first_run_wizard/store/available_localization_plugin"}
 
-        panel.padding = "0 0 5 0";
+Ext.define('Shopware.apps.FirstRunWizard.store.AvailableLocalizationPlugin', {
+    extend: 'Ext.data.Store',
 
-        return panel;
+    model: 'Shopware.apps.PluginManager.model.Plugin',
+
+    pageSize: 30,
+
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="FirstRunWizardPluginManager" action="getAvailableLocalizations"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
     }
 });
 

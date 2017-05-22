@@ -1,4 +1,7 @@
 ;
+/**
+ * Plugin to check the database configuration and automatically display the available database tables
+ */
 (function ($, window, document, undefined) {
     "use strict";
 
@@ -106,10 +109,14 @@
     })
 })(jQuery, window, document);
 
+/**
+ * Plugin for the installation process to update the status and progressbar
+ */
 ;(function ($, window, undefined) {
     "use strict";
 
-    var progressConfig = [
+    var backButtonBlocked = false,
+        progressConfig = [
         {
             requestUrl: 'importDatabase',
             counterText: shopwareTranslations.counterTextMigrations
@@ -118,13 +125,14 @@
             requestUrl: 'importSnippets',
             counterText: shopwareTranslations.counterTextMigrations,
             finalFcnt: function () {
-                $('.btn-primary').removeClass('is--hidden');
-                $('div .actions').show();
+                $('.btn-primary, .counter-content').removeClass('is--hidden');
+                $('#back').removeClass('disabled');
                 $('.progress').removeClass('progress-info').addClass('progress-success').removeClass('active');
-                $('.progress .progress-bar').width("100%");
-                $('#start-ajax').hide();
+                $('.progress .progress-bar, .install-buttons').width("100%");
+                $('#start-ajax, .counter-numbers').hide();
                 $(window).unbind('beforeunload');
                 refreshCounterText(2, shopwareTranslations.updateSuccess, false);
+                backButtonBlocked = false;
             }
         }
     ], counter = 1, configLen = progressConfig.length;
@@ -137,7 +145,7 @@
     };
 
     var refreshCounterText = function (step, stepText, showSuffix) {
-        var len = configLen, suffix, container = $('.counter-text');
+        var len = configLen, suffix, container = $('.counter-container');
 
         showSuffix = (showSuffix !== undefined) ? showSuffix : true;
         suffix = (showSuffix) ? '...' : '';
@@ -217,9 +225,18 @@
 
         $('#start-ajax').click(function () {
             startProgress(progressConfig);
-            $('#start-ajax').hide();
-            $('div .actions').hide();
-            $('.counter-text').removeClass('is--hidden').next('.progress-text').addClass('is--hidden');
+            $('#start-ajax').prop('disabled', true);
+            $('#back').addClass('disabled');
+            $('#back').on('click', function (event) {
+                if (backButtonBlocked) {
+                    event.preventDefault();
+                }
+            });
+            backButtonBlocked = true;
+
+            $('#skip-import').hide();
+
+            $('.counter-container').removeClass('is--hidden').next('.progress-text').addClass('is--hidden');
 
             $(window).bind('beforeunload', function () {
                 return 'A system update is running.';
@@ -254,7 +271,6 @@
             }
         });
 
-
         var changeLogo = function() {
             var win = $(window),
                 winWidth = win.width(),
@@ -272,3 +288,43 @@
     });
 })(jQuery, window);
 
+(function ($, undefined) {
+    "use strict";
+
+    $('a[data-shown][data-hidden]').on('click.toggle', function () {
+        var $element = $(this.hash),
+            $this = $(this);
+
+        switch (true) {
+            case $element.hasClass('is--hidden'):
+                $element.removeClass('is--hidden');
+                $this.html($this.attr('data-shown'));
+                break;
+
+            case $element.hasClass('hide-successful'):
+                $element.removeClass('hide-successful');
+                $this.html($this.attr('data-shown'));
+                break;
+
+            case $element.attr('data-hide-successful'):
+                $element.addClass('hide-successful');
+                break;
+
+            default:
+                $element.addClass('is--hidden');
+                $this.html($this.attr('data-hidden'));
+        }
+
+        $('html, body').animate({
+            scrollTop: $element.offset().top - 50 // Offset to show headline
+        }, 750);
+    });
+
+    $('input[type=checkbox].toggle, input[type=radio].toggle').on('change.toggle', function () {
+        $($(this).attr('data-href')).toggleClass('is--hidden');
+    });
+
+    $('input[type=checkbox].removeElem, input[type=radio].removeElem').on('change.removeElem', function () {
+        $($(this).attr('data-href-remove')).remove();
+    });
+})(jQuery);

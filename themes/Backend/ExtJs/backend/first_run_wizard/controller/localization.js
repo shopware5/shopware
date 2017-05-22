@@ -29,15 +29,16 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/controller/localization"}
+// {namespace name=backend/first_run_wizard/main}
+// {block name="backend/first_run_wizard/controller/localization"}
 
 Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
 
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
-        { ref: 'localizationPanel', selector: 'first-run-wizard-localization' }
+        { ref: 'localizationPanel', selector: 'first-run-wizard-localization' },
+        { ref: 'wizardWindow', selector: 'first-run-wizard' }
     ],
 
     snippets: {
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
             errorTitle: '{s name=switch_locale_error/errorTitle}Language switch{/s}',
             errorServerMessage: '{s name=switch_locale_error/errorServerMessage}The following error was detected: [0]{/s}'
         },
-        growlMessage:'{s name=growlMessage}First run wizard{/s}'
+        growlMessage: '{s name=growlMessage}First run wizard{/s}'
     },
 
     /**
@@ -67,12 +68,17 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
 
         me.control({
             'first-run-wizard-localization': {
-                changeLanguageFilter: me.onChangeLanguageFilter,
-                localizationResetData: me.onLocalizationResetData
+                localizationResetData: me.onLocalizationResetData,
+                retryConnectivityTest: me.onRetryConnectivityTest,
+                promptInstallLocalization: me.promptInstallLocalization,
+                'install-plugin': me.onSwitchLanguage
             },
             'first-run-wizard-localization-switcher': {
                 switchLanguage: me.onSwitchLanguage,
                 closeWindow: me.onCloseWindow
+            },
+            'first-run-wizard-localization-installer': {
+                installLanguage: me.installLanguage
             },
             'first-run-wizard': {
                 'navigate-next-localization': me.promptLanguageChange,
@@ -80,9 +86,55 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
             }
         });
 
+        me.firstRunWizardIsConnected = me.getController('Main').firstRunWizardIsConnected;
+
+        if (me.firstRunWizardIsConnected === true) {
+            me.onSetConnectivityMode(me.firstRunWizardIsConnected);
+        } else {
+            me.checkConnectivityStatus();
+        }
+
+        Shopware.app.Application.on(
+            'install-plugin',
+            function() { this.dirty = true; },
+            me,
+            { single: true }
+        );
+
+        Shopware.app.Application.on(
+            'reinstall-plugin',
+            function() { this.dirty = true; },
+            me,
+            { single: true }
+        );
+
         me.callParent(arguments);
     },
 
+    /**
+     * Installs and switches to the language given.
+     *
+     * @param { string } pluginName
+     * @param { string } locale
+     */
+    installLanguage: function(pluginName, locale) {
+        var me = this,
+            plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
+            technicalName: pluginName
+        });
+
+        Shopware.app.Application.fireEvent(
+            'install-plugin',
+            plugin,
+            function() {
+                me.onSwitchLanguage(locale)
+            }
+        );
+    },
+
+    /**
+     * @param { string } localeId
+     */
     onSwitchLanguage: function(localeId) {
         var me = this;
 
@@ -110,29 +162,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         });
     },
 
-    onChangeLanguageFilter: function(value) {
-        var me = this;
-
-        Shopware.app.Application.on(
-            'install-plugin',
-            function() { this.dirty = true; },
-            me,
-            { single: true }
-        );
-
-        Shopware.app.Application.on(
-            'reinstall-plugin',
-            function() { this.dirty = true; },
-            me,
-            { single: true }
-        );
-
-        me.getLocalizationPanel().storeListing.resetListing();
-        me.getLocalizationPanel().communityStore.getProxy().extraParams.localeId = value;
-        me.getLocalizationPanel().communityStore.load();
-        me.getLocalizationPanel().storeListing.setLoading(true);
-    },
-
     onCloseWindow: function() {
         var me = this;
 
@@ -145,6 +174,28 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         var me = this;
 
         me.dirty = false;
+    },
+
+    /**
+     * Checks if the plugin with the given name should be installed
+     *
+     * @param { string } pluginName
+     */
+    promptInstallLocalization: function(pluginName) {
+        var me = this,
+            installerLocale = Ext.util.Cookies.get('installed-locale');
+
+        if (installerLocale && installerLocale !== '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
+            try {
+                me.localizationInstallerWindow = me.getView('main.LocalizationInstaller').create({
+                    installerLocale: installerLocale,
+                    pluginName: pluginName,
+                    store: me.localeStore
+                }).show();
+            } catch(e) {
+                // Locale not supported
+            }
+        }
     },
 
     promptLanguageChange: function(context, callback) {
@@ -163,7 +214,59 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         } else {
             callback();
         }
+    },
+
+    onRetryConnectivityTest: function() {
+        var me = this,
+            localizationPanel = me.getLocalizationPanel();
+
+        localizationPanel.connectionResult = false;
+        localizationPanel.firstRunWizardIsConnected = null;
+        me.getController('Main').validateButtons();
+
+        localizationPanel.loadingResultContainer.hide();
+        localizationPanel.loadingIndicator.show();
+        me.checkConnectivityStatus();
+    },
+
+    onSetConnectivityMode: function(isConnected) {
+        var me = this,
+            localizationPanel = me.getLocalizationPanel(),
+            wizardWindow = me.getWizardWindow();
+
+        Ext.util.Cookies.set('firstRunWizardIsConnected', isConnected);
+
+        localizationPanel.connectionResult = true;
+        localizationPanel.firstRunWizardIsConnected = isConnected;
+
+        localizationPanel.loadingIndicator.hide();
+        localizationPanel.refreshLoadingResultContainer(isConnected);
+
+        localizationPanel.communityStore.load();
+
+        wizardWindow.isConnected = isConnected;
+        wizardWindow.updateNavigation();
+        wizardWindow.navigation.refresh();
+        me.getController('Main').validateButtons();
+    },
+
+    checkConnectivityStatus: function() {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller="firstRunWizard" action="pingServer"}',
+            method: 'GET',
+            timeout: 10000,
+            success: function(response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                me.onSetConnectivityMode((result && result.success === true && result.message === true));
+            },
+            failure: function (response, request) {
+                me.onSetConnectivityMode(false);
+            }
+        });
     }
 });
 
-//{/block}
+// {/block}

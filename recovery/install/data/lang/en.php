@@ -26,110 +26,126 @@ return [
     'menuitem_language-selection' => 'Start',
     'menuitem_requirements' => 'System requirements',
     'menuitem_database-configuration' => 'Database configuration',
-    'menuitem_database-import' => 'Database creation',
-    'menuitem_edition' => 'Shopware Edition',
+    'menuitem_database-import' => 'Installation',
+    'menuitem_edition' => 'Shopware licence',
     'menuitem_configuration' => 'Configuration',
-    'menuitem_finish' => 'Finish',
-    'menuitem_license' => 'License agreement',
+    'menuitem_finish' => 'Done',
+    'menuitem_license' => 'End user licence',
+
+    'license_incorrect' => 'The licence key entered does not appear to be valid',
+    'license_does_not_match' => 'The licence key entered does not match a commercial Shopware version',
+    'license_domain_error' => 'The licence key entered is not valid for the domain: ',
 
     'version_text' => '<strong>Version:</strong>',
     'back' => 'Back',
-    'forward' => 'Forward',
+    'forward' => 'Next',
     'start' => 'Start',
+    'start_installation' => 'Start installation',
 
     'select_language_de' => 'Deutsch',
     'select_language_en' => 'English',
     'select_language_nl' => 'Nederlands',
+    'select_language_it' => 'Italiano',
+    'select_language_fr' => 'Français',
+    'select_language_es' => 'Español',
+    'select_language_pt' => 'Português',
 
-    'language-selection_header' => 'Start installation',
-    'language-selection_select_language' => 'Choose installer language',
-    'language-selection_info_message' => 'This language selection applies only to the installation assistant. Once you finish installing Shopware, you will be able to configure multiple shop in different languages.',
+    'language-selection_select_language' => 'Language installation wizard',
+    'language-selection_header' => 'Your Shopware installation',
+    'language-selection_info_message' => 'The language you select here only applies to the installation wizard. You can specify the language for your shop later.',
     'language-selection_welcome_message' => <<<'EOT'
 <p>
-    You are only a few clicks away from being part of the big Shopware community,
-    which consists of over 54000 online merchants worldwide.
+    We are delighted you want to join our fantastic, global Shopware community.
 </p>
 <p>
-    Our Support team is available to answer your questions at any time.
-    Please contact us via telephone <a href="tel:+492555928850">(+49) 2555 92 8850</a> or via email <a href="mailto:info@shopware.com">info@shopware.com</a>.
+    We will now take you through the installation process step by step. If you have any queries, simply take a look in our <a href="https://forum.shopware.com" target="_blank">forum</a>, give us a call on <a href="tel:+492555928850">(+49) 2555 928850</a> or send us an <a href="mailto:info@shopware.com">e-mail</a>.
+</p>
+<p>
+    <strong>Let's get started</strong>
 </p>
 EOT
     ,
-
     'requirements_header' => 'System requirements',
-    'requirements_header_files' => 'File & directory permissions',
-    'requirements_header_system' => 'System requirements',
-    'requirements_files_info' => 'The following files and directories must exist and be writable',
-    'requirements_tablefiles_colcheck' => 'Check',
+    'requirements_header_files' => 'Files and directories',
+    'requirements_header_system' => 'System',
+    'requirements_files_info' => 'The following files and directories must be present and have write permissions',
+    'requirements_tablefiles_colcheck' => 'File/directory',
     'requirements_tablefiles_colstatus' => 'Status',
-    'requirements_error' => 'Some system requirements have not been met.',
-    'requirements_php_info' => 'Your server must meet the following requirements in order to run Shopware.',
-    'requirements_system_colcheck' => 'Check',
+    'requirements_error' => '<h3 class="alert-heading">Warning!</h3>Not all of the requirements for successful installation have been met',
+    'requirements_success' => '<h3 class="alert-heading">Congratulations!</h3>All of the requirements for successful installation have been met',
+    'requirements_ioncube' => '<small><strong>* Hinweis:</strong> The ionCube encoding software is not installed on your system. This will only be needed if later on you want to install extensions via our <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> that are encrypted with ionCube. You can install ionCube at any time.</small>',
+    'requirements_php_info' => 'Your server must meet the following system requirements in order to run Shopware',
+    'requirements_system_colcheck' => 'Requirement',
     'requirements_system_colrequired' => 'Required',
-    'requirements_system_colfound' => 'Found',
+    'requirements_system_colfound' => 'Your system',
     'requirements_system_colstatus' => 'Status',
+    'requirements_show_all' => '(show all)',
+    'requirements_hide_all' => '(hide all)',
 
-    'license_agreement_header' => 'License agreement (EULA)',
-    'license_agreement_info' => 'The Shopware Community Edition is AGPL licensed, whereas parts of the plugins and the theme are MIT licensed.',
-    'license_agreement_error' => 'You have to agree to our license',
-    'license_agreement_checkbox' => 'I agree to the above terms and conditions',
+    'license_agreement_header' => 'End user licence agreement ("EULA")',
+    'license_agreement_info' => 'Here you will find a summary of our licence terms, which you must read and accept for successful installation. The Shopware Community Edition is licensed under AGPL, while parts of the plug-ins and the template are under the New BSD licence.',
+    'license_agreement_error' => 'You must agree to our licence terms',
+    'license_agreement_checkbox' => 'I agree to the licence terms',
 
-    'database-configuration_header' => 'Database configuration',
-    'database-configuration_field_host' => 'Database host:',
+    'database-configuration_header' => 'Configure database',
+    'database-configuration_field_host' => 'Database server:',
+    'database-configuration_advanced_settings' => 'Show advanced settings',
     'database-configuration_field_port' => 'Database port:',
     'database-configuration_field_socket' => 'Database socket (optional):',
     'database-configuration_field_user' => 'Database user:',
     'database-configuration_field_password' => 'Database password:',
     'database-configuration_field_database' => 'Database name:',
-    'database-configuration_info' => 'Enter your database connection - if you are not sure what data must be entered here, please contact your hosting provider.',
+    'database-configuration_info' => 'The access details for the database are required in order to install Shopware on your system. If you are not sure what to enter, contact your administrator / hosting service.',
+    'database-configuration-create_new_database' => 'Create new database',
 
-    'database-import_header' => 'Database creation',
-    'database-import_skip_import' => 'Skip database creation',
-    'database-import_progress_text' => 'Please start the database creation process by clicking the "Start" button <br> <strong>Existing Shopware tables will be deleted.</strong>',
-    'migration_counter_text_migrations' => 'Creating database structure',
-    'migration_counter_text_snippets' => 'Update snippets',
-    'migration_update_success' => 'Process complete',
+    'database-import_header' => 'Installation',
+    'database-import_skip_import' => 'Skip',
+    'database-import_progress' => 'Progress: ',
+    'database-import-hint' => '<strong>Note: </strong> If Shopware tables already exist in the configured database, these will be removed by the installation/update!',
+    'migration_counter_text_migrations' => 'Updating database',
+    'migration_counter_text_snippets' => 'Updating text modules',
+    'migration_update_success' => 'Database successfully imported!',
 
-    'edition_header' => 'Choose your license',
-    'edition_ce' => 'Shopware Community Edition (License: AGPL)',
-    'edition_cm' => 'Shopware Commercial Version (License: Commercial / License key required) e.g. Professional, Professional Plus, Enterprise',
-    'edition_license' => 'License key:',
-    'edition_info' => 'If you have purchased a commercial Shopware version, select the appropriate edition in the list. Then enter the license key that you received upon purchasing.',
-    'edition_license_error' => 'It is required that you enter a valid to install a commercial shopware edition.',
+    'edition_header' => 'Have you purchased a Shopware licence?',
+    'edition_info' => 'Shopware is available as a free <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition</a>, and is also available as <a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus or Enterprise Edition</a>, for a one-time fee.',
+    'edition_ce' => 'No, I would like to use the free <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition</a>.',
+    'edition_cm' => 'Yes, I have purchased a Shopware licence (<a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus or Enterprise</a>).',
+    'edition_license' => 'Please enter your licence key here. You can find it in your Shopware account under "Licences" &rarr; "Product licences" &rarr; "Details / Download":',
+    'edition_license_error' => 'A valid licence is required in order to install a fee-based Shopware version.',
 
-    'configuration_header' => 'Shop configuration',
-    'configuration_sconfig_header' => 'Frontend configuration',
-    'configuration_sconfig_name' => 'Shop name:',
+    'configuration_header' => 'Basic shop set-up',
+    'configuration_sconfig_text' => 'Almost done! Now you just need to make a few basic settings for your shop and the installation will be complete. Anything that you enter here can be changed later on.',
+    'configuration_sconfig_name' => 'Name of your shop:',
     'configuration_sconfig_name_info' => 'Please enter the name of your shop',
-    'configuration_sconfig_mail' => 'Your email address:',
-    'configuration_sconfig_mail_info' => 'Please enter your email address used for outgoing email',
+    'configuration_sconfig_mail' => 'E-mail address of the shop:',
+    'configuration_sconfig_mail_info' => 'Please enter your email address for outgoing e-mails',
     'configuration_sconfig_domain' => 'Shop domain:',
-    'configuration_sconfig_language' => 'Default shop language:',
-    'configuration_sconfig_currency' => 'Default shop currency:',
-    'configuration_sconfig_currency_info' => 'Currency used by default when defining article prices',
+    'configuration_sconfig_language' => 'Main language:',
+    'configuration_sconfig_currency' => 'Default currency:',
+    'configuration_sconfig_currency_info' => 'This currency will be used as standard when setting item prices',
     'configuration_admin_currency_eur' => 'Euro',
     'configuration_admin_currency_usd' => 'Dollar (US)',
-    'configuration_admin_currency_gbp' => 'Pound (GB)',
-    'configuration_admin_title' => 'Configure admin user',
-    'configuration_admin_username' => 'Admin login:',
-    'configuration_admin_mail' => 'Admin email:',
+    'configuration_admin_currency_gbp' => 'Sterling (UK)',
+    'configuration_admin_username' => 'Admin login name:',
+    'configuration_admin_mail' => 'Admin e-mail:',
     'configuration_admin_name' => 'Admin name:',
-    'configuration_admin_language' => 'Admin backend language:',
-    'configuration_admin_language_de' => 'German',
+
+    'configuration_admin_language_de' => 'Deutsch',
     'configuration_admin_language_en' => 'English',
     'configuration_admin_password' => 'Admin password:',
 
-    'finish_header' => 'Finished',
-    'finish_info' => 'The installation has been completed successfully.',
-    'finish_frontend' => 'Open shop frontend',
-    'finish_backend' => 'Open shop backend',
+    'finish_header' => 'Installation complete',
+    'finish_info' => 'You have successfully installed Shopware!',
+    'finish_info_heading' => 'Hooray!',
+    'finish_first_steps' => '"First steps" guide',
+    'finish_frontend' => 'Go to shop frontend',
+    'finish_backend' => 'Go to shop backend (administration)',
     'finish_message' => '
 <p>
-    Welcome to Shopware.
+    <strong>Welcome to Shopware,</strong>
 </p>
 <p>
-    We are happy to welcome you to our Community.
-    Shopware is successfully installed and ready to use.
-</p>
-',
+    We are delighted to welcome you to our community. You have successfully installed Shopware.
+<p>Your shop is now ready to use. If you are new to Shopware, we recommend that you take a look at the guide <a href="http://wiki.shopware.com/_detail_930.html" target="_blank">"First steps in Shopware"</a>. When you log in to the shop backend for the first time, our "First Run Wizard" will take you through some further basic settings.</p>
+<p>Enjoy your new online shop!</p>',
 ];

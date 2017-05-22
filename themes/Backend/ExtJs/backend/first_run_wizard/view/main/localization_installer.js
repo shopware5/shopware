@@ -30,9 +30,9 @@
  */
 
 //{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/view/main/localization_switcher"}
+//{block name="backend/first_run_wizard/view/main/localization_installer"}
 
-Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
+Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
 
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-localization-switcher',
+    alias:'widget.first-run-wizard-localization-installer',
 
     /**
      * Define window width
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * Define window height
      * @integer
      */
-    height: 260,
+    height: 210,
 
     /**
      * Display no footer button for the detail window
@@ -109,9 +109,24 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * @object
      */
     snippets: {
-        title: '{s name=localization_switcher/content/title}Choose language{/s}',
-        message: '{s name=localization_switcher/content/message}If you installed a translation plugin, you can now reload the backend in that language.{/s}',
-        continue:'{s name=localization_switcher/continue}Continue in English{/s}'
+        title: '{s name=localization_installer/content/title}Choose language{/s}',
+        message: '{s name=localization_installer/content/message}During the installation you chose [language] as the preferred language.{/s}',
+        button: '{s name=localization_installer/content/button}Install and continue in [language] ([country]).{/s}',
+        continue: '{s name=localization_installer/continue}Continue in English{/s}',
+        locales: {
+            'bg_BG': { 'language': '{s name=localization_installer/content/bg_BG/language}Bulgarian{/s}', 'country': '{s name=localization_installer/content/bg_BG/country}Bulgaria{/s}' },
+            'cz_CZ': { 'language': '{s name=localization_installer/content/cz_CZ/language}Czech{/s}', 'country': '{s name=localization_installer/content/cz_CZ/country}Czech Republic{/s}' },
+            'de_DE': { 'language': '{s name=localization_installer/content/de_DE/language}German{/s}', 'country': '{s name=localization_installer/content/de_DE/country}Germany{/s}' },
+            'es_ES': { 'language': '{s name=localization_installer/content/es_ES/language}Spanish{/s}', 'country': '{s name=localization_installer/content/es_ES/country}Spain{/s}' },
+            'fi_FI': { 'language': '{s name=localization_installer/content/fi_FI/language}Finish{/s}', 'country': '{s name=localization_installer/content/fi_FI/country}Finland{/s}' },
+            'fr_FR': { 'language': '{s name=localization_installer/content/fr_FR/language}French{/s}', 'country': '{s name=localization_installer/content/fr_FR/country}France{/s}' },
+            'it_IT': { 'language': '{s name=localization_installer/content/it_IT/language}Italian{/s}', 'country': '{s name=localization_installer/content/it_IT/country}Italy{/s}' },
+            'nl_NL': { 'language': '{s name=localization_installer/content/nl_NL/language}Dutch{/s}', 'country': '{s name=localization_installer/content/nl_NL/country}Netherlands{/s}' },
+            'pt_PT': { 'language': '{s name=localization_installer/content/pt_PT/language}Portuguese{/s}', 'country': '{s name=localization_installer/content/pt_PT/country}Portugal{/s}' },
+            'pl_Pl': { 'language': '{s name=localization_installer/content/pl_Pl/language}Polish{/s}', 'country': '{s name=localization_installer/content/pl_Pl/country}Poland{/s}' },
+            'tk_TK': { 'language': '{s name=localization_installer/content/tk_TK/language}Turkish{/s}', 'country': '{s name=localization_installer/content/tk_TK/country}Turkey{/s}' },
+            'ru_RU': { 'language': '{s name=localization_installer/content/ru_RU/language}Russian{/s}', 'country': '{s name=localization_installer/content/ru_RU/country}Russia{/s}' }
+        }
     },
 
     batchSize: 200,
@@ -127,7 +142,20 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * @return void
      */
     initComponent: function () {
-        var me = this;
+        var me = this,
+            locales = [],
+            installerLocale = this.installerLocale;
+
+        for(var locale in this.snippets.locales) {
+            locales.push(locale);
+        }
+
+        if (!Ext.Array.contains(locales, installerLocale)) {
+            installerLocale = '{s namespace="backend/base/index" name=script/ext/locale}{/s}';
+        }
+        if (!Ext.Array.contains(locales, installerLocale)) {
+            throw new Error('Locale unknown');
+        }
 
         me.title = me.snippets.title;
 
@@ -137,10 +165,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
                 border: false,
                 bodyPadding: 20,
                 style: 'margin-bottom: 10px;',
-                html: '<p>' + me.snippets.message + '</p>',
+                html: '<p>' + me.snippets.message.replace('[language]', me.snippets.locales[installerLocale]['language']) + '</p>',
                 height: '40px'
             },
-            me.createLanguageSwitcherForm()
+            me.createLanguageSwitcherForm(installerLocale)
         ];
 
         me.buttons = [
@@ -153,32 +181,29 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
     /**
      * Creates the existing account form
      *
+     * @param { string } installerLocale Locale used in installer
      * @return Ext.container.Container Contains the form for existing account login
      */
-    createLanguageSwitcherForm: function () {
+    createLanguageSwitcherForm: function (installerLocale) {
         var me = this;
 
-        me.languageButtons = [];
-
-        me.store.each(function(elem) {
-            me.languageButtons.push(
-                Ext.create('Ext.Button', {
-                    text: elem.get('name'),
-                    cls: 'primary',
-                    style: {
-                        marginTop: '5px'
-                    },
-                    handler: function() {
-                        me.fireEvent('switchLanguage', elem.get('id'));
-                    }
-                })
-            );
+        me.languageButton = Ext.create('Ext.Button', {
+            text: me.snippets.button
+                .replace('[language]', me.snippets.locales[installerLocale]['language'])
+                .replace('[country]', me.snippets.locales[installerLocale]['country']),
+            cls: 'primary',
+            style: {
+                marginTop: '5px'
+            },
+            handler: function() {
+                me.fireEvent('installLanguage', me.pluginName, installerLocale);
+            }
         });
 
         return Ext.create('Ext.container.Container', {
-            items: me.languageButtons,
+            items: me.languageButton,
             overflowY: 'auto',
-            height: 120,
+            height: 70,
             layout: {
                 align: 'stretch',
                 type: 'vbox'

@@ -9,7 +9,9 @@
 <?php endif ?>
 
 <form action="<?= $menuHelper->getCurrentUrl() ?>" method="post">
-    <h3><?= $t->t('configuration_sconfig_header'); ?></h3>
+    <p>
+        <?= $t->t("configuration_sconfig_text"); ?>
+    </p>
 
     <p>
         <label for="c_config_shopName"><?= $t->t('configuration_sconfig_name'); ?></label>
@@ -63,8 +65,6 @@
         </span>
     </p>
 
-    <h3><?= $t->t('configuration_admin_title'); ?></h3>
-
     <p>
         <label for="c_config_admin_name"><?= $t->t('configuration_admin_name'); ?></label>
         <input type="text"
@@ -90,16 +90,6 @@
                name="c_config_admin_email"
                id="c_config_admin_email"
                required="required"/>
-    </p>
-
-    <p>
-        <label for="c_config_admin_language"><?= $t->t('configuration_admin_language'); ?></label>
-        <select name="c_config_admin_language" id="c_config_admin_language">
-            <option
-                value="de_DE" <?= $parameters['c_config_admin_language'] == 'de_DE' ? 'selected' : '' ?>><?= $t->t('configuration_admin_language_de'); ?></option>
-            <option
-                value="en_GB" <?= $parameters['c_config_admin_language'] == 'en_GB' ? 'selected' : '' ?>><?= $t->t('configuration_admin_language_en'); ?></option>
-        </select>
     </p>
 
     <p>
