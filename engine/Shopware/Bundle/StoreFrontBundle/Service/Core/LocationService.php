@@ -105,7 +105,7 @@ class LocationService implements LocationServiceInterface
      */
     private function sortStates($countryStates)
     {
-        usort($countryStates, function (Country\State $a, Country\State $b) {
+        uasort($countryStates, function (Country\State $a, Country\State $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getName(), $b->getName());
             }
@@ -123,7 +123,7 @@ class LocationService implements LocationServiceInterface
      */
     private function sortCountries($countries)
     {
-        usort($countries, function (Country $a, Country $b) {
+        uasort($countries, function (Country $a, Country $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getName(), $b->getName());
             }
