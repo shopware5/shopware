@@ -86,6 +86,26 @@ The styling includes the collapsed and expanded styling and the panel component 
             content: @sw-icon-arrow-up;
         }
     }
+
+    .flatpickr-wrapper {
+        position: relative;
+        display: block;
+
+        .flatpickr-calendar.static {
+            .unitize(top, 45);
+            display: block;
+            width: 100%;
+
+            .flatpickr-innerContainer {
+                display: block;
+                width: 100%;
+
+                .flatpickr-days {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 
 .filter-panel--flyout {
@@ -137,6 +157,8 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter-panel--content {
     .unitize-padding(10, 10);
     display: block;
+
+
 }
 
 .filter-panel--option-list {
@@ -654,6 +676,14 @@ The styling includes the collapsed and expanded styling and the panel component 
 
         &.is--collapsed {
             .unitize-height(38);
+        }
+
+        .flatpickr-wrapper {
+            position: static;
+
+            .flatpickr-calendar.static {
+                top: 100%;
+            }
         }
     }
 

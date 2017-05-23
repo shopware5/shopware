@@ -31,6 +31,7 @@
                    data-enableTime="{$enableTime}"
                    data-multiDateSeparator="|"
                    data-enabledDates="{$enabledDates}"
+                   data-static="true"
                    readonly="readonly"
                    value="{$value}"
                    {if !$facet->isActive()}disabled="disabled" {/if}/>

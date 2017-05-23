@@ -28,6 +28,7 @@
                    data-maxDate="{$rangeMax}"
                    data-rangeStartInput="{$facet->getMinFieldName()|escape:'htmlall'}"
                    data-rangeEndInput="{$facet->getMaxFieldName()|escape:'htmlall'}"
+                   data-static="true"
                    readonly="readonly" />
         {/block}
 

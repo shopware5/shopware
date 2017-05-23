@@ -46,6 +46,7 @@
                                    data-mode="single"
                                    data-enableTime="{$enableTime}"
                                    data-enabledDates="{$enabledDates}"
+                                   data-static="true"
                                    readonly="readonly"
                                    value="{$value}"
                                    {if !$facet->isActive()}disabled="disabled" {/if}/>
