@@ -91,9 +91,7 @@ Ext.override(Ext.app.Application, {
 	 * @param subapp
 	 */
 	addSubApplication: function(subapp, skipInit, fn, showLoadMask) {
-        if (skipInit === undefined) {
-			skipInit = false;
-		}
+		skipInit = skipInit === true;
 		subapp.app = this;
 
         if(subapp.hasOwnProperty('showLoadMask')) {
