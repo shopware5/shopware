@@ -121,7 +121,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
 
         /** @var ListProduct $product */
         $product = current($collection->getBatchResult()->get($key));
-        if ($type === self::TYPE_STATIC_VARIANT) {
+        if ($product && $type === self::TYPE_STATIC_VARIANT) {
             $this->additionalTextService->buildAdditionalText($product, $context);
             $this->switchPrice($product);
         }

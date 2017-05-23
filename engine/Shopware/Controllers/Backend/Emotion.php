@@ -519,11 +519,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 return;
             }
 
-            $emotion->setActive($data['active'] === 'true');
+            $emotion->setActive($data['active']);
             $emotion->setPosition($data['position']);
             $emotion->setModified(new \DateTime());
 
-            $manager->persist($emotion);
             $manager->flush();
 
             $this->View()->assign([

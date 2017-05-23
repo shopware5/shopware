@@ -165,6 +165,9 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
                 $products = [];
                 foreach ($productNumbers as $productNumber) {
+                    if (!$listProducts[$productNumber]) {
+                        continue;
+                    }
                     $products[$productNumber] = $listProducts[$productNumber];
                 }
 
@@ -180,6 +183,9 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 foreach ($productNumbers as $productNumber) {
                     /** @var ListProduct $product */
                     $product = $listProducts[$productNumber];
+                    if (!$product) {
+                        continue;
+                    }
                     $this->switchPrice($product);
                     $products[$productNumber] = $product;
                 }

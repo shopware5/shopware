@@ -83,8 +83,8 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
             vertical: true,
             margin: '10 0 0 0',
             items: [
-                { boxLabel: '{s name=form_window/boxlabel_new}{/s}', name: 'save', checked: true, inputValue: 1 },
-                { boxLabel: '{s name=form_window/boxlabel_override}{/s}', name: 'save', inputValue: 2 }
+                { boxLabel: '{s name=form_window/boxlabel_new}{/s}', name: 'save', checked: true, inputValue: 1, itemId: 'create' },
+                { boxLabel: '{s name=form_window/boxlabel_override}{/s}', name: 'save', inputValue: 2, itemId: 'update' }
             ],
             listeners: {
                 change: function(field, newValue) {
@@ -112,7 +112,15 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
                     function(record) {
                         return record.get('custom');
                     }
-                ]
+                ],
+                listeners: {
+                    load: function(store) {
+                        if (store.getCount() === 0) {
+                            me.radiogroup.down('#create').hide();
+                            me.radiogroup.down('#update').destroy();
+                        }
+                    }
+                }
             }),
             queryMode: 'local',
             triggerAction: 'all',
@@ -122,7 +130,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
                 scope: me,
                 select: function(combo, records) {
                     var record = records[0],
-                        path = record.get('preview');
+                        path = record.get('thumbnail');
 
                     me.mediafield.setValue(path);
                     me.down('textfield[name=name]').setValue(record.get('name'));
@@ -156,7 +164,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
     buildMediaSelectionField: function() {
         return Ext.create('Shopware.form.field.Media', {
             valueField: 'virtualPath',
-            name: 'preview',
+            name: 'thumbnail',
             fieldLabel: '{s name=form_window/preview_image}{/s}',
             requestMediaData: function(value) {
                 var me = this, params = {};

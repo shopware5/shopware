@@ -518,11 +518,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      */
     onSaveAsPreset: function(record) {
         var me = this,
+            emotionRecord,
             settings = me.getSettingsForm(),
             sidebar = me.getSidebar(),
-            layout = me.getLayoutForm(),
-            presetDataRecord,
-            presetRecord;
+            layout = me.getLayoutForm();
 
         settings.getForm().updateRecord(record);
         layout.getForm().updateRecord(record);
@@ -539,9 +538,15 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             return false;
         }
 
-        Ext.create('Shopware.apps.Emotion.view.presets.Form').show(null, function() {
-            this.down('form').getForm().setValues({ emotionId: record.get('id') });
-        });
+        emotionRecord = record.copy();
+        emotionRecord.set('id', 0);
+        emotionRecord.set('active', 0);
+        emotionRecord['getElementsStore'] = record.getElements();
+        emotionRecord['getShopsStore'] = record.getShops();
+
+        Ext.create('Shopware.apps.Emotion.view.presets.Form', {
+            emotion: emotionRecord
+        }).show();
     },
 
     /**
@@ -551,6 +556,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     savePreset: function(win) {
         var me = this,
             form = win.down('form'),
+            record = win.emotion,
             values;
 
         if (!form.getForm().isValid()) {
@@ -562,33 +568,67 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         win.setLoading('{s name=preset/saving_as_preset}{/s}');
 
         values = form.getForm().getValues();
-        values.thumbnail = values.preview;
+        values.preview = values.thumbnail;
         values.translations = [{
             label: values.name,
             description: values.description
         }];
         delete values.save;
 
-        Ext.Ajax.request({
-            url: '{url controller="EmotionPreset" action="save"}',
-            jsonData: values,
-            method: 'POST',
-            callback: function(operation, success, response) {
-                var result = Ext.JSON.decode(response.responseText);
-                win.setLoading(false);
+        // save emotion for transformation, will be deleted automatically
+        record.save({
+            callback: function(records, operation) {
+                var result = Ext.JSON.decode(operation.response.responseText);
 
-                if (!success) {
+                if (!result.success) {
                     return Shopware.Notification.createGrowlMessage(
                         me.snippets.errorTitle,
                         me.snippets.saveErrorMessage + '<br>' + result.message,
                         me.snippets.growlMessage
                     );
+                } else {
+                    values.emotionId = result.data.id;
+
+                    Ext.Ajax.request({
+                        url: '{url controller="EmotionPreset" action="save"}',
+                        jsonData: values,
+                        method: 'POST',
+                        callback: function(operation, success, response) {
+                            var result = Ext.JSON.decode(response.responseText);
+                            win.setLoading(false);
+                            me.deleteDummyEmotion(values.emotionId);
+
+                            if (!success) {
+                                return Shopware.Notification.createGrowlMessage(
+                                    me.snippets.errorTitle,
+                                    me.snippets.saveErrorMessage + '<br>' + result.message,
+                                    me.snippets.growlMessage
+                                );
+                            }
+                            win.close();
+                            Shopware.Notification.createGrowlMessage(
+                                '{s name=preset/save_success}{/s}',
+                                '{s name=preset/save_success_msg}{/s}'
+                            );
+                        }
+                    });
                 }
-                win.close();
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=preset/save_success}{/s}',
-                    '{s name=preset/save_success_msg}{/s}'
-                );
+            }
+        });
+    },
+
+    /**
+     * Removes dummy emotion after creating preset.
+     *
+     * @param { int } emotionId
+     */
+    deleteDummyEmotion: function(emotionId) {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url action="delete" targetField=emotions}',
+            jsonData: {
+                id: emotionId
             }
         });
     },
@@ -688,7 +728,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         }
     },
 
-
     getRequiredPluginsMessage: function(requiredPlugins) {
         var i = 0,
             count = requiredPlugins.length,
@@ -697,7 +736,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         for (i; i < count; i++) {
             var plugin = requiredPlugins[i];
 
-            if (plugin.active === "0" || plugin.installed === "0") {
+            if (!plugin.valid) {
                 var info = Ext.String.format('[0] ([1])', plugin.plugin_label || plugin.name, plugin.version);
 
                 pluginInfo.push(info);
@@ -933,7 +972,28 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this,
             win = me.getPresetWindow();
 
-        win.infoView.updateInfoView(selectedPreset);
+        if (selectedPreset && Ext.isEmpty(selectedPreset.get('presetData'))) {
+            win.setLoading(true);
+            Ext.Ajax.request({
+                url: '{url controller=emotionPreset action=preview}',
+                jsonData: {
+                    id: selectedPreset.get('id')
+                },
+                callback: function(options, success, response) {
+                    var result = Ext.JSON.decode(response.responseText);
+                    win.setLoading(false);
+
+                    if (result.success) {
+                        selectedPreset.set('presetData', result.data.presetData);
+                        selectedPreset.set('preview', result.data.preview);
+                        selectedPreset.set('previewUrl', result.data.previewUrl);
+                    }
+                    win.infoView.updateInfoView(selectedPreset);
+                }
+            });
+        } else {
+            win.infoView.updateInfoView(selectedPreset);
+        }
     },
 
     decodeEmotionPresetData: function(presetData){
