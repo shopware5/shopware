@@ -43,6 +43,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundle\TemplateSwitchable;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -185,6 +186,10 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     private function switchTemplate($type, FacetResultInterface $result, ProductAttributeFacet $facet)
     {
         if ($result === null) {
+            return $result;
+        }
+
+        if (!$result instanceof TemplateSwitchable) {
             return $result;
         }
 

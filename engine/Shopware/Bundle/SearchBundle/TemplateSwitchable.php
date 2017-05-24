@@ -24,33 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface FacetResultInterface
+interface TemplateSwitchable
 {
     /**
-     * @return string
+     * @param null|string $template
      */
-    public function getFacetName();
-
-    /**
-     * @return bool
-     */
-    public function isActive();
-
-    /**
-     * @return string
-     */
-    public function getLabel();
-
-    /**
-     * Returns the full path of the frontend template file beginning with frontend/...
-     * If the function returns null, the facet result isn't rendered automatically
-     *
-     * @return string|null
-     */
-    public function getTemplate();
+    public function setTemplate($template);
 }
