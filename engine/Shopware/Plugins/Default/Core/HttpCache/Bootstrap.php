@@ -1185,10 +1185,18 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         if ($session->offsetGet('sCountry')) {
             /** @var ProductContextInterface $productContext */
             $productContext = $this->get('shopware_storefront.context_service')->getShopContext();
-            $userContext = sha1(
-                json_encode($productContext->getTaxRules()) .
-                json_encode($productContext->getCurrentCustomerGroup())
-            );
+
+            $userContext = json_encode($productContext->getTaxRules()) .
+                json_encode($productContext->getCurrentCustomerGroup());
+
+            $userContext = $this->get('events')->filter('Shopware_Plugins_HttpCache_ContextCookieValue', $userContext, [
+                'shopContext' => $productContext,
+                'session'     => $session,
+                'request'     => $request,
+                'response'    => $response
+            ]);
+
+            $userContext = sha1($userContext);
             $response->setCookie(
                 'x-cache-context-hash',
                 $userContext,
