@@ -281,6 +281,8 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
         if ( value === Ext.undefined ) {
             return value;
         }
+
+        value = this._roundPriceValue(value);
         return Ext.util.Format.currency(value);
     },
 
@@ -293,9 +295,21 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
         if ( value === Ext.undefined ) {
             return value;
         }
+        value = this._roundPriceValue(value);
         return Ext.util.Format.currency(value);
-    }
+    },
 
+    _roundPriceValue: function(value) {
+        if (Math.sign(value) === -1) {
+            // Negativen Wert
+            value = Math.round(Math.abs(value) * 100);
+            value = (value * -1) / 100;
+        } else if (Math.sign(value) === 1) {
+            value = Math.round(value * 100) / 100;
+        }
+
+        return value;
+    }
 
 
 });
