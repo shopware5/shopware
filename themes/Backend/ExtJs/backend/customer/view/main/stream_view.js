@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.on('activate', function() {
             me.listStore.load();
-            me.streamStore.load();
 
             if (!me.activated) {
                 me.activated = true;
@@ -194,7 +193,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             sorters: [
                 { property: 'name', direction: 'ASC'}
             ]
-        });
+        }).load();
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.Preview', {
             store: me.listStore,

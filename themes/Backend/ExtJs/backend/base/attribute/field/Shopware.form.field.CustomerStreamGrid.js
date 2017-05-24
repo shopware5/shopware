@@ -69,10 +69,13 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
         return {
             action: 'open-customer',
             iconCls: 'sprite-customer-streams',
-            handler: function () {
+            handler: function (view, rowIndex, colIndex, item, opts, record) {
                 Shopware.app.Application.addSubApplication({
                     name: 'Shopware.apps.Customer',
-                    action: 'customer_stream'
+                    action: 'customer_stream',
+                    params: {
+                        streamId: record.get('id')
+                    }
                 });
             }
         };
