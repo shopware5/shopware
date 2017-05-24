@@ -35,6 +35,9 @@ use Shopware\Components\Random;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
+
+use \Shopware\Models\Blog\Comment\Data  as  CommentData;
+
 class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 {
     /**
@@ -256,11 +259,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function detailAction()
     {
-        $blogArticleId = intval($this->Request()->getQuery('blogArticle'));
-        if (empty($blogArticleId)) {
-            $this->forward('index', 'index');
+        $blogArticleId = (int)$this->Request()->getQuery('blogArticle');
 
-            return;
+        if ($blogArticleId<=0) {
+            return $this->forward('index', 'index');
         }
 
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
@@ -366,90 +368,182 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function ratingAction()
     {
-        $blogArticleId = intval($this->Request()->blogArticle);
+        $articleId              = (int)$this->Request()->blogArticle;
+        $optInCommentingEnabled = Shopware()->Config()->sOPTINVOTE;
+        $userLoggedIn           = (bool)Shopware()->Session()->sUserId;
+        /**
+         * If the blog article id is invalid, or, if optin commenting is not enabled
+         * and the user is not logged in, forward to detail.
+         */
+        if($articleId <= 0 || (!$userLoggedIn && !$optInCommentingEnabled)){
+            return $this->forward('detail');
+        }
 
-        if (!empty($blogArticleId)) {
-            $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
-            $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $this->View()->sAction = $this->Request()->getActionName();
 
-            $this->View()->sAction = $this->Request()->getActionName();
+        /** 
+         * If optin commenting is enabled and a hash has been provided 
+         * through the sConfirmation GET variable 
+         */
+        if ($optInCommentingEnabled && $hash = $this->Request()->sConfirmation){
+            /** Try to obtain a comment confirm by the provided hash **/
+            try{
+                $optIn = \Shopware\Models\CommentConfirm\Factory::getInstanceByHash($hash);
+                $this->sSaveComment($optIn->getUnserializedData(), $articleId);
+                Shopware()->Models()->remove($optIn);
+                Shopware()->Models()->flush();
 
-            if ($hash = $this->Request()->sConfirmation) {
-                //customer confirmed the link in the mail
-                $commentConfirmQuery = $this->getCommentConfirmRepository()->getConfirmationByHashQuery($hash);
-                $getComment = $commentConfirmQuery->getOneOrNullResult();
-
-                if ($getComment) {
-                    $commentData = unserialize($getComment->getData());
-
-                    //delete the data in the comment confirm table we don't need it anymore
-                    Shopware()->Models()->remove($getComment);
-                    Shopware()->Models()->flush();
-
-                    $this->sSaveComment($commentData, $blogArticleId);
-
-                    return $this->forward('detail');
-                }
-            }
-
-            //validation
-            if (empty($this->Request()->name)) {
-                $sErrorFlag['name'] = true;
-            }
-            if (empty($this->Request()->headline)) {
-                $sErrorFlag['headline'] = true;
-            }
-
-            if (empty($this->Request()->comment)) {
-                $sErrorFlag['comment'] = true;
-            }
-
-            if (empty($this->Request()->points)) {
-                $sErrorFlag['points'] = true;
-            }
-
-            if (!empty(Shopware()->Config()->CaptchaColor)) {
-                $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-                $rand = $this->Request()->getPost('sRand');
-                if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
-                    $sErrorFlag['sCaptcha'] = true;
-                }
-            }
-            $validator = $this->container->get('validator.email');
-            if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
-                $sErrorFlag['eMail'] = true;
-            }
-
-            if (empty($sErrorFlag)) {
-                if (!empty(Shopware()->Config()->sOPTINVOTE) && empty(Shopware()->Session()->sUserId)) {
-                    $hash = Random::getAlphanumericString(32);
-
-                    //save comment confirm for the optin
-                    $blogCommentModel = new \Shopware\Models\CommentConfirm\CommentConfirm();
-                    $blogCommentModel->setCreationDate(new DateTime('now'));
-                    $blogCommentModel->setHash($hash);
-                    $blogCommentModel->setData(serialize($this->Request()->getPost()));
-
-                    Shopware()->Models()->persist($blogCommentModel);
-                    Shopware()->Models()->flush();
-
-                    $link = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'action' => 'rating', 'blogArticle' => $blogArticleId, 'sConfirmation' => $hash]);
-
-                    $context = ['sConfirmLink' => $link, 'sArticle' => ['title' => $blogArticleData['title']]];
-                    $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
-                    $mail->addTo($this->Request()->getParam('eMail'));
-                    $mail->send();
-                } else {
-                    //save comment
-                    $commentData = $this->Request()->getPost();
-                    $this->sSaveComment($commentData, $blogArticleId);
-                }
-            } else {
-                $this->View()->sFormData = Shopware()->System()->_POST->toArray();
-                $this->View()->sErrorFlag = $sErrorFlag;
+                return $this->forward('detail');
+            }catch(\Exception $e){ 
+                /** 
+                 * Handle the exception, now this is the same as the try block 
+                 * but it is provided for us being able to add some other functionality 
+                 * in the future 
+                 */
+                return $this->forward('detail');
             }
         }
-        $this->forward('detail');
+
+        $data = new CommentData();
+
+        $article = $this->getRepository()
+        ->getDetailQuery($articleId)
+        ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+
+        /** Error storage **/
+        $errors = $this->validateCommentData($data,$this->Request(),$optInCommentingEnabled);
+
+        /** 
+         * If errors were encountered while trying to save the comment 
+         * Assign the errors to the view and proceed to forward to the detail page
+         */
+
+        if($errors){
+
+            $this->View()->sFormData  = Shopware()->System()->_POST->toArray();
+            $this->View()->sErrorFlag = $errors;
+            return $this->forward('detail');
+
+        }
+
+        $article = $this->getRepository()
+        ->getDetailQuery($articleId)
+        ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        /** 
+         * If the user is not logged in, save the comment in the optin table, if he is
+         * save the comment
+         */
+        !$userLoggedIn ? $this->saveOptinComment($article,$data,$this->Request()->eMail) :
+        $this->sSaveComment($data,$article['id']);
+
+        /** Finish up by forwarding to the detail page **/
+        return $this->forward('detail');
+    }
+
+    /**
+     * Validate comment data
+     *
+     * @param \Shopware\Models\Comment\Data Comment data object
+     * @param Enlight_Request $request object
+     * @param boolean $validateEmail
+     * 
+     * @return Array A populated array containing the error indexes set to true
+     * @return Array An empty array, which indicates there are no errors in 
+     * this comment data object.
+     */
+
+    public function validateCommentData(CommentData $data,Enlight_Request $request,$validateEmail){
+
+        /** Error array container **/
+        $errors = [];
+
+        /** Data validation **/
+        try{
+            $data->setName($request->name);
+        }catch(\Exception $e){
+            $errors['name'] = true;
+        }
+
+        try{
+            $data->setHeadline($request->headline);
+        }catch(\Exception $e){
+            $errors['headline'] = true;
+        }
+
+        try{
+            $data->setComment($request->comment);
+        }catch(\Exception $e){
+            $errors['comment'] = true;
+        }
+
+        try{
+            $data->setPoints($request->points);
+        }catch(\Exception $e){
+            $errors['points'] = true;
+        }
+
+        if($validateEmail){
+            $emailValidator = $this->container->get('validator.email');
+            try{
+                $data->setEmail(
+                                $request->eMail,
+                                function($email) use ($emailValidator){
+                                    return $emailValidator->isValid($email);
+                                }
+                );
+            }catch(\Exception $e){
+                $errors['eMail'] = true;
+            }
+        }
+
+        /** DEPRECATED **/
+        if (!empty(Shopware()->Config()->CaptchaColor)) {
+          $captcha = str_replace(' ', '', strtolower($request->sCaptcha));
+          $rand = $request->getPost('sRand');
+          if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+            $errors['sCaptcha'] = true;
+          }
+        }
+
+        return $errors;
+
+    }
+
+    /**
+     * Saves the comment data in the s_core_optin table and sends 
+     * the corresponding email to the user to confirm his email address.
+     * 
+     * @param Array $article article data
+     * @param string $email Commenter's email address
+     * @param \Shopware\Models\Blog\Comment\Data comment data structure
+     */
+
+    private function saveOptinComment(Array $article, CommentData $data, $email){
+        $hash = md5(mt_rand(0,getrandmax()));
+        //save comment confirm for the optin
+        $optInComment = new \Shopware\Models\CommentConfirm\CommentConfirm();
+        $optInComment->setCreationDate(new DateTime('now'));
+        $optInComment->setHash($hash);
+        $optInComment->setData(json_encode($data));
+
+        Shopware()->Models()->persist($optInComment);
+        Shopware()->Models()->flush();
+
+        $link = $this->Front()
+        ->Router()
+        ->assemble([
+                        'sViewport'     => 'blog',
+                        'action'        => 'rating',
+                        'blogArticle'   => $article['id'],
+                        'sConfirmation' => $hash
+        ]);
+
+        $context = ['sConfirmLink' => $link, 'sArticle' => ['title' => $article['title']]];
+        $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
+        $mail->addTo($email);
+        $mail->send();
     }
 
     /**
@@ -523,27 +617,27 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      *
      * @throws Enlight_Exception
      */
-    protected function sSaveComment($commentData, $blogArticleId)
+    protected function sSaveComment($data, $blogArticleId)
     {
-        if (empty($commentData)) {
+        if (empty($data)) {
             throw new Enlight_Exception('sSaveComment #00: Could not save comment');
         }
 
-        $blogCommentModel = new \Shopware\Models\Blog\Comment();
+        $model = new \Shopware\Models\Blog\Comment();
         $blog = $this->getRepository()->find($blogArticleId);
 
-        $blogCommentModel->setBlog($blog);
-        $blogCommentModel->setCreationDate(new \DateTime());
-        $blogCommentModel->setActive(false);
+        $model->setBlog($blog);
+        $model->setCreationDate(new \DateTime());
+        $model->setActive(false);
 
-        $blogCommentModel->setName($commentData['name']);
-        $blogCommentModel->setEmail($commentData['eMail']);
-        $blogCommentModel->setHeadline($commentData['headline']);
-        $blogCommentModel->setComment($commentData['comment']);
-        $blogCommentModel->setPoints($commentData['points']);
+        $model->setName($data['name']);
+        $model->setEmail($data['eMail']);
+        $model->setHeadline($data['headline']);
+        $model->setComment($data['comment']);
+        $model->setPoints($data['points']);
 
-        Shopware()->Models()->persist($blogCommentModel);
-        Shopware()->Models()->flush();
+        Shopware()->Models()->persist($model);
+        return Shopware()->Models()->flush();
     }
 
     /**

@@ -122,6 +122,85 @@ class CommentConfirm extends ModelEntity
         return $this->data;
     }
 
+	 /**
+	  * Verify that the passed string in the passed data argument
+	  * is actually PHP serialized code 
+	  *
+	  * @return boolean true the sring is serialized PHP data.
+	  * @return boolean false the string is NOT serialied PHP data.
+	  */
+    private function stringIsPHPSerialized($data){
+
+        if(!is_string($data)){
+
+            return FALSE;
+
+        }
+
+        $data = trim($data);
+
+        if ( 'N;' == $data ){
+
+            return TRUE;
+
+        }
+
+        if (!preg_match( '/^([adObis]):/', $data, $matches)){
+
+            return FALSE;
+
+        }
+
+        $types = Array('a','O','s','b','i','d');
+
+        if(!in_array($matches[1],$types)){
+
+            return FALSE;
+
+        }
+
+        return preg_match("/^{$matches[1]}:[0-9]+:.*[;}]\$/s", $data) ||
+               preg_match("/^{$matches[1]}:[0-9.E-]+;\$/",$data);
+
+    }
+
+	 /**
+	  * Allows BC by checking if the string is serialized PHP data.
+	  *
+	  * Checks if the given data is php serialized, if it is, it will use 
+	  * unserialize to allow Backward Compatiblity.
+	  *
+	  * If it's not, it will try to use json_decode to decode the data.
+	  *
+	  * @throws \RuntimeException if the data could not be decoded.
+	  * @return mixed Depending on the contents of $this->data.
+	  */
+    public function getUnserializedData(){
+
+        if($this->stringIsPHPSerialized($this->data)){
+
+            return unserialize($this->data);
+
+        }
+
+        $decode = json_decode($this->data,$asArray=TRUE);
+
+		  if(empty($decode)){
+
+			$msg = sprintf(
+								'Unable to decode JSON string "%s" | %s',
+								$this->data,
+								json_last_error_msg()
+			);
+
+			throw new \RuntimeException($msg);
+
+		  }
+
+		  return $decode;
+
+    }
+
     /**
      * Set CreationDate
      *
