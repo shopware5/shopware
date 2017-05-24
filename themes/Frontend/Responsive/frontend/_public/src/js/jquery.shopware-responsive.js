@@ -118,6 +118,7 @@
         .addPlugin('*[data-address-selection="true"]', 'swAddressSelection')
         .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
         .addPlugin('*[data-cookie-permission="true"]', 'swCookiePermission')
+        .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
     ;
 
     $(function($) {

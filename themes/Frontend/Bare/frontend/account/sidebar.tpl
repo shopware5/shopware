@@ -1,4 +1,4 @@
-{if $sUserLoggedIn}
+{if $sUserLoggedIn || $showSidebar}
 <div class="account--menu is--rounded">
     {block name="frontend_account_menu"}
 
