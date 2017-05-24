@@ -598,7 +598,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                             win.setLoading(false);
                             me.deleteDummyEmotion(values.emotionId);
 
-                            if (!success) {
+                            if (!response.success) {
                                 return Shopware.Notification.createGrowlMessage(
                                     me.snippets.errorTitle,
                                     me.snippets.saveErrorMessage + '<br>' + result.message,
