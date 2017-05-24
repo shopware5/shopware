@@ -52,7 +52,6 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.HeightFacet', 
             minValue: 0,
             labelWidth: 150,
             translatable: true,
-            value: 3,
             fieldLabel: '{s name="digits"}{/s}',
             helpText: '{s name="digits_help"}{/s}'
         }];

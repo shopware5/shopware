@@ -525,7 +525,8 @@
                 return value.toFixed(me.opts.digits) + ' ' + me.opts.suffix;
             }
 
-            value = Math.round(value * 100) / 100;
+            var division = Math.pow(10, me.opts.digits);
+            value = Math.round(value * division) / division;
             value = value.toFixed(me.opts.digits);
 
             if (me.opts.labelFormat.indexOf('0.00') >= 0) {
