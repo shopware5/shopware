@@ -74,10 +74,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added template `themes/Frontend/Bare/frontend/listing/filter/facet-datetime.tpl` for date and datetime facets
 * Added template `themes/Frontend/Bare/frontend/listing/filter/facet-datetime-multi.tpl` for date and datetime facets
 * Added template `themes/Frontend/Bare/frontend/listing/filter/facet-datetime-range.tpl` for date and datetime facets
-* Added class `.filter-panel--radio` to `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
-* Added class `.filter-panel--checkbox` to `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
-* Added class `.radio--state` to `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
-* Added class `.checkbox--state` to `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 * Added JavaScript method `document.asyncReady()` to register callbacks which fire after the main script was loaded asynchronously.
 * Added missing dependency `jquery.event.move` to the `package.json` file.
 * Added template switch for `listing/index.tpl` to `listing/customer_stream.tpl` in case that the category contains a shopping world which is restricted to customer streams
@@ -177,7 +173,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed event name from `plugin/swAjaxProductNavigation/onSetProductState` to `plugin/swAjaxProductNavigation/onGetProductState`
 * Changed behavior of the smarty rendering in forms fields comment. See below for more information
 * Changed behavior of the tracking url rendering. See below for more information
-* Changed text color and height of `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 * Changed database column `s_articles_details.instock` to allow `NULL` values and default to `0`
 * Backend customer listing is now loaded in `Shopware_Controllers_Backend_CustomerQuickView`
 * Refactored backend customer module. Please take a look into the different template files to see what has changed.

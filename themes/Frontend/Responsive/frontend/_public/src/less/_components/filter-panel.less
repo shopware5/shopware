@@ -86,6 +86,26 @@ The styling includes the collapsed and expanded styling and the panel component 
             content: @sw-icon-arrow-up;
         }
     }
+
+    .flatpickr-wrapper {
+        position: relative;
+        display: block;
+
+        .flatpickr-calendar.static {
+            .unitize(top, 45);
+            display: block;
+            width: 100%;
+
+            .flatpickr-innerContainer {
+                display: block;
+                width: 100%;
+
+                .flatpickr-days {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 
 .filter-panel--flyout {
@@ -137,6 +157,8 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter-panel--content {
     .unitize-padding(10, 10);
     display: block;
+
+
 }
 
 .filter-panel--option-list {
@@ -195,47 +217,20 @@ The styling includes the collapsed and expanded styling and the panel component 
     }
 }
 
-.option--container:hover {
-    .filter-panel--label {
-        color: @brand-primary;
-    }
-    .filter-panel--input, .filter-panel--checkbox, .filter-panel--radio {
-        border-color: @brand-primary;
-    }
-}
-
-.option--container:hover {
-    .filter-panel--input.is--disabled,
-    .filter-panel--checkbox.is--disabled,
-    .filter-panel--radio.is--disabled {
-        border-color: @border-color;
-    }
-}
-
-.filter-panel--input, .filter-panel--checkbox, .filter-panel--radio {
+.filter-panel--checkbox,
+.filter-panel--radio {
     .unitize-width(16);
     .unitize-height(16);
     .unitize-padding(1, 1);
     .border-radius();
-    .unitize(top, 5);
-    .unitize(left, 0);
     display: inline-block;
     border: 1px solid @border-color;
     cursor: pointer;
-    position: absolute;
+    position: relative;
+    vertical-align: top;
 
     &:hover {
         border-color: @brand-primary;
-    }
-
-    &.is--disabled {
-        & ~ .filter-panel--label {
-            color: @gray-dark;
-        }
-
-        &:hover {
-            border-color: @border-color;
-        }
     }
 
     input[type="checkbox"] {
@@ -251,7 +246,8 @@ The styling includes the collapsed and expanded styling and the panel component 
         cursor: pointer;
         z-index: @zindex-filter-panel-checkbox;
 
-        &:checked ~ .input--state, &:checked ~ .checkbox--state {
+        &:checked ~ .input--state,
+        &:checked ~ .checkbox--state {
             .primary-gradient();
 
             &:before {
@@ -273,7 +269,8 @@ The styling includes the collapsed and expanded styling and the panel component 
             font-weight: 600;
         }
 
-        &:disabled ~ .input--state, &:disabled ~ .checkbox--state {
+        &:disabled ~ .input--state,
+        &:disabled ~ .checkbox--state {
             background: @body-bg;
         }
 
@@ -282,7 +279,9 @@ The styling includes the collapsed and expanded styling and the panel component 
         }
     }
 
-    .input--state, .checkbox--state {
+    .input--state,
+    .checkbox--state,
+    .radio--state {
         .border-radius();
         display: block;
         width: 100%;
@@ -304,7 +303,8 @@ The styling includes the collapsed and expanded styling and the panel component 
         cursor: pointer;
         z-index: @zindex-filter-panel-radio;
 
-        &:checked ~ .input--state, &:checked ~ .radio--state {
+        &:checked ~ .input--state,
+        &:checked ~ .radio--state {
             .primary-gradient();
         }
 
@@ -313,27 +313,20 @@ The styling includes the collapsed and expanded styling and the panel component 
             font-weight: 600;
         }
 
-        &:disabled ~ .input--state, &:disabled ~ .radio--state {
+        &:disabled .input--state,
+        &:disabled .radio--state {
             background: @body-bg;
         }
 
-        &:disabled ~ .filter-panel--label {
+        &:disabled .filter-panel--label {
             color: @text-color;
         }
 
-        & + .input--state, & + .radio--state {
+        & + .input--state,
+        & + .radio--state {
             .border-radius(11px);
-            display: block;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: @zindex-filter-panel-radio-state;
         }
     }
-}
-
-.input-type--radio .filter-panel--input, .filter-panel--radio {
-    .border-radius(11px);
 }
 
 .input-type--media {
@@ -357,7 +350,8 @@ The styling includes the collapsed and expanded styling and the panel component 
         opacity: 0.2;
     }
 
-    input[type="checkbox"], input[type="radio"] {
+    input[type="checkbox"],
+    input[type="radio"] {
         .opacity(0);
         display: block;
         width: 100%;
@@ -398,6 +392,47 @@ The styling includes the collapsed and expanded styling and the panel component 
 
         &:disabled .filter-panel--label {
             .opacity(0.2);
+        }
+    }
+}
+
+.filter--multi-selection,
+.filter--value,
+.filter--value-tree {
+
+    .input-type--radio .filter-panel--input {
+        .border-radius(11px);
+    }
+
+    .option--container:hover {
+        .filter-panel--label {
+            color: @brand-primary;
+        }
+        .filter-panel--input {
+            border-color: @brand-primary;
+        }
+    }
+
+    .option--container:hover {
+        .filter-panel--input.is--disabled {
+            border-color: @border-color;
+        }
+    }
+
+    .filter-panel--checkbox,
+    .filter-panel--radio {
+        .unitize(top, 5);
+        .unitize(left, 0);
+        position: absolute;
+
+        &.is--disabled {
+            & ~ .filter-panel--label {
+                color: @gray-dark;
+            }
+
+            &:hover {
+                border-color: @border-color;
+            }
         }
     }
 }
@@ -479,7 +514,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--value {
     background: #fff;
 
-    .filter-panel--input, .filter-panel--checkbox, .filter-panel--radio {
+    .filter-panel--input {
         .unitize(top, 10);
         .unitize(left, 10);
     }
@@ -488,9 +523,7 @@ The styling includes the collapsed and expanded styling and the panel component 
         .unitize-padding(0, 30, 0, 40);
     }
 
-    &.is--disabled .filter-panel--input:hover,
-    &.is--disabled .filter-panel--checkbox:hover,
-    &.is--disabled .filter-panel--radio:hover {
+    &.is--disabled .filter-panel--input:hover {
         border-color: @border-color;
     }
 }
@@ -508,15 +541,16 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--active {
     .unitize-padding(0, 10);
     .unitize-margin(0, 10, 10, 0);
-    .unitize(line-height, 22);
+    .unitize(line-height, 30);
     .unitize(font-size, 13);
     .border-radius();
     display: inline-block;
     border: 1px solid @border-color;
-    color: @brand-primary;
+    color: @text-color;
     background: #FFF;
     cursor: pointer;
     white-space: nowrap;
+    max-width: 32%;
     overflow: hidden;
     text-overflow: ellipsis;
 
@@ -642,6 +676,14 @@ The styling includes the collapsed and expanded styling and the panel component 
 
         &.is--collapsed {
             .unitize-height(38);
+        }
+
+        .flatpickr-wrapper {
+            position: static;
+
+            .flatpickr-calendar.static {
+                top: 100%;
+            }
         }
     }
 

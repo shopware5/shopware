@@ -30,6 +30,11 @@
             wrap: false,
 
             /**
+             * Position the calendar inside the wrapper and next to the input element.
+             */
+            'static': false,
+
+            /**
              * Enables week numbers
              */
             weekNumbers: false,
@@ -256,6 +261,9 @@
                 me._on(me.$rangeEndInput, 'clear', $.proxy(me.onRangeInputClear, me, me.$rangeEndInput));
                 me._on(me.$rangeEndInput, 'change', $.proxy(me.onInputChange, me));
             }
+
+            $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onCloseMenu'), $.proxy(me.close, me));
+            $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'), $.proxy(me.close, me));
 
             $.publish('plugin/swDatePicker/onRegisterEvents', [ me ]);
         },
@@ -520,6 +528,9 @@
 
         destroy: function () {
             var me = this;
+
+            $.unsubscribe(me.getEventName('plugin/swOffcanvasMenu/onCloseMenu'));
+            $.unsubscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'));
 
             me.flatpickr.destroy();
 
