@@ -80,10 +80,10 @@ INSERT IGNORE INTO `s_search_custom_facet` (`id`, `unique_key`, `active`, `displ
 (5, 'PropertyFacet', 1, 1, 5, 'Eigenschaften', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\PropertyFacet":[]}', 0),
 (6, 'ShippingFreeFacet', 1, 1, 6, 'Versandkostenfrei', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\ShippingFreeFacet":{"label":"Versandkostenfrei"}}', 0),
 (7, 'VoteAverageFacet', 1, 1, 7, 'Bewertungen', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\VoteAverageFacet":{"label":"Bewertung"}}', 0),
-(8, 'WeightFacet', 0, 1, 8, 'Gewicht', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\WeightFacet":{"label":"Gewicht"}}', 0),
-(9, 'WidthFacet', 0, 1, 9, 'Breite', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\WidthFacet":{"label":"Breite"}}', 0),
-(10, 'HeightFacet', 0, 1, 10, 'Höhe', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\HeightFacet":{"label":"Höhe"}}', 0),
-(11, 'LengthFacet', 0, 1, 11, 'Länge', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\LengthFacet":{"label":"Länge"}}', 0)
+(8, 'WeightFacet', 0, 1, 8, 'Gewicht', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\WeightFacet":{"label":"Gewicht","suffix":"kg","digits":2}}', 0),
+(9, 'WidthFacet', 0, 1, 9, 'Breite', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\WidthFacet":{"label":"Breite","suffix":"cm","digits":2}}', 0),
+(10, 'HeightFacet', 0, 1, 10, 'Höhe', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\HeightFacet":{"label":"Höhe","suffix":"cm","digits":2}}', 0),
+(11, 'LengthFacet', 0, 1, 11, 'Länge', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\LengthFacet":{"label":"Länge","suffix":"cm","digits":2}}', 0)
 ;
 SQL;
         $this->addSql($sql);
