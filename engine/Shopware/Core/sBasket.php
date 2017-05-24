@@ -1621,6 +1621,8 @@ class sBasket
             ]
         );
 
+        $this->eventManager->notify('Shopware_Modules_Basket_AddArticle_Added', [ 'id' => $insertId]);
+
         $this->sUpdateArticle($insertId, $quantity);
 
         return $insertId;
