@@ -26,96 +26,95 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductAttributeRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductAttributeRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductAttributeRuleData;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class ProductAttributeRuleTest extends TestCase
 {
-    public function testSingleAttribute()
+    public function testSingleAttribute(): void
     {
-        $rule = new ProductAttributeRule('attr1', 1);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 1);
 
         $cart = $this->createMock(CalculatedCart::class);
 
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new ProductAttributeRuleData([
+            $rule->match($cart, $context, new StructCollection([
+                ProductAttributeRuleData::class => new ProductAttributeRuleData([
                     'attr1' => [2, 3, 1],
                 ]),
-            ]))
+            ]))->matches()
         );
     }
 
-    public function testMultipleAttributeData()
+    public function testMultipleAttributeData(): void
     {
-        $rule = new ProductAttributeRule('attr1', 1);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 1);
 
         $cart = $this->createMock(CalculatedCart::class);
 
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new ProductAttributeRuleData([
+            $rule->match($cart, $context, new StructCollection([
+                ProductAttributeRuleData::class => new ProductAttributeRuleData([
                     'attr2' => [2, 3, 1],
                     'attr3' => [2, 3, 1],
                     'attr1' => [2, 3, 1],
                 ]),
-            ]))
+            ]))->matches()
         );
     }
 
-    public function testNotMatch()
+    public function testNotMatch(): void
     {
-        $rule = new ProductAttributeRule('attr1', 10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new ProductAttributeRuleData([
+            $rule->match($cart, $context, new StructCollection([
+                ProductAttributeRuleData::class => new ProductAttributeRuleData([
                     'attr2' => [2, 3, 1],
                     'attr3' => [2, 3, 1],
                     'attr1' => [2, 3, 1],
                 ]),
-            ]))
+            ]))->matches()
         );
     }
 
-    public function testWithoutMappedAttribute()
+    public function testWithoutMappedAttribute(): void
     {
-        $rule = new ProductAttributeRule('attr2', 10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr2', 10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new ProductAttributeRuleData([
+            $rule->match($cart, $context, new StructCollection([
+                ProductAttributeRuleData::class => new ProductAttributeRuleData([
                     'attr3' => [2, 3, 1],
                     'attr1' => [2, 3, 1],
                 ]),
-            ]))
+            ]))->matches()
         );
     }
 
-    public function testWithoutDataObject()
+    public function testWithoutDataObject(): void
     {
-        $rule = new ProductAttributeRule('attr1', 10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

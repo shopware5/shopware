@@ -30,19 +30,22 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
 class DeliveryCollectionTest extends TestCase
 {
-    public function testCollectionIsCountable()
+    public function testCollectionIsCountable(): void
     {
         $collection = new DeliveryCollection();
         static::assertCount(0, $collection);
         static::assertSame(0, $collection->count());
     }
 
-    public function testAddFunctionAddsANewDelivery()
+    public function testAddFunctionAddsANewDelivery(): void
     {
         $collection = new DeliveryCollection();
         $collection->add(
@@ -52,14 +55,15 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new ShippingMethod(1, '', '', 1, true, 1),
-                self::createShippingLocation()
+                new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                self::createShippingLocation(),
+                new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
             )
         );
         static::assertCount(1, $collection);
     }
 
-    public function testCollectionCanBeFilledByConstructor()
+    public function testCollectionCanBeFilledByConstructor(): void
     {
         $collection = new DeliveryCollection([
             new Delivery(
@@ -68,8 +72,9 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new ShippingMethod(1, '', '', 1, true, 1),
-                self::createShippingLocation()
+                new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                self::createShippingLocation(),
+                new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
             ),
             new Delivery(
                 new DeliveryPositionCollection(),
@@ -77,14 +82,15 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new ShippingMethod(1, '', '', 1, true, 1),
-                self::createShippingLocation()
+                new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                self::createShippingLocation(),
+                new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
             ),
         ]);
         static::assertCount(2, $collection);
     }
 
-    public function testCollectionCanBeCleared()
+    public function testCollectionCanBeCleared(): void
     {
         $collection = new DeliveryCollection([
             new Delivery(
@@ -93,8 +99,9 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new ShippingMethod(1, '', '', 1, true, 1),
-                self::createShippingLocation()
+                new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                self::createShippingLocation(),
+                new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
             ),
             new Delivery(
                 new DeliveryPositionCollection(),
@@ -102,15 +109,16 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new ShippingMethod(1, '', '', 1, true, 1),
-                self::createShippingLocation()
+                new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                self::createShippingLocation(),
+                new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
             ),
         ]);
         $collection->clear();
         static::assertCount(0, $collection);
     }
 
-    private static function createShippingLocation()
+    private static function createShippingLocation(): \Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation
     {
         $country = new Country();
         $country->setArea(new \Shopware\Bundle\StoreFrontBundle\Country\Area());

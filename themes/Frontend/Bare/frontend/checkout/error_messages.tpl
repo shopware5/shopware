@@ -1,5 +1,5 @@
 
-{foreach $cart.calculatedCart.errors as $error}
+{foreach $errors.elements as $error}
     {if $error.level === 0}
         {include file="frontend/_includes/messages.tpl" type="warning" content=$error.message}
     {elseif $error.level === 1}

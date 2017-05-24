@@ -26,11 +26,15 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\Exception\CircularCartCalculationException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class CartCalculator
 {
+    const MAX_ITERATION = 5;
+
     /**
      * @var CartProcessorInterface[]
      */
@@ -41,29 +45,83 @@ class CartCalculator
      */
     private $calculatedCartGenerator;
 
+    /**
+     * @var CollectorInterface[]
+     */
+    private $collectors;
+
+    /**
+     * @var ValidatorInterface[]
+     */
+    private $validators;
+
     public function __construct(
         array $processors,
+        array $collectors,
+        array $validators,
         CalculatedCartGenerator $calculatedCartGenerator
     ) {
         $this->processors = $processors;
+        $this->collectors = $collectors;
         $this->calculatedCartGenerator = $calculatedCartGenerator;
+        $this->validators = $validators;
     }
 
     public function calculate(CartContainer $cartContainer, ShopContextInterface $context): CalculatedCart
     {
+        $dataCollection = $this->prepare($cartContainer, $context);
+
+        return $this->process($cartContainer, $context, $dataCollection, 0);
+    }
+
+    private function prepare(CartContainer $cartContainer, ShopContextInterface $context): StructCollection
+    {
+        $fetchCollection = new StructCollection();
+        foreach ($this->collectors as $collector) {
+            $collector->prepare($fetchCollection, $cartContainer, $context);
+        }
+
+        $dataCollection = new StructCollection();
+        foreach ($this->collectors as $collector) {
+            $collector->fetch($dataCollection, $fetchCollection, $context);
+        }
+
+        return $dataCollection;
+    }
+
+    private function process(
+        CartContainer $cartContainer,
+        ShopContextInterface $context,
+        StructCollection $dataCollection,
+        int $iteration
+    ): CalculatedCart {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
             new DeliveryCollection()
         );
 
         foreach ($this->processors as $processor) {
-            $processor->process(
-                $cartContainer,
-                $processorCart,
-                $context
-            );
+            $processor->process($cartContainer, $processorCart, $dataCollection, $context);
         }
 
-        return $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
+        $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
+
+        $recalculate = false;
+        foreach ($this->validators as $validator) {
+            if ($validator->validate($calculatedCart, $context, $dataCollection)) {
+                continue;
+            }
+            $recalculate = true;
+        }
+
+        if ($iteration >= self::MAX_ITERATION) {
+            throw new CircularCartCalculationException();
+        }
+
+        if ($recalculate) {
+            return $this->process($cartContainer, $context, $dataCollection, $iteration + 1);
+        }
+
+        return $calculatedCart;
     }
 }

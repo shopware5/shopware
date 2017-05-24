@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,73 +25,57 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
-use Shopware\Bundle\CartBundle\Domain\Error\ProductDeliveryInformationNotFoundError;
-use Shopware\Bundle\CartBundle\Domain\Error\ProductPriceNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedProductCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductCalculator
 {
     /**
-     * @var ProductPriceGatewayInterface
-     */
-    private $priceGateway;
-
-    /**
      * @var PriceCalculator
      */
     private $priceCalculator;
 
-    /**
-     * @var ProductDeliveryGatewayInterface
-     */
-    private $deliveryGateway;
-
-    public function __construct(
-        ProductPriceGatewayInterface $priceGateway,
-        PriceCalculator $priceCalculator,
-        ProductDeliveryGatewayInterface $deliveryGateway
-    ) {
-        $this->priceGateway = $priceGateway;
+    public function __construct(PriceCalculator $priceCalculator)
+    {
         $this->priceCalculator = $priceCalculator;
-        $this->deliveryGateway = $deliveryGateway;
     }
 
     public function calculate(
         LineItemCollection $collection,
-        ShopContextInterface $context
+        ShopContextInterface $context,
+        StructCollection $dataCollection
     ): CalculatedProductCollection {
-        $priceDefinitions = $this->priceGateway->get($collection, $context);
-
-        $deliveryInformation = $this->deliveryGateway->get($collection, $context);
-
         $products = new CalculatedProductCollection();
 
         /** @var LineItemInterface $lineItem */
         foreach ($collection as $lineItem) {
-            if (!$priceDefinitions->has($lineItem->getIdentifier())) {
-                $products->addError(
-                    new ProductPriceNotFoundError($lineItem->getIdentifier())
-                );
-
+            if (!$dataCollection->has($lineItem->getIdentifier())) {
                 continue;
             }
 
-            if (!$deliveryInformation->has($lineItem->getIdentifier())) {
-                $products->addError(
-                    new ProductDeliveryInformationNotFoundError($lineItem->getIdentifier())
-                );
+            /** @var ProductData $definition */
+            $definition = $dataCollection->get($lineItem->getIdentifier());
 
-                continue;
+            $priceDefinition = $lineItem->getPriceDefinition();
+            if (!$priceDefinition) {
+                $priceDefinition = $definition->getPrice($lineItem->getQuantity());
             }
 
-            $price = $this->priceCalculator->calculate(
-                $priceDefinitions->get($lineItem->getIdentifier()),
-                $context
+            $priceDefinition = new PriceDefinition(
+                $priceDefinition->getPrice(),
+                $priceDefinition->getTaxRules(),
+                $lineItem->getQuantity(),
+                $priceDefinition->isCalculated()
             );
+
+            $deliveryInformation = $definition->getDeliveryInformation();
+
+            $price = $this->priceCalculator->calculate($priceDefinition, $context);
 
             $products->add(
                 new CalculatedProduct(
@@ -98,7 +83,8 @@ class ProductCalculator
                     $lineItem->getQuantity(),
                     $lineItem,
                     $price,
-                    $deliveryInformation->get($lineItem->getIdentifier())
+                    $deliveryInformation,
+                    $definition->getRule()
                 )
             );
         }

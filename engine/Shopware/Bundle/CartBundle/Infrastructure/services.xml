@@ -6,17 +6,38 @@
 
     <services>
         <!--interface implementations of cart bundle-->
-        <service id="cart.product.delivery_information_gateway" alias="shopware.cart.product.delivery_information_gateway" />
-        <service id="cart.product.price_gateway" alias="shopware.cart.product.price_gateway" />
+        <service id="cart.product.gateway" alias="shopware.cart.product.gateway" />
         <service id="cart.voucher.gateway" alias="shopware.cart.voucher.gateway" />
+        <service id="cart.dynamic.line_item_gateway" alias="shopware.cart.dynamic.line_item_gateway" />
 
-        <service id="shopware.cart.product.delivery_information_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway">
-            <argument type="service" id="dbal_connection" />
+        <service id="shopware.cart.dynamic.line_item_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Dynamic\DynamicLineItemGateway">
+            <argument id="shopware.cart.dynamic.customer_group_discount_gateway" type="service"/>
+            <argument id="shopware.cart.dynamic.minimum_order_value_gateway" type="service"/>
+            <argument id="shopware.cart.dynamic.payment_surcharge_gateway" type="service"/>
+        </service>
+
+        <service id="shopware.cart.dynamic.customer_group_discount_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Dynamic\CustomerGroupDiscountGateway">
+            <argument id="cart.price.percentage_calculator" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="shopware.cart.dynamic.minimum_order_value_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Dynamic\MinimumOrderValueGateway">
+            <argument id="cart.price.calculator" type="service"/>
+            <argument id="cart.tax.percentage_rule_builder" type="service"/>
+        </service>
+
+        <service id="shopware.cart.dynamic.payment_surcharge_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Dynamic\PaymentSurchargeGateway">
+            <argument id="cart.tax.percentage_rule_builder" type="service"/>
+            <argument id="cart.price.percentage_calculator" type="service"/>
+            <argument id="cart.price.calculator" type="service"/>
+        </service>
+
+        <service id="shopware.cart.product.gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductGateway" >
+            <argument id="shopware.cart.product.price_gateway" type="service"/>
         </service>
 
         <service id="shopware.cart.product.price_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="storefront.common.field_helper" />
         </service>
 
         <service id="shopware.cart.storefront_service" class="Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService">
@@ -49,34 +70,41 @@
             </argument>
         </service>
 
-        <service id="shopware.cart.validator.product_of_categories_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCategoriesRuleCollector">
-            <argument id="dbal_connection" type="service"/>
-            <tag name="cart.validator_collector" />
-        </service>
-
-        <service id="shopware.cart.validator.last_order_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\LastOrderRuleCollector">
-            <argument type="service" id="dbal_connection" />
-            <tag name="cart.validator_collector" />
-        </service>
-
-        <service id="shopware.cart.validator.order_cleared_state_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderClearedStateRuleCollector">
-            <argument type="service" id="dbal_connection" />
-            <tag name="cart.validator_collector" />
-        </service>
-
-        <service id="shopware.cart.validator.order_count_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderCountRuleCollector">
-            <argument type="service" id="dbal_connection" />
-            <tag name="cart.validator_collector" />
-        </service>
-
-        <service id="shopware.cart.validator.product_attribute_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductAttributeRuleCollector">
-            <argument type="service" id="dbal_connection" />
-            <tag name="cart.validator_collector" />
-        </service>
-
         <service id="shopware.cart.voucher.gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Voucher\VoucherGateway" >
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="cart.tax.percentage_rule_builder" />
         </service>
+
+        <service id="shopware.cart.rule.product_of_categories_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\ProductOfCategoriesRuleCollector">
+            <argument id="dbal_connection" type="service"/>
+            <tag name="cart.collector" priority="-1000" />
+        </service>
+
+        <service id="shopware.cart.rule.last_order_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\LastOrderRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.collector" priority="-1000" />
+        </service>
+
+        <service id="shopware.cart.rule.order_cleared_state_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\OrderClearedStateRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.collector" priority="-1000" />
+        </service>
+
+        <service id="shopware.cart.rule.order_count_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\OrderCountRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.collector" priority="-1000" />
+        </service>
+
+        <service id="shopware.cart.rule.product_attribute_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\ProductAttributeRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.collector" priority="-1000" />
+        </service>
+
+        <service id="shopware.cart.rule.product_of_manufacturer_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\ProductOfManufacturersRuleCollector" >
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.collector" priority="-1000" />
+        </service>
+
+
     </services>
 </container>

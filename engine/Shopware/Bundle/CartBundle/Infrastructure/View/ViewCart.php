@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
@@ -43,6 +42,11 @@ class ViewCart extends Struct
      */
     protected $calculatedCart;
 
+    /**
+     * @var ViewDeliveryCollection
+     */
+    protected $deliveries;
+
     public function __construct(CalculatedCart $calculatedCart)
     {
         $this->calculatedCart = $calculatedCart;
@@ -50,6 +54,8 @@ class ViewCart extends Struct
         $this->viewLineItems = new ViewLineItemCollection(
             $calculatedCart->getCalculatedLineItems()->filterInstance(ViewLineItemInterface::class)->getIterator()->getArrayCopy()
         );
+
+        $this->deliveries = new ViewDeliveryCollection();
     }
 
     public function getPrice(): CartPrice
@@ -72,8 +78,27 @@ class ViewCart extends Struct
         return $this->calculatedCart->getErrors();
     }
 
-    public function getDeliveries(): DeliveryCollection
+    public function getDeliveries(): ViewDeliveryCollection
     {
-        return $this->calculatedCart->getDeliveries();
+        return $this->deliveries;
+    }
+
+    public function clearErrors(): ErrorCollection
+    {
+        return $this->calculatedCart->clearErrors();
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+
+        $data = array_merge($data, [
+            'price' => $this->getPrice(),
+            'errors' => $this->getErrors(),
+            'shippingCosts' => $this->getDeliveries()->getShippingCosts()->getTotalPrice()->getTotalPrice(),
+            'deliveries' => $this->getDeliveries(),
+        ]);
+
+        return $data;
     }
 }

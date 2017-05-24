@@ -26,15 +26,15 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\BillingZipCodeRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingZipCodeRule;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
 class BillingZipCodeRuleTest extends TestCase
 {
-    public function testEqualsWithSingleCode()
+    public function testEqualsWithSingleCode(): void
     {
         $rule = new BillingZipCodeRule(['ABC123']);
 
@@ -53,11 +53,11 @@ class BillingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testEqualsWithMultipleCodes()
+    public function testEqualsWithMultipleCodes(): void
     {
         $rule = new BillingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
 
@@ -76,11 +76,11 @@ class BillingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotMatchWithSingleCode()
+    public function testNotMatchWithSingleCode(): void
     {
         $rule = new BillingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
 
@@ -99,11 +99,11 @@ class BillingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithoutShippingAddress()
+    public function testWithoutShippingAddress(): void
     {
         $rule = new BillingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
 
@@ -116,7 +116,7 @@ class BillingZipCodeRuleTest extends TestCase
             ->will($this->returnValue(null));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

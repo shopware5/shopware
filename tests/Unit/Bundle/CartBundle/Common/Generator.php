@@ -101,7 +101,7 @@ class Generator extends \PHPUnit\Framework\TestCase
             $taxes,
             $priceGroups,
             new PaymentMethod(1, '', '', ''),
-            new ShippingMethod(1, '', '', 1, true, 1),
+            new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
             ShippingLocation::createFromAddress($shipping),
             new Customer()
         );

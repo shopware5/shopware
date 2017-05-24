@@ -67,14 +67,19 @@ class PaymentMethodHydrator extends Hydrator
         $paymentMethod->setTable((string) $data['__paymentMethod_table']);
         $paymentMethod->setTemplate((string) $data['__paymentMethod_template']);
         $paymentMethod->setHidden((bool) $data['__paymentMethod_hide']);
-        $paymentMethod->setPercentDebit((float) $data['__paymentMethod_debit_percent']);
-        $paymentMethod->setSurcharge((float) $data['__paymentMethod_surcharge']);
         $paymentMethod->setPosition((int) $data['__paymentMethod_position']);
         $paymentMethod->setActive((bool) $data['__paymentMethod_active']);
         $paymentMethod->setEsdActive((bool) $data['__paymentMethod_esdactive']);
         $paymentMethod->setIFrameUrl((string) $data['__paymentMethod_embediframe']);
         $paymentMethod->setAction($data['__paymentMethod_action']);
         $paymentMethod->setMobileInactive((bool) $data['__paymentMethod_mobile_inactive']);
+
+        if (isset($data['__paymentMethod_debit_percent']) && $data['__paymentMethod_debit_percent'] != 0) {
+            $paymentMethod->setPercentageSurcharge((float) $data['__paymentMethod_debit_percent']);
+        }
+        if (isset($data['__paymentMethod_surcharge']) && $data['__paymentMethod_surcharge']) {
+            $paymentMethod->setSurcharge((float) $data['__paymentMethod_surcharge']);
+        }
 
         if ($data['__paymentMethod_rules']) {
             $rule = json_decode($data['__paymentMethod_rules'], true);

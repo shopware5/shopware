@@ -26,15 +26,16 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\XorRule;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\XorRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Match;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
 class XorRuleTest extends TestCase
 {
-    public function testSingleTrueRule()
+    public function testSingleTrueRule(): void
     {
         $rule = new XorRule([
             new FalseRule(),
@@ -42,32 +43,34 @@ class XorRuleTest extends TestCase
             new FalseRule(),
         ]);
 
-        $this->assertTrue(
+        $this->assertEquals(
+            new Match(true),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }
 
-    public function testWithMultipleFalse()
+    public function testWithMultipleFalse(): void
     {
         $rule = new XorRule([
             new FalseRule(),
             new FalseRule(),
         ]);
 
-        $this->assertFalse(
+        $this->assertEquals(
+            new Match(false),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }
 
-    public function testWithMultipleTrue()
+    public function testWithMultipleTrue(): void
     {
         $rule = new XorRule([
             new TrueRule(),
@@ -75,11 +78,12 @@ class XorRuleTest extends TestCase
             new FalseRule(),
         ]);
 
-        $this->assertFalse(
+        $this->assertEquals(
+            new Match(false),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }

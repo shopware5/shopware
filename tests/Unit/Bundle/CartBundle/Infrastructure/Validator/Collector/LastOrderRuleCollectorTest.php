@@ -26,59 +26,50 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Collect
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\LastOrderRuleCollector;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\LastOrderRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\LastOrderRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\LastOrderRuleCollector;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\LastOrderRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;
 
 class LastOrderRuleCollectorTest extends TestCase
 {
-    public function testWithoutRule()
+    public function testWithoutRule(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
 
         $collector = new LastOrderRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection();
 
-        $ruleCollection = new RuleCollection();
-
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
         $this->assertSame(0, $dataCollection->count());
     }
 
-    public function testWithoutCustomer()
+    public function testWithoutCustomer(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
 
         $collector = new LastOrderRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new LastOrderRule(10)),
+        ]);
 
-        $ruleCollection = new RuleCollection([new LastOrderRule(10)]);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
-
-        $this->assertSame(0, $dataCollection->count());
+        $this->assertSame(1, $dataCollection->count());
     }
 
-    public function testWithLastOrder()
+    public function testWithLastOrder(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
@@ -94,13 +85,13 @@ class LastOrderRuleCollectorTest extends TestCase
 
         $collector = new LastOrderRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new LastOrderRule(10)),
+        ]);
 
-        $ruleCollection = new RuleCollection([new LastOrderRule(10)]);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
-
-        $this->assertSame(1, $dataCollection->count());
+        $this->assertSame(2, $dataCollection->count());
 
         /** @var LastOrderRuleData $rule */
         $rule = $dataCollection->get(LastOrderRuleData::class);
@@ -112,10 +103,8 @@ class LastOrderRuleCollectorTest extends TestCase
         );
     }
 
-    public function testWithoutLastOrder()
+    public function testWithoutLastOrder(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
@@ -131,13 +120,13 @@ class LastOrderRuleCollectorTest extends TestCase
 
         $collector = new LastOrderRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new LastOrderRule(10)),
+        ]);
 
-        $ruleCollection = new RuleCollection([new LastOrderRule(10)]);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
-
-        $this->assertSame(1, $dataCollection->count());
+        $this->assertSame(2, $dataCollection->count());
 
         /** @var LastOrderRuleData $rule */
         $rule = $dataCollection->get(LastOrderRuleData::class);

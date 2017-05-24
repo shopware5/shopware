@@ -35,13 +35,13 @@ class PriceRoundingTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $precision
      */
-    public function testWithValidNumbers($price, $expected, $precision)
+    public function testWithValidNumbers($price, $expected, $precision): void
     {
         $rounding = new PriceRounding($precision);
         static::assertEquals($expected, $rounding->round($price));
     }
 
-    public function getCases()
+    public function getCases(): array
     {
         return [
             [0, 0, 0],

@@ -26,14 +26,11 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Voucher;
 
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
-use Shopware\Bundle\CartBundle\Domain\Error\VoucherModeNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\Error\VoucherNotFoundError;
-use Shopware\Bundle\CartBundle\Domain\Error\VoucherRuleError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
@@ -42,54 +39,55 @@ use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Voucher\AbsoluteVoucherData;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\CartBundle\Domain\Voucher\Voucher;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherCollection;
+use Shopware\Bundle\CartBundle\Domain\Voucher\PercentageVoucherData;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
-use Shopware\Bundle\CartBundle\Infrastructure\Voucher\VoucherGateway;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
-use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 
 class VoucherProcessorTest extends TestCase
 {
-    public function testEmptyCart()
+    public function testEmptyCart(): void
     {
+        $cart = new CartContainer(
+            'test',
+            Uuid::uuid4(),
+            new LineItemCollection(),
+            new ErrorCollection()
+        );
         $processor = new VoucherProcessor(
             $this->createMock(PercentagePriceCalculator::class),
-            $this->createMock(CalculatedCartGenerator::class),
-            $this->createMock(VoucherGateway::class),
-            $this->createMock(RuleDataCollectorRegistry::class),
-            $this->createMock(PriceCalculator::class)
+            $this->createMock(PriceCalculator::class),
+            new PercentageTaxRuleBuilder()
         );
 
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
             new DeliveryCollection()
         );
-
         $processor->process(
-            new CartContainer('test', Uuid::uuid4(), new LineItemCollection([])),
+            $cart,
             $processorCart,
+            new StructCollection(),
             $this->createMock(ShopContext::class)
         );
 
-        $this->assertSame(0, $processorCart->getErrors()->count());
+        $this->assertSame(0, $cart->getErrors()->count());
         $this->assertSame(0, $processorCart->getCalculatedLineItems()->count());
     }
 
-    public function testCartWithNotVoucher()
+    public function testCartWithNotVoucher(): void
     {
         $processor = new VoucherProcessor(
             $this->createMock(PercentagePriceCalculator::class),
-            $this->createMock(CalculatedCartGenerator::class),
-            $this->createMock(VoucherGateway::class),
-            $this->createMock(RuleDataCollectorRegistry::class),
-            $this->createMock(PriceCalculator::class)
+            $this->createMock(PriceCalculator::class),
+            new PercentageTaxRuleBuilder()
         );
 
         $processorCart = new ProcessorCart(
@@ -100,50 +98,57 @@ class VoucherProcessorTest extends TestCase
             new DeliveryCollection()
         );
 
-        $processor->process(
-            new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
+        $cart = new CartContainer(
+            'test',
+            Uuid::uuid4(),
+            new LineItemCollection([
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-            ])),
+            ]),
+            new ErrorCollection()
+        );
+
+        $processor->process(
+            $cart,
             $processorCart,
+            new StructCollection(),
             $this->createMock(ShopContext::class)
         );
 
-        $this->assertSame(0, $processorCart->getErrors()->count());
+        $this->assertSame(0, $cart->getErrors()->count());
         $this->assertSame(2, $processorCart->getCalculatedLineItems()->count());
     }
 
-    public function testCartWithVoucherAndNoGoods()
+    public function testCartWithVoucherAndNoGoods(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection([]),
             new DeliveryCollection()
         );
 
-        $gateway = $this->createMock(VoucherGateway::class);
-        $gateway->expects($this->never())->method('get');
-
         $processor = new VoucherProcessor(
             $this->createMock(PercentagePriceCalculator::class),
-            $this->createMock(CalculatedCartGenerator::class),
-            $gateway,
-            $this->createMock(RuleDataCollectorRegistry::class),
-            $this->createMock(PriceCalculator::class)
+            $this->createMock(PriceCalculator::class),
+            new PercentageTaxRuleBuilder()
         );
 
-        $processor->process(
-            new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
+        $cart = new CartContainer(
+            'test',
+            Uuid::uuid4(),
+            new LineItemCollection([
                 new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']),
-            ])),
-            $processorCart,
-            $this->createMock(ShopContext::class)
+            ]),
+            new ErrorCollection()
         );
 
-        $this->assertSame(0, $processorCart->getErrors()->count());
+        $data = new StructCollection();
+        $processor->process($cart, $processorCart, $data, $this->createMock(ShopContext::class));
+
+        $this->assertSame(0, $cart->getErrors()->count());
         $this->assertSame(0, $processorCart->getCalculatedLineItems()->count());
     }
 
-    public function testVoucherNotExists()
+    public function testVoucherNotExists(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection([
@@ -153,88 +158,41 @@ class VoucherProcessorTest extends TestCase
             new DeliveryCollection()
         );
 
-        $cartContainer = new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
-            new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']),
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-        ]));
-
-        $voucherGateway = $this->createMock(VoucherGateway::class);
-        $voucherGateway->method('get')->will($this->returnValue(new VoucherCollection([])));
-
-        $ruleRegistry = $this->createMock(RuleDataCollectorRegistry::class);
-        $ruleRegistry->method('collect')->will($this->returnValue(new RuleDataCollection()));
+        $cart = new CartContainer(
+            'test',
+            Uuid::uuid4(),
+            new LineItemCollection([
+                new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']),
+                new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
+                new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
+            ]),
+            new ErrorCollection()
+        );
 
         $processor = new VoucherProcessor(
             $this->createMock(PercentagePriceCalculator::class),
-            $this->createMock(CalculatedCartGenerator::class),
-            $voucherGateway,
-            $ruleRegistry,
-            $this->createMock(PriceCalculator::class)
+            $this->createMock(PriceCalculator::class),
+            new PercentageTaxRuleBuilder()
         );
 
-        $processor->process($cartContainer, $processorCart, $this->createMock(ShopContext::class));
+        $data = new StructCollection();
+        $processor->process($cart, $processorCart, $data, $this->createMock(ShopContext::class));
 
-        $this->assertSame(1, $processorCart->getErrors()->count());
+        $this->assertSame(1, $cart->getErrors()->count());
         $this->assertEquals(
             new ErrorCollection([new VoucherNotFoundError('test')]),
-            $processorCart->getErrors()
+            $cart->getErrors()
         );
 
         /** @var VoucherNotFoundError $error */
-        $error = $processorCart->getErrors()->get(0);
+        $error = $cart->getErrors()->get(0);
 
         $this->assertSame('Voucher with code test not found', $error->getMessage());
         $this->assertSame(VoucherNotFoundError::LEVEL_ERROR, $error->getLevel());
         $this->assertSame(VoucherNotFoundError::class, $error->getMessageKey());
     }
 
-    public function testVoucherRuleMatch()
-    {
-        $processorCart = new ProcessorCart(
-            new CalculatedLineItemCollection([
-                new DummyProduct('SW1'),
-                new DummyProduct('SW2'),
-            ]),
-            new DeliveryCollection()
-        );
-
-        $cartContainer = new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
-            new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']),
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-        ]));
-
-        $voucherGateway = $this->createMock(VoucherGateway::class);
-        $voucherGateway->method('get')->will(
-            $this->returnValue(
-                new VoucherCollection([
-                    new Voucher('test', VoucherProcessor::TYPE_ABSOLUTE, 10, null, new FalseRule()),
-                ])
-            )
-        );
-
-        $ruleRegistry = $this->createMock(RuleDataCollectorRegistry::class);
-        $ruleRegistry->method('collect')->will($this->returnValue(new RuleDataCollection()));
-
-        $processor = new VoucherProcessor(
-            $this->createMock(PercentagePriceCalculator::class),
-            $this->createMock(CalculatedCartGenerator::class),
-            $voucherGateway,
-            $ruleRegistry,
-            $this->createMock(PriceCalculator::class)
-        );
-
-        $processor->process($cartContainer, $processorCart, $this->createMock(ShopContext::class));
-
-        $this->assertSame(1, $processorCart->getErrors()->count());
-        $this->assertEquals(
-            new ErrorCollection([new VoucherRuleError('test', new FalseRule())]),
-            $processorCart->getErrors()
-        );
-    }
-
-    public function testPercentage()
+    public function testPercentage(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection([
@@ -246,23 +204,16 @@ class VoucherProcessorTest extends TestCase
 
         $lineItem = new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']);
 
-        $cartContainer = new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
-            $lineItem,
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-        ]));
-
-        $voucherGateway = $this->createMock(VoucherGateway::class);
-        $voucherGateway->method('get')->will(
-            $this->returnValue(
-                new VoucherCollection([
-                    new Voucher('test', VoucherProcessor::TYPE_PERCENTAGE, 10, null, null),
-                ])
-            )
+        $cartContainer = new CartContainer(
+            'test',
+            Uuid::uuid4(),
+            new LineItemCollection([
+                $lineItem,
+                new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
+                new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
+            ]),
+            new ErrorCollection()
         );
-
-        $ruleRegistry = $this->createMock(RuleDataCollectorRegistry::class);
-        $ruleRegistry->method('collect')->will($this->returnValue(new RuleDataCollection()));
 
         $price = new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection());
         $percentageCalculator = $this->createMock(PercentagePriceCalculator::class);
@@ -272,13 +223,14 @@ class VoucherProcessorTest extends TestCase
 
         $processor = new VoucherProcessor(
             $percentageCalculator,
-            $this->createMock(CalculatedCartGenerator::class),
-            $voucherGateway,
-            $ruleRegistry,
-            $this->createMock(PriceCalculator::class)
+            $this->createMock(PriceCalculator::class),
+            new PercentageTaxRuleBuilder()
         );
 
-        $processor->process($cartContainer, $processorCart, $this->createMock(ShopContext::class));
+        $data = new StructCollection([
+            'test' => new PercentageVoucherData('test', new AndRule(), 10),
+        ]);
+        $processor->process($cartContainer, $processorCart, $data, $this->createMock(ShopContext::class));
         $this->assertSame(1, $processorCart->getCalculatedLineItems()->filterInstance(CalculatedVoucher::class)->count());
 
         /** @var CalculatedVoucher $voucher */
@@ -293,7 +245,7 @@ class VoucherProcessorTest extends TestCase
         $this->assertSame('voucher', $voucher->getCode());
     }
 
-    public function testAbsolute()
+    public function testAbsolute(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection([
@@ -305,23 +257,16 @@ class VoucherProcessorTest extends TestCase
 
         $lineItem = new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']);
 
-        $cartContainer = new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
-            $lineItem,
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-        ]));
-
-        $voucherGateway = $this->createMock(VoucherGateway::class);
-        $voucherGateway->method('get')->will(
-            $this->returnValue(
-                new VoucherCollection([
-                    new Voucher('test', VoucherProcessor::TYPE_ABSOLUTE, null, new PriceDefinition(1, new TaxRuleCollection()), null),
-                ])
-            )
+        $cartContainer = new CartContainer(
+            'test',
+            Uuid::uuid4(),
+            new LineItemCollection([
+                $lineItem,
+                new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
+                new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
+            ]),
+            new ErrorCollection()
         );
-
-        $ruleRegistry = $this->createMock(RuleDataCollectorRegistry::class);
-        $ruleRegistry->method('collect')->will($this->returnValue(new RuleDataCollection()));
 
         $percentageCalculator = $this->createMock(PercentagePriceCalculator::class);
         $percentageCalculator->expects($this->never())->method('calculate');
@@ -335,58 +280,15 @@ class VoucherProcessorTest extends TestCase
 
         $processor = new VoucherProcessor(
             $percentageCalculator,
-            $this->createMock(CalculatedCartGenerator::class),
-            $voucherGateway,
-            $ruleRegistry,
-            $priceCalculator
+            $priceCalculator,
+            new PercentageTaxRuleBuilder()
         );
 
-        $processor->process($cartContainer, $processorCart, $this->createMock(ShopContext::class));
+        $data = new StructCollection([
+            'test' => new AbsoluteVoucherData('test', new AndRule(), new PriceDefinition(1, new TaxRuleCollection())),
+        ]);
+        $processor->process($cartContainer, $processorCart, $data, $this->createMock(ShopContext::class));
 
         $this->assertSame(1, $processorCart->getCalculatedLineItems()->filterInstance(CalculatedVoucher::class)->count());
-    }
-
-    public function testNotSupportedMode()
-    {
-        $processorCart = new ProcessorCart(
-            new CalculatedLineItemCollection([
-                new DummyProduct('SW1'),
-                new DummyProduct('SW2'),
-            ]),
-            new DeliveryCollection()
-        );
-
-        $lineItem = new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => 'test']);
-
-        $cartContainer = new CartContainer('test', Uuid::uuid4(), new LineItemCollection([
-            $lineItem,
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-        ]));
-
-        $voucherGateway = $this->createMock(VoucherGateway::class);
-        $voucherGateway->method('get')->will(
-            $this->returnValue(
-                new VoucherCollection([
-                    new Voucher('test', 'not supported', null, new PriceDefinition(1, new TaxRuleCollection()), null),
-                ])
-            )
-        );
-
-        $processor = new VoucherProcessor(
-            $this->createMock(PercentagePriceCalculator::class),
-            $this->createMock(CalculatedCartGenerator::class),
-            $voucherGateway,
-            $this->createMock(RuleDataCollectorRegistry::class),
-            $this->createMock(PriceCalculator::class)
-        );
-
-        $processor->process($cartContainer, $processorCart, $this->createMock(ShopContext::class));
-
-        $this->assertSame(1, $processorCart->getErrors()->count());
-        $this->assertEquals(
-            new ErrorCollection([new VoucherModeNotFoundError('test', 'not supported')]),
-            $processorCart->getErrors()
-        );
     }
 }

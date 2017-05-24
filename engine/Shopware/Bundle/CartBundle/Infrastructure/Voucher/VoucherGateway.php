@@ -26,15 +26,21 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Voucher;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Voucher\Voucher;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\DateRangeRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\ProductOfManufacturerRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\CartBundle\Domain\Voucher\AbsoluteVoucherData;
+use Shopware\Bundle\CartBundle\Domain\Voucher\PercentageVoucherData;
+use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherData;
+use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGatewayInterface;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerGroupRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsPriceRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\LineItemsInCartRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class VoucherGateway implements VoucherGatewayInterface
@@ -44,29 +50,20 @@ class VoucherGateway implements VoucherGatewayInterface
      */
     private $connection;
 
-    /**
-     * @var PercentageTaxRuleBuilder
-     */
-    private $percentageTaxRuleBuilder;
-
-    public function __construct(
-        Connection $connection,
-        PercentageTaxRuleBuilder $percentageTaxRuleBuilder
-    ) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
-        $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
     }
 
-    public function get(LineItemCollection $lineItemCollection, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
+    public function get(array $codes, ShopContextInterface $context): VoucherDataCollection
     {
-        $codes = array_column($lineItemCollection->getExtraData(), 'code');
-        $query = $this->fetchSimpleVouchers($codes);
+        $query = $this->createVoucherQuery($codes);
 
         $rows = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
-        $vouchers = new VoucherCollection();
+        $vouchers = new VoucherDataCollection();
         foreach ($rows as $row) {
-            $vouchers->add($this->hydrate($row, $calculatedCart));
+            $vouchers->add($this->hydrate($row));
         }
 
         if (count($codes) === count($rows)) {
@@ -78,31 +75,26 @@ class VoucherGateway implements VoucherGatewayInterface
         return $vouchers;
     }
 
-    private function hydrate(array $row, CalculatedCart $calculatedCart): Voucher
+    private function hydrate(array $row): VoucherData
     {
-        $percentage = (float) $row['value'];
+        $price = (float) $row['value'];
 
-        $price = $calculatedCart->getCalculatedLineItems()->getPrices()->getTotalPrice();
-
-        $priceDefinition = new PriceDefinition(
-            $percentage,
-            $this->percentageTaxRuleBuilder->buildRules($price),
-            1,
-            true
-        );
-
-        $rule = new AndRule();
-
-        $mode = $row['percental'] ? VoucherProcessor::TYPE_PERCENTAGE : VoucherProcessor::TYPE_ABSOLUTE;
-
-        if (count($rule->getRules()) === 0) {
-            $rule = null;
+        if ($row['percental']) {
+            return new PercentageVoucherData(
+                $row['vouchercode'],
+                $this->buildRule($row),
+                $price
+            );
         }
 
-        return new Voucher($row['vouchercode'], $mode, $percentage, $priceDefinition, $rule);
+        return new AbsoluteVoucherData(
+            $row['vouchercode'],
+            $this->buildRule($row),
+            new PriceDefinition($price, new TaxRuleCollection(), 1, true)
+        );
     }
 
-    private function fetchSimpleVouchers(array $codes): QueryBuilder
+    private function createVoucherQuery(array $codes): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select([
@@ -125,5 +117,55 @@ class VoucherGateway implements VoucherGatewayInterface
         $query->setParameter(':codes', $codes, Connection::PARAM_STR_ARRAY);
 
         return $query;
+    }
+
+    private function buildRule($row): Rule
+    {
+        $rule = new AndRule();
+        if ($row['customergroup']) {
+            $rule->addRule(
+                new CustomerGroupRule([(int) $row['customergroup']])
+            );
+        }
+
+        if ($row['valid_from'] || $row['valid_to']) {
+            $rule->addRule(
+                new DateRangeRule(
+                    $row['valid_from'] ? new \DateTime($row['valid_from']) : null,
+                    $row['valid_to'] ? new \DateTime($row['valid_to']) : null
+                )
+            );
+        }
+
+        if ($row['subshopID']) {
+            $rule->addRule(
+                new ShopRule([(int) $row['subshopID']], Rule::OPERATOR_EQ)
+            );
+        }
+
+        if ($row['bindtosupplier']) {
+            $rule->addRule(
+                new ProductOfManufacturerRule([(int) $row['bindtosupplier']])
+            );
+        }
+
+        if ($row['minimumcharge']) {
+            $rule->addRule(
+                new GoodsPriceRule(
+                    (float) $row['minimumcharge'],
+                    Rule::OPERATOR_GTE
+                )
+            );
+        }
+
+        if ($row['restrictarticles']) {
+            $rule->addRule(
+                new LineItemsInCartRule(
+                    explode(';', $row['restrictarticles'])
+                )
+            );
+        }
+
+        return $rule;
     }
 }

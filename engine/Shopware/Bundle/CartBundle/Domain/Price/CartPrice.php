@@ -51,9 +51,15 @@ class CartPrice extends Struct
      */
     protected $taxRules;
 
+    /**
+     * @var float
+     */
+    protected $positionPrice;
+
     public function __construct(
         float $netPrice,
         float $totalPrice,
+        float $positionPrice,
         CalculatedTaxCollection $calculatedTaxes,
         TaxRuleCollection $taxRules
     ) {
@@ -61,6 +67,7 @@ class CartPrice extends Struct
         $this->totalPrice = $totalPrice;
         $this->calculatedTaxes = $calculatedTaxes;
         $this->taxRules = $taxRules;
+        $this->positionPrice = $positionPrice;
     }
 
     public function getNetPrice(): float
@@ -81,5 +88,10 @@ class CartPrice extends Struct
     public function getTaxRules(): TaxRuleCollection
     {
         return $this->taxRules;
+    }
+
+    public function getPositionPrice(): float
+    {
+        return $this->positionPrice;
     }
 }

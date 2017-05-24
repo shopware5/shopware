@@ -73,7 +73,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_sum_value'}
                             <div class="entry--value block">
-                                {$cart.calculatedCart.price.totalPrice|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                {$cart.calculatedCart.price.positionPrice|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
                             </div>
                         {/block}
                     </li>
@@ -91,7 +91,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_shipping_value'}
                             <div class="entry--value block">
-                                {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                {$cart.calculatedCart.shippingCosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
                             </div>
                         {/block}
                     </li>

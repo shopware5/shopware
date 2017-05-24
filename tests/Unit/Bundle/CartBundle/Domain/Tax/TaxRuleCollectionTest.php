@@ -29,13 +29,13 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
 class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCollectionIsCountable()
+    public function testCollectionIsCountable(): void
     {
         $collection = new TaxRuleCollection();
         static::assertCount(0, $collection);
     }
 
-    public function testCountReturnsCorrectValue()
+    public function testCountReturnsCorrectValue(): void
     {
         $collection = new TaxRuleCollection([
             new TaxRule(19),
@@ -45,7 +45,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertCount(3, $collection);
     }
 
-    public function testTaxRateIsUsedAsUniqueIdentifier()
+    public function testTaxRateIsUsedAsUniqueIdentifier(): void
     {
         $collection = new TaxRuleCollection([
             new TaxRule(19),
@@ -59,7 +59,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testElementCanBeAccessedByTaxRate()
+    public function testElementCanBeAccessedByTaxRate(): void
     {
         $collection = new TaxRuleCollection([
             new TaxRule(19),
@@ -72,7 +72,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testTaxRateCanBeAddedToCollection()
+    public function testTaxRateCanBeAddedToCollection(): void
     {
         $collection = new TaxRuleCollection();
         $collection->add(new TaxRule(19));
@@ -83,7 +83,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testCollectionCanBeCleared()
+    public function testCollectionCanBeCleared(): void
     {
         $collection = new TaxRuleCollection([
             new TaxRule(19),
@@ -95,7 +95,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(new TaxRuleCollection(), $collection);
     }
 
-    public function testCollectionCanBeFilledWithMultipleElements()
+    public function testCollectionCanBeFilledWithMultipleElements(): void
     {
         $collection = new TaxRuleCollection();
         $collection->fill([
@@ -114,7 +114,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMergeFunctionReturnsNewInstance()
+    public function testMergeFunctionReturnsNewInstance(): void
     {
         $a = new TaxRuleCollection([new TaxRule(19)]);
         $b = new TaxRuleCollection([new TaxRule(18)]);
@@ -124,7 +124,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertNotSame($c, $b);
     }
 
-    public function testMergeFunctionMergesAllTaxRules()
+    public function testMergeFunctionMergesAllTaxRules(): void
     {
         $a = new TaxRuleCollection([new TaxRule(19)]);
         $b = new TaxRuleCollection([new TaxRule(18)]);
@@ -139,7 +139,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testTaxRuleCanBeRemovedByRate()
+    public function testTaxRuleCanBeRemovedByRate(): void
     {
         $collection = new TaxRuleCollection([
             new TaxRule(19),
@@ -156,13 +156,13 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetOnEmptyCollection()
+    public function testGetOnEmptyCollection(): void
     {
         $collection = new TaxRuleCollection([]);
         static::assertNull($collection->get(19));
     }
 
-    public function testRemoveElement()
+    public function testRemoveElement(): void
     {
         $toRemove = new TaxRule(18);
 

@@ -85,6 +85,11 @@ class PriceCollection extends Collection
         return $taxes;
     }
 
+    public function merge(PriceCollection $prices): PriceCollection
+    {
+        return $this->doMerge($prices);
+    }
+
     private function getUnitPriceAmount(): float
     {
         $prices = $this->map(function (Price $price) {

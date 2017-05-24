@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -49,10 +50,10 @@ class CalculatedCartGenerator
             $processorCart->getCalculatedLineItems(),
             $this->amountCalculator->calculateAmount(
                 $processorCart->getCalculatedLineItems()->getPrices(),
+                $processorCart->getDeliveries()->getShippingCosts(),
                 $context
             ),
-            $processorCart->getDeliveries(),
-            $processorCart->getErrors()
+            $processorCart->getDeliveries()
         );
     }
 }

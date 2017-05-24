@@ -41,6 +41,10 @@ class ObjectDeserializer
             return $data;
         }
 
+        if ($this->isDateTime($data)) {
+            return new \DateTime($data['date']);
+        }
+
         if (is_array($data) && !$this->isObject($data)) {
             return array_map([$this, 'deserialize'], $data);
         }
@@ -126,5 +130,16 @@ class ObjectDeserializer
         }
 
         return $this->classes[$class] = new \ReflectionClass($class);
+    }
+
+    private function isDateTime($data): bool
+    {
+        if (!is_array($data)) {
+            return false;
+        }
+
+        $keys = array_keys($data);
+
+        return $keys == ['date', 'timezone_type', 'timezone'];
     }
 }

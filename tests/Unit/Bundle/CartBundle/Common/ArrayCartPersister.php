@@ -38,7 +38,7 @@ class ArrayCartPersister implements CartPersisterInterface
      *
      * @return string
      */
-    public function loadBySignature($signature)
+    public function loadBySignature($signature): string
     {
         return $this->signatures[$signature];
     }

@@ -24,15 +24,12 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface VoucherGatewayInterface
 {
     public function get(
-        LineItemCollection $lineItemCollection,
-        CalculatedCart $calculatedCart,
+        array $codes,
         ShopContextInterface $context
-    ): VoucherCollection;
+    ): VoucherDataCollection;
 }

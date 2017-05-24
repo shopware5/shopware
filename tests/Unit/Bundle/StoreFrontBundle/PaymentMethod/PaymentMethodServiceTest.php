@@ -31,12 +31,11 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
+use Shopware\Bundle\CartBundle\Domain\Rule\ValidatableFilter;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
@@ -111,9 +110,8 @@ class PaymentMethodServiceTest extends TestCase
                 new CalculatedCart(
                     CartContainer::createNew('test'),
                     new CalculatedLineItemCollection(),
-                    new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                    new DeliveryCollection(),
-                    new ErrorCollection()
+                    new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                    new DeliveryCollection()
                 ),
             ],
 
@@ -135,9 +133,8 @@ class PaymentMethodServiceTest extends TestCase
                 new CalculatedCart(
                     CartContainer::createNew('test'),
                     new CalculatedLineItemCollection(),
-                    new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                    new DeliveryCollection(),
-                    new ErrorCollection()
+                    new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                    new DeliveryCollection()
                 ),
             ],
         ];

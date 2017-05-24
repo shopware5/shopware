@@ -53,7 +53,7 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
         $percentage,
         Price $expected,
         PriceCollection $prices
-    ) {
+    ): void {
         $rounding = new PriceRounding(2);
 
         $calculator = new PercentagePriceCalculator(
@@ -85,7 +85,7 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected->getQuantity(), $price->getQuantity());
     }
 
-    public function calculatePercentagePriceOfGrossPricesProvider()
+    public function calculatePercentagePriceOfGrossPricesProvider(): array
     {
         $highTax = new TaxRuleCollection([new TaxRule(19)]);
 

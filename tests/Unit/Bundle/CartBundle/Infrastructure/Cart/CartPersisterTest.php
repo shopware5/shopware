@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Cart;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
+use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\Exception\CartTokenNotFoundException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartPersister;
@@ -35,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer;
 
 class CartPersisterTest extends TestCase
 {
-    public function testLoadWithNotExistingToken()
+    public function testLoadWithNotExistingToken(): void
     {
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())
@@ -58,7 +59,7 @@ class CartPersisterTest extends TestCase
         $this->assertSame('not_existing_token', $e->getToken());
     }
 
-    public function testLoadWithExistingToken()
+    public function testLoadWithExistingToken(): void
     {
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())
@@ -69,6 +70,7 @@ class CartPersisterTest extends TestCase
                     'lineItems' => new LineItemCollection(),
                     'token' => 'existing',
                     'name' => 'shopware',
+                    'errors' => new ErrorCollection(),
                 ])
             ));
 
@@ -80,12 +82,12 @@ class CartPersisterTest extends TestCase
         $cart = $persister->load('existing');
 
         $this->assertEquals(
-            new CartContainer('shopware', 'existing', new LineItemCollection()),
+            new CartContainer('shopware', 'existing', new LineItemCollection(), new ErrorCollection()),
             $cart
         );
     }
 
-    public function testSave()
+    public function testSave(): void
     {
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())->method('executeUpdate');
@@ -95,6 +97,6 @@ class CartPersisterTest extends TestCase
             new JsonSerializer(new ObjectDeserializer())
         );
 
-        $persister->save(new CartContainer('shopware', 'existing', new LineItemCollection()));
+        $persister->save(new CartContainer('shopware', 'existing', new LineItemCollection(), new ErrorCollection()));
     }
 }

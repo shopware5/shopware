@@ -26,14 +26,14 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\LastNameRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
 class LastNameRuleTest extends TestCase
 {
-    public function testExactMatch()
+    public function testExactMatch(): void
     {
         $rule = new LastNameRule('shopware');
 
@@ -49,13 +49,13 @@ class LastNameRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testCaseInsensitive()
+    public function testCaseInsensitive(): void
     {
-        $rule = new LastNameRule('SHOPWARE');
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule('SHOPWARE');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -69,13 +69,13 @@ class LastNameRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testContains()
+    public function testContains(): void
     {
-        $rule = new LastNameRule('olor');
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule('olor');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -89,13 +89,13 @@ class LastNameRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithoutCustomer()
+    public function testWithoutCustomer(): void
     {
-        $rule = new LastNameRule('test');
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule('test');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -106,7 +106,7 @@ class LastNameRuleTest extends TestCase
             ->will($this->returnValue(null));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

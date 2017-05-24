@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class DeliveryCollection extends Collection
@@ -66,6 +66,8 @@ class DeliveryCollection extends Collection
     public function getDelivery(DeliveryDate $deliveryDate, ShippingLocation $location): ? Delivery
     {
         foreach ($this->elements as $delivery) {
+            //find delivery with same data
+            //use only single "=", otherwise same object is expected
             if ($delivery->getDeliveryDate() != $deliveryDate) {
                 continue;
             }
@@ -80,11 +82,11 @@ class DeliveryCollection extends Collection
     }
 
     /**
-     * @param Deliverable|CalculatedLineItemInterface $item
+     * @param DeliverableLineItemInterface $item
      *
      * @return bool
      */
-    public function contains(Deliverable $item): bool
+    public function contains(DeliverableLineItemInterface $item): bool
     {
         foreach ($this->elements as $delivery) {
             if ($delivery->getPositions()->has($item->getIdentifier())) {
@@ -93,5 +95,14 @@ class DeliveryCollection extends Collection
         }
 
         return false;
+    }
+
+    public function getShippingCosts(): PriceCollection
+    {
+        return new PriceCollection(
+            $this->map(function (Delivery $delivery) {
+                return $delivery->getShippingCosts();
+            })
+        );
     }
 }

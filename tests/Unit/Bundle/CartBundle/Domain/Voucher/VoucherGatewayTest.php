@@ -25,9 +25,6 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Voucher;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGateway;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGateway;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
@@ -36,9 +33,9 @@ class VoucherGatewayTest extends TestCase
     /**
      * @expectedException \Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException
      */
-    public function testDummyGatewayThrowsException()
+    public function testDummyGatewayThrowsException(): void
     {
         $gateway = new VoucherGateway();
-        $gateway->get(new LineItemCollection(), $this->createMock(CalculatedCart::class), $this->createMock(ShopContext::class));
+        $gateway->get([], $this->createMock(ShopContext::class));
     }
 }

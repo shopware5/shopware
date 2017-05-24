@@ -67,7 +67,6 @@
 
         <service id="storefront.payment_method.service" class="Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodService">
             <argument id="storefront.payment_method.gateway" type="service"/>
-            <argument id="cart.validator.filter" type="service"/>
         </service>
 
         <service id="storefront.payment_method.hydrator" class="Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator">

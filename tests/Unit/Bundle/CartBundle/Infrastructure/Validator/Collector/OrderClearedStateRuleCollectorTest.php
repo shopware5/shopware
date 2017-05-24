@@ -28,59 +28,50 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderClearedStateRuleCollector;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderClearedStateRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderClearedStateRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\OrderClearedStateRuleCollector;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderClearedStateRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;
 
 class OrderClearedStateRuleCollectorTest extends TestCase
 {
-    public function testWithoutRule()
+    public function testWithoutRule(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
 
         $collector = new OrderClearedStateRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection();
 
-        $ruleCollection = new RuleCollection();
-
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
         $this->assertSame(0, $dataCollection->count());
     }
 
-    public function testWithoutCustomer()
+    public function testWithoutCustomer(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
 
         $collector = new OrderClearedStateRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new OrderClearedStateRule([10])),
+        ]);
 
-        $ruleCollection = new RuleCollection([new OrderClearedStateRule([10])]);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
-
-        $this->assertSame(0, $dataCollection->count());
+        $this->assertSame(1, $dataCollection->count());
     }
 
-    public function testWithStates()
+    public function testWithStates(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
         $customer = new Customer();
         $customer->setId(1);
@@ -91,13 +82,13 @@ class OrderClearedStateRuleCollectorTest extends TestCase
 
         $collector = new OrderClearedStateRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new OrderClearedStateRule([10])),
+        ]);
 
-        $ruleCollection = new RuleCollection([new OrderClearedStateRule([10])]);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
-
-        $this->assertSame(1, $dataCollection->count());
+        $this->assertSame(2, $dataCollection->count());
 
         $rule = $dataCollection->get(OrderClearedStateRuleData::class);
 
@@ -107,7 +98,7 @@ class OrderClearedStateRuleCollectorTest extends TestCase
         $this->assertSame([1], $rule->getStates());
     }
 
-    private function createConnection(?array $result)
+    private function createConnection(?array $result): \PHPUnit_Framework_MockObject_MockObject
     {
         $statement = $this->createMock(Statement::class);
         $statement->expects(static::any())

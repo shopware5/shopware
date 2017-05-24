@@ -26,16 +26,15 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\LastOrderRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\LastOrderRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\LastOrderRuleData;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class LastOrderRuleTest extends TestCase
 {
-    public function testRuleWithExactDate()
+    public function testRuleWithExactDate(): void
     {
-        $rule = new LastOrderRule(10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -46,15 +45,15 @@ class LastOrderRuleTest extends TestCase
         );
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new LastOrderRuleData($date),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                LastOrderRuleData::class => new LastOrderRuleData($date),
+            ]))->matches()
         );
     }
 
-    public function testRuleNotMatch()
+    public function testRuleNotMatch(): void
     {
-        $rule = new LastOrderRule(10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -65,15 +64,15 @@ class LastOrderRuleTest extends TestCase
         );
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new LastOrderRuleData($date),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                LastOrderRuleData::class => new LastOrderRuleData($date),
+            ]))->matches()
         );
     }
 
-    public function testRuleWithDateBefore()
+    public function testRuleWithDateBefore(): void
     {
-        $rule = new LastOrderRule(10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -84,22 +83,22 @@ class LastOrderRuleTest extends TestCase
         );
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new LastOrderRuleData($date),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                LastOrderRuleData::class => new LastOrderRuleData($date),
+            ]))->matches()
         );
     }
 
-    public function testWithoutDataObject()
+    public function testWithoutDataObject(): void
     {
-        $rule = new LastOrderRule(10);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

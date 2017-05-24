@@ -26,16 +26,15 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\CustomerNumberRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
 class CustomerNumberRuleTest extends TestCase
 {
-    public function testExactMatch()
+    public function testExactMatch(): void
     {
-        $rule = new CustomerNumberRule(['NO. 1']);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -49,13 +48,13 @@ class CustomerNumberRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testMultipleNumbers()
+    public function testMultipleNumbers(): void
     {
-        $rule = new CustomerNumberRule(['NO. 1', 'NO. 2', 'NO. 3']);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1', 'NO. 2', 'NO. 3']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -69,13 +68,13 @@ class CustomerNumberRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testCaseInsensitive()
+    public function testCaseInsensitive(): void
     {
-        $rule = new CustomerNumberRule(['NO. 1']);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -89,13 +88,13 @@ class CustomerNumberRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithoutCustomer()
+    public function testWithoutCustomer(): void
     {
-        $rule = new CustomerNumberRule(['NO. 1']);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -106,13 +105,13 @@ class CustomerNumberRuleTest extends TestCase
             ->will($this->returnValue(null));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotMatch()
+    public function testNotMatch(): void
     {
-        $rule = new CustomerNumberRule(['NO. 1']);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -126,7 +125,7 @@ class CustomerNumberRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

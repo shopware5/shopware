@@ -26,18 +26,17 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\BillingAreaRule;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
 class BillingAreaRuleTest extends TestCase
 {
-    public function testWithExactMatch()
+    public function testWithExactMatch(): void
     {
-        $rule = new BillingAreaRule([1]);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([1]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -60,13 +59,13 @@ class BillingAreaRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithNotMatch()
+    public function testWithNotMatch(): void
     {
-        $rule = new BillingAreaRule([2]);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([2]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -89,13 +88,13 @@ class BillingAreaRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testMultipleCountries()
+    public function testMultipleCountries(): void
     {
-        $rule = new BillingAreaRule([1, 3, 2]);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([1, 3, 2]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -118,13 +117,13 @@ class BillingAreaRuleTest extends TestCase
             ->will($this->returnValue($customer));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithoutCustomer()
+    public function testWithoutCustomer(): void
     {
-        $rule = new BillingAreaRule([1, 3, 2]);
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([1, 3, 2]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -135,7 +134,7 @@ class BillingAreaRuleTest extends TestCase
             ->will($this->returnValue(null));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

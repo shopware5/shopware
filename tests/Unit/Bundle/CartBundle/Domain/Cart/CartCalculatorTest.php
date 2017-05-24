@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class CartCalculatorTest extends TestCase
 {
-    public function testIterateAllProcessors()
+    public function testIterateAllProcessors(): void
     {
         $calculatedCart = $this->createMock(CalculatedCart::class);
         $generator = $this->createMock(CalculatedCartGenerator::class);
@@ -49,6 +49,8 @@ class CartCalculatorTest extends TestCase
 
         $calculator = new CartCalculator(
             [$productProcessor, $voucherProcessor],
+            [],
+            [],
             $generator
         );
 

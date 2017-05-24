@@ -53,23 +53,16 @@ class CalculatedCart extends Struct
      */
     protected $deliveries;
 
-    /**
-     * @var ErrorCollection
-     */
-    protected $errors;
-
     public function __construct(
         CartContainer $cartContainer,
         CalculatedLineItemCollection $calculatedLineItems,
         CartPrice $price,
-        DeliveryCollection $deliveries,
-        ErrorCollection $errors
+        DeliveryCollection $deliveries
     ) {
         $this->cartContainer = $cartContainer;
         $this->calculatedLineItems = $calculatedLineItems;
         $this->price = $price;
         $this->deliveries = $deliveries;
-        $this->errors = $errors;
     }
 
     public function getName(): string
@@ -89,7 +82,7 @@ class CalculatedCart extends Struct
 
     public function getCartContainer(): CartContainer
     {
-        return clone $this->cartContainer;
+        return $this->cartContainer;
     }
 
     public function getCalculatedLineItems(): CalculatedLineItemCollection
@@ -104,6 +97,20 @@ class CalculatedCart extends Struct
 
     public function getErrors(): ErrorCollection
     {
-        return $this->errors;
+        return $this->cartContainer->getErrors();
+    }
+
+    public function clearErrors(): ErrorCollection
+    {
+        return $this->cartContainer->clearErrors();
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+
+        $data['shippingCosts'] = $this->getDeliveries()->getShippingCosts()->getTotalPrice()->getTotalPrice();
+
+        return $data;
     }
 }

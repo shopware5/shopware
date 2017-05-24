@@ -28,6 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Product;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductProcessor implements CartProcessorInterface
@@ -50,16 +51,18 @@ class ProductProcessor implements CartProcessorInterface
     public function process(
         CartContainer $cartContainer,
         ProcessorCart $processorCart,
+        StructCollection $dataCollection,
         ShopContextInterface $context
     ): void {
         $collection = $cartContainer->getLineItems()->filterType(self::TYPE_PRODUCT);
+
         if ($collection->count() === 0) {
             return;
         }
 
-        $products = $this->calculator->calculate($collection, $context);
+        $products = $this->calculator->calculate($collection, $context, $dataCollection);
 
-        $processorCart->getErrors()->fill($products->getErrors());
+        $cartContainer->getErrors()->fill($products->getErrors());
 
         $processorCart->getCalculatedLineItems()->fill(
             $products->getIterator()->getArrayCopy()

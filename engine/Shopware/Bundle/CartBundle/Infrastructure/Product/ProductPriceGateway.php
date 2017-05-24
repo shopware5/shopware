@@ -27,14 +27,12 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Product;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGatewayInterface;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductPriceGateway implements ProductPriceGatewayInterface
@@ -45,71 +43,64 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     private $connection;
 
     /**
-     * @var FieldHelper
+     * @param Connection $connection
      */
-    private $fieldHelper;
-
-    /**
-     * @param Connection                                           $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
-     */
-    public function __construct(
-        Connection $connection,
-        FieldHelper $fieldHelper
-    ) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
-        $this->fieldHelper = $fieldHelper;
     }
 
-    public function get(LineItemCollection $collection, ShopContextInterface $context): PriceDefinitionCollection
+    public function get(array $numbers, ShopContextInterface $context): ProductPriceCollection
     {
-        $query = $this->buildQuery($collection->getIdentifiers(), $context);
+        $query = $this->buildQuery($numbers, $context);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
-        $prices = new PriceDefinitionCollection();
 
-        /** @var LineItemInterface $lineItem */
-        foreach ($collection as $lineItem) {
-            $number = $lineItem->getIdentifier();
+        $productPrices = new ProductPriceCollection();
 
+        /* @var LineItemInterface $lineItem */
+        foreach ($numbers as $number) {
             if (!array_key_exists($number, $data)) {
                 continue;
             }
 
-            $price = $this->findCustomerGroupPrice(
-                $lineItem->getQuantity(),
-                $data[$lineItem->getIdentifier()],
+            $definitions = $this->findCustomerGroupPrice(
+                $data[$number],
                 $context->getCurrentCustomerGroup()->getKey(),
                 $context->getFallbackCustomerGroup()->getKey()
             );
 
-            if (!$price) {
+            if (!$definitions) {
                 continue;
             }
 
-            $taxRule = new TaxRule((float) $price['__tax_tax']);
+            $prices = new PriceDefinitionCollection();
 
-            $prices->add(
-                $number,
-                new PriceDefinition(
-                    (float) $price['price_net'],
-                    new TaxRuleCollection([$taxRule]),
-                    $lineItem->getQuantity()
-                )
-            );
+            foreach ($definitions as $index => $definition) {
+                $price = new PriceDefinition(
+                    (float) $definition['price_net'],
+                    new TaxRuleCollection([
+                        new TaxRule((float) $definition['__tax_tax']),
+                    ]),
+                    (int) $definition['price_from_quantity']
+                );
+
+                $prices->add($price);
+            }
+            $productPrices->add($number, $prices);
         }
 
-        return $prices;
+        return $productPrices;
     }
 
-    private function findCustomerGroupPrice(int $quantity, array $prices, string $currentKey, string $fallbackKey): array
+    private function findCustomerGroupPrice(array $prices, string $currentKey, string $fallbackKey): array
     {
         $filtered = $this->filterCustomerGroupPrices($prices, $currentKey);
-        if (0 === count($filtered)) {
-            $filtered = $this->filterCustomerGroupPrices($prices, $fallbackKey);
+        if ($filtered) {
+            return $filtered;
         }
 
-        return $this->getQuantityPrice($filtered, $quantity);
+        return $this->filterCustomerGroupPrices($prices, $fallbackKey);
     }
 
     private function filterCustomerGroupPrices(array $prices, string $key): array
@@ -117,24 +108,6 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
         return array_filter($prices, function ($price) use ($key) {
             return $price['price_customer_group_key'] === $key;
         });
-    }
-
-    private function getQuantityPrice(array $prices, int $quantity): ? array
-    {
-        foreach ($prices as $price) {
-            $to = (float) $price['price_to_quantity'];
-            $from = $price['price_from_quantity'];
-
-            if ($from <= $quantity && $to >= $quantity) {
-                return $price;
-            }
-
-            if ($from <= $quantity && (int) $to === 0) {
-                return $price;
-            }
-        }
-
-        return null;
     }
 
     private function buildQuery(array $numbers, ShopContextInterface $context): QueryBuilder
@@ -148,9 +121,8 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
             'price.from as price_from_quantity',
             'price.to as price_to_quantity',
             'price.price as price_net',
+            'tax.tax as __tax_tax',
         ]);
-
-        $query->addSelect($this->fieldHelper->getTaxFields());
 
         $query->from('s_articles_prices', 'price');
         $query->innerJoin('price', 's_articles_details', 'variant', 'variant.id = price.articledetailsID');

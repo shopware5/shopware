@@ -28,6 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class DeliveryCalculatorProcessor implements CartProcessorInterface
@@ -37,9 +38,18 @@ class DeliveryCalculatorProcessor implements CartProcessorInterface
      */
     private $calculator;
 
+    /**
+     * @param DeliveryCalculator $calculator
+     */
+    public function __construct(DeliveryCalculator $calculator)
+    {
+        $this->calculator = $calculator;
+    }
+
     public function process(
         CartContainer $cartContainer,
         ProcessorCart $processorCart,
+        StructCollection $dataCollection,
         ShopContextInterface $context
     ): void {
         foreach ($processorCart->getDeliveries() as $delivery) {

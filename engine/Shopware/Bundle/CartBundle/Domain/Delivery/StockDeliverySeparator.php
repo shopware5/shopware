@@ -26,10 +26,12 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
+use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
@@ -51,7 +53,7 @@ class StockDeliverySeparator
         ShopContextInterface $context
     ): DeliveryCollection {
         foreach ($items as $item) {
-            if (!$item instanceof Deliverable) {
+            if (!$item instanceof DeliverableLineItemInterface) {
                 continue;
             }
 
@@ -133,16 +135,8 @@ class StockDeliverySeparator
         return clone $deliveries;
     }
 
-    /**
-     * @param CalculatedLineItemInterface $item
-     * @param int                         $quantity
-     * @param DeliveryDate                $deliveryDate
-     * @param ShopContextInterface        $context
-     *
-     * @return DeliveryPosition
-     */
     private function recalculatePosition(
-        CalculatedLineItemInterface $item,
+        DeliverableLineItemInterface $item,
         int $quantity,
         DeliveryDate $deliveryDate,
         ShopContextInterface $context
@@ -187,7 +181,8 @@ class StockDeliverySeparator
                 new DeliveryPositionCollection([$position]),
                 $position->getDeliveryDate(),
                 $shippingMethod,
-                $location
+                $location,
+                new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
             )
         );
     }

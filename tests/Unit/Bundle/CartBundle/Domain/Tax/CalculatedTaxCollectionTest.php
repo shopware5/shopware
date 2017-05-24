@@ -31,13 +31,13 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
 {
     const DUMMY_TAX_NAME = 'dummy-tax';
 
-    public function testCollectionIsCountable()
+    public function testCollectionIsCountable(): void
     {
         $collection = new CalculatedTaxCollection();
         static::assertCount(0, $collection);
     }
 
-    public function testCountReturnsCorrectValue()
+    public function testCountReturnsCorrectValue(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(10.99, 19, 1),
@@ -47,7 +47,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertCount(3, $collection);
     }
 
-    public function testAddFunctionAddsATax()
+    public function testAddFunctionAddsATax(): void
     {
         $collection = new CalculatedTaxCollection();
         $collection->add(
@@ -62,7 +62,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFillFunctionFillsTheCollection()
+    public function testFillFunctionFillsTheCollection(): void
     {
         $collection = new CalculatedTaxCollection();
         $collection->fill([
@@ -81,7 +81,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testTaxesCanBeGetterByTheirRate()
+    public function testTaxesCanBeGetterByTheirRate(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -94,7 +94,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testTaxAmountCanBeSummed()
+    public function testTaxAmountCanBeSummed(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -104,7 +104,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame(13.2, $collection->getAmount());
     }
 
-    public function testIncrementFunctionAddsNewCalculatedTaxIfNotExist()
+    public function testIncrementFunctionAddsNewCalculatedTaxIfNotExist(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -123,7 +123,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIncrementFunctionIncrementsExistingTaxes()
+    public function testIncrementFunctionIncrementsExistingTaxes(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -140,7 +140,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIncrementFunctionIncrementExistingTaxAmounts()
+    public function testIncrementFunctionIncrementExistingTaxAmounts(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -164,7 +164,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIncrementFunctionWorksWithEmptyCollection()
+    public function testIncrementFunctionWorksWithEmptyCollection(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -183,7 +183,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFillFunctionsFillsTheCollection()
+    public function testFillFunctionsFillsTheCollection(): void
     {
         $collection = new CalculatedTaxCollection();
         $collection->fill([
@@ -199,7 +199,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         ]), $collection);
     }
 
-    public function testTaxesCanBeRemovedByRate()
+    public function testTaxesCanBeRemovedByRate(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -214,7 +214,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         ]), $collection);
     }
 
-    public function testClearFunctionRemovesAllTaxes()
+    public function testClearFunctionRemovesAllTaxes(): void
     {
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
@@ -226,13 +226,13 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(new CalculatedTaxCollection(), $collection);
     }
 
-    public function testGetOnEmptyCollection()
+    public function testGetOnEmptyCollection(): void
     {
         $collection = new CalculatedTaxCollection();
         static::assertNull($collection->get(19));
     }
 
-    public function testRemoveElement()
+    public function testRemoveElement(): void
     {
         $toRemove = new CalculatedTax(5.50, 18, 1);
         $collection = new CalculatedTaxCollection([

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,11 +26,12 @@
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Country\State;
 
-class ShippingLocation
+class ShippingLocation extends Struct
 {
     /**
      * @var Country
@@ -62,7 +64,7 @@ class ShippingLocation
         $this->address = $address;
     }
 
-    public static function createFromAddress(Address $address)
+    public static function createFromAddress(Address $address): ShippingLocation
     {
         return new self(
             $address->getCountry(),
@@ -71,7 +73,7 @@ class ShippingLocation
         );
     }
 
-    public static function createFromState(State $state)
+    public static function createFromState(State $state): ShippingLocation
     {
         return new self(
             $state->getCountry(),
@@ -80,7 +82,7 @@ class ShippingLocation
         );
     }
 
-    public static function createFromCountry(Country $country)
+    public static function createFromCountry(Country $country): ShippingLocation
     {
         return new self(
             $country,

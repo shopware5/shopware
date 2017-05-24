@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
@@ -38,20 +37,19 @@ use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredLineItem;
 
 class CalculatedCartTest extends TestCase
 {
-    public function testEmptyCartHasNoGoods()
+    public function testEmptyCartHasNoGoods(): void
     {
         $cart = new CalculatedCart(
             CartContainer::createNew('test'),
             new CalculatedLineItemCollection(),
-            new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new DeliveryCollection(),
-            new ErrorCollection()
+            new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            new DeliveryCollection()
         );
 
         static::assertCount(0, $cart->getCalculatedLineItems()->filterGoods());
     }
 
-    public function testCartWithLineItemsHasGoods()
+    public function testCartWithLineItemsHasGoods(): void
     {
         $cart = new CalculatedCart(
             CartContainer::createNew('test'),
@@ -59,15 +57,14 @@ class CalculatedCartTest extends TestCase
                 new ConfiguredGoodsItem('A', 1),
                 new ConfiguredLineItem('B', 1),
             ]),
-            new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new DeliveryCollection(),
-            new ErrorCollection()
+            new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            new DeliveryCollection()
         );
 
         static::assertCount(1, $cart->getCalculatedLineItems()->filterGoods());
     }
 
-    public function testCartHasNoGoodsIfNoLineItemDefinedAsGoods()
+    public function testCartHasNoGoodsIfNoLineItemDefinedAsGoods(): void
     {
         $cart = new CalculatedCart(
             CartContainer::createNew('test'),
@@ -75,9 +72,8 @@ class CalculatedCartTest extends TestCase
                 new ConfiguredLineItem('A', 1),
                 new ConfiguredLineItem('B', 1),
             ]),
-            new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new DeliveryCollection(),
-            new ErrorCollection()
+            new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            new DeliveryCollection()
         );
 
         static::assertCount(0, $cart->getCalculatedLineItems()->filterGoods());

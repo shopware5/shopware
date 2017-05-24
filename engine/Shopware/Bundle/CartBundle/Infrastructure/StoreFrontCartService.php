@@ -133,7 +133,7 @@ class StoreFrontCartService
         $this->calculate($cartContainer);
     }
 
-    public function order()
+    public function order(): void
     {
         $this->orderPersister->persist(
             $this->getCart()->getCalculatedCart(),
@@ -165,9 +165,9 @@ class StoreFrontCartService
 
     private function getCalculatedCart(): CalculatedCart
     {
-        return $this->calculate(
-            $this->getCartContainer()
-        );
+        $container = $this->getCartContainer();
+
+        return $this->calculate($container);
     }
 
     private function calculate(CartContainer $cartContainer): CalculatedCart

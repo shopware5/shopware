@@ -28,11 +28,13 @@ namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewLineItemInterface;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
-class CalculatedVoucher extends Struct implements CalculatedLineItemInterface, ViewLineItemInterface
+class CalculatedVoucher extends Struct implements CalculatedLineItemInterface, ViewLineItemInterface, Validatable
 {
     /**
      * @var LineItemInterface
@@ -64,13 +66,19 @@ class CalculatedVoucher extends Struct implements CalculatedLineItemInterface, V
      */
     protected $type = 'voucher';
 
-    public function __construct(string $code, LineItemInterface $lineItem, Price $price)
+    /**
+     * @var Rule
+     */
+    protected $rule;
+
+    public function __construct(string $code, LineItemInterface $lineItem, Price $price, Rule $rule)
     {
         $this->price = $price;
         $this->lineItem = $lineItem;
         $this->code = $code;
         $this->identifier = $this->lineItem->getIdentifier();
         $this->label = $code;
+        $this->rule = $rule;
     }
 
     public function getIdentifier(): string
@@ -111,5 +119,10 @@ class CalculatedVoucher extends Struct implements CalculatedLineItemInterface, V
     public function getQuantity(): int
     {
         return $this->lineItem->getQuantity();
+    }
+
+    public function getRule(): ? Rule
+    {
+        return $this->rule;
     }
 }

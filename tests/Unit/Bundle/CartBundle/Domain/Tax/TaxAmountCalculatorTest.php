@@ -47,7 +47,7 @@ class TaxAmountCalculatorTest extends TestCase
     /**
      * @dataProvider calculationProvider
      */
-    public function testCalculation(string $calculationType, TaxDetector $taxDetector, PriceCollection $prices, CalculatedTaxCollection $expected)
+    public function testCalculation(string $calculationType, TaxDetector $taxDetector, PriceCollection $prices, CalculatedTaxCollection $expected): void
     {
         $shop = $this->createMock(Shop::class);
         $shop->method('getTaxCalculation')->will($this->returnValue($calculationType));
@@ -73,7 +73,7 @@ class TaxAmountCalculatorTest extends TestCase
         );
     }
 
-    public function calculationProvider()
+    public function calculationProvider(): array
     {
         $grossPriceDetector = $this->createMock(TaxDetector::class);
         $grossPriceDetector->method('useGross')->will($this->returnValue(true));

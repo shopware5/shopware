@@ -39,7 +39,7 @@ class PriceTest extends TestCase
      * @param Price $b
      * @param Price $expected
      */
-    public function testAdd(Price $a, Price $b, Price $expected)
+    public function testAdd(Price $a, Price $b, Price $expected): void
     {
         $a->add($b);
         $this->assertEquals($expected->getQuantity(), $a->getQuantity());
@@ -58,7 +58,7 @@ class PriceTest extends TestCase
      * @param Price $b
      * @param Price $expected
      */
-    public function testSub(Price $a, Price $b, Price $expected)
+    public function testSub(Price $a, Price $b, Price $expected): void
     {
         $a->sub($b);
         $this->assertEquals($expected->getQuantity(), $a->getQuantity());
@@ -70,7 +70,7 @@ class PriceTest extends TestCase
         $this->assertEquals($expected, $a);
     }
 
-    public function addCases()
+    public function addCases(): array
     {
         return [
             [
@@ -91,7 +91,7 @@ class PriceTest extends TestCase
         ];
     }
 
-    public function subCases()
+    public function subCases(): array
     {
         return [
             [

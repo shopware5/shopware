@@ -27,11 +27,9 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Product;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
@@ -44,7 +42,7 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
 {
     const QUERY_TO_UNLIMITED = 'beliebig';
 
-    public function testNoProductPricesDefined()
+    public function testNoProductPricesDefined(): void
     {
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([]),
@@ -52,20 +50,16 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
             new TaxHydrator()
         );
 
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-        ]);
-
         $context = Generator::createContext(
             $this->createCustomerGroup('EK1'), //current customer group
             $this->createCustomerGroup('EK2')  //fallback customer group
         );
 
-        $prices = $gateway->get($collection, $context);
-        static::assertEquals(new PriceDefinitionCollection(), $prices);
+        $prices = $gateway->get(['SW1'], $context);
+        static::assertEquals(new ProductPriceCollection(), $prices);
     }
 
-    public function testReturnsPriceDefinitionIndexedByNumber()
+    public function testReturnsPriceDefinitionIndexedByNumber(): void
     {
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
@@ -77,26 +71,24 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
             new TaxHydrator()
         );
 
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-        ]);
-
         $context = Generator::createContext(
             $this->createCustomerGroup('EK1'), //current customer group
             $this->createCustomerGroup('EK2')  //fallback customer group
         );
 
-        $prices = $gateway->get($collection, $context);
+        $prices = $gateway->get(['SW1'], $context);
 
         static::assertEquals(
-            new PriceDefinitionCollection([
-                'SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+            new ProductPriceCollection([
+                'SW1' => new PriceDefinitionCollection([
+                    new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+                ]),
             ]),
             $prices
         );
     }
 
-    public function testCurrentCustomerGroupPricesHasHigherPriority()
+    public function testCurrentCustomerGroupPricesHasHigherPriority(): void
     {
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
@@ -109,26 +101,24 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
             new TaxHydrator()
         );
 
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-        ]);
-
         $context = Generator::createContext(
             $this->createCustomerGroup('EK1'), //current customer group
             $this->createCustomerGroup('EK2')  //fallback customer group
         );
 
-        $prices = $gateway->get($collection, $context);
+        $prices = $gateway->get(['SW1'], $context);
 
         static::assertEquals(
-            new PriceDefinitionCollection([
-                'SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+            new ProductPriceCollection([
+                'SW1' => new PriceDefinitionCollection([
+                    new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+                ]),
             ]),
             $prices
         );
     }
 
-    public function testProductsWithFallbackCustomerGroupPrice()
+    public function testProductsWithFallbackCustomerGroupPrice(): void
     {
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
@@ -144,28 +134,27 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
             new TaxHydrator()
         );
 
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-        ]);
-
         $context = Generator::createContext(
             $this->createCustomerGroup('EK1'), //current customer group
             $this->createCustomerGroup('EK2')  //fallback customer group
         );
 
-        $prices = $gateway->get($collection, $context);
+        $prices = $gateway->get(['SW1', 'SW2'], $context);
 
         static::assertEquals(
-            new PriceDefinitionCollection([
-                'SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
-                'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)])),
+            new ProductPriceCollection([
+                'SW1' => new PriceDefinitionCollection([
+                    new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+                ]),
+                'SW2' => new PriceDefinitionCollection([
+                    new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)])),
+                ]),
             ]),
             $prices
         );
     }
 
-    public function testLastGraduatedPriceOfCurrentCustomerGroup()
+    public function testLastGraduatedPriceOfCurrentCustomerGroup(): void
     {
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
@@ -182,69 +171,28 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
             new TaxHydrator()
         );
 
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 4),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 2),
-        ]);
-
         $context = Generator::createContext(
             $this->createCustomerGroup('EK1'), //current customer group
             $this->createCustomerGroup('EK2')  //fallback customer group
         );
 
-        $prices = $gateway->get($collection, $context);
+        $prices = $gateway->get(['SW1', 'SW2'], $context);
 
         static::assertEquals(
-            new PriceDefinitionCollection([
-                'SW1' => new PriceDefinition(15.10, new TaxRuleCollection([new TaxRule(19)]), 4),
-                'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 2),
+            new ProductPriceCollection([
+                'SW1' => new PriceDefinitionCollection([
+                    new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)]), 1),
+                    new PriceDefinition(15.10, new TaxRuleCollection([new TaxRule(19)]), 4),
+                ]),
+                'SW2' => new PriceDefinitionCollection([
+                    new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 1),
+                ]),
             ]),
             $prices
         );
     }
 
-    public function testLineItemPriceAppliedToPriceDefinition()
-    {
-        $gateway = new ProductPriceGateway(
-            $this->createDatabaseMock([
-                'SW1' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 1.10, 19),
-                ],
-                'SW2' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
-                ],
-                'SW3' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 10.10, 19),
-                ],
-            ]),
-            $this->createMock(FieldHelper::class),
-            new TaxHydrator()
-        );
-
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 2),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 3),
-            new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 4),
-        ]);
-
-        $context = Generator::createContext(
-            $this->createCustomerGroup('EK1'), //current customer group
-            $this->createCustomerGroup('EK2')  //fallback customer group
-        );
-
-        $prices = $gateway->get($collection, $context);
-
-        static::assertEquals(
-            new PriceDefinitionCollection([
-                'SW1' => new PriceDefinition(1.10, new TaxRuleCollection([new TaxRule(19)]), 2),
-                'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 3),
-                'SW3' => new PriceDefinition(10.10, new TaxRuleCollection([new TaxRule(19)]), 4),
-            ]),
-            $prices
-        );
-    }
-
-    public function testUseFallbackPriceWithGraduation()
+    public function testUseFallbackPriceWithGraduation(): void
     {
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
@@ -262,22 +210,23 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
             new TaxHydrator()
         );
 
-        $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 3),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 2),
-        ]);
-
         $context = Generator::createContext(
             $this->createCustomerGroup('EK1'), //current customer group
             $this->createCustomerGroup('EK2')  //fallback customer group
         );
 
-        $prices = $gateway->get($collection, $context);
+        $prices = $gateway->get(['SW1', 'SW2'], $context);
 
         static::assertEquals(
-            new PriceDefinitionCollection([
-                'SW1' => new PriceDefinition(2.10, new TaxRuleCollection([new TaxRule(19)]), 3),
-                'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 2),
+            new ProductPriceCollection([
+                'SW1' => new PriceDefinitionCollection([
+                    new PriceDefinition(1.10, new TaxRuleCollection([new TaxRule(19)]), 1),
+                    new PriceDefinition(2.10, new TaxRuleCollection([new TaxRule(19)]), 3),
+                    new PriceDefinition(3.10, new TaxRuleCollection([new TaxRule(19)]), 5),
+                ]),
+                'SW2' => new PriceDefinitionCollection([
+                    new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 1),
+                ]),
             ]),
             $prices
         );
@@ -313,7 +262,7 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
      *
      * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
-    private function createCustomerGroup($key)
+    private function createCustomerGroup($key): \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
     {
         $group = new CustomerGroup();
         $group->setKey($key);
@@ -332,7 +281,7 @@ class PriceQueryRow
         $taxRate,
         $taxId = null,
         $taxName = null
-    ) {
+    ): array {
         return [
             'price_customer_group_key' => $customerGroupKey,
             'price_from_quantity' => $from,

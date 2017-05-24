@@ -25,17 +25,16 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class DeliveryPosition extends Struct
 {
     /**
-     * @var CalculatedLineItemInterface|Deliverable
+     * @var DeliverableLineItemInterface
      */
-    protected $item;
+    protected $calculatedLineItem;
 
     /**
      * @var float
@@ -57,33 +56,21 @@ class DeliveryPosition extends Struct
      */
     protected $deliveryDate;
 
-    /**
-     * @param string                                  $identifier
-     * @param CalculatedLineItemInterface|Deliverable $item
-     * @param float                                   $quantity
-     * @param Price                                   $price
-     * @param DeliveryDate                            $deliveryDate
-     */
     public function __construct(
-        $identifier,
-        CalculatedLineItemInterface $item,
-        $quantity,
+        string $identifier,
+        DeliverableLineItemInterface $calculatedLineItem,
+        int $quantity,
         Price $price,
         DeliveryDate $deliveryDate
     ) {
-        $this->item = $item;
+        $this->calculatedLineItem = $calculatedLineItem;
         $this->quantity = $quantity;
         $this->price = $price;
         $this->identifier = $identifier;
         $this->deliveryDate = $deliveryDate;
     }
 
-    /**
-     * @param Deliverable|CalculatedLineItemInterface $lineItem
-     *
-     * @return DeliveryPosition
-     */
-    public static function createByLineItemForInStockDate($lineItem): DeliveryPosition
+    public static function createByLineItemForInStockDate(DeliverableLineItemInterface $lineItem): DeliveryPosition
     {
         return new self(
             $lineItem->getIdentifier(),
@@ -94,12 +81,7 @@ class DeliveryPosition extends Struct
         );
     }
 
-    /**
-     * @param Deliverable|CalculatedLineItemInterface $lineItem
-     *
-     * @return DeliveryPosition
-     */
-    public static function createByLineItemForOutOfStockDate($lineItem): DeliveryPosition
+    public static function createByLineItemForOutOfStockDate(DeliverableLineItemInterface $lineItem): DeliveryPosition
     {
         return new self(
             $lineItem->getIdentifier(),
@@ -110,9 +92,9 @@ class DeliveryPosition extends Struct
         );
     }
 
-    public function getItem()
+    public function getCalculatedLineItem(): DeliverableLineItemInterface
     {
-        return $this->item;
+        return $this->calculatedLineItem;
     }
 
     public function getQuantity(): float

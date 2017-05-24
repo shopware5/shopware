@@ -26,14 +26,14 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderCountRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderCountRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderCountRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderCountRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderCountRuleTest extends TestCase
 {
-    public function testRuleWithExactMatch()
+    public function testRuleWithExactMatch(): void
     {
         $rule = new OrderCountRule(1);
 
@@ -42,13 +42,28 @@ class OrderCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new OrderCountRuleData(1),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                OrderCountRuleData::class => new OrderCountRuleData(1),
+            ]))->matches()
         );
     }
 
-    public function testRuleNotMatch()
+    public function testRuleNotMatch(): void
+    {
+        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderCountRule(10);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $this->assertFalse(
+            $rule->match($cart, $context, new StructCollection([
+                OrderCountRuleData::class => new OrderCountRuleData(1),
+            ]))->matches()
+        );
+    }
+
+    public function testRuleWithoutDataObject(): void
     {
         $rule = new OrderCountRule(10);
 
@@ -57,26 +72,11 @@ class OrderCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new OrderCountRuleData(1),
-            ]))
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testRuleWithoutDataObject()
-    {
-        $rule = new OrderCountRule(10);
-
-        $cart = $this->createMock(CalculatedCart::class);
-
-        $context = $this->createMock(ShopContext::class);
-
-        $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
-        );
-    }
-
-    public function testRuleWithGreaterMatch()
+    public function testRuleWithGreaterMatch(): void
     {
         $rule = new OrderCountRule(1);
 
@@ -85,9 +85,9 @@ class OrderCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new OrderCountRuleData(10),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                OrderCountRuleData::class => new OrderCountRuleData(10),
+            ]))->matches()
         );
     }
 }

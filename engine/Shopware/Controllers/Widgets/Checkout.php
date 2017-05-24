@@ -41,7 +41,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign([
             'sBasketQuantity' => $cart->getCalculatedCart()->getCalculatedLineItems()->filterGoods()->count(),
-            'sBasketAmount' => $cart->getPrice()->getTotalPrice(),
+            'sBasketAmount' => $cart->getPrice()->getPositionPrice(),
             'sUserLoggedIn' => !empty($session->get('sUserId')),
             'sNotesQuantity' => $session->get('sNotesQuantity') ?: Shopware()->Modules()->Basket()->sCountNotes(),
         ]);

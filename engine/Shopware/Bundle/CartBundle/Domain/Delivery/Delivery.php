@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
+use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
@@ -50,16 +51,23 @@ class Delivery extends Struct
      */
     protected $shippingMethod;
 
+    /**
+     * @var Price
+     */
+    protected $shippingCosts;
+
     public function __construct(
         DeliveryPositionCollection $positions,
         DeliveryDate $deliveryDate,
         ShippingMethod $shippingMethod,
-        ShippingLocation $location
+        ShippingLocation $location,
+        Price $shippingCosts
     ) {
         $this->location = $location;
         $this->positions = $positions;
         $this->deliveryDate = $deliveryDate;
         $this->shippingMethod = $shippingMethod;
+        $this->shippingCosts = $shippingCosts;
     }
 
     public function getPositions(): DeliveryPositionCollection
@@ -80,5 +88,15 @@ class Delivery extends Struct
     public function getShippingMethod(): ShippingMethod
     {
         return $this->shippingMethod;
+    }
+
+    public function getShippingCosts(): Price
+    {
+        return $this->shippingCosts;
+    }
+
+    public function setShippingCosts(Price $shippingCosts): void
+    {
+        $this->shippingCosts = $shippingCosts;
     }
 }

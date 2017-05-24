@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\CartBundle\Domain\Validator\Validatable;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class PaymentMethod extends Struct implements Validatable
@@ -72,12 +72,12 @@ class PaymentMethod extends Struct implements Validatable
     protected $hidden;
 
     /**
-     * @var float
+     * @var float|null
      */
-    protected $percentDebit;
+    protected $percentageSurcharge;
 
     /**
-     * @var float
+     * @var float|null
      */
     protected $surcharge;
 
@@ -217,22 +217,22 @@ class PaymentMethod extends Struct implements Validatable
         $this->hidden = $hidden;
     }
 
-    public function getPercentDebit(): float
+    public function getPercentageSurcharge(): ?float
     {
-        return $this->percentDebit;
+        return $this->percentageSurcharge;
     }
 
-    public function setPercentDebit(float $percentDebit): void
+    public function setPercentageSurcharge(?float $percentageSurcharge): void
     {
-        $this->percentDebit = $percentDebit;
+        $this->percentageSurcharge = $percentageSurcharge;
     }
 
-    public function getSurcharge(): float
+    public function getSurcharge(): ?float
     {
         return $this->surcharge;
     }
 
-    public function setSurcharge(float $surcharge): void
+    public function setSurcharge(?float $surcharge): void
     {
         $this->surcharge = $surcharge;
     }

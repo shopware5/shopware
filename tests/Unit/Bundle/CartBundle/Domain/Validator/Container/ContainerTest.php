@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
 class ContainerTest extends TestCase
 {
-    public function testConstructorWithRules()
+    public function testConstructorWithRules(): void
     {
         $container = new AndRule([
             new TrueRule(),
