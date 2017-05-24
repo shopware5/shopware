@@ -79,7 +79,7 @@ module.exports = function (grunt) {
                     '../custom/plugins/**/*.less',
                     '../custom/plugins/**/*.css'
                 ],
-                tasks: ['less:development', 'eslint'],
+                tasks: ['less:development'],
                 options: {
                     spawn: false
                 }
