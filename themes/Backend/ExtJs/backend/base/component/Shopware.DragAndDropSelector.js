@@ -199,7 +199,6 @@ Ext.define('Shopware.DragAndDropSelector',
 
         //to set the usedIds to the store
         me.refreshStore();
-        me.fromStore.load();
 
         me.fromField = me.createGrid({
             title: me.fromTitle,
