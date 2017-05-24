@@ -60,6 +60,21 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             activeTab: (me.subApp.action && me.subApp.action === 'customer_stream') ? 1: 0
         });
 
+        me.on('afterrender', function() {
+
+            if (me.subApp.action !== 'customer_stream' || !me.subApp.params || !me.subApp.params.streamId) {
+                return;
+            }
+
+            Ext.defer(function() {
+                var record = me.streamView.streamListing.getStore().getById(
+                    window.parseInt(me.subApp.params.streamId)
+                );
+
+                me.streamView.streamListing.getSelectionModel().select([record]);
+            }, 200);
+        });
+
         return [me.tabPanel];
     },
 
