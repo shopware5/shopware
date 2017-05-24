@@ -6,24 +6,24 @@
                 <div class="navigation--smartphone">
                     <ul class="navigation--list ">
 
-                        {* Trigger to close the off canvas menu *}
-                        {block name="frontend_index_left_categories_close_menu"}
-                            <li class="navigation--entry entry--close-off-canvas">
-                                <a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}" class="navigation--link">
-                                    {s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s} <i class="icon--arrow-right"></i>
-                                </a>
-                            </li>
-                        {/block}
+                    {* Trigger to close the off canvas menu *}
+                    {block name="frontend_index_left_categories_close_menu"}
+                        <li class="navigation--entry entry--close-off-canvas">
+                            <a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}" class="navigation--link">
+                                {s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s} <i class="icon--arrow-right"></i>
+                            </a>
+                        </li>
+                    {/block}
+                </ul>
 
-                        {* Switches for currency and language on mobile devices *}
-                        {block name="frontend_index_left_switches"}
-                            <div class="mobile--switches">
-                                {action module=widgets controller=index action=shopMenu}
-                            </div>
-                        {/block}
-                    </ul>
-                </div>
-            {/block}
+                {* Switches for currency and language on mobile devices *}
+                {block name="frontend_index_left_switches"}
+                    <div class="mobile--switches">
+                        {action module=widgets controller=index action=shopMenu}
+                    </div>
+                {/block}
+            </div>
+        {/block}
 
             {* if sCategoryContent is not available use sArticle.categoryID *}
             {if isset($sCategoryContent) && $sCategoryContent.id}
