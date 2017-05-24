@@ -18,7 +18,7 @@
                 {* Link to the account overview page *}
                 {block name="frontend_account_menu_link_overview"}
                     <li class="navigation--entry">
-                        <a href="{url controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'index'} is--active{/if}">
+                        <a href="{url module='frontend' controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'index'} is--active{/if}">
                             {s name="AccountLinkOverview"}{/s}
                         </a>
                     </li>
@@ -27,7 +27,7 @@
                 {* Link to the account overview page *}
                 {block name="frontend_account_menu_link_profile"}
                     <li class="navigation--entry">
-                        <a href="{url controller='account' action=profile}" title="{s name="AccountLinkProfile"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'profile'} is--active{/if}">
+                        <a href="{url module='frontend' controller='account' action=profile}" title="{s name="AccountLinkProfile"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'profile'} is--active{/if}">
                             {s name="AccountLinkProfile"}{/s}
                         </a>
                     </li>
@@ -36,7 +36,7 @@
                 {* Link to the user addresses *}
                 {block name="frontend_account_menu_link_addresses"}
                     <li class="navigation--entry">
-                        <a href="{url controller='address' action='index'}" title="{s name="AccountLinkAddresses"}My addresses{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}">
+                        <a href="{url module='frontend' controller='address' action='index'}" title="{s name="AccountLinkAddresses"}My addresses{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}">
                             {s name="AccountLinkAddresses"}My addresses{/s}
                         </a>
                     </li>
@@ -45,7 +45,7 @@
                 {* Link to the user payment method settings *}
                 {block name="frontend_account_menu_link_payment"}
                     <li class="navigation--entry">
-                        <a href="{url controller='account' action='payment'}" title="{s name="AccountLinkPayment"}{/s}" class="navigation--link{if $sAction == 'payment'} is--active{/if}">
+                        <a href="{url module='frontend' controller='account' action='payment'}" title="{s name="AccountLinkPayment"}{/s}" class="navigation--link{if $sAction == 'payment'} is--active{/if}">
                             {s name="AccountLinkPayment"}{/s}
                         </a>
                     </li>
@@ -54,7 +54,7 @@
                 {* Link to the user orders *}
                 {block name="frontend_account_menu_link_orders"}
                     <li class="navigation--entry">
-                        <a href="{url controller='account' action='orders'}" title="{s name="AccountLinkPreviousOrders"}{/s}" class="navigation--link{if $sAction == 'orders'} is--active{/if}">
+                        <a href="{url module='frontend' controller='account' action='orders'}" title="{s name="AccountLinkPreviousOrders"}{/s}" class="navigation--link{if $sAction == 'orders'} is--active{/if}">
                             {s name="AccountLinkPreviousOrders"}{/s}
                         </a>
                     </li>
@@ -64,7 +64,7 @@
                 {block name="frontend_account_menu_link_downloads"}
                     {if {config name=showEsd}}
                         <li class="navigation--entry">
-                            <a href="{url controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
+                            <a href="{url module='frontend' controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
                                 {s name="AccountLinkDownloads"}{/s}
                             </a>
                         </li>
@@ -74,7 +74,7 @@
                 {* Link to the user product notes *}
                 {block name="frontend_account_menu_link_notes"}
                     <li class="navigation--entry">
-                        <a href="{url controller='note'}" title="{s name="AccountLinkNotepad"}{/s}" class="navigation--link{if {controllerName} == 'note'} is--active{/if}">
+                        <a href="{url module='frontend' controller='note'}" title="{s name="AccountLinkNotepad"}{/s}" class="navigation--link{if {controllerName} == 'note'} is--active{/if}">
                             {s name="AccountLinkNotepad"}{/s}
                         </a>
                     </li>
@@ -82,13 +82,13 @@
 
                 {* Link to the partner statistics *}
                 {block name="frontend_account_menu_link_partner_statistics"}
-                    {action action="partnerStatisticMenuItem" controller="account"}
+                    {action module='frontend' controller="account" action="partnerStatisticMenuItem"}
                 {/block}
 
                 {* Logout action *}
                 {block name="frontend_account_menu_link_logout"}
                     <li class="navigation--entry">
-                        <a href="{url controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout">
+                        <a href="{url module='frontend' controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout">
                             <i class="icon--logout"></i> {s name="AccountLinkLogout2"}{/s}
                         </a>
                     </li>
