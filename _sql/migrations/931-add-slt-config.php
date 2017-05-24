@@ -33,10 +33,14 @@ class Migrations_Migration931 extends AbstractMigration
     {
         $this->addSql("SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend33' LIMIT 1);");
 
-        $sql = <<<'SQL'
-INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options)
-VALUES (@parent, 'useSltCookie', 'b:1;', 'Shopware Login Cookie erstellen', 'Es wird ein Cookie gespeichert, an dem der Benutzer wieder identifiziert werden kann. Dieser wird nur für das Setzen der aktuellen Kundengruppe sowie aktiven Customer Streams verwendet', 'boolean', 1, 0, 0, NULL);
-SQL;
+        if ($modus === AbstractMigration::MODUS_UPDATE) {
+            $sql = "INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options)
+                    VALUES (@parent, 'useSltCookie', 'b:0;', 'Shopware Login Cookie erstellen', 'Es wird ein Cookie gespeichert, an dem der Benutzer wieder identifiziert werden kann. Dieser wird nur für das Setzen der aktuellen Kundengruppe sowie aktiven Customer Streams verwendet', 'boolean', 1, 0, 0, NULL);";
+        } else {
+            $sql = "INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options)
+                    VALUES (@parent, 'useSltCookie', 'b:1;', 'Shopware Login Cookie erstellen', 'Es wird ein Cookie gespeichert, an dem der Benutzer wieder identifiziert werden kann. Dieser wird nur für das Setzen der aktuellen Kundengruppe sowie aktiven Customer Streams verwendet', 'boolean', 1, 0, 0, NULL);";
+        }
+
         $this->addSql($sql);
 
         $this->addSql("SET @parent = (SELECT id FROM s_core_config_elements WHERE name = 'useSltCookie' LIMIT 1);");
