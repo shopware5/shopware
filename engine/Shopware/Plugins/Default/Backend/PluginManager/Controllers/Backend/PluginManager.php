@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
@@ -312,35 +313,43 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function toggleSafeModeAction()
     {
-        $em = $this->container->get('models');
+        $query = $this->container->get('models')->createQueryBuilder();
+        $query->select(['plugin']);
+        $query->from(Plugin::class, 'plugin');
+        $query->where('plugin.source != :source');
+        $query->andWhere('plugin.name NOT LIKE :name');
+        $query->setParameter(':source', 'Default');
+        $query->setParameter(':name', 'Swag%');
 
-        $plugins = $em->getRepository(Plugin::class)->findAll();
+        /** @var Plugin[] $plugins */
+        $plugins = $query->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
         $pluginsInSafeMode = $this->getPluginsInSafeMode($plugins);
 
-        $caches = InstallContext::CACHE_LIST_ALL;
-
-        /** @var InstallerService $installerService */
-        $installerService = $this->get('shopware_plugininstaller.plugin_installer');
+        $installer = $this->container->get('shopware_plugininstaller.plugin_manager');
 
         if ($pluginsInSafeMode) {
             foreach ($pluginsInSafeMode as $plugin) {
                 $plugin->setInSafeMode(false);
-                $installerService->activatePlugin($plugin);
+
+                if (!$plugin->getActive()) {
+                    $installer->activatePlugin($plugin);
+                }
             }
-            $em->flush();
+            $this->container->get('models')->flush();
             $this->View()->assign(['success' => true, 'inSafeMode' => false]);
 
             return;
         }
+
         foreach ($plugins as $plugin) {
-            if ($plugin->getSource() === 'Default' || strpos('Swag', $plugin->getName()) === 0 || $plugin->getActive() === false) {
+            if (!$plugin->getActive()) {
                 continue;
             }
             $plugin->setInSafeMode(true);
-            $installerService->deactivatePlugin($plugin);
+            $installer->deactivatePlugin($plugin);
         }
-        $em->flush();
+        $this->container->get('models')->flush();
 
         $this->View()->assign(['success' => true, 'inSafeMode' => true]);
     }
@@ -963,7 +972,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      *
      * @param array $plugins
      *
-     * @return array
+     * @return Plugin[]
      */
     private function getPluginsInSafeMode(array $plugins)
     {
