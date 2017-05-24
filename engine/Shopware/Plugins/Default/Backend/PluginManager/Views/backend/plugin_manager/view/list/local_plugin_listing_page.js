@@ -215,7 +215,10 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         var me = this,
             pagingBar = me.callParent(arguments);
 
+        /* {if {acl_is_allowed privilege=install}} */
         pagingBar.insert(12, me.createSafeModeCheckbox());
+        /* {/if} */
+
         pagingBar.insert(13, {
             xtype: 'tbseparator',
             cls: 'separator-first'
@@ -351,8 +354,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         }
 
         Ext.Msg.confirm(
-            '{s name="safemodepopup/title"}Attention!{/s}',
-            '{s name="safemodepopup/detail"}Enabling safe mode, all plugins that are not from shopware AG are disabled. This can severely limit the stability and runability of the shop. Use this mode only if you know exactly what you are doing. When the security mode is exited, the automatically deactivated plugins are activated again. Would you like to enable Safe mode now?{/s}',
+            '{s name="safemodepopup/title"}{/s}',
+            '{s name="safemodepopup/warning"}{/s}',
             function (button) {
                 if (button == 'yes') {
                     me.toggleSafeMode();
@@ -366,7 +369,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
     },
 
     toggleSafeMode: function () {
-        var me = this,
+        var content,
             msg = Shopware.Notification;
 
         var toggleSafeMode = Ext.Ajax.request({
@@ -378,11 +381,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         var response = Ext.decode(toggleSafeMode.responseText);
 
-        var title = '{s name=title/safe_mode}Safe Mode{/s}';
+        var title = '{s name="title/safe_mode"}{/s}';
         if (response.inSafeMode) {
-            var content = '{s name=content/safe_mode_on}Safe mode has been turned on{/s}';
+            content = '{s name="content/safe_mode_on"}{/s}';
         } else {
-            var content = '{s name=content/safe_mode_off}Safe mode has been turned off{/s}';
+            content = '{s name="content/safe_mode_off"}{/s}';
         }
         Shopware.app.Application.fireEvent('clear-all-cache');
         msg.createGrowlMessage(title, content);
