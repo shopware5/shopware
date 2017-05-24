@@ -984,9 +984,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     win.setLoading(false);
 
                     if (result.success) {
-                        selectedPreset.set('presetData', result.data.presetData);
-                        selectedPreset.set('preview', result.data.preview);
-                        selectedPreset.set('previewUrl', result.data.previewUrl);
+                        selectedPreset.beginEdit();
+                        selectedPreset.set(result.data);
+                        selectedPreset.endEdit(true);
                     }
                     win.infoView.updateInfoView(selectedPreset);
                 }

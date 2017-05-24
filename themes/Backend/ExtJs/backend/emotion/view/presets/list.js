@@ -37,7 +37,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
     extend: 'Ext.panel.Panel',
 
     config: {
-        selectedPreset: null
+        selectedPreset: null,
+        initialSelectionId: null,
+        initialSelection: true
     },
 
     initComponent: function () {
@@ -66,8 +68,12 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         me.store.on('load', function() {
             me.selectedPreset = null;
             if (me.store.getCount() > 0) {
-                me.infoView.getSelectionModel().select(0);
-                me.selectedPreset = me.infoView.getSelectionModel().getSelection()[0];
+                if (me.initialSelection && me.initialSelectionId) {
+                    me.infoView.getSelectionModel().select(me.store.getById(me.initialSelectionId));
+                    me.selectedPreset = me.infoView.getSelectionModel().getSelection()[0];
+                    me.initialSelection = false;
+                }
+
                 if (me.selectedPreset) {
                     if (me.down('#deletebutton')) {
                         me.down('#deletebutton').setDisabled(!me.selectedPreset.get('custom'));
@@ -125,6 +131,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                     }
                     if (selection.length === 0) {
                         me.selectedPreset = null;
+                        me.showDetails();
                     }
                 }
             }
@@ -200,7 +207,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
     },
 
     createTemplate: function () {
-        var me = this;
+        var panel = this;
 
         return new Ext.XTemplate(
             '{literal}{[this.getPresetRows(values)]}{/literal}',
@@ -223,6 +230,12 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                         } else {
                             sortedPresets['installed'].push(preset);
                         }
+                    }
+
+                    if (panel.initialSelection && sortedPresets['installed'].length > 0) {
+                        panel.initialSelectionId = sortedPresets['installed'][0]['id'];
+                    } else if (panel.initialSelection && sortedPresets['custom'].length > 0) {
+                        panel.initialSelectionId = sortedPresets['custom'][0]['id'];
                     }
 
                     Ext.Object.each(sortedPresets, function(key, value) {
