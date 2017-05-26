@@ -468,7 +468,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             selection = me.dataView.getSelectionModel().getSelection(),
             replaceWindow, grid;
 
-        if (me.selectedLayout == 'table') {
+        if (me.selectedLayout === 'table') {
             grid = me.down('mediamanager-media-grid');
             selection = grid.selModel.getSelection();
         }
@@ -664,11 +664,14 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         return toolbar;
     },
 
+    /**
+     * @param { object } toolbar
+     */
     createPreviewSizeComboBox: function(toolbar) {
         var me = this;
 
         me.tableImageSizes = me.createPreviewSizeStoreData(16);
-        me.gridImageSizes = me.createPreviewSizeStoreData(36, 7);
+        me.gridImageSizes = me.createPreviewSizeStoreData(36, 5);
         me.gridImageSizes.shift();
 
         // Preview image size selection, especially for the list view
@@ -697,6 +700,11 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         toolbar.add(me.imageSize, { xtype: 'tbspacer', width: 6 });
     },
 
+    /**
+     * @param { int } imageSize
+     * @param { int? } iterations
+     * @returns { Array }
+     */
     createPreviewSizeStoreData: function(imageSize, iterations) {
         var imageSizeData = [],
             i = 1,
