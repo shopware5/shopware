@@ -43,7 +43,7 @@ class Media extends Resource
     const FILENAME_LENGTH = 200;
 
     /**
-     * @return \Shopware\Models\Category\Repository
+     * @return \Shopware\Models\Media\Repository
      */
     public function getRepository()
     {
@@ -324,6 +324,7 @@ class Media extends Resource
         $urlArray['path'] = explode('/', $urlArray['path']);
         switch ($urlArray['scheme']) {
             case 'ftp':
+            case 'ftps':
             case 'http':
             case 'https':
             case 'file':
