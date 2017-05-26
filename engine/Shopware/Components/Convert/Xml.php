@@ -75,6 +75,7 @@ class Shopware_Components_Convert_Xml
             if (empty($item)) {
                 $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
             } elseif (is_array($item)) {
+                reset($item);
                 if (is_numeric(key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
