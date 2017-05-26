@@ -107,9 +107,9 @@ EOT
     'migration_update_success' => 'Database is geïmporteerd!',
 
     'edition_header' => 'Heb je een Shopware-licentie gekocht?',
-    'edition_info' => 'Shopware is verkrijgbaar als gratis <a href="https://de.shopware.com/versionen/" target="_blank">Community-versie</a> en als betaalde <a href="https://de.shopware.com/versionen/" target="_blank">Professional-, Professional Plus- en Enterprise-versie</a>.',
-    'edition_ce' => 'Nee, ik wil de gratis <a href="https://de.shopware.com/versionen/" target="_blank">Community-versie</a> gebruiken.',
-    'edition_cm' => 'Ja, ik heb een betaalde Shopware-licentie (<a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus of Enterprise</a>).',
+    'edition_info' => 'Shopware is verkrijgbaar als gratis <a href="https://en.shopware.com/pricing/" target="_blank">Community-versie</a> en als betaalde <a href="https://en.shopware.com/pricing/" target="_blank">Professional-, Professional Plus- en Enterprise-versie</a>.',
+    'edition_ce' => 'Nee, ik wil de gratis <a href="https://en.shopware.com/pricing/" target="_blank">Community-versie</a> gebruiken.',
+    'edition_cm' => 'Ja, ik heb een betaalde Shopware-licentie (<a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus of Enterprise</a>).',
     'edition_license' => 'Voer dan hier je licentiesleutel in. Deze sleutel staat in je Shopware-account onder "Licenties" &rarr; "Productlicenties" &rarr; "Details/downloaden":',
     'edition_license_error' => 'Er is een geldige licentie vereist om een betaalde Shopware-versie te installeren.',
 
