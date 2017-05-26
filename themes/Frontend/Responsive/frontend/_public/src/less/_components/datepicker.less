@@ -201,6 +201,11 @@ The datepicker is based on the jQuery Plugin [flatpickr](https://github.com/chml
 
 .numInputWrapper input {
     width: 100%;
+
+    &::-ms-clear,
+    &::-ms-expand {
+        display: none;
+    }
 }
 
 .numInputWrapper span {
@@ -599,6 +604,11 @@ span.flatpickr-weekday {
     position: relative;
     box-sizing: border-box;
     text-align: center;
+
+    &::-ms-clear,
+    &::-ms-expand {
+        display: none;
+    }
 }
 
 .flatpickr-time input.flatpickr-hour {
