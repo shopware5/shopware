@@ -57,6 +57,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
+        if (Shopware()->Session()->offsetGet('sOneTimeAccount')) {
+            $this->logoutAction();
+
+            return $this->redirect(['controller' => 'register']);
+        }
+
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
         if (!in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
             && !$this->admin->sCheckUser()) {
@@ -82,14 +88,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if (
-            $this->View()->sUserData['additional']['user']['accountmode'] == 1
-        ) {
-            $this->logoutAction();
-
-            return $this->redirect(['controller' => 'register']);
-        }
-
         if ($this->Request()->getParam('success')) {
             $this->View()->sSuccessAction = $this->Request()->getParam('success');
         }

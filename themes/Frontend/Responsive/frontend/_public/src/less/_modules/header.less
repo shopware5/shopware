@@ -245,6 +245,25 @@ More precise designations are commented inside the document.
         .unitize(padding-left, 23);
     }
 
+    .navigation--signin {
+        .unitize(padding-top, 15);
+        .unitize(padding-bottom, 15);
+        .unitize(margin-top, 7);
+        border-bottom: 1px solid @border-color;
+        display: block;
+        text-align: center;
+
+        .navigation--signin-btn.btn {
+            .unitize(margin-bottom, 5);
+            width: 95%;
+            text-align: center;
+        }
+    }
+
+    .navigation--register {
+        .unitize(font-size, 13)
+    }
+
     .navigation--link.link--logout.navigation--personalized {
         .unitize(line-height, 20);
         color: @text-color;
@@ -863,6 +882,18 @@ More precise designations are commented inside the document.
 
         .js--is--dropdown-active & {
             display: block;
+        }
+
+        .navigation--signin {
+            .unitize(padding-bottom, 6);
+            .unitize(margin-bottom, 6);
+            .unitize(margin-top, 5);
+            padding-top: 0;
+
+            .navigation--signin-btn.btn {
+                width: 100%;
+                margin-bottom: 0;
+            }
         }
 
         .navigation--smartphone {
