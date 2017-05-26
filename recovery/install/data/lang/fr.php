@@ -107,9 +107,9 @@ EOT
     'migration_update_success' => 'Base de données importée !',
 
     'edition_header' => 'As-tu obtenu une licence Shopware ?',
-    'edition_info' => 'Il existe une édition Shopware <a href="https://de.shopware.com/versionen/" target="_blank">Community</a> gratuite ainsi que des éditions payantes <a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus et Enterprise</a>.',
-    'edition_ce' => 'Je souhaite utiliser l\'édition <a href="https://de.shopware.com/versionen/" target="_blank">Community</a> gratuite.',
-    'edition_cm' => 'Je possède une licence Shopware payante (<a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus ou Enterprise</a>).',
+    'edition_info' => 'Il existe une édition Shopware <a href="https://en.shopware.com/pricing/" target="_blank">Community</a> gratuite ainsi que des éditions payantes <a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus et Enterprise</a>.',
+    'edition_ce' => 'Je souhaite utiliser l\'édition <a href="https://en.shopware.com/pricing/" target="_blank">Community</a> gratuite.',
+    'edition_cm' => 'Je possède une licence Shopware payante (<a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus ou Enterprise</a>).',
     'edition_license' => 'Saisis ici ta clé de licence. Tu la trouveras sur ton compte Shopware sous « Licences » ; « Licences de produits » ; »Détails/Téléchargement » :',
     'edition_license_error' => 'Il est nécessaire de posséder une licence valable pour installer une version Shopware payante.',
 

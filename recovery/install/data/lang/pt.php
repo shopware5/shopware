@@ -107,9 +107,9 @@ EOT
     'migration_update_success' => 'Base de dados importada com êxito!',
 
     'edition_header' => 'Já adquiriu a sua licença Shopware?',
-    'edition_info' => 'O Shopware está disponível na versão gratuita <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition </a> e nas <a href="https://de.shopware.com/versionen/" target="_blank">versões pagas Professional, Professional Plus e Enterprise</a>.',
-    'edition_ce' => 'Não, pretendo utilizar a versão gratuita <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition</a>.',
-    'edition_cm' => 'Sim, tenho uma licença paga Shopware (<a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus ou Enterprise</a>).',
+    'edition_info' => 'O Shopware está disponível na versão gratuita <a href="https://en.shopware.com/pricing/" target="_blank">Community Edition </a> e nas <a href="https://en.shopware.com/pricing/" target="_blank">versões pagas Professional, Professional Plus e Enterprise</a>.',
+    'edition_ce' => 'Não, pretendo utilizar a versão gratuita <a href="https://en.shopware.com/pricing/" target="_blank">Community Edition</a>.',
+    'edition_cm' => 'Sim, tenho uma licença paga Shopware (<a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus ou Enterprise</a>).',
     'edition_license' => 'Introduza aqui o código da sua licença. Este consta da sua conta Shopware, em "Licenças" &rarr; "Licenças de produtos" &rarr; "Detalhes/Descarregar":',
     'edition_license_error' => 'É necessária uma licença válida para a instalação de uma versão paga do Shopware.',
 
