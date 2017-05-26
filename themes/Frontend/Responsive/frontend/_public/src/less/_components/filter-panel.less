@@ -290,6 +290,10 @@ The styling includes the collapsed and expanded styling and the panel component 
         z-index: @zindex-filter-panel-checkbox-state;
     }
 
+    &.filter-panel--radio {
+        .border-radius(11px);
+    }
+
     input[type="radio"] {
         .opacity(0);
         display: block;
@@ -399,10 +403,6 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--multi-selection,
 .filter--value,
 .filter--value-tree {
-
-    .input-type--radio .filter-panel--input {
-        .border-radius(11px);
-    }
 
     .option--container:hover {
         .filter-panel--label {
@@ -541,7 +541,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--active {
     .unitize-padding(0, 10);
     .unitize-margin(0, 10, 10, 0);
-    .unitize(line-height, 30);
+    .unitize(line-height, 24);
     .unitize(font-size, 13);
     .border-radius();
     display: inline-block;
@@ -550,7 +550,7 @@ The styling includes the collapsed and expanded styling and the panel component 
     background: #FFF;
     cursor: pointer;
     white-space: nowrap;
-    max-width: 32%;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
 
