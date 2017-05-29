@@ -36,11 +36,11 @@ Ext.define('Shopware.apps.Customer.view.chart.AmountChartFactory', {
         var modelFields = [];
 
         streamStore.each(function (item) {
-            fields.push({ name: item.get('name') });
+            fields.push({ name: item.get('name'), currency: true });
             modelFields.push({ name: item.get('name'), type: 'float' });
         });
 
-        fields.push({ name: 'unassigned', title: '{s name="unassigned_stream"}{/s}' });
+        fields.push({ name: 'unassigned', title: '{s name="unassigned_stream"}{/s}', currency: true });
         modelFields.push({ name: 'unassigned', type: 'float' });
         modelFields.push({ name: 'yearMonth', type: 'string' });
 

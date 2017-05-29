@@ -59,10 +59,10 @@ Ext.define('Shopware.apps.Customer.view.chart.MetaChart', {
 
     getFields: function () {
         return [
-            { name: 'count_orders',       title: '{s name=count_orders}{/s}' },
-            { name: 'invoice_amount_max', title: '{s name=max_order}{/s}' },
-            { name: 'invoice_amount_min', title: '{s name=min_order}{/s}' },
-            { name: 'product_avg',        title: '{s name=average_product_amount}{/s}' }
+            { name: 'count_orders',       title: '{s name=count_orders}{/s}', currency: false },
+            { name: 'invoice_amount_max', title: '{s name=max_order}{/s}', currency: true },
+            { name: 'invoice_amount_min', title: '{s name=min_order}{/s}', currency: true },
+            { name: 'product_avg',        title: '{s name=average_product_amount}{/s}', currency: true }
         ];
     }
 });

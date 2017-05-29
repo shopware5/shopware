@@ -105,16 +105,16 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
 
         Ext.each(me.getFields(), function(item) {
             if (item.hasOwnProperty('title')) {
-                series.push(me.createLineSeries(item.name, item.title));
+                series.push(me.createLineSeries(item.name, item.title, item.currency));
             } else {
-                series.push(me.createLineSeries(item.name, item.name));
+                series.push(me.createLineSeries(item.name, item.name, item.currency));
             }
         });
 
         return series;
     },
 
-    createLineSeries: function(field, title) {
+    createLineSeries: function(field, title, currency) {
         var me = this;
 
         return {
@@ -136,10 +136,15 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
                 highlight: { size: 7, radius: 7 },
                 renderer: function (storeItem) {
                     var value = storeItem.get(this.lineField);
+
+                    if (currency) {
+                        value = me.currencyRenderer(value);
+                    }
+
                     this.setTitle(
                         '<div class="customer-stream-chart-tip">' +
                             '<span class="customer-stream-chart-tip-label">' + this.fieldTitle + ':</span>&nbsp;'+
-                            '<span class="customer-stream-chart-tip-amount">' + me.currencyRenderer(value) + '</span>' +
+                            '<span class="customer-stream-chart-tip-amount">' + value + '</span>' +
                         '</div>'
                     );
                 }
