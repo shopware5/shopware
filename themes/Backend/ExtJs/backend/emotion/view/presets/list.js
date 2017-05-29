@@ -192,7 +192,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
 
         me.store.filter({
             filterFn: function(item) {
-                return item.get('name').toLowerCase().indexOf(term.toLowerCase()) >= 0;
+                return item.get('label').toLowerCase().indexOf(term.toLowerCase()) >= 0;
             }
         });
     },
