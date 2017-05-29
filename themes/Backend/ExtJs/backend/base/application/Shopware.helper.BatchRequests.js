@@ -53,6 +53,10 @@ Ext.define('Shopware.helper.BatchRequests', {
             return true;
         }
 
+        if (response.hasOwnProperty('params')) {
+            Ext.Object.merge(request.params, response.params);
+        }
+
         if (response.finish == false) {
             return me.send(request, requests, callback);
         }
