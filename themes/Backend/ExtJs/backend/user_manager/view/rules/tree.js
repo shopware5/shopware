@@ -85,6 +85,10 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         growlMessage: '{s name=growlMessage}User Management{/s}'
     },
 
+    viewConfig: {
+        animate: false
+    },
+
     /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -102,10 +106,54 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         me.selModel = me.createSelectionModel();
         me.tbar = me.createToolbar();
         me.registerEvents();
-        me.ruleStore.getProxy().extraParams = {};
-        me.store = me.ruleStore.load();
+        me.store = Ext.create('Shopware.apps.UserManager.store.Rules');
+        me.store.getProxy().extraParams = {};
+
+        me.on('activate', function() {
+            me.getStore().load();
+        });
+
+        me.on('checkchange', function (node, checked) {
+            me.suspendLayouts();
+            if (checked) {
+                if(!Ext.isEmpty(node.get('requirements'))) {
+                    me.checkRequiredNodes(node, true);
+                }
+
+                Ext.each(node.childNodes, function(childNode) {
+                    if(!Ext.isEmpty(childNode.get('requirements'))) {
+                        me.checkRequiredNodes(childNode, true);
+                    }
+                    childNode.set('checked', true);
+                });
+                node.expand();
+            } else if (node.isLeaf()) {
+                node.parentNode.set('checked', false);
+            } else {
+                Ext.each(node.childNodes, function(childNode) {
+                    childNode.set('checked', false);
+                });
+            }
+            me.resumeLayouts(true);
+        });
 
         me.callParent(arguments);
+    },
+
+    checkRequiredNodes: function(node, check) {
+        var me = this;
+
+        Ext.each(node.get('requirements'), function(nodeId) {
+            var requiredNode = me.getStore().getRootNode().findChild('helperId', nodeId, true);
+
+            if (requiredNode) {
+                if(!Ext.isEmpty(requiredNode.get('requirements'))) {
+                    me.checkRequiredNodes(requiredNode, true);
+                }
+                requiredNode.set('checked', true);
+                requiredNode.parentNode.expand();
+            }
+        });
     },
 
     /**
@@ -131,7 +179,8 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
      */
     onNodeSelect: function(selModel, record) {
         var me = this;
-        me.addPrivilegeButton.setDisabled(record.get('type')!=='resource');
+
+        me.addPrivilegeButton.setDisabled(record.get('type') !== 'resource');
     },
 
     /**
@@ -217,45 +266,44 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
     createToolbar: function() {
         var me = this;
 
-        me.roleStore = Ext.create('Shopware.apps.UserManager.store.Roles', {
-            pageSize: 5
-        });
+        // me.roleStore = Ext.create('Shopware.apps.UserManager.store.Roles', {
+        //     pageSize: 5
+        // });
+        //
+        // me.roleCombo = Ext.create('Shopware.form.field.PagingComboBox', {
+        //     pageSize: 5,
+        //     queryMode: 'remote',
+        //     store: me.roleStore,
+        //     valueField: 'id',
+        //     displayField: 'name',
+        //     forceSelection: true,
+        //     allowBlank:false,
+        //     labelWidth: 50,
+        //     emptyText: me.snippets.role.empty,
+        //     fieldLabel: me.snippets.role.label,
+        //     listeners: {
+        //         change: function(field, value) {
+        //             me.fireEvent('roleSelect', me.store, value);
+        //         }
+        //     }
+        // });
 
-        me.roleCombo = Ext.create('Shopware.form.field.PagingComboBox', {
-            pageSize: 5,
-            queryMode: 'remote',
-            store: me.roleStore,
-            valueField: 'id',
-            displayField: 'name',
-            forceSelection: true,
-            disableLoadingSelectedName: true,
-            allowBlank:false,
-            labelWidth: 50,
-            emptyText: me.snippets.role.empty,
-            fieldLabel: me.snippets.role.label,
-            listeners: {
-                change: function(field, value) {
-                    me.fireEvent('roleSelect', me.store, value);
-                }
-            }
-        });
-
-        /**
-         * The save role button assign the selected privileges
-         * to the selected role.
-         * @type Ext.button.Button
-         */
-        /* {if {acl_is_allowed privilege=update}} */
-        me.saveRoleButton = Ext.create('Ext.button.Button', {
-            text: me.snippets.saveRole,
-            disabled:true,
-            name: 'saveRolePrivileges',
-            iconCls:'sprite-disk',
-            handler: function() {
-                me.fireEvent('saveRolePrivileges', me.store, me.roleCombo.getValue(), me.getChecked());
-            }
-        });
-        /* {/if} */
+        // /**
+        //  * The save role button assign the selected privileges
+        //  * to the selected role.
+        //  * @type Ext.button.Button
+        //  */
+        // /* {if {acl_is_allowed privilege=update}} */
+        // me.saveRoleButton = Ext.create('Ext.button.Button', {
+        //     text: me.snippets.saveRole,
+        //     disabled:true,
+        //     name: 'saveRolePrivileges',
+        //     iconCls:'sprite-disk',
+        //     handler: function() {
+        //         me.fireEvent('saveRolePrivileges', me.store, me.roleCombo.getValue(), me.getChecked());
+        //     }
+        // });
+        // /* {/if} */
 
         /**
          * The add resource button creates a new resource
@@ -310,16 +358,15 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
+            ui: 'shopware-ui',
             items: [
-                me.roleCombo,
-        /* {if {acl_is_allowed privilege=update}} */
-                { xtype:'tbspacer', width:6 },
-                me.saveRoleButton,
-        /* {/if} */
+        //         me.roleCombo,
+        // /* {if {acl_is_allowed privilege=update}} */
+        //         { xtype:'tbspacer', width:6 },
+        //         me.saveRoleButton,
+        // /* {/if} */
         /* {if {acl_is_allowed privilege=create}} */
-                { xtype:'tbspacer', width:6 },
                 me.addResourceButton,
-                { xtype:'tbspacer', width:6 },
                 me.addPrivilegeButton,
         /* {/if} */
                 '->',
@@ -336,10 +383,10 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
     createColumns: function() {
         var me = this;
 
-        var columns = [{
+        return [{
             xtype: 'treecolumn',
             text: me.snippets.columns.name ,
-            flex: 2,
+            flex: 1,
             sortable: true,
             dataIndex: 'name'
         },
@@ -351,7 +398,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             items: [{
                 iconCls:'sprite-minus-circle-frame',
                 action:'deleteNode',
-                tooltip: me.snippets.columns.delete,
+                tooltip: '{s name=rules/column/action_delete}{/s}',
                 /**
                  * Remove button handler to fire the deletePrivilege or deleteResource event which is handled
                  * in the rules controller.
@@ -366,8 +413,6 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             }]
         }
         /* {/if} */];
-
-        return columns;
     }
 
 

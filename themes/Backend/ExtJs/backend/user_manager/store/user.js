@@ -35,7 +35,6 @@
 //{block name="backend/user_manager/store/user"}
 Ext.define('Shopware.apps.UserManager.store.User', {
     extend: 'Ext.data.Store',
-    autoLoad: true,
     groupField: 'groupname',
     pageSize: 30,
     model : 'Shopware.apps.UserManager.model.User'

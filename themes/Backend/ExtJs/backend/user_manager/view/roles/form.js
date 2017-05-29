@@ -22,26 +22,26 @@
  *
  * @category   Shopware
  * @package    UserManager
- * @subpackage Store
+ * @subpackage View
  * @version    $Id$
  * @author shopware AG
  */
 
+//{namespace name=backend/user_manager/view/main}
 /**
- * Shopware Backend - User Manager Detail model
+ * Shopware Backend - View for role-form
  *
- * The detail model is used to load a role with all assigned privileges. The model
- * is only used to assign the selected tree nodes of the user_manager/view/rules/tree.js component
- * to the selected role.
  */
-//{block name="backend/user_manager/store/rules"}
-Ext.define('Shopware.apps.UserManager.store.Rules', {
-    extend: 'Ext.data.TreeStore',
-    /**
-     * Enable remote filtering
-     * @boolean
-     */
-    remoteFilter:true,
-    model : 'Shopware.apps.UserManager.model.Rules'
+//{block name="backend/user_manager/view/roles/form"}
+Ext.define('Shopware.apps.UserManager.view.roles.Form', {
+    extend: 'Enlight.app.Window',
+
+    title: '',
+
+    initComponent: function() {
+        var me = this;
+
+        me.callParent(arguments);
+    }
 });
 //{/block}

@@ -61,7 +61,11 @@ Ext.define('Shopware.apps.UserManager.model.Rules', {
         */
        { name: 'resourceId',     type: 'int'},
        { name: 'privilegeId',     type: 'int'},
-       { name: 'roleId',     type: 'int'}
+       { name: 'roleId',     type: 'int'},
+       /**
+        * Helper field for required privileges
+        */
+       { name: 'requirements', type: 'array' }
    ],
 
     /**
