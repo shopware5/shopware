@@ -119,6 +119,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
     {
         $total = (int) $this->Request()->getParam('total');
         $iteration = (int) $this->Request()->getParam('iteration', 1);
+        $lastId = (int) $this->Request()->getParam('lastId');
 
         $offset = ($iteration - 1) * CustomerStreamRepository::INDEXING_LIMIT;
         $handled = $offset + CustomerStreamRepository::INDEXING_LIMIT;
@@ -128,7 +129,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $full = $this->Request()->getParam('full');
 
         $ids = $this->container->get('shopware.customer_stream.repository')
-            ->fetchSearchIndexIds($offset, $full);
+            ->fetchSearchIndexIds($lastId, $full);
 
         if (!empty($ids)) {
             $this->container->get('dbal_connection')->executeUpdate(
@@ -158,6 +159,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign([
             'success' => true,
             'finish' => false,
+            'params' => ['lastId' => (int) array_pop($ids)],
             'text' => sprintf($snippets->get('refresh_customer'), $handled, $total),
             'progress' => $handled / $total,
         ]);
