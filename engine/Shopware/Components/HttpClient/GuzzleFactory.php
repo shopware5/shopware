@@ -30,13 +30,15 @@ use GuzzleHttp\ClientInterface;
 class GuzzleFactory
 {
     /**
+     * @param array $guzzleConfig
+     *
      * @return ClientInterface
      */
-    public function createClient()
+    public function createClient(array $guzzleConfig = [])
     {
-        $client = new Client();
+        $client = new Client($guzzleConfig);
 
-        $certPath = __DIR__.'/cacert.pem';
+        $certPath = __DIR__ . '/cacert.pem';
         if (is_file($certPath)) {
             $client->setDefaultOption('verify', $certPath);
         }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Components_Test_TestCase
 {
     public function testSetAttribute()

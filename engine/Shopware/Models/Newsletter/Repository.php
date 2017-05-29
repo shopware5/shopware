@@ -28,7 +28,6 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the mailing model
- *
  */
 class Repository extends ModelRepository
 {
@@ -39,6 +38,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $limit
      * @param null $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListGroupsQuery($filter = null, $order = null, $limit = null, $offset = null)
@@ -56,16 +56,18 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getListGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListGroupsQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
-            'groups'
-        ));
+        $builder->select([
+            'groups',
+        ]);
         $builder->from('Shopware\Models\Newsletter\Group', 'groups');
 
         if ($filter !== null) {
@@ -85,6 +87,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $limit
      * @param null $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListAddressesQuery($filter = null, $order = null, $limit = null, $offset = null)
@@ -102,19 +105,21 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getListAddressesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListAddressesQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'address',
             'customer',
             'newsletterGroup',
-            'lastNewsletter'
-        ));
+            'lastNewsletter',
+        ]);
         $builder->from('Shopware\Models\Newsletter\Address', 'address')
             ->leftJoin('address.customer', 'customer', 'WITH', 'address.isCustomer = true')
             ->leftJoin('address.newsletterGroup', 'newsletterGroup')
@@ -135,8 +140,6 @@ class Repository extends ModelRepository
         return $builder;
     }
 
-
-
     /**
      * Receives all known senders
      *
@@ -144,6 +147,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $limit
      * @param null $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListSenderQuery($filter = null, $order = null, $limit = null, $offset = null)
@@ -161,16 +165,18 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getListSendersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListSenderQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
-            'sender'
-        ));
+        $builder->select([
+            'sender',
+        ]);
         $builder->from('Shopware\Models\Newsletter\Sender', 'sender');
 
         if ($filter !== null) {
@@ -193,6 +199,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $limit
      * @param null $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListNewslettersQuery($filter = null, $order = null, $limit = null, $offset = null)
@@ -210,15 +217,17 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getListNewslettersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListNewslettersQueryBuilder($filter = null, $order = null)
     {
         // Joining the addresses will have a massive impact on query time if many addresses needs to be joined
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'mailing',
             'container',
             'text',
@@ -226,7 +235,7 @@ class Repository extends ModelRepository
             'links',
             'banner',
 //            'addresses'
-        ));
+        ]);
         $builder->from('Shopware\Models\Newsletter\Newsletter', 'mailing')
                 ->leftJoin('mailing.containers', 'container')
                 ->leftJoin('container.text', 'text')

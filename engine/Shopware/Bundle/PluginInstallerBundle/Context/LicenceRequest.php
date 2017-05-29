@@ -26,9 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class LicenceRequest extends BaseRequest
 {
     /**
@@ -42,10 +39,10 @@ class LicenceRequest extends BaseRequest
     private $token;
 
     /**
-     * @param string $domain
+     * @param string            $domain
      * @param AccessTokenStruct $token
-     * @param string $locale
-     * @param string $shopwareVersion
+     * @param string            $locale
+     * @param string            $shopwareVersion
      */
     public function __construct(
         $locale,

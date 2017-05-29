@@ -90,7 +90,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         $this->rewriteTable->sCreateRewriteTableCleanup();
 
         foreach ($shops as $shopId) {
-            $output->writeln("Rebuilding SEO index for shop " . $shopId);
+            $output->writeln('Rebuilding SEO index for shop ' . $shopId);
             /** @var $repository \Shopware\Models\Shop\Repository */
             $repository = $this->modelManager->getRepository('Shopware\Models\Shop\Shop');
             $shop = $repository->getActiveById($shopId);
@@ -128,6 +128,6 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->rewriteTable->sCreateRewriteTableStatic();
         }
 
-        $output->writeln("The SEO index was rebuild successfully.");
+        $output->writeln('The SEO index was rebuild successfully.');
     }
 }

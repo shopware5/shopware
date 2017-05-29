@@ -28,7 +28,7 @@ use Shopware\Models\Blog\Blog;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class BlogReader extends GenericReader
@@ -41,10 +41,11 @@ class BlogReader extends GenericReader
             'entity.title',
             'entity.active',
             'entity.displayDate',
-            'author.username as authorName'
+            'author.username as authorName',
         ]);
         $query->from(Blog::class, 'entity', $this->getIdentifierField());
         $query->leftJoin('entity.author', 'author');
+
         return $query;
     }
 }

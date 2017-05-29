@@ -25,13 +25,13 @@
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
 use Doctrine\DBAL\Connection;
-use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class LicenseCheck implements CheckInterface
@@ -59,9 +59,9 @@ class LicenseCheck implements CheckInterface
     private $endpoint;
 
     /**
-     * @param Connection $connection
-     * @param string $endpoint
-     * @param string $shopwareVersion
+     * @param Connection       $connection
+     * @param string           $endpoint
+     * @param string           $shopwareVersion
      * @param SnippetNamespace $namespace
      */
     public function __construct(Connection $connection, $endpoint, $shopwareVersion, SnippetNamespace $namespace)
@@ -88,27 +88,27 @@ class LicenseCheck implements CheckInterface
         $licenseKeys = $requirement['value']['licenseKeys'];
 
         if (empty($licenseKeys)) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_WARNING,
-                'message' => 'License check requested but no license key provided'
-            );
+                'message' => 'License check requested but no license key provided',
+            ];
         }
         $licenseData = $this->getLicenseData($licenseKeys);
 
         if (empty($licenseData)) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message' => $this->namespace->get('controller/check_license_nolicense')
-            );
+                'message' => $this->namespace->get('controller/check_license_nolicense'),
+            ];
         }
 
-        $url = $this->endpoint.'/licenseupgrades/permission';
+        $url = $this->endpoint . '/licenseupgrades/permission';
         $client = new \Zend_Http_Client(
-            $url, array(
-                'timeout' => 15
-            )
+            $url, [
+                'timeout' => 15,
+            ]
         );
 
         foreach ($licenseData as $licenseDatum) {
@@ -136,32 +136,33 @@ class LicenseCheck implements CheckInterface
             }
 
             if ($json === true) {
-                return array(
+                return [
                     'type' => self::CHECK_TYPE,
                     'errorLevel' => Validation::REQUIREMENT_VALID,
-                    'message' => $this->namespace->get('controller/check_license_success')
-                );
+                    'message' => $this->namespace->get('controller/check_license_success'),
+                ];
             }
         }
 
-        return array(
+        return [
             'type' => self::CHECK_TYPE,
             'errorLevel' => $requirement['level'],
-            'message' => $this->namespace->get('controller/check_license_failure')
-        );
+            'message' => $this->namespace->get('controller/check_license_failure'),
+        ];
     }
 
     /**
      * Returns existing license data for the provided keys
      *
      * @param array $licenseKeys
+     *
      * @return array
      */
     private function getLicenseData($licenseKeys)
     {
         /** @var \Doctrine\DBAL\Query\QueryBuilder $queryBuilder */
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select(array('host', 'license'))
+        $queryBuilder->select(['host', 'license'])
             ->from('s_core_licenses', 'license')
             ->where('license.active = 1')
             ->andWhere('license.module IN (:modules)')

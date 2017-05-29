@@ -267,9 +267,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 var disableTab = !record.get('leaf');
                 if (me.detailRecord.get('streamId')) {
                     disableTab = true;
-                    settingForm.streamSelection.store.load({
-                        params: { id: me.detailRecord.get('streamId') }
-                    });
                 }
 
                 // Just create the selection view once, if created just refresh the stores and the detail record.

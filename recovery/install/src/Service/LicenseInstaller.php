@@ -28,7 +28,7 @@ use Shopware\Recovery\Install\Struct\LicenseInformation;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LicenseInstaller
@@ -47,7 +47,8 @@ class LicenseInstaller
     }
 
     /**
-     * @param  LicenseInformation $license
+     * @param LicenseInformation $license
+     *
      * @throws \RuntimeException
      */
     public function installLicense(LicenseInformation $license)
@@ -76,7 +77,7 @@ EOT;
                 ':expiration' => $this->checkDate($license->expiration),
             ]);
         } catch (\PDOException $e) {
-            throw new \RuntimeException("Could not insert license into database", 0, $e);
+            throw new \RuntimeException('Could not insert license into database', 0, $e);
         }
     }
 
@@ -85,11 +86,13 @@ EOT;
      * If not, returns null. Otherwise the string.
      *
      * @param string $date
+     *
      * @return string|null
      */
     private function checkDate($date)
     {
         $dateCheck = strtotime($date);
+
         return is_int($dateCheck) && $dateCheck > 0 ? $date : null;
     }
 }

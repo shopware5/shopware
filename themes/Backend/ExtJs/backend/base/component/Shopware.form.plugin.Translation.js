@@ -34,6 +34,9 @@
  * for multiple form elements such as a textfield, a combo box or
  * a fancy TinyMCE form field.
  */
+
+//{block name="backend/base/component/form_plugin_translation"}
+
 Ext.define('Shopware.form.plugin.Translation',
 /** @lends Ext.AbstractPlugin# */
 {
@@ -332,3 +335,4 @@ Ext.define('Shopware.form.plugin.Translation',
         return type;
     }
 });
+//{/block}

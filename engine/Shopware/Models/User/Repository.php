@@ -38,29 +38,35 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the user data for
      * the passed user id.
+     *
      * @param $userId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getUserDetailQuery($userId)
     {
         $builder = $this->getUserDetailQueryBuilder($userId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getUserDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $userId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getUserDetailQueryBuilder($userId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('users', 'attribute'))
+        $builder->select(['users', 'attribute'])
                 ->from('Shopware\Models\User\User', 'users')
                 ->leftJoin('users.attribute', 'attribute')
                 ->where('users.id = ?1')
                 ->setParameter(1, $userId);
+
         return $builder;
     }
 
@@ -70,6 +76,7 @@ class Repository extends ModelRepository
      * @param null $filter
      * @param null $limit
      * @param null $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getUsersQuery($filter = null, $limit = null, $offset = null)
@@ -79,43 +86,49 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getUserListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getUsersQueryBuilder($filter = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
                 'user.id as id',
                 'user.username as username',
                 'user.lastLogin as lastLogin',
                 'user.name as name',
                 'role.name as groupname',
                 'user.active as active',
-                'user.email as email'
-            )
+                'user.email as email',
+            ]
         );
         $builder->from('Shopware\Models\User\User', 'user');
         $builder->join('user.role', 'role');
         if (!empty($filter)) {
-            $builder->where("user.username LIKE ?1")
-                    ->orWhere("user.name LIKE ?1")
+            $builder->where('user.username LIKE ?1')
+                    ->orWhere('user.name LIKE ?1')
                     ->setParameter(1, '%' . $filter . '%');
         }
         $builder->orderBy('username');
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of roles.
+     *
      * @param null $offset
      * @param null $limit
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getRolesQuery($offset = null, $limit = null)
@@ -125,72 +138,86 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getRolesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getRolesQueryBuilder()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('roles'))
+        $builder->select(['roles'])
                 ->from('Shopware\Models\User\Role', 'roles');
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which search the attributes
      * for the passed user id.
+     *
      * @param $userId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getAttributesQuery($userId)
     {
         $builder = $this->getAttributesQueryBuilder($userId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $userId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getAttributesQueryBuilder($userId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
+        $builder->select(['attribute'])
                       ->from('Shopware\Models\Attribute\User', 'attribute')
                       ->where('attribute.userId = ?1')
                       ->setParameter(1, $userId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of resources.
+     *
      * @param $filter
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getResourcesQuery($filter = null)
     {
         $builder = $this->getResourcesQueryBuilder($filter);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getResourcesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getResourcesQueryBuilder($filter = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array('resources', 'privileges'))
+        $builder->select(['resources', 'privileges'])
                 ->from('Shopware\Models\User\Resource', 'resources')
                 ->leftJoin('resources.privileges', 'privileges');
 
@@ -198,6 +225,7 @@ class Repository extends ModelRepository
             $builder->where($builder->expr()->like('resources.name', '?1'))
                     ->setParameter(1, $filter . '%');
         }
+
         return $builder;
     }
 
@@ -206,54 +234,63 @@ class Repository extends ModelRepository
      * with an active admin rule.
      *
      * @param $roleId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getResourcesWithAdminRuleQuery($roleId)
     {
         $builder = $this->getResourcesWithAdminRuleQueryBuilder($roleId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getResourcesWithAdminRuleQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $roleId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getResourcesWithAdminRuleQueryBuilder($roleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('rule.resourceId'))
+        $builder->select(['rule.resourceId'])
                 ->from('Shopware\Models\User\Rule', 'rule')
                 ->where($builder->expr()->isNull('rule.privilegeId'))
                 ->andWhere($builder->expr()->isNotNull('rule.resourceId'))
                 ->andWhere($builder->expr()->eq('rule.roleId', '?1'))
                 ->setParameter(1, $roleId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select all role data for the passed role id.
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getRoleDetailQuery()
     {
         $builder = $this->getRoleDetailQueryBuilder();
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getRoleDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getRoleDetailQueryBuilder()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('roles', 'rules', 'privilege'))
+        $builder->select(['roles', 'rules', 'privilege'])
                 ->from('Shopware\Models\User\Role', 'roles')
                 ->leftJoin('roles.rules', 'rules')
                 ->leftJoin('rules.privilege', 'privilege');
+
         return $builder;
     }
 
@@ -261,18 +298,22 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which deletes the passed resource
      *
      * @param $resourceId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getResourceDeleteQuery($resourceId)
     {
         $builder = $this->getResourceDeleteQueryBuilder($resourceId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getResourceDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $resourceId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getResourceDeleteQueryBuilder($resourceId)
@@ -281,6 +322,7 @@ class Repository extends ModelRepository
         $builder->delete('Shopware\Models\User\Resource', 'resource')
                 ->where('resource.id = ?1')
                 ->setParameter(1, $resourceId);
+
         return $builder;
     }
 
@@ -288,18 +330,22 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which deletes the passed privilege.
      *
      * @param $privilegeId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getPrivilegeDeleteQuery($privilegeId)
     {
         $builder = $this->getPrivilegeDeleteQueryBuilder($privilegeId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getPrivilegeDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $privilegeId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getPrivilegeDeleteQueryBuilder($privilegeId)
@@ -308,6 +354,7 @@ class Repository extends ModelRepository
         $builder->delete('Shopware\Models\User\Privilege', 'privilege')
                 ->where('privilege.id = ?1')
                 ->setParameter(1, $privilegeId);
+
         return $builder;
     }
 
@@ -316,18 +363,22 @@ class Repository extends ModelRepository
      * of the passed resource id.
      *
      * @param $resourceId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getPrivilegeDeleteByResourceIdQuery($resourceId)
     {
         $builder = $this->getPrivilegeDeleteByResourceIdQueryBuilder($resourceId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getPrivilegeDeleteByResourceIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $resourceId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getPrivilegeDeleteByResourceIdQueryBuilder($resourceId)
@@ -336,6 +387,7 @@ class Repository extends ModelRepository
         $builder->delete('Shopware\Models\User\Privilege', 'privilege')
                 ->where('privilege.resourceId = ?1')
                 ->setParameter(1, $resourceId);
+
         return $builder;
     }
 
@@ -344,18 +396,22 @@ class Repository extends ModelRepository
      * for the passed privilege id.
      *
      * @param $privilegeId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getRuleDeleteByPrivilegeIdQuery($privilegeId)
     {
         $builder = $this->getRuleDeleteByPrivilegeIdQueryBuilder($privilegeId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getRuleDeleteByPrivilegeIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $privilegeId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getRuleDeleteByPrivilegeIdQueryBuilder($privilegeId)
@@ -364,24 +420,30 @@ class Repository extends ModelRepository
         $builder->delete('Shopware\Models\User\Rule', 'rule')
                 ->where('rule.privilegeId = ?1')
                 ->setParameter(1, $privilegeId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which delete the passed rule.
+     *
      * @param $roleId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getRuleDeleteByRoleIdQuery($roleId)
     {
         $builder = $this->getRuleDeleteByRoleIdQueryBuilder($roleId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getRuleDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $roleId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getRuleDeleteByRoleIdQueryBuilder($roleId)
@@ -390,25 +452,31 @@ class Repository extends ModelRepository
         $builder->delete('Shopware\Models\User\Rule', 'rule')
                 ->where('rule.roleId = ?1')
                 ->setParameter(1, $roleId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which deletes all rules
      * for the passed resource id.
+     *
      * @param $resourceId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getRuleDeleteByResourceIdQuery($resourceId)
     {
         $builder = $this->getRuleDeleteByResourceIdQueryBuilder($resourceId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getRuleDeleteByResourceIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $resourceId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getRuleDeleteByResourceIdQueryBuilder($resourceId)
@@ -417,24 +485,30 @@ class Repository extends ModelRepository
         $builder->delete('Shopware\Models\User\Rule', 'rule')
                 ->where('rule.resourceId = ?1')
                 ->setParameter(1, $resourceId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @param $roleId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getAdminRuleDeleteQuery($roleId)
     {
         $builder = $this->getAdminRuleDeleteQueryBuilder($roleId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getAdminRuleDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $roleId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getAdminRuleDeleteQueryBuilder($roleId)
@@ -446,6 +520,7 @@ class Repository extends ModelRepository
                 ->setParameter(1, $roleId)
                 ->andWhere($expr->isNull('rule.resourceId'))
                 ->andWhere($expr->isNull('rule.privilegeId'));
+
         return $builder;
     }
 }

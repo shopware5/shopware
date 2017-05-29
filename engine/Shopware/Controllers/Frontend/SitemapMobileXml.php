@@ -26,7 +26,7 @@
  * Mobile sitemap controller
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_SitemapMobileXml extends Enlight_Controller_Action

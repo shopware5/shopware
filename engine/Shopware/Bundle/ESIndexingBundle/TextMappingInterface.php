@@ -26,7 +26,6 @@ namespace Shopware\Bundle\ESIndexingBundle;
 
 /**
  * Class TextMapping
- * @package Shopware\Bundle\ESIndexingBundle
  */
 interface TextMappingInterface
 {

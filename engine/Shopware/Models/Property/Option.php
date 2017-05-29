@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Property;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Article Model
@@ -37,7 +37,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Option extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Value", mappedBy="option", cascade={"remove"}))
+     */
+    protected $values;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\PropertyOption
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,14 +61,14 @@ class Option extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var bool $filterable
+     * @var bool
      *
      * @ORM\Column(name="filterable", type="boolean")
      */
@@ -62,7 +77,7 @@ class Option extends ModelEntity
     /**
      * ManyToMany to Group (Inverse Side)
      *
-     * @var Group[]Doctrine\Common\Collections\ArrayCollection $groups
+     * @var Group[]Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="s_filter_relations",
      *      joinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")},
@@ -72,40 +87,26 @@ class Option extends ModelEntity
     private $groups;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $articles
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Relation", mappedBy="option")
      */
     private $relations;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $values
-     *
-     * @ORM\OneToMany(targetEntity="Value", mappedBy="option", cascade={"remove"}))
-     */
-    protected $values;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\PropertyOption
-     */
-    protected $attribute;
-
-    /**
      * Constructor of Mail
      */
     public function __construct()
     {
-        $this->groups    = new ArrayCollection();
-        $this->values    = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->values = new ArrayCollection();
         $this->relations = new ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -116,6 +117,7 @@ class Option extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Option
      */
     public function setName($name)
@@ -139,6 +141,7 @@ class Option extends ModelEntity
      * Set filterable
      *
      * @param bool $filterable
+     *
      * @return Option
      */
     public function setFilterable($filterable)
@@ -192,6 +195,7 @@ class Option extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\PropertyOption|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\PropertyOption
      */
     public function setAttribute($attribute)

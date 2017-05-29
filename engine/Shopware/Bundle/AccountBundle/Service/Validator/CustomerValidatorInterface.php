@@ -29,18 +29,19 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * Interface CustomerValidatorInterface
- * @package Shopware\Bundle\AccountBundle\Service\Validator
  */
 interface CustomerValidatorInterface
 {
     /**
      * @param Customer $customer
+     *
      * @throws ValidationException
      */
     public function validate(Customer $customer);
 
     /**
      * @param Customer $customer
+     *
      * @return bool
      */
     public function isValid(Customer $customer);

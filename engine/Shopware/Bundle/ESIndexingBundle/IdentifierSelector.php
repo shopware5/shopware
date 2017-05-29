@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * Class IdentifierSelector
- * @package Shopware\Bundle\ESIndexingBundle
  */
 class IdentifierSelector
 {
@@ -45,7 +44,7 @@ class IdentifierSelector
     private $shopGateway;
 
     /**
-     * @param Connection $connection
+     * @param Connection           $connection
      * @param ShopGatewayInterface $shopGateway
      */
     public function __construct(
@@ -90,6 +89,7 @@ class IdentifierSelector
 
     /**
      * @param int $shopId
+     *
      * @return int[]
      */
     public function getShopCurrencyIds($shopId)

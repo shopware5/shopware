@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Voucher', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers:['Main','Voucher','Code'],
+    controllers:['Voucher','Main','Code'],
 
     /**
      * Returns the main application window for this is expected

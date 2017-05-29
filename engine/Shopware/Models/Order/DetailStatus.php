@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Order;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware order detail status model represents the status of an order position.
@@ -42,7 +42,7 @@ use Doctrine\ORM\Mapping as ORM;
 class DetailStatus extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -51,21 +51,21 @@ class DetailStatus extends ModelEntity
     private $id;
 
     /**
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
 
     /**
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
 
     /**
-     * @var integer $mail
+     * @var int
      *
      * @ORM\Column(name="mail", type="integer", nullable=false)
      */
@@ -74,7 +74,7 @@ class DetailStatus extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -85,11 +85,13 @@ class DetailStatus extends ModelEntity
      * Set description
      *
      * @param string $description
+     *
      * @return Status
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -106,19 +108,21 @@ class DetailStatus extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Status
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -128,19 +132,21 @@ class DetailStatus extends ModelEntity
     /**
      * Set mail
      *
-     * @param integer $mail
+     * @param int $mail
+     *
      * @return Status
      */
     public function setMail($mail)
     {
         $this->mail = $mail;
+
         return $this;
     }
 
     /**
      * Get mail
      *
-     * @return integer
+     * @return int
      */
     public function getMail()
     {

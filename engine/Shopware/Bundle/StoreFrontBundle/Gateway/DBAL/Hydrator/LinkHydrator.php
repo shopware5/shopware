@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LinkHydrator extends Hydrator
@@ -48,6 +48,7 @@ class LinkHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link
      */
     public function hydrate(array $data)
@@ -61,6 +62,7 @@ class LinkHydrator extends Hydrator
         if (!empty($data['__linkAttribute_id'])) {
             $this->attributeHydrator->addAttribute($link, $data, 'linkAttribute');
         }
+
         return $link;
     }
 }

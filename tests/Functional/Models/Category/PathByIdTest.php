@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Test_TestCase
@@ -34,77 +34,65 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
      */
     protected $repo = null;
 
-    /**
-     * @return Shopware\Models\Category\Repository
-     */
-    protected function getRepo()
-    {
-        if ($this->repo === null) {
-            $this->repo =Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
-        }
-
-        return $this->repo;
-    }
-
     public function simpleNameArrayProvider()
     {
-        return array(
-            array(1, array(1 => 'Root')),
-            array(3, array(3 => 'Deutsch')),
-            array(39, array(39 => 'English')),
-            array(6, array(3 => 'Deutsch', 6 => 'Sommerwelten')),
-            array(11, array(3 => 'Deutsch', 5 => 'Genusswelten', 11 => 'Tees und Zubehör')),
-            array(48, array(39 => 'English', 43 => 'Worlds of indulgence', 47 => 'Teas and Accessories', 48 => 'Teas')),
-        );
+        return [
+            [1, [1 => 'Root']],
+            [3, [3 => 'Deutsch']],
+            [39, [39 => 'English']],
+            [6, [3 => 'Deutsch', 6 => 'Sommerwelten']],
+            [11, [3 => 'Deutsch', 5 => 'Genusswelten', 11 => 'Tees und Zubehör']],
+            [48, [39 => 'English', 43 => 'Worlds of indulgence', 47 => 'Teas and Accessories', 48 => 'Teas']],
+        ];
     }
 
     public function simpleIdArrayProvider()
     {
-        return array(
-            array(1, array(1 => 1)),
-            array(3, array(3 => 3)),
-            array(39, array(39 => 39)),
-            array(6, array(3 => 3, 6 => 6)),
-            array(11, array(3 => 3, 5 => 5, 11 => 11)),
-            array(48, array(39 => 39, 43 => 43, 47 => 47, 48 => 48)),
-        );
+        return [
+            [1, [1 => 1]],
+            [3, [3 => 3]],
+            [39, [39 => 39]],
+            [6, [3 => 3, 6 => 6]],
+            [11, [3 => 3, 5 => 5, 11 => 11]],
+            [48, [39 => 39, 43 => 43, 47 => 47, 48 => 48]],
+        ];
     }
 
     public function multiArrayProvider()
     {
-        return array(
-            array(1, array(
-                1 => array('id' => 1, 'name' => 'Root', 'blog' => false)
-            )),
-            array(3, array(
-                3 => array('id' => 3, 'name' => 'Deutsch', 'blog' => false)
-            )),
-            array(39, array(
-                39 => array('id' => 39, 'name' => 'English', 'blog' => false)
-            )),
-            array(5, array(
-                3 => array('id' => 3, 'name' => 'Deutsch', 'blog' => false),
-                5 => array('id' => 5, 'name' => 'Genusswelten', 'blog' => false),
-            )),
-            array(48, array(
-                39 => array('id' => 39, 'name' => 'English', 'blog' => false),
-                43 => array('id' => 43, 'name' => 'Worlds of indulgence', 'blog' => false),
-                47 => array('id' => 47, 'name' => 'Teas and Accessories', 'blog' => false),
-                48 => array('id' => 48, 'name' => 'Teas', 'blog' => false),
-            )),
-        );
+        return [
+            [1, [
+                1 => ['id' => 1, 'name' => 'Root', 'blog' => false],
+            ]],
+            [3, [
+                3 => ['id' => 3, 'name' => 'Deutsch', 'blog' => false],
+            ]],
+            [39, [
+                39 => ['id' => 39, 'name' => 'English', 'blog' => false],
+            ]],
+            [5, [
+                3 => ['id' => 3, 'name' => 'Deutsch', 'blog' => false],
+                5 => ['id' => 5, 'name' => 'Genusswelten', 'blog' => false],
+            ]],
+            [48, [
+                39 => ['id' => 39, 'name' => 'English', 'blog' => false],
+                43 => ['id' => 43, 'name' => 'Worlds of indulgence', 'blog' => false],
+                47 => ['id' => 47, 'name' => 'Teas and Accessories', 'blog' => false],
+                48 => ['id' => 48, 'name' => 'Teas', 'blog' => false],
+            ]],
+        ];
     }
 
     public function stringPathProvider()
     {
-        return array(
-            array(1, 'Root'),
-            array(3, 'Deutsch'),
-            array(39, 'English'),
-            array(5, 'Deutsch > Genusswelten'),
-            array(12, 'Deutsch > Genusswelten > Tees und Zubehör > Tees'),
-            array(48, 'English > Worlds of indulgence > Teas and Accessories > Teas'),
-        );
+        return [
+            [1, 'Root'],
+            [3, 'Deutsch'],
+            [39, 'English'],
+            [5, 'Deutsch > Genusswelten'],
+            [12, 'Deutsch > Genusswelten > Tees und Zubehör > Tees'],
+            [48, 'English > Worlds of indulgence > Teas and Accessories > Teas'],
+        ];
     }
 
     /**
@@ -139,7 +127,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
      */
     public function testGetPathByIdShouldReturnArray($categoryId, $expectedResult)
     {
-        $result = $this->getRepo()->getPathById($categoryId, array('id', 'name', 'blog'));
+        $result = $this->getRepo()->getPathById($categoryId, ['id', 'name', 'blog']);
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -161,5 +149,17 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
 
         $result = $this->getRepo()->getPathById($categoryId, 'name', '|');
         $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @return Shopware\Models\Category\Repository
+     */
+    protected function getRepo()
+    {
+        if ($this->repo === null) {
+            $this->repo = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
+        }
+
+        return $this->repo;
     }
 }

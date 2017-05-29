@@ -115,11 +115,16 @@ Ext.define('Shopware.apps.MediaManager.view.batchMove.BatchMove', {
     /**
      * on cancel click set the property isCanceled to true,
      * so we can break the move media process
+     *
+     * @param { Ext.button.Button } button
      */
-    onCancelClick: function() {
+    onCancelClick: function(button) {
         var me = this;
 
         me.isCanceled = true;
+
+        me.updateProgressBar(true);
+        button.setDisabled(true);
     },
 
     startMoveMedia: function() {
@@ -141,10 +146,16 @@ Ext.define('Shopware.apps.MediaManager.view.batchMove.BatchMove', {
         me.afterUpdateProgressBar();
     },
 
-    updateProgressBar: function() {
+    updateProgressBar: function(force) {
         var me = this,
             text = Ext.String.format(me.indicatorSnippet, me.currentIndex, '' + me.mediasToMove.length),
-            value = (1 / me.mediasToMove.length) * (me.currentIndex);
+            value = (1 / me.mediasToMove.length) * (me.currentIndex),
+            force = force || false;
+
+        if (force || me.isCanceled) {
+            me.progressBar.updateProgress(value, '{s name="move/media/cancel_message"}{/s}', true);
+            return;
+        }
 
         me.progressBar.updateProgress(value, text, true);
     },

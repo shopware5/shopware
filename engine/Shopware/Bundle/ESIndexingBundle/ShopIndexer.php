@@ -73,14 +73,14 @@ class ShopIndexer implements ShopIndexerInterface
     private $configuration;
 
     /**
-     * @param Client $client
-     * @param BacklogReaderInterface $backlogReader
+     * @param Client                    $client
+     * @param BacklogReaderInterface    $backlogReader
      * @param BacklogProcessorInterface $backlogProcessor
-     * @param IndexFactoryInterface $indexFactory
-     * @param DataIndexerInterface[] $indexer
-     * @param MappingInterface[] $mappings
-     * @param SettingsInterface[] $settings
-     * @param array $configuration
+     * @param IndexFactoryInterface     $indexFactory
+     * @param DataIndexerInterface[]    $indexer
+     * @param MappingInterface[]        $mappings
+     * @param SettingsInterface[]       $settings
+     * @param array                     $configuration
      */
     public function __construct(
         Client $client,
@@ -109,7 +109,7 @@ class ShopIndexer implements ShopIndexerInterface
     {
         $lastBacklogId = $this->backlogReader->getLastBacklogId();
         $configuration = $this->indexFactory->createIndexConfiguration($shop);
-        $shopIndex     = new ShopIndex($configuration->getName(), $shop);
+        $shopIndex = new ShopIndex($configuration->getName(), $shop);
 
         $this->createIndex($configuration);
         $this->updateSettings($shopIndex);
@@ -120,13 +120,31 @@ class ShopIndexer implements ShopIndexerInterface
     }
 
     /**
+     * Removes unused indices
+     */
+    public function cleanupIndices()
+    {
+        $prefix = $this->indexFactory->getPrefix();
+        $aliases = $this->client->indices()->getAliases();
+        foreach ($aliases as $index => $indexAliases) {
+            if (strpos($index, $prefix) !== 0) {
+                continue;
+            }
+
+            if (empty($indexAliases['aliases'])) {
+                $this->client->indices()->delete(['index' => $index]);
+            }
+        }
+    }
+
+    /**
      * @param IndexConfiguration $configuration
      */
     private function createIndex(IndexConfiguration $configuration)
     {
         $exist = $this->client->indices()->exists(['index' => $configuration->getName()]);
         if ($exist) {
-            throw new \RuntimeException("Elasticsearch index %s already exist.");
+            throw new \RuntimeException('Elasticsearch index %s already exist.');
         }
 
         $this->client->indices()->create([
@@ -134,9 +152,9 @@ class ShopIndexer implements ShopIndexerInterface
             'body' => [
                 'settings' => [
                     'number_of_shards' => $configuration->getNumberOfShards(),
-                    'number_of_replicas' => $configuration->getNumberOfReplicas()
-                ]
-            ]
+                    'number_of_replicas' => $configuration->getNumberOfReplicas(),
+                ],
+            ],
         ]);
     }
 
@@ -156,7 +174,7 @@ class ShopIndexer implements ShopIndexerInterface
 
             $this->client->indices()->putSettings([
                 'index' => $index->getName(),
-                'body'  => $settings
+                'body' => $settings,
             ]);
         }
 
@@ -173,14 +191,14 @@ class ShopIndexer implements ShopIndexerInterface
         foreach ($this->mappings as $mapping) {
             $this->client->indices()->putMapping([
                 'index' => $index->getName(),
-                'type'  => $mapping->getType(),
-                'body'  => $mapping->get($index->getShop())
+                'type' => $mapping->getType(),
+                'body' => $mapping->get($index->getShop()),
             ]);
         }
     }
 
     /**
-     * @param ShopIndex $index
+     * @param ShopIndex               $index
      * @param ProgressHelperInterface $progress
      */
     private function populate(ShopIndex $index, ProgressHelperInterface $progress)
@@ -193,7 +211,7 @@ class ShopIndexer implements ShopIndexerInterface
 
     /**
      * @param ShopIndex $shopIndex
-     * @param int $lastId
+     * @param int       $lastId
      */
     private function applyBacklog(ShopIndex $shopIndex, $lastId)
     {
@@ -219,12 +237,13 @@ class ShopIndexer implements ShopIndexerInterface
 
         if ($exist) {
             $this->switchAlias($configuration);
+
             return;
         }
 
         $this->client->indices()->putAlias([
             'index' => $configuration->getName(),
-            'name'  => $configuration->getAlias()
+            'name' => $configuration->getAlias(),
         ]);
     }
 
@@ -234,7 +253,7 @@ class ShopIndexer implements ShopIndexerInterface
     private function switchAlias(IndexConfiguration $configuration)
     {
         $actions = [
-            ['add' => ['index' => $configuration->getName(), 'alias' => $configuration->getAlias()]]
+            ['add' => ['index' => $configuration->getName(), 'alias' => $configuration->getAlias()]],
         ];
 
         $current = $this->client->indices()->getAlias(['name' => $configuration->getAlias()]);
@@ -244,23 +263,5 @@ class ShopIndexer implements ShopIndexerInterface
             $actions[] = ['remove' => ['index' => $value, 'alias' => $configuration->getAlias()]];
         }
         $this->client->indices()->updateAliases(['body' => ['actions' => $actions]]);
-    }
-
-    /**
-     * Removes unused indices
-     */
-    public function cleanupIndices()
-    {
-        $prefix = $this->indexFactory->getPrefix();
-        $aliases = $this->client->indices()->getAliases();
-        foreach ($aliases as $index => $indexAliases) {
-            if (strpos($index, $prefix) !== 0) {
-                continue;
-            }
-
-            if (empty($indexAliases['aliases'])) {
-                $this->client->indices()->delete(['index' => $index]);
-            }
-        }
     }
 }

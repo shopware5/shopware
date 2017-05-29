@@ -33,22 +33,24 @@ use Shopware\Recovery\Install\Struct\ShopwareEdition;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LocalLicenseUnpackService implements LicenseUnpackService
 {
     /**
-     * @param  LicenseUnpackRequest $request
+     * @param LicenseUnpackRequest $request
+     *
      * @throws LicenseHostException
      * @throws LicenseProductKeyException
      * @throws LicenseInvalidException
+     *
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request)
     {
         $license = $request->licenseKey;
-        $host    = $request->host;
+        $host = $request->host;
 
         $license = str_replace('-------- LICENSE BEGIN ---------', '', $license);
         $license = str_replace('--------- LICENSE END ----------', '', $license);
@@ -57,39 +59,39 @@ class LocalLicenseUnpackService implements LicenseUnpackService
 
         $info = base64_decode($license);
         if ($info === false) {
-            throw new LicenseInvalidException("License key seems to be incorrect");
+            throw new LicenseInvalidException('License key seems to be incorrect');
         }
         $info = @gzinflate($info);
         if ($info === false) {
-            throw new LicenseInvalidException("License key seems to be incorrect");
+            throw new LicenseInvalidException('License key seems to be incorrect');
         }
 
         if (strlen($info) > (512 + 60) || strlen($info) < 100) {
-            throw new LicenseInvalidException("License key seems to be incorrect");
+            throw new LicenseInvalidException('License key seems to be incorrect');
         }
 
-        $hash          = substr($info, 0, 20);
-        $coreLicense   = substr($info, 20, 20);
+        $hash = substr($info, 0, 20);
+        $coreLicense = substr($info, 20, 20);
         $moduleLicense = substr($info, 40, 20);
-        $info          = substr($info, 60);
+        $info = substr($info, 60);
 
         if ($hash !== sha1($coreLicense . $info . $moduleLicense, true)) {
-            throw new LicenseInvalidException("License key seems to be incorrect");
+            throw new LicenseInvalidException('License key seems to be incorrect');
         }
 
         $info = unserialize($info);
         if ($info === false) {
-            throw new LicenseInvalidException("License key seems to be incorrect");
+            throw new LicenseInvalidException('License key seems to be incorrect');
         }
 
         $info['license'] = $license;
 
         if (!$this->isValidProductKey($info['product'])) {
-            throw new LicenseProductKeyException("License key does not match a commercial Shopware edition");
+            throw new LicenseProductKeyException('License key does not match a commercial Shopware edition');
         }
 
         if ($info['host'] != $host) {
-            throw new LicenseHostException(new LicenseInformation($info), "License key is not valid for domain " . $request->host);
+            throw new LicenseHostException(new LicenseInformation($info), 'License key is not valid for domain ' . $request->host);
         }
 
         $info += ['edition' => $info['product']];
@@ -101,6 +103,7 @@ class LocalLicenseUnpackService implements LicenseUnpackService
      * Validates the product key provided in the license
      *
      * @param string $productKey
+     *
      * @return bool
      */
     private function isValidProductKey($productKey)
@@ -109,6 +112,7 @@ class LocalLicenseUnpackService implements LicenseUnpackService
             return false;
         }
         $validKeys = ShopwareEdition::getValidEditions();
+
         return in_array($productKey, $validKeys, true);
     }
 }

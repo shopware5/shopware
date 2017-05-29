@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -16,24 +38,25 @@ use Shopware\Tests\Mink\Helper;
 class CategoryTeaser extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => 'div.emotion--category-teaser'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
         return [
             'name' => '.category-teaser--title',
             'image' => 'style',
-            'link' => '.category-teaser--link'
+            'link' => '.category-teaser--link',
         ];
     }
 
     /**
      * Returns the category name
+     *
      * @return array[]
      */
     public function getNameProperty()
@@ -42,7 +65,7 @@ class CategoryTeaser extends MultipleElement implements \Shopware\Tests\Mink\Hel
 
         $names = [
             $elements['name']->getText(),
-            $elements['link']->getAttribute('title')
+            $elements['link']->getAttribute('title'),
         ];
 
         return Helper::getUnique($names);
@@ -50,21 +73,25 @@ class CategoryTeaser extends MultipleElement implements \Shopware\Tests\Mink\Hel
 
     /**
      * Returns the category image
+     *
      * @return array
      */
     public function getImageProperty()
     {
         $elements = Helper::findElements($this, ['image']);
+
         return $elements['image']->getHtml();
     }
 
     /**
      * Returns the category link
+     *
      * @return array
      */
     public function getLinkProperty()
     {
         $elements = Helper::findElements($this, ['link']);
+
         return $elements['link']->getAttribute('href');
     }
 }

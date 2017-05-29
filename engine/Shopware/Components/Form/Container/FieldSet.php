@@ -28,12 +28,11 @@ use Shopware\Components\Form\Container as BaseContainer;
 
 /**
  * Class FieldSet
- * @package Shopware\Components\Form\Container
  */
 class FieldSet extends BaseContainer
 {
     /**
-     * @var string $label
+     * @var string
      */
     protected $title;
 

@@ -26,10 +26,10 @@ namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PopularitySortingHandler implements HandlerInterface
@@ -39,7 +39,7 @@ class PopularitySortingHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof PopularitySorting);
+        return $criteriaPart instanceof PopularitySorting;
     }
 
     /**
@@ -51,8 +51,7 @@ class PopularitySortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-
-        /** @var PopularitySorting $criteriaPart */
+        /* @var PopularitySorting $criteriaPart */
         $search->addSort(
             new FieldSort('sales', strtolower($criteriaPart->getDirection()))
         );

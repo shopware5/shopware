@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Condition
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductAttributeCondition implements ConditionInterface
@@ -62,9 +62,9 @@ class ProductAttributeCondition implements ConditionInterface
     private $operator;
 
     /**
-     * @param string $field
-     * @param string $operator
-     * @param string|array $value ['min' => 1, 'max' => 10] for between operator
+     * @param string       $field
+     * @param string       $operator
+     * @param string|array $value    ['min' => 1, 'max' => 10] for between operator
      */
     public function __construct($field, $operator, $value)
     {

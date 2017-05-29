@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * 'Shopware' is a registered trademark of shopware AG.
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper;
 class TermHelperTest extends TestCase
 {
     /**
-     * @var TermHelper $termHelper
+     * @var TermHelper
      */
     private $termHelper;
 
@@ -49,6 +49,7 @@ class TermHelperTest extends TestCase
      * tests if the provided string gets divided by words and if all these words are lower case
      *
      * @dataProvider splitTermProvider
+     *
      * @param string $testString
      * @param string $expectedResult
      */
@@ -71,7 +72,7 @@ class TermHelperTest extends TestCase
             ['ABC DEF 123', ['abc', 'def', 123]],
             ['Ä ÖÜ 456', ['ae', 'oeue', 456]],
             ['ӔЁ Љ 789', ['ӕё', 'љ', 789]],
-            ['THIS-is/a?tÉsT:123', ['this', 'is', 'a', 'tést', 123]]
+            ['THIS-is/a?tÉsT:123', ['this', 'is', 'a', 'tést', 123]],
         ];
     }
 }

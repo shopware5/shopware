@@ -31,7 +31,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Plugin
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ResourceSubscriber implements SubscriberInterface
@@ -40,6 +40,14 @@ class ResourceSubscriber implements SubscriberInterface
      * @var string
      */
     private $pluginPath;
+
+    /**
+     * @param string $pluginPath
+     */
+    public function __construct($pluginPath)
+    {
+        $this->pluginPath = $pluginPath;
+    }
 
     /**
      * {@inheritdoc}
@@ -51,14 +59,6 @@ class ResourceSubscriber implements SubscriberInterface
             'Theme_Compiler_Collect_Plugin_Css' => 'onCollectCss',
             'Theme_Compiler_Collect_Plugin_Javascript' => 'onCollectJavascript',
         ];
-    }
-
-    /**
-     * @param string $pluginPath
-     */
-    public function __construct($pluginPath)
-    {
-        $this->pluginPath = $pluginPath;
     }
 
     /**
@@ -88,7 +88,7 @@ class ResourceSubscriber implements SubscriberInterface
      */
     public function onCollectLess()
     {
-        $file = $this->pluginPath . '/Resources/frontend/less/all.less' ;
+        $file = $this->pluginPath . '/Resources/frontend/less/all.less';
         if (!is_file($file)) {
             return null;
         }
@@ -101,7 +101,8 @@ class ResourceSubscriber implements SubscriberInterface
 
     /**
      * @param string $baseDir resource basedirectory
-     * @param string $type `css` or `js`
+     * @param string $type    `css` or `js`
+     *
      * @return string[]
      */
     private function collectResourceFiles($baseDir, $type)

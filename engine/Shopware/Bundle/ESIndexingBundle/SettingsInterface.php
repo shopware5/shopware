@@ -30,6 +30,7 @@ interface SettingsInterface
 {
     /**
      * @param Shop $shop
+     *
      * @return array|null
      */
     public function get(Shop $shop);

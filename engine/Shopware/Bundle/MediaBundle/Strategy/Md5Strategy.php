@@ -26,7 +26,6 @@ namespace Shopware\Bundle\MediaBundle\Strategy;
 
 /**
  * Class Md5Strategy
- * @package Shopware\Bundle\MediaBundle\Strategy
  */
 class Md5Strategy implements StrategyInterface
 {
@@ -34,7 +33,7 @@ class Md5Strategy implements StrategyInterface
      * @var array
      */
     private $blacklist = [
-        '/ad/' => '/g0/'
+        '/ad/' => '/g0/',
     ];
 
     /**
@@ -43,13 +42,13 @@ class Md5Strategy implements StrategyInterface
     public function normalize($path)
     {
         // remove filesystem directories
-        $path = str_replace("//", "/", $path);
+        $path = str_replace('//', '/', $path);
 
         // remove everything before /media/...
-        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/", $path, $matches);
+        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/", $path, $matches);
 
         if (!empty($matches)) {
-            return $matches[2] . "/" .$matches[3];
+            return $matches[2] . '/' . $matches[3];
         }
 
         return $path;
@@ -66,17 +65,17 @@ class Md5Strategy implements StrategyInterface
 
         $path = $this->normalize($path);
 
-        $path = ltrim($path, "/");
-        $pathElements = explode("/", $path);
+        $path = ltrim($path, '/');
+        $pathElements = explode('/', $path);
         $pathInfo = pathinfo($path);
         $md5hash = md5($path);
 
         if (empty($pathInfo['extension'])) {
-            return "";
+            return '';
         }
 
         $realPath = array_slice(str_split($md5hash, 2), 0, 3);
-        $realPath = $pathElements[0] . "/" . $pathElements[1] . "/" . join("/", $realPath) . "/" . $pathInfo['basename'];
+        $realPath = $pathElements[0] . '/' . $pathElements[1] . '/' . join('/', $realPath) . '/' . $pathInfo['basename'];
 
         if (!$this->hasBlacklistParts($realPath)) {
             return $realPath;
@@ -90,7 +89,20 @@ class Md5Strategy implements StrategyInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isEncoded($path)
+    {
+        if ($this->hasBlacklistParts($path)) {
+            return false;
+        }
+
+        return (bool) preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?\/(?:([0-9a-g]{2}\/[0-9a-g]{2}\/[0-9a-g]{2}\/))((.+)\.(.+)))/", $path);
+    }
+
+    /**
      * @param string $path
+     *
      * @return bool
      */
     private function hasBlacklistParts($path)
@@ -100,27 +112,18 @@ class Md5Strategy implements StrategyInterface
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function isEncoded($path)
-    {
-        if ($this->hasBlacklistParts($path)) {
-            return false;
-        }
-        return (bool)preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/(?:([0-9a-g]{2}\/[0-9a-g]{2}\/[0-9a-g]{2}\/))((.+)\.(.+)))/", $path);
-    }
-
-    /**
      * @param string $path
+     *
      * @return null|string
      */
     private function substringPath($path)
     {
-        preg_match("/(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/.*)/", $path, $matches);
+        preg_match("/(media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?\/.*)/", $path, $matches);
 
         return empty($matches) ? null : $matches[0];
     }

@@ -28,8 +28,6 @@ namespace ShopwarePlugin\PaymentMethods\Components;
  * Abstract class BasePaymentMethod
  * All PaymentMethod implementations should extend this class.
  * Current methods are legacy, more may be added in the future.
- *
- * @package ShopwarePlugin\PaymentMethods\Components
  */
 abstract class BasePaymentMethod
 {
@@ -37,6 +35,7 @@ abstract class BasePaymentMethod
      * Validates the input received from the client
      *
      * @param array $paymentData
+     *
      * @return array List of fields containing errors
      */
     abstract public function validate($paymentData);
@@ -46,9 +45,8 @@ abstract class BasePaymentMethod
      * Creates/updates the payment information for the current
      * method.
      *
-     * @param int $userId The user id
+     * @param int                                 $userId  The user id
      * @param \Enlight_Controller_Request_Request $request The Request object
-     * @return null
      */
     abstract public function savePaymentData($userId, \Enlight_Controller_Request_Request $request);
 
@@ -57,6 +55,7 @@ abstract class BasePaymentMethod
      * payment method as array
      *
      * @param int $userId The user id
+     *
      * @return array|null
      */
     abstract public function getCurrentPaymentDataAsArray($userId);
@@ -65,9 +64,10 @@ abstract class BasePaymentMethod
      * Creates the Payment Instance for the given order
      * based on the current Payment Method policy.
      *
-     * @param int $orderId The Order Id associated with the current payment
-     * @param int $userId The User/Customer Id associated with the current payment
+     * @param int $orderId   The Order Id associated with the current payment
+     * @param int $userId    The User/Customer Id associated with the current payment
      * @param int $paymentId The Payment Method Id associated with the current payment
+     *
      * @return true|null
      */
     abstract public function createPaymentInstance($orderId, $userId, $paymentId);

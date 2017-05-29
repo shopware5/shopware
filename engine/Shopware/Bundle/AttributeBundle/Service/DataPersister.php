@@ -31,7 +31,7 @@ use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class DataPersister
@@ -53,9 +53,10 @@ class DataPersister
 
     /**
      * DataPersister constructor.
-     * @param Connection $connection
+     *
+     * @param Connection   $connection
      * @param TableMapping $mapping
-     * @param DataLoader $dataLoader
+     * @param DataLoader   $dataLoader
      */
     public function __construct(Connection $connection, TableMapping $mapping, DataLoader $dataLoader)
     {
@@ -68,18 +69,19 @@ class DataPersister
      * Persists the provided data into the provided attribute table.
      * Only attribute tables supported.
      *
-     * @param string $table
-     * @param array $data
+     * @param string     $table
+     * @param array      $data
      * @param int|string $foreignKey
+     *
      * @throws \Exception
      */
     public function persist($data, $table, $foreignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf("Table %s is no attribute table", $table));
+            throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$foreignKey) {
-            throw new \Exception(sprintf("No foreign key provided"));
+            throw new \Exception(sprintf('No foreign key provided'));
         }
         $data = $this->filter($table, $data);
 
@@ -94,17 +96,18 @@ class DataPersister
 
     /**
      * @param string $table
-     * @param int $sourceForeignKey
-     * @param int $targetForeignKey
+     * @param int    $sourceForeignKey
+     * @param int    $targetForeignKey
+     *
      * @throws \Exception
      */
     public function cloneAttribute($table, $sourceForeignKey, $targetForeignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf("Table %s is no attribute table", $table));
+            throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception(sprintf("No foreign key provided"));
+            throw new \Exception(sprintf('No foreign key provided'));
         }
         $data = $this->dataLoader->load($table, $sourceForeignKey);
 
@@ -119,17 +122,18 @@ class DataPersister
 
     /**
      * @param string $table
-     * @param int $sourceForeignKey
-     * @param int $targetForeignKey
+     * @param int    $sourceForeignKey
+     * @param int    $targetForeignKey
+     *
      * @throws \Exception
      */
     public function cloneAttributeTranslations($table, $sourceForeignKey, $targetForeignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf("Table %s is no attribute table", $table));
+            throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception(sprintf("No foreign key provided"));
+            throw new \Exception(sprintf('No foreign key provided'));
         }
 
         $translations = $this->dataLoader->loadTranslations($table, $sourceForeignKey);
@@ -141,7 +145,7 @@ class DataPersister
 
     /**
      * @param array $translation
-     * @param int $foreignKey
+     * @param int   $foreignKey
      */
     private function saveTranslation($translation, $foreignKey)
     {
@@ -155,13 +159,13 @@ class DataPersister
             $query->setValue($key, ':' . $key);
             $query->setParameter(':' . $key, $value);
         }
-        
+
         $query->execute();
     }
 
     /**
-     * @param string $table
-     * @param array $data
+     * @param string     $table
+     * @param array      $data
      * @param int|string $foreignKey
      */
     private function create($table, $data, $foreignKey)
@@ -180,8 +184,9 @@ class DataPersister
 
     /**
      * Updates an existing attribute
-     * @param string $table
-     * @param array $data
+     *
+     * @param string     $table
+     * @param array      $data
      * @param int|string $foreignKey
      */
     private function update($table, $data, $foreignKey)
@@ -200,9 +205,11 @@ class DataPersister
 
     /**
      * @param string $table
-     * @param array $data
-     * @return array
+     * @param array  $data
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     private function filter($table, $data)
     {
@@ -231,10 +238,11 @@ class DataPersister
 
     /**
      * @param Column $column
+     *
      * @return bool
      */
     private function isDateColumn(Column $column)
     {
-        return ($column->getType() instanceof DateStringType || $column->getType() instanceof DateTimeStringType);
+        return $column->getType() instanceof DateStringType || $column->getType() instanceof DateTimeStringType;
     }
 }

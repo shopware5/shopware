@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\MediaBundle\Strategy;
 
@@ -20,13 +42,13 @@ class Md5StrategyTest extends TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object $object    Instantiated object that we will run method on.
+     * @param object $object     instantiated object that we will run method on
      * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
+     * @param array  $parameters array of parameters to pass into method
      *
-     * @return mixed Method return.
+     * @return mixed method return
      */
-    public function invokeMethod($object, $methodName, array $parameters = array())
+    public function invokeMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -70,7 +92,7 @@ class Md5StrategyTest extends TestCase
         return [
             ['media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg'],
             ['http://shop.internal/media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg'],
-            ['media/media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg']
+            ['media/media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg'],
         ];
     }
 
@@ -88,6 +110,7 @@ class Md5StrategyTest extends TestCase
 
     /**
      * @dataProvider getNormalizedData
+     *
      * @param string $path
      * @param string $expected
      */
@@ -117,11 +140,12 @@ class Md5StrategyTest extends TestCase
 
     /**
      * @dataProvider getInvalidPathsToEncode
+     *
      * @param string $path
      */
     public function testEncodingWithInvalidPaths($path)
     {
-        $this->assertEquals("", $this->strategy->encode($path));
+        $this->assertEquals('', $this->strategy->encode($path));
     }
 
     public function testEncodingBlacklist()
@@ -131,6 +155,7 @@ class Md5StrategyTest extends TestCase
 
     /**
      * @dataProvider getSubstringPathDataSet
+     *
      * @param string $path
      * @param string $expectedPath
      */
@@ -141,6 +166,7 @@ class Md5StrategyTest extends TestCase
 
     /**
      * @dataProvider getEncodeDataSet
+     *
      * @param string $path
      * @param string $expectedPath
      */

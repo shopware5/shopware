@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Property;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Article Model
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Relation extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -47,7 +47,7 @@ class Relation extends ModelEntity
     /**
      * The resource property is the owning side of the association between relation and group.
      *
-     * @var $group \Shopware\Models\Property\Group
+     * @var \Shopware\Models\Property\Group
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Property\Group", inversedBy="relations")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id", nullable=true)
      */
@@ -55,28 +55,29 @@ class Relation extends ModelEntity
 
     /**
      * @ORM\Column(name="groupID", type="integer", nullable=true)
-     * @var int $groupId
+     *
+     * @var int
      */
     private $groupId;
 
     /**
      * The resource property is the owning side of the association between relation and option.
      *
-     * @var $group \Shopware\Models\Property\Option
+     * @var \Shopware\Models\Property\Option
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Property\Option", inversedBy="relations")
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id", nullable=true)
      */
     private $option;
 
-
     /**
      * @ORM\Column(name="optionID", type="integer", nullable=true)
-     * @var int $optionId
+     *
+     * @var int
      */
     private $optionId;
 
     /**
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -85,7 +86,7 @@ class Relation extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

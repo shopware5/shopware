@@ -36,7 +36,7 @@ use Symfony\Component\DependencyInjection\Container;
  * CategorySubscriber
  *
  * @category  Shopware
- * @package   Shopware\Components\Model
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategorySubscriber implements BaseEventSubscriber
@@ -54,17 +54,17 @@ class CategorySubscriber implements BaseEventSubscriber
     /**
      * @var array
      */
-    protected $pendingAddAssignments = array();
+    protected $pendingAddAssignments = [];
 
     /**
      * @var array
      */
-    protected $pendingRemoveAssignments = array();
+    protected $pendingRemoveAssignments = [];
 
     /**
      * @var array
      */
-    protected $pendingMoves = array();
+    protected $pendingMoves = [];
 
     /**
      * @var bool
@@ -105,50 +105,16 @@ class CategorySubscriber implements BaseEventSubscriber
     }
 
     /**
-     * @param Article  $article
-     * @param Category $category
-     */
-    protected function addPendingAddAssignment(Article $article, Category $category)
-    {
-        $this->pendingAddAssignments[$category->getId() . '_' . $article->getId()] = array(
-            'category' => $category,
-            'article'  => $article
-        );
-    }
-
-    /**
-     * @param Article  $article
-     * @param Category $category
-     */
-    protected function addPendingRemoveAssignment(Article $article, Category $category)
-    {
-        $this->pendingRemoveAssignments[$category->getId() . '_' . $article->getId()] = array(
-            'category' => $category,
-            'article'  => $article
-        );
-    }
-
-    /**
-     * @param Category $category
-     */
-    protected function addPendingMove(Category $category)
-    {
-        $this->pendingMoves[$category->getId()] = array(
-            'category' => $category,
-        );
-    }
-
-    /**
      * Returns an array of events this subscriber wants to listen to.
      *
      * @return array
      */
     public function getSubscribedEvents()
     {
-        return array(Events::onFlush, Events::postFlush);
+        return [Events::onFlush, Events::postFlush];
     }
 
-     /**
+    /**
      * @param OnFlushEventArgs $eventArgs
      */
     public function onFlush(OnFlushEventArgs $eventArgs)
@@ -158,13 +124,13 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         /** @var $em ModelManager */
-        $em  = $eventArgs->getEntityManager();
+        $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
         $this->em = $em;
 
-        $this->pendingAddAssignments = array();
-        $this->pendingRemoveAssignments = array();
+        $this->pendingAddAssignments = [];
+        $this->pendingRemoveAssignments = [];
 
         // Entity deletions
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
@@ -181,7 +147,6 @@ class CategorySubscriber implements BaseEventSubscriber
 
         // Entity Insertions
         foreach ($uow->getScheduledEntityInsertions() as $category) {
-
             /* @var $category Category */
             if (!($category instanceof Category)) {
                 continue;
@@ -195,7 +160,6 @@ class CategorySubscriber implements BaseEventSubscriber
 
         // Entity updates
         foreach ($uow->getScheduledEntityUpdates() as $category) {
-
             /* @var $category Category */
             if (!($category instanceof Category)) {
                 continue;
@@ -292,10 +256,11 @@ class CategorySubscriber implements BaseEventSubscriber
     /**
      * @param PostFlushEventArgs $eventArgs
      */
-    public function postFlush(/** @noinspection PhpUnusedParameterInspection */ PostFlushEventArgs $eventArgs)
+    public function postFlush(/* @noinspection PhpUnusedParameterInspection */ PostFlushEventArgs $eventArgs)
     {
         if ($this->disabledForNextFlush) {
             $this->disabledForNextFlush = false;
+
             return;
         }
 
@@ -311,7 +276,7 @@ class CategorySubscriber implements BaseEventSubscriber
             /** @var $category Category */
             $category = $pendingRemove['category'];
             /** @var $article Article */
-            $article  = $pendingRemove['article'];
+            $article = $pendingRemove['article'];
 
             $this->backlogRemoveAssignment($article->getId(), $category->getId());
         }
@@ -320,7 +285,7 @@ class CategorySubscriber implements BaseEventSubscriber
             /** @var $category Category */
             $category = $pendingAdd['category'];
             /** @var $article Article */
-            $article  = $pendingAdd['article'];
+            $article = $pendingAdd['article'];
 
             $this->backlogAddAssignment($article->getId(), $category->getId());
         }
@@ -336,6 +301,7 @@ class CategorySubscriber implements BaseEventSubscriber
      * Sets the internal path field for given category based on it's parents
      *
      * @param Category $category
+     *
      * @return Category
      */
     public function setPathForCategory(Category $category)
@@ -400,5 +366,39 @@ class CategorySubscriber implements BaseEventSubscriber
         $component->rebuildCategoryPath($categoryId);
         $component->removeOldAssignments($categoryId);
         $component->rebuildAssignments($categoryId);
+    }
+
+    /**
+     * @param Article  $article
+     * @param Category $category
+     */
+    protected function addPendingAddAssignment(Article $article, Category $category)
+    {
+        $this->pendingAddAssignments[$category->getId() . '_' . $article->getId()] = [
+            'category' => $category,
+            'article' => $article,
+        ];
+    }
+
+    /**
+     * @param Article  $article
+     * @param Category $category
+     */
+    protected function addPendingRemoveAssignment(Article $article, Category $category)
+    {
+        $this->pendingRemoveAssignments[$category->getId() . '_' . $article->getId()] = [
+            'category' => $category,
+            'article' => $article,
+        ];
+    }
+
+    /**
+     * @param Category $category
+     */
+    protected function addPendingMove(Category $category)
+    {
+        $this->pendingMoves[$category->getId()] = [
+            'category' => $category,
+        ];
     }
 }

@@ -31,12 +31,12 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
 {
     public function invalidAction()
     {
-        $this->View()->assign(array('success' => false, 'message' => 'Invalid method or invalid json string.'));
+        $this->View()->assign(['success' => false, 'message' => 'Invalid method or invalid json string.']);
     }
 
     public function noAuthAction()
     {
-        $this->View()->assign(array('success' => false, 'message' => 'Invalid or missing auth'));
+        $this->View()->assign(['success' => false, 'message' => 'Invalid or missing auth']);
     }
 
     /**
@@ -46,16 +46,16 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
     {
         $error = $this->Request()->getParam('error_handler');
 
-        /** @var \Exception $exception  */
+        /** @var \Exception $exception */
         $exception = $error->exception;
 
         if ($exception instanceof Enlight_Controller_Exception) {
             $this->Response()->setHttpResponseCode(404);
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => 'Resource not found'
-            ));
+                'message' => 'Resource not found',
+            ]);
 
             return;
         }
@@ -63,10 +63,10 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         if ($exception instanceof ApiException\PrivilegeException) {
             $this->Response()->setHttpResponseCode(403);
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $exception->getMessage()
-            ));
+                'message' => $exception->getMessage(),
+            ]);
 
             return;
         }
@@ -74,10 +74,10 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         if ($exception instanceof ApiException\NotFoundException) {
             $this->Response()->setHttpResponseCode(404);
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $exception->getMessage()
-            ));
+                'message' => $exception->getMessage(),
+            ]);
 
             return;
         }
@@ -86,17 +86,17 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
             $this->Response()->setHttpResponseCode(400);
 
             if ($exception->getMissingParam() === null) {
-                $this->View()->assign(array(
+                $this->View()->assign([
                    'success' => false,
-                   'code'    => 400,
-                   'message' => 'A required parameter is missing'
-                ));
+                   'code' => 400,
+                   'message' => 'A required parameter is missing',
+                ]);
             } else {
-                $this->View()->assign(array(
+                $this->View()->assign([
                    'success' => false,
-                   'code'    => 400,
-                   'message' => sprintf('A required parameter is missing: %s', $exception->getMissingParam())
-                ));
+                   'code' => 400,
+                   'message' => sprintf('A required parameter is missing: %s', $exception->getMissingParam()),
+                ]);
             }
 
             return;
@@ -105,19 +105,19 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         if ($exception instanceof ApiException\CustomValidationException) {
             $this->Response()->setHttpResponseCode(400);
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $exception->getMessage()
-            ));
+                'message' => $exception->getMessage(),
+            ]);
 
             return;
         }
 
         if ($exception instanceof ApiException\ValidationException) {
-            /** @var \Shopware\Components\Api\Exception\ValidationException $exception */
+            /* @var \Shopware\Components\Api\Exception\ValidationException $exception */
             $this->Response()->setHttpResponseCode(400);
 
-            $errors = array();
+            $errors = [];
             /** @var \Symfony\Component\Validator\ConstraintViolation $violation */
             foreach ($exception->getViolations() as $violation) {
                 $errors[] = sprintf(
@@ -127,32 +127,27 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
                 );
             }
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
                 'message' => 'Validation error',
-                'errors'  => $errors,
-            ));
+                'errors' => $errors,
+            ]);
 
             return;
         }
 
         if ($exception instanceof ApiException\BatchInterfaceNotImplementedException) {
             $this->Response()->setHttpResponseCode(405);
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'code'    => 405,
-                'message' => 'This resource has no support for batch operations.'
-            ));
+                'code' => 405,
+                'message' => 'This resource has no support for batch operations.',
+            ]);
 
             return;
         }
 
         $this->Response()->setHttpResponseCode(500);
-        $debug = true;
-        if ($debug) {
-            $this->View()->assign(array('success' => false, 'message' => 'Errormesage: ' . $exception->getMessage()));
-        } else {
-            $this->View()->assign(array('success' => false, 'message' => 'Unknown Error'));
-        }
+        $this->View()->assign(['success' => false, 'message' => 'Error message: ' . $exception->getMessage()]);
     }
 }

@@ -39,7 +39,7 @@ class CloseoutConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof CloseoutCondition);
+        return $criteriaPart instanceof CloseoutCondition;
     }
 
     /**

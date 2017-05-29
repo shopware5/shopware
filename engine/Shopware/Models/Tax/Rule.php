@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Tax;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * The Shopware Model represents the Taxes.
@@ -47,7 +47,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Rule extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -56,62 +56,62 @@ class Rule extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $tax
+     * @var string
      *
      * @ORM\Column(name="tax", type="float", nullable=false)
      */
     private $tax = 0;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active = false;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="areaID", type="integer", nullable=true)
      */
     private $areaId = null;
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="countryID", type="integer", nullable=true)
      */
     private $countryId = null;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
     private $stateId = null;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="groupID", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="customer_groupID", type="integer", nullable=false)
      */
     private $customerGroupId;
 
     /**
-     * The area property is the owning side of the association between tax rul and area.
+     * The area property is the owning side of the association between tax rule and area.
      * The association is joined over the tax rule areaID field and the id field of the area.
      *
      * @var \Shopware\Models\Country\Area
@@ -121,7 +121,7 @@ class Rule extends ModelEntity
     private $area;
 
     /**
-     * The country property is the owning side of the association between tax rul and country.
+     * The country property is the owning side of the association between tax rule and country.
      * The association is joined over the tax rule countryID field and the id field of the country.
      *
      * @var \Shopware\Models\Country\Country
@@ -131,7 +131,7 @@ class Rule extends ModelEntity
     private $country;
 
     /**
-     * The state property is the owning side of the association between tax rul and state.
+     * The state property is the owning side of the association between tax rule and state.
      * The association is joined over the tax rule stateID field and the id field of the state.
      *
      * @var \Shopware\Models\Country\State
@@ -141,7 +141,7 @@ class Rule extends ModelEntity
     private $state;
 
     /**
-     * The group property is the owning side of the association between tax rul and group.
+     * The group property is the owning side of the association between tax rule and group.
      * The association is joined over the tax rule groupID field and the id field of the group.
      *
      * @var \Shopware\Models\Tax\Tax
@@ -151,7 +151,7 @@ class Rule extends ModelEntity
     private $group;
 
     /**
-     * @var \Shopware\Models\Customer\Group $customerGroup
+     * @var \Shopware\Models\Customer\Group
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_groupID", referencedColumnName="id")
      */
@@ -160,7 +160,7 @@ class Rule extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -184,7 +184,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -192,7 +192,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {

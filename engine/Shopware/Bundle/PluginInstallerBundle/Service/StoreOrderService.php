@@ -32,7 +32,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
 /**
  * Class StoreOrderService
- * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
 class StoreOrderService
 {
@@ -47,7 +46,7 @@ class StoreOrderService
     private $hydrator;
 
     /**
-     * @param StoreClient $storeClient
+     * @param StoreClient    $storeClient
      * @param StructHydrator $hydrator
      */
     public function __construct(
@@ -60,7 +59,8 @@ class StoreOrderService
 
     /**
      * @param AccessTokenStruct $token
-     * @param OrderRequest $context
+     * @param OrderRequest      $context
+     *
      * @return BasketStruct
      */
     public function getCheckout(
@@ -79,9 +79,9 @@ class StoreOrderService
                     'priceModel' => [
                         'price' => $context->getPrice(),
                         'type' => $context->getPriceType(),
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         $response = $this->storeClient->doAuthPostRequest(
@@ -98,8 +98,10 @@ class StoreOrderService
 
     /**
      * @param AccessTokenStruct $accessToken
-     * @param OrderRequest $context
+     * @param OrderRequest      $context
+     *
      * @throws \Exception
+     *
      * @return bool
      */
     public function orderPlugin(
@@ -117,10 +119,10 @@ class StoreOrderService
                     'isArticle' => true,
                     'priceModel' => [
                         'type' => $context->getPriceType(),
-                        'price' => $context->getPrice()
-                    ]
-                ]
-            ]
+                        'price' => $context->getPrice(),
+                    ],
+                ],
+            ],
         ];
 
         $response = $this->storeClient->doAuthPostRequestRaw(

@@ -24,66 +24,21 @@
 
 namespace   Shopware\Models\Country;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Entity
  * @ORM\Table(name="s_core_countries_states")
  */
 class State extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $countryId
-     *
-     * @ORM\Column(name="countryID", type="integer", nullable=true)
-     */
-    private $countryId;
-
-    /**
-     * @var integer $position
-     *
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     */
-    private $position = null;
-
-    /**
-     * @var string $name
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    private $name = null;
-
-    /**
-     * @var string $shortCode
-     *
-     * @ORM\Column(name="shortcode", type="string", length=255, nullable=true)
-     */
-    private $shortCode = null;
-
-    /**
-     * @var integer $active
-     *
-     * @ORM\Column(name="active", type="integer", nullable=true)
-     */
-    private $active = null;
-
-    /**
      * OWNING SIDE
      * The countries property is the owning side of the association between area and countries.
      * The association is joined over the countryID field and the id field of the country.
      *
-     * @var \Shopware\Models\Country\Country $country
+     * @var \Shopware\Models\Country\Country
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country", inversedBy="states", cascade={"persist"})
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
@@ -92,15 +47,60 @@ class State extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CountryState", mappedBy="countryState", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\CountryState
      */
     protected $attribute;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="countryID", type="integer", nullable=true)
+     */
+    private $countryId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", nullable=true)
+     */
+    private $position = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shortcode", type="string", length=255, nullable=true)
+     */
+    private $shortCode = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="active", type="integer", nullable=true)
+     */
+    private $active = null;
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -111,11 +111,13 @@ class State extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Country
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -133,11 +135,13 @@ class State extends ModelEntity
      * Set shortCode
      *
      * @param string $shortCode
+     *
      * @return Country
      */
     public function setShortCode($shortCode)
     {
         $this->shortCode = $shortCode;
+
         return $this;
     }
 
@@ -154,19 +158,21 @@ class State extends ModelEntity
     /**
      * Set active
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return Country
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -192,6 +198,7 @@ class State extends ModelEntity
     /**
      * OWNING SIDE
      * of the association between states and country
+     *
      * @return \Shopware\Models\Country\Country
      */
     public function getCountry()
@@ -201,11 +208,13 @@ class State extends ModelEntity
 
     /**
      * @param \Shopware\Models\Country\Country|array|null $country
+     *
      * @return \Shopware\Models\Country\State
      */
     public function setCountry($country)
     {
         $this->country = $country;
+
         return $this;
     }
 
@@ -219,6 +228,7 @@ class State extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\CountryState|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\CountryState
      */
     public function setAttribute($attribute)

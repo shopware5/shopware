@@ -26,7 +26,7 @@
  * Shopware System Plugin
  *
  * @category  Shopware
- * @package   Shopware\Plugins\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -50,6 +50,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             'Enlight_Controller_Front_DispatchLoopShutdown',
             'onDispatchLoopShutdown'
         );
+
         return true;
     }
 
@@ -81,6 +82,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      * Event listener method
      *
      * @param Enlight_Event_EventArgs $args
+     *
      * @return \sSystem
      */
     public function onInitResourceSystem(Enlight_Event_EventArgs $args)
@@ -121,10 +123,10 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             if (!empty(Shopware()->Session()->sUserGroup)
                     && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
                 $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
-                $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow("
+                $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow('
                     SELECT * FROM s_core_customergroups
                     WHERE groupkey = ?
-                ", array($system->sUSERGROUP));
+                ', [$system->sUSERGROUP]);
             }
             if (empty($system->sUSERGROUPDATA['tax']) && !empty($system->sUSERGROUPDATA['id'])) {
                 $config['sARTICLESOUTPUTNETTO'] = 1; //Old template
@@ -153,6 +155,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      * Event listener method
      *
      * @param Enlight_Event_EventArgs $args
+     *
      * @return \Shopware_Components_Modules
      */
     public static function onInitResourceModules(Enlight_Event_EventArgs $args)
@@ -169,10 +172,10 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => false,
-            'update' => true
-        );
+            'update' => true,
+        ];
     }
 }

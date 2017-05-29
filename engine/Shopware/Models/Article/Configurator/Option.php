@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Article\Configurator;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -36,7 +35,36 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Option extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="configuratorOptions")
+     * @ORM\JoinTable(name="s_article_configurator_option_relations",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *      }
+     * )
+     *
+     * @var ArrayCollection
+     */
+    protected $articles;
+
+    /**
+     * @var \Shopware\Models\Article\Configurator\Set
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="options")
+     */
+    protected $sets;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorOption", mappedBy="configuratorOption", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ConfiguratorOption
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,7 +73,7 @@ class Option extends ModelEntity
     private $id;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
     private $groupId = null;
@@ -57,7 +85,7 @@ class Option extends ModelEntity
     private $name;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
@@ -80,33 +108,6 @@ class Option extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="childOption", orphanRemoval=true)
      */
     private $dependencyChildren;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="configuratorOptions")
-     * @ORM\JoinTable(name="s_article_configurator_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
-     * )
-     * @var ArrayCollection
-     */
-    protected $articles;
-
-    /**
-     * @var \Shopware\Models\Article\Configurator\Set
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="options")
-     */
-    protected $sets;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorOption", mappedBy="configuratorOption", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\ConfiguratorOption
-     */
-    protected $attribute;
 
     /**
      * Class constructor, initials the array collections for the associations.
@@ -215,6 +216,7 @@ class Option extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ConfiguratorOption|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ConfiguratorOption
      */
     public function setAttribute($attribute)

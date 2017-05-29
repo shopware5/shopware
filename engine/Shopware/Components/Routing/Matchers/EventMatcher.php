@@ -24,14 +24,14 @@
 
 namespace Shopware\Components\Routing\Matchers;
 
-use Shopware\Components\Routing\MatcherInterface;
-use Shopware\Components\Routing\Context;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Event_EventManager as EnlightEventManager;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\MatcherInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EventMatcher implements MatcherInterface
@@ -68,9 +68,10 @@ class EventMatcher implements MatcherInterface
         $event = $this->eventManager->notifyUntil('Enlight_Controller_Router_Route', [
             //'subject' => $router, @deprecated someone need it?
             'request' => $request,
-            'context' => $context
+            'context' => $context,
         ]
         );
+
         return $event !== null ? $event->getReturn() : false;
     }
 }

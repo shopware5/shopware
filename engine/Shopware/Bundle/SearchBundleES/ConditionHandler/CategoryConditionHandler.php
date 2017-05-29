@@ -26,10 +26,10 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CategoryConditionHandler implements HandlerInterface
@@ -39,7 +39,7 @@ class CategoryConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof CategoryCondition);
+        return $criteriaPart instanceof CategoryCondition;
     }
 
     /**

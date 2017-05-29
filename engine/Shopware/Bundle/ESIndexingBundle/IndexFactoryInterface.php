@@ -30,18 +30,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * Class IndexFactory
- * @package Shopware\Bundle\ESIndexingBundle
  */
 interface IndexFactoryInterface
 {
     /**
      * @param Shop $shop
+     *
      * @return IndexConfiguration
      */
     public function createIndexConfiguration(Shop $shop);
 
     /**
      * @param Shop $shop
+     *
      * @return ShopIndex
      */
     public function createShopIndex(Shop $shop);

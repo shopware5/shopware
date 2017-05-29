@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -15,12 +37,12 @@ use Shopware\Tests\Mink\Helper;
 class AccountOrder extends MultipleElement
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => '.order--item'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -34,12 +56,12 @@ class AccountOrder extends MultipleElement
             'currentPrice' => '.order--current-price',
             'quantity' => '.order--quantity > .column--value',
             'price' => '.order--price > .column--value',
-            'sum' => '.order--amount > .column--value'
+            'sum' => '.order--amount > .column--value',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDateProperty()
     {
@@ -47,7 +69,7 @@ class AccountOrder extends MultipleElement
 
         $dates = [
             'orderDate' => $elements['date']->getText(),
-            'footerDate' => $elements['footerDate']->getText()
+            'footerDate' => $elements['footerDate']->getText(),
         ];
 
         return Helper::getUnique($dates);
@@ -55,6 +77,7 @@ class AccountOrder extends MultipleElement
 
     /**
      * Returns the order number
+     *
      * @return string
      */
     public function getNumberProperty()
@@ -63,7 +86,7 @@ class AccountOrder extends MultipleElement
 
         $numbers = [
             'orderNumber' => $elements['number']->getText(),
-            'footerNumber' => $elements['footerNumber']->getText()
+            'footerNumber' => $elements['footerNumber']->getText(),
         ];
 
         return Helper::getUnique($numbers);
@@ -71,7 +94,9 @@ class AccountOrder extends MultipleElement
 
     /**
      * Returns the order positions
+     *
      * @param string[] $locators
+     *
      * @return array[]
      */
     public function getPositions($locators = ['product', 'currentPrice', 'quantity', 'price', 'sum'])
@@ -90,8 +115,10 @@ class AccountOrder extends MultipleElement
 
     /**
      * Helper function returns the data of an order position
+     *
      * @param NodeElement $position
-     * @param string[] $selectors
+     * @param string[]    $selectors
+     *
      * @return array
      */
     private function getOrderPositionData(NodeElement $position, array $selectors)

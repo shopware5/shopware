@@ -21,13 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Shop\Template;
-use Shopware\Models\Shop\TemplateConfig;
 
 /**
  * @ORM\Table(name="s_core_templates_config_elements")
@@ -36,21 +36,6 @@ use Shopware\Models\Shop\TemplateConfig;
 class Element extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var
-     * @ORM\Column(name="template_id", type="integer", nullable=false)
-     */
-    private $templateId;
-
-    /**
      * @var Template
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Template", inversedBy="elements")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
@@ -58,7 +43,7 @@ class Element extends ModelEntity
     protected $template;
 
     /**
-     * @var ArrayCollection $values
+     * @var ArrayCollection
      * @ORM\OneToMany(
      *      targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
      *      mappedBy="element",
@@ -140,7 +125,20 @@ class Element extends ModelEntity
      * @ORM\Column(name="container_id", type="integer", nullable=false)
      */
     protected $containerId;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
+    /**
+     * @var
+     * @ORM\Column(name="template_id", type="integer", nullable=false)
+     */
+    private $templateId;
 
     public function __construct()
     {
@@ -261,6 +259,7 @@ class Element extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $values
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setValues($values)
@@ -315,15 +314,15 @@ class Element extends ModelEntity
      */
     public function toArray()
     {
-        return array(
+        return [
             'name' => $this->name,
             'type' => $this->type,
             'fieldLabel' => $this->fieldLabel,
             'defaultValue' => $this->defaultValue,
             'allowBlank' => $this->allowBlank,
             'position' => $this->position,
-            'selection' => $this->selection
-        );
+            'selection' => $this->selection,
+        ];
     }
 
     /**
@@ -375,7 +374,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isLessCompatible()
     {
@@ -383,7 +382,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param boolean $lessCompatible
+     * @param bool $lessCompatible
      */
     public function setLessCompatible($lessCompatible)
     {

@@ -42,6 +42,7 @@ class Shopware_Components_Benchmark_Point
         $this->label = $label;
         $this->start = microtime(true);
         $this->start_ram = memory_get_peak_usage(true);
+
         return $this;
     }
 

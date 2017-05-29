@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\FacetResult
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaListFacetResult extends Extendable implements FacetResultInterface
@@ -66,13 +66,13 @@ class MediaListFacetResult extends Extendable implements FacetResultInterface
     private $template = null;
 
     /**
-     * @param string $facetName
-     * @param boolean $active
-     * @param string $label
+     * @param string          $facetName
+     * @param bool            $active
+     * @param string          $label
      * @param MediaListItem[] $values
-     * @param string $fieldName
-     * @param string|null $template
-     * @param Attribute[] $attributes
+     * @param string          $fieldName
+     * @param string|null     $template
+     * @param Attribute[]     $attributes
      */
     public function __construct(
         $facetName,
@@ -109,7 +109,7 @@ class MediaListFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -133,7 +133,7 @@ class MediaListFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplate()
     {

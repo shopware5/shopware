@@ -41,8 +41,10 @@ interface OptimizerServiceInterface
 
     /**
      * @param string $mime
-     * @return OptimizerInterface
+     *
      * @throws OptimizerNotFoundException
+     *
+     * @return OptimizerInterface
      */
     public function getOptimizerByMimeType($mime);
 }

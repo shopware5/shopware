@@ -28,7 +28,7 @@ namespace Shopware\Components\Escaper;
  * @see https://github.com/zendframework/zend-escaper/blob/master/src/Escaper.php
  *
  * @category  Shopware
- * @package   Shopware\Components\Escaper
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface EscaperInterface
@@ -38,6 +38,7 @@ interface EscaperInterface
      * of special meaning. Internally this will use htmlspecialchars().
      *
      * @param string $string
+     *
      * @return string
      */
     public function escapeHtml($string);
@@ -48,6 +49,7 @@ interface EscaperInterface
      * might be unquoted or quoted illegally (e.g. backticks are valid quotes for IE).
      *
      * @param string $string
+     *
      * @return string
      */
     public function escapeHtmlAttr($string);
@@ -62,6 +64,7 @@ interface EscaperInterface
      * is not useful in a HTML context.
      *
      * @param string $string
+     *
      * @return string
      */
     public function escapeJs($string);
@@ -72,6 +75,7 @@ interface EscaperInterface
      * to rawurlencode() which now implements RFC 3986 since PHP 5.3 completely.
      *
      * @param string $string
+     *
      * @return string
      */
     public function escapeUrl($string);
@@ -81,6 +85,7 @@ interface EscaperInterface
      * inserted into CSS and escapes everything except alphanumerics.
      *
      * @param string $string
+     *
      * @return string
      */
     public function escapeCss($string);

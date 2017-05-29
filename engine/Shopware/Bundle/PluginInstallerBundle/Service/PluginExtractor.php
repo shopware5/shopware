@@ -44,9 +44,9 @@ class PluginExtractor
     private $pluginDirectories = [];
 
     /**
-     * @param string $pluginDir
+     * @param string     $pluginDir
      * @param Filesystem $filesystem
-     * @param string[] $pluginDirectories
+     * @param string[]   $pluginDirectories
      */
     public function __construct($pluginDir, Filesystem $filesystem, array $pluginDirectories = [])
     {
@@ -59,6 +59,7 @@ class PluginExtractor
      * Extracts the provided zip file to the provided destination
      *
      * @param \ZipArchive $archive
+     *
      * @throws \Exception
      */
     public function extract($archive)
@@ -100,12 +101,12 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param string $prefix
+     * @param string      $prefix
      * @param \ZipArchive $archive
      */
     private function validatePluginZip($prefix, \ZipArchive $archive)
     {
-        for ($i = 2; $i < $archive->numFiles; $i++) {
+        for ($i = 2; $i < $archive->numFiles; ++$i) {
             $stat = $archive->statIndex($i);
 
             $this->assertNoDirectoryTraversal($stat['name']);
@@ -115,6 +116,7 @@ class PluginExtractor
 
     /**
      * @param \ZipArchive $archive
+     *
      * @return string
      */
     private function getPluginPrefix(\ZipArchive $archive)
@@ -170,6 +172,7 @@ class PluginExtractor
 
     /**
      * @param string $pluginName
+     *
      * @return bool|string
      */
     private function findOldFile($pluginName)
@@ -195,6 +198,7 @@ class PluginExtractor
 
     /**
      * @param string $oldFile
+     *
      * @return bool|string
      */
     private function createBackupFile($oldFile)
@@ -206,6 +210,7 @@ class PluginExtractor
         $backupFile = $oldFile . '.' . uniqid();
         $this->filesystem->rename($oldFile, $backupFile);
         rename($oldFile, $backupFile);
+
         return $backupFile;
     }
 }

@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Validator;
 
 /**
  * The Validator\EmailValidator class is used to validate emails addresses consistently across the system
  *
  * @category  Shopware
- * @package   Shopware\Components\Validator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface EmailValidatorInterface
@@ -36,6 +37,7 @@ interface EmailValidatorInterface
      * Validates the provided email address
      *
      * @param string $emailAddress
+     *
      * @return bool
      */
     public function isValid($emailAddress);

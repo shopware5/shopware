@@ -38,13 +38,13 @@ class PasswordValidator extends ConstraintValidator
     const SNIPPET_PASSWORD_CONFIRMATION = [
         'namespace' => 'frontend',
         'name' => 'AccountPasswordNotEqual',
-        'default' => 'The passwords are not equal'
+        'default' => 'The passwords are not equal',
     ];
 
     const SNIPPET_PASSWORD_LENGTH = [
         'namespace' => 'frontend',
         'name' => 'RegisterPasswordLength',
-        'default' => ''
+        'default' => '',
     ];
 
     /**
@@ -59,7 +59,7 @@ class PasswordValidator extends ConstraintValidator
 
     /**
      * @param Shopware_Components_Snippet_Manager $snippets
-     * @param Shopware_Components_Config $config
+     * @param Shopware_Components_Config          $config
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
@@ -70,7 +70,7 @@ class PasswordValidator extends ConstraintValidator
     }
 
     /**
-     * @param string $password
+     * @param string     $password
      * @param Constraint $constraint
      */
     public function validate($password, Constraint $constraint)
@@ -111,12 +111,13 @@ class PasswordValidator extends ConstraintValidator
 
     /**
      * @param FormInterface $form
+     *
      * @return bool
      */
     private function isFastLogin(FormInterface $form)
     {
         if ($form->has('accountmode')) {
-            return ($form->get('accountmode')->getData() == Customer::ACCOUNT_MODE_FAST_LOGIN);
+            return $form->get('accountmode')->getData() == Customer::ACCOUNT_MODE_FAST_LOGIN;
         }
 
         $customer = $form->getData();
@@ -129,6 +130,7 @@ class PasswordValidator extends ConstraintValidator
 
     /**
      * @param array $snippet with namespace, name and default value
+     *
      * @return string
      */
     private function getSnippet(array $snippet)
