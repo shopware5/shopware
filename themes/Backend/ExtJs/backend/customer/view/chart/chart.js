@@ -115,6 +115,8 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
     },
 
     createLineSeries: function(field, title) {
+        var me = this;
+
         return {
             type: 'line',
             axis: 'left',
