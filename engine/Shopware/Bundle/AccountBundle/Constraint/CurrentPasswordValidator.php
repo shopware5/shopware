@@ -33,8 +33,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 /**
  * Constraint validator for CurrentPassword.
  * Checks if the given value (password) matches the password of the logged-in user.
- *
- * @package Shopware\Bundle\AccountBundle\Constraint
  */
 class CurrentPasswordValidator extends ConstraintValidator
 {
@@ -60,10 +58,11 @@ class CurrentPasswordValidator extends ConstraintValidator
 
     /**
      * CurrentPasswordValidator constructor.
+     *
      * @param \Enlight_Components_Session_Namespace $session
-     * @param \Enlight_Components_Snippet_Manager $snippets
-     * @param Manager $passwordManager
-     * @param ModelManager $modelManager
+     * @param \Enlight_Components_Snippet_Manager   $snippets
+     * @param Manager                               $passwordManager
+     * @param ModelManager                          $modelManager
      */
     public function __construct(
         \Enlight_Components_Session_Namespace $session,
@@ -80,12 +79,12 @@ class CurrentPasswordValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param mixed $value The value that should be validated
+     * @param mixed      $value      The value that should be validated
      * @param Constraint $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint)
     {
-        /** @var CurrentPassword  $constraint */
+        /** @var CurrentPassword $constraint */
         if ($constraint instanceof CurrentPassword === false) {
             return;
         }
@@ -114,6 +113,7 @@ class CurrentPasswordValidator extends ConstraintValidator
     {
         /** @var Customer $user */
         $user = $this->modelManager->find(Customer::class, $this->session->offsetGet('sUserId'));
+
         return $user->getEncoderName() ?: $this->passwordManager->getDefaultPasswordEncoderName();
     }
 }

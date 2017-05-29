@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LinkGateway implements Gateway\LinkGatewayInterface
@@ -61,8 +61,8 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection            $connection
+     * @param FieldHelper           $fieldHelper
      * @param Hydrator\LinkHydrator $linkHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -86,7 +86,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
@@ -106,7 +106,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
 
         $this->fieldHelper->addLinkTranslation($query, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

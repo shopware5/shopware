@@ -47,8 +47,8 @@ class ProductIndexer implements DataIndexerInterface
     private $queryFactory;
 
     /**
-     * @param Client $client
-     * @param ProductProviderInterface $provider
+     * @param Client                       $client
+     * @param ProductProviderInterface     $provider
      * @param ProductQueryFactoryInterface $queryFactory
      */
     public function __construct(
@@ -62,7 +62,7 @@ class ProductIndexer implements DataIndexerInterface
     }
 
     /**
-     * @param ShopIndex $index
+     * @param ShopIndex               $index
      * @param ProgressHelperInterface $progress
      */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress)
@@ -82,7 +82,8 @@ class ProductIndexer implements DataIndexerInterface
 
     /**
      * @param ShopIndex $index
-     * @param string[] $numbers
+     * @param string[]  $numbers
+     *
      * @return \string[]
      */
     public function indexProducts(ShopIndex $index, $numbers)
@@ -92,7 +93,7 @@ class ProductIndexer implements DataIndexerInterface
         }
 
         $products = $this->provider->get($index->getShop(), $numbers);
-        $remove   = array_diff($numbers, array_keys($products));
+        $remove = array_diff($numbers, array_keys($products));
 
         $documents = [];
         foreach ($products as $product) {
@@ -106,8 +107,8 @@ class ProductIndexer implements DataIndexerInterface
 
         $this->client->bulk([
             'index' => $index->getName(),
-            'type'  => ProductMapping::TYPE,
-            'body'  => $documents
+            'type' => ProductMapping::TYPE,
+            'body' => $documents,
         ]);
     }
 }

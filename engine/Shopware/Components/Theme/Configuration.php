@@ -26,7 +26,7 @@ namespace Shopware\Components\Theme;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Configuration implements \JsonSerializable
@@ -59,9 +59,9 @@ class Configuration implements \JsonSerializable
     /**
      * @param string[] $less
      * @param string[] $js
-     * @param array $config
-     * @param string $lessTarget
-     * @param string $jsTarget
+     * @param array    $config
+     * @param string   $lessTarget
+     * @param string   $jsTarget
      */
     public function __construct($less, $js, $config, $lessTarget, $jsTarget)
     {
@@ -113,7 +113,7 @@ class Configuration implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

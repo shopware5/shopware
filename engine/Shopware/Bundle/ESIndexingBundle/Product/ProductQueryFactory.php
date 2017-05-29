@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
@@ -28,7 +29,6 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 
 /**
  * Class ProductQueryFactory
- * @package Shopware\Bundle\ESIndexingBundle\Product
  */
 class ProductQueryFactory implements ProductQueryFactoryInterface
 {
@@ -46,7 +46,157 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function createCategoryQuery($categoryId, $limit = null)
+    {
+        $query = $this->connection->createQueryBuilder()
+            ->select(['categories.articleID', 'categories.articleID'])
+            ->from('s_articles_categories_ro', 'categories')
+            ->andWhere('categories.articleID > :lastId')
+            ->andWhere('categories.categoryID = :categoryId')
+            ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT)
+            ->setParameter(':lastId', 0, \PDO::PARAM_INT)
+            ->orderBy('categories.articleID');
+
+        if ($limit !== null) {
+            $query->setMaxResults($limit);
+        }
+
+        return new LastIdQuery($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createPriceIdQuery($priceIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->innerJoin('variant', 's_articles_details', 'subVariant', 'subVariant.articleID = variant.articleID')
+            ->innerJoin('subVariant', 's_articles_prices', 'price', 'price.articledetailsID = subVariant.id')
+            ->andWhere('price.id IN (:priceIds)')
+            ->setParameter(':priceIds', $priceIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createUnitIdQuery($unitIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->andWhere('variant.unitID IN (:unitIds)')
+            ->setParameter(':unitIds', $unitIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createVoteIdQuery($voteIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->innerJoin('product', 's_articles_vote', 'vote', 'vote.articleID = product.id')
+            ->andWhere('vote.id IN (:voteIds)')
+            ->setParameter(':voteIds', $voteIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createProductIdQuery($productIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->andWhere('product.id IN (:productIds)')
+            ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createVariantIdQuery($variantIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->innerJoin('variant', 's_articles_details', 'subVariant', 'subVariant.articleID = variant.articleID')
+            ->andWhere('subVariant.id IN (:variantIds)')
+            ->setParameter(':variantIds', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createTaxQuery($taxIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->andWhere('product.taxID IN (:taxIds)')
+            ->setParameter(':taxIds', $taxIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createManufacturerQuery($manufacturerIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->andWhere('product.supplierID IN (:manufacturerIds)')
+            ->setParameter(':manufacturerIds', $manufacturerIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createProductCategoryQuery($categoryIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->innerJoin('variant', 's_articles_categories_ro', 'shopProducts', 'shopProducts.articleID = variant.articleID')
+            ->andWhere('shopProducts.categoryID IN (:categoryIds)')
+            ->setParameter(':categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createPropertyGroupQuery($groupIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->innerJoin('variant', 's_filter_articles', 'productProperty', 'variant.articleID = productProperty.articleID')
+            ->innerJoin('productProperty', 's_filter_values', 'propertyValue', 'propertyValue.id = productProperty.valueID')
+            ->andWhere('propertyValue.optionID IN (:propertyGroupIds)')
+            ->setParameter(':propertyGroupIds', $groupIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createPropertyOptionQuery($optionIds, $limit = null)
+    {
+        $dbal = $this->createQuery($limit)
+            ->innerJoin('variant', 's_filter_articles', 'productProperty', 'variant.articleID = productProperty.articleID')
+            ->andWhere('productProperty.valueID IN (:optionIds)')
+            ->setParameter(':optionIds', $optionIds, Connection::PARAM_INT_ARRAY);
+
+        return new LastIdQuery($dbal);
+    }
+
+    /**
      * @param null|int $limit
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function createQuery($limit = null)
@@ -64,154 +214,7 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
         if ($limit !== null) {
             $query->setMaxResults($limit);
         }
+
         return $query;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createCategoryQuery($categoryId, $limit = null)
-    {
-        $query = $this->connection->createQueryBuilder()
-            ->select(['categories.articleID', 'categories.articleID'])
-            ->from('s_articles_categories_ro', 'categories')
-            ->andWhere('categories.articleID > :lastId')
-            ->andWhere('categories.categoryID = :categoryId')
-            ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT)
-            ->setParameter(':lastId', 0, \PDO::PARAM_INT)
-            ->orderBy('categories.articleID');
-
-        if ($limit !== null) {
-            $query->setMaxResults($limit);
-        }
-        return new LastIdQuery($query);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createPriceIdQuery($priceIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->innerJoin('variant', 's_articles_details', 'subVariant', 'subVariant.articleID = variant.articleID')
-            ->innerJoin('subVariant', 's_articles_prices', 'price', 'price.articledetailsID = subVariant.id')
-            ->andWhere('price.id IN (:priceIds)')
-            ->setParameter(':priceIds', $priceIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createUnitIdQuery($unitIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->andWhere('variant.unitID IN (:unitIds)')
-            ->setParameter(':unitIds', $unitIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createVoteIdQuery($voteIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->innerJoin('product', 's_articles_vote', 'vote', 'vote.articleID = product.id')
-            ->andWhere('vote.id IN (:voteIds)')
-            ->setParameter(':voteIds', $voteIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createProductIdQuery($productIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->andWhere('product.id IN (:productIds)')
-            ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createVariantIdQuery($variantIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->innerJoin('variant', 's_articles_details', 'subVariant', 'subVariant.articleID = variant.articleID')
-            ->andWhere('subVariant.id IN (:variantIds)')
-            ->setParameter(':variantIds', $variantIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createTaxQuery($taxIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->andWhere('product.taxID IN (:taxIds)')
-            ->setParameter(':taxIds', $taxIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createManufacturerQuery($manufacturerIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->andWhere('product.supplierID IN (:manufacturerIds)')
-            ->setParameter(':manufacturerIds', $manufacturerIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createProductCategoryQuery($categoryIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->innerJoin('variant', 's_articles_categories_ro', 'shopProducts', 'shopProducts.articleID = variant.articleID')
-            ->andWhere('shopProducts.categoryID IN (:categoryIds)')
-            ->setParameter(':categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createPropertyGroupQuery($groupIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->innerJoin('variant', 's_filter_articles', 'productProperty', 'variant.articleID = productProperty.articleID')
-            ->innerJoin('productProperty', 's_filter_values', 'propertyValue', 'propertyValue.id = productProperty.valueID')
-            ->andWhere('propertyValue.optionID IN (:propertyGroupIds)')
-            ->setParameter(':propertyGroupIds', $groupIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createPropertyOptionQuery($optionIds, $limit = null)
-    {
-        $dbal = $this->createQuery($limit)
-            ->innerJoin('variant', 's_filter_articles', 'productProperty', 'variant.articleID = productProperty.articleID')
-            ->andWhere('productProperty.valueID IN (:optionIds)')
-            ->setParameter(':optionIds', $optionIds, Connection::PARAM_INT_ARRAY);
-
-        return new LastIdQuery($dbal);
     }
 }

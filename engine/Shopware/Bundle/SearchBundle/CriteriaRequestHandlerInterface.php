@@ -29,13 +29,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Interface CriteriaRequestHandlerInterface
- * @package Shopware\Bundle\SearchBundle
  */
 interface CriteriaRequestHandlerInterface
 {
     /**
-     * @param Request $request
-     * @param Criteria $criteria
+     * @param Request              $request
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      */
     public function handleRequest(

@@ -28,7 +28,6 @@ use Shopware\Components\Form as Form;
 
 /**
  * Interface Persister
- * @package Shopware\Components\Form\Interfaces
  */
 interface Persister
 {
@@ -37,6 +36,7 @@ interface Persister
      *
      * @param Form\Interfaces\Container $container
      * @param $reference
+     *
      * @return
      */
     public function save(Form\Interfaces\Container $container, $reference);

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 
 /**
@@ -38,11 +39,11 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     public function searchAction()
     {
         $entity = $this->Request()->getParam('entity', null);
-        $ids    = $this->Request()->getParam('ids', []);
-        $id     = $this->Request()->getParam('id', null);
-        $term   = $this->Request()->getParam('query', null);
+        $ids = $this->Request()->getParam('ids', []);
+        $id = $this->Request()->getParam('id', null);
+        $term = $this->Request()->getParam('query', null);
         $offset = $this->Request()->getParam('start', 0);
-        $limit  = $this->Request()->getParam('limit', 20);
+        $limit = $this->Request()->getParam('limit', 20);
 
         $builder = $this->createEntitySearchQuery($entity);
 
@@ -61,20 +62,188 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         $pagination = $this->getPaginator($builder);
-        $data  = $pagination->getIterator()->getArrayCopy();
+        $data = $pagination->getIterator()->getArrayCopy();
 
         $data = $this->hydrateSearchResult($entity, $data);
 
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => $pagination->count()
+            'total' => $pagination->count(),
         ]);
     }
 
     /**
-     * @param string $entity
+     * Sanitizes the passed term and queries the different areas of the search
+     *
+     * @return mixed
+     */
+    public function indexAction()
+    {
+        if (!$this->Request()->isPost()) {
+            return;
+        }
+
+        // Sanitize and clean up the search parameter for later processing
+        $search = $this->Request()->get('search');
+        $search = strtolower($search);
+        $search = trim($search);
+
+        $search = preg_replace('/[^\\w0-9]+/u', ' ', $search);
+        $search = trim(preg_replace('/\s+/', '%', $search), '%');
+
+        $articles = $this->getArticles($search);
+        $customers = $this->getCustomers($search);
+        $orders = $this->getOrders($search);
+
+        $this->View()->assign('searchResult', [
+            'articles' => $articles,
+            'customers' => $customers,
+            'orders' => $orders,
+        ]);
+    }
+
+    /**
+     * Queries the articles from the database based on the passed search term
+     *
+     * @param $search
+     *
+     * @return array
+     */
+    public function getArticles($search)
+    {
+        $search2 = Shopware()->Db()->quote("$search%");
+        $search = Shopware()->Db()->quote("%$search%");
+
+        $sql = "
+            SELECT DISTINCT
+                a.id,
+                a.name,
+                a.description_long,
+                a.description,
+                IFNULL(d.ordernumber, m.ordernumber) as ordernumber
+            FROM s_articles as a
+            JOIN s_articles_details as m
+            ON m.id = a.main_detail_id
+            LEFT JOIN s_articles_details as d
+            ON a.id = d.articleID
+            AND d.ordernumber LIKE $search2
+            LEFT JOIN s_articles_translations AS t
+            ON a.id=t.articleID
+            LEFT JOIN s_articles_supplier AS s
+            ON a.supplierID=s.id
+            WHERE ( a.name LIKE $search
+                OR t.name LIKE $search
+                OR s.name LIKE $search
+                OR d.id IS NOT NULL
+            )
+        ";
+        $sql = Shopware()->Db()->limit($sql, 5);
+
+        return Shopware()->Db()->fetchAll($sql);
+    }
+
+    /**
+     * Queries the customers from the database based on the passed search term
+     *
+     * @param $search
+     *
+     * @return array
+     */
+    public function getCustomers($search)
+    {
+        $search2 = Shopware()->Db()->quote("$search%");
+        $search = Shopware()->Db()->quote("%$search%");
+
+        $sql = "
+            SELECT userID as id,
+            IF(b.company != '', b.company, CONCAT(u.firstname, ' ', u.lastname)) as name,
+            CONCAT(street, ' ', zipcode, ' ', city) as description
+            FROM s_user_billingaddress b, s_user u
+            WHERE (
+                email LIKE $search
+                OR u.customernumber LIKE $search2
+                OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search
+                OR TRIM(CONCAT(b.firstname,' ',b.lastname)) LIKE $search
+            )
+            AND u.id = b.userID
+            GROUP BY u.id
+            ORDER BY name ASC
+        ";
+
+        $sql = Shopware()->Db()->limit($sql, 5);
+        $result = Shopware()->Db()->fetchAll($sql);
+
+        return $result;
+    }
+
+    /**
+     * Queries the orders from the database based on the passed search term
+     *
+     * @param $search
+     *
+     * @return array
+     */
+    public function getOrders($search)
+    {
+        $search = Shopware()->Db()->quote("$search%");
+
+        $sql = "
+            SELECT
+                o.id,
+                o.ordernumber as name,
+                o.userID,
+                o.invoice_amount as totalAmount,
+                o.transactionID,
+                o.status,
+                o.cleared,
+                d.type,
+                d.docID,
+                CONCAT(
+                    IF(b.company != '', b.company, CONCAT(b.firstname, ' ', b.lastname)),
+                    ', ',
+                    p.description
+                ) as description
+            FROM s_order o
+            LEFT JOIN s_order_documents d
+            ON d.orderID=o.id AND docID != '0'
+            LEFT JOIN s_order_billingaddress b
+            ON o.id=b.orderID
+            LEFT JOIN s_core_paymentmeans p
+            ON o.paymentID = p.id
+            WHERE o.id != '0'
+            AND (o.ordernumber LIKE $search
+            OR o.transactionID LIKE $search
+            OR docID LIKE $search)
+            GROUP BY o.id
+            ORDER BY o.ordertime DESC
+        ";
+        $sql = Shopware()->Db()->limit($sql, 5);
+
+        return Shopware()->Db()->fetchAll($sql);
+    }
+
+    /**
+     * @param $builder
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    protected function getPaginator($builder)
+    {
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        /** @var \Shopware\Components\Model\ModelManager $entityManager */
+        $entityManager = $this->get('models');
+        $pagination = $entityManager->createPaginator($query);
+
+        return $pagination;
+    }
+
+    /**
+     * @param string  $entity
      * @param array[] $data
+     *
      * @return array[]
      */
     private function hydrateSearchResult($entity, $data)
@@ -84,11 +253,13 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 $data = $this->resolveCategoryPath($data);
                 break;
         }
+
         return $data;
     }
 
     /**
      * @param string $entity
+     *
      * @return string[]
      */
     private function getEntitySearchFields($entity)
@@ -96,11 +267,13 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
         $entityManager = $this->get('models');
         $metaData = $entityManager->getClassMetadata($entity);
+
         return $metaData->getFieldNames();
     }
 
     /**
      * @param $entity
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     private function createEntitySearchQuery($entity)
@@ -141,9 +314,9 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param string $entity
+     * @param string                     $entity
      * @param \Doctrine\ORM\QueryBuilder $query
-     * @param string $term
+     * @param string                     $term
      */
     private function addSearchTermCondition($entity, $query, $term)
     {
@@ -159,7 +332,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         $where = implode(' OR ', $where);
-        $query->andWhere('('.$where.')');
+        $query->andWhere('(' . $where . ')');
         $query->setParameter('search', '%' . $term . '%');
     }
 
@@ -167,6 +340,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      * Gets custom search conditions
      *
      * @param string $entity
+     *
      * @return array
      */
     private function getCustomSearchConditions($entity)
@@ -188,18 +362,20 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      *
      * @param string $entity
      * @param string $column
+     *
      * @return string
      */
     private function createCustomFieldToSearchTermCondition($entity, $column)
     {
         $field = $entity . '.' . $column;
         $where = $field . ' LIKE :search';
+
         return $where;
     }
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $query
-     * @param int[] $ids
+     * @param int[]                      $ids
      */
     private function addIdsCondition($query, $ids)
     {
@@ -209,6 +385,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
     /**
      * @param $data
+     *
      * @return array[]
      */
     private function resolveCategoryPath($data)
@@ -233,167 +410,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         return $data;
-    }
-
-
-
-    /**
-     * Sanitizes the passed term and queries the different areas of the search
-     * @return mixed
-     */
-    public function indexAction()
-    {
-        if (!$this->Request()->isPost()) {
-            return;
-        }
-
-        // Sanitize and clean up the search parameter for later processing
-        $search = $this->Request()->get('search');
-        $search = strtolower($search);
-        $search = trim($search);
-
-        $search = preg_replace("/[^\\w0-9]+/u", " ", $search);
-        $search = trim(preg_replace('/\s+/', '%', $search), "%");
-
-        $articles = $this->getArticles($search);
-        $customers = $this->getCustomers($search);
-        $orders = $this->getOrders($search);
-
-        $this->View()->assign('searchResult', array(
-            'articles' => $articles,
-            'customers' => $customers,
-            'orders' => $orders
-        ));
-    }
-
-    /**
-     * Queries the articles from the database based on the passed search term
-     *
-     * @param $search
-     * @return array
-     */
-    public function getArticles($search)
-    {
-        $search2 = Shopware()->Db()->quote("$search%");
-        $search = Shopware()->Db()->quote("%$search%");
-
-        $sql = "
-            SELECT DISTINCT
-                a.id,
-                a.name,
-                a.description_long,
-                a.description,
-                IFNULL(d.ordernumber, m.ordernumber) as ordernumber
-            FROM s_articles as a
-            JOIN s_articles_details as m
-            ON m.id = a.main_detail_id
-            LEFT JOIN s_articles_details as d
-            ON a.id = d.articleID
-            AND d.ordernumber LIKE $search2
-            LEFT JOIN s_articles_translations AS t
-            ON a.id=t.articleID
-            LEFT JOIN s_articles_supplier AS s
-            ON a.supplierID=s.id
-            WHERE ( a.name LIKE $search
-                OR t.name LIKE $search
-                OR s.name LIKE $search
-                OR d.id IS NOT NULL
-            )
-        ";
-        $sql = Shopware()->Db()->limit($sql, 5);
-        return Shopware()->Db()->fetchAll($sql);
-    }
-
-    /**
-     * Queries the customers from the database based on the passed search term
-     *
-     * @param $search
-     * @return array
-     */
-    public function getCustomers($search)
-    {
-        $search2 = Shopware()->Db()->quote("$search%");
-        $search = Shopware()->Db()->quote("%$search%");
-
-        $sql = "
-            SELECT userID as id,
-            IF(b.company != '', b.company, CONCAT(u.firstname, ' ', u.lastname)) as name,
-            CONCAT(street, ' ', zipcode, ' ', city) as description
-            FROM s_user_billingaddress b, s_user u
-            WHERE (
-                email LIKE $search
-                OR u.customernumber LIKE $search2
-                OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search
-                OR TRIM(CONCAT(b.firstname,' ',b.lastname)) LIKE $search
-            )
-            AND u.id = b.userID
-            GROUP BY u.id
-            ORDER BY name ASC
-        ";
-
-        $sql = Shopware()->Db()->limit($sql, 5);
-        $result = Shopware()->Db()->fetchAll($sql);
-
-        return $result;
-    }
-
-    /**
-     * Queries the orders from the database based on the passed search term
-     *
-     * @param $search
-     * @return array
-     */
-    public function getOrders($search)
-    {
-        $search = Shopware()->Db()->quote("$search%");
-
-        $sql = "
-            SELECT
-                o.id,
-                o.ordernumber as name,
-                o.userID,
-                o.invoice_amount as totalAmount,
-                o.transactionID,
-                o.status,
-                o.cleared,
-                d.type,
-                d.docID,
-                CONCAT(
-                    IF(b.company != '', b.company, CONCAT(b.firstname, ' ', b.lastname)),
-                    ', ',
-                    p.description
-                ) as description
-            FROM s_order o
-            LEFT JOIN s_order_documents d
-            ON d.orderID=o.id AND docID != '0'
-            LEFT JOIN s_order_billingaddress b
-            ON o.id=b.orderID
-            LEFT JOIN s_core_paymentmeans p
-            ON o.paymentID = p.id
-            WHERE o.id != '0'
-            AND (o.ordernumber LIKE $search
-            OR o.transactionID LIKE $search
-            OR docID LIKE $search)
-            GROUP BY o.id
-            ORDER BY o.ordertime DESC
-        ";
-        $sql = Shopware()->Db()->limit($sql, 5);
-        return Shopware()->Db()->fetchAll($sql);
-    }
-
-    /**
-     * @param $builder
-     * @return \Doctrine\ORM\Tools\Pagination\Paginator
-     */
-    protected function getPaginator($builder)
-    {
-        $query = $builder->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get('models');
-        $pagination = $entityManager->createPaginator($query);
-        return $pagination;
     }
 
     /**

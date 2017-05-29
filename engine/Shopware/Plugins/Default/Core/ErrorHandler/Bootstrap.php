@@ -23,15 +23,15 @@
  */
 
 use Monolog\Handler\BufferHandler;
+use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
 use Shopware\Components\Log\Processor\ShopwareEnvironmentProcessor;
-use Shopware\Components\Log\Formatter\HtmlFormatter;
 
 /**
  * Shopware Error Handler
  *
  * @category  Shopware
- * @package   Shopware\Plugins\Core\ErrorHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -42,7 +42,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     protected static $_origErrorHandler = null;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected static $_registeredErrorHandler = false;
 
@@ -64,7 +64,29 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var array
      */
-    protected $_errorList = array();
+    protected $_errorList = [];
+
+    /**
+     * @var array
+     */
+    protected $_errorLevelList = [
+        E_ERROR => 'E_ERROR',
+        E_WARNING => 'E_WARNING',
+        E_PARSE => 'E_PARSE',
+        E_NOTICE => 'E_NOTICE',
+        E_CORE_ERROR => 'E_CORE_ERROR',
+        E_CORE_WARNING => 'E_CORE_WARNING',
+        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+        E_USER_ERROR => 'E_USER_ERROR',
+        E_USER_WARNING => 'E_USER_WARNING',
+        E_USER_NOTICE => 'E_USER_NOTICE',
+        E_STRICT => 'E_STRICT',
+        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+        E_DEPRECATED => 'E_DEPRECATED',
+        E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+        E_ALL => 'E_ALL',
+    ];
 
     /**
      * @var bool
@@ -72,37 +94,15 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     private $throwOnRecoverableError = false;
 
     /**
-     * @var array
-     */
-    protected $_errorLevelList = array(
-        E_ERROR             => 'E_ERROR',
-        E_WARNING           => 'E_WARNING',
-        E_PARSE             => 'E_PARSE',
-        E_NOTICE            => 'E_NOTICE',
-        E_CORE_ERROR        => 'E_CORE_ERROR',
-        E_CORE_WARNING      => 'E_CORE_WARNING',
-        E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
-        E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
-        E_USER_ERROR        => 'E_USER_ERROR',
-        E_USER_WARNING      => 'E_USER_WARNING',
-        E_USER_NOTICE       => 'E_USER_NOTICE',
-        E_STRICT            => 'E_STRICT',
-        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-        E_DEPRECATED        => 'E_DEPRECATED',
-        E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
-        E_ALL               => 'E_ALL',
-    );
-
-    /**
      * Returns plugin capabilities
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => false,
-            'update' => true
-        );
+            'update' => true,
+        ];
     }
 
     /**
@@ -127,7 +127,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     {
         $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorHandler.throwOnRecoverableError');
 
-        // Register ErrorHanlder for all errors, including strict
+        // Register ErrorHandler for all errors, including strict
         $this->registerErrorHandler(E_ALL | E_STRICT);
 
         if ($this->Config()->get('logMail')) {
@@ -136,26 +136,29 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
 
         $this->get('events')->addListener(
             'Enlight_Controller_Front_DispatchLoopShutdown',
-            array($this, 'onDispatchLoopShutdown')
+            [$this, 'onDispatchLoopShutdown']
         );
     }
 
     /**
      * Register error handler callback
      *
-     * @link http://www.php.net/manual/en/function.set-error-handler.php Custom error handler
-     * @param  int $errorLevel
+     * @see http://www.php.net/manual/en/function.set-error-handler.php Custom error handler
+     *
+     * @param int $errorLevel
+     *
      * @return Shopware_Plugins_Core_ErrorHandler_Bootstrap
      */
     public function registerErrorHandler($errorLevel = E_ALL)
     {
         // Only register once.  Avoids loop issues if it gets registered twice.
         if (self::$_registeredErrorHandler) {
-            set_error_handler(array($this, 'errorHandler'), $errorLevel);
+            set_error_handler([$this, 'errorHandler'], $errorLevel);
+
             return $this;
         }
 
-        self::$_origErrorHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
+        self::$_origErrorHandler = set_error_handler([$this, 'errorHandler'], $errorLevel);
         self::$_registeredErrorHandler = true;
 
         return $this;
@@ -164,14 +167,17 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * Error Handler will convert error into log message, and then call the original error handler
      *
-     * @link http://www.php.net/manual/en/function.set-error-handler.php Custom error handler
-     * @param  int            $errno
-     * @param  string         $errstr
-     * @param  string         $errfile
-     * @param  int            $errline
-     * @param  array          $errcontext
+     * @see http://www.php.net/manual/en/function.set-error-handler.php Custom error handler
+     *
+     * @param int    $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param int    $errline
+     * @param array  $errcontext
+     *
      * @throws ErrorException
-     * @return boolean
+     *
+     * @return bool
      */
     public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
     {
@@ -189,14 +195,14 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
             $hash_id = md5($errno . $errstr . $errfile . $errline);
             if (!isset($this->_errorList[$hash_id])) {
                 $errna = isset($this->_errorLevelList[$errno]) ? $this->_errorLevelList[$errno] : '';
-                $this->_errorList[$hash_id] = array(
+                $this->_errorList[$hash_id] = [
                     'count' => 1,
                     'code' => $errno,
                     'name' => $errna,
                     'message' => $errstr,
                     'line' => $errline,
-                    'file' => $errfile
-                );
+                    'file' => $errfile,
+                ];
             } else {
                 ++$this->_errorList[$hash_id]['count'];
             }
@@ -218,11 +224,11 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
                 break;
             case E_RECOVERABLE_ERROR:
                 if ($this->throwOnRecoverableError) {
-                    throw new ErrorException($this->_errorLevelList[$errno].': '.$errstr, 0, $errno, $errfile, $errline);
+                    throw new ErrorException($this->_errorLevelList[$errno] . ': ' . $errstr, 0, $errno, $errfile, $errline);
                 }
                 break;
             default:
-                throw new ErrorException($this->_errorLevelList[$errno].': '.$errstr, 0, $errno, $errfile, $errline);
+                throw new ErrorException($this->_errorLevelList[$errno] . ': ' . $errstr, 0, $errno, $errfile, $errline);
                 break;
         }
 
@@ -246,7 +252,8 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * Sets enabled log flag
      *
-     * @param  bool $value
+     * @param bool $value
+     *
      * @return Shopware_Plugins_Core_ErrorHandler_Bootstrap
      */
     public function setEnabledLog($value = true)
@@ -255,7 +262,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
 
         return $this;
     }
-
 
     /**
      * @param Enlight_Controller_EventArgs $args
@@ -281,7 +287,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     {
         $mailer = new \Enlight_Components_Mail();
         $mailer->addTo(Shopware()->Config()->Mail);
-        $mailer->setSubject('Error in shop "'.Shopware()->Config()->Shopname.'".');
+        $mailer->setSubject('Error in shop "' . Shopware()->Config()->Shopname . '".');
         $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());

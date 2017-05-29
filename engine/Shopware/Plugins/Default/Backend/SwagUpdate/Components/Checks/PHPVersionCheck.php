@@ -24,13 +24,13 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
-use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PHPVersionCheck implements CheckInterface
@@ -67,29 +67,29 @@ class PHPVersionCheck implements CheckInterface
 
         $validVersion = (version_compare(PHP_VERSION, $minPHPVersion) >= 0);
 
-        $successMessage = $this->namespace->get('controller/check_phpversion_success', "Min PHP Version: %s, your version %s");
-        $failMessage = $this->namespace->get('controller/check_phpversion_failure', "Min PHP Version: %s, your version %s");
+        $successMessage = $this->namespace->get('controller/check_phpversion_success', 'Min PHP Version: %s, your version %s');
+        $failMessage = $this->namespace->get('controller/check_phpversion_failure', 'Min PHP Version: %s, your version %s');
 
         if ($validVersion) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message'    => sprintf(
+                'message' => sprintf(
                     $successMessage,
                     $minPHPVersion,
                     PHP_VERSION
-                )
-            );
-        } else {
-            return array(
+                ),
+            ];
+        }
+
+        return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
-                'message'    => sprintf(
+                'message' => sprintf(
                     $failMessage,
                     $minPHPVersion,
                     PHP_VERSION
-                )
-            );
-        }
+                ),
+            ];
     }
 }

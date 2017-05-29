@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ class HasPseudoPriceConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof HasPseudoPriceCondition);
+        return $criteriaPart instanceof HasPseudoPriceCondition;
     }
 
     /**
@@ -64,12 +64,14 @@ class HasPseudoPriceConditionHandler implements HandlerInterface
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return string
      */
     private function getPseudoPriceField(ShopContextInterface $context)
     {
         $key = $context->getCurrentCustomerGroup()->getKey();
         $currency = $context->getCurrency()->getId();
+
         return 'calculatedPrices.' . $key . '_' . $currency . '.calculatedPseudoPrice';
     }
 }

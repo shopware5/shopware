@@ -28,7 +28,7 @@ use Shopware\Models\Property\Value;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PropertyOptionReader extends GenericReader
@@ -41,10 +41,11 @@ class PropertyOptionReader extends GenericReader
             'entity.value',
             'entity.position',
             'option.name as optionName',
-            'option.filterable'
+            'option.filterable',
         ]);
         $query->from(Value::class, 'entity', $this->getIdentifierField());
         $query->innerJoin('entity.option', 'option');
+
         return $query;
     }
 }

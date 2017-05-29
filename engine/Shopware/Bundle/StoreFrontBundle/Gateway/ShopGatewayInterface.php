@@ -30,12 +30,14 @@ interface ShopGatewayInterface
 {
     /**
      * @param $ids
+     *
      * @return Shop[] indexed by id
      */
     public function getList($ids);
 
     /**
      * @param int $id
+     *
      * @return Shop
      */
     public function get($id);

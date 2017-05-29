@@ -27,7 +27,7 @@ namespace Shopware\Bundle\MediaBundle\Optimizer;
 class PngcrushOptimizer extends BinaryOptimizer
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCommand()
     {
@@ -35,7 +35,7 @@ class PngcrushOptimizer extends BinaryOptimizer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSupportedMimeTypes()
     {
@@ -43,7 +43,7 @@ class PngcrushOptimizer extends BinaryOptimizer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCommandArguments($filepath)
     {

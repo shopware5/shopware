@@ -28,17 +28,17 @@ use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Country\Country as CountryModel;
 use Shopware\Models\Country\State as StateModel;
-use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\Address as AddressModel;
-use Shopware\Models\Shop\Shop as ShopModel;
+use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\PaymentData;
 use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
  * Customer API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Customer extends Resource
@@ -53,10 +53,13 @@ class Customer extends Resource
 
     /**
      * Little helper function for the ...ByNumber methods
+     *
      * @param $number
-     * @return int
+     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     *
+     * @return int
      */
     public function getIdFromNumber($number)
     {
@@ -81,9 +84,11 @@ class Customer extends Resource
 
     /**
      * @param string $number
-     * @return array|\Shopware\Models\Customer\Customer
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Customer\Customer
      */
     public function getOneByNumber($number)
     {
@@ -94,9 +99,11 @@ class Customer extends Resource
 
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Customer\Customer
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Customer\Customer
      */
     public function getOne($id)
     {
@@ -119,7 +126,7 @@ class Customer extends Resource
             'billingCountry',
             'shippingCountry',
             'billingState',
-            'shippingState'
+            'shippingState',
         ]);
         $builder->leftJoin('customer.attribute', 'attribute')
             ->leftJoin('customer.defaultBillingAddress', 'billing')
@@ -145,10 +152,11 @@ class Customer extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
     public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
@@ -179,6 +187,7 @@ class Customer extends Resource
 
     /**
      * @param array $params
+     *
      * @return \Shopware\Models\Customer\Customer
      */
     public function create(array $params)
@@ -205,24 +214,29 @@ class Customer extends Resource
 
     /**
      * @param string $number
-     * @param array $params
-     * @return \Shopware\Models\Customer\Customer
+     * @param array  $params
+     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return \Shopware\Models\Customer\Customer
      */
     public function updateByNumber($number, array $params)
     {
         $id = $this->getIdFromNumber($number);
+
         return $this->update($id, $params);
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Customer\Customer
+     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     *
+     * @return \Shopware\Models\Customer\Customer
      */
     public function update($id, array $params)
     {
@@ -265,21 +279,26 @@ class Customer extends Resource
 
     /**
      * @param string $number
-     * @return \Shopware\Models\Customer\Customer
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Customer\Customer
      */
     public function deleteByNumber($number)
     {
         $id = $this->getIdFromNumber($number);
+
         return $this->delete($id);
     }
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Customer\Customer
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Customer\Customer
      */
     public function delete($id)
     {
@@ -302,42 +321,10 @@ class Customer extends Resource
         return $customer;
     }
 
-    private function prepareCustomerData($params, CustomerModel $customer)
-    {
-        if (array_key_exists('groupKey', $params)) {
-            $params['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(['key' => $params['groupKey']]);
-            if (!$params['group']) {
-                throw new ApiException\CustomValidationException(sprintf("CustomerGroup by key %s not found", $params['groupKey']));
-            }
-        }
-
-        if (array_key_exists('shopId', $params)) {
-            $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
-            if (!$params['shop']) {
-                throw new ApiException\CustomValidationException(sprintf("Shop by id %s not found", $params['shopId']));
-            }
-        }
-
-        if (array_key_exists('priceGroupId', $params)) {
-            $priceGroupId = (int) $params['priceGroupId'];
-            if ($priceGroupId > 0) {
-                $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
-            } else {
-                $params['priceGroup'] = null;
-            }
-        }
-
-        //If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
-        if ($customer->getId() && $customer->getPaymentId() !== $params['paymentId']) {
-            $params['paymentPreset'] = $params['paymentId'];
-        }
-
-        return $params;
-    }
-
     /**
-     * @param array $data
+     * @param array                              $data
      * @param \Shopware\Models\Customer\Customer $customer
+     *
      * @return array
      */
     protected function prepareAssociatedData($data, CustomerModel $customer)
@@ -348,9 +335,11 @@ class Customer extends Resource
     }
 
     /**
-     * @param array $data
+     * @param array                              $data
      * @param \Shopware\Models\Customer\Customer $customer
+     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
      * @return array
      */
     protected function prepareCustomerPaymentData($data, CustomerModel $customer)
@@ -365,12 +354,12 @@ class Customer extends Resource
             if ($debitPaymentMean) {
                 $data['paymentData'] = [
                     [
-                        "accountNumber" => $data['debit']["account"],
-                        "bankCode" => $data['debit']["bankCode"],
-                        "bankName" => $data['debit']["bankName"],
-                        "accountHolder" => $data['debit']["accountHolder"],
-                        "paymentMeanId" => $debitPaymentMean->getId()
-                    ]
+                        'accountNumber' => $data['debit']['account'],
+                        'bankCode' => $data['debit']['bankCode'],
+                        'bankName' => $data['debit']['bankName'],
+                        'accountHolder' => $data['debit']['accountHolder'],
+                        'paymentMeanId' => $debitPaymentMean->getId(),
+                    ],
                 ];
             }
         }
@@ -400,7 +389,7 @@ class Customer extends Resource
                 $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMeanId']);
                 if (is_null($paymentMean)) {
                     throw new ApiException\CustomValidationException(
-                        sprintf("%s by %s %s not found", 'Shopware\Models\Payment\Payment', 'id', $paymentDataData['paymentMeanId'])
+                        sprintf('%s by %s %s not found', 'Shopware\Models\Payment\Payment', 'id', $paymentDataData['paymentMeanId'])
                     );
                 }
                 $paymentData->setPaymentMean($paymentMean);
@@ -420,9 +409,51 @@ class Customer extends Resource
     }
 
     /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function getListQuery()
+    {
+        return $this->getRepository()->createQueryBuilder('customer');
+    }
+
+    private function prepareCustomerData($params, CustomerModel $customer)
+    {
+        if (array_key_exists('groupKey', $params)) {
+            $params['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(['key' => $params['groupKey']]);
+            if (!$params['group']) {
+                throw new ApiException\CustomValidationException(sprintf('CustomerGroup by key %s not found', $params['groupKey']));
+            }
+        }
+
+        if (array_key_exists('shopId', $params)) {
+            $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
+            if (!$params['shop']) {
+                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $params['shopId']));
+            }
+        }
+
+        if (array_key_exists('priceGroupId', $params)) {
+            $priceGroupId = (int) $params['priceGroupId'];
+            if ($priceGroupId > 0) {
+                $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
+            } else {
+                $params['priceGroup'] = null;
+            }
+        }
+
+        //If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
+        if ($customer->getId() && $customer->getPaymentId() !== $params['paymentId']) {
+            $params['paymentPreset'] = $params['paymentId'];
+        }
+
+        return $params;
+    }
+
+    /**
      * Sets the correct context for e.g. validation
      *
      * @param int $shopId
+     *
      * @throws ApiException\CustomValidationException
      */
     private function setupContext($shopId = null)
@@ -433,7 +464,7 @@ class Customer extends Resource
         if ($shopId) {
             $shop = $shopRepository->getActiveById($shopId);
             if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf("Shop by id %s not found", $shopId));
+                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $shopId));
             }
         } else {
             $shop = $shopRepository->getActiveDefault();
@@ -444,8 +475,10 @@ class Customer extends Resource
 
     /**
      * @param array|null $data
-     * @return null|AddressModel
+     *
      * @throws ApiException\CustomValidationException
+     *
+     * @return null|AddressModel
      */
     private function createAddress(array $data = null)
     {
@@ -454,7 +487,7 @@ class Customer extends Resource
         }
 
         if (!$data['country']) {
-            throw new ApiException\CustomValidationException("A country is required.");
+            throw new ApiException\CustomValidationException('A country is required.');
         }
 
         $data = $this->prepareAddressData($data);
@@ -469,7 +502,8 @@ class Customer extends Resource
      * Resolves id's to models
      *
      * @param array $data
-     * @param bool $filter
+     * @param bool  $filter
+     *
      * @return array
      */
     private function prepareAddressData(array $data, $filter = false)
@@ -481,8 +515,9 @@ class Customer extends Resource
     }
 
     /**
-     * @param array $params
+     * @param array         $params
      * @param CustomerModel $customer
+     *
      * @return array
      */
     private function applyAddressData(array $params, CustomerModel $customer)
@@ -512,13 +547,5 @@ class Customer extends Resource
         $customer->getDefaultShippingAddress()->fromArray($shippingData);
 
         return $params;
-    }
-
-    /**
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    protected function getListQuery()
-    {
-        return $this->getRepository()->createQueryBuilder('customer');
     }
 }

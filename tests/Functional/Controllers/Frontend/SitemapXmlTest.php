@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Components_Test_Controller_TestCase
@@ -50,7 +50,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
         $content = $response->getBody();
 
         $crawler = new Symfony\Component\DomCrawler\Crawler($content);
-        $crawler =  $crawler->filter('url');
+        $crawler = $crawler->filter('url');
 
         $this->assertGreaterThanOrEqual(40, count($crawler));
     }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -50,12 +51,14 @@ class CompositeSynchronizerFactory
 
     /**
      * @param Container $container
+     *
      * @return CompositeSynchronizer
      */
     public function factory(Container $container)
     {
         $this->container = $container;
         $synchronizer = $this->collectSynchronizer();
+
         return new CompositeSynchronizer($synchronizer);
     }
 
@@ -69,6 +72,7 @@ class CompositeSynchronizerFactory
             'Shopware_ESIndexingBundle_Collect_Synchronizer',
             $collection
         );
+
         return array_merge($collection->toArray(), $this->synchronizer);
     }
 }

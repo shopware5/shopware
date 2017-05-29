@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace Shopware\Tests\Unit\Components;
 
 use PHPUnit\Framework\TestCase;
@@ -17,7 +40,7 @@ class MyBasicTestClass implements MyInterface
 {
     public function myPublic($bar, $foo = 'bar')
     {
-        return $bar.$foo;
+        return $bar . $foo;
     }
 
     protected function myProtected($bar)
@@ -29,7 +52,7 @@ class MyReferenceTestClass implements MyReferenceInterface
 {
     public function myPublic(&$bar, $foo)
     {
-        return $bar.$foo;
+        return $bar . $foo;
     }
 }
 
@@ -56,18 +79,9 @@ class EnlightHookProxyFactoryTest extends TestCase
         $this->proxyFactory = new TestProxyFactory($hookManager, 'ShopwareTests');
     }
 
-    private function invokeMethod($object, $methodName, array $parameters = array())
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
-    }
-
     public function testGenerateBasicProxyClass()
     {
-        $generatedClass  = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyBasicTestClass::class]);
+        $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyBasicTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
 class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends Shopware\Tests\Unit\Components\MyBasicTestClass implements Enlight_Hook_Proxy
@@ -104,7 +118,7 @@ EOT;
 
     public function testGenerateProxyClassWithReferenceParameter()
     {
-        $generatedClass  = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyReferenceTestClass::class]);
+        $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyReferenceTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
 class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends Shopware\Tests\Unit\Components\MyReferenceTestClass implements Enlight_Hook_Proxy
@@ -130,5 +144,14 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
 
 EOT;
         $this->assertSame($expectedClass, $generatedClass);
+    }
+
+    private function invokeMethod($object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }

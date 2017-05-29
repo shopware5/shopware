@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Country extends Extendable implements \JsonSerializable
@@ -64,7 +64,7 @@ class Country extends Extendable implements \JsonSerializable
     protected $position;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $active;
 
@@ -74,32 +74,32 @@ class Country extends Extendable implements \JsonSerializable
     protected $iso3;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $shippingFree;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $taxFree;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $taxFreeForVatId;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $vatIdCheck;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $displayStateSelection;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $requiresStateSelection;
 
@@ -205,7 +205,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $shippingFree
+     * @param bool $shippingFree
      */
     public function setShippingFree($shippingFree)
     {
@@ -213,7 +213,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $taxFree
+     * @param bool $taxFree
      */
     public function setTaxFree($taxFree)
     {
@@ -221,7 +221,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $taxFreeForVatId
+     * @param bool $taxFreeForVatId
      */
     public function setTaxFreeForVatId($taxFreeForVatId)
     {
@@ -229,7 +229,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $vatIdCheck
+     * @param bool $vatIdCheck
      */
     public function setVatIdCheck($vatIdCheck)
     {
@@ -237,7 +237,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $displayStateSelection
+     * @param bool $displayStateSelection
      */
     public function setDisplayStateSelection($displayStateSelection)
     {
@@ -245,7 +245,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $requiresStateSelection
+     * @param bool $requiresStateSelection
      */
     public function setRequiresStateSelection($requiresStateSelection)
     {
@@ -253,7 +253,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isShippingFree()
     {
@@ -261,7 +261,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTaxFree()
     {
@@ -269,7 +269,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTaxFreeForVatId()
     {
@@ -277,7 +277,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function checkVatId()
     {
@@ -285,7 +285,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayStateSelection()
     {
@@ -293,7 +293,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function requiresStateSelection()
     {
@@ -301,7 +301,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -341,7 +341,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -349,7 +349,7 @@ class Country extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

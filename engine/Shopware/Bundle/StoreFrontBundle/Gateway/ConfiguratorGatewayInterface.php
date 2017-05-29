@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ConfiguratorGatewayInterface
@@ -50,8 +50,9 @@ interface ConfiguratorGatewayInterface
      * - Option position
      * - Option name
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Configurator\Set
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -62,9 +63,10 @@ interface ConfiguratorGatewayInterface
      * The image mapping defines which product image should be displayed for which configurator selection.
      * Returns for each configurator option the first possible image
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct          $product
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
-     * @return Struct\Media[] Indexed by the configurator option id.
+     *
+     * @return Struct\Media[] indexed by the configurator option id
      */
     public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
@@ -90,6 +92,7 @@ interface ConfiguratorGatewayInterface
      * )
      *
      * @param Struct\BaseProduct $product
+     *
      * @return array Indexed by the option id
      */
     public function getProductCombinations(Struct\BaseProduct $product);

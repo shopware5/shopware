@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Country
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Area extends Extendable implements \JsonSerializable
@@ -76,7 +76,7 @@ class Area extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -28,18 +28,30 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginDeleteCommand extends ShopwareCommand
 {
+    public function deletePath($path)
+    {
+        $fs = new Filesystem();
+
+        try {
+            $fs->remove($path);
+        } catch (IOException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -57,7 +69,6 @@ class PluginDeleteCommand extends ShopwareCommand
 The <info>%command.name%</info> deletes a plugin.
 EOF
             );
-        ;
     }
 
     /**
@@ -66,29 +77,31 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+
             return 1;
         }
 
         if ($plugin->getInstalled()) {
-            $output->writeln("The Plugin has to be uninstalled first.");
+            $output->writeln('The Plugin has to be uninstalled first.');
+
             return 1;
         }
 
-        $pluginPath = Shopware()->AppPath(implode('_', array(
+        $pluginPath = Shopware()->AppPath(implode('_', [
             'Plugins',
             $plugin->getSource(),
             $plugin->getNamespace(),
-            $plugin->getName()
-        )));
+            $plugin->getName(),
+        ]));
 
-        if ($plugin->getSource() === "Default") {
+        if ($plugin->getSource() === 'Default') {
             $message = "'Default' Plugins may not be deleted.";
         } elseif ($plugin->getInstalled() !== null) {
             $message = 'Please uninstall the plugin first.';
@@ -101,22 +114,9 @@ EOF
 
         if (isset($message)) {
             $output->writeln($message);
+
             return 1;
-        } else {
-            $output->writeln(sprintf('Plugin %s has been deleted successfully.', $pluginName));
         }
-    }
-
-    public function deletePath($path)
-    {
-        $fs = new Filesystem();
-
-        try {
-            $fs->remove($path);
-        } catch (IOException $e) {
-            return false;
-        }
-
-        return true;
+        $output->writeln(sprintf('Plugin %s has been deleted successfully.', $pluginName));
     }
 }

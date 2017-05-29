@@ -30,7 +30,6 @@ use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
  * Class GarbageCollector
- * @package Shopware\Bundle\MediaBundle
  */
 class GarbageCollector
 {
@@ -54,12 +53,12 @@ class GarbageCollector
      */
     private $queue = [
         'id' => [],
-        'path' => []
+        'path' => [],
     ];
 
     /**
-     * @param MediaPosition[] $mediaPositions
-     * @param Connection $dbConnection
+     * @param MediaPosition[]       $mediaPositions
+     * @param Connection            $dbConnection
      * @param MediaServiceInterface $mediaService
      */
     public function __construct(array $mediaPositions, Connection $dbConnection, MediaServiceInterface $mediaService)
@@ -94,10 +93,22 @@ class GarbageCollector
 
     /**
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool|string
+     */
+    public function getCount()
+    {
+        $query = $this->connection->query('SELECT count(*) AS cnt FROM `s_media` WHERE albumID = -13');
+
+        return $query->fetchColumn();
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function createTempTable()
     {
-        $this->connection->exec("CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id))");
+        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id))');
     }
 
     /**
@@ -105,19 +116,20 @@ class GarbageCollector
      */
     private function moveToTrash()
     {
-        $sql = "
+        $sql = '
             UPDATE s_media m
             LEFT JOIN s_media_used u
             ON u.mediaId = m.id
             SET albumID=-13
             WHERE u.id IS NULL
             AND albumID = -1
-        ";
+        ';
         $this->connection->exec($sql);
     }
 
     /**
      * @param MediaPosition $mediaPosition
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function find(MediaPosition $mediaPosition)
@@ -141,19 +153,10 @@ class GarbageCollector
     }
 
     /**
-     * @return bool|string
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function getCount()
-    {
-        $query = $this->connection->query("SELECT count(*) AS cnt FROM `s_media` WHERE albumID = -13");
-
-        return $query->fetchColumn();
-    }
-
-    /**
      * Handles tables with json content
+     *
      * @param MediaPosition $mediaPosition
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function handleJsonTable(MediaPosition $mediaPosition)
@@ -223,6 +226,7 @@ class GarbageCollector
 
     /**
      * @param MediaPosition $mediaPosition
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function handleTable(MediaPosition $mediaPosition)
@@ -274,10 +278,10 @@ class GarbageCollector
             $this->connection->executeQuery(
                 $sql,
                 [
-                    ':mediaPaths' => $paths
+                    ':mediaPaths' => $paths,
                 ],
                 [
-                    ':mediaPaths' => Connection::PARAM_INT_ARRAY
+                    ':mediaPaths' => Connection::PARAM_INT_ARRAY,
                 ]
             );
         }
@@ -286,13 +290,14 @@ class GarbageCollector
         if (!empty($this->queue['id'])) {
             $ids = array_unique($this->queue['id']);
             $idString = '(' . implode('),(', $ids) . ')';
-            $sql = sprintf("INSERT INTO s_media_used (mediaId) VALUES %s", $idString);
+            $sql = sprintf('INSERT INTO s_media_used (mediaId) VALUES %s', $idString);
             $this->connection->executeQuery($sql);
         }
     }
 
     /**
      * @param MediaPosition $mediaPosition
+     *
      * @return array
      */
     private function fetchColumn(MediaPosition $mediaPosition)

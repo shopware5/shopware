@@ -24,29 +24,29 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_Test_Controller_TestCase
 {
-    private $testDataCreate = array(
-        "name" => "New payment",
-        "description" => "New payment",
-        "source" => 1,
-        "template" => "",
-        "class" => "",
-        "table" => "",
-        "hide" => 0,
-        "additionaldescription" => "",
-        "debitPercent" => 0,
-        "surcharge" => 0,
-        "surchargeString" => "",
-        "position" => 0,
-        "active" => 0,
-        "esdActive" => 0,
-        "embedIFrame" => "",
-        "hideProspect" => ""
-    );
+    private $testDataCreate = [
+        'name' => 'New payment',
+        'description' => 'New payment',
+        'source' => 1,
+        'template' => '',
+        'class' => '',
+        'table' => '',
+        'hide' => 0,
+        'additionaldescription' => '',
+        'debitPercent' => 0,
+        'surcharge' => 0,
+        'surchargeString' => '',
+        'position' => 0,
+        'active' => 0,
+        'esdActive' => 0,
+        'embedIFrame' => '',
+        'hideProspect' => '',
+    ];
 
     /**
      * Standard set up for every test - just disable auth
@@ -66,7 +66,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
      */
     public function testGetPayments()
     {
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getPayments');
         $this->assertTrue($this->View()->success);
 
@@ -82,7 +82,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
      */
     public function testGetCountries()
     {
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getCountries');
         $this->assertTrue($this->View()->success);
 
@@ -94,6 +94,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
 
     /**
      * Function to test creating a new payment
+     *
      * @return mixed
      */
     public function testCreatePayments()
@@ -114,14 +115,15 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
 
     /**
      * Function to test updating a payment
+     *
      * @param $data Contains the data of the created payment
      * @depends testCreatePayments
      */
     public function testUpdatePayments($data)
     {
-        $this->Request()->setMethod('POST')->setPost(array('id'=>$data['id'], 'name'=>'Neue Zahlungsart'));
+        $this->Request()->setMethod('POST')->setPost(['id' => $data['id'], 'name' => 'Neue Zahlungsart']);
 
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/updatePayments');
         $this->assertTrue($this->View()->success);
 
@@ -133,14 +135,15 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
 
     /**
      * Function to test deleting a payment
+     *
      * @param $data Contains the data of the created payment
      * @depends testCreatePayments
      */
     public function testDeletePayment($data)
     {
-        $this->Request()->setMethod('POST')->setPost(array('id' => $data['id']));
+        $this->Request()->setMethod('POST')->setPost(['id' => $data['id']]);
 
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/deletePayment');
         $this->assertTrue($this->View()->success);
 

@@ -1,9 +1,30 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
 use Shopware\Tests\Mink\Helper;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Element: AddressManagementAddressBox
@@ -15,12 +36,12 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class AddressManagementAddressBox extends MultipleElement
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => 'div.address--box'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -43,7 +64,7 @@ class AddressManagementAddressBox extends MultipleElement
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -57,6 +78,7 @@ class AddressManagementAddressBox extends MultipleElement
 
     /**
      * @param $givenAddress
+     *
      * @return bool
      */
     public function containsAdress($givenAddress)
@@ -70,17 +92,8 @@ class AddressManagementAddressBox extends MultipleElement
         $testAddress[] = Helper::getElementProperty($this, 'street');
         $testAddress[] = Helper::getElementProperty($this, 'zipcode') . ' ' . Helper::getElementProperty($this, 'city');
         $testAddress[] = Helper::getElementProperty($this, 'countryName');
-        
+
         return Helper::compareArrays($givenAddress, $testAddress) === true;
-    }
-
-    private function getCompanyOrNull()
-    {
-        if ($this->has('css', $this->getCssSelectors()['company'])) {
-            return $this->getCompanyProperty();
-        }
-
-        return null;
     }
 
     public function hasTitle($title)
@@ -90,5 +103,14 @@ class AddressManagementAddressBox extends MultipleElement
         }
 
         return false;
+    }
+
+    private function getCompanyOrNull()
+    {
+        if ($this->has('css', $this->getCssSelectors()['company'])) {
+            return $this->getCompanyProperty();
+        }
+
+        return null;
     }
 }

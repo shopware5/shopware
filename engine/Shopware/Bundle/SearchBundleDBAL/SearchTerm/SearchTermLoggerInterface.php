@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SearchTermLoggerInterface
@@ -38,9 +38,9 @@ interface SearchTermLoggerInterface
     /**
      * Traces the search result into the s_statistic_search
      *
-     * @param Criteria $criteria
+     * @param Criteria                  $criteria
      * @param ProductNumberSearchResult $result
-     * @param Shop $shop
+     * @param Shop                      $shop
      */
     public function logResult(Criteria $criteria, ProductNumberSearchResult $result, Shop $shop);
 }

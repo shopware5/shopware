@@ -26,9 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class PluginLicenceRequest
 {
     /**

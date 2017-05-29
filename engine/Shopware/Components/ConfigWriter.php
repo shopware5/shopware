@@ -30,7 +30,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigWriter
@@ -49,9 +49,10 @@ class ConfigWriter
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $namespace
-     * @param int $shopId
+     * @param int         $shopId
+     *
      * @return mixed
      */
     public function get($name, $namespace = null, $shopId = 1)
@@ -68,10 +69,10 @@ class ConfigWriter
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
+     * @param string      $name
+     * @param mixed       $value
      * @param string|null $namespace
-     * @param int $shopId
+     * @param int         $shopId
      */
     public function save($name, $value, $namespace = null, $shopId = 1)
     {
@@ -83,6 +84,7 @@ class ConfigWriter
 
         if ($result['valueId']) {
             $this->update($value, $result['valueId']);
+
             return;
         }
 
@@ -90,9 +92,10 @@ class ConfigWriter
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $namespace
-     * @param int $shopId
+     * @param int         $shopId
+     *
      * @return QueryBuilder
      */
     private function getConfigValueByNameQuery($name, $namespace = null, $shopId = 1)
@@ -121,27 +124,29 @@ class ConfigWriter
 
     /**
      * @param string $value
-     * @param int $valueId
+     * @param int    $valueId
+     *
      * @throws DBALException
      */
     private function update($value, $valueId)
     {
         $this->connection->executeUpdate(
-            "UPDATE s_core_config_values SET value = :value WHERE id = :id",
+            'UPDATE s_core_config_values SET value = :value WHERE id = :id',
             [':value' => $value, ':id' => $valueId]
         );
     }
 
     /**
      * @param string $value
-     * @param int $shopId
-     * @param int $elementId
+     * @param int    $shopId
+     * @param int    $elementId
+     *
      * @throws DBALException
      */
     private function insert($value, $shopId, $elementId)
     {
         $this->connection->executeUpdate(
-            "INSERT INTO s_core_config_values (element_id, shop_id, value) VALUES (:elementId, :shopId, :value)",
+            'INSERT INTO s_core_config_values (element_id, shop_id, value) VALUES (:elementId, :shopId, :value)',
             [':elementId' => $elementId, ':value' => $value, 'shopId' => $shopId]
         );
     }

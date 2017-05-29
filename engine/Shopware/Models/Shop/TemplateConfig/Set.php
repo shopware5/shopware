@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Shop\TemplateConfig;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_core_templates_config_set")
@@ -33,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Set extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -66,7 +67,7 @@ class Set extends ModelEntity
     protected $values;
 
     /**
-     * @var Template $element
+     * @var Template
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
      *      inversedBy="configSets"

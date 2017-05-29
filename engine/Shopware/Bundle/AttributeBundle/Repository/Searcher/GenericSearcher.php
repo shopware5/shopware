@@ -31,7 +31,7 @@ use Shopware\Components\Model\QueryBuilder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class GenericSearcher implements SearcherInterface
@@ -48,7 +48,8 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * GenericSearcher constructor.
-     * @param string $entity
+     *
+     * @param string       $entity
      * @param ModelManager $entityManager
      */
     public function __construct($entity, ModelManager $entityManager)
@@ -59,6 +60,7 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return SearcherResult
      */
     public function search(SearchCriteria $criteria)
@@ -77,11 +79,13 @@ class GenericSearcher implements SearcherInterface
         if ($criteria->sortings) {
             $builder->addOrderBy($criteria->sortings);
         }
+
         return $this->createResult($builder);
     }
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
     protected function createQuery(SearchCriteria $criteria)
@@ -90,12 +94,13 @@ class GenericSearcher implements SearcherInterface
         $builder->select($this->getIdentifierField());
         $builder->from($criteria->entity, 'entity');
         $builder->setAlias('entity');
+
         return $builder;
     }
 
     /**
      * @param SearchCriteria $criteria
-     * @param QueryBuilder $builder
+     * @param QueryBuilder   $builder
      */
     protected function addSearchTermCondition(SearchCriteria $criteria, QueryBuilder $builder)
     {
@@ -110,11 +115,13 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return string[]
      */
     protected function getSearchFields(SearchCriteria $criteria)
     {
         $classMetaData = $this->entityManager->getClassMetadata($this->entity);
+
         return array_map(function ($field) {
             return 'entity.' . $field;
         }, $classMetaData->fieldNames);
@@ -122,6 +129,7 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * @param QueryBuilder $builder
+     *
      * @return SearcherResult
      */
     protected function createResult(QueryBuilder $builder)

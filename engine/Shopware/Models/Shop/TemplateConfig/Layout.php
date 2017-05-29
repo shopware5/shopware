@@ -21,11 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_core_templates_config_layout")
@@ -33,15 +34,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Layout extends ModelEntity
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
     /**
      * @var
      * @ORM\Column(name="name", type="string", nullable=false)
@@ -61,7 +53,7 @@ class Layout extends ModelEntity
     protected $templateId;
 
     /**
-     * @var Element $element
+     * @var Element
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
      *      inversedBy="layouts"
@@ -71,7 +63,7 @@ class Layout extends ModelEntity
     protected $template;
 
     /**
-     * @var integer $parentId
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
@@ -111,13 +103,20 @@ class Layout extends ModelEntity
      * @ORM\OneToMany(targetEntity="Element", mappedBy="container"))
      */
     protected $elements;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->elements = new ArrayCollection();
     }
-
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $children
@@ -190,7 +189,6 @@ class Layout extends ModelEntity
     {
         return $this->template;
     }
-
 
     /**
      * @return string

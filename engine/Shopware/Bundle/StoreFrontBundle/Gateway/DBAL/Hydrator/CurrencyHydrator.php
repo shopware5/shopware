@@ -37,6 +37,7 @@ class CurrencyHydrator extends Hydrator
         $currency->setCurrency($data['__currency_currency']);
         $currency->setSymbol($data['__currency_templatechar']);
         $currency->setSymbolPosition($data['__currency_symbol_position']);
+
         return $currency;
     }
 }

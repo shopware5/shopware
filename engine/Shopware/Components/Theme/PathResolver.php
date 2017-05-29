@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 use Shopware\Models\Plugin\Plugin;
@@ -34,7 +35,7 @@ use Shopware\Models\Shop;
  * returns the Theme directory of the passed shop template.
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PathResolver
@@ -55,8 +56,8 @@ class PathResolver
     private $pluginDirectories;
 
     /**
-     * @param string $rootDir
-     * @param array $pluginDirectories
+     * @param string                    $rootDir
+     * @param array                     $pluginDirectories
      * @param \Enlight_Template_Manager $templateManager
      */
     public function __construct($rootDir, array $pluginDirectories, \Enlight_Template_Manager $templateManager)
@@ -68,6 +69,7 @@ class PathResolver
 
     /**
      * @param Shop\Template $template
+     *
      * @return null|string
      */
     public function getDirectory(Shop\Template $template)
@@ -77,6 +79,7 @@ class PathResolver
 
     /**
      * @param array $template
+     *
      * @return null|string
      */
     public function getDirectoryByArray(array $template)
@@ -92,7 +95,7 @@ class PathResolver
                     $this->pluginDirectories['ShopwarePlugins'] . '/' . $template['plugin_name'] . '/Resources',
                     'Themes',
                     'Frontend',
-                    $template['template']
+                    $template['template'],
                 ]
             );
         }
@@ -105,16 +108,16 @@ class PathResolver
                 $template['plugin_name'],
                 'Themes',
                 'Frontend',
-                $template['template']
+                $template['template'],
             ]
         );
     }
-
 
     /**
      * Helper function to build the path to the passed plugin.
      *
      * @param Plugin $plugin
+     *
      * @return string
      */
     public function getPluginPath(Plugin $plugin)
@@ -124,14 +127,6 @@ class PathResolver
         }
 
         return $this->pluginDirectories['ShopwarePlugins'] . '/' . $plugin->getName() . '/Resources';
-    }
-
-    /**
-     * @return string
-     */
-    private function getBaseThemeDirectory()
-    {
-        return $this->rootDir . DIRECTORY_SEPARATOR . 'themes';
     }
 
     /**
@@ -156,12 +151,13 @@ class PathResolver
     {
         return $this->getBaseThemeDirectory() .
         DIRECTORY_SEPARATOR .
-        'Backend' ;
+        'Backend';
     }
 
     /**
      * Returns the current Ext JS backend theme which
      * is used for the shopware backend.
+     *
      * @return string
      */
     public function getExtJsThemeDirectory()
@@ -173,7 +169,9 @@ class PathResolver
 
     /**
      * Returns the less directory for the passed theme.
+     *
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getPublicDirectory(Shop\Template $template)
@@ -189,6 +187,7 @@ class PathResolver
      * Returns the fix defined snippet directory of the passed theme.
      *
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getSnippetDirectory(Shop\Template $template)
@@ -205,6 +204,7 @@ class PathResolver
      * Returns the fix defined snippet directory of the passed theme.
      *
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getSmartyDirectory(Shop\Template $template)
@@ -219,7 +219,9 @@ class PathResolver
 
     /**
      * Returns the less directory for the passed theme.
+     *
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getLessDirectory(Shop\Template $template)
@@ -233,7 +235,9 @@ class PathResolver
 
     /**
      * Returns the less directory for the passed theme.
+     *
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getCssDirectory(Shop\Template $template)
@@ -247,6 +251,7 @@ class PathResolver
 
     /**
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getThemeLessFile(Shop\Template $template)
@@ -257,6 +262,7 @@ class PathResolver
 
     /**
      * Helper function which returns the default shopware theme directory.
+     *
      * @return string
      */
     public function getCacheDirectory()
@@ -265,9 +271,10 @@ class PathResolver
     }
 
     /**
-     * @param string $path
+     * @param string    $path
      * @param Shop\Shop $shop
-     * @param bool $isSecureRequest
+     * @param bool      $isSecureRequest
+     *
      * @return string
      */
     public function formatPathToUrl($path, Shop\Shop $shop, $isSecureRequest = false)
@@ -283,6 +290,7 @@ class PathResolver
 
     /**
      * Returns the directory path to the compiler source map.
+     *
      * @return string
      */
     public function getSourceMapPath()
@@ -294,6 +302,7 @@ class PathResolver
      * Returns the shop url to the generated compiler source map.
      *
      * @param Shop\Shop $shop
+     *
      * @return string
      */
     public function getSourceMapUrl(Shop\Shop $shop)
@@ -311,6 +320,7 @@ class PathResolver
      *
      * @param Shop\Shop $shop
      * @param $timestamp
+     *
      * @return string
      */
     public function getCssFilePath(Shop\Shop $shop, $timestamp)
@@ -327,6 +337,7 @@ class PathResolver
      *
      * @param Shop\Shop $shop
      * @param $timestamp
+     *
      * @return string
      */
     public function getJsFilePath(Shop\Shop $shop, $timestamp)
@@ -336,9 +347,11 @@ class PathResolver
 
     /**
      * Helper function to build a unique file name.
-     * @param string $timestamp
+     *
+     * @param string    $timestamp
      * @param Shop\Shop $shop
-     * @param string $suffix
+     * @param string    $suffix
+     *
      * @return string
      */
     public function buildTimestampName($timestamp, Shop\Shop $shop, $suffix)
@@ -353,10 +366,19 @@ class PathResolver
     }
 
     /**
+     * @return string
+     */
+    private function getBaseThemeDirectory()
+    {
+        return $this->rootDir . DIRECTORY_SEPARATOR . 'themes';
+    }
+
+    /**
      * Helper function which returns the theme directory for the passed
      * shop template.
      *
      * @param Shop\Template $theme
+     *
      * @return null|string
      */
     private function getThemeDirectory(Shop\Template $theme)
@@ -369,8 +391,8 @@ class PathResolver
             'Frontend' .
             DIRECTORY_SEPARATOR .
             $theme->getTemplate();
-        } else {
-            return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
+
+        return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
     }
 }

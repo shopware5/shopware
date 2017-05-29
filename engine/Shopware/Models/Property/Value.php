@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Property;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Media\Media;
 
 /**
@@ -37,7 +37,15 @@ use Shopware\Models\Media\Media;
 class Value extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\PropertyValue
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,7 +54,7 @@ class Value extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="value", type="string", length=255, nullable=false)
      */
@@ -55,7 +63,7 @@ class Value extends ModelEntity
     /**
      * Position of this value
      *
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -64,14 +72,14 @@ class Value extends ModelEntity
     /**
      * Id of assigned Option
      *
-     * @var integer $optionId
+     * @var int
      *
      * @ORM\Column(name="optionID", type="integer")
      */
     private $optionId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\ManyToOne(targetEntity="Option", inversedBy="values", cascade={"persist"})
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id")
@@ -90,7 +98,7 @@ class Value extends ModelEntity
     private $articles;
 
     /**
-     * @var int $mediaId
+     * @var int
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
     private $mediaId = null;
@@ -103,17 +111,10 @@ class Value extends ModelEntity
     private $media;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\PropertyValue
-     */
-    protected $attribute;
-
-    /**
      * Class constructor.
      *
      * @param \Shopware\Models\Property\Option $option
-     * @param string $value
+     * @param string                           $value
      */
     public function __construct(Option $option, $value)
     {
@@ -125,7 +126,7 @@ class Value extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -136,11 +137,13 @@ class Value extends ModelEntity
      * Set value
      *
      * @param string $value
+     *
      * @return Value
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -157,19 +160,21 @@ class Value extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return \Shopware\Models\Property\Value
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -218,6 +223,7 @@ class Value extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\PropertyValue
      */
     public function setAttribute($attribute)

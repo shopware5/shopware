@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
@@ -49,7 +49,7 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
     private $config;
 
     /**
-     * @param PriceHelperInterface $priceHelper
+     * @param PriceHelperInterface        $priceHelper
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -65,7 +65,7 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof HasPseudoPriceCondition);
+        return $condition instanceof HasPseudoPriceCondition;
     }
 
     /**

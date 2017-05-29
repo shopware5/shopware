@@ -28,7 +28,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Class Result which allows to paginate dbal queries.
- * @package Shopware\Components\Model\DBAL
  */
 class Result
 {
@@ -56,6 +55,7 @@ class Result
 
     /**
      * The fetch mode which is used for the PDOStatement->fetch() function.
+     *
      * @var int
      */
     protected $fetchMode;
@@ -63,9 +63,10 @@ class Result
     /**
      * Class constructor which expects the DBAL query builder object.
      *
-     * @param QueryBuilder $builder The DBAL\Query builder object.
-     * @param int $fetchMode Allows to define the data result structure
-     * @param bool $useCountQuery Allows to disable or enable the total count query.
+     * @param QueryBuilder $builder       the DBAL\Query builder object
+     * @param int          $fetchMode     Allows to define the data result structure
+     * @param bool         $useCountQuery allows to disable or enable the total count query
+     *
      * @internal param array $data
      */
     public function __construct(QueryBuilder $builder, $fetchMode = \PDO::FETCH_ASSOC, $useCountQuery = true)
@@ -82,28 +83,14 @@ class Result
 
         if ($useCountQuery) {
             $this->totalCount = $builder->getConnection()->fetchColumn(
-                "SELECT FOUND_ROWS() as count"
+                'SELECT FOUND_ROWS() as count'
             );
         }
     }
 
     /**
-     * Modifies the passed DBAL query builder object to calculate
-     * the total count.
-     *
-     * @param QueryBuilder $builder
-     * @return $this
-     */
-    private function addTotalCountSelect(QueryBuilder $builder)
-    {
-        $select = $builder->getQueryPart('select');
-        $select[0] = ' SQL_CALC_FOUND_ROWS ' . $select[0];
-        $builder->select($select);
-        return $this;
-    }
-
-    /**
      * Returns the data result of the statement
+     *
      * @return array
      */
     public function getData()
@@ -124,5 +111,22 @@ class Result
     public function getTotalCount()
     {
         return $this->totalCount;
+    }
+
+    /**
+     * Modifies the passed DBAL query builder object to calculate
+     * the total count.
+     *
+     * @param QueryBuilder $builder
+     *
+     * @return $this
+     */
+    private function addTotalCountSelect(QueryBuilder $builder)
+    {
+        $select = $builder->getQueryPart('select');
+        $select[0] = ' SQL_CALC_FOUND_ROWS ' . $select[0];
+        $builder->select($select);
+
+        return $this;
     }
 }

@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CreateDateConditionHandler implements ConditionHandlerInterface
@@ -42,7 +42,7 @@ class CreateDateConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof CreateDateCondition);
+        return $condition instanceof CreateDateCondition;
     }
 
     /**
@@ -53,7 +53,7 @@ class CreateDateConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /**@var CreateDateCondition $condition */
+        /** @var CreateDateCondition $condition */
         $date = new \DateTime();
         $intervalSpec = 'P' . $condition->getDays() . 'D';
         $interval = new \DateInterval($intervalSpec);

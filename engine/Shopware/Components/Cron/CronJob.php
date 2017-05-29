@@ -37,9 +37,10 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
     /**
      * Sets a value of an element in the list.
      *
-     * @param   string $key
-     * @param   mixed $value
-     * @return  Shopware_Components_Cron_CronJob
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return Shopware_Components_Cron_CronJob
      */
     public function set($key, $value)
     {
@@ -48,6 +49,7 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
         } else {
             $this->_elements[$key] = $value;
         }
+
         return $this;
     }
 
@@ -55,6 +57,7 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
      * Returns a value of an element in the list.
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -62,6 +65,7 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
         if ($key === 'data') {
             return $this->getReturn();
         }
+
         return parent::get($key);
     }
 }

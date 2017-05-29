@@ -66,10 +66,17 @@ Ext.define('Shopware.apps.Voucher.controller.Main', {
      */
     init: function() {
         var me = this;
-        me.mainWindow = me.getView('main.Window').create({
-            listStore: me.getStore('List')
-        });
-        me.getStore('List').load();
+
+        if (me.subApplication && me.subApplication.params && Ext.isNumeric(me.subApplication.params.voucherId)) {
+            var voucherController = me.subApplication.getController('Voucher');
+            voucherController.openVoucher(me.subApplication.params.voucherId);
+        } else {
+            me.mainWindow = me.getView('main.Window').create({
+                listStore: me.getStore('List')
+            });
+            me.getStore('List').load();
+        }
+
         me.callParent(arguments);
     }
 });

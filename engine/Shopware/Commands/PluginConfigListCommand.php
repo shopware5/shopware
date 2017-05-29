@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginConfigListCommand extends ShopwareCommand
@@ -62,7 +62,6 @@ class PluginConfigListCommand extends ShopwareCommand
 The <info>%command.name%</info> lists a plugin configuration.
 EOF
             );
-        ;
     }
 
     /**
@@ -71,34 +70,35 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+
             return 1;
         }
-        /**@var ModelManager $em */
+        /** @var ModelManager $em */
         $em = $this->container->get('models');
 
         if ($input->getOption('shop')) {
             $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($input->getOption('shop'));
             if (!$shop) {
                 $output->writeln(sprintf('Could not find shop with id %s.', $input->getOption('shop')));
+
                 return 1;
             }
-            $shops = array($shop);
+            $shops = [$shop];
         } else {
             $shops = $em->getRepository('Shopware\Models\Shop\Shop')->findAll();
         }
 
-
         foreach ($shops as $shop) {
             $config = $pluginManager->getPluginConfig($plugin, $shop);
 
-            $output->writeln(sprintf("Plugin configuration for Plugin %s and shop %s:", $pluginName, $shop->getName()));
+            $output->writeln(sprintf('Plugin configuration for Plugin %s and shop %s:', $pluginName, $shop->getName()));
             $output->writeln(print_r($config, true));
         }
     }

@@ -26,7 +26,7 @@ namespace Shopware\Plugin\Debug\Components;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Utils
@@ -34,9 +34,10 @@ class Utils
     /**
      * Encode data method
      *
-     * @param   $data
-     * @param   int $length
-     * @return  array|string
+     * @param     $data
+     * @param int $length
+     *
+     * @return array|string
      */
     public function encode($data, $length = 250)
     {
@@ -71,6 +72,7 @@ class Utils
      * Format memory in a proper way
      *
      * @param  $size
+     *
      * @return string
      */
     public function formatMemory($size)
@@ -78,7 +80,8 @@ class Utils
         if (empty($size)) {
             return '0.00 b';
         }
-        $unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+        $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
+
         return @number_format($size / pow(1024, ($i = floor(log($size, 1024)))), 2, '.', '') . ' ' . $unit[$i];
     }
 
@@ -86,6 +89,7 @@ class Utils
      * Format time for human readable
      *
      * @param  $time
+     *
      * @return string
      */
     public function formatTime($time)

@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Components_Test_TestCase
@@ -34,14 +34,14 @@ class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Com
      */
     public function testSnippetsShouldBeValid()
     {
-        $source = Shopware()->Container()->getParameter('kernel.root_dir').'/snippets';
+        $source = Shopware()->Container()->getParameter('kernel.root_dir') . '/snippets';
 
         $validator = Shopware()->Container()->get('shopware.snippet_validator');
 
         $validationResult = $validator->validate($source);
 
         $pluginBasePath = Shopware()->Container()->get('application')->AppPath('Plugins_Default');
-        foreach (array('Backend', 'Core', 'Frontend') as $namespace) {
+        foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
             foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
                 if ($pluginDir->isDot() || !$pluginDir->isDir()) {
                     continue;
@@ -51,6 +51,6 @@ class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Com
             }
         }
 
-        $this->assertEmpty($validationResult, "Snippet validation errors detected: \n" .  implode("\n", $validationResult));
+        $this->assertEmpty($validationResult, "Snippet validation errors detected: \n" . implode("\n", $validationResult));
     }
 }

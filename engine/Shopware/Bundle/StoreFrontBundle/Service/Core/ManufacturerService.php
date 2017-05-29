@@ -21,17 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerService implements Service\ManufacturerServiceInterface
@@ -48,7 +49,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
 
     /**
      * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
-     * @param RouterInterface $router
+     * @param RouterInterface                      $router
      */
     public function __construct(
         Gateway\ManufacturerGatewayInterface $manufacturerGateway,
@@ -59,7 +60,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
@@ -69,13 +70,13 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context);
 
-        //fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
+        // fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
         $links = $this->collectLinks($manufacturers);
         $urls = $this->router->generateList($links);
         foreach ($manufacturers as $manufacturer) {
@@ -89,6 +90,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
 
     /**
      * @param Manufacturer[] $manufacturers
+     *
      * @return array[]
      */
     private function collectLinks(array $manufacturers)
@@ -98,9 +100,10 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
             $links[$manufacturer->getId()] = [
                 'controller' => 'listing',
                 'action' => 'manufacturer',
-                'sSupplier' => $manufacturer->getId()
+                'sSupplier' => $manufacturer->getId(),
             ];
         }
+
         return $links;
     }
 }

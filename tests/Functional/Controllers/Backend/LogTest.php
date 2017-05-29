@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test_Controller_TestCase
@@ -46,7 +46,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      */
     public function testGetLogs()
     {
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/log/getLogs');
         $this->assertTrue($this->View()->success);
 
@@ -60,22 +60,22 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
     /**
      * This test tests the creating of a new log.
      * This function is called before testDeleteLogs
+     *
      * @return mixed
      */
     public function testCreateLog()
     {
         $this->Request()->setClientIp('10.0.0.3', false);
         $this->Request()->setMethod('POST')->setPost(
-            array(
-                'type'   => 'backend',
-                'key'    => 'Log',
-                'text'   => 'DummyText',
-                'date'   => new \DateTime('now'),
-                'user'   => 'Administrator',
-                'value4' => ''
-            )
+            [
+                'type' => 'backend',
+                'key' => 'Log',
+                'text' => 'DummyText',
+                'date' => new \DateTime('now'),
+                'user' => 'Administrator',
+                'value4' => '',
+            ]
         );
-
 
         $this->dispatch('backend/log/createLog');
         $this->assertTrue($this->View()->success);
@@ -93,11 +93,12 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      * This test-method tests the deleting of a log.
      *
      * @depends testCreateLog
+     *
      * @param $lastId
      */
     public function testDeleteLogs($lastId)
     {
-        $this->Request()->setMethod('POST')->setPost(array('id'=>$lastId));
+        $this->Request()->setMethod('POST')->setPost(['id' => $lastId]);
 
         $this->dispatch('backend/log/deleteLogs');
 

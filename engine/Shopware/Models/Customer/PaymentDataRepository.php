@@ -25,7 +25,6 @@
 namespace   Shopware\Models\Customer;
 
 use Shopware\Components\Model\ModelRepository;
-use Doctrine\ORM\Query\Expr;
 
 /**
  * Shopware Payment Data Repository
@@ -34,22 +33,23 @@ class PaymentDataRepository extends ModelRepository
 {
     /**
      * @param null $userId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCurrentPaymentDataQueryBuilder($userId, $paymentName)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('paymentdata'));
+        $builder->select(['paymentdata']);
         $builder->from('Shopware\Models\Customer\PaymentData', 'paymentdata')
             ->leftJoin('paymentdata.paymentMean', 'paymentmean')
             ->leftJoin('paymentdata.customer', 'customer')
             ->where('customer.id = :userId')
-            ->andWhere("paymentmean.name = :paymentName")
-            ->andWhere("paymentmean.active = 1")
-            ->setParameters(array(
+            ->andWhere('paymentmean.name = :paymentName')
+            ->andWhere('paymentmean.active = 1')
+            ->setParameters([
                 'userId' => $userId,
                 'paymentName' => $paymentName,
-            ));
+            ]);
 
         return $builder;
     }

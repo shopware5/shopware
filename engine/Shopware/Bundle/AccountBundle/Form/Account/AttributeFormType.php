@@ -53,8 +53,9 @@ class AttributeFormType extends AbstractType
 
     /**
      * AttributeFormType constructor.
-     * @param ModelManager $entityManager
-     * @param CrudService $attributeService
+     *
+     * @param ModelManager    $entityManager
+     * @param CrudService     $attributeService
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -85,7 +86,7 @@ class AttributeFormType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -118,9 +119,9 @@ class AttributeFormType extends AbstractType
                     }
                     $field = $metaData->getFieldForColumn($attribute->getColumnName());
 
-                    $method = "get" . ucfirst($field);
+                    $method = 'get' . ucfirst($field);
                     if (method_exists($data, $method)) {
-                        $form->add($field, null, [ 'empty_data' => $data->$method() ]);
+                        $form->add($field, null, ['empty_data' => $data->$method()]);
                     }
                 }
             } catch (\Exception $e) {

@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class UpdateResultStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class UpdateResultStruct implements \JsonSerializable
 {
@@ -42,7 +41,7 @@ class UpdateResultStruct implements \JsonSerializable
 
     /**
      * @param PluginStruct[] $plugins
-     * @param bool $gtcAcceptanceRequired
+     * @param bool           $gtcAcceptanceRequired
      */
     public function __construct($plugins, $gtcAcceptanceRequired)
     {
@@ -75,7 +74,7 @@ class UpdateResultStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

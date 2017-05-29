@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
@@ -22,8 +44,9 @@ class LocationService implements LocationServiceInterface
 
     /**
      * LocationService constructor.
+     *
      * @param CountryGatewayInterface $gateway
-     * @param Connection $connection
+     * @param Connection              $connection
      */
     public function __construct(CountryGatewayInterface $gateway, Connection $connection)
     {
@@ -35,6 +58,7 @@ class LocationService implements LocationServiceInterface
      * Returns all available countries for the provided shop context
      *
      * @param ShopContextInterface $context
+     *
      * @return Country[] indexed by id
      */
     public function getCountries(ShopContextInterface $context)
@@ -70,11 +94,13 @@ class LocationService implements LocationServiceInterface
         $query = $this->connection->createQueryBuilder();
         $query->select('id');
         $query->from('s_core_countries', 'country');
+
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
      * @param Country\State[] $countryStates
+     *
      * @return Country\State[]
      */
     private function sortStates($countryStates)
@@ -83,6 +109,7 @@ class LocationService implements LocationServiceInterface
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getName(), $b->getName());
             }
+
             return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
         });
 
@@ -91,6 +118,7 @@ class LocationService implements LocationServiceInterface
 
     /**
      * @param Country[] $countries
+     *
      * @return Country[]
      */
     private function sortCountries($countries)

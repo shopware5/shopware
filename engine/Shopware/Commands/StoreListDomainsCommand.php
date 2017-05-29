@@ -24,15 +24,12 @@
 
 namespace Shopware\Commands;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StoreListDomainsCommand extends StoreCommand
@@ -60,17 +57,17 @@ class StoreListDomainsCommand extends StoreCommand
         $shops = $this->container->get('shopware_plugininstaller.account_manager_service')
             ->getShops($token);
 
-        $domains = array();
+        $domains = [];
 
         foreach ($shops as $shop) {
-            $domains[] = array(
+            $domains[] = [
                $shop['domain'],
-               number_format($shop['balance'], 2)
-            );
+               number_format($shop['balance'], 2),
+            ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Domain', 'Balance'))
+        $table->setHeaders(['Domain', 'Balance'])
               ->setRows($domains);
 
         $table->render($output);
