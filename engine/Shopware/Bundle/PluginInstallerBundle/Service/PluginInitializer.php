@@ -76,6 +76,11 @@ class PluginInitializer
                 continue;
             }
 
+            $isActive = in_array($pluginName, $activePlugins, true);
+            if (!$isActive) {
+                continue;
+            }
+
             $namespace = $pluginName;
             $className = '\\' . $namespace . '\\' . $pluginName;
             $classLoader->addPrefix($namespace, $pluginDir->getPathname());
@@ -83,8 +88,6 @@ class PluginInitializer
             if (!class_exists($className)) {
                 throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
             }
-
-            $isActive = in_array($pluginName, $activePlugins, true);
 
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
