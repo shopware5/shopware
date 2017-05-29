@@ -2356,7 +2356,7 @@ class sBasket
                 ++$totalCount;
             }
 
-            $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
+            $totalAmountNet += round($getArticles[$key]['amountnet'], 2);
             $totalAmountNet = round($totalAmountNet, 2);
 
             $getArticles[$key]['priceNumeric'] = $getArticles[$key]['price'];
@@ -2475,7 +2475,7 @@ class sBasket
             FROM s_articles, s_order_basket, s_articles_details
               LEFT JOIN s_articles_avoid_customergroups avoid
                 ON avoid.articleID = s_articles_details.articleID
-
+                
             WHERE s_order_basket.articleID = s_articles.id
             AND s_order_basket.ordernumber = s_articles_details.ordernumber
             AND s_order_basket.id = ?
