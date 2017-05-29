@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_UserConfig extends Shopware_Controllers_Backe
         $name = $this->Request()->getParam('name');
 
         $config = $this->container->get('dbal_connection')->fetchColumn(
-            'SELECT config FROM s_user_config WHERE user_id = :id AND `name` = :name',
+            'SELECT config FROM s_core_auth_config WHERE user_id = :id AND `name` = :name',
             [':id' => $identity, ':name' => $name]
         );
 
@@ -50,7 +50,7 @@ class Shopware_Controllers_Backend_UserConfig extends Shopware_Controllers_Backe
         $config = $this->Request()->getParam('config');
 
         $this->container->get('dbal_connection')->executeUpdate(
-            'INSERT INTO s_user_config (user_id, `name`, `config`) 
+            'INSERT INTO s_core_auth_config (user_id, `name`, `config`) 
              VALUES (:id, :name, :config) 
              ON DUPLICATE KEY UPDATE `config`= :config',
             [':id' => $identity, ':name' => $name, ':config' => $config]
