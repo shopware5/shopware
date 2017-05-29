@@ -12,6 +12,22 @@
     {/if}
 {/block}
 
+{block name="frontend_account_menu_link_overview"}
+    {if !$userInfo}
+        <li class="navigation--entry">
+            <span class="navigation--signin">
+                <a href="{url module='frontend' controller='account'}" class="blocked--link btn is--primary navigation--signin-btn">
+                    {s name="AccountLogin"}{/s}
+                </a>
+                <span class="navigation--register">
+                    {s name="AccountOr"}{/s} <a href="{url module='frontend' controller='account'}" class="blocked--link">{s name="AccountRegister"}{/s}</a>
+                </span>
+            </span>
+        </li>
+    {/if}
+    {$smarty.block.parent}
+{/block}
+
 {block name="frontend_account_menu_link_logout"}
     {if $userInfo}
         <li class="navigation--entry">

@@ -53,7 +53,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
         $view = $this->View();
 
         $config = $this->container->get('config');
-        if ($config->get('useSltCookie')) {
+        if ($config->get('useSltCookie') && !$this->session->sOneTimeAccount) {
             if (!isset($this->session->userInfo)) {
                 $this->session->userInfo = $this->fetchUserInfo();
             }
