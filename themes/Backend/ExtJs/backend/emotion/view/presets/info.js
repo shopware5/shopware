@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
                                         '<tpl else>' +
                                             '<span style="width: 16px; height: 16px; display: inline-block; line-height: 15px;" class="sprite-ui-check-box-uncheck">&nbsp;</span>' +
                                         '</tpl>',
-                                        '<span>{literal}{plugin_label} ({version}){/literal}</span>' +
+                                        '<span>{literal}{[this.getPluginName(values)]} ({version}){/literal}</span>' +
                                     '</li>',
                                 '</tpl>',
                             '</ul>',
@@ -91,6 +91,11 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
             {
                 hasRequiredPlugins: function(requiredPlugins) {
                     return requiredPlugins.length > 0;
+                }
+            },
+            {
+                getPluginName: function(values) {
+                    return values.plugin_label || values.name;
                 }
             }
         );
