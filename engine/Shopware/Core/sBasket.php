@@ -2346,13 +2346,11 @@ class sBasket
                 }
             }
 
-
             $totalAmount += round($getArticles[$key]['amount'], 2);
             $totalAmount = round($totalAmount, 2);
             // Needed if shop is in net-mode
             $totalAmountWithTax += round($getArticles[$key]['amountWithTax'], 2);
             $totalAmountWithTax = round($totalAmountWithTax, 2);
-
             // Ignore vouchers and premiums by counting articles
             if (!$getArticles[$key]['modus']) {
                 ++$totalCount;
@@ -2360,7 +2358,6 @@ class sBasket
 
             $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
             $totalAmountNet = round($totalAmountNet, 2);
-
 
             $getArticles[$key]['priceNumeric'] = $getArticles[$key]['price'];
             $getArticles[$key]['price'] = $this->moduleManager->Articles()
@@ -2478,7 +2475,7 @@ class sBasket
             FROM s_articles, s_order_basket, s_articles_details
               LEFT JOIN s_articles_avoid_customergroups avoid
                 ON avoid.articleID = s_articles_details.articleID
-                
+
             WHERE s_order_basket.articleID = s_articles.id
             AND s_order_basket.ordernumber = s_articles_details.ordernumber
             AND s_order_basket.id = ?
