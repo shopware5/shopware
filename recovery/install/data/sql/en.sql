@@ -537,3 +537,7 @@ UPDATE s_search_custom_facet SET `name` = 'Price' WHERE id = 4;
 UPDATE s_search_custom_facet SET `name` = 'Properties' WHERE id = 5;
 UPDATE s_search_custom_facet SET `name` = 'Shipping free' WHERE id = 6;
 UPDATE s_search_custom_facet SET `name` = 'Rating' WHERE id = 7;
+UPDATE s_search_custom_facet SET `name` = 'Weight' WHERE id = 8;
+UPDATE s_search_custom_facet SET `name` = 'Width' WHERE id = 9;
+UPDATE s_search_custom_facet SET `name` = 'Height' WHERE id = 10;
+UPDATE s_search_custom_facet SET `name` = 'Length' WHERE id = 11;
