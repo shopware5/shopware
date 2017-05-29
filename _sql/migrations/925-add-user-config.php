@@ -32,7 +32,7 @@ class Migrations_Migration925 extends AbstractMigration
     public function up($modus)
     {
         $this->addSql('
-CREATE TABLE `s_user_config` (
+CREATE TABLE `s_core_auth_config` (
 `user_id` int(11) NOT NULL,
 `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
 `config` longtext COLLATE utf8_unicode_ci NOT NULL,
