@@ -1797,7 +1797,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers sBasket::sGetBasketData
+     * @covers \sBasket::sGetBasketData
      */
     public function testsGetBasketDataFloatValueIssues()
     {
@@ -1808,48 +1808,48 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $this->db->insert(
             's_order_basket',
-            array(
-                'price' => (float)"3.09",
-                'netprice' => (float)"3.09",
+            [
+                'price' => (float)'3.09',
+                'netprice' => (float)'3.09',
                 'tax_rate' => 0,
                 'quantity' => 1,
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => '12345',
                 'articleID' => 1,
                 'currencyFactor' => 1,
-            )
+            ]
         );
 
         $this->db->insert(
             's_order_basket',
-            array(
-                'price' => (float)"6.18",
-                'netprice' => (float)"6.18",
+            [
+                'price' => (float)'6.18',
+                'netprice' => (float)'6.18',
                 'tax_rate' => 0,
                 'quantity' => 1,
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => '12346',
                 'articleID' => 2,
                 'currencyFactor' => 1,
-            )
+            ]
         );
 
         $this->db->insert(
             's_order_basket',
-            array(
-                'price' => (float)"8.99",
-                'netprice' => (float)"8.99",
+            [
+                'price' => (float)'8.99',
+                'netprice' => (float)'8.99',
                 'tax_rate' => 0,
                 'quantity' => 1,
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => '12347',
                 'articleID' => 3,
                 'currencyFactor' => 1,
-            )
+            ]
         );
 
 
-        $voucherData = array(
+        $voucherData = [
             'vouchercode' => 'testpercentile',
             'description' => 'testpercentile description',
             'numberofunits' => 1,
@@ -1860,7 +1860,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             'numorder' => 1,
             'modus' => 0,
             'taxconfig' => 'auto',
-        );
+        ];
 
         $this->db->insert(
             's_emarketing_vouchers',
@@ -1869,7 +1869,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $result1 = $this->module->sAddVoucher('testpercentile');
 
-        $keys = array(
+        $keys = [
             'content',
             'Amount',
             'AmountNet',
@@ -1877,8 +1877,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             'AmountNumeric',
             'AmountNetNumeric',
             'AmountWithTax',
-            'AmountWithTaxNumeric'
-        );
+            'AmountWithTaxNumeric',
+        ];
 
         $result = $this->module->sGetBasketData();
         $this->assertEquals($keys, array_keys($result));
@@ -1890,11 +1890,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         // Housekeeping
         $this->db->delete(
             's_order_basket',
-            array('sessionID = ?' => $this->session->get('sessionId'))
+            ['sessionID = ?' => $this->session->get('sessionId')]
         );
         $this->db->delete(
             's_emarketing_vouchers',
-            array('vouchercode = ?' => 'testpercentile')
+            ['vouchercode = ?' => 'testpercentile']
         );
         $this->deleteDummyCustomer($customer);
     }
