@@ -2346,15 +2346,21 @@ class sBasket
                 }
             }
 
+
             $totalAmount += round($getArticles[$key]['amount'], 2);
+            $totalAmount = round($totalAmount, 2);
             // Needed if shop is in net-mode
             $totalAmountWithTax += round($getArticles[$key]['amountWithTax'], 2);
+            $totalAmountWithTax = round($totalAmountWithTax, 2);
+
             // Ignore vouchers and premiums by counting articles
             if (!$getArticles[$key]['modus']) {
                 ++$totalCount;
             }
 
-            $totalAmountNet += round($getArticles[$key]['amountnet'], 2);
+            $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
+            $totalAmountNet = round($totalAmountNet, 2);
+
 
             $getArticles[$key]['priceNumeric'] = $getArticles[$key]['price'];
             $getArticles[$key]['price'] = $this->moduleManager->Articles()

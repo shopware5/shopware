@@ -1797,6 +1797,109 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @covers sBasket::sGetBasketData
+     */
+    public function testsGetBasketDataFloatValueIssues()
+    {
+        $customer = $this->createDummyCustomer();
+        $this->session['sUserId'] = $customer->getId();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => (float)"3.09",
+                'netprice' => (float)"3.09",
+                'tax_rate' => 0,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => '12345',
+                'articleID' => 1,
+                'currencyFactor' => 1,
+            )
+        );
+
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => (float)"6.18",
+                'netprice' => (float)"6.18",
+                'tax_rate' => 0,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => '12346',
+                'articleID' => 2,
+                'currencyFactor' => 1,
+            )
+        );
+
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => (float)"8.99",
+                'netprice' => (float)"8.99",
+                'tax_rate' => 0,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => '12347',
+                'articleID' => 3,
+                'currencyFactor' => 1,
+            )
+        );
+
+
+        $voucherData = array(
+            'vouchercode' => 'testpercentile',
+            'description' => 'testpercentile description',
+            'numberofunits' => 1,
+            'value' => 100,
+            'percental' => 1,
+            'minimumcharge' => 1,
+            'ordercode' => uniqid(rand()),
+            'numorder' => 1,
+            'modus' => 0,
+            'taxconfig' => 'auto',
+        );
+
+        $this->db->insert(
+            's_emarketing_vouchers',
+            $voucherData
+        );
+
+        $result1 = $this->module->sAddVoucher('testpercentile');
+
+        $keys = array(
+            'content',
+            'Amount',
+            'AmountNet',
+            'Quantity',
+            'AmountNumeric',
+            'AmountNetNumeric',
+            'AmountWithTax',
+            'AmountWithTaxNumeric'
+        );
+
+        $result = $this->module->sGetBasketData();
+        $this->assertEquals($keys, array_keys($result));
+        $this->assertGreaterThanOrEqual(4, count($result['content']));
+        $this->assertEquals(0, $result['Amount']);
+        $this->assertEquals(0, $result['AmountNet']);
+        $this->assertEquals(0, $result['AmountWithTax']);
+
+        // Housekeeping
+        $this->db->delete(
+            's_order_basket',
+            array('sessionID = ?' => $this->session->get('sessionId'))
+        );
+        $this->db->delete(
+            's_emarketing_vouchers',
+            array('vouchercode = ?' => 'testpercentile')
+        );
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
      * @covers \sBasket::sAddNote
      */
     public function testsAddNote()
