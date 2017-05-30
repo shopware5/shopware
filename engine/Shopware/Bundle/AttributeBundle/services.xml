@@ -218,7 +218,7 @@
             <tag name="attribute_search_repository" />
         </service>
 
-        <service id="shopware_attribute.customer_stream_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
+        <service id="shopware_attribute.customer_stream_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CustomerStreamSearcher">
             <argument>Shopware\Models\CustomerStream\CustomerStream</argument>
             <argument type="service" id="models" />
         </service>
