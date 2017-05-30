@@ -99,7 +99,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         $sqlField = 'productAttribute.' . $facet->getField();
         $query->andWhere($sqlField . ' IS NOT NULL')
-            ->andWhere($sqlField . " != ''");
+            ->andWhere($sqlField . " NOT IN ('', 0, '0000-00-00')");
 
         /** @var ConfigurationStruct $attribute */
         $attribute = $this->crudService->get('s_articles_attributes', $facet->getField());
