@@ -53,11 +53,19 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
         $view = $this->View();
 
         $config = $this->container->get('config');
+
         if ($config->get('useSltCookie') && !$this->session->sOneTimeAccount) {
             if (!isset($this->session->userInfo)) {
                 $this->session->userInfo = $this->fetchUserInfo();
             }
+
             $view->userInfo = $this->session->userInfo;
+
+            if ($this->session->userInfo['accountmode'] == 1) {
+                $this->session->sOneTimeAccount = true;
+                $view->userInfo = [];
+                $this->session->userInfo = [];
+            }
         }
 
         $view->sBasketQuantity = isset($this->session->sBasketQuantity) ? $this->session->sBasketQuantity : 0;
@@ -80,11 +88,9 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
 
         $connection = Shopware()->Container()->get('dbal_connection');
 
-        $userInfo = $connection->fetchAssoc(
-            'SELECT firstname, lastname, email, salutation, title, birthday FROM s_user WHERE id = :id',
+        return $connection->fetchAssoc(
+            'SELECT firstname, lastname, email, salutation, title, birthday, accountmode FROM s_user WHERE id = :id',
             [':id' => $userId]
         );
-
-        return $userInfo;
     }
 }
