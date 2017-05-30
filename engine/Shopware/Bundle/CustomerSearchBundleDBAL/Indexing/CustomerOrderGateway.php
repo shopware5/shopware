@@ -104,7 +104,7 @@ class CustomerOrderGateway
         $query->from('s_order', 'orders');
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('orders.ordernumber IS NOT NULL');
-        $query->andWhere('orders.ordernumber != 0');
+        $query->andWhere("orders.ordernumber != '0'");
         $query->andWhere('orders.userID IN (:ids)');
         $query->setParameter(':cancelStatus', -1);
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
@@ -139,7 +139,7 @@ class CustomerOrderGateway
         $query->from('s_order', 'orders');
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('orders.ordernumber IS NOT NULL');
-        $query->andWhere('orders.ordernumber != 0');
+        $query->andWhere("orders.ordernumber != '0'");
         $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
         $query->andWhere('orders.userID IN (:ids)');
         $query->setParameter(':cancelStatus', -1);
@@ -186,6 +186,12 @@ class CustomerOrderGateway
 
         $query->andWhere('orders.userID IN (:customerIds)');
         $query->setParameter(':customerIds', $customerIds, Connection::PARAM_INT_ARRAY);
+
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere("orders.ordernumber != '0'");
+        $query->setParameter(':cancelStatus', -1);
+
         $query->groupBy('orders.userID');
 
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
