@@ -636,6 +636,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         if ($form->isValid()) {
             $this->customerService->update($customer);
+            $this->container->get('session')->offsetSet('userInfo', null);
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'profile']);
 
             return;
@@ -660,7 +661,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if ($form->isValid()) {
             $this->customerService->update($customer);
             $this->get('session')->offsetSet('sUserMail', $customer->getEmail());
-
+            $this->get('session')->offsetSet('userInfo', null);
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'email']);
 
             return;
