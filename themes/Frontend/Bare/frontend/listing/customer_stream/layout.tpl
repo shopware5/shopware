@@ -26,6 +26,10 @@
         {$emotionViewports = [0 => 'xl', 1 => 'l', 2 => 'm', 3 => 's', 4 => 'xs']}
 
         {if $hasEmotion}
+            {if $isHomePage}
+                {$Controller = 'index'}
+            {/if}
+
             {$fullscreen = false}
 
             {block name="frontend_listing_emotions"}

@@ -166,9 +166,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     if(value) {
                         me.generalFieldSet.hide();
                         me.landingPageFieldSet.show();
+                        me.customerFieldSet.hide();
                     } else {
                         me.landingPageFieldSet.hide();
                         me.generalFieldSet.show();
+                        me.customerFieldSet.show();
                     }
                 }
             }

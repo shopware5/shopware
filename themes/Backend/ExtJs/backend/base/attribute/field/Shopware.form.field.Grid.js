@@ -375,11 +375,14 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     fixLayout: function() {
-        try {
-            this.setHeight(this.getHeight());
-        } catch (e) {
-
+        if (!this.rendered) {
+            return;
         }
+        if (this.getHeight() <= 0) {
+            return;
+        }
+
+        this.setHeight(this.getHeight());
     },
 
     getSubmitData: function() {
