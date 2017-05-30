@@ -65,7 +65,20 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
 
     currencyRenderer: function(value) {
         value = value * 1;
-        return Ext.util.Format.currency(value, this.subApp.currencySign, 2, (this.subApp.currencyAtEnd == 1));
+        return Ext.util.Format.currency(value, this.getCurrency(), 2, (this.subApp.currencyAtEnd == 1));
+    },
+
+    getCurrency: function() {
+        var currency = this.subApp.currencySign;
+
+        switch (currency) {
+            case '&euro;':
+                return '&#8364;';
+            case '&pound;':
+                return '&#163;';
+            default:
+                return currency;
+        }
     },
 
     createAxes: function () {
