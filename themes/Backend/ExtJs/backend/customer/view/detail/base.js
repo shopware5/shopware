@@ -179,7 +179,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      * @return [Array] Contains the different form field of the left container
      */
     createBaseFormLeft: function () {
-        var me = this;
+        var me = this,
+            pwRequired = false;
 
         me.customerGroupCombo = Ext.create('Ext.form.field.ComboBox', {
             triggerAction: 'all',
@@ -253,6 +254,36 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             }
         });
 
+
+        if (me.record.data.id === 0) {
+            pwRequired = true;
+        }
+
+        // create the confirm password field to get access in the create password
+        // button handler to pass the field to the generate password event
+        me.confirmField = Ext.create('Ext.form.field.Text', {
+            name: 'confirm',
+            inputType: 'password',
+            anchor: '95%',
+            labelWidth: 155,
+            allowBlank: !pwRequired,
+            required: pwRequired,
+            fieldLabel: me.snippets.confirm.label,
+            supportText: me.snippets.confirm.support,
+            helpTitle: me.snippets.confirm.helpTitle,
+            helpText: me.snippets.confirm.helpText,
+            validator: function (value) {
+                if (Ext.String.trim(value) == Ext.String.trim(me.passwordField.getValue())) {
+                    me.passwordField.clearInvalid();
+                    return true;
+                } else {
+                    return me.snippets.password.message;
+                }
+            }
+        });
+
+        me.passwordContainer = me.createPasswordContainer();
+
         return [
             me.customerMail,
             me.customerGroupCombo,
@@ -268,7 +299,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                 helpText: me.snippets.number.helpText,
                 helpWidth: 360,
                 helpTitle: me.snippets.number.helpTitle
-            }
+            },
+            me.passwordContainer, me.confirmField
         ];
     },
 
@@ -312,6 +344,19 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         me.passwordContainer = me.createPasswordContainer();
 
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
+            name: 'customerStreamIds',
+            labelWidth: 155,
+            height: 150,
+            allowSorting: false,
+            allowDelete: false,
+            allowAdd: false,
+            fieldLabel: '{s name="customer_streams"}{/s}',
+            store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
+        });
+
         return [{
             name: 'active',
             anchor: '95%',
@@ -322,7 +367,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             labelWidth: 155,
             uncheckedValue: false,
             inputValue: true
-        }, me.passwordContainer, me.confirmField ];
+        }, me.customerStreamSelection ];
     },
 
     /**
