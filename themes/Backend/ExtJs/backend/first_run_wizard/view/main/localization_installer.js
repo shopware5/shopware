@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
      * Define window width
      * @integer
      */
-    width: 360,
+    width: 450,
 
     /**
      * Define window height
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
      * The body padding is used in order to have a smooth side clearance.
      * @integer
      */
-    bodyPadding: 10,
+    bodyPadding: 20,
 
     /**
      * Disable window resize
@@ -146,9 +146,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
             locales = [],
             installerLocale = this.installerLocale;
 
-        for(var locale in this.snippets.locales) {
-            locales.push(locale);
-        }
+        locales = Ext.Object.getKeys(me.snippets.locales);
 
         if (!Ext.Array.contains(locales, installerLocale)) {
             installerLocale = '{s namespace="backend/base/index" name=script/ext/locale}{/s}';
@@ -163,16 +161,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
             {
                 xtype: 'container',
                 border: false,
-                bodyPadding: 20,
-                style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.message.replace('[language]', me.snippets.locales[installerLocale]['language']) + '</p>',
                 height: '40px'
             },
             me.createLanguageSwitcherForm(installerLocale)
-        ];
-
-        me.buttons = [
-            me.createCloseButton()
         ];
 
         me.callParent(arguments);
@@ -188,43 +180,37 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
         var me = this;
 
         me.languageButton = Ext.create('Ext.Button', {
+            margins: '5px 0 20px 0',
             text: me.snippets.button
                 .replace('[language]', me.snippets.locales[installerLocale]['language'])
                 .replace('[country]', me.snippets.locales[installerLocale]['country']),
             cls: 'primary',
-            style: {
-                marginTop: '5px'
-            },
             handler: function() {
                 me.fireEvent('installLanguage', me.pluginName, installerLocale);
             }
         });
 
-        return Ext.create('Ext.container.Container', {
-            items: me.languageButton,
-            overflowY: 'auto',
-            height: 70,
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            }
-        });
-    },
-
-    /**
-     * Creates the close button which allows the user to close the window.
-     */
-    createCloseButton: function() {
-        var me = this;
-
-        return Ext.create('Ext.button.Button', {
+        /**
+         * Creates the close button which allows the user to close the window.
+         */
+        me.closeButton = Ext.create('Ext.button.Button', {
             text: me.snippets.continue,
-            flex: 1,
             action: 'closeWindow',
             cls: 'secondary',
             handler: function() {
                 me.fireEvent('closeWindow');
                 me.destroy();
+            }
+        });
+
+        return Ext.create('Ext.container.Container', {
+            items: [
+                me.languageButton,
+                me.closeButton
+            ],
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
             }
         });
     }

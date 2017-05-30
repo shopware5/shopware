@@ -119,15 +119,35 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
      */
     installLanguage: function(pluginName, locale) {
         var me = this,
+            localizationPanel = me.getLocalizationPanel(),
+            communityStore = localizationPanel.communityStore,
+            plugin;
+
+        plugin = communityStore.findRecord('technicalName', pluginName);
+
+        if (Ext.isEmpty(plugin)) {
             plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
-            technicalName: pluginName
-        });
+                technicalName: pluginName
+            });
+        }
 
         Shopware.app.Application.fireEvent(
-            'install-plugin',
+            'update-dummy-plugin',
             plugin,
             function() {
-                me.onSwitchLanguage(locale)
+                Shopware.app.Application.fireEvent(
+                    'install-plugin',
+                    plugin,
+                    function() {
+                        Shopware.app.Application.fireEvent(
+                            'activate-plugin',
+                            plugin,
+                            function() {
+                                me.onSwitchLanguage(locale)
+                            }
+                        );
+                    }
+                );
             }
         );
     },
