@@ -30,7 +30,7 @@
 
 {* Link to the partner statistics *}
 {block name="frontend_account_menu_link_partner_statistics"}
-    {if $sUserLoggedIn}
+    {if $sUserLoggedIn && !$sOneTimeAccount}
         {$smarty.block.parent}
     {/if}
 {/block}

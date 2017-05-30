@@ -64,6 +64,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
         $view->sBasketAmount = isset($this->session->sBasketAmount) ? $this->session->sBasketAmount : 0;
         $view->sNotesQuantity = isset($this->session->sNotesQuantity) ? $this->session->sNotesQuantity : $this->module->sCountNotes();
         $view->sUserLoggedIn = !empty(Shopware()->Session()->sUserId);
+        $view->sOneTimeAccount = $this->session->sOneTimeAccount;
     }
 
     private function fetchUserInfo()
