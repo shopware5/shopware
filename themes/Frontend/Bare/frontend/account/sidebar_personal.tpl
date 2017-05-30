@@ -28,13 +28,6 @@
     {$smarty.block.parent}
 {/block}
 
-{* Link to the partner statistics *}
-{block name="frontend_account_menu_link_partner_statistics"}
-    {if $sUserLoggedIn && !$sOneTimeAccount}
-        {$smarty.block.parent}
-    {/if}
-{/block}
-
 {block name="frontend_account_menu_link_logout"}
     {if $userInfo}
         <li class="navigation--entry">

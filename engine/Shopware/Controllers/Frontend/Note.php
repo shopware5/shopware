@@ -30,6 +30,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
+        $this->View()->assign('sOneTimeAccount', Shopware()->Session()->offsetGet('sOneTimeAccount'));
     }
 
     public function postDispatch()

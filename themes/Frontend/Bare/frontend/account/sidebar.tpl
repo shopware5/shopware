@@ -82,7 +82,9 @@
 
                 {* Link to the partner statistics *}
                 {block name="frontend_account_menu_link_partner_statistics"}
-                    {action module='frontend' controller="account" action="partnerStatisticMenuItem"}
+                    {if $sUserLoggedIn && !$sOneTimeAccount}
+                        {action module='frontend' controller="account" action="partnerStatisticMenuItem"}
+                    {/if}
                 {/block}
 
                 {* Logout action *}
