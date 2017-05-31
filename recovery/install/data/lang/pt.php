@@ -73,7 +73,7 @@ EOT
     'requirements_tablefiles_colstatus' => 'Estado',
     'requirements_error' => '<h3 class="alert-heading">Atenção!</h3>Não estão satisfeitos todos os requisitos necessários para uma instalação correta',
     'requirements_success' => '<h3 class="alert-heading">Parabéns!</h3>Estão satisfeitos todos os requisitos para uma instalação correta',
-    'requirements_ioncube' => '<small><strong>* Hinweis:</strong> O software de encriptação ionCube não está instalado no seu sistema. Este só é necessário se, posteriormente, pretender instalar extensões encriptadas com o ionCube através da nossa <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a>. Pode realizar a instalação do ionCube a qualquer momento.</small>',
+    'requirements_ioncube' => '<small><strong>* Nota:</strong> O software de encriptação ionCube não está instalado no seu sistema. Este só é necessário se, posteriormente, pretender instalar extensões encriptadas com o ionCube através da nossa <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a>. Pode realizar a instalação do ionCube a qualquer momento.</small>',
     'requirements_php_info' => 'O seu servidor deve satisfazer os seguintes requisitos de sistema para que possa executar o Shopware',
     'requirements_system_colcheck' => 'Requisitos',
     'requirements_system_colrequired' => 'Necessário',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Ficamos muitos satisfeitos em recebê-lo na nossa comunidade. Instalou o Shopware com êxito.
-<p>A sua loja está operacional. Caso esteja agora a começar a utilizar o Shopware, recomendamos a leitura do guia <a href="http://wiki.shopware.com/_detail_930.html" target="_blank">"Passos iniciais no Shopware"</a>. Caso esteja a entrar pela primeira vez no back-end da loja, terá a ajuda do nosso assistente de primeira execução para o guiar durante o processo.</p>
+<p>A sua loja está operacional. Caso esteja agora a começar a utilizar o Shopware, recomendamos a leitura do guia <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Passos iniciais no Shopware"</a>. Caso esteja a entrar pela primeira vez no back-end da loja, terá a ajuda do nosso assistente de primeira execução para o guiar durante o processo.</p>
 <p>Esperamos que se divirta na nossa nova loja online!</p>',
 ];

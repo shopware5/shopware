@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     wir freuen uns Dich in unserer Community begrüßen zu dürfen. Du hast Shopware erfolgreich installiert.
-<p>Dein Shop ist jetzt einsatzbereit. Falls Du neu bei Shopware bist, empfehlen wir Dir den Guide <a href="http://wiki.shopware.com/_detail_930.html" target="_blank">"Erste Schritte in Shopware"</a>. Wenn Du Dich zum ersten Mal im Shop-Backend anmeldest, wird Dich unser First Run Wizard durch die weitere grundlegende Einrichtung führen.</p>
+<p>Dein Shop ist jetzt einsatzbereit. Falls Du neu bei Shopware bist, empfehlen wir Dir den Guide <a href="http://community.shopware.com/_detail_930.html" target="_blank">"Erste Schritte in Shopware"</a>. Wenn Du Dich zum ersten Mal im Shop-Backend anmeldest, wird Dich unser First Run Wizard durch die weitere grundlegende Einrichtung führen.</p>
 <p>Viel Spaß mit Deinem neuen Onlineshop!</p>',
 ];
