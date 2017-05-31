@@ -69,6 +69,12 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             return;
         }
 
+        // show partner statistic menu
+        $partnerModel = Shopware()->Models()->getRepository('Shopware\Models\Partner\Partner')->findOneBy(['customerId' => Shopware()->Session()->sUserId]);
+        if (!empty($partnerModel)) {
+            $this->View()->partnerId = Shopware()->Session()->partnerId = $partnerModel->getId();
+        }
+
         $this->View()->assign('sUserData', $this->admin->sGetUserData());
         $this->View()->assign('sAction', $this->Request()->getActionName());
     }
