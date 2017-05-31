@@ -73,7 +73,7 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => '<h3 class="alert-heading">Let op!</h3>Er is niet aan alle vereisten voor een geslaagde installatie voldaan',
     'requirements_success' => '<h3 class="alert-heading">Gefeliciteerd</h3>Er is aan alle vereisten voor een geslaagde installatie voldaan',
-    'requirements_ioncube' => '<small><strong>* Hinweis:</strong> De coderingssoftware ionCube is niet op jouw systeem geïnstalleerd. Deze software is alleen vereist als je later via onze <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> uitbreidingen wilt installeren die met ionCube versleuteld zijn. Je kunt ionCube altijd later nog installeren.</small>',
+    'requirements_ioncube' => '<small><strong>* Opmerking:</strong> De coderingssoftware ionCube is niet op jouw systeem geïnstalleerd. Deze software is alleen vereist als je later via onze <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> uitbreidingen wilt installeren die met ionCube versleuteld zijn. Je kunt ionCube altijd later nog installeren.</small>',
     'requirements_php_info' => 'Je server moet aan de volgende systeemvereisten voldoen om Shopware te kunnen gebruiken',
     'requirements_system_colcheck' => 'Vereiste',
     'requirements_system_colrequired' => 'Vereist',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Fijn dat je je bij onze community hebt aangesloten. Je hebt Shopware geïnstalleerd.
-<p>Je winkel is nu gebruiksklaar. Als je Shopware nog niet eerder hebt gebruikt, raden we je aan de gids <a href="http://wiki.shopware.com/_detail_930.html" target="_blank">"Eerste stappen in Shopware"</a> eens door te lezen. Wanneer je je voor het eerst bij de Shop-backend aanmeldt, leidt onze "First Run Wizard" je verder door de basisinrichting.</p>
+<p>Je winkel is nu gebruiksklaar. Als je Shopware nog niet eerder hebt gebruikt, raden we je aan de gids <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Eerste stappen in Shopware"</a> eens door te lezen. Wanneer je je voor het eerst bij de Shop-backend aanmeldt, leidt onze "First Run Wizard" je verder door de basisinrichting.</p>
 <p>Veel plezier met je nieuwe online winkel!</p>',
 ];
