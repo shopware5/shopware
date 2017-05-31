@@ -14,6 +14,7 @@
 <body class="{block name="frontend_index_body_classes"}{strip}
     is--ctl-{controllerName|lower} is--act-{controllerAction|lower}
     {if $sUserLoggedIn} is--user{/if}
+    {if $sOneTimeAccount} is--one-time-account{/if}
     {if $sTarget} is--target-{$sTarget|escapeHtml}{/if}
     {if $theme.checkoutHeader && (({controllerName|lower} == "checkout" && {controllerAction|lower} != "cart") || ({controllerName|lower} == "register" && $sTarget != "account"))} is--minimal-header{/if}
     {if !$theme.displaySidebar} is--no-sidebar{/if}
