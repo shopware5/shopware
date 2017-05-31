@@ -278,6 +278,15 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 
-        return array_key_exists($localeCode, $locales) ? $locales[$localeCode] : null;
+        if (array_key_exists($localeCode, $locales)) {
+            return $locales[$localeCode];
+        }
+
+        // Fallback to english locale when available
+        if (array_key_exists('en_GB', $locales)) {
+            return $locales['en_GB'];
+        }
+
+        return null;
     }
 }
