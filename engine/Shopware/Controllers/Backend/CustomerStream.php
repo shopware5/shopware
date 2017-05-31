@@ -25,8 +25,8 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\CustomerStream\StreamIndexer;
-use Shopware\Models\Customer\CustomerStream;
-use Shopware\Models\Customer\CustomerStreamRepository;
+use Shopware\Models\CustomerStream\CustomerStream;
+use Shopware\Models\CustomerStream\CustomerStreamRepository;
 
 class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_Backend_Application
 {

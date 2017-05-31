@@ -352,9 +352,19 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             record: record
         });
 
+        var attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_customer_streams_attributes'
+        });
+
         streamView.streamDetailForm.removeAll();
         streamView.streamDetailForm.add(detail);
+
+        streamView.attributeForm = attributeForm;
+        streamView.streamDetailForm.add(attributeForm);
+
         streamView.streamDetailForm.loadRecord(record);
+        streamView.attributeForm.loadAttribute(record.get('id'));
+
         streamView.cardContainer.getLayout().setActiveItem(3);
     },
 
@@ -439,7 +449,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         record.save({
             callback: function() {
-                me.switchLayout('table');
+                streamView.attributeForm.saveAttribute(record.get('id'), function() {
+                    me.switchLayout('table');
+                });
             }
         });
     },
