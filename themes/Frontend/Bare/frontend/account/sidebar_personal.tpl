@@ -28,6 +28,8 @@
     {$smarty.block.parent}
 {/block}
 
+{block name="frontend_account_menu_link_partner_statistics"}{/block}
+
 {block name="frontend_account_menu_link_logout"}
     {if $userInfo}
         <li class="navigation--entry">
