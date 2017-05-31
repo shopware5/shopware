@@ -102,6 +102,7 @@ EOT;
         }
 
         $this->updateMailAddress($shop);
+        $this->updateFormMailAddress($shop);
         $this->updateShopName($shop);
     }
 
@@ -138,6 +139,16 @@ EOT;
     private function updateShopName(Shop $shop)
     {
         $this->updateConfigValue('shopName', $shop->name);
+    }
+
+    /**
+     * @param Shop $shop
+     */
+    private function updateFormMailAddress(Shop $shop)
+    {
+        $this->connection
+            ->prepare('UPDATE s_cms_support SET email = ? WHERE email = ?')
+            ->execute([$shop->email, 'info@example.com']);
     }
 
     /**
