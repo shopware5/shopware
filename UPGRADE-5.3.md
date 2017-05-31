@@ -79,7 +79,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added template switch for `listing/index.tpl` to `listing/customer_stream.tpl` in case that the category contains a shopping world which is restricted to customer streams
 * Added database column `s_emarketing_vouchers.customer_stream_ids` to restrict vouchers to customer streams.
 * Added database column `s_emotion.customer_stream_ids` to restrict shopping worlds to customer streams.
-* Added database table `s_customer_streams` for a list of all existing streams (`Shopware\Models\Customer\CustomerStream`)
+* Added database table `s_customer_streams` for a list of all existing streams (`Shopware\Models\CustomerStream\CustomerStream`)
 * Added database table `s_customer_search_index` for an fast customer search
 * Added database table `s_customer_streams_mapping` for mappings between customer and assigned streams
 * Added bundle `Shopware\Bundle\CustomerSearchBundle` which defines how customers can be searched
@@ -89,7 +89,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added flag `$hasCustomerStreamEmotion` in `frontend/home/index.tpl` to switch between emotions restricted to customer streams and those which are unrestricted
 * Added route `/frontend/listing/layout` which loads the category page layout for customer streams. This route is called using `{action ...}` in case that the category contains an emotion with customer streams
 * Added route `/frontend/listing/listing` which loads the category product listing. This route is called using `{action ...}` in case that the category contains an emotion with customer streams
-* Added entity `Shopware\Models\Customer\CustomerStream` for attribute single and multi selection.
+* Added entity `Shopware\Models\CustomerStream\CustomerStream` for attribute single and multi selection.
 * Added translations for attribute labels. See below for more information.
 * Added database structure for new emotion preset feature:
     * `s_emotion_presets` - contains all installed presets

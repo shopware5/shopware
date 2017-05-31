@@ -201,7 +201,7 @@ class TypeMapping
             'Shopware\Models\Blog\Blog',
             'Shopware\Models\Form\Form',
             'Shopware\Models\Customer\Customer',
-            'Shopware\Models\Customer\CustomerStream',
+            'Shopware\Models\CustomerStream\CustomerStream',
             'Shopware\Models\Dispatch\Dispatch',
             'Shopware\Models\Payment\Payment',
             'Shopware\Models\Mail\Mail',

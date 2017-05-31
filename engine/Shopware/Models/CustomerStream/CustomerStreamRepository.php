@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Customer;
+namespace Shopware\Models\CustomerStream;
 
 use DateInterval;
 use DateTime;

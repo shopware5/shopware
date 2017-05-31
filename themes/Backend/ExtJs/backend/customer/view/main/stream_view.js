@@ -290,6 +290,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
             margin: 10,
+            autoScroll: true,
             name: 'detail-form',
             dockedItems: [{
                 xtype: 'toolbar',

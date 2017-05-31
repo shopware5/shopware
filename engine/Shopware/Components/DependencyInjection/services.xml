@@ -648,7 +648,7 @@
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware.customer_stream.repository" class="Shopware\Models\Customer\CustomerStreamRepository" >
+        <service id="shopware.customer_stream.repository" class="Shopware\Models\CustomerStream\CustomerStreamRepository" >
             <argument id="dbal_connection" type="service"/>
         </service>
 

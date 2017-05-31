@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Customer;
+namespace Shopware\Models\CustomerStream;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -33,6 +33,13 @@ use Shopware\Components\Model\ModelEntity;
  */
 class CustomerStream extends ModelEntity
 {
+    /**
+     * INVERSE SIDE
+     *
+     * @var \Shopware\Models\Attribute\CustomerStream
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
+     */
+    protected $attribute;
     /**
      * @var int
      *
