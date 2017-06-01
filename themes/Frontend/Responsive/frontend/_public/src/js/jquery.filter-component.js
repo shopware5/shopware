@@ -344,6 +344,10 @@
                     me.datePicker.flatpickr.set('maxDate', data.max);
                     me.datePicker.resumeEvents();
                     me.disableComponent(false);
+
+                    me.disableElement(me.datePicker.$rangeStartInput, !isFiltered);
+                    me.disableElement(me.datePicker.$rangeEndInput, !isFiltered);
+
                     return;
                 }
 
@@ -378,6 +382,8 @@
                 me.datePicker.flatpickr.set('enable', enabledDates);
 
                 me.disableComponent(enabledDates.length <= 0);
+
+                me.disableElement(me.$datePickerEl, !isFiltered);
             },
 
             disableComponent: function(disable) {
