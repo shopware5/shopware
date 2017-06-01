@@ -529,6 +529,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 });
             });
         }, 1000);
+
+        return record;
     }
 });
 //{/block}
