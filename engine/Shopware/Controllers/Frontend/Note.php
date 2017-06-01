@@ -43,12 +43,6 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $view = $this->View();
         $view->sNotes = Shopware()->Modules()->Basket()->sGetNotes();
         $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
-
-        // show partner statistic menu
-        $partnerModel = Shopware()->Models()->getRepository('Shopware\Models\Partner\Partner')->findOneBy(['customerId' => Shopware()->Session()->sUserId]);
-        if (!empty($partnerModel)) {
-            $this->View()->partnerId = Shopware()->Session()->partnerId = $partnerModel->getId();
-        }
     }
 
     public function deleteAction()
