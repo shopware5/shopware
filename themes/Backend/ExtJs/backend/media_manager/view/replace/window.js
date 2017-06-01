@@ -211,9 +211,15 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
      */
     startUpload: function() {
         var me = this,
+            mediaManager = me.mediaManager,
+            selectedRecord = mediaManager.dataView.getSelectionModel().getSelection()[0],
             length = me.replaceGrid.rows.length,
             rows = me.replaceGrid.rows,
             row;
+
+        if (mediaManager.selectedLayout === 'table') {
+            selectedRecord = mediaManager.down('mediamanager-media-grid').getSelectionModel().getSelection()[0];
+        }
 
         me.setLoading(true);
 
@@ -222,8 +228,20 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
                 '',
                 '{s name="mediaManager/replaceWindiw/window/saved"}{/s}'
             );
-            me.mediaManager.mediaStore.reload();
-            me.mediaManager.down('mediamanager-media-grid').reconfigure(me.mediaManager.mediaStore);
+            mediaManager.mediaStore.load({
+                callback: function() {
+                    if (!selectedRecord) {
+                        return;
+                    }
+
+                    var record = mediaManager.mediaStore.getById(selectedRecord.get('id'));
+                    if (record) {
+                        mediaManager.infoView.update(record.getData());
+                    }
+                }
+            });
+
+
             me.close();
             return;
         }
