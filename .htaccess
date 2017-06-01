@@ -27,6 +27,9 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
     # Restrict access to root folder files
     RedirectMatch 404 /(composer\.(json|lock)|README\.md|UPGRADE\.md)$
+    
+    # Restrict access to grunt configuration
+    RedirectMatch 404 /web/cache/config_\d+\.json$
 </IfModule>
 
 # Staging environment
