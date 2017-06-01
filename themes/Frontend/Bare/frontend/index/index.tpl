@@ -169,7 +169,8 @@
             {rdelim};
 
             var snippets = snippets || {ldelim}
-                'noCookiesNotice': '{"{s name='IndexNoCookiesNotice'}{/s}"|escape}'
+                {capture name="IndexNoCookiesNotice"}{s name='IndexNoCookiesNotice'}{/s}{/capture}
+                'noCookiesNotice': '{$smarty.capture.IndexNoCookiesNotice|escape:"javascript"}'
             {rdelim};
 
             var themeConfig = themeConfig || {ldelim}
