@@ -394,7 +394,7 @@ Ext.define('Shopware.form.field.Grid', {
     isValid: function() {
         var me = this;
 
-        if (me.searchField) {
+        if (me.searchField && me.searchField.combo) {
             me.searchField.combo.clearInvalid();
         }
 

@@ -32,6 +32,8 @@
 Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
     extend: 'Shopware.model.Container',
     alias: 'widget.customer-stream-detail',
+    layout: 'anchor',
+    defaults: { anchor: '100%' },
 
     configure: function () {
         return {
