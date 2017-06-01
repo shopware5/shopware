@@ -178,6 +178,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Refactored backend customer module. Please take a look into the different template files to see what has changed.
 * Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
 * Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
+* Changed include of partner statistics link in the account sidebar. Instead of a widget call to `frontend/account/partnerStatisticMenuItem`, the template `frontend/account/partner_statistic_menu_item.tpl` is included directly. The required `partnerId` property is now set in the `preDispatch` of the different controllers. This must be taken into account in all plugins that integrate the `account/sidebar.tpl`.
 
 ### Removals
 
