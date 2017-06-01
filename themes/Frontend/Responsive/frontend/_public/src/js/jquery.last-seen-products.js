@@ -171,7 +171,7 @@
             }
 
             $.each(products, function(i, product) {
-                if (product.articleId === opts.currentArticle.articleId) {
+                if (product.cacheCreated !== window.cacheCreated || product.articleId === opts.currentArticle.articleId) {
                     return;
                 }
 
@@ -282,6 +282,7 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? $.parseJSON(productsJson) : [],
+                newProducts = [],
                 linkDetailsQuery = '',
                 len = products.length,
                 i = 0,
@@ -315,13 +316,16 @@
                 newProduct.linkDetailsRewritten = url.substring(0, url.indexOf('?')) + linkDetailsQuery;
             }
 
-            products.splice(0, 0, newProduct);
+            newProduct.cacheCreated = window.cacheCreated;
+            newProducts.push(newProduct);
 
-            while (products.length > opts.productLimit + 1) {
-                products.pop();
-            }
+            $.each(products, function (i, product) {
+                if (newProducts.length <= opts.productLimit && product.cacheCreated === window.cacheCreated) {
+                    newProducts.push(product);
+                }
+            });
 
-            me.storage.setItem(itemKey, JSON.stringify(products));
+            me.storage.setItem(itemKey, JSON.stringify(newProducts));
 
             $.publish('plugin/swLastSeenProducts/onCollectProduct', [ me, newProduct ]);
         },
