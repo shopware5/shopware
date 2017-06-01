@@ -44,7 +44,7 @@
         }, ['xs', 's'])
 
         // Collapse panel
-        .addPlugin('#new-customer-action', 'swCollapsePanel', ['xs', 's'])
+        .addPlugin('#new-customer-action, .registration--menu-entry', 'swCollapsePanel', ['xs', 's'])
 
         // Image slider
         .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
