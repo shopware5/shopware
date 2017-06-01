@@ -387,7 +387,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
      */
     createRestrictionFormRight: function () {
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
-        var customerStreamStore = factory.createEntitySearchStore('Shopware\\Models\\Customer\\CustomerStream');
+        var customerStreamStore = factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream');
 
         return [
             {

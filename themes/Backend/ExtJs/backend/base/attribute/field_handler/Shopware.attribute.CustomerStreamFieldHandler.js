@@ -31,7 +31,7 @@
 
 Ext.define('Shopware.attribute.CustomerStreamFieldHandler', {
     extend: 'Shopware.attribute.AbstractEntityFieldHandler',
-    entity: "Shopware\\Models\\Customer\\CustomerStream",
+    entity: "Shopware\\Models\\CustomerStream\\CustomerStream",
     singleSelectionClass: 'Shopware.form.field.CustomerStreamSingleSelection',
     multiSelectionClass: 'Shopware.form.field.CustomerStreamGrid'
 });
