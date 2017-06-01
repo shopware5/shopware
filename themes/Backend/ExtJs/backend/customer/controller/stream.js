@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'save-stream-details': me.saveStreamDetails,
                 'stream-selected': me.streamSelected,
                 'change-auto-index': me.changeAutoIndex,
-                'index-search': me.indexSearch,
+                'full-index': me.fullIndex,
                 'save-edited-stream': me.saveEditedStream,
                 'save-as-new-stream': me.saveAsNewStream,
                 'refresh-stream-views': me.reloadView,
@@ -74,19 +74,28 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.callParent(arguments);
     },
 
-    onTabActivated: function() {
+    fullIndex: function() {
         var me = this;
         var store = me.getStreamListing().getStore();
 
+        me.indexSearch(true, function() {
+            var streamView = me.getStreamView();
+            streamView.listStore.load();
+
+            if (store.getCount() > 0) {
+                var streams = store.data.items;
+                me.refreshWhileFullIndex(streams, streams.length);
+            } else {
+                me.resetProgressbar();
+            }
+        });
+    },
+
+    onTabActivated: function() {
+        var me = this;
+
         if (me.subApplication.userConfig && me.subApplication.userConfig.autoIndex) {
-            me.indexSearch(true, function() {
-                if (store.getCount() > 0) {
-                    var streams = store.data.items;
-                    me.refreshWhileFullIndex(streams, streams.length);
-                } else {
-                    me.resetProgressbar();
-                }
-            });
+            me.fullIndex();
             return;
         }
 

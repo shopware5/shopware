@@ -385,7 +385,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
     },
 
     onIndexSearch: function () {
-        this.fireEvent('index-search');
+        this.fireEvent('full-index');
     },
 
     onSaveStream: function() {
