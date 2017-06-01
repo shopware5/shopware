@@ -56,11 +56,10 @@ class Migrations_Migration932 extends Shopware\Components\Migrations\AbstractMig
             $controllers = explode("\n", $controllers);
 
             foreach ($controllers as &$controller) {
-                if ($controller === 'widgets/checkout checkout') {
-                    $controller = 'widgets/checkout checkout,slt';
+                if (strpos($controller, 'widgets/checkout') !== false) {
+                    $controller .= ',slt';
                 }
             }
-
             $this->addSql(sprintf(
                 "UPDATE s_core_config_values SET value = '%s' WHERE id = " . $value['id'],
                 serialize(implode("\n", $controllers))
