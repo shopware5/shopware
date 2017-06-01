@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 hidden: true,
             /*{/if}*/
 
-            /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
                 hidden: true,
             /*{/if}*/
 

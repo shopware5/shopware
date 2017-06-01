@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     indexStreams: function(stream, streams, total) {
         var me = this;
 
-        /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
             return;
         /*{/if}*/
 
@@ -468,7 +468,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     indexStream: function(record, callback) {
         var me = this;
 
-        /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
             return;
         /*{/if}*/
 
