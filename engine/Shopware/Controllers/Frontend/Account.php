@@ -64,12 +64,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-        if (!in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
-            && !$this->admin->sCheckUser()) {
-            return $this->forward('index', 'register', 'frontend', [
-                'sTarget' => $this->Request()->getControllerName(),
-                'sTargetAction' => $this->Request()->getActionName(),
-            ]);
+        if ($this->shouldForwardToRegister()) {
+            return $this->forward('index', 'register', 'frontend', $this->getForwardParameters());
         }
         $userData = $this->admin->sGetUserData();
 
@@ -780,5 +776,32 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         return $customer;
+    }
+
+    /**
+     * @return bool
+     */
+    private function shouldForwardToRegister()
+    {
+        return !in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
+            && !$this->admin->sCheckUser();
+    }
+
+    /**
+     * @return array
+     */
+    private function getForwardParameters()
+    {
+        if (!$this->Request()->getParam('sTarget') && !$this->Request()->getParam('sTargetAction')) {
+            return [
+                'sTarget' => $this->Request()->getControllerName(),
+                'sTargetAction' => $this->Request()->getActionName(),
+            ];
+        }
+
+        return [
+            'sTarget' => $this->Request()->getParam('sTarget'),
+            'sTargetAction' => $this->Request()->getParam('sTargetAction'),
+        ];
     }
 }

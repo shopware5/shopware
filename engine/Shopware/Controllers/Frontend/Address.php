@@ -61,12 +61,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
 
         if (!$this->View()->getAssign('sUserLoggedIn')) {
-            $this->forward('index', 'register', 'frontend', [
-                'sTarget' => $this->Request()->getControllerName(),
-                'sTargetAction' => $this->Request()->getActionName(),
-            ]);
-
-            return;
+            return $this->forward('index', 'register', 'frontend', $this->getForwardParameters());
         }
 
         $this->View()->assign('sUserData', $this->admin->sGetUserData());
@@ -443,5 +438,23 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->get('session')->offsetSet('sArea', $areaId);
 
         $this->get('shopware_storefront.context_service')->initializeShopContext();
+    }
+
+    /**
+     * @return array
+     */
+    private function getForwardParameters()
+    {
+        if (!$this->Request()->getParam('sTarget') && !$this->Request()->getParam('sTargetAction')) {
+            return [
+                'sTarget' => $this->Request()->getControllerName(),
+                'sTargetAction' => $this->Request()->getActionName(),
+            ];
+        }
+
+        return [
+            'sTarget' => $this->Request()->getParam('sTarget'),
+            'sTargetAction' => $this->Request()->getParam('sTargetAction'),
+        ];
     }
 }
