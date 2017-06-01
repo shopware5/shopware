@@ -550,8 +550,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             height: 150,
             fieldLabel: '{s name="customer_streams"}{/s}',
             helpText: '{s name="customer_streams_help"}{/s}',
-            store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream"),
-            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
+            store: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream")
         });
 
         me.replacementSelection = Ext.create('Shopware.form.field.EmotionGrid', {

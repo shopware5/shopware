@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Main', {
         me.subApplication.recipientGroupStore = me.getStore('RecipientGroup').load();
         me.subApplication.newsletterGroupStore = me.getStore('NewsletterGroup').load();
         me.subApplication.customerGroupStore = me.getStore('Shopware.apps.Base.store.CustomerGroup').load();
-        me.subApplication.customerStreamStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream").load();
+        me.subApplication.customerStreamStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream").load();
 
         // Don't do the default filtering - get all shops
         me.subApplication.shopStore = Ext.create('Shopware.apps.Base.store.Shop', {
