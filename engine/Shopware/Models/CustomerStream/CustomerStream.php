@@ -33,6 +33,9 @@ use Shopware\Components\Model\ModelEntity;
  */
 class CustomerStream extends ModelEntity
 {
+    const TYPE_DYNAMIC = 'dynamic';
+    const TYPE_STATIC = 'static';
+
     /**
      * INVERSE SIDE
      *
@@ -40,6 +43,7 @@ class CustomerStream extends ModelEntity
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -68,6 +72,12 @@ class CustomerStream extends ModelEntity
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
+
+    /**
+     * @var string
+     * @ORM\Column(name="type", type="string", nullable=true)
+     */
+    private $type = 'dynamic';
 
     /**
      * @return int
@@ -123,5 +133,18 @@ class CustomerStream extends ModelEntity
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }

@@ -472,6 +472,11 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             return;
         /*{/if}*/
 
+        if (record.get('type') === 'dynamic') {
+            callback();
+            return;
+        }
+
         me.initProgressbar();
 
         Ext.Ajax.request({

@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,34 +20,20 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Customer
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+use Shopware\Components\Migrations\AbstractMigration;
 
-// {block name="backend/customer/model/customer_stream"}
-Ext.define('Shopware.apps.Customer.model.CustomerStream', {
-    extend: 'Shopware.data.Model',
-
-    configure: function() {
-        return {
-            controller: 'CustomerStream'
-        };
-    },
-
-    fields: [
-        // {block name="backend/customer/model/customer_stream/fields"}{/block}
-        { name: 'id', type: 'int', useNull: true },
-        { name: 'customer_count', type: 'int' },
-        { name: 'name', type: 'string' },
-        { name: 'type', type: 'string' },
-        { name: 'description', type: 'string', useNull: true },
-        { name: 'conditions', type: 'string' }
-    ]
-});
-// {/block}
+class Migrations_Migration935 extends AbstractMigration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function up($modus)
+    {
+        $sql = <<<'SQL'
+ALTER TABLE `s_customer_streams` ADD `type` varchar(30) COLLATE 'utf8_unicode_ci' NULL DEFAULT 'dynamic';
+SQL;
+        $this->addSql($sql);
+    }
+}
