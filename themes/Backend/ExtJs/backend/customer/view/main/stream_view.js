@@ -325,6 +325,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.filterPanel.removeAll();
         this.filterPanel.loadRecord(null);
         this.formPanel.loadRecord(null);
+        this.formPanel.setDisabled(false);
         this.saveStreamButton.setDisabled(true);
         this.saveNewStreamButton.setDisabled(true);
     },

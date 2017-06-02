@@ -368,6 +368,22 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         streamView.streamDetailForm.removeAll();
         streamView.streamDetailForm.add(detail);
 
+        if (record.get('type') === 'static') {
+            var assignment = Ext.create('Shopware.apps.Customer.view.customer_stream.Assignment', {
+                record: record,
+                flex: 1,
+                maxHeight: 5000
+            });
+
+            streamView.streamDetailForm.add({
+                xtype: 'fieldset',
+                height: 600,
+                layout: { type: 'vbox', align: 'stretch' },
+                title: 'Statische Stream zuweisung',
+                items: [assignment]
+            });
+        }
+
         streamView.attributeForm = attributeForm;
         streamView.streamDetailForm.add(attributeForm);
 
@@ -405,10 +421,15 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         streamView.resetFilterPanel();
 
-        streamView.formPanel.loadRecord(record);
+        if (record.get('type') === 'static') {
+            streamView.formPanel.setDisabled(true);
+        } else {
+            streamView.formPanel.loadRecord(record);
+        }
 
         streamView.streamListing.setLoading(false);
         streamView.listStore.getProxy().extraParams = {
+            streamId: record.get('id'),
             conditions: record.get('conditions')
         };
 

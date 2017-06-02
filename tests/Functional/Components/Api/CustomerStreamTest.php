@@ -44,13 +44,13 @@ class CustomerStreamTest extends TestCase
     {
         parent::setUp();
         $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
+//        $this->connection->beginTransaction();
     }
 
     protected function tearDown()
     {
         parent::tearDown();
-        $this->connection->rollBack();
+//        $this->connection->rollBack();
     }
 
     public function createResource()
@@ -66,7 +66,7 @@ class CustomerStreamTest extends TestCase
     {
         $data = [
             'name' => 'static stream',
-            'customers' => [1, 2],
+            'customers' => [1],
             'type' => CustomerStreamEntity::TYPE_STATIC,
         ];
 
@@ -81,6 +81,6 @@ class CustomerStreamTest extends TestCase
         );
         $ids = array_column($ids, 'customer_id');
 
-        $this->assertEquals([1, 2], $ids);
+        $this->assertEquals([1], $ids);
     }
 }

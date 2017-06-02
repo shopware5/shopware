@@ -23,6 +23,8 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CustomerSearchBundle\Condition\AssignedToStreamCondition;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\CustomerStream\StreamIndexer;
 use Shopware\Models\CustomerStream\CustomerStream;
@@ -169,16 +171,13 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
     {
         $request = $this->Request();
 
-        if ($request->has('conditions')) {
-            $conditions = $request->getParam('conditions', '');
-        } else {
-            $stream = $this->getDetail($request->getParam('streamId'));
-            $conditions = $stream['data']['conditions'];
+        $conditions = $this->getConditions($request);
+
+        $criteria = new Criteria();
+        foreach ($conditions as $condition) {
+            $criteria->addCondition($condition);
         }
 
-        $conditions = $conditions === null ? [] : json_decode($conditions, true);
-
-        $criteria = $this->createCriteria($conditions);
         $criteria->offset((int) $request->getParam('start', 0));
         $criteria->limit((int) $request->getParam('limit', 50));
 
@@ -218,6 +217,20 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign([
             'data' => array_values($chart),
         ]);
+    }
+
+    public function addCustomerToStreamAction()
+    {
+        $streamId = $this->Request()->getParam('streamId');
+        $customerId = $this->Request()->getParam('customerId');
+        $connection = $this->container->get('dbal_connection');
+
+        $connection->executeUpdate(
+            'INSERT IGNORE INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)',
+            [':streamId' => $streamId, ':customerId' => $customerId]
+        );
+
+        $this->View()->assign('success', true);
     }
 
     public function loadAmountPerStreamChartAction()
@@ -266,23 +279,44 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
     }
 
     /**
-     * @param array $conditions
+     * @param Enlight_Controller_Request_RequestHttp $request
      *
-     * @return Criteria
+     * @return ConditionInterface[]|null
      */
-    private function createCriteria(array $conditions)
+    private function getConditions($request)
     {
-        $criteria = new Criteria();
+        $conditions = $request->getParam('conditions');
 
-        $conditions = $this->container->get('shopware.logaware_reflection_helper')->unserialize(
-            $conditions,
-            sprintf('Serialization error in Customer Stream')
-        );
+        if (!empty($conditions)) {
+            $conditions = $request->getParam('conditions', '');
 
-        foreach ($conditions as $condition) {
-            $criteria->addCondition($condition);
+            $conditions = $conditions === null ? [] : json_decode($conditions, true);
+
+            return $this->container->get('shopware.logaware_reflection_helper')->unserialize(
+                $conditions,
+                sprintf('Serialization error in Customer Stream')
+            );
         }
 
-        return $criteria;
+        $streamId = $request->getParam('streamId');
+
+        $stream = $this->getDetail($streamId);
+
+        switch ($stream['data']['type']) {
+            case CustomerStream::TYPE_DYNAMIC:
+                $conditions = $stream['data']['conditions'];
+
+                $conditions = $conditions === null ? [] : json_decode($conditions, true);
+
+                return $this->container->get('shopware.logaware_reflection_helper')->unserialize(
+                    $conditions,
+                    sprintf('Serialization error in Customer Stream')
+                );
+
+            case CustomerStream::TYPE_STATIC:
+                return [new AssignedToStreamCondition($streamId)];
+        }
+
+        return null;
     }
 }

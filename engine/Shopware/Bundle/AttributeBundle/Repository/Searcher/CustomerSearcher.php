@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\CustomerStream\Mapping;
 
 /**
  * @category  Shopware
@@ -42,6 +43,11 @@ class CustomerSearcher extends GenericSearcher
         $builder->innerJoin('entity.billing', 'billing');
         $builder->innerJoin('entity.group', 'customerGroup');
         $builder->setAlias('entity');
+
+        if ($criteria->params && $criteria->params['streamId']) {
+            $builder->innerJoin(Mapping::class, 'mapping', 'WITH', 'mapping.customerId = entity.id AND mapping.streamId = :streamId');
+            $builder->setParameter(':streamId', $criteria->params['streamId']);
+        }
 
         return $builder;
     }

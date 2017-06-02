@@ -62,6 +62,10 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="customer_search.dbal.condition.assigned_to_stream_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\AssignedToStreamConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.customer_attribute_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\CustomerAttributeConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
