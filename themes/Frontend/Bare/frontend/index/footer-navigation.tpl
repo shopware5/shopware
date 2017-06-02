@@ -114,9 +114,8 @@
 
                         {block name="frontend_index_footer_column_newsletter_form_field"}
                             <input type="email" name="newsletter" class="newsletter--field" placeholder="{s name="IndexFooterNewsletterValue"}{/s}" />
-                            {$captchaName = {config name=newsletterCaptcha}}
-                            {if $captchaName !== "nocaptcha"}
-                                <input type="hidden" name="newsletterCaptcha" value="{$captchaName}" />
+                            {if {config name="newsletterCaptcha"} !== "nocaptcha"}
+                                <input type="hidden" name="redirect">
                             {/if}
                         {/block}
 
