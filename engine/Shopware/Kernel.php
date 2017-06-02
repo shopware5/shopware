@@ -550,6 +550,10 @@ class Kernel implements HttpKernelInterface
     {
         // cache the container
         $dumper = new PhpDumper($container);
+        
+        if (class_exists('ProxyManager\Configuration') && class_exists('Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper')) {
+            $dumper->setProxyDumper(new \Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper(md5($cache->getPath())));
+        }
 
         $content = $dumper->dump(['class' => $class, 'base_class' => $baseClass]);
 
