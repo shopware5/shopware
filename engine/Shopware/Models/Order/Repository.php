@@ -299,9 +299,11 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.paymentStatus', 'paymentStatus')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.billing', 'billing')
+                ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('billing.state', 'billingState')
+                ->leftJoin('shipping.country', 'shippingCountry')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.attribute', 'attribute');
@@ -528,9 +530,23 @@ class Repository extends ModelRepository
                                 $expr->like('orders.invoiceAmount', '?1'),
                                 $expr->like('orders.transactionId', '?1'),
                                 $expr->like('billing.company', '?3'),
+                                $expr->like('shipping.company', '?3'),
+                                $expr->like('billing.department', '?3'),
+                                $expr->like('shipping.department', '?3'),
+                                $expr->like('billing.street', '?3'),
+                                $expr->like('shipping.street', '?3'),
+                                $expr->like('billing.zipCode', '?1'),
+                                $expr->like('shipping.zipCode', '?1'),
+                                $expr->like('billing.city', '?3'),
+                                $expr->like('shipping.city', '?3'),
+                                $expr->like('billingCountry.name', '?3'),
+                                $expr->like('shippingCountry.name', '?3'),
                                 $expr->like('customer.email', '?3'),
                                 $expr->like('billing.lastName', '?3'),
+                                $expr->like('shipping.lastName', '?3'),
                                 $expr->like('billing.firstName', '?3'),
+                                $expr->like('shipping.firstName', '?3'),
+                                $expr->like('shop.name', '?3'),
                                 $expr->like('orders.comment', '?3'),
                                 $expr->like('orders.customerComment', '?3'),
                                 $expr->like('orders.internalComment', '?3')
