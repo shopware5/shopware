@@ -2226,7 +2226,9 @@ class sAdmin
             $errorFlag = [];
 
             $captchaName = Shopware()->Config()->get('newsletterCaptcha');
-            if ($captchaName !== 'nocaptcha') {
+            $noCaptchaAfterLogin = Shopware()->Config()->get('noCaptchaAfterLogin');
+            if ($captchaName !== 'nocaptcha' &&
+                !($noCaptchaAfterLogin && Shopware()->Modules()->Admin()->sCheckUser())) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 

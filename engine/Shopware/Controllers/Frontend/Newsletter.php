@@ -47,6 +47,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     public function indexAction()
     {
         $this->View()->voteConfirmed = $this->isConfirmed();
+        $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (isset($this->Request()->sUnsubscribe)) {
             $this->View()->sUnsubscribe = true;
@@ -72,9 +73,11 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return;
         }
 
+        $noCaptchaAfterLogin = Shopware()->Config()->get('noCaptchaAfterLogin');
         // redirect user if captcha is active and request is sent from the footer
         if ($this->Request()->getPost('redirect') !== null &&
-            Shopware()->Config()->get('newsletterCaptcha') !== 'noCaptcha') {
+            Shopware()->Config()->get('newsletterCaptcha') !== 'noCaptcha' &&
+            !($noCaptchaAfterLogin && Shopware()->Modules()->Admin()->sCheckUser())) {
             return;
         }
 
