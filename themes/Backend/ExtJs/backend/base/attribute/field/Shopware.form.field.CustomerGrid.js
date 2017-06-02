@@ -43,12 +43,17 @@ Ext.define('Shopware.form.field.CustomerGrid', {
             me.createSortingColumn(),
             activeColumn,
             { dataIndex: 'number' },
+            { dataIndex: 'email', flex: 1, renderer: me.mailRenderer },
             { dataIndex: 'firstname', flex: 1 },
             { dataIndex: 'lastname', flex: 1 },
             { dataIndex: 'customerGroup', flex: 1 },
             { dataIndex: 'company', flex: 1 },
             me.createActionColumn()
         ];
+    },
+
+    mailRenderer: function(value) {
+        return Ext.String.format('<a href="mailto:[0]" data-qtip="[0]">[0]</a>', value)
     },
 
     createSearchField: function() {

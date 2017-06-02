@@ -262,6 +262,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         return Ext.create('Ext.form.Panel', {
             items: [{
                 xtype: 'customer-stream-detail',
+                withAssignment: false,
                 record: Ext.create('Shopware.apps.Customer.model.CustomerStream')
             }],
             bodyPadding: 20,
@@ -285,18 +286,14 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             cls: 'primary',
             text: '{s name="save"}{/s}',
             handler: function() {
-                if (form.getForm().isValid()) {
-                    me.saveStream(
-                        Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues())
-                    );
-                    window.destroy();
-                }
+                me.createStream(form, window);
             }
         });
 
         var window = Ext.create('Ext.window.Window', {
             modal: true,
-            width: 450,
+            width: 900,
+            height: 255,
             items: [form],
             title: '{s name="save_new"}{/s}',
             layout: 'fit',
@@ -315,16 +312,31 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 if(event.getKey() !== event.ENTER) {
                     return false;
                 }
-                if (form.getForm().isValid()) {
-                    me.saveStream(
-                        Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues())
-                    );
-                    window.destroy();
-                }
+                me.createStream(form, window);
             });
         });
 
         window.show();
+    },
+
+    createStream: function(form, window) {
+        var me = this;
+
+        if (form.getForm().isValid()) {
+            var stream = Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues());
+            var type = stream.get('type');
+            
+            stream.set('type', 'dynamic');
+            window.destroy();
+
+            me.saveStream(stream, function() {
+                stream.set('type', type);
+                stream.save();
+                me.resetProgressbar();
+                me.getStreamView().resetFilterPanel();
+                me.getStreamView().streamListing.getStore().load();
+            });
+        }
     },
 
     saveEditedStream: function() {
@@ -332,7 +344,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         this.saveStream(streamView.formPanel.getForm().getRecord());
     },
 
-    saveStream: function (record) {
+    saveStream: function (record, callback) {
         var me = this;
         var streamView = this.getStreamView();
 
@@ -349,7 +361,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         record.save({
             callback: function() {
-                me.indexStream(record);
+                me.indexStream(record, callback);
             }
         });
     },
@@ -367,22 +379,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         streamView.streamDetailForm.removeAll();
         streamView.streamDetailForm.add(detail);
-
-        if (record.get('type') === 'static') {
-            var assignment = Ext.create('Shopware.apps.Customer.view.customer_stream.Assignment', {
-                record: record,
-                flex: 1,
-                maxHeight: 5000
-            });
-
-            streamView.streamDetailForm.add({
-                xtype: 'fieldset',
-                height: 600,
-                layout: { type: 'vbox', align: 'stretch' },
-                title: 'Statische Stream zuweisung',
-                items: [assignment]
-            });
-        }
 
         streamView.attributeForm = attributeForm;
         streamView.streamDetailForm.add(attributeForm);
@@ -479,6 +475,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         record.save({
             callback: function() {
+                me.getStreamListing().getStore().load();
+
                 streamView.attributeForm.saveAttribute(record.get('id'), function() {
                     me.switchLayout('table');
                 });
@@ -493,8 +491,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             return;
         /*{/if}*/
 
-        if (record.get('type') === 'dynamic') {
-            callback();
+        if (record.get('type') !== 'dynamic') {
+            Ext.callback(callback);
             return;
         }
 

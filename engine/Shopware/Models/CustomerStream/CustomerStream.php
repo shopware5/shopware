@@ -77,7 +77,13 @@ class CustomerStream extends ModelEntity
      * @var string
      * @ORM\Column(name="type", type="string", nullable=true)
      */
-    private $type = 'dynamic';
+    private $type = self::TYPE_DYNAMIC;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="freeze_up", type="date", nullable=true)
+     */
+    private $freezeUp;
 
     /**
      * @return int
@@ -146,5 +152,21 @@ class CustomerStream extends ModelEntity
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getFreezeUp()
+    {
+        return $this->freezeUp;
+    }
+
+    public function setFreezeUp($freezeUp)
+    {
+        if (is_string($freezeUp)) {
+            $freezeUp = new \DateTime($freezeUp);
+        }
+        $this->freezeUp = $freezeUp;
     }
 }

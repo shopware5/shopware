@@ -44,7 +44,9 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
         { name: 'id', type: 'int', useNull: true },
         { name: 'customer_count', type: 'int' },
         { name: 'name', type: 'string' },
-        { name: 'type', type: 'string' },
+        { name: 'type', type: 'string', defaultValue: 'dynamic' },
+        { name: 'assignment', type: 'string' },
+        { name: 'freezeUp', type: 'date', useNull: true, defaultValue: null },
         { name: 'description', type: 'string', useNull: true },
         { name: 'conditions', type: 'string' }
     ]

@@ -1,12 +1,45 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage Controller
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/customer_stream/assignment"}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.Assignment', {
 
     extend: 'Shopware.form.field.CustomerGrid',
+    xtype: 'widget.customer-stream-assignment',
     isFormField: false,
-    supportText: 'Änderungen werden direkt gespeichert!',
-    // fieldLabel: 'Zugewiesene Kunden',
+    supportText: '{s name="assigned_customers_help"}{/s}',
+    fieldLabel: '{s name="assigned_customers"}{/s}',
+    fieldLabelConfig: 'as_empty_text',
     allowSorting: false,
-    labelWidth: 155,
+    animateAddItem: false,
 
     initComponent: function() {
         var me = this;
@@ -44,7 +77,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Assignment', {
 
         me.store = factory.createEntitySearchStore("Shopware\\Models\\Customer\\Customer");
         me.store.getProxy().extraParams.streamId = me.record.get('id');
-
+        me.store.pageSize = 20;
         return me.store;
     },
 
@@ -58,6 +91,25 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Assignment', {
         return success;
     },
 
+    removeItem: function(record) {
+        var me = this,
+            customerId = record.get('id'),
+            streamId = me.record.get('id');
+
+        me.callParent(arguments);
+        me.removeCustomerFromStream(streamId, customerId);
+    },
+
+    removeCustomerFromStream: function(streamId, customerId) {
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=removeCustomerFromStream}',
+            params: {
+                streamId: streamId,
+                customerId: customerId
+            }
+        });
+    },
+
     addCustomerToStream: function(streamId, customerId) {
         Ext.Ajax.request({
             url: '{url controller=CustomerStream action=addCustomerToStream}',
@@ -68,3 +120,5 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Assignment', {
         });
     }
 });
+
+//{/block}

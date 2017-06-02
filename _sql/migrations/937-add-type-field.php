@@ -24,7 +24,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration935 extends AbstractMigration
+class Migrations_Migration937 extends AbstractMigration
 {
     /**
      * {@inheritdoc}
@@ -32,7 +32,8 @@ class Migrations_Migration935 extends AbstractMigration
     public function up($modus)
     {
         $sql = <<<'SQL'
-ALTER TABLE `s_customer_streams` ADD `type` varchar(30) COLLATE 'utf8_unicode_ci' NULL DEFAULT 'dynamic';
+ALTER TABLE `s_customer_streams` ADD `type` varchar(30) COLLATE 'utf8_unicode_ci' DEFAULT 'dynamic';
+ALTER TABLE `s_customer_streams` ADD `freeze_up` DATE NULL DEFAULT NULL;
 SQL;
         $this->addSql($sql);
     }

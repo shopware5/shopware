@@ -44,22 +44,18 @@ class CustomerStreamTest extends TestCase
     {
         parent::setUp();
         $this->connection = Shopware()->Container()->get('dbal_connection');
-//        $this->connection->beginTransaction();
+        $this->connection->beginTransaction();
     }
 
     protected function tearDown()
     {
         parent::tearDown();
-//        $this->connection->rollBack();
+        $this->connection->rollBack();
     }
 
     public function createResource()
     {
-        $resource = new CustomerStream();
-        $resource->setManager(Shopware()->Container()->get('models'));
-        $resource->setContainer(Shopware()->Container());
-
-        return $resource;
+        return Shopware()->Container()->get('shopware.api.customer_stream');
     }
 
     public function testCreateStaticStream()

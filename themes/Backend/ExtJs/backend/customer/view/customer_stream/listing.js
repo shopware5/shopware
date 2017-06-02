@@ -53,7 +53,12 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
             
             columns: {
                 name: {
+                    flex: 2,
                     renderer: me.nameRenderer
+                },
+                freezeUp: {
+                    flex: 1,
+                    renderer: me.freezeUpRenderer
                 }
             }
         };
@@ -90,14 +95,35 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                         me.fireEvent('reset-progressbar');
                         me.getStore().load();
                     });
+                },
+                getClass: function(value, metadata, record) {
+                    if (record.get('freezeUp') || record.get('type') !== 'dynamic') {
+                        return 'x-hidden';
+                    }
                 }
             }
         ]);
         return items;
     },
 
+    freezeUpRenderer: function(value, meta, record) {
+        var lockIcon = 'sprite-lock-unlock', freezeUp = '';
+
+        if (value) {
+            freezeUp = Ext.util.Format.date(value);
+        }
+        if (value || record.get('type') === 'static') {
+            lockIcon = 'sprite-lock';
+        }
+
+        return '<span class="lock-icon '+ lockIcon +'">&nbsp;</span>' + freezeUp;
+    },
+
     nameRenderer: function (value, meta, record) {
-        return '<span class="stream-name-column"><b>' + value + '</b> - '+ record.get('customer_count') +' {s name="customer_count_suffix"}{/s}</span>';
+        return '<span class="stream-name-column">' +
+                '<b>' + value + '</b> - '+
+                record.get('customer_count') +
+                ' {s name="customer_count_suffix"}{/s}</span>';
     }
 });
 // {/block}

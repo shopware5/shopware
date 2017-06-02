@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.listStore = Ext.create('Shopware.apps.Customer.store.Preview');
         me.streamStore = Ext.create('Shopware.apps.Customer.store.CustomerStream', {
             sorters: [
-                { property: 'name', direction: 'ASC'}
+                { property: 'stream.name', direction: 'ASC'}
             ]
         }).load();
 

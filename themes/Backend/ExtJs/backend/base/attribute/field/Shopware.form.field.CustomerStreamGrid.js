@@ -42,8 +42,13 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
         return [
             me.createSortingColumn(),
             { dataIndex: 'name', flex: 1, renderer: me.nameRenderer },
+            me.applyDateColumnConfig({ dataIndex: 'freezeUp', flex: 1, renderer: me.freezeUpRenderer }),
             me.createActionColumn()
         ];
+    },
+
+    freezeUpRenderer: function(value) {
+        return value;
     },
 
     nameRenderer: function (value, meta, record) {

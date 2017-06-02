@@ -22,11 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\Condition\AssignedToStreamCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Components\CustomerStream\StreamIndexer;
+use Shopware\Components\Api\Resource\CustomerStream as CustomerStreamApi;
 use Shopware\Models\CustomerStream\CustomerStream;
 use Shopware\Models\CustomerStream\CustomerStreamRepository;
 
@@ -36,14 +32,25 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function delete($id)
     {
-        $success = parent::delete($id);
+        $this->getApiResource()->delete($id);
 
-        $this->get('dbal_connection')->executeQuery(
-            'DELETE FROM s_customer_streams_mapping WHERE stream_id = :id',
-            [':id' => $id]
-        );
+        return true;
+    }
 
-        return $success;
+    public function save($data)
+    {
+        $data = array_merge([
+            'freezeUp' => null,
+        ], $data);
+
+        if ($data['id']) {
+            $entity = $this->getApiResource()->update($data['id'], $data);
+        } else {
+            $entity = $this->getApiResource()->create($data);
+        }
+        $detail = $this->getDetail($entity->getId());
+
+        return ['success' => true, 'data' => $detail['data']];
     }
 
     public function getLastFullIndexTimeAction()
@@ -59,30 +66,26 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $streamId = (int) $this->Request()->getParam('streamId');
         $total = (int) $this->Request()->getParam('total');
 
+        $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
+        $stream = $this->container->get('models')->find(CustomerStream::class, $streamId);
+
+        if ($stream->getFreezeUp()) {
+            $this->View()->assign([
+                'success' => true,
+                'finish' => true,
+                'progress' => 1,
+                'text' => $snippets->get('stream_refreshed'),
+            ]);
+
+            return;
+        }
+
         $iteration = (int) $this->Request()->getParam('iteration', 1);
         $offset = ($iteration - 1) * CustomerStreamRepository::INDEXING_LIMIT;
 
-        /** @var StreamIndexer $indexer */
-        $indexer = $this->get('shopware.customer_stream.stream_indexer');
-
-        /** @var \Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory $factory */
-        $factory = $this->get('shopware.customer_stream.criteria_factory');
-
-        $criteria = $factory->createCriteria($streamId);
-
-        $criteria->offset($offset)
-            ->limit(CustomerStreamRepository::INDEXING_LIMIT)
-            ->setFetchCount(false);
-
-        if ($criteria->getOffset() === 0) {
-            $indexer->clearStreamIndex($streamId);
-        }
-
-        $indexer->populatePartial($streamId, $criteria);
+        $this->getApiResource()->indexStream($stream, $offset, CustomerStreamRepository::INDEXING_LIMIT);
 
         $handled = $offset + CustomerStreamRepository::INDEXING_LIMIT;
-
-        $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
 
         if ($handled >= $total) {
             $this->View()->assign([
@@ -126,27 +129,14 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $offset = ($iteration - 1) * CustomerStreamRepository::INDEXING_LIMIT;
         $handled = $offset + CustomerStreamRepository::INDEXING_LIMIT;
 
-        $indexer = $this->container->get('customer_search.dbal.indexing.indexer');
-
         $full = $this->Request()->getParam('full');
 
-        $ids = $this->container->get('shopware.customer_stream.repository')
-            ->fetchSearchIndexIds($lastId, $full);
-
-        if (!empty($ids)) {
-            $this->container->get('dbal_connection')->executeUpdate(
-                'DELETE FROM s_customer_search_index WHERE id IN (:ids)',
-                [':ids' => $ids],
-                [':ids' => Connection::PARAM_INT_ARRAY]
-            );
-        }
-
-        $indexer->populate($ids);
+        $this->getApiResource()->buildSearchIndex($lastId, $full);
 
         $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
 
         if ($handled >= $total) {
-            $indexer->cleanupIndex();
+            $this->getApiResource()->cleanupIndexSearchIndex();
 
             $this->View()->assign([
                 'success' => true,
@@ -169,33 +159,16 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function loadStreamAction()
     {
+        /** @var Enlight_Controller_Request_Request $request */
         $request = $this->Request();
 
-        $conditions = $this->getConditions($request);
-
-        $criteria = new Criteria();
-        foreach ($conditions as $condition) {
-            $criteria->addCondition($condition);
-        }
-
-        $criteria->offset((int) $request->getParam('start', 0));
-        $criteria->limit((int) $request->getParam('limit', 50));
-
-        $sortings = json_decode($request->getParam('sorting', []), true);
-
-        if (!empty($sortings)) {
-            $reflectionHelper = $this->container->get('shopware.logaware_reflection_helper');
-            $sortings = $reflectionHelper->unserialize($sortings, '');
-
-            foreach ($sortings as $sorting) {
-                $criteria->addSorting($sorting);
-            }
-        }
-
-        /** @var \Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch $numberSearch */
-        $numberSearch = $this->get('customer_search.dbal.number_search');
-
-        $result = $numberSearch->search($criteria);
+        $result = $this->getApiResource()->getOne(
+            $request->getParam('streamId'),
+            (int) $request->getParam('start', 0),
+            (int) $request->getParam('limit', 50),
+            $request->getParam('conditions', null),
+            $request->getParam('sorting', null)
+        );
 
         $data = $this->container->get('shopware.customer_stream.repository')->fetchBackendListing($result->getIds());
 
@@ -221,12 +194,27 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function addCustomerToStreamAction()
     {
-        $streamId = $this->Request()->getParam('streamId');
-        $customerId = $this->Request()->getParam('customerId');
+        $streamId = (int) $this->Request()->getParam('streamId');
+        $customerId = (int) $this->Request()->getParam('customerId');
         $connection = $this->container->get('dbal_connection');
 
         $connection->executeUpdate(
             'INSERT IGNORE INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)',
+            [':streamId' => $streamId, ':customerId' => $customerId]
+        );
+
+        $this->View()->assign('success', true);
+    }
+
+    public function removeCustomerFromStreamAction()
+    {
+        $streamId = (int) $this->Request()->getParam('streamId');
+        $customerId = (int) $this->Request()->getParam('customerId');
+
+        $connection = $this->container->get('dbal_connection');
+
+        $connection->executeUpdate(
+            'DELETE FROM s_customer_streams_mapping WHERE stream_id = :streamId AND customer_id = :customerId',
             [':streamId' => $streamId, ':customerId' => $customerId]
         );
 
@@ -256,67 +244,16 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
     {
-        $data = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
+        $resource = $this->getApiResource();
 
-        $ids = array_column($data['data'], 'id');
-        if (empty($ids)) {
-            return $data;
-        }
-
-        $counts = $this->container->get('shopware.customer_stream.repository')->fetchStreamsCustomerCount($ids);
-
-        foreach ($data['data'] as &$row) {
-            $id = (int) $row['id'];
-            if (!array_key_exists($id, $counts)) {
-                $row['customer_count'] = 0;
-                $row['newsletter_count'] = 0;
-            } else {
-                $row = array_merge($row, $counts[$id]);
-            }
-        }
-
-        return $data;
+        return $resource->getList($offset, $limit, $filter, $sort);
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
-     *
-     * @return ConditionInterface[]|null
+     * @return CustomerStreamApi
      */
-    private function getConditions($request)
+    protected function getApiResource()
     {
-        $conditions = $request->getParam('conditions');
-
-        if (!empty($conditions)) {
-            $conditions = $request->getParam('conditions', '');
-
-            $conditions = $conditions === null ? [] : json_decode($conditions, true);
-
-            return $this->container->get('shopware.logaware_reflection_helper')->unserialize(
-                $conditions,
-                sprintf('Serialization error in Customer Stream')
-            );
-        }
-
-        $streamId = $request->getParam('streamId');
-
-        $stream = $this->getDetail($streamId);
-
-        switch ($stream['data']['type']) {
-            case CustomerStream::TYPE_DYNAMIC:
-                $conditions = $stream['data']['conditions'];
-
-                $conditions = $conditions === null ? [] : json_decode($conditions, true);
-
-                return $this->container->get('shopware.logaware_reflection_helper')->unserialize(
-                    $conditions,
-                    sprintf('Serialization error in Customer Stream')
-                );
-
-            case CustomerStream::TYPE_STATIC:
-                return [new AssignedToStreamCondition($streamId)];
-        }
-
-        return null;
+        return $this->container->get('shopware.api.customer_stream');
     }
 }
