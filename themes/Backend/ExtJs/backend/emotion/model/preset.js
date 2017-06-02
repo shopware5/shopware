@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
         { name: 'description', type: 'string', persist: false },
         { name: 'translations', type: 'array' },
         { name: 'requiredPlugins', type: 'array' },
+        { name: 'emotionTranslations', type: 'string' },
         { name: 'assetsImported', type: 'boolean', defaultValue: true, persist: false },
         {
             name: 'pluginsInstalled',

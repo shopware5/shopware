@@ -133,6 +133,12 @@ class Preset extends ModelEntity
     private $hidden = false;
 
     /**
+     * @var string
+     * @ORM\Column(name="emotion_translations", type="text", nullable=false)
+     */
+    private $emotionTranslations;
+
+    /**
      * Preset constructor.
      */
     public function __construct()
@@ -317,8 +323,6 @@ class Preset extends ModelEntity
 
     /**
      * @param string $requiredPlugins
-     *
-     * @return ModelEntity
      */
     public function setRequiredPlugins($requiredPlugins)
     {
@@ -331,5 +335,21 @@ class Preset extends ModelEntity
     public function getRequiredPlugins()
     {
         return $this->requiredPlugins;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmotionTranslations()
+    {
+        return $this->emotionTranslations;
+    }
+
+    /**
+     * @param string $emotionTranslations
+     */
+    public function setEmotionTranslations($emotionTranslations)
+    {
+        $this->emotionTranslations = $emotionTranslations;
     }
 }

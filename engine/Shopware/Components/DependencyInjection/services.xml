@@ -604,6 +604,10 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
+        <service id="shopware.emotion.translation_importer" class="Shopware\Components\Emotion\EmotionTranslationImporter">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
         <service id="shopware.emotion.preset_loader" class="Shopware\Components\Emotion\Preset\PresetLoader">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_media.media_service" />

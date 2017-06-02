@@ -84,6 +84,7 @@ class EmotionImporter implements EmotionImporterInterface
             'presetData' => $presetData,
             'hidden' => true,
             'assetsImported' => false,
+            'emotionTranslations' => $emotionData['emotionTranslations'],
         ]);
 
         return $preset;

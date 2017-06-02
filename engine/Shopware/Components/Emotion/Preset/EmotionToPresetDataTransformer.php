@@ -92,7 +92,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     private function cleanupEmotionData(array $emotionData, $keepName = false)
     {
         unset(
-            $emotionData['id'],
             $emotionData['parentId'],
             $emotionData['userId'],
             $emotionData['validFrom'],
@@ -110,7 +109,12 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
         $emotionData['active'] = false;
 
         $requiredPlugins = $this->getRequiredPlugins($emotionData['elements']);
+        $emotionTranslations = $this->getTranslations($emotionData['elements'], $emotionData['id']);
+
+        unset($emotionData['id']);
+
         $emotionData['elements'] = $this->cleanupElements($emotionData['elements']);
+        $data['emotionTranslations'] = json_encode($emotionTranslations);
         $data['requiredPlugins'] = $requiredPlugins;
         $data['presetData'] = json_encode($emotionData);
 
@@ -233,11 +237,56 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     private function getRequiredPluginsById(array $pluginIds)
     {
         return $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('name, label, version')
-            ->from('s_core_plugins', 's')
-            ->where('s.id IN (:ids)')
+            ->select('plugin.name, plugin.label, plugin.version')
+            ->from('s_core_plugins', 'plugin')
+            ->where('plugin.id IN (:ids)')
             ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param array $elements
+     * @param int   $emotionId
+     *
+     * @return array
+     */
+    private function getTranslations(array $elements, $emotionId)
+    {
+        $elementIds = array_column($elements, 'id');
+        // this is important because id expresses the order elements were created
+        // and will be created on import
+        sort($elementIds);
+
+        $translations = $this->getEmotionTranslation($emotionId, $elementIds);
+        $elementIds = array_flip($elementIds);
+
+        foreach ($translations as $key => &$translation) {
+            if (!$translation['locale'] || !$translation['shop']) {
+                unset($translations[$key]);
+                continue;
+            }
+            if ($translation['objecttype'] === 'emotionElement' && $elementIds[$translation['objectkey']]) {
+                $translation['objectkey'] = 'elementIndex-' . $elementIds[$translation['objectkey']];
+            }
+        }
+        unset($translation);
+
+        return array_values($translations);
+    }
+
+    private function getEmotionTranslation($emotionId, array $elementIds)
+    {
+        return $this->modelManager->getConnection()->createQueryBuilder()
+            ->select('translation.objectkey, translation.objecttype, translation.objectdata, locale.locale, shop.name as shop')
+            ->from('s_core_translations', 'translation')
+            ->leftJoin('translation', 's_core_shops', 'shop', 'translation.objectlanguage = shop.id')
+            ->leftJoin('shop', 's_core_locales', 'locale', 'shop.locale_id = locale.id')
+            ->where('translation.objecttype = "emotion" AND translation.objectkey = :emotionId')
+            ->orWhere('translation.objectkey IN (:ids)')
+            ->setParameter('emotionId', $emotionId)
+            ->setParameter('ids', $elementIds, Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll();
     }
 }

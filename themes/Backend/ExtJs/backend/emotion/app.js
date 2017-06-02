@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Emotion', {
         'components.fields.CategoryImageType', 'components.fields.CategorySelection', 'components.Blog', 'components.BannerSlider',
         'components.fields.SliderSelect', 'components.fields.Variant', 'components.fields.ManufacturerType', 'components.ManufacturerSlider', 'components.fields.LinkTarget',
         'components.fields.ArticleSliderType', 'components.ArticleSlider', 'components.HtmlElement', 'components.HtmlVideo', 'components.HtmlCode', 'components.Youtube',
-        'templates.List', 'templates.Toolbar', 'templates.Settings', 'components.fields.VideoMode' ],
+        'templates.List', 'templates.Toolbar', 'templates.Settings', 'components.fields.VideoMode', 'translation.Window' ],
 
     /**
      * Required views for module (subapplication)
