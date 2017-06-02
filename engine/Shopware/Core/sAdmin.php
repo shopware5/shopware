@@ -2225,20 +2225,12 @@ class sAdmin
         if (empty($unsubscribe)) {
             $errorFlag = [];
 
-            $captchaName = $this->front->Request()->getPost('captchaName');
-            if (($captchaName !== 'noCaptcha')) {
+            $captchaName = Shopware()->Config()->get('newsletterCaptcha');
+            if ($captchaName !== 'nocaptcha') {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 
-                try {
-                    $isValid = $captchaValidator->validateByName($captchaName, $this->front->Request());
-                } catch (\Exception $exception) {
-                    // log captchaNotFound Exception
-                    Shopware()->Container()->get('corelogger')->error($exception->getMessage());
-                    $isValid = $captchaValidator->validateByName('nocaptcha', $this->front->Request());
-                }
-
-                if (!$isValid) {
+                if (!$captchaValidator->validateByName($captchaName, $this->front->Request())) {
                     return [
                         'code' => 7,
                     ];

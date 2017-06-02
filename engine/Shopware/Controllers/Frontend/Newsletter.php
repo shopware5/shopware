@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
-
 /**
  * Newsletter controller
  */
@@ -74,8 +72,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return;
         }
 
-        $newsletterCaptcha = Shopware()->System()->_POST['newsletterCaptcha'];
-        if (isset($newsletterCaptcha) && ($newsletterCaptcha !== 'noCaptcha')) {
+        // redirect user if captcha is active and request is sent from the footer
+        if ($this->Request()->getPost('redirect') !== null &&
+            Shopware()->Config()->get('newsletterCaptcha') !== 'noCaptcha') {
             return;
         }
 
@@ -201,8 +200,8 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     /**
      * Send mail method
      *
-     * @param string $recipient
-     * @param string $template
+     * @param string      $recipient
+     * @param string      $template
      * @param bool|string $optin
      */
     protected function sendMail($recipient, $template, $optin = false)
