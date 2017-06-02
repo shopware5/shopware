@@ -126,9 +126,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $errors['shipping'] = $this->getFormErrors($shippingForm);
         }
 
-        $captchaErrors = $this->validateCaptcha($this->request->getParam('captchaName'), $this->request);
-        if (!empty($captchaErrors)) {
-            $errors['captcha'] = [$captchaErrors];
+        $validCaptcha = $this->validateCaptcha($this->get('config')->get('registerCaptcha'), $this->request);
+        if (!$validCaptcha) {
+            $errors['captcha'] = [
+                $this->get('snippets')
+                ->getNamespace('widgets/captcha/custom_captcha')
+                ->get('invalidCaptchaMessage'),
+            ];
         }
 
         $errors['occurred'] = (
@@ -228,7 +232,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      * @param string                             $captchaName
      * @param Enlight_Controller_Request_Request $request
      *
-     * @return string
+     * @return bool
      */
     private function validateCaptcha($captchaName, Enlight_Controller_Request_Request $request)
     {
@@ -244,12 +248,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         if ($isValid) {
-            return null;
+            return true;
         }
 
-        return $this->get('snippets')
-                ->getNamespace('widgets/captcha/custom_captcha')
-                ->get('invalidCaptchaMessage');
+        return false;
     }
 
     /**
