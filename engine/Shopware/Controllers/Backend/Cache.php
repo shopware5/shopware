@@ -148,6 +148,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->clearProxyCache();
             $this->cacheManager->clearOpCache();
         }
+        if ($cache['opcache'] == 'on') {
+            $this->cacheManager->clearOpCache();
+        }
 
         $this->View()->assign([
             'success' => true,
