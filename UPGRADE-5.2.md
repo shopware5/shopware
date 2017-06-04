@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added support for uploading media with ftps in Rest-API
 * Added `{$smarty.block.parent}` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
 * Added new block `frontend_checkout_cart_item_details_essential_features` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
+* Added new block `frontend_checkout_confirm_product_table_content` around table in `themes/Frontend/Bare/frontend/checkout/confirm.tpl`.
 
 # 5.2.26
 
