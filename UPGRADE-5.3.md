@@ -133,7 +133,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Updated `FPDF` to 1.8.1
 * Updated `FPDI` to 1.6.1
-* Updated `flatpickr` to 2.5.7
 * Updated `jquery` to 2.2.4
 * Updated `grunt` to 1.0.1
 * Updated `grunt-contrib-clean` to 1.1.0
