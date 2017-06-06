@@ -107,6 +107,61 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $this->View()->assign('perPage', $perPage);
     }
 
+    public function productSliderAction()
+    {
+        $numbers = $this->Request()->getParam('numbers');
+        if (is_string($numbers)) {
+            $numbers = array_filter(explode('|', $numbers));
+        }
+
+        $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+
+        if (!is_array($numbers)) {
+            return;
+        }
+
+        $context = $this->container->get('shopware_storefront.context_service')
+            ->getShopContext();
+
+        $products = $this->container->get('shopware_storefront.list_product_service')
+            ->getList($numbers, $context);
+
+        $articles = $this->container->get('legacy_struct_converter')
+            ->convertListProductStructList($products);
+
+        $this->View()->assign('articles', $articles);
+        $this->View()->assign($this->Request()->getParams());
+    }
+
+    public function streamSliderAction()
+    {
+        $streamId = $this->Request()->getParam('streamId');
+
+        $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+
+        if (!$streamId) {
+            return;
+        }
+
+        $context = $this->container->get('shopware_storefront.context_service')
+            ->getShopContext();
+
+        $criteria = $this->container->get('shopware_product_stream.criteria_factory')
+            ->createCriteria($this->Request(), $context);
+
+        $this->container->get('shopware_product_stream.repository')
+            ->prepareCriteria($criteria, $streamId);
+
+        $products = $this->container->get('shopware_search.product_search')
+            ->search($criteria, $context);
+
+        $articles = $this->container->get('legacy_struct_converter')
+            ->convertListProductStructList($products->getProducts());
+
+        $this->View()->assign('articles', $articles);
+        $this->View()->assign($this->Request()->getParams());
+    }
+
     /**
      * tag cloud by category
      */
