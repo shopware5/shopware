@@ -47,6 +47,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     public function indexAction()
     {
         $this->View()->voteConfirmed = $this->isConfirmed();
+        $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (isset($this->Request()->sUnsubscribe)) {
             $this->View()->sUnsubscribe = true;
@@ -72,13 +73,16 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return;
         }
 
+        $config = $this->container->get('config');
+        $noCaptchaAfterLogin = $config->get('noCaptchaAfterLogin');
         // redirect user if captcha is active and request is sent from the footer
-        if ($this->Request()->getPost('redirect') !== null &&
-            Shopware()->Config()->get('newsletterCaptcha') !== 'noCaptcha') {
+        if ($config->get('newsletterCaptcha') !== 'noCaptcha' &&
+            $this->Request()->getPost('redirect') !== null &&
+            !($noCaptchaAfterLogin && Shopware()->Modules()->Admin()->sCheckUser())) {
             return;
         }
 
-        if (empty(Shopware()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
+        if (empty($config->get('sOPTINNEWSLETTER')) || $this->View()->voteConfirmed) {
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
             if ($this->View()->sStatus['code'] == 3) {
                 // Send mail to subscriber

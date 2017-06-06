@@ -130,8 +130,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         if (!$validCaptcha) {
             $errors['captcha'] = [
                 $this->get('snippets')
-                ->getNamespace('widgets/captcha/custom_captcha')
-                ->get('invalidCaptchaMessage'),
+                    ->getNamespace('widgets/captcha/custom_captcha')
+                    ->get('invalidCaptchaMessage'),
             ];
         }
 

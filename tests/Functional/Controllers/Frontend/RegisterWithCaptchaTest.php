@@ -26,8 +26,14 @@ use Shopware\Components\Captcha\DefaultCaptcha;
 
 class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Components_Test_Plugin_TestCase
 {
+    public static function tearDownAfterClass()
+    {
+        static::saveConfig('registerCaptcha', 'nocaptcha');
+    }
+
     public function testValidateCaptchaIsUninstalled()
     {
+        static::saveConfig('registerCaptcha', 'uninstalledCaptchaName');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
         $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
         $this->Request()->setMethod('POST');
@@ -43,8 +49,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
     public function testNoCaptcha()
     {
+        static::saveConfig('registerCaptcha', 'nocaptcha');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $postParameter['captchaName'] = 'nocaptcha';
 
         $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
         $this->Request()->setMethod('POST');
@@ -60,8 +66,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
     public function testHoneypot()
     {
+        static::saveConfig('registerCaptcha', 'honeypot');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $postParameter['captchaName'] = 'honeypot';
 
         $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
         $this->Request()->setMethod('POST');
@@ -77,14 +83,13 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
     public function testDefault()
     {
-        $captchaName = 'default';
+        static::saveConfig('registerCaptcha', 'default');
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random, $random => true];
 
         Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
 
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $postParameter['captchaName'] = $captchaName;
         $postParameter['sCaptcha'] = $random;
 
         $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
@@ -101,8 +106,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
     public function testInvalidHoneypot()
     {
+        static::saveConfig('registerCaptcha', 'honeypot');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $postParameter['captchaName'] = 'honeypot';
         $postParameter['first_name_confirmation'] = uniqid();
 
         $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
@@ -118,14 +123,13 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
     public function testInvalidDefault()
     {
-        $captchaName = 'default';
+        static::saveConfig('registerCaptcha', 'default');
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random];
 
         Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
 
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $postParameter['captchaName'] = $captchaName;
         $postParameter['sCaptcha'] = $random;
 
         $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
@@ -137,5 +141,15 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
         $viewVariables = $this->View()->getAssign();
 
         $this->assertArrayHasKey('errors', $viewVariables);
+    }
+
+    private static function saveConfig($name, $value)
+    {
+        $formattedValue = sprintf('s:%d:"%s";', strlen($value), $value);
+        Shopware()->Db()->query(
+            'UPDATE s_core_config_elements SET value = ? WHERE name = ?',
+            [$formattedValue, $name]
+        );
+        Shopware()->Container()->get('cache')->clean();
     }
 }
