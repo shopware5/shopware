@@ -95,6 +95,11 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                     { property: 'emotionPreset', value: 1 }
                 ]
             }
+        }, undefined, function() {
+            Ext.Function.defer(function () {
+                Shopware.app.Application.fireEvent('reload-local-listing');
+                Shopware.app.Application.fireEvent('load-update-listing');
+            }, 2000);
         });
     },
 
