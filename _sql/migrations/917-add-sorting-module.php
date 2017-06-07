@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
@@ -10,7 +32,7 @@ use Shopware\Components\Migrations\AbstractMigration;
 class Migrations_Migration917 extends AbstractMigration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up($modus)
     {
@@ -91,7 +113,7 @@ INSERT INTO `s_search_custom_sorting` (`id`, `label`, `active`, `display_in_cate
 (3, 'Niedrigster Preis', 1, 1, 2, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"ASC"}}'),
 (4, 'Höchster Preis', 1, 1, 3, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}'),
 (5, 'Artikelbezeichnung', 1, 1, 4, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}'),
-(7, 'Beste Ergebnisse', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}');
+(7, 'Beste Ergebnisse', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{"direction":"DESC"}}');
 SQL;
 
         $this->addSql($sql);
@@ -100,6 +122,7 @@ SQL;
     /**
      * @param int $translationShopId
      * @param int $localeId
+     *
      * @return array
      */
     private function getExistingSortingTranslations($translationShopId, $localeId)
@@ -107,7 +130,7 @@ SQL;
         $translations = $this->connection->query(
             "SELECT `name`, `value` FROM s_core_snippets WHERE `name`
              IN ('ListingSortRelevance', 'ListingSortRelease', 'ListingSortRating', 'ListingSortPriceHighest', 'ListingSortName', 'ListingSortPriceLowest')
-             AND shopID = " . $translationShopId . " AND localeID = " . $localeId
+             AND shopID = " . $translationShopId . ' AND localeID = ' . $localeId
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $insert = [];
@@ -133,17 +156,18 @@ SQL;
                     break;
             }
         }
+
         return $insert;
     }
 
     private function importProductStreamSortings()
     {
-        $streamSortings = $this->connection->query("SELECT id, name, sorting FROM s_product_streams WHERE sorting IS NOT NULL")->fetchAll(PDO::FETCH_ASSOC);
+        $streamSortings = $this->connection->query('SELECT id, name, sorting FROM s_product_streams WHERE sorting IS NOT NULL')->fetchAll(PDO::FETCH_ASSOC);
         $newSortings = [];
         foreach ($streamSortings as $sorting) {
             $id = $this->getIdOfStreamSorting($sorting['sorting']);
             if ($id) {
-                $this->addSql("UPDATE s_product_streams SET sorting_id = " . (int) $id . " WHERE id = " . (int) $sorting['id']);
+                $this->addSql('UPDATE s_product_streams SET sorting_id = ' . (int) $id . ' WHERE id = ' . (int) $sorting['id']);
                 continue;
             }
             $key = md5($sorting['sorting']);
@@ -155,15 +179,16 @@ SQL;
 
             $this->addSql("
 INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories`, `position`, `sortings`) VALUES
-('".$name."', 1, 0, 0, '". str_replace("\\", "\\\\", $sorting['sorting']) ."');
+('" . $name . "', 1, 0, 0, '" . str_replace('\\', '\\\\', $sorting['sorting']) . "');
             ");
 
-            $this->addSql("UPDATE s_product_streams SET sorting_id = (SELECT id FROM s_search_custom_sorting WHERE name = '". $name ."' LIMIT 1) WHERE id  = " . (int) $sorting['id']);
+            $this->addSql("UPDATE s_product_streams SET sorting_id = (SELECT id FROM s_search_custom_sorting WHERE name = '" . $name . "' LIMIT 1) WHERE id  = " . (int) $sorting['id']);
         }
     }
 
     /**
      * @param string $sorting
+     *
      * @return int|null
      */
     private function getIdOfStreamSorting($sorting)
@@ -183,6 +208,7 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
                 if ($parameters['direction'] == 'desc') {
                     return 4;
                 }
+
                 return 3;
             case ReleaseDateSorting::class:
                 return 1;
@@ -191,12 +217,13 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
             case SearchRankingSorting::class:
                 return 7;
         }
+
         return null;
     }
 
     private function importSortingTranslations()
     {
-        $shops = $this->connection->query("SELECT id, main_id, locale_id FROM s_core_shops")->fetchAll(PDO::FETCH_ASSOC);
+        $shops = $this->connection->query('SELECT id, main_id, locale_id FROM s_core_shops')->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($shops as $shop) {
             $translationShopId = $shop['main_id'] ?: $shop['id'];
@@ -207,7 +234,7 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
             if (!empty($insert)) {
                 $this->addSql(
                     "INSERT IGNORE INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
-                     VALUES ('custom_sorting', '" . serialize($insert) . "', '1', " . $shop['id'] . ")"
+                     VALUES ('custom_sorting', '" . serialize($insert) . "', '1', " . $shop['id'] . ')'
                 );
             }
         }
