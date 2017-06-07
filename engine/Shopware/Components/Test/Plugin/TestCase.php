@@ -113,7 +113,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     private static function restorePluginStates()
     {
-        Shopware()->Models()->clear();
         foreach (self::$pluginStates as $pluginName => $status) {
             self::restorePluginState($pluginName, $status);
         }
