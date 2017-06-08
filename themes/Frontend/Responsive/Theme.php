@@ -225,6 +225,26 @@ class Theme extends \Shopware\Components\Theme
         "badge-download-color" => "#FFFFFF"
     ];
 
+    private $themeFontDefaults = [
+        'font-base-stack' => '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;',
+        'font-headline-stack' => '@font-base-stack',
+        'font-size-base' => 14,
+        'font-base-weight' => 500,
+        'font-light-weight' => 300,
+        'font-bold-weight' => 700,
+        'font-size-h1' => 26,
+        'font-size-h2' => 21,
+        'font-size-h3' => 18,
+        'font-size-h4' => 16,
+        'font-size-h5' => '@font-size-base',
+        'font-size-h6' => 12,
+        'panel-header-font-size' => 14,
+        'label-font-size' => 14,
+        'input-font-size' => 14,
+        'btn-font-size' => 14,
+        'btn-icon-size' => 10
+    ];
+
     /**
      * Holds default font configuration
      *
