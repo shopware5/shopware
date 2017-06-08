@@ -263,7 +263,7 @@ class Order extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="partnerID", type="string", length=255, nullable=false)
+     * @ORM\Column(name="partnerID", type="string", length=255, nullable=true)
      */
     private $partnerId;
 
