@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.Config.view.element.Interval', {
         [3600, '{s name=element/interval/1_hour}1 Hour (3600 Sec.){/s}'],
         [7200, '{s name=element/interval/2_hours}2 Hours (7200 Sec.){/s}'],
         [14400, '{s name=element/interval/4_hours}4 Hours (14400 Sec.){/s}'],
+        [28800, '{s name=element/interval/8_hours}8 Hours (28800 Sec.){/s}'],
         [43200, '{s name=element/interval/12_hours}12 Hours (43200 Sec.){/s}'],
         [86400, '{s name=element/interval/1_day}1 Day (86400 Sec.){/s}'],
         [172800, '{s name=element/interval/2_days}2 Days (172800 Sec.){/s}'],
