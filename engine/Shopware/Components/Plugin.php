@@ -32,16 +32,16 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\Config\FileLocator;
-use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Shopware\Components\DependencyInjection\ContainerInterface as ShopwareContainerInterface;
 
 abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
     /**
-     * @var Container
+     * @var ShopwareContainerInterface
      */
     protected $container;
 

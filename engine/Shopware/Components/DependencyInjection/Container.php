@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Container extends BaseContainer
+class Container extends BaseContainer implements ContainerInterface
 {
     /**
      * @var Container
