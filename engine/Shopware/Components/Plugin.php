@@ -159,6 +159,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     }
 
     /**
+     * This method can be used to register our custom composer dependencies.
+     * It would be executed on any kernel boot, if the plugin is active
+     */
+    public function registerAutoloader()
+    {
+    }
+
+    /**
      * Sets the container.
      *
      * @param ContainerInterface|null $container A ContainerInterface instance or null

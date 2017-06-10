@@ -92,6 +92,11 @@ class PluginInitializer
             if (!$plugin instanceof Plugin) {
                 throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
             }
+
+            if ($plugin->isActive()) {
+                $plugin->registerAutoloader();
+            }
+
             $plugins[$plugin->getName()] = $plugin;
         }
 
