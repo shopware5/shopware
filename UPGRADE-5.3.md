@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ### Additions
 
+* Added command option `--current` to theme:cache:generate to compile from current asset timestamp and skip cache clear
 * Added config element `displayOnlySubShopVotes` to display only shop assigned article votes
 * Added parameter `displayProgressOnSingleDelete` to `Shopware.grid.Panel` to hide progress window on single delete action
 * Added parameter `expression` in `Shopware.listing.FilterPanel` to allow define own query expressions
