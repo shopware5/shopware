@@ -54,10 +54,10 @@ class BillingZipCodeRule extends Rule
             return new Match(false, ['Not logged in customer']);
         }
 
-        $zipcode = $customer->getActiveBillingAddress()->getZipcode();
+        $zipCode = $customer->getActiveBillingAddress()->getZipcode();
 
         return new Match(
-            in_array(strtolower($zipcode), $this->zipCodes, true),
+            in_array(strtolower($zipCode), $this->zipCodes, true),
             ['Zip code not matched']
         );
     }

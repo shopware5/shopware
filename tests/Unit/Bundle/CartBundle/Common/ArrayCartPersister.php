@@ -33,12 +33,7 @@ class ArrayCartPersister implements CartPersisterInterface
 
     private $signatures = [];
 
-    /**
-     * @param string $signature
-     *
-     * @return string
-     */
-    public function loadBySignature($signature): string
+    public function loadBySignature(string $signature): string
     {
         return $this->signatures[$signature];
     }

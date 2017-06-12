@@ -58,7 +58,7 @@ class BillingAreaRule extends Rule
 
         return new Match(
             in_array($id, $this->areaIds, true),
-            ['Billing area not matched']
+            ['Billing area does not match']
         );
     }
 }

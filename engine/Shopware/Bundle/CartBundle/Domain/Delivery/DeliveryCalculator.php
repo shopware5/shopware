@@ -79,7 +79,7 @@ class DeliveryCalculator
                 $costs = $this->calculateShippingCosts(
                     $this->findShippingCosts(
                         $delivery->getShippingMethod(),
-                        $delivery->getPositions()->getPrices()->getTotalPrice()->getTotalPrice()
+                        $delivery->getPositions()->getPrices()->sum()->getTotalPrice()
                     ),
                     $delivery->getPositions()->getLineItems(),
                     $context
@@ -109,7 +109,7 @@ class DeliveryCalculator
     private function calculateShippingCosts(float $price, CalculatedLineItemCollection $calculatedLineItems, ShopContextInterface $context): Price
     {
         $rules = $this->percentageTaxRuleBuilder->buildRules(
-            $calculatedLineItems->getPrices()->getTotalPrice()
+            $calculatedLineItems->getPrices()->sum()
         );
 
         $definition = new PriceDefinition($price, $rules, 1, true);

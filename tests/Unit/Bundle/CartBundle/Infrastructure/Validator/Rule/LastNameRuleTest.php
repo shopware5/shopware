@@ -55,7 +55,7 @@ class LastNameRuleTest extends TestCase
 
     public function testCaseInsensitive(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule('SHOPWARE');
+        $rule = new LastNameRule('SHOPWARE');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -75,7 +75,7 @@ class LastNameRuleTest extends TestCase
 
     public function testContains(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule('olor');
+        $rule = new LastNameRule('olor');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -95,7 +95,7 @@ class LastNameRuleTest extends TestCase
 
     public function testWithoutCustomer(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastNameRule('test');
+        $rule = new LastNameRule('test');
 
         $cart = $this->createMock(CalculatedCart::class);
 

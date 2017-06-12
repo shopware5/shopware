@@ -68,7 +68,7 @@ class TaxAmountCalculator implements TaxAmountCalculatorInterface
             return $priceCollection->getCalculatedTaxes();
         }
 
-        $price = $priceCollection->getTotalPrice();
+        $price = $priceCollection->sum();
 
         $rules = $this->percentageTaxRuleBuilder->buildRules($price);
 

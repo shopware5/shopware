@@ -30,19 +30,13 @@ use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class PriceDefinition extends Struct
 {
-    /**
-     * @var float
-     */
+    /** @var float */
     protected $price;
 
-    /**
-     * @var TaxRuleCollection
-     */
+    /** @var TaxRuleCollection */
     protected $taxRules;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $quantity;
 
     /**

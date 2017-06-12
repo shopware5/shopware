@@ -26,9 +26,11 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
@@ -36,7 +38,7 @@ class BillingAreaRuleTest extends TestCase
 {
     public function testWithExactMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([1]);
+        $rule = new BillingAreaRule([1]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -44,7 +46,7 @@ class BillingAreaRuleTest extends TestCase
 
         $country = new Country();
 
-        $area = new \Shopware\Bundle\StoreFrontBundle\Country\Area();
+        $area = new Area();
         $area->setId(1);
         $country->setArea($area);
 
@@ -65,7 +67,7 @@ class BillingAreaRuleTest extends TestCase
 
     public function testWithNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([2]);
+        $rule = new BillingAreaRule([2]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -73,7 +75,7 @@ class BillingAreaRuleTest extends TestCase
 
         $country = new Country();
 
-        $area = new \Shopware\Bundle\StoreFrontBundle\Country\Area();
+        $area = new Area();
         $area->setId(1);
         $country->setArea($area);
 
@@ -94,7 +96,7 @@ class BillingAreaRuleTest extends TestCase
 
     public function testMultipleCountries(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([1, 3, 2]);
+        $rule = new BillingAreaRule([1, 3, 2]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -102,7 +104,7 @@ class BillingAreaRuleTest extends TestCase
 
         $country = new Country();
 
-        $area = new \Shopware\Bundle\StoreFrontBundle\Country\Area();
+        $area = new Area();
         $area->setId(3);
         $country->setArea($area);
 
@@ -123,7 +125,7 @@ class BillingAreaRuleTest extends TestCase
 
     public function testWithoutCustomer(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule([1, 3, 2]);
+        $rule = new BillingAreaRule([1, 3, 2]);
 
         $cart = $this->createMock(CalculatedCart::class);
 

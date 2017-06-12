@@ -42,9 +42,6 @@ class ProductOfManufacturersRuleCollector implements CollectorInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -107,7 +104,7 @@ class ProductOfManufacturersRuleCollector implements CollectorInterface
         return array_keys(array_flip($numbers));
     }
 
-    private function fetchManufacturerIds($numbers)
+    private function fetchManufacturerIds($numbers): array
     {
         $query = $this->connection->createQueryBuilder();
 

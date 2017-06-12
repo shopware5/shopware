@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator;
 use Shopware\Bundle\CartBundle\Domain\Cart\ValidatorInterface;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
@@ -34,16 +33,6 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class PaymentValidatorProcessor implements ValidatorInterface
 {
-    /**
-     * @var CalculatedCartGenerator
-     */
-    private $calculatedCartGenerator;
-
-    public function __construct(CalculatedCartGenerator $calculatedCartGenerator)
-    {
-        $this->calculatedCartGenerator = $calculatedCartGenerator;
-    }
-
     public function validate(
         CalculatedCart $cart,
         ShopContextInterface $context,

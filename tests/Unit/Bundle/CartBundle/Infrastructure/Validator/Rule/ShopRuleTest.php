@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
@@ -35,7 +36,7 @@ class ShopRuleTest extends TestCase
 {
     public function testEqualsWithSingleShop(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([1], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_EQ);
+        $rule = new ShopRule([1], ShopRule::OPERATOR_EQ);
 
         $shop = new Shop();
         $shop->setId(1);
@@ -53,7 +54,7 @@ class ShopRuleTest extends TestCase
 
     public function testEqualsWithMultipleShops(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([2, 3, 4, 1], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_EQ);
+        $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_EQ);
 
         $shop = new Shop();
         $shop->setId(3);
@@ -73,7 +74,7 @@ class ShopRuleTest extends TestCase
 
     public function testEqualsNotMatchWithSingleShop(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([11], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_EQ);
+        $rule = new ShopRule([11], ShopRule::OPERATOR_EQ);
 
         $shop = new Shop();
         $shop->setId(1);
@@ -93,7 +94,7 @@ class ShopRuleTest extends TestCase
 
     public function testEqualsNotMatchWithMultipleShops(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([2, 3, 4, 1], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_EQ);
+        $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_EQ);
 
         $shop = new Shop();
         $shop->setId(11);
@@ -113,7 +114,7 @@ class ShopRuleTest extends TestCase
 
     public function testNotEqualsWithSingleShop(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([1], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_NEQ);
+        $rule = new ShopRule([1], ShopRule::OPERATOR_NEQ);
 
         $shop = new Shop();
         $shop->setId(1);
@@ -131,7 +132,7 @@ class ShopRuleTest extends TestCase
 
     public function testNotEqualsWithMultipleShops(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([2, 3, 4, 1], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_NEQ);
+        $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_NEQ);
 
         $shop = new Shop();
         $shop->setId(3);
@@ -149,7 +150,7 @@ class ShopRuleTest extends TestCase
 
     public function testNotEqualsNotMatchWithSingleShop(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([11], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_NEQ);
+        $rule = new ShopRule([11], ShopRule::OPERATOR_NEQ);
 
         $shop = new Shop();
         $shop->setId(1);
@@ -167,7 +168,7 @@ class ShopRuleTest extends TestCase
 
     public function testNotEqualsNotMatchWithMultipleShops(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([2, 3, 4, 1], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule::OPERATOR_NEQ);
+        $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_NEQ);
 
         $shop = new Shop();
         $shop->setId(11);
@@ -192,7 +193,7 @@ class ShopRuleTest extends TestCase
      */
     public function testUnsupportedOperators(string $operator): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule([1], $operator);
+        $rule = new ShopRule([1], $operator);
         $shop = new Shop();
         $shop->setId(1);
 
@@ -213,7 +214,7 @@ class ShopRuleTest extends TestCase
             [true],
             [false],
             [''],
-            [\Shopware\Bundle\CartBundle\Domain\Rule\Rule::OPERATOR_GTE],
+            [Rule::OPERATOR_GTE],
             [Rule::OPERATOR_LTE],
         ];
     }

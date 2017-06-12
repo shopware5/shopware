@@ -132,18 +132,13 @@
             <tag name="cart.collector"/>
         </service>
 
-
         <!-- cart validators -->
-        <!--<service id="cart.payment.validator" class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidator">-->
-            <!--<tag name="cart.validator" priority="1000" />-->
-        <!--</service>-->
-
         <service id="cart.product.validator" class="Shopware\Bundle\CartBundle\Domain\Product\ProductValidator" >
             <argument id="dbal_connection" type="service"/>
             <tag name="cart.validator" priority="2000"/>
         </service>
 
-        <service id="shopware_bundle_cart.domain_voucher.voucher_validator" class="Shopware\Bundle\CartBundle\Domain\Voucher\VoucherValidator">
+        <service id="cart.voucher.validator" class="Shopware\Bundle\CartBundle\Domain\Voucher\VoucherValidator">
             <tag name="cart.validator" priority="1000"/>
         </service>
 

@@ -49,6 +49,7 @@ class DateRangeRule extends Rule
     /**
      * @param DateTime|null $fromDate
      * @param DateTime|null $toDate
+     * @param bool          $useTime
      */
     public function __construct(?DateTime $fromDate, ?DateTime $toDate, $useTime = false)
     {

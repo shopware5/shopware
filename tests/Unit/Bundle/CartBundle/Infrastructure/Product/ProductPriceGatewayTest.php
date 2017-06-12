@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Product;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceCollection;
@@ -38,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
+class ProductPriceGatewayTest extends TestCase
 {
     const QUERY_TO_UNLIMITED = 'beliebig';
 
@@ -260,9 +261,9 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $key
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
+     * @return CustomerGroup
      */
-    private function createCustomerGroup($key): \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
+    private function createCustomerGroup($key): CustomerGroup
     {
         $group = new CustomerGroup();
         $group->setKey($key);

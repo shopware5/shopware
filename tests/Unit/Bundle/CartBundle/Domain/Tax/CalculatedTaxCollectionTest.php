@@ -24,10 +24,11 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 
-class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
+class CalculatedTaxCollectionTest extends TestCase
 {
     const DUMMY_TAX_NAME = 'dummy-tax';
 

@@ -37,10 +37,7 @@ class BillingStreetRule extends Rule
      */
     protected $streetName;
 
-    /**
-     * @param string $streetName
-     */
-    public function __construct($streetName)
+    public function __construct(string $streetName)
     {
         $this->streetName = $streetName;
     }

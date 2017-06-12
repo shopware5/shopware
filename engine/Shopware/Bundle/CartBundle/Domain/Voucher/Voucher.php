@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 
 class Voucher
 {

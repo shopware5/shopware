@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
@@ -40,7 +41,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
+class PercentagePriceCalculatorTest extends TestCase
 {
     /**
      * @dataProvider calculatePercentagePriceOfGrossPricesProvider

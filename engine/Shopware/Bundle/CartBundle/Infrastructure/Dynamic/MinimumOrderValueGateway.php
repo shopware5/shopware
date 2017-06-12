@@ -72,7 +72,7 @@ class MinimumOrderValueGateway
             return null;
         }
 
-        $price = $goods->getPrices()->getTotalPrice();
+        $price = $goods->getPrices()->sum();
 
         if ($customerGroup->getMinimumOrderValue() <= $price->getTotalPrice()) {
             return null;

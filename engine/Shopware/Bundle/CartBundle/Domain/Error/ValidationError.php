@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Rule\Match;
-use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-
 class ValidationError extends Error
 {
     /**
@@ -45,9 +42,9 @@ class ValidationError extends Error
     protected $message;
 
     /**
-     * @param int   $level
-     * @param Match $match
-     * @param Rule  $rule
+     * @param int    $level
+     * @param string $message
+     * @param string $identifier
      */
     public function __construct(int $level, string $message, string $identifier)
     {

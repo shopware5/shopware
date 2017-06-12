@@ -44,10 +44,6 @@ class CustomerGroupDiscountGateway
      */
     private $connection;
 
-    /**
-     * @param PercentagePriceCalculator $percentagePriceCalculator
-     * @param Connection                $connection
-     */
     public function __construct(PercentagePriceCalculator $percentagePriceCalculator, Connection $connection)
     {
         $this->percentagePriceCalculator = $percentagePriceCalculator;
@@ -70,7 +66,7 @@ class CustomerGroupDiscountGateway
 
         $discount = $this->getDiscount(
             $context->getCurrentCustomerGroup(),
-            $prices->getTotalPrice()->getTotalPrice()
+            $prices->sum()->getTotalPrice()
         );
 
         if ($discount === null) {

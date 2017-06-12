@@ -22,11 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Validator;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Rule\Data;
 
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-interface Validatable
+class RecentOrderRuleData extends Struct
 {
-    public function getRule(): ? Rule;
+    /**
+     * @var \DateTime|null
+     */
+    protected $recentOrderTime;
+
+    public function __construct(?\DateTime $recentOrderTime)
+    {
+        $this->recentOrderTime = $recentOrderTime;
+    }
+
+    public function getRecentOrderTime(): ?\DateTime
+    {
+        return $this->recentOrderTime;
+    }
 }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
@@ -45,7 +46,7 @@ use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 /**
  * Class PriceCalculatorTest
  */
-class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
+class AmountCalculatorTest extends TestCase
 {
     /**
      * @dataProvider calculateAmountWithGrossPricesProvider

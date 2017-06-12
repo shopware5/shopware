@@ -22,39 +22,44 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Validator\Collector;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Match;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
-class RuleDataCollectorRegistry
+class LineItemInCartRule extends Rule
 {
     /**
-     * @var RuleDataCollectorInterface[]
+     * @var string[]
      */
-    private $collectors;
+    private $identifiers;
 
     /**
-     * @param RuleDataCollectorInterface[] $collectors
+     * @param \string[] $identifiers
      */
-    public function __construct(array $collectors)
+    public function __construct(array $identifiers)
     {
-        $this->collectors = $collectors;
+        $this->identifiers = $identifiers;
     }
 
-    public function collect(
+    public function match(
         CalculatedCart $calculatedCart,
         ShopContextInterface $context,
-        RuleCollection $rules
-    ): RuleDataCollection {
-        $collection = new RuleDataCollection([]);
+        StructCollection $collection
+    ): Match {
+        $identifiers = $calculatedCart->getCalculatedLineItems()->getIdentifiers();
 
-        foreach ($this->collectors as $collector) {
-            $collector->collect($rules, $calculatedCart, $context, $collection);
-        }
+        return new Match(
+            !empty(array_intersect($identifiers, $this->identifiers)),
+            ['Line items not in cart']
+        );
+    }
 
-        return $collection;
+    public function getIdentifiers(): array
+    {
+        return $this->identifiers;
     }
 }

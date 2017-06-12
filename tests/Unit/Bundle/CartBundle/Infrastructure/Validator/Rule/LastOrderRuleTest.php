@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\LastOrderRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
@@ -34,7 +35,7 @@ class LastOrderRuleTest extends TestCase
 {
     public function testRuleWithExactDate(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
+        $rule = new LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -53,7 +54,7 @@ class LastOrderRuleTest extends TestCase
 
     public function testRuleNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
+        $rule = new LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -72,7 +73,7 @@ class LastOrderRuleTest extends TestCase
 
     public function testRuleWithDateBefore(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
+        $rule = new LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -91,7 +92,7 @@ class LastOrderRuleTest extends TestCase
 
     public function testWithoutDataObject(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\LastOrderRule(10);
+        $rule = new LastOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 

@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 
-class PriceRoundingTest extends \PHPUnit\Framework\TestCase
+class PriceRoundingTest extends TestCase
 {
     /**
      * @dataProvider getCases

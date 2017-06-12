@@ -65,7 +65,7 @@ class PriceCollection extends Collection
         return $rules;
     }
 
-    public function getTotalPrice(): Price
+    public function sum(): Price
     {
         return new Price(
             $this->getUnitPriceAmount(),

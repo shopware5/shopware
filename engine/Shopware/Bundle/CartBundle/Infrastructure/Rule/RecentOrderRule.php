@@ -22,33 +22,46 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Match;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\RecentOrderRuleData;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
-class CustomerGroupRule extends Rule
+class RecentOrderRule extends Rule
 {
     /**
-     * @var int[]
+     * @var int
      */
-    protected $customerGroupIds;
+    protected $days;
 
-    /**
-     * @param int[] $customerGroupIds
-     */
-    public function __construct(array $customerGroupIds)
+    public function __construct(int $days)
     {
-        $this->customerGroupIds = $customerGroupIds;
+        $this->days = $days;
     }
 
     public function match(
         CalculatedCart $calculatedCart,
         ShopContextInterface $context,
-        RuleDataCollection $collection
-    ): bool {
-        return in_array($context->getCurrentCustomerGroup()->getId(), $this->customerGroupIds, true);
+        StructCollection $collection
+    ): Match {
+        if (!$collection->has(RecentOrderRuleData::class)) {
+            return new Match(false, ['No last order data found']);
+        }
+
+        /** @var RecentOrderRuleData $data */
+        $data = $collection->get(RecentOrderRuleData::class);
+
+        $min = (new \DateTime())->sub(
+            new \DateInterval('P' . (int) $this->days . 'D')
+        );
+
+        return new Match(
+            $min >= $data->getRecentOrderTime(),
+            ['Last order not matched']
+        );
     }
 }

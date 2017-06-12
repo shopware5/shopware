@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
@@ -41,7 +42,7 @@ use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 /**
  * Class PriceCalculatorTest
  */
-class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
+class PriceCalculatorTest extends TestCase
 {
     /**
      * @dataProvider priceCalculationWithGrossPricesProvider

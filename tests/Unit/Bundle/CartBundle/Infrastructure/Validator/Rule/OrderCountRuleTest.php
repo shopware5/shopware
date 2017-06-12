@@ -50,7 +50,7 @@ class OrderCountRuleTest extends TestCase
 
     public function testRuleNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderCountRule(10);
+        $rule = new OrderCountRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 

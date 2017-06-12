@@ -95,7 +95,7 @@ class ViewCart extends Struct
         $data = array_merge($data, [
             'price' => $this->getPrice(),
             'errors' => $this->getErrors(),
-            'shippingCosts' => $this->getDeliveries()->getShippingCosts()->getTotalPrice()->getTotalPrice(),
+            'shippingCosts' => $this->getDeliveries()->getShippingCosts()->sum()->getTotalPrice(),
             'deliveries' => $this->getDeliveries(),
         ]);
 

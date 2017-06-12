@@ -26,67 +26,77 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerGroupRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\RecentOrderRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\RecentOrderRule;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
-class CustomerGroupRuleTest extends TestCase
+class RecentOrderRuleTest extends TestCase
 {
-    public function testMatch(): void
+    public function testRuleWithExactDate(): void
     {
-        $rule = new CustomerGroupRule([1]);
+        $rule = new RecentOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $group = new CustomerGroup();
-        $group->setId(1);
-
         $context = $this->createMock(ShopContext::class);
 
-        $context->expects($this->any())
-            ->method('getCurrentCustomerGroup')
-            ->will($this->returnValue($group));
+        $date = (new \DateTime())->sub(
+            new \DateInterval('P' . (int) 10 . 'D')
+        );
 
         $this->assertTrue(
-            $rule->match($cart, $context, new StructCollection())->matches()
+            $rule->match($cart, $context, new StructCollection([
+                RecentOrderRuleData::class => new RecentOrderRuleData($date),
+            ]))->matches()
         );
     }
 
-    public function testMultipleGroups(): void
+    public function testRuleNotMatch(): void
     {
-        $rule = new CustomerGroupRule([2, 3, 1]);
+        $rule = new RecentOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $group = new CustomerGroup();
-        $group->setId(3);
-
         $context = $this->createMock(ShopContext::class);
 
-        $context->expects($this->any())
-            ->method('getCurrentCustomerGroup')
-            ->will($this->returnValue($group));
+        $date = (new \DateTime())->sub(
+            new \DateInterval('P' . (int) 9 . 'D')
+        );
 
-        $this->assertTrue(
-            $rule->match($cart, $context, new StructCollection())->matches()
+        $this->assertFalse(
+            $rule->match($cart, $context, new StructCollection([
+                RecentOrderRuleData::class => new RecentOrderRuleData($date),
+            ]))->matches()
         );
     }
 
-    public function testNotMatch(): void
+    public function testRuleWithDateBefore(): void
     {
-        $rule = new CustomerGroupRule([2, 3, 1]);
+        $rule = new RecentOrderRule(10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $group = new CustomerGroup();
-        $group->setId(5);
-
         $context = $this->createMock(ShopContext::class);
 
-        $context->expects($this->any())
-            ->method('getCurrentCustomerGroup')
-            ->will($this->returnValue($group));
+        $date = (new \DateTime())->sub(
+            new \DateInterval('P' . (int) 50 . 'D')
+        );
+
+        $this->assertTrue(
+            $rule->match($cart, $context, new StructCollection([
+                RecentOrderRuleData::class => new RecentOrderRuleData($date),
+            ]))->matches()
+        );
+    }
+
+    public function testWithoutDataObject(): void
+    {
+        $rule = new RecentOrderRule(10);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
             $rule->match($cart, $context, new StructCollection())->matches()

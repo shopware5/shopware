@@ -94,7 +94,7 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
         /** @var ProductOfCategoriesRuleData $data */
         $data = $dataCollection->get(ProductOfCategoriesRuleData::class);
 
-        $this->assertTrue($data->hasOneCategory([1]));
+        $this->assertTrue($data->hasCategory([1]));
     }
 
     public function testWithMultipleRules(): void
@@ -128,8 +128,8 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
         /** @var ProductOfCategoriesRuleData $data */
         $data = $dataCollection->get(ProductOfCategoriesRuleData::class);
 
-        $this->assertTrue($data->hasOneCategory([1]));
-        $this->assertTrue($data->hasOneCategory([2]));
+        $this->assertTrue($data->hasCategory([1]));
+        $this->assertTrue($data->hasCategory([2]));
     }
 
     private function createConnection(?array $result, array $categoryIds = [], array $numbers = []): \PHPUnit_Framework_MockObject_MockObject

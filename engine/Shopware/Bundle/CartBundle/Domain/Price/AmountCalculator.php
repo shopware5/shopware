@@ -81,9 +81,9 @@ class AmountCalculator
      */
     private function calculateNetDeliveryAmount(PriceCollection $prices, PriceCollection $shippingCosts): CartPrice
     {
-        $positionPrice = $prices->getTotalPrice();
+        $positionPrice = $prices->sum();
 
-        $total = $positionPrice->getTotalPrice() + $shippingCosts->getTotalPrice()->getTotalPrice();
+        $total = $positionPrice->getTotalPrice() + $shippingCosts->sum()->getTotalPrice();
 
         return new CartPrice(
             $total,
@@ -110,9 +110,9 @@ class AmountCalculator
     {
         $allPrices = $prices->merge($shippingCosts);
 
-        $total = $allPrices->getTotalPrice();
+        $total = $allPrices->sum();
 
-        $positionPrice = $prices->getTotalPrice();
+        $positionPrice = $prices->sum();
 
         $taxes = $this->taxAmountCalculator->calculate($allPrices, $context);
 
@@ -144,7 +144,7 @@ class AmountCalculator
     {
         $all = $prices->merge($shippingCosts);
 
-        $total = $all->getTotalPrice();
+        $total = $all->sum();
 
         $taxes = $this->taxAmountCalculator->calculate($all, $context);
 
@@ -154,7 +154,7 @@ class AmountCalculator
         return new CartPrice(
             $total->getTotalPrice(),
             $gross,
-            $prices->getTotalPrice()->getTotalPrice(),
+            $prices->sum()->getTotalPrice(),
             $taxes,
             $total->getTaxRules()
         );

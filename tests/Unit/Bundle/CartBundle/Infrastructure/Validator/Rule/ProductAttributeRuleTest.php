@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductAttributeRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
@@ -34,7 +35,7 @@ class ProductAttributeRuleTest extends TestCase
 {
     public function testSingleAttribute(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 1);
+        $rule = new ProductAttributeRule('attr1', 1);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -51,7 +52,7 @@ class ProductAttributeRuleTest extends TestCase
 
     public function testMultipleAttributeData(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 1);
+        $rule = new ProductAttributeRule('attr1', 1);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -70,7 +71,7 @@ class ProductAttributeRuleTest extends TestCase
 
     public function testNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 10);
+        $rule = new ProductAttributeRule('attr1', 10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -89,7 +90,7 @@ class ProductAttributeRuleTest extends TestCase
 
     public function testWithoutMappedAttribute(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr2', 10);
+        $rule = new ProductAttributeRule('attr2', 10);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -107,7 +108,7 @@ class ProductAttributeRuleTest extends TestCase
 
     public function testWithoutDataObject(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule('attr1', 10);
+        $rule = new ProductAttributeRule('attr1', 10);
 
         $cart = $this->createMock(CalculatedCart::class);
 

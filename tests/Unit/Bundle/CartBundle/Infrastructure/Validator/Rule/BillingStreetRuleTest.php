@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingStreetRule;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
@@ -35,7 +36,7 @@ class BillingStreetRuleTest extends TestCase
 {
     public function testWithExactMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingStreetRule('example street');
+        $rule = new BillingStreetRule('example street');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -58,7 +59,7 @@ class BillingStreetRuleTest extends TestCase
 
     public function testCaseInsensitive(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingStreetRule('ExaMple StreEt');
+        $rule = new BillingStreetRule('ExaMple StreEt');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -81,7 +82,7 @@ class BillingStreetRuleTest extends TestCase
 
     public function testNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingStreetRule('example street');
+        $rule = new BillingStreetRule('example street');
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -104,7 +105,7 @@ class BillingStreetRuleTest extends TestCase
 
     public function testWithoutAddress(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingStreetRule('ExaMple StreEt');
+        $rule = new BillingStreetRule('ExaMple StreEt');
 
         $cart = $this->createMock(CalculatedCart::class);
 

@@ -24,10 +24,11 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
-class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
+class TaxRuleCollectionTest extends TestCase
 {
     public function testCollectionIsCountable(): void
     {

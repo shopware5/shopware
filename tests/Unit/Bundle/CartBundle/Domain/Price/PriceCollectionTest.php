@@ -24,13 +24,14 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
-class PriceCollectionTest extends \PHPUnit\Framework\TestCase
+class PriceCollectionTest extends TestCase
 {
     public function testCollectionIsCountable(): void
     {
@@ -81,7 +82,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
     public function testTotalAmountWithEmptyCollection(): void
     {
         $collection = new PriceCollection();
-        static::assertSame(0.0, $collection->getTotalPrice()->getTotalPrice());
+        static::assertSame(0.0, $collection->sum()->getTotalPrice());
     }
 
     public function testTotalAmountWithMultiplePrices(): void
@@ -90,7 +91,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
             new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
             new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection()),
         ]);
-        static::assertSame(500.0, $collection->getTotalPrice()->getTotalPrice());
+        static::assertSame(500.0, $collection->sum()->getTotalPrice());
     }
 
     public function testGetTaxesReturnsACalculatedTaxCollection(): void

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
@@ -34,7 +35,7 @@ class CustomerNumberRuleTest extends TestCase
 {
     public function testExactMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
+        $rule = new CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -54,7 +55,7 @@ class CustomerNumberRuleTest extends TestCase
 
     public function testMultipleNumbers(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1', 'NO. 2', 'NO. 3']);
+        $rule = new CustomerNumberRule(['NO. 1', 'NO. 2', 'NO. 3']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -74,7 +75,7 @@ class CustomerNumberRuleTest extends TestCase
 
     public function testCaseInsensitive(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
+        $rule = new CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -94,7 +95,7 @@ class CustomerNumberRuleTest extends TestCase
 
     public function testWithoutCustomer(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
+        $rule = new CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -111,7 +112,7 @@ class CustomerNumberRuleTest extends TestCase
 
     public function testNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerNumberRule(['NO. 1']);
+        $rule = new CustomerNumberRule(['NO. 1']);
 
         $cart = $this->createMock(CalculatedCart::class);
 

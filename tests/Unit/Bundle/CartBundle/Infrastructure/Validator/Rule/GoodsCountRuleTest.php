@@ -44,7 +44,7 @@ class GoodsCountRuleTest extends TestCase
 {
     public function testGteExactMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule(2, \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule::OPERATOR_GTE);
+        $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -66,7 +66,7 @@ class GoodsCountRuleTest extends TestCase
 
     public function testGteWithVoucher(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
+        $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -94,7 +94,7 @@ class GoodsCountRuleTest extends TestCase
 
     public function testGteNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule(2, \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule::OPERATOR_GTE);
+        $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -115,7 +115,7 @@ class GoodsCountRuleTest extends TestCase
 
     public function testLteExactMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule(2, GoodsCountRule::OPERATOR_LTE);
+        $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -137,7 +137,7 @@ class GoodsCountRuleTest extends TestCase
 
     public function testLteWithVoucher(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule(2, \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule::OPERATOR_LTE);
+        $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -195,7 +195,7 @@ class GoodsCountRuleTest extends TestCase
      */
     public function testUnsupportedOperators(string $operator): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule(2, $operator);
+        $rule = new GoodsCountRule(2, $operator);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -213,7 +213,7 @@ class GoodsCountRuleTest extends TestCase
             [false],
             [''],
             [Rule::OPERATOR_EQ],
-            [\Shopware\Bundle\CartBundle\Domain\Rule\Rule::OPERATOR_NEQ],
+            [Rule::OPERATOR_NEQ],
         ];
     }
 }

@@ -128,7 +128,7 @@ class VoucherProcessor implements CartProcessorInterface
                     new PriceDefinition(
                         $voucher->getPrice()->getPrice(),
                         $this->percentageTaxRuleBuilder->buildRules(
-                            $prices->getTotalPrice()
+                            $prices->sum()
                         ),
                         $voucher->getPrice()->getQuantity(),
                         $voucher->getPrice()->isCalculated()

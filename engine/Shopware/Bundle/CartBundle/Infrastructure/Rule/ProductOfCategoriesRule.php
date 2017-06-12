@@ -63,7 +63,7 @@ class ProductOfCategoriesRule extends Rule
         }
 
         return new Match(
-            $data->hasOneCategory($this->categoryIds),
+            $data->hasCategory($this->categoryIds),
             ['Product category not matched']
         );
     }

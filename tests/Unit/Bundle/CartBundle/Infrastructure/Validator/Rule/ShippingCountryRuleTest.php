@@ -57,7 +57,7 @@ class ShippingCountryRuleTest extends TestCase
 
     public function testNotEquals(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule([1], ShippingCountryRule::OPERATOR_NEQ);
+        $rule = new ShippingCountryRule([1], ShippingCountryRule::OPERATOR_NEQ);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -77,7 +77,7 @@ class ShippingCountryRuleTest extends TestCase
 
     public function testEqualsWithMultipleCountries(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule([1, 2, 3], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule::OPERATOR_EQ);
+        $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_EQ);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -97,7 +97,7 @@ class ShippingCountryRuleTest extends TestCase
 
     public function testNotEqualsWithMultipleCountries(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_NEQ);
+        $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_NEQ);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -124,7 +124,7 @@ class ShippingCountryRuleTest extends TestCase
      */
     public function testUnsupportedOperators(string $operator): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule([1, 2, 3], $operator);
+        $rule = new ShippingCountryRule([1, 2, 3], $operator);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -142,7 +142,7 @@ class ShippingCountryRuleTest extends TestCase
 
     public function testUnsupportedOperatorMessage(): void
     {
-        $rule = new ShippingCountryRule([1, 2, 3], \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule::OPERATOR_GTE);
+        $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -159,7 +159,7 @@ class ShippingCountryRuleTest extends TestCase
             $rule->match($cart, $context, new StructCollection());
         } catch (UnsupportedOperatorException $e) {
             $this->assertSame(ShippingCountryRule::OPERATOR_GTE, $e->getOperator());
-            $this->assertSame(\Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule::class, $e->getClass());
+            $this->assertSame(ShippingCountryRule::class, $e->getClass());
         }
     }
 
@@ -170,7 +170,7 @@ class ShippingCountryRuleTest extends TestCase
             [false],
             [''],
             [ShippingCountryRule::OPERATOR_GTE],
-            [\Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule::OPERATOR_LTE],
+            [ShippingCountryRule::OPERATOR_LTE],
         ];
     }
 }

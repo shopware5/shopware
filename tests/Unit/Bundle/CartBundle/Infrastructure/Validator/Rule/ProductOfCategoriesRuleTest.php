@@ -52,7 +52,7 @@ class ProductOfCategoriesRuleTest extends TestCase
 
     public function testMultipleProductsWithSingleCategory(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule([1]);
+        $rule = new ProductOfCategoriesRule([1]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -70,7 +70,7 @@ class ProductOfCategoriesRuleTest extends TestCase
 
     public function testMultipleCategories(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule([2, 3]);
+        $rule = new ProductOfCategoriesRule([2, 3]);
 
         $cart = $this->createMock(CalculatedCart::class);
 

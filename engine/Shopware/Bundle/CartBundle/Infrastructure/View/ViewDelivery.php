@@ -39,10 +39,6 @@ class ViewDelivery extends Struct
      */
     protected $viewPositions;
 
-    /**
-     * @param Delivery                       $delivery
-     * @param ViewDeliveryPositionCollection $viewPositions
-     */
     public function __construct(Delivery $delivery, ViewDeliveryPositionCollection $viewPositions)
     {
         $this->delivery = $delivery;

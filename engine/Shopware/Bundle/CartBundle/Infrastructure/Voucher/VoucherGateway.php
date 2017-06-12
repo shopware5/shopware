@@ -39,7 +39,7 @@ use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGatewayInterface;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerGroupRule;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsPriceRule;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\LineItemsInCartRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\LineItemInCartRule;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
@@ -160,7 +160,7 @@ class VoucherGateway implements VoucherGatewayInterface
 
         if ($row['restrictarticles']) {
             $rule->addRule(
-                new LineItemsInCartRule(
+                new LineItemInCartRule(
                     explode(';', $row['restrictarticles'])
                 )
             );

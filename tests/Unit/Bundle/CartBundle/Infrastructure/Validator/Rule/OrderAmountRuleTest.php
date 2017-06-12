@@ -92,7 +92,7 @@ class OrderAmountRuleTest extends TestCase
 
     public function testRuleWithLteAndExactAmount(): void
     {
-        $rule = new OrderAmountRule(100, \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderAmountRule::OPERATOR_LTE);
+        $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -110,7 +110,7 @@ class OrderAmountRuleTest extends TestCase
 
     public function testRuleWithLteAndGreaterAmount(): void
     {
-        $rule = new OrderAmountRule(100, \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderAmountRule::OPERATOR_LTE);
+        $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -153,7 +153,7 @@ class OrderAmountRuleTest extends TestCase
      */
     public function testUnsupportedOperators(string $operator): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderAmountRule(100, $operator);
+        $rule = new OrderAmountRule(100, $operator);
 
         $cart = $this->createMock(CalculatedCart::class);
 

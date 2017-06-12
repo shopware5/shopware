@@ -73,7 +73,7 @@ class PaymentSurchargeGateway
         switch (true) {
             case $payment->getSurcharge() !== null:
                 $rules = $this->percentageTaxRuleBuilder->buildRules(
-                    $goods->getPrices()->getTotalPrice()
+                    $goods->getPrices()->sum()
                 );
                 $surcharge = $this->priceCalculator->calculate(
                     new PriceDefinition($payment->getSurcharge(), $rules, 1, true),
@@ -81,7 +81,6 @@ class PaymentSurchargeGateway
                 );
 
                 break;
-
             case $payment->getPercentageSurcharge() !== null:
                 $surcharge = $this->percentagePriceCalculator->calculate(
                     $payment->getPercentageSurcharge(),

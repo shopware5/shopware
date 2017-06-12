@@ -33,6 +33,7 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
@@ -118,10 +119,10 @@ class DeliveryCollectionTest extends TestCase
         static::assertCount(0, $collection);
     }
 
-    private static function createShippingLocation(): \Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation
+    private static function createShippingLocation(): ShippingLocation
     {
         $country = new Country();
-        $country->setArea(new \Shopware\Bundle\StoreFrontBundle\Country\Area());
+        $country->setArea(new Area());
 
         return ShippingLocation::createFromCountry($country);
     }

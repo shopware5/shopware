@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
@@ -55,7 +56,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class ProductProcessorTest extends \PHPUnit\Framework\TestCase
+class ProductProcessorTest extends TestCase
 {
     const DUMMY_TAX_NAME = 'test-tax';
 

@@ -109,7 +109,7 @@ class CalculatedCart extends Struct
     {
         $data = parent::jsonSerialize();
 
-        $data['shippingCosts'] = $this->getDeliveries()->getShippingCosts()->getTotalPrice()->getTotalPrice();
+        $data['shippingCosts'] = $this->getDeliveries()->getShippingCosts()->sum()->getTotalPrice();
 
         return $data;
     }

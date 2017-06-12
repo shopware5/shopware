@@ -32,6 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
 use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 
 class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
 {
@@ -70,6 +71,9 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
     public function changeContextAction(): void
     {
         $token = $this->Request()->getParam('token');
+        if (!$token) {
+            throw new ParameterMissingException('token');
+        }
 
         $context = $this->loadContext($token);
 
@@ -105,9 +109,24 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
     public function addLineItemAction(): void
     {
         $token = $this->Request()->getParam('token');
+        if (!$token) {
+            throw new ParameterMissingException('token');
+        }
+
         $identifier = $this->Request()->getParam('identifier');
+        if (!$identifier) {
+            throw new ParameterMissingException('identifier');
+        }
+
         $quantity = $this->Request()->getParam('quantity');
+        if (!$quantity) {
+            throw new ParameterMissingException('quantity');
+        }
+
         $type = $this->Request()->getParam('type');
+        if (!$type) {
+            throw new ParameterMissingException('type');
+        }
 
         $price = $this->Request()->getParam('price', null);
 
@@ -137,7 +156,14 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
     public function removeLineItemAction(): void
     {
         $token = $this->Request()->getParam('token');
+        if (!$token) {
+            throw new ParameterMissingException('token');
+        }
+
         $identifier = $this->Request()->getParam('identifier');
+        if (!$identifier) {
+            throw new ParameterMissingException('identifier');
+        }
 
         $cart = $this->container->get('shopware.cart.persister')->load($token);
 
@@ -153,8 +179,19 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
     public function changeQuantityAction(): void
     {
         $token = $this->Request()->getParam('token');
+        if (!$token) {
+            throw new ParameterMissingException('token');
+        }
+
         $identifier = $this->Request()->getParam('identifier');
+        if (!$identifier) {
+            throw new ParameterMissingException('identifier');
+        }
+
         $quantity = $this->Request()->getParam('quantity');
+        if (!$quantity) {
+            throw new ParameterMissingException('quantity');
+        }
 
         $cart = $this->container->get('shopware.cart.persister')->load($token);
 
@@ -170,6 +207,9 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
     public function getAction(): void
     {
         $token = $this->Request()->getParam('token');
+        if (!$token) {
+            throw new ParameterMissingException('token');
+        }
 
         $cart = $this->container->get('shopware.cart.persister')->load($token);
 
@@ -188,6 +228,9 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
     public function orderAction(): void
     {
         $token = $this->Request()->getParam('token');
+        if (!$token) {
+            throw new ParameterMissingException('token');
+        }
 
         $cart = $this->container->get('shopware.cart.persister')->load($token);
 

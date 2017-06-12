@@ -45,9 +45,6 @@ class ProductGateway implements ProductGatewayInterface
      */
     private $priceGateway;
 
-    /**
-     * @param ProductPriceGatewayInterface $priceGateway
-     */
     public function __construct(ProductPriceGatewayInterface $priceGateway)
     {
         $this->priceGateway = $priceGateway;
@@ -112,7 +109,7 @@ class ProductGateway implements ProductGatewayInterface
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
     }
 
-    private function buildDeliveryInformation(array $row)
+    private function buildDeliveryInformation(array $row): DeliveryInformation
     {
         $earliestInterval = new \DateInterval('P1D');
         $deliveryTimeInterval = new \DateInterval('P3D');

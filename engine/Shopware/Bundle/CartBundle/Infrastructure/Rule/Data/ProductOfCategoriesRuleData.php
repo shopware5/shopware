@@ -39,7 +39,7 @@ class ProductOfCategoriesRuleData extends Struct
         $this->mapping = $mapping;
     }
 
-    public function hasOneCategory(array $categoryIds): bool
+    public function hasCategory(array $categoryIds): bool
     {
         return count(array_intersect(array_keys($this->mapping), $categoryIds)) > 0;
     }

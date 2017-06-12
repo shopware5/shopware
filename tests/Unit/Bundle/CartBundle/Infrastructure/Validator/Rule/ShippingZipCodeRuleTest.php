@@ -32,6 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Address\Address;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\Country\State;
 
 class ShippingZipCodeRuleTest extends TestCase
 {
@@ -57,7 +58,7 @@ class ShippingZipCodeRuleTest extends TestCase
 
     public function testEqualsWithMultipleCodes(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
+        $rule = new ShippingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
         $address = $this->createAddress('ABC2');
 
         $cart = $this->createMock(CalculatedCart::class);
@@ -116,7 +117,7 @@ class ShippingZipCodeRuleTest extends TestCase
 
     private function createAddress(string $code): Address
     {
-        $state = new \Shopware\Bundle\StoreFrontBundle\Country\State();
+        $state = new State();
         $state->setCountry(new Country());
 
         $address = new Address();

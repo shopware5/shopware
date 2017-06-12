@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,18 +23,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorInterface;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\LastOrderRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\LastOrderRule;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
+use Shopware\Bundle\CartBundle\Domain\Cart\CollectorInterface;
+use Shopware\Bundle\CartBundle\Domain\Rule\RuleCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\RecentOrderRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\RecentOrderRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
-class LastOrderRuleCollector implements RuleDataCollectorInterface
+class RecentOrderRuleCollector implements CollectorInterface
 {
     /**
      * @var Connection
@@ -48,13 +50,27 @@ class LastOrderRuleCollector implements RuleDataCollectorInterface
         $this->connection = $connection;
     }
 
-    public function collect(
-        RuleCollection $rules,
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context,
-        RuleDataCollection $collection
-    ) {
-        if (!$rules->has(LastOrderRule::class)) {
+    public function prepare(
+        StructCollection $fetchDefinition,
+        CartContainer $cartContainer,
+        ShopContextInterface $context
+    ): void {
+    }
+
+    public function fetch(
+        StructCollection $dataCollection,
+        StructCollection $fetchCollection,
+        ShopContextInterface $context
+    ): void {
+        $rules = $dataCollection->filterInstance(Validatable::class);
+
+        $rules = $rules->map(function (Validatable $validatable) {
+            return $validatable->getRule();
+        });
+
+        $rules = new RuleCollection($rules);
+
+        if (!$rules->has(RecentOrderRule::class)) {
             return;
         }
 
@@ -70,6 +86,10 @@ class LastOrderRuleCollector implements RuleDataCollectorInterface
         if ($time) {
             $time = new \DateTime($time);
         }
-        $collection->add(new LastOrderRuleData($time));
+
+        $dataCollection->add(
+            new RecentOrderRuleData($time),
+            RecentOrderRuleData::class
+        );
     }
 }

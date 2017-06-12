@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 
 class VoucherRuleError extends Error
 {

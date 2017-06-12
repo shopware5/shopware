@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Exception\TaxRuleNotSupportedException;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
@@ -33,7 +34,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleInterface;
 use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 
-class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
+class TaxCalculatorTest extends TestCase
 {
     /**
      * @dataProvider netPricesToGross

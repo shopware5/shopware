@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderClearedStateRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule;
 use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
@@ -34,7 +35,7 @@ class OrderClearedStateRuleTest extends TestCase
 {
     public function testRuleWithState(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule([1]);
+        $rule = new OrderClearedStateRule([1]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -49,7 +50,7 @@ class OrderClearedStateRuleTest extends TestCase
 
     public function testRuleWithStates(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule([1, 2, 3]);
+        $rule = new OrderClearedStateRule([1, 2, 3]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -64,7 +65,7 @@ class OrderClearedStateRuleTest extends TestCase
 
     public function testRuleNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule([1, 2, 3]);
+        $rule = new OrderClearedStateRule([1, 2, 3]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
@@ -79,7 +80,7 @@ class OrderClearedStateRuleTest extends TestCase
 
     public function testRuleWithoutDataObject(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule([1, 2, 3]);
+        $rule = new OrderClearedStateRule([1, 2, 3]);
 
         $cart = $this->createMock(CalculatedCart::class);
 

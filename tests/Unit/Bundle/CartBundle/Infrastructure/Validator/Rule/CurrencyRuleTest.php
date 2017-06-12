@@ -55,7 +55,7 @@ class CurrencyRuleTest extends TestCase
 
     public function testNotMatch(): void
     {
-        $rule = new \Shopware\Bundle\CartBundle\Infrastructure\Rule\CurrencyRule([2, 3, 1]);
+        $rule = new CurrencyRule([2, 3, 1]);
 
         $cart = $this->createMock(CalculatedCart::class);
 
