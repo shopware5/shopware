@@ -25,8 +25,8 @@
 namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
-use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 
@@ -38,7 +38,7 @@ class StreamIndexer implements StreamIndexerInterface
     private $criteriaFactory;
 
     /**
-     * @var CustomerNumberSearch
+     * @var CustomerNumberSearchInterface
      */
     private $numberSearch;
 
@@ -49,12 +49,12 @@ class StreamIndexer implements StreamIndexerInterface
 
     /**
      * @param CustomerStreamCriteriaFactory $criteriaFactory
-     * @param CustomerNumberSearch          $numberSearch
+     * @param CustomerNumberSearchInterface $numberSearch
      * @param Connection                    $connection
      */
     public function __construct(
         CustomerStreamCriteriaFactory $criteriaFactory,
-        CustomerNumberSearch $numberSearch,
+        CustomerNumberSearchInterface $numberSearch,
         Connection $connection
     ) {
         $this->criteriaFactory = $criteriaFactory;

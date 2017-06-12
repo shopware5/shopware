@@ -162,7 +162,6 @@
         <service id="customer_search.dbal.number_search" class="Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch">
             <argument id="customer_search.dbal.handler_registry" type="service"/>
             <argument id="dbal_connection" type="service"/>
-            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
         </service>
 
         <service id="customer_search.dbal.handler_registry" class="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry">
