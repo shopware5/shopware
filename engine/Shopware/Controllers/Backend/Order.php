@@ -89,10 +89,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public static $documentRepository = null;
 
     /**
-    * Registers the different acl permission for the different controller actions.
-    *
-    * @return void
-    */
+     * Registers the different acl permission for the different controller actions.
+     */
     public function initAcl()
     {
         $this->addAclPermission('loadStores', 'read', 'Insufficient Permissions');
@@ -666,20 +664,20 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function batchProcessAction()
     {
-        $autoSend = $this->Request()->getParam('autoSend', false);
+        $autoSend = $this->Request()->getParam('autoSend') === 'true';
         $orders = $this->Request()->getParam('orders', [0 => $this->Request()->getParams()]);
         $documentType = $this->Request()->getParam('docType', null);
         $documentMode = $this->Request()->getParam('mode');
-        $addAttachments = $this->request->getParam('addAttachments') == 'true' ? true : false;
+        $addAttachments = $this->request->getParam('addAttachments') === 'true';
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         if (empty($orders)) {
             $this->View()->assign([
-                    'success' => false,
-                    'data' => $this->Request()->getParams(),
-                    'message' => $namespace->get('no_order_id_passed', 'No valid order id passed.'), ]
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $namespace->get('no_order_id_passed', 'No valid order id passed.'), ]
             );
 
             return;
@@ -1332,16 +1330,20 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments)
     {
-        if ($order->getOrderStatus()->getId() !== $statusBefore->getId() || $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
+        if ($autoSend ||
+            $order->getOrderStatus()->getId() !== $statusBefore->getId() ||
+            $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
             //status or cleared changed?
             if ($order->getOrderStatus()->getId() !== $statusBefore->getId()) {
                 $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
-            } else {
+            } elseif ($order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
                 $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
+            } else {
+                $mail = $this->getMailForOrder($order->getId(), null);
             }
 
             //mail object created and auto send activated, then send mail directly.
-            if (is_object($mail['mail']) && $autoSend === 'true') {
+            if ($autoSend && is_object($mail['mail'])) {
                 if ($addAttachments) {
                     $document = $this->getDocument($documentType, $order);
                     $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
@@ -1752,17 +1754,21 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Creates the status mail order for the passed order id and new status object.
      *
-     * @param $orderId
-     * @param $statusId
-     *
-     * @internal param \Shopware\Models\Order\Order $order
+     * @param int      $orderId
+     * @param int|null $statusId
      *
      * @return array
      */
     private function getMailForOrder($orderId, $statusId)
     {
-        /** @var $mail Enlight_Components_Mail */
-        $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, $statusId);
+        // If there is no state change, we send a generic "here are some documents regarding your order"-mail
+        if ($statusId === null) {
+            /** @var $mail Enlight_Components_Mail */
+            $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, 'sORDERDOCUMENTS');
+        } else {
+            /** @var $mail Enlight_Components_Mail */
+            $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, $statusId);
+        }
 
         if ($mail instanceof Enlight_Components_Mail) {
             return [

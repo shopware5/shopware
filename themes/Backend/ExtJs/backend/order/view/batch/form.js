@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
 
     /**
      * Contains all snippets for the view component
-     * @object
      */
     snippets:{
         info: '{s name=settings/info}Caution: If you have selected orders with an already existing receipt, these will be regenerated.{/s}',
@@ -119,8 +118,8 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
              * Event will be fired when the user clicks the "generate documents" button which is
              * displayed within the form field set.
              *
-             * @event
-             * @param [Ext.form.Panel] - This component
+             * @Event
+             * @param { Ext.form.Panel } - This component
              */
             'processChanges'
         );
@@ -128,6 +127,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
 
     /**
      * Creates the info container which is displayed on top of the form.
+     *
      * @return Ext.container.Container
      */
     createInfoContainer: function() {
@@ -145,7 +145,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.settingsFieldSetLabel,
             layout: 'anchor',
-            flex: 1,
             defaults: {
                 labelWidth: 155,
                 xtype: 'combobox',
@@ -244,6 +243,5 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             store: store
         });
     }
-
 });
 //{/block}
