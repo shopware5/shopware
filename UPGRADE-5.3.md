@@ -178,6 +178,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
 * Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
 * Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
+* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
 
 ### Removals
 
