@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Dispatch;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Customer;
@@ -147,7 +148,6 @@ class Repository extends ModelRepository
     public function getShippingCostsQueryBuilder($dispatchId = null, $filter = null, $order = [])
     {
         $builder = $this->createQueryBuilder('dispatch');
-        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         // Build the query
         $builder->select(['dispatch', 'countries', 'categories', 'holidays', 'payments', 'attribute'])
@@ -157,18 +157,12 @@ class Repository extends ModelRepository
                 ->leftJoin('dispatch.attribute', 'attribute')
                 ->leftJoin('dispatch.payments', 'payments');
         if (null !== $dispatchId) {
-            $builder->where($expr->eq('dispatch.id', '?2'))
-                    ->setParameter(2, $dispatchId);
+            $builder->where('dispatch.id = ?2')->setParameter(2, $dispatchId);
         }
 
         // Set the filtering logic
         if (null !== $filter) {
-            $builder->andWhere(
-                $expr->orX(
-                    $expr->like('dispatch.name', '?1'),
-                    $expr->like('dispatch.description', '?1')
-                )
-            );
+            $builder->andWhere('(dispatch.name LIKE ?1 OR dispatch.description LIKE ?2)');
             $builder->setParameter(1, '%' . $filter . '%');
         }
 
@@ -190,19 +184,13 @@ class Repository extends ModelRepository
     public function getListQueryBuilder($filter = null, $order = [])
     {
         $builder = $this->createQueryBuilder('dispatch');
-        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         // Build the query
         $builder->select(['dispatch']);
 
         // Set the filtering logic
         if (null !== $filter) {
-            $builder->andWhere(
-                $expr->orX(
-                    $expr->like('dispatch.name', '?1'),
-                    $expr->like('dispatch.description', '?1')
-                )
-            );
+            $builder->andWhere('(dispatch.name LIKE ?1 OR dispatch.description LIKE ?1)');
             $builder->setParameter(1, '%' . $filter . '%');
         }
 
@@ -242,14 +230,13 @@ class Repository extends ModelRepository
     public function getShippingCostsMatrixQueryBuilder($dispatchId = null, $filter = null, $limit = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $expr = $this->getEntityManager()->getExpressionBuilder();
         $builder->from('Shopware\Models\Dispatch\ShippingCost', 'shippingcosts')->select(['shippingcosts']);
 
         // assure that we will get an empty result set when no dispatch ID is provided
         if (is_null($dispatchId) || empty($dispatchId)) {
             $dispatchId = '-1';
         }
-        $builder->where($expr->eq('shippingcosts.dispatchId', $dispatchId));
+        $builder->where('shippingcosts.dispatchId = :dispatchId')->setParameter('dispatchId', $dispatchId);
         // we need a hard coded sorting here.
         $builder->orderBy('shippingcosts.from');
 
@@ -305,7 +292,6 @@ class Repository extends ModelRepository
     public function getPaymentQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         $filters = [];
         if (null !== $filter && !empty($filter)) {
@@ -320,7 +306,8 @@ class Repository extends ModelRepository
         $builder = $this->sortOrderQuery($builder, 'payment', $order);
         // use the filter
         if (!empty($filters['usedIds'])) {
-            $builder->add('where', $expr->notIn('payment.id', $filters['usedIds']));
+            $builder->andWhere('payment.id NOT IN (:usedIds)')
+                ->setParameter('usedIds', $filters['usedIds'], Connection::PARAM_INT_ARRAY);
         }
 
         return $builder;
@@ -367,7 +354,6 @@ class Repository extends ModelRepository
             }
         }
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         // Build the query
         $builder->from('Shopware\Models\Country\Country', 'country')
@@ -378,10 +364,12 @@ class Repository extends ModelRepository
 
         // use the filter
         if (!empty($filters['usedIds'])) {
-            $builder->add('where', $expr->notIn('country.id', $filters['usedIds']));
+            $builder->andWhere('country.id NOT IN (:usedIds)')
+                ->setParameter('usedIds', $filters['usedIds'], Connection::PARAM_INT_ARRAY);
         }
         if (!empty($filters['onlyIds'])) {
-            $builder->add('where', $expr->in('country.id', $filters['onlyIds']));
+            $builder->andWhere('country.id IN (:onlyIds)')
+                ->setParameter('onlyIds', $filters['onlyIds'], Connection::PARAM_INT_ARRAY);
         }
 
         return $builder;
@@ -421,7 +409,6 @@ class Repository extends ModelRepository
     public function getHolidayQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         // Build the query
         $builder->from('Shopware\Models\Dispatch\Holiday', 'holiday')
@@ -430,8 +417,9 @@ class Repository extends ModelRepository
         // Set the order logic
         $builder = $this->sortOrderQuery($builder, 'holiday', $order);
         // use the filter
-        if (!empty($filters['usedIds'])) {
-            $builder->add('where', $expr->notIn('country.id', $filter['usedIds']));
+        if (!empty($filter['usedIds'])) {
+            $builder->andWhere('country.id NOT IN (:usedIds)')
+                ->setParameter('usedIds', $filter['usedIds'], Connection::PARAM_INT_ARRAY);
         }
 
         return $builder;

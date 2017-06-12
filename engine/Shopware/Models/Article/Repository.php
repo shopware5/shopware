@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Article;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -967,7 +968,12 @@ class Repository extends ModelRepository
                 ->addOrderBy('options.position', 'ASC');
 
         if (!empty($ids)) {
-            $builder->andWhere($builder->expr()->notIn('configuratorSet.id', $ids));
+            if (!is_array($ids)) {
+                $ids = [$ids];
+            }
+
+            $builder->andWhere('configuratorSet.id NOT IN (:ids)')
+                ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         }
 
         return $builder;
@@ -1780,8 +1786,8 @@ class Repository extends ModelRepository
                 ->leftJoin('articles.supplier', 'supplier');
 
         if (!empty($ids)) {
-            $ids = implode(',', $ids);
-            $builder->where($builder->expr()->notIn('articles.id', $ids));
+            $builder->where('articles.id NOT IN (:articleIds)')
+                ->setParameter('articleIds', $ids, Connection::PARAM_INT_ARRAY);
         }
 
         if (!empty($filter) && $filter[0]['property'] == 'filter' && !empty($filter[0]['value'])) {
@@ -1900,8 +1906,8 @@ class Repository extends ModelRepository
         ]);
         $builder->from('Shopware\Models\Article\Supplier', 'suppliers');
         if (!empty($ids)) {
-            $ids = implode(',', $ids);
-            $builder->where($builder->expr()->notIn('suppliers.id', $ids));
+            $builder->where('suppliers.id NOT IN (:ids)')
+                ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         }
         if (!empty($filter) && $filter[0]['property'] == 'filter' && !empty($filter[0]['value'])) {
             $builder->andWhere('suppliers.name LIKE ?1')

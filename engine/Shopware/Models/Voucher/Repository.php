@@ -235,7 +235,7 @@ class Repository extends ModelRepository
                 ->where('voucher.voucherCode = ?1')
                 ->setParameter(1, $code);
         if (!empty($voucherId)) {
-            $builder->andWhere($builder->expr()->neq('voucher.id', '?2'))
+            $builder->andWhere('voucher.id != ?2')
                     ->setParameter(2, $voucherId);
         }
 
@@ -275,7 +275,7 @@ class Repository extends ModelRepository
                 ->where('voucher.orderCode = ?1')
                 ->setParameter(1, $code);
         if (!empty($voucherId)) {
-            $builder->andWhere($builder->expr()->neq('voucher.id', $voucherId));
+            $builder->andWhere('voucher.id != :voucherId')->setParameter('voucherId', $voucherId);
         }
 
         return $builder;

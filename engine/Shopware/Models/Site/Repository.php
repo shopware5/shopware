@@ -24,7 +24,6 @@
 
 namespace   Shopware\Models\Site;
 
-use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -124,14 +123,10 @@ class Repository extends ModelRepository
                 ->leftJoin('sites.attribute', 'attribute')
                 ->leftJoin('sites.children', 'children')
                 ->leftJoin('children.attribute', 'childrenAttribute')
-                ->where($builder->expr()->eq('sites.parentId', 0))
+                ->where('sites.parentId = 0')
                 ->andWhere(
-                    $builder->expr()->orX(
-                        $builder->expr()->eq('sites.grouping', '?1'),        // = gBottom
-                        $builder->expr()->like('sites.grouping', '?2'),      //like 'gBottom|%
-                        $builder->expr()->like('sites.grouping', '?3'),      //like '|gBottom
-                        $builder->expr()->like('sites.grouping', '?4')      //like '|gBottom|
-                    )
+                    // = gBottom, like 'gBottom|%', like '|gBottom', like '|gBottom|'
+                    '(sites.grouping = ?1 OR sites.grouping LIKE ?2 OR sites.grouping LIKE ?3 OR sites.grouping LIKE ?4)'
                 )
                 ->setParameter(1, $nodeName)
                 ->setParameter(2, $nodeName . '|%')
@@ -140,12 +135,7 @@ class Repository extends ModelRepository
 
         if ($shopId) {
             $builder
-                ->andWhere(
-                    $builder->expr()->orX(
-                        $builder->expr()->like('sites.shopIds', ':shopId'),
-                        $builder->expr()->isNull('sites.shopIds')
-                    )
-                )
+                ->andWhere('(sites.shopIds LIKE :shopId OR sites.shopIds IS NULL)')
                 ->setParameter('shopId', '%|' . $shopId . '|%');
         }
 
@@ -250,12 +240,7 @@ class Repository extends ModelRepository
         $builder->select(['site'])
             ->from('Shopware\Models\Site\Site', 'site')
             ->where('site.link = \'\'')
-            ->andWhere(
-                $builder->expr()->orX(
-                    $builder->expr()->like('site.shopIds', ':shopId'),
-                    $builder->expr()->isNull('site.shopIds')
-                )
-            )
+            ->andWhere('(site.shopIds LIKE :shopId OR site.shopIds IS NULL)')
             ->setParameter('shopId', '%|' . $shopId . '|%');
 
         return $builder;

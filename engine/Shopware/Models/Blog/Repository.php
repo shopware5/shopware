@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Blog;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 
@@ -96,7 +97,8 @@ class Repository extends ModelRepository
         ->orderBy('blog.displayDate', 'DESC');
 
         if (!empty($blogCategoryIds)) {
-            $builder->andWhere($builder->expr()->in('blog.categoryId', $blogCategoryIds));
+            $builder->andWhere('blog.categoryId IN (:categoryIds)')
+                ->setParameter('categoryIds', $blogCategoryIds, Connection::PARAM_INT_ARRAY);
         }
 
         if (!empty($filter)) {
@@ -307,7 +309,8 @@ class Repository extends ModelRepository
                 ->orderBy('blog.displayDate', 'DESC');
 
         if (!empty($categoryIds)) {
-            $builder->andWhere($builder->expr()->in('blog.categoryId', $categoryIds));
+            $builder->andWhere('blog.categoryId IN (:categoryIds)')
+                ->setParameter('categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
         }
 
         if (!empty($filter)) {
@@ -368,7 +371,8 @@ class Repository extends ModelRepository
             ->groupBy('blog.id');
 
         if (!empty($blogCategoryIds)) {
-            $builder->where($builder->expr()->in('blog.categoryId', $blogCategoryIds));
+            $builder->where('blog.categoryId IN (:blogCategoryIds)')
+                ->setParameter('blogCategoryIds', $blogCategoryIds, Connection::PARAM_INT_ARRAY);
         }
 
         if (!empty($filter) && $filter[0]['property'] == 'filter' && !empty($filter[0]['value'])) {

@@ -182,11 +182,11 @@ class Repository extends ModelRepository
             ->leftJoin('o.orderStatus', 'orderState')
             ->leftJoin('o.customer', 'customer')
             ->leftJoin('customer.billing', 'billing')
-            ->where($expr->eq('partner.id', '?1'))
+            ->where('partner.id = ?1')
             ->andWhere('o.status != 4')
             ->andWhere('o.status != -1')
-            ->andWhere($expr->gt('o.orderTime', '?2'))
-            ->andWhere($expr->lt('o.orderTime', '?3'))
+            ->andWhere('o.orderTime > ?2')
+            ->andWhere('o.orderTime < ?3')
             ->setParameter(1, $partnerId)
             ->setParameter(2, $fromDate)
             ->setParameter(3, $toDate)
@@ -335,8 +335,8 @@ class Repository extends ModelRepository
                 'partner.id',
             ])
             ->from('Shopware\\Models\\Partner\\Partner', 'partner')
-            ->where($builder->expr()->eq('partner.idCode', '?1'))
-            ->andWhere($builder->expr()->neq('partner.id', '?2'))
+            ->where('partner.idCode = ?1')
+            ->andWhere('partner.id != ?2')
             ->setParameter(1, $trackingCode)
             ->setParameter(2, $partnerId);
 
