@@ -75,6 +75,11 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
                 }
                 break;
 
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_NOT_IN:
+                $query->andWhere($field . ' NOT IN (' . $placeholder . ')');
+                $query->setParameter($placeholder, $condition->getValue(), Connection::PARAM_STR_ARRAY);
+                break;
+
             case $condition->getOperator() === ProductAttributeCondition::OPERATOR_IN:
                 $query->andWhere($field . ' IN (' . $placeholder . ')');
                 $query->setParameter($placeholder, $condition->getValue(), Connection::PARAM_STR_ARRAY);

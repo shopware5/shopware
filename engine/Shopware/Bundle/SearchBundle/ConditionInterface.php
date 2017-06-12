@@ -43,6 +43,7 @@ interface ConditionInterface extends CriteriaPartInterface
     const OPERATOR_LTE = '<=';
     const OPERATOR_GT = '>';
     const OPERATOR_GTE = '>=';
+    const OPERATOR_NOT_IN = 'NOT IN';
     const OPERATOR_IN = 'IN';
     const OPERATOR_BETWEEN = 'BETWEEN';
     const OPERATOR_STARTS_WITH = 'STARTS_WITH';
