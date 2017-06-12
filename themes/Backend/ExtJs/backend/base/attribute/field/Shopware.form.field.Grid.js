@@ -77,6 +77,10 @@ Ext.define('Shopware.form.field.Grid', {
      */
     ignoreDisabled: true,
 
+    allowDelete: true,
+
+    allowAdd: true,
+
     initComponent: function() {
         var me = this;
 
@@ -187,7 +191,13 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     createActionColumnItems: function() {
-        return [this.createDeleteColumn()];
+        var items = [];
+
+        if (this.allowDelete) {
+            items.push(this.createDeleteColumn());
+        }
+
+        return items;
     },
 
     createDeleteColumn: function() {
@@ -265,6 +275,7 @@ Ext.define('Shopware.form.field.Grid', {
             store: me.searchStore,
             multiSelect: true,
             margin: margin,
+            hidden: !me.allowAdd,
             isFormField: false,
             pageSize: me.searchStore.pageSize,
             listeners: {
