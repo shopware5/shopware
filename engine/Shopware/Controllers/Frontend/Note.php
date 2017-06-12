@@ -30,7 +30,6 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-        $this->View()->assign('sOneTimeAccount', Shopware()->Session()->offsetGet('sOneTimeAccount'));
     }
 
     public function postDispatch()
@@ -43,6 +42,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $view = $this->View();
         $view->sNotes = Shopware()->Modules()->Basket()->sGetNotes();
         $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
+        $view->sOneTimeAccount = Shopware()->Session()->offsetGet('sOneTimeAccount');
     }
 
     public function deleteAction()

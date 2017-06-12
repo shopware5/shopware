@@ -30,7 +30,7 @@ The sidebar is displayed inside the off-canvas menu on small devices.
 */
 
 body > .sidebar-main {
-	.clearfix();
+    .clearfix();
     .unitize(padding-bottom, 20);
     border-right: @border-color;
 }
@@ -330,13 +330,13 @@ body > .sidebar-main {
     }
 
     .sidebar-main {
-    	.unitize-width(230);
+        .unitize-width(230);
         .unitize-margin(0, 0);
-		.unitize(padding-top, 30);
+        .unitize(padding-top, 30);
         display: none;
         float: left;
 
-		.is--ctl-listing &,
+        .is--ctl-listing &,
         .is--ctl-forms &,
         .is--ctl-tellafriend &,
         .is--ctl-newsletter &,
@@ -344,45 +344,46 @@ body > .sidebar-main {
         .is--ctl-custom &,
         .is--ctl-note.is--user &,
         .is--ctl-address &,
-		.is--ctl-account.is--user & {
-			display: block;
+        .is--ctl-account.is--user & {
+            display: block;
 
-			& + .content--wrapper {
-				.unitize(margin-left, 260);
-			}
-		}
+            & + .content--wrapper {
+                .unitize(margin-left, 260);
+            }
+        }
 
-		.is--ctl-blog &,
-		.is--ctl-note &,
-		.is--ctl-index &,
-		.is--ctl-detail &,
-		.is--ctl-search &,
-		.is--ctl-checkout &,
+        .is--ctl-blog &,
+        .is--ctl-note &,
+        .is--ctl-note.is--user.is--one-time-account &,
+        .is--ctl-index &,
+        .is--ctl-detail &,
+        .is--ctl-search &,
+        .is--ctl-checkout &,
         .is--ctl-register &,
-		.is--ctl-campaign &,
-		.is--ctl-account.is--act-logout &,
-		.is--ctl-account.is--act-password &,
+        .is--ctl-campaign &,
+        .is--ctl-account.is--act-logout &,
+        .is--ctl-account.is--act-password &,
         .is--ctl-account.is--act-resetPassword &,
-		.is--ctl-listing.is--no-sidebar & {
-			display: none;
+        .is--ctl-listing.is--no-sidebar & {
+            display: none;
 
-			& + .content--wrapper {
-				margin: 0;
-			}
-		}
+            & + .content--wrapper {
+                margin: 0;
+            }
+        }
 
-		.is--ctl-note &,
+        .is--ctl-note &,
         .is--ctl-address &,
-		.is--ctl-account & {
-			.categories--headline,
-			.categories--navigation,
-			.shop-sites--container {
-				display: none;
-			}
-		}
+        .is--ctl-account & {
+            .categories--headline,
+            .categories--navigation,
+            .shop-sites--container {
+                display: none;
+            }
+        }
 
         .mobile--switches,
-		.filter--container,
+        .filter--container,
         .navigation--smartphone {
             display: none;
         }
@@ -396,12 +397,12 @@ body > .sidebar-main {
         .unitize-margin(20, 10, 10, 10);
     }
 
-	.campaign--box {
-		.unitize-margin(0, 0, 20, 0);
-		display: block;
-	}
+    .campaign--box {
+        .unitize-margin(0, 0, 20, 0);
+        display: block;
+    }
 
-	.categories--headline {
+    .categories--headline {
         display: none;
     }
 
