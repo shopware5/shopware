@@ -16,11 +16,20 @@
     {if !$userInfo}
         <li class="navigation--entry">
             <span class="navigation--signin">
-                <a href="{url module='frontend' controller='account'}" class="blocked--link btn is--primary navigation--signin-btn">
+                <a href="{url module='frontend' controller='account'}#hide-registration"
+                   class="blocked--link btn is--primary navigation--signin-btn{if $register} registration--menu-entry entry--close-off-canvas{/if}"
+                   data-collapseTarget="#registration"
+                   data-action="close">
                     {s name="AccountLogin"}{/s}
                 </a>
                 <span class="navigation--register">
-                    {s name="AccountOr"}{/s} <a href="{url module='frontend' controller='account'}" class="blocked--link">{s name="AccountRegister"}{/s}</a>
+                    {s name="AccountOr"}{/s}
+                    <a href="{url module='frontend' controller='account'}#show-registration"
+                       class="blocked--link{if $register} registration--menu-entry entry--close-off-canvas{/if}"
+                       data-collapseTarget="#registration"
+                       data-action="open">
+                        {s name="AccountRegister"}{/s}
+                    </a>
                 </span>
             </span>
         </li>
