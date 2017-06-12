@@ -305,7 +305,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     // If the type is image, then show the image
                     '<tpl if="this.isImage(type, extension)">',
                         '<div class="thumb">',
-                            '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
+                            '<div class="inner-thumb"><img src="{thumbnail}?{timestamp}" title="{name}" /></div>',
                         '</div>',
                     '</tpl>',
 
