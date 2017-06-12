@@ -19,6 +19,7 @@
 
 {* Additional product relevant information *}
 {block name='frontend_checkout_cart_item_details_inline'}
+    {$smarty.block.parent}
     <div class="product--essential-features">
         {include file="string:{config name=mainfeatures}"}
     </div>
