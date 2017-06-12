@@ -58,7 +58,9 @@
             <xsd:enumeration value="mediaselection"/>
             <xsd:enumeration value="number"/>
             <xsd:enumeration value="select"/>
+            <xsd:enumeration value="selecttree"/>
             <xsd:enumeration value="combo"/>
+            <xsd:enumeration value="combotree"/>
             <xsd:enumeration value="button"/>
         </xsd:restriction>
     </xsd:simpleType>
