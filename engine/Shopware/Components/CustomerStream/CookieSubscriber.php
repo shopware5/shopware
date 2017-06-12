@@ -106,6 +106,16 @@ class CookieSubscriber implements SubscriberInterface
 
             return;
         }
+
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        if ($context->getShop()->hasCustomerScope()) {
+            $parts = explode('.', $token);
+
+            if ($context->getShop()->getParentId() != $parts[1]) {
+                return;
+            }
+        }
+
         if ($session->offsetGet('auto-user')) {
             return;
         }
@@ -141,7 +151,9 @@ class CookieSubscriber implements SubscriberInterface
 
         $request = $controller->Request();
 
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
         $token = Uuid::uuid4();
+        $token .= '.' . $context->getShop()->getParentId();
 
         $expire = time() + 365 * 24 * 60 * 60;
 
