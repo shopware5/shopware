@@ -55,6 +55,12 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->admin = Shopware()->Modules()->Admin();
+
+        $session = $this->container->get('session');
+        if ($session->get('sOneTimeAccount') && $this->Request()->has('sidebar')) {
+            $this->admin->logout();
+        }
+
         $this->addressRepository = $this->get('models')->getRepository(Address::class);
         $this->addressService = $this->get('shopware_account.address_service');
 

@@ -39,6 +39,14 @@
 
 {block name="frontend_account_menu_link_partner_statistics"}{/block}
 
+{block name="frontend_account_menu_link_addresses"}
+    <li class="navigation--entry">
+        <a href="{url module='frontend' controller='address' action='index' sidebar=''}" title="{s name="AccountLinkAddresses" namespace="frontend/account/sidebar"}{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}">
+            {s name="AccountLinkAddresses" namespace="frontend/account/sidebar"}{/s}
+        </a>
+    </li>
+{/block}
+
 {block name="frontend_account_menu_link_logout"}
     {if $userInfo}
         <li class="navigation--entry">
