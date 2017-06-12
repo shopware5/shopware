@@ -276,6 +276,20 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
                     $array_params .= ', ';
                 }
 
+                // Add parameter type/class for interface compliance
+                if (method_exists($rp, 'hasType') && $rp->hasType()) {
+                    // PHP >= 7.0 only
+                    $params .= $rp->getType() . ' ';
+                } elseif ($rp->isArray()) {
+                    // PHP < 7.0 fallback
+                    $params .= 'array ';
+                } elseif ($rp->isCallable()) {
+                    // PHP < 7.0 fallback
+                    $params .= 'callable ';
+                } elseif ($rp->getClass()) {
+                    $params .= $rp->getClass()->getName() . ' ';
+                }
+
                 $array_param = '';
                 if ($rp->isPassedByReference()) {
                     $params .= '&';
