@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     createActionColumnItems: function() {
         var me = this, items = me.callParent(arguments);
 
-        /*{if !{acl_is_allowed resource=customerstream privilege=stream_index}}*/
+        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
             return items;
         /*{/if}*/
         
