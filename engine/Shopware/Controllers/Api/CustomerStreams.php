@@ -51,7 +51,7 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
     }
 
     /**
-     * Returns the customers of a stream or collection of conditions
+     * Returns the customers of a stream or of a collection of conditions
      * GET /api/customer_streams/{id}
      */
     public function getAction()

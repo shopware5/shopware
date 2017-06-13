@@ -26,6 +26,7 @@ namespace Shopware\Models\CustomerStream;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="s_customer_streams")
@@ -55,7 +56,7 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
@@ -75,12 +76,14 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var string
+     * @Assert\NotBlank
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     private $type = self::TYPE_DYNAMIC;
 
     /**
      * @var \DateTime
+     * @Assert\DateTime
      * @ORM\Column(name="freeze_up", type="date", nullable=true)
      */
     private $freezeUp;

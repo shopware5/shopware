@@ -32,6 +32,7 @@ use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\CustomerStream\CustomerStreamCriteriaFactoryInterface;
 use Shopware\Components\CustomerStream\StreamIndexerInterface;
 use Shopware\Components\LogawareReflectionHelper;
@@ -176,6 +177,8 @@ class CustomerStream extends Resource
             } else {
                 $row = array_merge($row, $counts[$id]);
             }
+
+            $row['freezeUp'] = $this->updateFreezeUp($id, $row['freezeUp']);
         }
 
         return ['data' => $data, 'total' => $total];
@@ -187,6 +190,11 @@ class CustomerStream extends Resource
 
         $stream = new CustomerStreamEntity();
         $stream->fromArray($data);
+
+        $violations = $this->getManager()->validate($stream);
+        if ($violations->count() > 0) {
+            throw new ValidationException($violations);
+        }
 
         $this->getManager()->persist($stream);
         $this->getManager()->flush($stream);
@@ -213,6 +221,11 @@ class CustomerStream extends Resource
         }
 
         $stream->fromArray($data);
+
+        $violations = $this->getManager()->validate($stream);
+        if ($violations->count() > 0) {
+            throw new ValidationException($violations);
+        }
 
         if ($stream->getType() === CustomerStreamEntity::TYPE_DYNAMIC && $index) {
             $this->indexStream($stream);
@@ -242,8 +255,7 @@ class CustomerStream extends Resource
 
     public function buildSearchIndex($lastId, $full)
     {
-        $ids = $this->streamRepository
-            ->fetchSearchIndexIds($lastId, $full);
+        $ids = $this->streamRepository->fetchSearchIndexIds($lastId, $full);
 
         if (!empty($ids)) {
             $this->connection->executeUpdate(
@@ -299,7 +311,7 @@ class CustomerStream extends Resource
         if (!empty($conditions)) {
             return $this->reflectionHelper->unserialize(
                 json_decode($conditions, true),
-                sprintf('Serialization error in Customer Stream')
+                'Serialization error in Customer Stream'
             );
         }
 
@@ -312,7 +324,7 @@ class CustomerStream extends Resource
             case CustomerStreamEntity::TYPE_DYNAMIC:
                 return $this->reflectionHelper->unserialize(
                     json_decode($stream->getConditions(), true),
-                    sprintf('Serialization error in Customer Stream')
+                    'Serialization error in Customer Stream'
                 );
 
             case CustomerStreamEntity::TYPE_STATIC:
@@ -346,6 +358,31 @@ class CustomerStream extends Resource
                 ]);
             }
         });
+    }
+
+    /**
+     * @param int         $id
+     * @param string|null $freezeUp
+     *
+     * @return string|null
+     */
+    private function updateFreezeUp($id, $freezeUp)
+    {
+        if (!$freezeUp) {
+            return $freezeUp;
+        }
+
+        $now = new \DateTime();
+
+        if ($freezeUp >= $now) {
+            return $freezeUp;
+        }
+        $this->connection->executeUpdate(
+            'UPDATE s_customer_streams SET freeze_up = NULL WHERE id = :id',
+            [':id' => $id]
+        );
+
+        return null;
     }
 }
 

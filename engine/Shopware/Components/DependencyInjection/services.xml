@@ -573,7 +573,7 @@
             <argument type="service" id="shopware.slug" />
         </service>
 
-        <service id="shopware.api.customer_stream" class="Shopware\Components\Api\Resource\CustomerStream" >
+        <service id="shopware.api.customer_stream" class="Shopware\Components\Api\Resource\CustomerStream">
             <argument id="shopware.logaware_reflection_helper" type="service"/>
             <argument id="customer_search.dbal.number_search" type="service"/>
             <argument id="shopware.customer_stream.repository" type="service"/>
