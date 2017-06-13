@@ -120,10 +120,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     },
 
     nameRenderer: function (value, meta, record) {
-        return '<span class="stream-name-column">' +
-                '<b>' + value + '</b> - '+
-                record.get('customer_count') +
-                ' {s name="customer_count_suffix"}{/s}</span>';
+        return '<span class="stream-name-column"><b>' + value + '</b> - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}</span>';
     }
 });
 // {/block}

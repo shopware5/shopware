@@ -45,6 +45,7 @@ class CustomerStream extends Resource
      * @var ModelManager
      */
     protected $manager;
+
     /**
      * @var LogawareReflectionHelper
      */
