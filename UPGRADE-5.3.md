@@ -128,6 +128,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added `Shopware\Bundle\SearchBundleDBAL\VariantHelper` which joins all variants for dbal search
 * Added smarty blocks `frontend_checkout_shipping_payment_core_button_top` and `frontend_checkout_shipping_payment_core_button_top` for shipping
 * Added new Interface for facet result template switch `Shopware\Bundle\SearchBundle\TemplateSwitchable`
+* Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
 
 ### Changes
 

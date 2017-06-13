@@ -2224,21 +2224,13 @@ class sAdmin
     {
         if (empty($unsubscribe)) {
             $errorFlag = [];
+            $config = Shopware()->Container()->get('config');
 
-            $captchaName = $this->front->Request()->getPost('captchaName');
-            if (($captchaName !== 'noCaptcha')) {
+            if ($this->shouldVerifyCaptcha($config)) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 
-                try {
-                    $isValid = $captchaValidator->validateByName($captchaName, $this->front->Request());
-                } catch (\Exception $exception) {
-                    // log captchaNotFound Exception
-                    Shopware()->Container()->get('corelogger')->error($exception->getMessage());
-                    $isValid = $captchaValidator->validateByName('nocaptcha', $this->front->Request());
-                }
-
-                if (!$isValid) {
+                if (!$captchaValidator->validateByName($config->get('newsletterCaptcha'), $this->front->Request())) {
                     return [
                         'code' => 7,
                     ];
@@ -4054,5 +4046,16 @@ SQL;
             ',
             ['id' => $this->session->offsetGet('sUserId')]
         );
+    }
+
+    /**
+     * @param $config
+     *
+     * @return bool
+     */
+    private function shouldVerifyCaptcha($config)
+    {
+        return $config->get('newsletterCaptcha') !== 'nocaptcha' &&
+            !($config->get('noCaptchaAfterLogin') && Shopware()->Modules()->Admin()->sCheckUser());
     }
 }

@@ -157,11 +157,38 @@
                             {/block}
 
                             {* Captcha *}
-                            {block name='frontend_newsletter_form_captcha'}
-                                {$captchaName = {config name=newsletterCaptcha}}
-                                {if $captchaName !== "nocaptcha"}
-                                    {$captchaHasError = $errors.captcha}
-                                    {include file="widgets/captcha/newsletter_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
+                            {block name="frontend_newsletter_form_captcha"}
+                                {if !({config name=noCaptchaAfterLogin} && $sUserLoggedIn)}
+                                    {$newsletterCaptchaName = {config name=newsletterCaptcha}}
+                                    <div class="newsletter--captcha-form">
+                                        {if $newsletterCaptchaName === 'legacy'}
+                                            <div class="newsletter--captcha">
+
+                                                {* Deferred loading of the captcha image *}
+                                                {block name='frontend_newsletter_form_captcha_placeholder'}
+                                                    <div class="captcha--placeholder" {if $sErrorFlag.sCaptcha}
+                                                         data-hasError="true"{/if}
+                                                         data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"
+                                                         data-autoload="true">
+                                                    </div>
+                                                {/block}
+
+                                                {block name='frontend_newsletter_form_captcha_label'}
+                                                    <strong class="captcha--notice">{s name="SupportLabelCaptcha" namespace="frontend/forms/elements"}{/s}</strong>
+                                                {/block}
+
+                                                {block name='frontend_newsletter_form_captcha_code'}
+                                                    <div class="captcha--code">
+                                                        <input type="text" name="sCaptcha" class="newsletter--field{if $sErrorFlag.sCaptcha} has--error{/if}" required="required" aria-required="true" />
+                                                    </div>
+                                                {/block}
+                                            </div>
+                                        {elseif $newsletterCaptchaName !== 'nocaptcha'}
+                                            <div class="captcha--placeholder"
+                                                 data-src="{url module=widgets controller=Captcha action=getCaptchaByName captchaName=$newsletterCaptchaName}"{if isset($sErrorFlag) && count($sErrorFlag) > 0}
+                                                 data-hasError="true"{/if} data-autoload="true"></div>
+                                        {/if}
+                                    </div>
                                 {/if}
                             {/block}
 

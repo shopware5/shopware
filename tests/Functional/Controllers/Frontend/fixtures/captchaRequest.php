@@ -56,5 +56,4 @@ return [
         ],
     'first_name_confirmation' => '',
     'Submit' => '',
-    'captchaName' => 'uninstalledCaptchaName',
 ];
