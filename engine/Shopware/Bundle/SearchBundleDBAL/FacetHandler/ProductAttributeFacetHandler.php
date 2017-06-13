@@ -240,6 +240,9 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         if ($result['minValues'] === null && $result['maxValues'] === null) {
             return null;
         }
+        if ($result['minValues'] === $result['maxValues']) {
+            return null;
+        }
 
         $activeMin = $result['minValues'];
         $activeMax = $result['maxValues'];

@@ -226,14 +226,32 @@ class DataPersister
             }
             $value = $data[$column->getName()];
 
-            if ($this->isDateColumn($column) && empty($value)) {
-                $result[$column->getName()] = 'NULL';
+            if ($this->isDateColumn($column) && !$this->isValidDate($value)) {
+                $result[$column->getName()] = null;
             } else {
                 $result[$column->getName()] = $value;
             }
         }
 
         return $result;
+    }
+
+    private function isValidDate($date)
+    {
+        if (!$date) {
+            return false;
+        }
+        if (strpos('0000-00-00', $date) !== false) {
+            return false;
+        }
+
+        try {
+            new \DateTime($date);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

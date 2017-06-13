@@ -162,6 +162,11 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                     break;
                 case ProductAttributeFacet::MODE_RANGE_RESULT:
                     $criteriaPartResult = $this->createRangeResult($criteriaPart, $aggregations[$key], $criteria);
+
+                    if ($criteriaPartResult->getMax() === $criteriaPartResult->getMin()) {
+                        $criteriaPartResult = null;
+                    }
+
                     break;
                 default:
                     break;
