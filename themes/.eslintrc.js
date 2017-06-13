@@ -37,7 +37,8 @@ module.exports = {
         'one-var': 0,
         'indent': [
             'error',
-            4
+            4,
+            { 'SwitchCase': 1 }
         ],
 
         'standard/no-callback-literal': 0
