@@ -84,7 +84,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasTotalOrderAmountCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SalutationCondition'),
-            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCondition')
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.AccountModeCondition')
         ];
     },
 

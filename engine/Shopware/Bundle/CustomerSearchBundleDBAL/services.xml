@@ -142,6 +142,10 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="customer_search.dbal.condition.account_mode_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\AccountModeConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.indexing.cron_job_subscriber" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CronJobSubscriber">
             <argument id="dbal_connection" type="service"/>
             <argument id="customer_search.dbal.indexing.indexer" type="service"/>
