@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\CustomerStream\CustomerStreamRepository;
+use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 
 /**
  * @category  Shopware
@@ -35,16 +35,16 @@ use Shopware\Models\CustomerStream\CustomerStreamRepository;
 class CustomerStreamReader extends GenericReader
 {
     /**
-     * @var \Shopware\Models\CustomerStream\CustomerStreamRepository
+     * @var \Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface
      */
     private $repository;
 
     /**
-     * @param string                                                   $entity
-     * @param ModelManager                                             $entityManager
-     * @param \Shopware\Models\CustomerStream\CustomerStreamRepository $repository
+     * @param string                                                            $entity
+     * @param ModelManager                                                      $entityManager
+     * @param \Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface $repository
      */
-    public function __construct($entity, ModelManager $entityManager, CustomerStreamRepository $repository)
+    public function __construct($entity, ModelManager $entityManager, CustomerStreamRepositoryInterface $repository)
     {
         parent::__construct($entity, $entityManager);
         $this->repository = $repository;

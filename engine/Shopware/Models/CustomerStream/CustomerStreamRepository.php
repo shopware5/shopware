@@ -30,7 +30,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 
-class CustomerStreamRepository
+class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 {
     const INDEXING_LIMIT = 500;
 
@@ -48,11 +48,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * Checks if the provided category id has an configured emotion for some customer streams
-     *
-     * @param int $categoryId
-     *
-     * @return int|bool
+     * {@inheritdoc}
      */
     public function hasCustomerStreamEmotions($categoryId)
     {
@@ -69,9 +65,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @param int[] $ids
-     *
-     * @return array[]
+     * {@inheritdoc}
      */
     public function fetchBackendListing(array $ids)
     {
@@ -105,9 +99,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @param int[] $streamIds
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function fetchStreamsCustomerCount(array $streamIds)
     {
@@ -129,7 +121,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getNotIndexedCount()
     {
@@ -148,7 +140,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getCustomerCount()
     {
@@ -156,12 +148,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * Fetches the next ids for search table indexing
-     *
-     * @param int  $offset
-     * @param bool $full
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function fetchSearchIndexIds($offset, $full = false)
     {
@@ -190,10 +177,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @param null|int $streamId
-     * @param int      $month
-     *
-     * @return array[]
+     * {@inheritdoc}
      */
     public function fetchCustomerAmount($streamId = null, $month = 12)
     {
@@ -232,7 +216,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @return array[] indexed by year-month
+     * {@inheritdoc}
      */
     public function fetchAmountPerStreamChart()
     {
@@ -284,7 +268,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @return string|false
+     * {@inheritdoc}
      */
     public function getLastFillIndexDate()
     {
@@ -296,9 +280,7 @@ class CustomerStreamRepository
     }
 
     /**
-     * @param int[] $customerIds
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function fetchStreamsForCustomers(array $customerIds)
     {
@@ -335,6 +317,11 @@ class CustomerStreamRepository
         return $result;
     }
 
+    /**
+     * @param DateTime $date
+     *
+     * @return QueryBuilder
+     */
     private function createAmountPerMonthQuery(DateTime $date)
     {
         $format = "DATE_FORMAT(orders.ordertime,'%Y-%m')";
@@ -358,6 +345,12 @@ class CustomerStreamRepository
         return $query;
     }
 
+    /**
+     * @param DateTime $date
+     * @param null|int $streamId
+     *
+     * @return QueryBuilder
+     */
     private function createStreamAmountQuery(DateTime $date, $streamId = null)
     {
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
