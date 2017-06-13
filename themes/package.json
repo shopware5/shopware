@@ -13,7 +13,9 @@
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-uglify": "^2.3.0",
     "grunt-file-exists": "^0.1.4",
-    "gruntify-eslint": "^3.1.0"
+    "gruntify-eslint": "^3.1.0",
+    "jit-grunt": "^0.10.0",
+    "load-grunt-config": "^0.19.2"
   },
   "dependencies": {
     "eslint-plugin-import": "^2.2.0",
