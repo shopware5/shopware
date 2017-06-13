@@ -58,6 +58,7 @@ class VoucherGateway implements VoucherGatewayInterface
     public function get(array $codes, ShopContextInterface $context): VoucherDataCollection
     {
         $query = $this->createVoucherQuery($codes);
+        $query->setParameter(':codes', $codes, Connection::PARAM_STR_ARRAY);
 
         $rows = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -65,12 +66,6 @@ class VoucherGateway implements VoucherGatewayInterface
         foreach ($rows as $row) {
             $vouchers->add($this->hydrate($row));
         }
-
-        if (count($codes) === count($rows)) {
-            return $vouchers;
-        }
-
-        //fetch individual code
 
         return $vouchers;
     }
@@ -81,14 +76,14 @@ class VoucherGateway implements VoucherGatewayInterface
 
         if ($row['percental']) {
             return new PercentageVoucherData(
-                $row['vouchercode'],
+                $row['code'],
                 $this->buildRule($row),
                 $price
             );
         }
 
         return new AbsoluteVoucherData(
-            $row['vouchercode'],
+            $row['code'],
             $this->buildRule($row),
             new PriceDefinition($price, new TaxRuleCollection(), 1, true)
         );
@@ -98,22 +93,24 @@ class VoucherGateway implements VoucherGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
         $query->select([
-            'vouchercode',
-            'modus',
-            'percental',
-            'value',
+            'IFNULL(codes.code, voucher.vouchercode) as code',
+            'voucher.vouchercode as number',
+            'voucher.modus',
+            'voucher.percental',
+            'voucher.value',
 
             //validations
-            'customergroup',
-            'subshopID',
-            'valid_from',
-            'valid_to',
-            'bindtosupplier',
-            'minimumcharge',
-            'restrictarticles',
+            'voucher.customergroup',
+            'voucher.subshopID',
+            'voucher.valid_from',
+            'voucher.valid_to',
+            'voucher.bindtosupplier',
+            'voucher.minimumcharge',
+            'voucher.restrictarticles',
         ]);
         $query->from('s_emarketing_vouchers', 'voucher');
-        $query->where('voucher.vouchercode IN (:codes)');
+        $query->leftJoin('voucher', 's_emarketing_voucher_codes', 'codes', 'codes.voucherID = voucher.id AND codes.cashed != 1');
+        $query->andWhere('voucher.vouchercode IN (:codes) OR codes.code IN (:codes)');
         $query->setParameter(':codes', $codes, Connection::PARAM_STR_ARRAY);
 
         return $query;
