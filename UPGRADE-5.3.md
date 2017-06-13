@@ -130,6 +130,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new Interface for facet result template switch `Shopware\Bundle\SearchBundle\TemplateSwitchable`
 * Added `selecttree` and `combotree` config elements for plugins
 * Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
+* Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar 
 
 ### Changes
 
