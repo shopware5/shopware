@@ -164,6 +164,7 @@ class Shopware_Components_StringCompiler
 
         try {
             $template = $templateEngine->createTemplate('string:' . $value);
+            $template->enableSecurity();
             $template->assign($context);
             $template = $template->fetch();
         } catch (SmartyCompilerException $e) {
