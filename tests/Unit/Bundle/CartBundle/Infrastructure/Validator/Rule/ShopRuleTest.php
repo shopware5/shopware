@@ -26,15 +26,15 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShopRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 class ShopRuleTest extends TestCase
 {
-    public function testEqualsWithSingleShop()
+    public function testEqualsWithSingleShop(): void
     {
         $rule = new ShopRule([1], ShopRule::OPERATOR_EQ);
 
@@ -49,10 +49,10 @@ class ShopRuleTest extends TestCase
             ->method('getShop')
             ->will($this->returnValue($shop));
 
-        $this->assertTrue($rule->match($cart, $context, new RuleDataCollection()));
+        $this->assertTrue($rule->match($cart, $context, new StructCollection())->matches());
     }
 
-    public function testEqualsWithMultipleShops()
+    public function testEqualsWithMultipleShops(): void
     {
         $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_EQ);
 
@@ -68,11 +68,11 @@ class ShopRuleTest extends TestCase
             ->will($this->returnValue($shop));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testEqualsNotMatchWithSingleShop()
+    public function testEqualsNotMatchWithSingleShop(): void
     {
         $rule = new ShopRule([11], ShopRule::OPERATOR_EQ);
 
@@ -88,11 +88,11 @@ class ShopRuleTest extends TestCase
             ->will($this->returnValue($shop));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testEqualsNotMatchWithMultipleShops()
+    public function testEqualsNotMatchWithMultipleShops(): void
     {
         $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_EQ);
 
@@ -108,11 +108,11 @@ class ShopRuleTest extends TestCase
             ->will($this->returnValue($shop));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotEqualsWithSingleShop()
+    public function testNotEqualsWithSingleShop(): void
     {
         $rule = new ShopRule([1], ShopRule::OPERATOR_NEQ);
 
@@ -127,10 +127,10 @@ class ShopRuleTest extends TestCase
             ->method('getShop')
             ->will($this->returnValue($shop));
 
-        $this->assertFalse($rule->match($cart, $context, new RuleDataCollection()));
+        $this->assertFalse($rule->match($cart, $context, new StructCollection())->matches());
     }
 
-    public function testNotEqualsWithMultipleShops()
+    public function testNotEqualsWithMultipleShops(): void
     {
         $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_NEQ);
 
@@ -145,10 +145,10 @@ class ShopRuleTest extends TestCase
             ->method('getShop')
             ->will($this->returnValue($shop));
 
-        $this->assertFalse($rule->match($cart, $context, new RuleDataCollection()));
+        $this->assertFalse($rule->match($cart, $context, new StructCollection())->matches());
     }
 
-    public function testNotEqualsNotMatchWithSingleShop()
+    public function testNotEqualsNotMatchWithSingleShop(): void
     {
         $rule = new ShopRule([11], ShopRule::OPERATOR_NEQ);
 
@@ -163,10 +163,10 @@ class ShopRuleTest extends TestCase
             ->method('getShop')
             ->will($this->returnValue($shop));
 
-        $this->assertTrue($rule->match($cart, $context, new RuleDataCollection()));
+        $this->assertTrue($rule->match($cart, $context, new StructCollection())->matches());
     }
 
-    public function testNotEqualsNotMatchWithMultipleShops()
+    public function testNotEqualsNotMatchWithMultipleShops(): void
     {
         $rule = new ShopRule([2, 3, 4, 1], ShopRule::OPERATOR_NEQ);
 
@@ -181,17 +181,17 @@ class ShopRuleTest extends TestCase
             ->method('getShop')
             ->will($this->returnValue($shop));
 
-        $this->assertTrue($rule->match($cart, $context, new RuleDataCollection()));
+        $this->assertTrue($rule->match($cart, $context, new StructCollection())->matches());
     }
 
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
-    public function testUnsupportedOperators(string $operator)
+    public function testUnsupportedOperators(string $operator): void
     {
         $rule = new ShopRule([1], $operator);
         $shop = new Shop();
@@ -205,10 +205,10 @@ class ShopRuleTest extends TestCase
             ->method('getShop')
             ->will($this->returnValue($shop));
 
-        $rule->match($cart, $context, new RuleDataCollection());
+        $rule->match($cart, $context, new StructCollection());
     }
 
-    public function unsupportedOperators()
+    public function unsupportedOperators(): array
     {
         return [
             [true],

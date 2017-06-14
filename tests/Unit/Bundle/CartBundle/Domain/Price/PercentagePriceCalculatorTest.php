@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
@@ -40,7 +41,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
+class PercentagePriceCalculatorTest extends TestCase
 {
     /**
      * @dataProvider calculatePercentagePriceOfGrossPricesProvider
@@ -53,7 +54,7 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
         $percentage,
         Price $expected,
         PriceCollection $prices
-    ) {
+    ): void {
         $rounding = new PriceRounding(2);
 
         $calculator = new PercentagePriceCalculator(
@@ -85,7 +86,7 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected->getQuantity(), $price->getQuantity());
     }
 
-    public function calculatePercentagePriceOfGrossPricesProvider()
+    public function calculatePercentagePriceOfGrossPricesProvider(): array
     {
         $highTax = new TaxRuleCollection([new TaxRule(19)]);
 

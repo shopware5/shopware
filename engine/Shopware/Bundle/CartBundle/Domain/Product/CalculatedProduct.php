@@ -25,16 +25,18 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
+use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Goods;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class CalculatedProduct extends Struct implements CalculatedLineItemInterface, Deliverable, Goods
+class CalculatedProduct extends Struct implements DeliverableLineItemInterface, Goods, Validatable
 {
     /**
      * @var LineItemInterface
@@ -61,18 +63,30 @@ class CalculatedProduct extends Struct implements CalculatedLineItemInterface, D
      */
     protected $deliveryInformation;
 
+    /**
+     * @var null|Delivery
+     */
+    protected $delivery;
+
+    /**
+     * @var null|\Shopware\Bundle\CartBundle\Domain\Rule\Rule
+     */
+    private $rule;
+
     public function __construct(
         string $identifier,
         int $quantity,
         LineItemInterface $lineItem,
         Price $price,
-        DeliveryInformation $deliveryInformation
+        DeliveryInformation $deliveryInformation,
+        ?Rule $rule
     ) {
         $this->identifier = $identifier;
         $this->price = $price;
         $this->quantity = $quantity;
         $this->lineItem = $lineItem;
         $this->deliveryInformation = $deliveryInformation;
+        $this->rule = $rule;
     }
 
     public function getIdentifier(): string
@@ -100,6 +114,11 @@ class CalculatedProduct extends Struct implements CalculatedLineItemInterface, D
         return $this->deliveryInformation->getOutOfStockDeliveryDate();
     }
 
+    public function getWeight(): float
+    {
+        return $this->deliveryInformation->getWeight();
+    }
+
     public function getQuantity(): int
     {
         return $this->quantity;
@@ -108,5 +127,23 @@ class CalculatedProduct extends Struct implements CalculatedLineItemInterface, D
     public function getLineItem(): LineItemInterface
     {
         return $this->lineItem;
+    }
+
+    public function getDelivery(): ? Delivery
+    {
+        return $this->delivery;
+    }
+
+    public function setDelivery(?Delivery $delivery): void
+    {
+        $this->delivery = $delivery;
+    }
+
+    /**
+     * @return null|\Shopware\Bundle\CartBundle\Domain\Rule\Rule
+     */
+    public function getRule(): ? Rule
+    {
+        return $this->rule;
     }
 }

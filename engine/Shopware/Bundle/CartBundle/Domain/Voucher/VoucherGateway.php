@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,16 +25,13 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductDeliveryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class VoucherGateway implements VoucherGatewayInterface
 {
-    public function get(LineItemCollection $lineItemCollection, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
+    public function get(array $codes, ShopContextInterface $context): VoucherDataCollection
     {
-        throw new NotImplementedException(ProductDeliveryGatewayInterface::class);
+        throw new NotImplementedException(VoucherGatewayInterface::class);
     }
 }

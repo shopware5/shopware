@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 
-class PriceRoundingTest extends \PHPUnit\Framework\TestCase
+class PriceRoundingTest extends TestCase
 {
     /**
      * @dataProvider getCases
@@ -35,13 +36,13 @@ class PriceRoundingTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $precision
      */
-    public function testWithValidNumbers($price, $expected, $precision)
+    public function testWithValidNumbers($price, $expected, $precision): void
     {
         $rounding = new PriceRounding($precision);
         static::assertEquals($expected, $rounding->round($price));
     }
 
-    public function getCases()
+    public function getCases(): array
     {
         return [
             [0, 0, 0],

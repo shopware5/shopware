@@ -30,13 +30,13 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 
 class LineItemCollectionTest extends TestCase
 {
-    public function testCollectionIsCountable()
+    public function testCollectionIsCountable(): void
     {
         $collection = new LineItemCollection();
         static::assertCount(0, $collection);
     }
 
-    public function testCountReturnsCorrectValue()
+    public function testCountReturnsCorrectValue(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', '', 1),
@@ -46,7 +46,7 @@ class LineItemCollectionTest extends TestCase
         static::assertCount(3, $collection);
     }
 
-    public function testCollectionStacksSameIdentifier()
+    public function testCollectionStacksSameIdentifier(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -62,7 +62,7 @@ class LineItemCollectionTest extends TestCase
         );
     }
 
-    public function testFilterReturnsNewCollectionWithCorrectItems()
+    public function testFilterReturnsNewCollectionWithCorrectItems(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A1', 'A', 1),
@@ -103,7 +103,7 @@ class LineItemCollectionTest extends TestCase
         );
     }
 
-    public function testFilterReturnsCollection()
+    public function testFilterReturnsCollection(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -114,7 +114,7 @@ class LineItemCollectionTest extends TestCase
         static::assertInstanceOf(LineItemCollection::class, $collection->filterType('a'));
     }
 
-    public function testFilterReturnsNewCollection()
+    public function testFilterReturnsNewCollection(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -125,7 +125,7 @@ class LineItemCollectionTest extends TestCase
         static::assertNotSame($collection, $collection->filterType('a'));
     }
 
-    public function testLineItemsCanBeCleared()
+    public function testLineItemsCanBeCleared(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -136,7 +136,7 @@ class LineItemCollectionTest extends TestCase
         static::assertEquals(new LineItemCollection(), $collection);
     }
 
-    public function testLineItemsCanBeRemovedByIdentifier()
+    public function testLineItemsCanBeRemovedByIdentifier(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -151,7 +151,7 @@ class LineItemCollectionTest extends TestCase
         ]), $collection);
     }
 
-    public function testIdentifiersCanEasyAccessed()
+    public function testIdentifiersCanEasyAccessed(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -164,7 +164,7 @@ class LineItemCollectionTest extends TestCase
         ], $collection->getIdentifiers());
     }
 
-    public function testFillCollectionWithItems()
+    public function testFillCollectionWithItems(): void
     {
         $collection = new LineItemCollection();
         $collection->fill([
@@ -180,13 +180,13 @@ class LineItemCollectionTest extends TestCase
         ]), $collection);
     }
 
-    public function testGetOnEmptyCollection()
+    public function testGetOnEmptyCollection(): void
     {
         $collection = new LineItemCollection();
         static::assertNull($collection->get('not found'));
     }
 
-    public function testRemoveElement()
+    public function testRemoveElement(): void
     {
         $first = new LineItem('A', 'temp', 1);
 
@@ -203,7 +203,7 @@ class LineItemCollectionTest extends TestCase
         );
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $first = new LineItem('A', 'temp', 1);
         $second = new LineItem('B2', 'temp', 1);
@@ -217,7 +217,7 @@ class LineItemCollectionTest extends TestCase
         $this->assertFalse($collection->exists($second));
     }
 
-    public function testGetCollectiveExtraData()
+    public function testGetCollectiveExtraData(): void
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'temp', 1, ['foo' => 'bar']),

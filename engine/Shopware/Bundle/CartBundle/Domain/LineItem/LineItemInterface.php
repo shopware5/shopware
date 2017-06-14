@@ -25,20 +25,61 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+
 interface LineItemInterface extends \JsonSerializable
 {
     /**
      * Defines the unique identifier for a cart line item
+     * This identifier is used to find already existing items
+     * and increase or decrease the quantity of them
      *
      * @return string
      */
     public function getIdentifier(): string;
 
+    /**
+     * Defines the quantity of the line item.
+     *
+     * @return int
+     */
     public function getQuantity(): int;
 
+    /**
+     * Returns a custom type for the line item which can be used instead
+     * of `instance of`
+     *
+     * @return string
+     */
     public function getType(): string;
 
+    /**
+     * Allows to store extra data for an line item which not defined in the LineItemInterface
+     *
+     * @return array
+     */
     public function getExtraData(): array;
 
+    /**
+     * Sets the quantity of the line item which used to calculate to total amount
+     *
+     * @param int $quantity
+     */
     public function setQuantity(int $quantity): void;
+
+    /**
+     * Allows to define a pre calculated price which should be used instead of live requested prices.
+     * Used for example if an order has to be recalculated if the shop owner changes order data
+     *
+     * @return null|PriceDefinition
+     */
+    public function getPriceDefinition(): ? PriceDefinition;
+
+    /**
+     * Allows to define a pre calculated price which should be used instead of live requested prices.
+     * Used for example if an order has to be recalculated if the shop owner changes order data
+     *
+     * @param PriceDefinition $priceDefinition
+     */
+    public function setPriceDefinition(PriceDefinition $priceDefinition): void;
 }

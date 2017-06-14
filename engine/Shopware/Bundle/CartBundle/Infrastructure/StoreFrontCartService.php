@@ -25,7 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure;
 
-use Psr\Log\LoggerInterface;
+use /* @noinspection PhpUndefinedClassInspection */
+    Psr\Log\LoggerInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
@@ -67,6 +68,7 @@ class StoreFrontCartService
      * @var ViewCartTransformer
      */
     private $viewCartTransformer;
+    /** @noinspection PhpUndefinedClassInspection */
 
     /**
      * @var LoggerInterface
@@ -84,6 +86,7 @@ class StoreFrontCartService
         ContextServiceInterface $contextService,
         \Enlight_Components_Session_Namespace $session,
         ViewCartTransformer $viewCartTransformer,
+        /* @noinspection PhpUndefinedClassInspection */
         LoggerInterface $logger,
         OrderPersisterInterface $orderPersister
     ) {
@@ -133,7 +136,7 @@ class StoreFrontCartService
         $this->calculate($cartContainer);
     }
 
-    public function order()
+    public function order(): void
     {
         $this->orderPersister->persist(
             $this->getCart()->getCalculatedCart(),
@@ -165,9 +168,9 @@ class StoreFrontCartService
 
     private function getCalculatedCart(): CalculatedCart
     {
-        return $this->calculate(
-            $this->getCartContainer()
-        );
+        $container = $this->getCartContainer();
+
+        return $this->calculate($container);
     }
 
     private function calculate(CartContainer $cartContainer): CalculatedCart

@@ -40,6 +40,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
@@ -48,7 +49,9 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\Country\State;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
@@ -59,7 +62,7 @@ class StockDeliverySeparatorTest extends TestCase
      */
     private $separator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -75,7 +78,7 @@ class StockDeliverySeparatorTest extends TestCase
         );
     }
 
-    public function testAnEmptyCartHasNoDeliveries()
+    public function testAnEmptyCartHasNoDeliveries(): void
     {
         static::assertEquals(
             new DeliveryCollection(),
@@ -87,7 +90,7 @@ class StockDeliverySeparatorTest extends TestCase
         );
     }
 
-    public function testDeliverableItemCanBeAddedToDelivery()
+    public function testDeliverableItemCanBeAddedToDelivery(): void
     {
         $location = self::createShippingLocation();
 
@@ -100,7 +103,8 @@ class StockDeliverySeparatorTest extends TestCase
                 1, 0, 0, 0, 0,
                 new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
                 new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05'))
-            )
+            ),
+            new AndRule()
         );
 
         static::assertEquals(
@@ -110,8 +114,9 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($item),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
-                    new ShippingMethod(1, '', '', 1, true, 1),
-                    $location
+                    new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                    $location,
+                    new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -122,7 +127,7 @@ class StockDeliverySeparatorTest extends TestCase
         );
     }
 
-    public function testCanDeliveryItemsWithSameDeliveryDateTogether()
+    public function testCanDeliveryItemsWithSameDeliveryDateTogether(): void
     {
         $location = self::createShippingLocation();
 
@@ -135,13 +140,15 @@ class StockDeliverySeparatorTest extends TestCase
         $itemA = new CalculatedProduct('A', 5,
             new LineItem('A', ProductProcessor::TYPE_PRODUCT, 5),
             new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            $deliveryInformation
+            $deliveryInformation,
+            new AndRule()
         );
 
         $itemB = new CalculatedProduct('B', 5,
             new LineItem('B', ProductProcessor::TYPE_PRODUCT, 5),
             new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            $deliveryInformation
+            $deliveryInformation,
+            new AndRule()
         );
 
         $result = $this->separator->addItemsToDeliveries(
@@ -158,15 +165,16 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($itemB),
                     ]),
                     $deliveryInformation->getInStockDeliveryDate(),
-                    new ShippingMethod(1, '', '', 1, true, 1),
-                    $location
+                    new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                    $location,
+                    new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
             ]),
             $result
         );
     }
 
-    public function testOutOfStockItemsCanBeDelivered()
+    public function testOutOfStockItemsCanBeDelivered(): void
     {
         $location = self::createShippingLocation();
 
@@ -177,7 +185,8 @@ class StockDeliverySeparatorTest extends TestCase
                 0, 0, 0, 0, 0,
                 new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-03')),
                 new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05'))
-            )
+            ),
+            new AndRule()
         );
         $itemB = new CalculatedProduct('B', 5,
             new LineItem('B', ProductProcessor::TYPE_PRODUCT, 5),
@@ -186,7 +195,8 @@ class StockDeliverySeparatorTest extends TestCase
                 0, 0, 0, 0, 0,
                 new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
                 new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05'))
-            )
+            ),
+            new AndRule()
         );
 
         static::assertEquals(
@@ -197,8 +207,9 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForOutOfStockDate($itemB),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05')),
-                    new ShippingMethod(1, '', '', 1, true, 1),
-                    $location
+                    new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                    $location,
+                    new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -209,7 +220,7 @@ class StockDeliverySeparatorTest extends TestCase
         );
     }
 
-    public function testNoneDeliverableItemBeIgnored()
+    public function testNoneDeliverableItemBeIgnored(): void
     {
         $location = self::createShippingLocation();
         $product = new CalculatedProduct('A', 5,
@@ -219,12 +230,14 @@ class StockDeliverySeparatorTest extends TestCase
                 10, 0, 0, 0, 0,
                 new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-03')),
                 new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05'))
-            )
+            ),
+            new AndRule()
         );
         $voucher = new CalculatedVoucher(
             'Code1',
             new LineItem('B', 'discount', 1),
-            new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
+            new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            new AndRule()
         );
 
         static::assertEquals(
@@ -234,8 +247,9 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($product),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new ShippingMethod(1, '', '', 1, true, 1),
-                    $location
+                    new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                    $location,
+                    new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -246,7 +260,7 @@ class StockDeliverySeparatorTest extends TestCase
         );
     }
 
-    public function testPositionWithMoreQuantityThanStockWillBeSplitted()
+    public function testPositionWithMoreQuantityThanStockWillBeSplitted(): void
     {
         $location = self::createShippingLocation();
 
@@ -256,7 +270,8 @@ class StockDeliverySeparatorTest extends TestCase
             new DeliveryInformation(5, 0, 0, 0, 0,
                 new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-03')),
                 new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-06'))
-            )
+            ),
+            new AndRule()
         );
 
         static::assertEquals(
@@ -269,8 +284,9 @@ class StockDeliverySeparatorTest extends TestCase
                         ),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new ShippingMethod(1, '', '', 1, true, 1),
-                    $location
+                    new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                    $location,
+                    new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
                 new Delivery(
                     new DeliveryPositionCollection([
@@ -280,8 +296,9 @@ class StockDeliverySeparatorTest extends TestCase
                         ),
                     ]),
                     $product->getOutOfStockDeliveryDate(),
-                    new ShippingMethod(1, '', '', 1, true, 1),
-                    $location
+                    new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+                    $location,
+                    new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -292,13 +309,13 @@ class StockDeliverySeparatorTest extends TestCase
         );
     }
 
-    private static function createShippingLocation()
+    private static function createShippingLocation(): ShippingLocation
     {
         $address = new Address();
-        $address->setState(new \Shopware\Bundle\StoreFrontBundle\Country\State());
+        $address->setState(new State());
 
         $country = new Country();
-        $country->setArea(new \Shopware\Bundle\StoreFrontBundle\Country\Area());
+        $country->setArea(new Area());
 
         $address->setCountry($country);
         $address->getState()->setCountry($country);

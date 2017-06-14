@@ -27,16 +27,16 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingStreetRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingStreetRule;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Country\State;
 
 class ShippingStreetRuleTest extends TestCase
 {
-    public function testWithExactMatch()
+    public function testWithExactMatch(): void
     {
         $rule = new ShippingStreetRule('example street');
 
@@ -53,11 +53,11 @@ class ShippingStreetRuleTest extends TestCase
             ));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testCaseInsensitive()
+    public function testCaseInsensitive(): void
     {
         $rule = new ShippingStreetRule('ExaMple StreEt');
 
@@ -74,11 +74,11 @@ class ShippingStreetRuleTest extends TestCase
             ));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotMatch()
+    public function testNotMatch(): void
     {
         $rule = new ShippingStreetRule('example street');
 
@@ -95,11 +95,11 @@ class ShippingStreetRuleTest extends TestCase
             ));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithoutAddress()
+    public function testWithoutAddress(): void
     {
         $rule = new ShippingStreetRule('ExaMple StreEt');
 
@@ -116,7 +116,7 @@ class ShippingStreetRuleTest extends TestCase
             ));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 

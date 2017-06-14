@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Ramsey\Uuid\Uuid;
+use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
@@ -46,21 +47,29 @@ class CartContainer extends Struct
      */
     protected $token;
 
-    public function __construct(string $name, string $token, LineItemCollection $lineItems)
+    /**
+     * @var ErrorCollection
+     */
+    protected $errors;
+
+    public function __construct(string $name, string $token, LineItemCollection $lineItems, ErrorCollection $errors)
     {
         $this->name = $name;
         $this->token = $token;
         $this->lineItems = $lineItems;
+        $this->errors = $errors;
     }
 
+    //todo remove this function, only used in unit tests
     public static function createNew(string $name): CartContainer
     {
-        return new self($name, Uuid::uuid4()->toString(), new LineItemCollection());
+        return new self($name, Uuid::uuid4()->toString(), new LineItemCollection(), new ErrorCollection());
     }
 
+    //todo remove this function, only used in unit tests
     public static function createExisting(string $name, string $token, array $items): CartContainer
     {
-        return new self($name, $token, new LineItemCollection($items));
+        return new self($name, $token, new LineItemCollection($items), new ErrorCollection());
     }
 
     public function getName(): string
@@ -76,5 +85,18 @@ class CartContainer extends Struct
     public function getLineItems(): LineItemCollection
     {
         return $this->lineItems;
+    }
+
+    public function getErrors(): ErrorCollection
+    {
+        return $this->errors;
+    }
+
+    public function clearErrors(): ErrorCollection
+    {
+        $errors = clone $this->errors;
+        $this->errors->clear();
+
+        return $errors;
     }
 }

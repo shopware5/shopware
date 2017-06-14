@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ViewCartTransformer
@@ -51,6 +52,24 @@ class ViewCartTransformer
         $viewCart->getViewLineItems()->sortByIdentifiers(
             $calculatedCart->getCalculatedLineItems()->getIdentifiers()
         );
+
+        /** @var Delivery $delivery */
+        foreach ($calculatedCart->getDeliveries() as $delivery) {
+            $positions = new ViewDeliveryPositionCollection();
+
+            foreach ($delivery->getPositions() as $deliveryPosition) {
+                $positions->add(
+                    new ViewDeliveryPosition(
+                        $viewCart->getViewLineItems()->get($deliveryPosition->getIdentifier()),
+                        $deliveryPosition
+                    )
+                );
+            }
+
+            $viewCart->getDeliveries()->add(
+                new ViewDelivery($delivery, $positions)
+            );
+        }
 
         return $viewCart;
     }

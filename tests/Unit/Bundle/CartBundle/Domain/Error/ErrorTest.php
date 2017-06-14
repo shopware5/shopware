@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 class ErrorTest extends TestCase
 {
-    public function testJsonSerialize()
+    public function testJsonSerialize(): void
     {
         $error = new SimpleError();
         $this->assertEquals(

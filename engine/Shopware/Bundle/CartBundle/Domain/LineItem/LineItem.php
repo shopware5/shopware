@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class LineItem extends Struct implements LineItemInterface
@@ -49,16 +50,23 @@ class LineItem extends Struct implements LineItemInterface
      */
     protected $extraData;
 
+    /**
+     * @var null|PriceDefinition
+     */
+    protected $priceDefinition;
+
     public function __construct(
         string $identifier,
         string $type,
         int $quantity,
-        array $extraData = []
+        array $extraData = [],
+        ?PriceDefinition $priceDefinition = null
     ) {
         $this->identifier = $identifier;
         $this->quantity = $quantity;
         $this->type = $type;
         $this->extraData = $extraData;
+        $this->priceDefinition = $priceDefinition;
     }
 
     public function getIdentifier(): string
@@ -84,5 +92,15 @@ class LineItem extends Struct implements LineItemInterface
     public function getExtraData(): array
     {
         return $this->extraData;
+    }
+
+    public function getPriceDefinition(): ?PriceDefinition
+    {
+        return $this->priceDefinition;
+    }
+
+    public function setPriceDefinition(?PriceDefinition $priceDefinition): void
+    {
+        $this->priceDefinition = $priceDefinition;
     }
 }

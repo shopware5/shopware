@@ -28,72 +28,50 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCategoriesRuleCollector;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductOfCategoriesRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductOfCategoriesRule;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductFetchDefinition;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\ProductOfCategoriesRuleCollector;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductOfCategoriesRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;
 
 class ProductOfCategoriesRuleCollectorTest extends TestCase
 {
-    public function testWithoutRule()
+    public function testWithoutRule(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createMock(Connection::class);
 
         $collector = new ProductOfCategoriesRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
+        $dataCollection = new StructCollection();
 
-        $ruleCollection = new RuleCollection();
-
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
         $this->assertSame(0, $dataCollection->count());
     }
 
-    public function testWithEmptyCart()
+    public function testWithEmptyCart(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getCalculatedLineItems')
-            ->will($this->returnValue(
-                new CalculatedLineItemCollection([])
-            ));
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createConnection([]);
 
         $collector = new ProductOfCategoriesRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
-
-        $ruleCollection = new RuleCollection([
-            new ProductOfCategoriesRule([1]),
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new ProductOfCategoriesRule([1])),
         ]);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
+        $collector->fetch($dataCollection, new StructCollection(), $context);
 
-        $this->assertSame(0, $dataCollection->count());
+        $this->assertSame(1, $dataCollection->count());
     }
 
-    public function testWithSingleRule()
+    public function testWithSingleRule(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getCalculatedLineItems')
-            ->will($this->returnValue(
-                new CalculatedLineItemCollection([
-                    new DummyProduct('SW1'),
-                ])
-            ));
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createConnection([
@@ -103,33 +81,24 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
 
         $collector = new ProductOfCategoriesRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
-
-        $ruleCollection = new RuleCollection([
-            new ProductOfCategoriesRule([1]),
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new ProductOfCategoriesRule([1])),
         ]);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
+        $collector->fetch($dataCollection, new StructCollection([
+            new ProductFetchDefinition(['SW1', 'SW2']),
+        ]), $context);
 
-        $this->assertSame(1, $dataCollection->count());
+        $this->assertSame(2, $dataCollection->count());
 
         /** @var ProductOfCategoriesRuleData $data */
         $data = $dataCollection->get(ProductOfCategoriesRuleData::class);
 
-        $this->assertTrue($data->hasOneCategory([1]));
+        $this->assertTrue($data->hasCategory([1]));
     }
 
-    public function testWithMultipleRules()
+    public function testWithMultipleRules(): void
     {
-        $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getCalculatedLineItems')
-            ->will($this->returnValue(
-                new CalculatedLineItemCollection([
-                    new DummyProduct('SW1'),
-                    new DummyProduct('SW2'),
-                ])
-            ));
-
         $context = $this->createMock(ShopContext::class);
 
         $connection = $this->createConnection(
@@ -143,25 +112,27 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
 
         $collector = new ProductOfCategoriesRuleCollector($connection);
 
-        $dataCollection = new RuleDataCollection();
-
-        $ruleCollection = new RuleCollection([
-            new ProductOfCategoriesRule([1, 2]),
-            new ProductOfCategoriesRule([3, 4]),
+        $dataCollection = new StructCollection([
+            new ValidatableDefinition(new ProductOfCategoriesRule([1, 2])),
+            new ValidatableDefinition(new ProductOfCategoriesRule([3, 4])),
         ]);
 
-        $collector->collect($ruleCollection, $cart, $context, $dataCollection);
+        $fetchDefinition = new StructCollection([
+            new ProductFetchDefinition(['SW1', 'SW2']),
+        ]);
 
-        $this->assertSame(1, $dataCollection->count());
+        $collector->fetch($dataCollection, $fetchDefinition, $context);
+
+        $this->assertSame(3, $dataCollection->count());
 
         /** @var ProductOfCategoriesRuleData $data */
         $data = $dataCollection->get(ProductOfCategoriesRuleData::class);
 
-        $this->assertTrue($data->hasOneCategory([1]));
-        $this->assertTrue($data->hasOneCategory([2]));
+        $this->assertTrue($data->hasCategory([1]));
+        $this->assertTrue($data->hasCategory([2]));
     }
 
-    private function createConnection(?array $result, array $categoryIds = [], array $numbers = [])
+    private function createConnection(?array $result, array $categoryIds = [], array $numbers = []): \PHPUnit_Framework_MockObject_MockObject
     {
         $statement = $this->createMock(Statement::class);
         $statement->expects(static::any())

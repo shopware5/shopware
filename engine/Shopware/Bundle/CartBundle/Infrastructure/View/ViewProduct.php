@@ -41,16 +41,9 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
      */
     protected $type = 'product';
 
-    final public function __construct(int $id, int $variantId, string $number)
+    public function __construct(int $id, int $variantId, string $number, CalculatedProduct $product)
     {
         parent::__construct($id, $variantId, $number);
-    }
-
-    /**
-     * @param CalculatedProduct $product
-     */
-    public function setLineItem($product)
-    {
         $this->product = $product;
     }
 
@@ -77,13 +70,22 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
         $product = new self(
             $simpleProduct->getId(),
             $simpleProduct->getVariantId(),
-            $simpleProduct->getNumber()
+            $simpleProduct->getNumber(),
+            $calculatedProduct
         );
         foreach ($simpleProduct as $key => $value) {
             $product->$key = $value;
         }
-        $product->setLineItem($calculatedProduct);
 
         return $product;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+
+        $data['label'] = $this->getLabel();
+
+        return $data;
     }
 }

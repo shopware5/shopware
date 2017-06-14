@@ -39,6 +39,7 @@ use Shopware\Bundle\CartBundle\Domain\Error\VoucherNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
+use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
@@ -47,14 +48,14 @@ use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class CalculatedCartGeneratorTest extends TestCase
 {
-    public function test()
+    public function test(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
             new DeliveryCollection()
         );
 
-        $price = new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
 
         $amountCalculator = $this->createMock(AmountCalculator::class);
         $amountCalculator->method('calculateAmount')->will($this->returnValue($price));
@@ -77,7 +78,7 @@ class CalculatedCartGeneratorTest extends TestCase
         );
     }
 
-    public function testUsesLineItemsOfProcessorCart()
+    public function testUsesLineItemsOfProcessorCart(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection([
@@ -87,7 +88,7 @@ class CalculatedCartGeneratorTest extends TestCase
             new DeliveryCollection()
         );
 
-        $price = new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
 
         $amountCalculator = $this->createMock(AmountCalculator::class);
         $amountCalculator->method('calculateAmount')->will($this->returnValue($price));
@@ -106,20 +107,20 @@ class CalculatedCartGeneratorTest extends TestCase
                     new DummyProduct('SW2'),
                 ]),
                 $price,
-                new DeliveryCollection(),
-                new ErrorCollection()
+                new DeliveryCollection()
             ),
             $generator->create($container, $context, $processorCart)
         );
     }
 
-    public function testUsesDeliveriesOfProcessorCart()
+    public function testUsesDeliveriesOfProcessorCart(): void
     {
         $delivery = new Delivery(
             new DeliveryPositionCollection(),
             new DeliveryDate(new \DateTime(), new \DateTime()),
-            new ShippingMethod(1, 'prime', 'prime', 1, true, 1),
-            $this->createMock(ShippingLocation::class)
+            new ShippingMethod(1, 'prime', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
+            $this->createMock(ShippingLocation::class),
+            new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
         );
 
         $processorCart = new ProcessorCart(
@@ -127,7 +128,7 @@ class CalculatedCartGeneratorTest extends TestCase
             new DeliveryCollection([$delivery])
         );
 
-        $price = new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
 
         $amountCalculator = $this->createMock(AmountCalculator::class);
         $amountCalculator->method('calculateAmount')->will($this->returnValue($price));
@@ -143,29 +144,28 @@ class CalculatedCartGeneratorTest extends TestCase
                 $container,
                 new CalculatedLineItemCollection(),
                 $price,
-                new DeliveryCollection([$delivery]),
-                new ErrorCollection()
+                new DeliveryCollection([$delivery])
             ),
             $generator->create($container, $context, $processorCart)
         );
     }
 
-    public function testUsesErrorsOfProcessorCart()
+    public function testUsesErrorsOfProcessorCart(): void
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
             new DeliveryCollection()
         );
-        $processorCart->getErrors()->add(new VoucherNotFoundError('1'));
+        $container = CartContainer::createNew('test');
 
-        $price = new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $container->getErrors()->add(new VoucherNotFoundError('1'));
+
+        $price = new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection());
 
         $amountCalculator = $this->createMock(AmountCalculator::class);
         $amountCalculator->method('calculateAmount')->will($this->returnValue($price));
 
         $generator = new CalculatedCartGenerator($amountCalculator);
-
-        $container = CartContainer::createNew('test');
 
         $context = $this->createMock(ShopContext::class);
 
@@ -174,16 +174,13 @@ class CalculatedCartGeneratorTest extends TestCase
                 $container,
                 new CalculatedLineItemCollection(),
                 $price,
-                new DeliveryCollection(),
-                new ErrorCollection([
-                    new VoucherNotFoundError('1'),
-                ])
+                new DeliveryCollection()
             ),
             $generator->create($container, $context, $processorCart)
         );
     }
 
-    private function assertCalculatedCart(CalculatedCart $expected, CalculatedCart $actual)
+    private function assertCalculatedCart(CalculatedCart $expected, CalculatedCart $actual): void
     {
         $this->assertEquals($expected->getErrors(), $actual->getErrors());
         $this->assertEquals($expected->getName(), $actual->getName());

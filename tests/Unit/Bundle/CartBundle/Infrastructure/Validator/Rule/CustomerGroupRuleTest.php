@@ -26,14 +26,14 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\CustomerGroupRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerGroupRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 class CustomerGroupRuleTest extends TestCase
 {
-    public function testMatch()
+    public function testMatch(): void
     {
         $rule = new CustomerGroupRule([1]);
 
@@ -49,11 +49,11 @@ class CustomerGroupRuleTest extends TestCase
             ->will($this->returnValue($group));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testMultipleGroups()
+    public function testMultipleGroups(): void
     {
         $rule = new CustomerGroupRule([2, 3, 1]);
 
@@ -69,11 +69,11 @@ class CustomerGroupRuleTest extends TestCase
             ->will($this->returnValue($group));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotMatch()
+    public function testNotMatch(): void
     {
         $rule = new CustomerGroupRule([2, 3, 1]);
 
@@ -89,7 +89,7 @@ class CustomerGroupRuleTest extends TestCase
             ->will($this->returnValue($group));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

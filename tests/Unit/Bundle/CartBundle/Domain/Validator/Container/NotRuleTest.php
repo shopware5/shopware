@@ -26,25 +26,27 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\NotRule;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\NotRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Match;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
 class NotRuleTest extends TestCase
 {
-    public function testTrue()
+    public function testTrue(): void
     {
         $rule = new NotRule([
             new FalseRule(),
         ]);
 
-        $this->assertTrue(
+        $this->assertEquals(
+            new Match(true),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }
@@ -52,7 +54,7 @@ class NotRuleTest extends TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testExceptionByMultipleRules()
+    public function testExceptionByMultipleRules(): void
     {
         new NotRule([
             new FalseRule(),
@@ -61,17 +63,18 @@ class NotRuleTest extends TestCase
         ]);
     }
 
-    public function testFalse()
+    public function testFalse(): void
     {
         $rule = new NotRule([
             new TrueRule(),
         ]);
 
-        $this->assertFalse(
+        $this->assertEquals(
+            new Match(false),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }

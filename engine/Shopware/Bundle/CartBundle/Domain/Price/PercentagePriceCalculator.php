@@ -69,7 +69,7 @@ class PercentagePriceCalculator
         PriceCollection $prices,
         ShopContextInterface $context
     ): Price {
-        $price = $prices->getTotalPrice();
+        $price = $prices->sum();
 
         $discount = $this->rounding->round($price->getTotalPrice() / 100 * $percentage);
 

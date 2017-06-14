@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Exception\TaxRuleNotSupportedException;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
@@ -33,7 +34,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleInterface;
 use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 
-class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
+class TaxCalculatorTest extends TestCase
 {
     /**
      * @dataProvider netPricesToGross
@@ -43,7 +44,7 @@ class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
      * @param TaxRuleInterface|Tax $taxRule
      * @param float                $net
      */
-    public function testCalculateGrossPriceOfNetPrice($expected, PriceRounding $rounding, TaxRuleInterface $taxRule, $net)
+    public function testCalculateGrossPriceOfNetPrice($expected, PriceRounding $rounding, TaxRuleInterface $taxRule, $net): void
     {
         $calculator = new TaxCalculator(
             $rounding,
@@ -58,7 +59,7 @@ class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testNotSupportedRule()
+    public function testNotSupportedRule(): void
     {
         $calculator = new TaxCalculator(
             new PriceRounding(2),
@@ -81,7 +82,7 @@ class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function netPricesToGross()
+    public function netPricesToGross(): array
     {
         return [
             [0.01,         new PriceRounding(2), new TaxRule(7),  0.00934579439252336],

@@ -26,8 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Error\Error;
-use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
@@ -43,18 +41,12 @@ class ProcessorCart extends Struct
      */
     protected $deliveries;
 
-    /**
-     * @var Error[]
-     */
-    protected $errors;
-
     public function __construct(
         CalculatedLineItemCollection $calculatedLineItems,
         DeliveryCollection $deliveries
     ) {
         $this->calculatedLineItems = $calculatedLineItems;
         $this->deliveries = $deliveries;
-        $this->errors = new ErrorCollection();
     }
 
     public function getCalculatedLineItems(): CalculatedLineItemCollection
@@ -65,10 +57,5 @@ class ProcessorCart extends Struct
     public function getDeliveries(): DeliveryCollection
     {
         return $this->deliveries;
-    }
-
-    public function getErrors(): ErrorCollection
-    {
-        return $this->errors;
     }
 }

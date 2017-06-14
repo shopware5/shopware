@@ -24,13 +24,16 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
@@ -40,7 +43,7 @@ use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 
-class Generator extends \PHPUnit\Framework\TestCase
+class Generator extends TestCase
 {
     public static function createContext(
         $currentCustomerGroup = null,
@@ -76,14 +79,14 @@ class Generator extends \PHPUnit\Framework\TestCase
         $priceGroups = $priceGroups ?: [new PriceGroup()];
         $taxes = $taxes ?: [new Tax(1, 'test', 19.0)];
 
-        $area = $area ?: new \Shopware\Bundle\StoreFrontBundle\Country\Area();
+        $area = $area ?: new Area();
 
         if (!$country) {
             $country = new Country();
             $country->setArea($area);
         }
         if (!$state) {
-            $state = new \Shopware\Bundle\StoreFrontBundle\Country\State();
+            $state = new State();
             $state->setCountry($country);
         }
 
@@ -101,7 +104,7 @@ class Generator extends \PHPUnit\Framework\TestCase
             $taxes,
             $priceGroups,
             new PaymentMethod(1, '', '', ''),
-            new ShippingMethod(1, '', '', 1, true, 1),
+            new ShippingMethod(1, '', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
             ShippingLocation::createFromAddress($shipping),
             new Customer()
         );

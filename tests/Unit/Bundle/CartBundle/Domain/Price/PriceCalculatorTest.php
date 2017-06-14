@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
@@ -41,7 +42,7 @@ use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 /**
  * Class PriceCalculatorTest
  */
-class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
+class PriceCalculatorTest extends TestCase
 {
     /**
      * @dataProvider priceCalculationWithGrossPricesProvider
@@ -54,7 +55,7 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
         PriceRounding $priceRounding,
         Price $expected,
         PriceDefinition $priceDefinition
-    ) {
+    ): void {
         $calculator = new PriceCalculator(
             new TaxCalculator(
                 $priceRounding,
@@ -81,7 +82,7 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
     public function testNetPrices(
         Price $expected,
         PriceDefinition $priceDefinition
-    ) {
+    ): void {
         $detector = $this->createMock(TaxDetector::class);
         $detector->method('useGross')->will($this->returnValue(false));
         $detector->method('isNetDelivery')->will($this->returnValue(false));
@@ -111,7 +112,7 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
     public function testNetDeliveries(
         Price $expected,
         PriceDefinition $priceDefinition
-    ) {
+    ): void {
         $detector = $this->createMock(TaxDetector::class);
         $detector->method('useGross')->will($this->returnValue(false));
         $detector->method('isNetDelivery')->will($this->returnValue(true));
@@ -132,7 +133,7 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, $lineItemPrice);
     }
 
-    public function netPrices()
+    public function netPrices(): array
     {
         $highTaxRules = new TaxRuleCollection([new TaxRule(19)]);
 
@@ -144,7 +145,7 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function netDeliveryPrices()
+    public function netDeliveryPrices(): array
     {
         $highTaxRules = new TaxRuleCollection([new TaxRule(19)]);
 
@@ -156,7 +157,7 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function priceCalculationWithGrossPricesProvider()
+    public function priceCalculationWithGrossPricesProvider(): array
     {
         $highTaxRules = new TaxRuleCollection([new TaxRule(19)]);
         $lowTaxRuleCollection = new TaxRuleCollection([new TaxRule(7)]);

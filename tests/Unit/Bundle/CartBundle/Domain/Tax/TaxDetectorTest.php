@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 class TaxDetectorTest extends TestCase
 {
-    public function testUseGrossPrices()
+    public function testUseGrossPrices(): void
     {
         $context = $this->createMock(ShopContext::class);
         $customerGroup = $this->createMock(CustomerGroup::class);
@@ -44,7 +44,7 @@ class TaxDetectorTest extends TestCase
         $this->assertTrue($detector->useGross($context));
     }
 
-    public function testDoNotUseGrossPrices()
+    public function testDoNotUseGrossPrices(): void
     {
         $context = $this->createMock(ShopContext::class);
         $customerGroup = $this->createMock(CustomerGroup::class);
@@ -55,7 +55,7 @@ class TaxDetectorTest extends TestCase
         $this->assertFalse($detector->useGross($context));
     }
 
-    public function testIsNetDelivery()
+    public function testIsNetDelivery(): void
     {
         $context = $this->createMock(ShopContext::class);
 
@@ -70,7 +70,7 @@ class TaxDetectorTest extends TestCase
         $this->assertTrue($detector->isNetDelivery($context));
     }
 
-    public function testIsNotNetDelivery()
+    public function testIsNotNetDelivery(): void
     {
         $context = $this->createMock(ShopContext::class);
 

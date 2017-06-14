@@ -30,6 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
@@ -41,13 +42,13 @@ class CalculatedLineItemCollectionTest extends TestCase
 {
     const DUMMY_TAX_NAME = 'dummy-tax';
 
-    public function testCollectionIsCountable()
+    public function testCollectionIsCountable(): void
     {
         $collection = new CalculatedLineItemCollection();
         static::assertCount(0, $collection);
     }
 
-    public function testCountReturnsCorrectValue()
+    public function testCountReturnsCorrectValue(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A'),
@@ -57,7 +58,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         static::assertCount(3, $collection);
     }
 
-    public function testCollectionOverwriteExistingIdentifierWithLastItem()
+    public function testCollectionOverwriteExistingIdentifierWithLastItem(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 1),
@@ -73,18 +74,20 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testFilterReturnsNewCollectionWithCorrectItems()
+    public function testFilterReturnsNewCollectionWithCorrectItems(): void
     {
         $collection = new CalculatedLineItemCollection([
             new CalculatedVoucher(
                 'Code1',
                 new LineItem(1, ProductProcessor::TYPE_PRODUCT, 1),
-                new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                new AndRule()
             ),
             new CalculatedVoucher(
                 'Code1',
                 new LineItem(2, ProductProcessor::TYPE_PRODUCT, 1),
-                new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                new AndRule()
             ),
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
@@ -107,19 +110,21 @@ class CalculatedLineItemCollectionTest extends TestCase
                 new CalculatedVoucher(
                     'Code1',
                     new LineItem(1, ProductProcessor::TYPE_PRODUCT, 1),
-                    new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection())
+                    new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                    new AndRule()
                 ),
                 new CalculatedVoucher(
                     'Code1',
                     new LineItem(2, ProductProcessor::TYPE_PRODUCT, 1),
-                    new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection())
+                    new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                    new AndRule()
                 ),
             ]),
             $collection->filterInstance(CalculatedVoucher::class)
         );
     }
 
-    public function testFilterReturnsNewCollection()
+    public function testFilterReturnsNewCollection(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 3),
@@ -139,7 +144,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testLineItemsCanBeCleared()
+    public function testLineItemsCanBeCleared(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 3),
@@ -152,7 +157,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         static::assertEquals(new CalculatedLineItemCollection(), $collection);
     }
 
-    public function testLineItemsCanBeRemovedByIdentifier()
+    public function testLineItemsCanBeRemovedByIdentifier(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 3),
@@ -173,7 +178,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testIdentifiersCanEasyAccessed()
+    public function testIdentifiersCanEasyAccessed(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 3),
@@ -188,7 +193,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testFillCollectionWithItems()
+    public function testFillCollectionWithItems(): void
     {
         $collection = new CalculatedLineItemCollection();
         $collection->fill([
@@ -209,7 +214,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testGetLineItemByIdentifier()
+    public function testGetLineItemByIdentifier(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 3),
@@ -224,13 +229,13 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testGetOnEmptyCollection()
+    public function testGetOnEmptyCollection(): void
     {
         $collection = new CalculatedLineItemCollection();
         static::assertNull($collection->get('not found'));
     }
 
-    public function testFilterGoodsReturnsOnlyGoods()
+    public function testFilterGoodsReturnsOnlyGoods(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredGoodsItem('A', 3),
@@ -248,7 +253,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testFilterGoodsReturnsNewCollection()
+    public function testFilterGoodsReturnsNewCollection(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredGoodsItem('A', 3),
@@ -266,18 +271,20 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testGetPricesCollectionOfMultipleItems()
+    public function testGetPricesCollectionOfMultipleItems(): void
     {
         $collection = new CalculatedLineItemCollection([
             new CalculatedVoucher(
                 'Code1',
                 new LineItem(1, VoucherProcessor::TYPE_VOUCHER, 1),
-                new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                new AndRule()
             ),
             new CalculatedVoucher(
                 'Code1',
                 new LineItem(2, VoucherProcessor::TYPE_VOUCHER, 1),
-                new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                new AndRule()
             ),
         ]);
 
@@ -290,7 +297,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testRemoveWithNoneExistingIdentifier()
+    public function testRemoveWithNoneExistingIdentifier(): void
     {
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 3),
@@ -311,7 +318,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testRemoveElement()
+    public function testRemoveElement(): void
     {
         $c = new ConfiguredLineItem('C', 3);
 
@@ -334,7 +341,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         );
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $c = new ConfiguredLineItem('C', 3);
 
@@ -350,7 +357,7 @@ class CalculatedLineItemCollectionTest extends TestCase
         $this->assertFalse($collection->exists($c));
     }
 
-    public function testRemoveWithNotExisting()
+    public function testRemoveWithNotExisting(): void
     {
         $c = new ConfiguredLineItem('C', 3);
 

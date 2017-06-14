@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,59 +25,39 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
-use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Cart\ValidatorInterface;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
-use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
-class PaymentValidatorProcessor implements CartProcessorInterface
+class PaymentValidatorProcessor implements ValidatorInterface
 {
-    /**
-     * @var CalculatedCartGenerator
-     */
-    private $calculatedCartGenerator;
-
-    /**
-     * @var ValidatableFilter
-     */
-    private $validatableFilter;
-
-    public function __construct(
-        ValidatableFilter $validatableFilter,
-        CalculatedCartGenerator $calculatedCartGenerator
-    ) {
-        $this->calculatedCartGenerator = $calculatedCartGenerator;
-        $this->validatableFilter = $validatableFilter;
-    }
-
-    public function process(
-        CartContainer $cartContainer,
-        ProcessorCart $processorCart,
-        ShopContextInterface $context
-    ): void {
+    public function validate(
+        CalculatedCart $cart,
+        ShopContextInterface $context,
+        StructCollection $dataCollection
+    ): bool {
         if (!$context->getCustomer()) {
-            return;
+            return true;
         }
 
         $payment = $context->getPaymentMethod();
 
         if (!$payment->getRule()) {
-            return;
+            return true;
         }
 
-        $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
+        $valid = $payment->getRule()->match($cart, $context, $dataCollection);
 
-        $valid = $this->validatableFilter->filter([$payment], $calculatedCart, $context);
-
-        if (!empty($valid)) {
-            return;
+        if ($valid->matches()) {
+            return true;
         }
 
-        $processorCart->getErrors()->add(
+        $cart->getErrors()->add(
             new PaymentBlockedError($payment->getId(), $payment->getLabel())
         );
+
+        return true;
     }
 }

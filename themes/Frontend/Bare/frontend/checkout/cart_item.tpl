@@ -9,4 +9,9 @@
     {block name='frontend_checkout_cart_item_voucher'}
         {include file="frontend/checkout/items/voucher.tpl" isLast=$isLast}
     {/block}
+
+{elseif $lineItem.type == "discount"}
+    {block name='frontend_checkout_cart_item_voucher'}
+        {include file="frontend/checkout/items/discount.tpl" isLast=$isLast}
+    {/block}
 {/if}

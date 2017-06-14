@@ -27,15 +27,16 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingZipCodeRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingZipCodeRule;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\Country\State;
 
 class ShippingZipCodeRuleTest extends TestCase
 {
-    public function testEqualsWithSingleCode()
+    public function testEqualsWithSingleCode(): void
     {
         $rule = new ShippingZipCodeRule(['ABC123']);
         $address = $this->createAddress('ABC123');
@@ -51,11 +52,11 @@ class ShippingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($location));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testEqualsWithMultipleCodes()
+    public function testEqualsWithMultipleCodes(): void
     {
         $rule = new ShippingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
         $address = $this->createAddress('ABC2');
@@ -71,11 +72,11 @@ class ShippingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($location));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotMatchWithSingleCode()
+    public function testNotMatchWithSingleCode(): void
     {
         $rule = new ShippingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
         $address = $this->createAddress('ABC4');
@@ -91,11 +92,11 @@ class ShippingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($location));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testWithoutShippingAddress()
+    public function testWithoutShippingAddress(): void
     {
         $rule = new ShippingZipCodeRule(['ABC1', 'ABC2', 'ABC3']);
 
@@ -110,13 +111,13 @@ class ShippingZipCodeRuleTest extends TestCase
             ->will($this->returnValue($location));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
     private function createAddress(string $code): Address
     {
-        $state = new \Shopware\Bundle\StoreFrontBundle\Country\State();
+        $state = new State();
         $state->setCountry(new Country());
 
         $address = new Address();

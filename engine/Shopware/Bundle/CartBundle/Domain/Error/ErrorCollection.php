@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -54,7 +55,7 @@ class ErrorCollection extends Collection
         return false;
     }
 
-    public function hasLevel(int $errorLevel)
+    public function hasLevel(int $errorLevel): bool
     {
         foreach ($this->elements as $element) {
             if ($element->getLevel() === $errorLevel) {

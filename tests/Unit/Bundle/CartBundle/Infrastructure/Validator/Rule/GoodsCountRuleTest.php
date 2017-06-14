@@ -29,19 +29,20 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\GoodsCountRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class GoodsCountRuleTest extends TestCase
 {
-    public function testGteExactMatch()
+    public function testGteExactMatch(): void
     {
         $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
 
@@ -59,11 +60,11 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testGteWithVoucher()
+    public function testGteWithVoucher(): void
     {
         $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
 
@@ -78,7 +79,8 @@ class GoodsCountRuleTest extends TestCase
                     new CalculatedVoucher(
                         'Code1',
                         new LineItem(1, VoucherProcessor::TYPE_VOUCHER, 1),
-                        new Price(-1, -1, new CalculatedTaxCollection(), new TaxRuleCollection())
+                        new Price(-1, -1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                        new AndRule()
                     ),
                 ])
             ));
@@ -86,11 +88,11 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testGteNotMatch()
+    public function testGteNotMatch(): void
     {
         $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_GTE);
 
@@ -107,11 +109,11 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testLteExactMatch()
+    public function testLteExactMatch(): void
     {
         $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_LTE);
 
@@ -129,11 +131,11 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testLteWithVoucher()
+    public function testLteWithVoucher(): void
     {
         $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_LTE);
 
@@ -148,7 +150,8 @@ class GoodsCountRuleTest extends TestCase
                     new CalculatedVoucher(
                         'Code1',
                         new LineItem(1, VoucherProcessor::TYPE_VOUCHER, 1),
-                        new Price(-1, -1, new CalculatedTaxCollection(), new TaxRuleCollection())
+                        new Price(-1, -1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                        new AndRule()
                     ),
                 ])
             ));
@@ -156,11 +159,11 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testLteNotMatch()
+    public function testLteNotMatch(): void
     {
         $rule = new GoodsCountRule(2, GoodsCountRule::OPERATOR_LTE);
 
@@ -179,18 +182,18 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
-    public function testUnsupportedOperators(string $operator)
+    public function testUnsupportedOperators(string $operator): void
     {
         $rule = new GoodsCountRule(2, $operator);
 
@@ -199,11 +202,11 @@ class GoodsCountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function unsupportedOperators()
+    public function unsupportedOperators(): array
     {
         return [
             [true],

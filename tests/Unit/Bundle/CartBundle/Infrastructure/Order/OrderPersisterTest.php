@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderPersisterTest extends TestCase
 {
-    public function testSave()
+    public function testSave(): void
     {
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())->method('executeUpdate');

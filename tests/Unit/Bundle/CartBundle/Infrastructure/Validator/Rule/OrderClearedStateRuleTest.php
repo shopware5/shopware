@@ -26,14 +26,14 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderClearedStateRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderClearedStateRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderClearedStateRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderClearedStateRuleTest extends TestCase
 {
-    public function testRuleWithState()
+    public function testRuleWithState(): void
     {
         $rule = new OrderClearedStateRule([1]);
 
@@ -42,13 +42,13 @@ class OrderClearedStateRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new OrderClearedStateRuleData([1]),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                OrderClearedStateRuleData::class => new OrderClearedStateRuleData([1]),
+            ]))->matches()
         );
     }
 
-    public function testRuleWithStates()
+    public function testRuleWithStates(): void
     {
         $rule = new OrderClearedStateRule([1, 2, 3]);
 
@@ -57,13 +57,13 @@ class OrderClearedStateRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new OrderClearedStateRuleData([1]),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                OrderClearedStateRuleData::class => new OrderClearedStateRuleData([1]),
+            ]))->matches()
         );
     }
 
-    public function testRuleNotMatch()
+    public function testRuleNotMatch(): void
     {
         $rule = new OrderClearedStateRule([1, 2, 3]);
 
@@ -72,13 +72,13 @@ class OrderClearedStateRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection([
-                new OrderClearedStateRuleData([5]),
-            ]))
+            $rule->match($cart, $context, new StructCollection([
+                OrderClearedStateRuleData::class => new OrderClearedStateRuleData([5]),
+            ]))->matches()
         );
     }
 
-    public function testRuleWithoutDataObject()
+    public function testRuleWithoutDataObject(): void
     {
         $rule = new OrderClearedStateRule([1, 2, 3]);
 
@@ -87,7 +87,7 @@ class OrderClearedStateRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 }

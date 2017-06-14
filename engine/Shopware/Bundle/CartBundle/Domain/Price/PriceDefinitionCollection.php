@@ -36,24 +36,28 @@ class PriceDefinitionCollection extends Collection
     /**
      * @param PriceDefinition[] $elements
      */
-    public function __construct(array $elements = [])
+    public function fill(array $elements): void
     {
         foreach ($elements as $key => $element) {
-            $this->add($key, $element);
+            $this->add($element, $key);
         }
     }
 
-    public function add(string $key, PriceDefinition $priceDefinition): void
+    public function add(PriceDefinition $priceDefinition, $key = null): void
     {
-        $this->elements[$key] = $priceDefinition;
+        if ($key) {
+            $this->elements[$key] = $priceDefinition;
+        } else {
+            $this->elements[] = $priceDefinition;
+        }
     }
 
-    public function remove(string $key): void
+    public function remove($key): void
     {
         parent::doRemoveByKey($key);
     }
 
-    public function get(string $key): ? PriceDefinition
+    public function get($key): ? PriceDefinition
     {
         if ($this->has($key)) {
             return $this->elements[$key];

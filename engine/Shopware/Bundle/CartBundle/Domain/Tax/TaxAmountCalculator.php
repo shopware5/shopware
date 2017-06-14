@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -67,16 +68,14 @@ class TaxAmountCalculator implements TaxAmountCalculatorInterface
             return $priceCollection->getCalculatedTaxes();
         }
 
-        $price = $priceCollection->getTotalPrice();
+        $price = $priceCollection->sum();
 
         $rules = $this->percentageTaxRuleBuilder->buildRules($price);
 
-        switch (true) {
-            case $this->taxDetector->useGross($context):
-                return $this->taxCalculator->calculateGrossTaxes($price->getTotalPrice(), $rules);
-
-            default:
-                return $this->taxCalculator->calculateNetTaxes($price->getTotalPrice(), $rules);
+        if ($this->taxDetector->useGross($context)) {
+            return $this->taxCalculator->calculateGrossTaxes($price->getTotalPrice(), $rules);
         }
+
+        return $this->taxCalculator->calculateNetTaxes($price->getTotalPrice(), $rules);
     }
 }

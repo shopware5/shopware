@@ -27,10 +27,11 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingAreaRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingAreaRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 
 class ShippingAreaRuleTest extends TestCase
@@ -38,7 +39,7 @@ class ShippingAreaRuleTest extends TestCase
     /**
      * @dataProvider matchingEqualsData
      */
-    public function testEquals(array $ruleData, int $currentArea)
+    public function testEquals(array $ruleData, int $currentArea): void
     {
         $rule = new ShippingAreaRule($ruleData, ShippingAreaRule::OPERATOR_EQ);
 
@@ -57,11 +58,11 @@ class ShippingAreaRuleTest extends TestCase
             );
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function matchingEqualsData()
+    public function matchingEqualsData(): array
     {
         return [
             [[1], 1],
@@ -72,7 +73,7 @@ class ShippingAreaRuleTest extends TestCase
     /**
      * @dataProvider matchingNotEqualsData
      */
-    public function testNotEquals(array $ruleData, int $currentArea)
+    public function testNotEquals(array $ruleData, int $currentArea): void
     {
         $rule = new ShippingAreaRule($ruleData, ShippingAreaRule::OPERATOR_NEQ);
 
@@ -91,11 +92,11 @@ class ShippingAreaRuleTest extends TestCase
             );
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function matchingNotEqualsData()
+    public function matchingNotEqualsData(): array
     {
         return [
             [[1], 2],
@@ -106,11 +107,11 @@ class ShippingAreaRuleTest extends TestCase
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
-    public function testUnsupportedOperators(string $operator)
+    public function testUnsupportedOperators(string $operator): void
     {
         $rule = new ShippingAreaRule([1], $operator);
 
@@ -118,10 +119,10 @@ class ShippingAreaRuleTest extends TestCase
 
         $context = $this->createMock(ShopContext::class);
 
-        $rule->match($cart, $context, new RuleDataCollection());
+        $rule->match($cart, $context, new StructCollection())->matches();
     }
 
-    public function unsupportedOperators()
+    public function unsupportedOperators(): array
     {
         return [
             [true],
@@ -136,7 +137,7 @@ class ShippingAreaRuleTest extends TestCase
     {
         $country = new Country();
         $country->setId(1);
-        $area = new \Shopware\Bundle\StoreFrontBundle\Country\Area();
+        $area = new Area();
         $area->setId($areaId);
         $country->setArea($area);
 

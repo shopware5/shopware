@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
+use Shopware\Bundle\CartBundle\Domain\Rule\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class PaymentMethodService
@@ -41,12 +41,9 @@ class PaymentMethodService
      */
     private $ruleFilter;
 
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        ValidatableFilter $paymentRiskManagementFilter
-    ) {
+    public function __construct(PaymentMethodGateway $gateway)
+    {
         $this->gateway = $gateway;
-        $this->ruleFilter = $paymentRiskManagementFilter;
     }
 
     /**
@@ -65,6 +62,6 @@ class PaymentMethodService
             return $paymentMethod->isActive();
         });
 
-        return $this->ruleFilter->filter($actives, $calculatedCart, $context);
+        return $actives;
     }
 }

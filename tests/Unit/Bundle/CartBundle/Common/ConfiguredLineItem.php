@@ -24,15 +24,15 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
+use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class ConfiguredLineItem extends Struct implements Deliverable, CalculatedLineItemInterface
+class ConfiguredLineItem extends Struct implements DeliverableLineItemInterface
 {
     /**
      * @var string
@@ -58,6 +58,11 @@ class ConfiguredLineItem extends Struct implements Deliverable, CalculatedLineIt
      * @var DeliveryInformation
      */
     private $deliveryInformation;
+
+    /**
+     * @var Delivery|null
+     */
+    private $delivery;
 
     /**
      * @param string              $identifier
@@ -116,6 +121,11 @@ class ConfiguredLineItem extends Struct implements Deliverable, CalculatedLineIt
         return $this->deliveryInformation->getOutOfStockDeliveryDate();
     }
 
+    public function getWeight(): float
+    {
+        return $this->deliveryInformation->getWeight();
+    }
+
     public function getQuantity(): int
     {
         return $this->quantity;
@@ -124,5 +134,15 @@ class ConfiguredLineItem extends Struct implements Deliverable, CalculatedLineIt
     public function getLineItem(): LineItemInterface
     {
         return $this->lineItem;
+    }
+
+    public function getDelivery(): ? Delivery
+    {
+        return $this->delivery;
+    }
+
+    public function setDelivery(?Delivery $delivery): void
+    {
+        $this->delivery = $delivery;
     }
 }

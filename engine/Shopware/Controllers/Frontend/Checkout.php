@@ -22,12 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
-use Shopware\Models\Customer\Address;
 
 /**
  * @category  Shopware
@@ -42,15 +40,24 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     const TARGET_ACTION_KEY = 'sTargetAction';
 
+    public function indexAction()
+    {
+        $this->forward('cart');
+    }
+
     public function cartAction(): void
     {
         $context = $this->container->get('storefront.context.service')->getShopContext();
 
         $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
+        $errors = $cart->clearErrors();
+        $this->container->get('shopware.cart.persister')->save($cart->getCalculatedCart()->getCartContainer());
+
         $this->View()->assign([
             'context' => $this->serialize($context),
             'cart' => $this->serialize($cart),
+            'errors' => $this->serialize($errors),
             self::TARGET_ACTION_KEY => self::ACTION_CART,
         ]);
     }
@@ -81,6 +88,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->assign([
             'context' => $this->serialize($context),
             'cart' => $this->serialize($cart),
+            'errors' => $this->serialize($cart->clearErrors()),
             self::TARGET_ACTION_KEY => self::ACTION_CONFIRM,
         ]);
     }
@@ -135,7 +143,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $quantity = $cart->getCalculatedCart()->getCalculatedLineItems()->filterGoods()->count();
 
-        $this->View()->assign(['amount' => $cart->getPrice()->getTotalPrice()]);
+        $this->View()->assign(['amount' => $cart->getPrice()->getPositionPrice()]);
 
         $template = $this->View()->fetch('frontend/checkout/ajax_amount.tpl');
 
@@ -182,9 +190,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             throw new Exception('No voucher code provided');
         }
 
-        $this->container->get('shopware.cart.storefront_service')->add(
-            new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => $code])
-        );
+        $lineItem = new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => $code]);
+
+        $this->container->get('shopware.cart.storefront_service')->add($lineItem);
 
         $this->redirect([
             'action' => $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_CART),

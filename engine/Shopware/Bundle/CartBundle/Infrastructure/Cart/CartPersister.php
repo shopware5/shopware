@@ -43,9 +43,6 @@ class CartPersister implements CartPersisterInterface
      */
     private $serializer;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection, JsonSerializer $serializer)
     {
         $this->connection = $connection;

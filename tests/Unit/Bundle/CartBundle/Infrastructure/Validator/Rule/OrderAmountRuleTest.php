@@ -27,22 +27,22 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
+use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderAmountRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderAmountRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderAmountRuleTest extends TestCase
 {
-    public function testRuleWithGteAndExactAmount()
+    public function testRuleWithGteAndExactAmount(): void
     {
         $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(100, 100, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(100, 100, 100, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -50,17 +50,17 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testRuleWithGteAndGreaterAmount()
+    public function testRuleWithGteAndGreaterAmount(): void
     {
         $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(200, 200, 200, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -68,17 +68,17 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testRuleNotMatchWithGte()
+    public function testRuleNotMatchWithGte(): void
     {
         $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_GTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(50, 50, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(50, 50, 50, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -86,17 +86,17 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testRuleWithLteAndExactAmount()
+    public function testRuleWithLteAndExactAmount(): void
     {
         $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(100, 100, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(100, 100, 100, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -104,17 +104,17 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testRuleWithLteAndGreaterAmount()
+    public function testRuleWithLteAndGreaterAmount(): void
     {
         $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(50, 50, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(50, 50, 50, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -122,17 +122,17 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testRuleNotMatchWithLte()
+    public function testRuleNotMatchWithLte(): void
     {
         $rule = new OrderAmountRule(100, OrderAmountRule::OPERATOR_LTE);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(150, 150, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(150, 150, 150, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -140,24 +140,24 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
-    public function testUnsupportedOperators(string $operator)
+    public function testUnsupportedOperators(string $operator): void
     {
         $rule = new OrderAmountRule(100, $operator);
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $price = new CartPrice(150, 150, new CalculatedTaxCollection(), new TaxRuleCollection());
+        $price = new CartPrice(150, 150, 150, new CalculatedTaxCollection(), new TaxRuleCollection());
         $cart->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValue($price));
@@ -165,11 +165,11 @@ class OrderAmountRuleTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function unsupportedOperators()
+    public function unsupportedOperators(): array
     {
         return [
             [true],

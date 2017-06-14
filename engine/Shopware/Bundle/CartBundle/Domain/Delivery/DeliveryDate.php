@@ -39,10 +39,6 @@ class DeliveryDate extends Struct
      */
     protected $latest;
 
-    /**
-     * @param \DateTime $earliest
-     * @param \DateTime $latest
-     */
     public function __construct(
         \DateTime $earliest,
         \DateTime $latest
@@ -57,7 +53,7 @@ class DeliveryDate extends Struct
     /**
      * @return \DateTime
      */
-    public function getEarliest()
+    public function getEarliest(): \DateTime
     {
         return $this->earliest;
     }
@@ -65,7 +61,7 @@ class DeliveryDate extends Struct
     /**
      * @return \DateTime
      */
-    public function getLatest()
+    public function getLatest(): \DateTime
     {
         return $this->latest;
     }

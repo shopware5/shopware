@@ -24,21 +24,22 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
-class PriceCollectionTest extends \PHPUnit\Framework\TestCase
+class PriceCollectionTest extends TestCase
 {
-    public function testCollectionIsCountable()
+    public function testCollectionIsCountable(): void
     {
         $collection = new PriceCollection();
         static::assertCount(0, $collection);
     }
 
-    public function testCountReturnsCorrectValue()
+    public function testCountReturnsCorrectValue(): void
     {
         $collection = new PriceCollection([
             new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
@@ -48,7 +49,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertCount(3, $collection);
     }
 
-    public function testAddFunctionAddsAPrice()
+    public function testAddFunctionAddsAPrice(): void
     {
         $collection = new PriceCollection();
         $collection->add(new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()));
@@ -61,7 +62,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFillFunctionFillsTheCollection()
+    public function testFillFunctionFillsTheCollection(): void
     {
         $collection = new PriceCollection();
         $collection->fill([
@@ -78,28 +79,28 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testTotalAmountWithEmptyCollection()
+    public function testTotalAmountWithEmptyCollection(): void
     {
         $collection = new PriceCollection();
-        static::assertSame(0.0, $collection->getTotalPrice()->getTotalPrice());
+        static::assertSame(0.0, $collection->sum()->getTotalPrice());
     }
 
-    public function testTotalAmountWithMultiplePrices()
+    public function testTotalAmountWithMultiplePrices(): void
     {
         $collection = new PriceCollection([
             new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
             new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection()),
         ]);
-        static::assertSame(500.0, $collection->getTotalPrice()->getTotalPrice());
+        static::assertSame(500.0, $collection->sum()->getTotalPrice());
     }
 
-    public function testGetTaxesReturnsACalculatedTaxCollection()
+    public function testGetTaxesReturnsACalculatedTaxCollection(): void
     {
         $collection = new PriceCollection();
         static::assertEquals(new CalculatedTaxCollection(), $collection->getCalculatedTaxes());
     }
 
-    public function testGetTaxesReturnsCollectionWithAllTaxes()
+    public function testGetTaxesReturnsCollectionWithAllTaxes(): void
     {
         $collection = new PriceCollection([
             new Price(
@@ -137,7 +138,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testClearFunctionRemovesAllPrices()
+    public function testClearFunctionRemovesAllPrices(): void
     {
         $collection = new PriceCollection([
             new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
@@ -148,7 +149,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(new PriceCollection(), $collection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $collection = new PriceCollection([
             new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
@@ -167,7 +168,7 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($collection->get(2));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $collection = new PriceCollection([
             new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),

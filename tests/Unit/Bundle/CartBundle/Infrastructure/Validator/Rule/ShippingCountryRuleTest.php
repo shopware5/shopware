@@ -27,15 +27,15 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingCountryRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 
 class ShippingCountryRuleTest extends TestCase
 {
-    public function testEquals()
+    public function testEquals(): void
     {
         $rule = new ShippingCountryRule([1], ShippingCountryRule::OPERATOR_EQ);
 
@@ -51,11 +51,11 @@ class ShippingCountryRuleTest extends TestCase
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotEquals()
+    public function testNotEquals(): void
     {
         $rule = new ShippingCountryRule([1], ShippingCountryRule::OPERATOR_NEQ);
 
@@ -71,11 +71,11 @@ class ShippingCountryRuleTest extends TestCase
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testEqualsWithMultipleCountries()
+    public function testEqualsWithMultipleCountries(): void
     {
         $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_EQ);
 
@@ -91,11 +91,11 @@ class ShippingCountryRuleTest extends TestCase
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
         $this->assertTrue(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
-    public function testNotEqualsWithMultipleCountries()
+    public function testNotEqualsWithMultipleCountries(): void
     {
         $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_NEQ);
 
@@ -111,18 +111,18 @@ class ShippingCountryRuleTest extends TestCase
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
         $this->assertFalse(
-            $rule->match($cart, $context, new RuleDataCollection())
+            $rule->match($cart, $context, new StructCollection())->matches()
         );
     }
 
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
-    public function testUnsupportedOperators(string $operator)
+    public function testUnsupportedOperators(string $operator): void
     {
         $rule = new ShippingCountryRule([1, 2, 3], $operator);
 
@@ -137,10 +137,10 @@ class ShippingCountryRuleTest extends TestCase
             ->method('getShippingLocation')
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
-        $rule->match($cart, $context, new RuleDataCollection());
+        $rule->match($cart, $context, new StructCollection())->matches();
     }
 
-    public function testUnsupportedOperatorMessage()
+    public function testUnsupportedOperatorMessage(): void
     {
         $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_GTE);
 
@@ -156,14 +156,14 @@ class ShippingCountryRuleTest extends TestCase
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
         try {
-            $rule->match($cart, $context, new RuleDataCollection());
+            $rule->match($cart, $context, new StructCollection());
         } catch (UnsupportedOperatorException $e) {
             $this->assertSame(ShippingCountryRule::OPERATOR_GTE, $e->getOperator());
             $this->assertSame(ShippingCountryRule::class, $e->getClass());
         }
     }
 
-    public function unsupportedOperators()
+    public function unsupportedOperators(): array
     {
         return [
             [true],

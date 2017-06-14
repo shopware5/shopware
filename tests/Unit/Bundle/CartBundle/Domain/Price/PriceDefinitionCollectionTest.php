@@ -31,7 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
 class PriceDefinitionCollectionTest extends TestCase
 {
-    public function testCreateWithKeys()
+    public function testCreateWithKeys(): void
     {
         $collection = new PriceDefinitionCollection([
             'a' => new PriceDefinition(1, new TaxRuleCollection()),
@@ -43,20 +43,20 @@ class PriceDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->has('c'));
     }
 
-    public function testAddWithKey()
+    public function testAddWithKey(): void
     {
         $collection = new PriceDefinitionCollection([
             'a' => new PriceDefinition(1, new TaxRuleCollection()),
             'b' => new PriceDefinition(2, new TaxRuleCollection()),
         ]);
-        $collection->add('c', new PriceDefinition(3, new TaxRuleCollection()));
+        $collection->add(new PriceDefinition(3, new TaxRuleCollection()), 'c');
 
         $this->assertTrue($collection->has('a'));
         $this->assertTrue($collection->has('b'));
         $this->assertTrue($collection->has('c'));
     }
 
-    public function testGetByKey()
+    public function testGetByKey(): void
     {
         $collection = new PriceDefinitionCollection([
             'a' => new PriceDefinition(1, new TaxRuleCollection()),
@@ -73,7 +73,7 @@ class PriceDefinitionCollectionTest extends TestCase
         );
     }
 
-    public function testRemoveWithKey()
+    public function testRemoveWithKey(): void
     {
         $collection = new PriceDefinitionCollection([
             'a' => new PriceDefinition(1, new TaxRuleCollection()),

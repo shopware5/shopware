@@ -65,7 +65,7 @@ class PriceCollection extends Collection
         return $rules;
     }
 
-    public function getTotalPrice(): Price
+    public function sum(): Price
     {
         return new Price(
             $this->getUnitPriceAmount(),
@@ -83,6 +83,11 @@ class PriceCollection extends Collection
         }
 
         return $taxes;
+    }
+
+    public function merge(PriceCollection $prices): PriceCollection
+    {
+        return $this->doMerge($prices);
     }
 
     private function getUnitPriceAmount(): float

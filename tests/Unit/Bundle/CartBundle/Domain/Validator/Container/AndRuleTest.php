@@ -26,42 +26,45 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Match;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
 class AndRuleTest extends TestCase
 {
-    public function testTrue()
+    public function testTrue(): void
     {
         $rule = new AndRule([
             new TrueRule(),
             new TrueRule(),
         ]);
 
-        $this->assertTrue(
+        $this->assertEquals(
+            new Match(true),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }
 
-    public function testFalse()
+    public function testFalse(): void
     {
         $rule = new AndRule([
             new TrueRule(),
             new FalseRule(),
         ]);
 
-        $this->assertFalse(
+        $this->assertEquals(
+            new Match(false, []),
             $rule->match(
                 $this->createMock(CalculatedCart::class),
                 $this->createMock(ShopContext::class),
-                new RuleDataCollection()
+                new StructCollection()
             )
         );
     }

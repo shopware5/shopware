@@ -29,7 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 
 class ErrorCollectionTest extends TestCase
 {
-    public function testHasError()
+    public function testHasError(): void
     {
         $collection = new ErrorCollection([
             new OtherError(),
@@ -45,7 +45,7 @@ class ErrorCollectionTest extends TestCase
         $this->assertFalse($collection->has(Error::class));
     }
 
-    public function testHasErrorLevel()
+    public function testHasErrorLevel(): void
     {
         $collection = new ErrorCollection([
             new Error(1),

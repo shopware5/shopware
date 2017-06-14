@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
@@ -83,11 +84,29 @@ class DeliveryPositionCollection extends Collection
         return new CalculatedLineItemCollection(
             array_map(
                 function (DeliveryPosition $position) {
-                    return $position->getItem();
+                    return $position->getCalculatedLineItem();
                 },
                 $this->elements
             )
         );
+    }
+
+    public function getWeight(): float
+    {
+        $weights = $this->getLineItems()->map(function (DeliverableLineItemInterface $deliverable) {
+            return $deliverable->getWeight();
+        });
+
+        return array_sum($weights);
+    }
+
+    public function getQuantity(): float
+    {
+        $quantities = $this->map(function (DeliveryPosition $position) {
+            return $position->getQuantity();
+        });
+
+        return array_sum($quantities);
     }
 
     /**

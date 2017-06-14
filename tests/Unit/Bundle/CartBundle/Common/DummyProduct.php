@@ -29,6 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
@@ -45,7 +46,8 @@ class DummyProduct extends CalculatedProduct
                 1, 1, 1, 1, 1,
                 new DeliveryDate(new \DateTime(), new \DateTime()),
                 new DeliveryDate(new \DateTime(), new \DateTime())
-            )
+            ),
+            new AndRule()
         );
     }
 }

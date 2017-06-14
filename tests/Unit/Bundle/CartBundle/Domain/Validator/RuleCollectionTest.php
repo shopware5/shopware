@@ -25,15 +25,15 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\OrRule;
-use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\Container\OrRule;
+use Shopware\Bundle\CartBundle\Domain\Rule\RuleCollection;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
 class RuleCollectionTest extends TestCase
 {
-    public function testMetaCollecting()
+    public function testMetaCollecting(): void
     {
         $collection = new RuleCollection([
             new TrueRule(),

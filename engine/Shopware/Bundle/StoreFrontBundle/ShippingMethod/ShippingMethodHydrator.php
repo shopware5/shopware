@@ -61,8 +61,7 @@ class ShippingMethodHydrator extends Hydrator
         $service = new ShippingMethod(
             (int) $data['__shippingMethod_id'],
             (string) $data['__shippingMethod_name'],
-            (string) $data['__shippingMethod_description'],
-            (int) $data['__shippingMethod_type'],
+            (int) $data['__shippingMethod_calculation'],
             (bool) $data['__shippingMethod_active'],
             (int) $data['__shippingMethod_position']
         );

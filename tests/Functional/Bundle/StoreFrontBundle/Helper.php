@@ -863,7 +863,7 @@ class Helper
             $this->buildTaxRules($taxes),
             [],
             new PaymentMethod(1, 'cash', 'Cash', 'Cash'),
-            new ShippingMethod(1, 'prime', 'Fast', 1, true, 1),
+            new ShippingMethod(1, 'prime', ShippingMethod::CALCULATION_BY_WEIGHT, true, 1),
             ShippingLocation::createFromCountry($shop->getCountry()),
             null
         );

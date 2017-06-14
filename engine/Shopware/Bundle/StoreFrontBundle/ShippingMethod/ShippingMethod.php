@@ -29,6 +29,14 @@ use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class ShippingMethod extends Struct
 {
+    const CALCULATION_BY_WEIGHT = 0;
+
+    const CALCULATION_BY_PRICE = 1;
+
+    const CALCULATION_BY_LINE_ITEM_COUNT = 2;
+
+    const CALCULATION_BY_CUSTOM = 3;
+
     /**
      * @var int
      */
@@ -42,17 +50,7 @@ class ShippingMethod extends Struct
     /**
      * @var int
      */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $description;
-
-    /**
-     * @var string
-     */
-    protected $comment;
+    protected $calculation;
 
     /**
      * @var bool
@@ -65,21 +63,22 @@ class ShippingMethod extends Struct
     protected $position;
 
     /**
-     * @param int    $id
-     * @param string $name
-     * @param string $description
-     * @param int    $type
-     * @param bool   $active
-     * @param int    $position
+     * @var string|null
      */
-    public function __construct(int $id, string $name, string $description, int $type, bool $active, int $position)
+    protected $description;
+
+    /**
+     * @var string
+     */
+    protected $comment;
+
+    public function __construct(int $id, string $name, int $calculation, bool $active, int $position)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->type = $type;
         $this->active = $active;
         $this->position = $position;
-        $this->description = $description;
+        $this->calculation = $calculation;
     }
 
     public function getId(): int
@@ -102,22 +101,12 @@ class ShippingMethod extends Struct
         $this->name = $name;
     }
 
-    public function getType(): int
-    {
-        return $this->type;
-    }
-
-    public function setType(int $type): void
-    {
-        $this->type = $type;
-    }
-
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -150,5 +139,15 @@ class ShippingMethod extends Struct
     public function setPosition(int $position): void
     {
         $this->position = $position;
+    }
+
+    public function getCalculation(): int
+    {
+        return $this->calculation;
+    }
+
+    public function setCalculation(int $calculation): void
+    {
+        $this->calculation = $calculation;
     }
 }

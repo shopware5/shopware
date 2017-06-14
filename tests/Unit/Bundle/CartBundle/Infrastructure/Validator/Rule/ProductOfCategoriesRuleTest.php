@@ -26,14 +26,14 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductOfCategoriesRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductOfCategoriesRule;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductOfCategoriesRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule;
+use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class ProductOfCategoriesRuleTest extends TestCase
 {
-    public function testSingleProductAndSingleCategory()
+    public function testSingleProductAndSingleCategory(): void
     {
         $rule = new ProductOfCategoriesRule([1]);
 
@@ -41,16 +41,16 @@ class ProductOfCategoriesRuleTest extends TestCase
 
         $context = $this->createMock(ShopContext::class);
 
-        $collection = new RuleDataCollection([
-            new ProductOfCategoriesRuleData([
+        $collection = new StructCollection([
+            ProductOfCategoriesRuleData::class => new ProductOfCategoriesRuleData([
                 1 => ['SW1'],
             ]),
         ]);
 
-        $this->assertTrue($rule->match($cart, $context, $collection));
+        $this->assertTrue($rule->match($cart, $context, $collection)->matches());
     }
 
-    public function testMultipleProductsWithSingleCategory()
+    public function testMultipleProductsWithSingleCategory(): void
     {
         $rule = new ProductOfCategoriesRule([1]);
 
@@ -58,17 +58,17 @@ class ProductOfCategoriesRuleTest extends TestCase
 
         $context = $this->createMock(ShopContext::class);
 
-        $collection = new RuleDataCollection([
-            new ProductOfCategoriesRuleData([
+        $collection = new StructCollection([
+            ProductOfCategoriesRuleData::class => new ProductOfCategoriesRuleData([
                 1 => ['SW1', 'SW2'],
                 2 => ['SW3'],
             ]),
         ]);
 
-        $this->assertTrue($rule->match($cart, $context, $collection));
+        $this->assertTrue($rule->match($cart, $context, $collection)->matches());
     }
 
-    public function testMultipleCategories()
+    public function testMultipleCategories(): void
     {
         $rule = new ProductOfCategoriesRule([2, 3]);
 
@@ -76,17 +76,17 @@ class ProductOfCategoriesRuleTest extends TestCase
 
         $context = $this->createMock(ShopContext::class);
 
-        $collection = new RuleDataCollection([
-            new ProductOfCategoriesRuleData([
+        $collection = new StructCollection([
+            ProductOfCategoriesRuleData::class => new ProductOfCategoriesRuleData([
                 1 => ['SW1', 'SW2'],
                 2 => ['SW3'],
             ]),
         ]);
 
-        $this->assertTrue($rule->match($cart, $context, $collection));
+        $this->assertTrue($rule->match($cart, $context, $collection)->matches());
     }
 
-    public function testNotMatch()
+    public function testNotMatch(): void
     {
         $rule = new ProductOfCategoriesRule([2, 3]);
 
@@ -94,17 +94,17 @@ class ProductOfCategoriesRuleTest extends TestCase
 
         $context = $this->createMock(ShopContext::class);
 
-        $collection = new RuleDataCollection([
-            new ProductOfCategoriesRuleData([
+        $collection = new StructCollection([
+            ProductOfCategoriesRuleData::class => new ProductOfCategoriesRuleData([
                 4 => ['SW1', 'SW2'],
                 5 => ['SW3'],
             ]),
         ]);
 
-        $this->assertFalse($rule->match($cart, $context, $collection));
+        $this->assertFalse($rule->match($cart, $context, $collection)->matches());
     }
 
-    public function testMissingDataObject()
+    public function testMissingDataObject(): void
     {
         $rule = new ProductOfCategoriesRule([2, 3]);
 
@@ -112,6 +112,6 @@ class ProductOfCategoriesRuleTest extends TestCase
 
         $context = $this->createMock(ShopContext::class);
 
-        $this->assertFalse($rule->match($cart, $context, new RuleDataCollection([])));
+        $this->assertFalse($rule->match($cart, $context, new StructCollection())->matches());
     }
 }
