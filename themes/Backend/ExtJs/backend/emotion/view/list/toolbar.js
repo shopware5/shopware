@@ -69,6 +69,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
                 iconCls: 'sprite-import'
             },
             buttonText: '{s name=toolbar/import_emotion}{/s}',
+            cls: Ext.baseCSSPrefix + 'emotion-toolbar-import-btn',
+            margin: 0,
             listeners: {
                 change: function(field, newValue) {
                     me.fireEvent('uploadEmotion', me, field, newValue);
@@ -88,7 +90,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             action: 'emotion-list-toolbar-add-preset'
         }, {
             xtype: 'form',
-            bodyStyle: 'background-color: #ebedef; padding: 5px 0 0 0;',
+            bodyStyle: 'background-color: #ebedef; padding: 0;',
             border: false,
             items: [
                 me.filefield
