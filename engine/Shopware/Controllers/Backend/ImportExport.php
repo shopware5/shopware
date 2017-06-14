@@ -156,7 +156,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         echo json_encode([
             'success' => false,
-            'message' => sprintf("Exportformat '%s' invalid", $format),
+            'message' => sprintf("Exportformat '%s' invalid", htmlspecialchars($format)),
         ]);
     }
 
@@ -975,7 +975,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             echo json_encode([
                 'success' => false,
-                'message' => sprintf('Could not handle upload of type: %s.', $type),
+                'message' => sprintf('Could not handle upload of type: %s.', htmlspecialchars($type)),
             ]);
 
             return;
