@@ -43,8 +43,7 @@
                    data-date-range-input="min"
                    id="{$facet->getMinFieldName()|escape:'htmlall'}"
                    name="{$facet->getMinFieldName()|escape:'htmlall'}"
-                   value="{if $facet->isActive()}{$startMin}{/if}"
-                   {if !$facet->isActive() || $startMin == null}disabled="disabled" {/if}/>
+                   value="{if $facet->isActive()}{$startMin}{/if}" />
         {/block}
 
         {block name="frontend_listing_filter_facet_date_range_max_label"}
@@ -58,8 +57,7 @@
                    data-date-range-input="max"
                    id="{$facet->getMaxFieldName()|escape:'htmlall'}"
                    name="{$facet->getMaxFieldName()|escape:'htmlall'}"
-                   value="{if $facet->isActive()}{$startMax}{/if}"
-                   {if !$facet->isActive() || $startMax == null}disabled="disabled" {/if}/>
+                   value="{if $facet->isActive()}{$startMax}{/if}" />
         {/block}
     </div>
 {/block}
