@@ -144,7 +144,7 @@ class SchemaOperator
             throw new \Exception(sprintf('Provided column %s does not exist in table %s', $column, $table));
         }
 
-        $sql = sprintf('UPDATE %s SET %s = NULL', $table, $column);
+        $sql = sprintf('UPDATE `%s` SET `%s` = NULL', $table, $column);
         $this->connection->executeUpdate($sql);
     }
 
