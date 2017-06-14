@@ -162,11 +162,11 @@
                 $siblings = $('.' + opts.collapseTargetCls).not($targetEl),
                 tabId = $targetEl.parent().attr('data-tab-id');
 
+            me.$el.addClass(opts.activeTriggerCls);
+
             if ($targetEl.hasClass(opts.collapsedStateCls)) {
                 return;
             }
-
-            me.$el.addClass(opts.activeTriggerCls);
 
             $targetEl.finish().slideDown(opts.animationSpeed, function () {
                 $.publish('plugin/swCollapsePanel/onOpen', [ me ]);
@@ -196,11 +196,12 @@
             var me = this,
                 opts = me.opts;
 
+            me.$el.removeClass(opts.activeTriggerCls);
+
             if (!me.$targetEl.hasClass(opts.collapsedStateCls)) {
                 return;
             }
 
-            me.$el.removeClass(opts.activeTriggerCls);
             me.$targetEl.finish().slideUp(opts.animationSpeed, function() {
                 me.$targetEl.removeClass(opts.collapsedStateCls);
                 $.publish('plugin/swCollapsePanel/onClose', [ me ]);
