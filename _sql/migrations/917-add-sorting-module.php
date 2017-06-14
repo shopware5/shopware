@@ -232,10 +232,16 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
             $insert = $this->getExistingSortingTranslations($translationShopId, $localeId);
 
             if (!empty($insert)) {
-                $this->addSql(
+                $statement = $this->connection->prepare(
                     "INSERT IGNORE INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
-                     VALUES ('custom_sorting', '" . serialize($insert) . "', '1', " . $shop['id'] . ')'
+                     VALUES ('custom_sorting', :data, :key, :language)"
                 );
+
+                $statement->execute([
+                    ':data' => serialize($insert),
+                    ':key' => '1',
+                    ':language' => $shop['id'],
+                ]);
             }
         }
     }
