@@ -27,13 +27,13 @@
  * @author shopware AG
  */
 
-//{namespace name="backend/newsletter_manager/main"}
+// {namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware Controller - Overview controller
  * For events and actions fired in the overview tab
  */
-//{block name="backend/newsletter_manager/controller/overview"}
+// {block name="backend/newsletter_manager/controller/overview"}
 Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
 
     extend: 'Ext.app.Controller',
@@ -54,12 +54,11 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
         }
     },
 
-    refs:[
-        { ref:'newsletterEditor', selector:'newsletter-manager-newsletter-editor' },
-        { ref:'newsletterSettings', selector:'newsletter-manager-newsletter-settings' },
-        { ref:'overviewGrid', selector:'newsletter-manager-tabs-overview' }
+    refs: [
+        { ref: 'newsletterEditor', selector: 'newsletter-manager-newsletter-editor' },
+        { ref: 'newsletterSettings', selector: 'newsletter-manager-newsletter-settings' },
+        { ref: 'overviewGrid', selector: 'newsletter-manager-tabs-overview' }
     ],
-
 
     /**
      * A template method that is called when your application boots. It is called before the Application's
@@ -68,7 +67,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
     init: function() {
         var me = this;
 
-        me.control(                {
+        me.control({
             'newsletter-manager-tabs-overview': {
                 'createNewNewsletter': me.onCreateNewNewsletter,
                 'editNewsletter': me.onEditNewsletter,
@@ -87,7 +86,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
      * Called when the user types into the serach newsletter field
      */
     onSearchNewsletter: function(field) {
-        if(!field) {
+        if (!field) {
             return;
         }
 
@@ -95,27 +94,25 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             searchString = Ext.String.trim(field.getValue()),
             store = me.subApplication.mailingStore;
 
-            //scroll the store to first page
-            store.currentPage = 1;
+        // scroll the store to first page
+        store.currentPage = 1;
 
-            //If the search-value is empty, reset the filter
-            if ( searchString.length === 0 ) {
-                store.clearFilter();
-            } else {
-                //This won't reload the store
-                store.filters.clear();
-                //Loads the store with a special filter
-                store.filter('filter', searchString);
-            }
+        // If the search-value is empty, reset the filter
+        if (searchString.length === 0) {
+            store.clearFilter();
+        } else {
+            // This won't reload the store
+            store.filters.clear();
+            // Loads the store with a special filter
+            store.filter('filter', searchString);
+        }
     },
 
     /**
      * Called when the user clicks the 'duplicate' action button
      * @param record
      */
-    onDuplicateNewsletter: function(record) {
-        var me = this;
-    },
+    onDuplicateNewsletter: function(record) {},
 
     /**
      * Called when the user clicked the "delete" action button in the newsletter overview
@@ -126,7 +123,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             store = me.subApplication.mailingStore;
 
         Ext.MessageBox.confirm('{s name=deleteNewsletter}Delete newsletter(s){/s}', '{s name=delteNewsletterMessage}Do you really want to delete the selected newsletter?{/s}', function (response) {
-            if ( response !== 'yes' ) {
+            if (response !== 'yes') {
                 return;
             }
             store.remove([record]);
@@ -140,32 +137,30 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
      * @param record
      */
     onStartSendingNewsletter: function(record) {
-        var me = this,
-             pos = location.href.search("/backend"),
-             url = location.href.substr(0, pos) + "/backend/Newsletter/cron";
+        var pos = location.href.search('/backend'),
+            url = location.href.substr(0, pos) + '/backend/Newsletter/cron';
 
         Ext.MessageBox.confirm('{s name=startSendingNewsletter/title}Start sending{/s}', '{s name=startSendingNewsletter/message}Do you really want to start sending this newsletter?{/s}', function (response) {
-            if ( response !== 'yes' ) {
+            if (response !== 'yes') {
                 return;
             }
             record.set('status', 1);
             record.set('publish', 1);
             record.save();
             Ext.Msg.show({
-                 title:'{s name=startSendingNewsletter/title}Start sending{/s}',
+                title: '{s name=startSendingNewsletter/title}Start sending{/s}',
                 //
-                 msg: '{s name=startSendingNewsletterInfo/message}The newsletter is now queued for sending.<br />Please make sure, that you have set up the newsletter-script as a cron job or run it manually.<br /><br />Do you want to open the newsletter-script in a new window now?{/s}',
-                 buttons: Ext.Msg.YESNO,
-                 icon: Ext.Msg.QUESTION,
+                msg: '{s name=startSendingNewsletterInfo/message}The newsletter is now queued for sending.<br />Please make sure, that you have set up the newsletter-script as a cron job or run it manually.<br /><br />Do you want to open the newsletter-script in a new window now?{/s}',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.QUESTION,
                 fn: function(response) {
-                    if(response !== 'yes') {
+                    if (response !== 'yes') {
                         return;
                     }
                     window.open(url);
                 }
             });
         });
-
     },
 
     /**
@@ -174,9 +169,9 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
      */
     onEditNewsletter: function(record) {
         var me = this,
-            newsletterWindow,
             settings = Ext.create('Shopware.apps.NewsletterManager.model.Settings');
-        newsletterWindow = me.getView('newsletter.Window').create({
+        
+        me.getView('newsletter.Window').create({
             senderStore: me.subApplication.senderStore,                     // available senders
             recipientGroupStore: me.subApplication.recipientGroupStore,     // available newsletter groups + available customer groups
             newsletterGroupStore: me.subApplication.newsletterGroupStore,   // available newsletter groups
@@ -188,49 +183,45 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             record: record
         });
 
-        //As the existing database table holds some strings where IDs would be needed, we have a additional
-        //settings model, which translates between the Newsletter-Model ("Mailing") and the structure needed
-        //to set the form up properly.
+        // As the existing database table holds some strings where IDs would be needed, we have a additional
+        // settings model, which translates between the Newsletter-Model ("Mailing") and the structure needed
+        // to set the form up properly.
         settings.set('subject', record.get('subject'));
         settings.set('customerGroup', record.get('customerGroup'));
         settings.set('languageId', record.get('languageId'));
-        if(record.get('plaintext') == true){
+        if (record.get('plaintext') == true) {
             settings.set('dispatch', 2);
-        }else{
+        } else {
             settings.set('dispatch', 1);
         }
 
-
         var editor = me.getNewsletterEditor(), form = me.getNewsletterSettings(),
             senderMail = record.get('senderMail'),
-            groups, containers, text, content="", senderRecord;
+            containers, text, content = '', senderRecord;
 
         containers = record.getContainers();
-        if(containers instanceof Ext.data.Store && containers.first() instanceof Ext.data.Model) {
+        if (containers instanceof Ext.data.Store && containers.first() instanceof Ext.data.Model) {
             text = containers.first().getText();
-            if(text instanceof Ext.data.Store && text.first() instanceof Ext.data.Model) {
-                    content = text.first().get('content');
+            if (text instanceof Ext.data.Store && text.first() instanceof Ext.data.Model) {
+                content = text.first().get('content');
             }
-
         }
-        settings.set('content',content);
-
+        settings.set('content', content);
 
         // sender is saved as plain text. need to get the id from senderStore
         senderRecord = me.subApplication.senderStore.findRecord('email', senderMail);
-        if(!senderRecord instanceof Ext.data.Model){
+        if (!(senderRecord instanceof Ext.data.Model)) {
             settings.set('senderId', null);
-        }else{
+        } else {
             settings.set('senderId', senderRecord.get('id'));
         }
 
         form.loadRecord(settings);
 
-        //TinyMCE will be loaded last - it hast some getDoc() us undefined issues
-        setTimeout(function(){
+        // TinyMCE will be loaded last - it hast some getDoc() us undefined issues
+        setTimeout(function() {
             editor.loadRecord(settings);
         }, 500);
-
     },
 
     /**
@@ -239,10 +230,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
      */
     onCreateNewNewsletter: function() {
         var me = this,
-            newsletterWindow,
-            settings = Ext.create('Shopware.apps.NewsletterManager.model.Settings');
+            settings = Ext.create('Shopware.apps.NewsletterManager.model.Settings'),
+            form = me.getNewsletterSettings();
 
-        newsletterWindow = me.getView('newsletter.Window').create({
+        me.getView('newsletter.Window').create({
             senderStore: me.subApplication.senderStore,                     // available senders
             recipientGroupStore: me.subApplication.recipientGroupStore,     // available newsletter groups + available customer groups
             newsletterGroupStore: me.subApplication.newsletterGroupStore,   // available newsletter groups
@@ -255,8 +246,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
         var editor = me.getNewsletterEditor(), form = me.getNewsletterSettings();
         settings.set('customerGroup', me.subApplication.customerGroupStore.first().get('key'));
         form.loadRecord(settings);
-
-
     },
 
     /**
@@ -267,13 +256,13 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
     onReleaseNewsletter: function(record, grid) {
         var id = record.get('id'),
             me = this;
-        //inverts and converts the active flag
+        // inverts and converts the active flag
         var status = (record.get('status') > 0 ? 0 : 1);
 
         Ext.Ajax.request({
             url: '{url controller="newsletterManager" action="releaseNewsletter"}',
             method: 'GET',
-            params : {
+            params: {
                 status: status,
                 id: id
             },
@@ -290,4 +279,4 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
     }
 
 });
-//{/block}
+// {/block}
