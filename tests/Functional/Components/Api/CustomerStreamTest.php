@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource\CustomerStream;
 use Shopware\Models\CustomerStream\CustomerStream as CustomerStreamEntity;
 
-class CustomerStreamTest extends TestCase
+class CustomerStreamTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var CustomerStream
@@ -42,7 +42,10 @@ class CustomerStreamTest extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
+        Shopware()->Models()->clear();
+
+        $this->resource = $this->createResource();
+        $this->resource->setManager(Shopware()->Models());
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
     }
@@ -50,6 +53,7 @@ class CustomerStreamTest extends TestCase
     protected function tearDown()
     {
         parent::tearDown();
+        Shopware()->Models()->clear();
         $this->connection->rollBack();
     }
 
@@ -75,6 +79,7 @@ class CustomerStreamTest extends TestCase
             'SELECT customer_id FROM s_customer_streams_mapping WHERE stream_id = :streamId',
             [':streamId' => (int) $stream->getId()]
         );
+
         $ids = array_column($ids, 'customer_id');
 
         $this->assertEquals([1], $ids);

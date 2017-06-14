@@ -203,6 +203,10 @@ class CustomerStream extends Resource
             $this->indexStream($stream);
         }
 
+        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+            $this->insertCustomers($data['customers'], $stream->getId());
+        }
+
         return $stream;
     }
 
