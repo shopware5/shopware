@@ -417,7 +417,7 @@ Ext.define('Shopware.form.field.Grid', {
             return true;
         }
 
-        if (me.searchField) {
+        if (me.searchField && me.searchField.combo) {
             me.searchField.combo.markInvalid([
                 '{s name="not_empty"}{/s}'
             ]);

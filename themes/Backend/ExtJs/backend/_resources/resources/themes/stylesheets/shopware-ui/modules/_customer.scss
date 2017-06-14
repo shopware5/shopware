@@ -110,4 +110,13 @@
     -moz-filter: #{"grayscale(100%)"};
     filter:#{"grayscale(100%)"};
   }
+  .x-grid-cell-inner {
+    line-height: 16px;
+  }
+  .lock-icon {
+    width:16px;
+    height:16px;
+    display: inline-block;
+    margin-right: 3px;
+  }
 }

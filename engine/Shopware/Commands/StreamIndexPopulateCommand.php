@@ -25,7 +25,8 @@
 namespace Shopware\Commands;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Models\CustomerStream\CustomerStream;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,31 +61,28 @@ class StreamIndexPopulateCommand extends ShopwareCommand
         }
         $streams = $this->getStreams($streamIds);
 
-        $indexer = $this->container->get('shopware.customer_stream.stream_indexer');
-
-        $helper = new ConsoleProgressHelper($output);
-
         foreach ($streams as $stream) {
-            $output->writeln("\n## Indexing Customer Stream: " . $stream['name'] . ' ##');
-            $indexer->populate($stream['id'], $helper);
+            $output->writeln("\n## Indexing Customer Stream: " . $stream->getName() . ' ##');
+            $this->container->get('shopware.api.customer_stream')->indexStream($stream);
         }
     }
 
     /**
      * @param array $ids
      *
-     * @return \array[]|false
+     * @return CustomerStream[]|false
      */
     private function getStreams($ids = [])
     {
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select('*');
-        $query->from('s_customer_streams');
+        $query = $this->container->get('models')->createQueryBuilder();
+        $query->select(['stream']);
+        $query->from(CustomerStream::class, 'stream');
+
         if (!empty($ids)) {
-            $query->andWhere('id IN (:ids)');
+            $query->where('stream.id IN (:ids)');
             $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         }
 
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
     }
 }

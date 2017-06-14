@@ -573,6 +573,17 @@
             <argument type="service" id="shopware.slug" />
         </service>
 
+        <service id="shopware.api.customer_stream" class="Shopware\Components\Api\Resource\CustomerStream">
+            <argument id="shopware.logaware_reflection_helper" type="service"/>
+            <argument id="customer_search.dbal.number_search" type="service"/>
+            <argument id="shopware.customer_stream.repository" type="service"/>
+            <argument id="models" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <argument id="customer_search.dbal.indexing.indexer" type="service"/>
+            <argument id="shopware.customer_stream.stream_indexer" type="service"/>
+            <argument id="shopware.customer_stream.criteria_factory" type="service"/>
+        </service>
+
         <service id="shopware.emotion.emotion_presetdata_transformer" class="Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer">
             <argument type="service" id="models" />
         </service>

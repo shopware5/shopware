@@ -26,6 +26,7 @@ namespace Shopware\Models\CustomerStream;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="s_customer_streams")
@@ -33,6 +34,9 @@ use Shopware\Components\Model\ModelEntity;
  */
 class CustomerStream extends ModelEntity
 {
+    const TYPE_DYNAMIC = 'dynamic';
+    const TYPE_STATIC = 'static';
+
     /**
      * INVERSE SIDE
      *
@@ -40,6 +44,7 @@ class CustomerStream extends ModelEntity
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -51,7 +56,7 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
@@ -68,6 +73,20 @@ class CustomerStream extends ModelEntity
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
+
+    /**
+     * @var string
+     * @Assert\NotBlank
+     * @ORM\Column(name="type", type="string", nullable=true)
+     */
+    private $type = self::TYPE_DYNAMIC;
+
+    /**
+     * @var \DateTime
+     * @Assert\DateTime
+     * @ORM\Column(name="freeze_up", type="date", nullable=true)
+     */
+    private $freezeUp;
 
     /**
      * @return int
@@ -123,5 +142,34 @@ class CustomerStream extends ModelEntity
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getFreezeUp()
+    {
+        return $this->freezeUp;
+    }
+
+    public function setFreezeUp($freezeUp)
+    {
+        if (is_string($freezeUp)) {
+            $freezeUp = new \DateTime($freezeUp);
+        }
+        $this->freezeUp = $freezeUp;
     }
 }
