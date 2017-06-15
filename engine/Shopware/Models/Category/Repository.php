@@ -98,7 +98,7 @@ class Repository extends ModelRepository
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
+    public function getListQuery(array $filterBy, array $orderBy = array(), $limit = null, $offset = null, $selectOnlyActive = true)
     {
         $builder = $this->getListQueryBuilder($filterBy, $orderBy, $limit, $offset, $selectOnlyActive);
 
@@ -185,7 +185,7 @@ class Repository extends ModelRepository
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
+    public function getListQueryBuilder(array $filterBy, array $orderBy = array(), $limit = null, $offset = null, $selectOnlyActive = true)
     {
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $this->createQueryBuilder('c');
