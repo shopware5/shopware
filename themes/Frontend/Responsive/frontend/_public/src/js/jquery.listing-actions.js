@@ -955,6 +955,11 @@
 
             $.each(formData, function(index, item) {
                 if (!params.hasOwnProperty(item.name)) {
+
+                    if (!item.value || (typeof item.value === 'string' && item.value.length <= 0) ) {
+                        return;
+                    }
+
                     params[item.name] = item.value;
                 }
             });

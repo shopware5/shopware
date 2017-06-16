@@ -501,7 +501,7 @@
             // enable loading for further pages
             me.isLoading = false;
 
-            $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [ me, event, response.listing ]);
+            $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [ me, response.listing ]);
         },
 
         /**
