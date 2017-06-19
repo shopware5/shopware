@@ -38,7 +38,7 @@ use Shopware\Components\CustomerStream\StreamIndexerInterface;
 use Shopware\Components\LogawareReflectionHelper;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\CustomerStream\CustomerStream as CustomerStreamEntity;
-use Shopware\Models\CustomerStream\CustomerStreamRepository;
+use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 
 class CustomerStream extends Resource
 {
@@ -58,7 +58,7 @@ class CustomerStream extends Resource
     private $customerNumberSearch;
 
     /**
-     * @var CustomerStreamRepository
+     * @var CustomerStreamRepositoryInterface
      */
     private $streamRepository;
 
@@ -85,7 +85,7 @@ class CustomerStream extends Resource
     /**
      * @param LogawareReflectionHelper               $reflectionHelper
      * @param CustomerNumberSearchInterface          $customerNumberSearch
-     * @param CustomerStreamRepository               $streamRepository
+     * @param CustomerStreamRepositoryInterface      $streamRepository
      * @param ModelManager                           $manager
      * @param Connection                             $connection
      * @param SearchIndexer                          $searchIndexer
@@ -95,7 +95,7 @@ class CustomerStream extends Resource
     public function __construct(
         LogawareReflectionHelper $reflectionHelper,
         CustomerNumberSearchInterface $customerNumberSearch,
-        CustomerStreamRepository $streamRepository,
+        CustomerStreamRepositoryInterface $streamRepository,
         ModelManager $manager,
         Connection $connection,
         SearchIndexer $searchIndexer,
