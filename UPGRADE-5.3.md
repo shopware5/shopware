@@ -132,6 +132,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
 * Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
 * Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
+* Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
 
 ### Changes
 
