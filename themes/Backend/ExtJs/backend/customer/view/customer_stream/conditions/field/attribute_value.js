@@ -114,8 +114,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
 
         me.fromField = Ext.create('Ext.form.field.Number', {
             fieldLabel: '{s name=attribute/from_text}{/s}',
-            flex: 1,
             allowBlank: false,
+            width: '100%',
             listeners: {
                 change: function() {
                     me.toField.setMinValue(this.getValue() + 1);
@@ -129,11 +129,9 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         var me = this;
 
         me.toField = Ext.create('Ext.form.field.Number', {
-            labelWidth: 50,
-            allowBlank: false,
             fieldLabel: '{s name=attribute/to_text}{/s}',
-            padding: '0 0 0 10',
-            flex: 1,
+            allowBlank: false,
+            width: '100%',
             listeners: {
                 change: function() {
                     me.fromField.setMaxValue(this.getValue() - 1);
@@ -158,7 +156,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         var me = this;
 
         me.betweenContainer = Ext.create('Ext.container.Container', {
-            layout: { type: 'hbox', alaign: 'strech' },
+            layout: { type: 'vbox' },
             hidden: true,
             items: [me.createFromField(), me.createToField()]
         });
