@@ -214,7 +214,7 @@ class DatabaseWriter
     {
         $hasSameValue = $name === $row['name'] && $value === $row['value'];
 
-        $isDirty = $row['dirty'] === 1;
+        $isDirty = $row['dirty'] == 1;
 
         // snippet was never touched after insert
         if (!$this->force && $hasSameValue && !$isDirty) {
