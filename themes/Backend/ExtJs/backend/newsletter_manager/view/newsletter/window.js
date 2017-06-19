@@ -27,16 +27,16 @@
  * @author shopware AG
  */
 
-//{namespace name="backend/newsletter_manager/main"}
+// {namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware UI - Subwindow for creating a new newsletter or edit an existing one
  */
-//{block name="backend/newsletter_manager/view/newsletter/window"}
+// {block name="backend/newsletter_manager/view/newsletter/window"}
 Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.newsletter-manager-newsletter-window',
-    autoShow:true,
+    alias: 'widget.newsletter-manager-newsletter-window',
+    autoShow: true,
     layout: 'fit',
     width: 860,
     height: '90%',
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
                 'loadData'
         );
 
-        if(me.record === null){
+        if (me.record === null) {
             me.record = Ext.create('Shopware.apps.NewsletterManager.model.Mailing');
         }
 
@@ -76,8 +76,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
         me.items = me.createTab();
 
         me.callParent(arguments);
-
-
     },
 
     /**
@@ -91,7 +89,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
         me.toolbar = Ext.create('widget.newsletter-manager-bottom-toolbar');
 
         return me.toolbar;
-
     },
     /**
      * Creates the tab panel for the main window
@@ -99,7 +96,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
     createTab: function() {
         var me = this;
 
-        me.tabPanel =  Ext.create('Ext.tab.Panel', {
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
             items: me.getTabs()
         });
         return me.tabPanel;
@@ -110,23 +107,22 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
      * internal titles needed in the main controller to tell apart the different tabs
      * @return Array
      */
-    getTabs: function(){
+    getTabs: function() {
         var me = this;
 
         return [{
-            xtype:'newsletter-manager-newsletter-editor',
+            xtype: 'newsletter-manager-newsletter-editor',
             record: me.record
         }, {
-            xtype:'newsletter-manager-newsletter-settings',
+            xtype: 'newsletter-manager-newsletter-settings',
             senderStore: me.senderStore,
             recipientGroupStore: me.recipientGroupStore,
             newsletterGroupStore: me.newsletterGroupStore,
             customerGroupStore: me.customerGroupStore,
             shopStore: me.shopStore,
             dispatchStore: me.dispatchStore,
-            customerStreamStore: me.customerStreamStore,
             record: me.record
         }];
     }
 });
-//{/block}
+// {/block}

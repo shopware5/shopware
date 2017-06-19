@@ -27,18 +27,18 @@
  * @author shopware AG
  */
 
-//{namespace name="backend/newsletter_manager/main"}
+// {namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware UI - Editor
  * View for the editor which allows the user to create new newsletters
  */
-//{block name="backend/newsletter_manager/view/newsletter/Settings"}
+// {block name="backend/newsletter_manager/view/newsletter/Settings"}
 Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsletter-manager-newsletter-settings',
     title: '{s name=title/Settings}Settings{/s}',
-    autoScroll:true,
+    autoScroll: true,
 
     cls: 'shopware-form',
     layout: 'anchor',
@@ -76,7 +76,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 });
             }
         );
-
     },
 
     /**
@@ -84,7 +83,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
      */
     getFieldSets: function() {
         var me = this;
-
 
         return [
             {
@@ -101,7 +99,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 title: '{s name=selectNewsletterRecipients}Select newsletter recipients{/s}',
                 items: me.getRecipientsFieldset(),
                 flex: 1,
-                defaults:  { anchor: '100%' },
+                defaults: { anchor: '100%' },
                 layout: 'anchor'
             }
         ];
@@ -120,14 +118,14 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
 
         recipientGroupRecord = me.recipientGroupStore.findBy(function(rec) {
             var otherIsCustomer = rec.get('isCustomerGroup');
-            if(thisIsCustomer == otherIsCustomer && rec.get('internalId') == id){
+            if (thisIsCustomer == otherIsCustomer && rec.get('internalId') == id) {
                 return true;
             }
         });
 
-        if(recipientGroupRecord > -1) {
+        if (recipientGroupRecord > -1) {
             recipientGroupRecord = me.recipientGroupStore.getAt(recipientGroupRecord);
-            if(recipientGroupRecord.get('number') == null){
+            if (recipientGroupRecord.get('number') == null) {
                 return 0;
             }
             return recipientGroupRecord.get('number');
@@ -147,56 +145,58 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             checkBox;
 
         // create customer checkboxes and put them into an array
-        me.customerGroups = new Array();
+        me.customerGroups = [];
         me.customerGroupStore.each(function(record) {
             count = me.getNumberOfCustomersInGroup(record.get('id'), true);
             checkBox = Ext.create('Ext.form.field.Checkbox', {
-                boxLabel: record.get('name') + Ext.String.format("{s name=customerCount} ({literal}{0}{/literal} customer(s)){/s}", count),
+                boxLabel: record.get('name') + Ext.String.format('{s name=receiverCount} ({literal}{0}{/literal} receiver(s)){/s}', count),
                 name: record.get('name'),
                 count: count,
                 record: record
             });
             foundGroup = groups.findRecord('groupkey', record.get('key'), 0, false, false, true);
-            if(foundGroup !== null) {
+            if (foundGroup !== null) {
                 checkBox.setValue(true);
             }
             me.customerGroups.push(checkBox);
         });
 
         // create newsletter group checkboxes and put them into an array
-        me.newsletterGroups = new Array();
+        me.newsletterGroups = [];
         me.newsletterGroupStore.each(function(record) {
             count = me.getNumberOfCustomersInGroup(record.get('id'), false);
             checkBox = Ext.create('Ext.form.field.Checkbox', {
-                boxLabel: record.get('name') + Ext.String.format("{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}", count),
+                boxLabel: record.get('name') + Ext.String.format('{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}', count),
                 name: record.get('name'),
                 count: count,
                 record: record
             });
             foundGroup = groups.findRecord('internalId', record.get('id'), 0, false, false, true);
-            if(foundGroup !== null) {
+            if (foundGroup !== null) {
                 checkBox.setValue(true);
             }
             me.newsletterGroups.push(checkBox);
         });
 
-        me.customerStreamGroups = new Array();
-
-        me.customerStreamStore.each(function(record) {
-            checkBox = Ext.create('Ext.form.field.Checkbox', {
-                boxLabel: record.get('name') + Ext.String.format("{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}", record.get('newsletter_count')),
-                name: record.get('name'),
-                record: record,
-                count: record.get('newsletter_count') * 1,
-                value: false
-            });
-            foundStream = groups.findRecord('streamId', record.get('id'), 0, false, false, true);
-            if(foundStream !== null) {
-                checkBox.setValue(true);
-            }
-
-            me.customerStreamGroups.push(checkBox);
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
+            name: 'customerStreamIds',
+            labelWidth: 170,
+            height: 150,
+            fieldLabel: '{s name="customer_streams"}{/s}',
+            helpText: '{s name="customer_streams_help"}{/s}',
+            store: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream'),
+            searchStore: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream'),
+            displayNewsletterCount: true
         });
+
+        var value = [];
+        groups.each(function(group) {
+            if (group.get('streamId')) {
+                value.push(group.get('streamId'));
+            }
+        });
+        me.customerStreamSelection.setValue(value.join('|'));
 
         return [
             {
@@ -217,15 +217,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 vertical: false,
                 name: 'newsletterGroups'
             },
-            {
-                xtype: 'checkboxgroup',
-                fieldLabel: '{s name=customerStreamGroups}{/s}',
-                labelWidth: 170,
-                items: me.customerStreamGroups,
-                columns: 2,
-                vertical: false,
-                name: 'customerStreams'
-            }
+            me.customerStreamSelection
         ];
     },
 
@@ -254,7 +246,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 editable: false
             },
             {
-                xtype:  'combobox',
+                xtype: 'combobox',
                 fieldLabel: '{s name=customerGroupLabel}Customer group:{/s}',
                 allowBlank: false,
                 valueField: 'key',
@@ -325,7 +317,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                             field.setDisabled(true);
                             field.helpTitle = '{s name=active/error/help_title}Error{/s}';
                             field.helpText = '{s name=error/active_text}A delivered newsletter can\'t change the released option.{/s}';
-                            return;
                         } else if (me.record.get('status') > 0) {
                             field.setValue(1);
                         } else {
@@ -400,25 +391,25 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
      * Sets the time field min value to get a time in the future if the user set the current date
      */
     setTimeFieldMinValue: function() {
-        var me                = this,
+        var me = this,
             timedDeliveryDate = me.record.get('timedDeliveryDate'),
-            currentDate       = new Date();
+            currentDate = new Date();
 
-        //don't set a min value if the time is not defined at the moment
+        // don't set a min value if the time is not defined at the moment
         if (timedDeliveryDate == Ext.undefined) {
             return;
         }
 
         timedDeliveryDate = Ext.Date.clearTime(timedDeliveryDate);
-        currentDate       = Ext.Date.clearTime(currentDate);
+        currentDate = Ext.Date.clearTime(currentDate);
 
-        //set the min value if the date the user set is equal to the current date
+        // set the min value if the date the user set is equal to the current date
         if (Ext.Date.isEqual(currentDate, timedDeliveryDate)) {
             me.timedDeliveryTimeField.setMinValue(new Date());
         } else {
-            //Resets the min value
+            // Resets the min value
             me.timedDeliveryTimeField.setMinValue(Ext.Date.clearTime(new Date()));
         }
     }
 });
-//{/block}
+// {/block}

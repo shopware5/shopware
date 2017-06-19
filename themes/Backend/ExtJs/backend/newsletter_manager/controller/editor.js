@@ -27,13 +27,13 @@
  * @author shopware AG
  */
 
-//{namespace name="backend/newsletter_manager/main"}
+// {namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware Controller - Overview controller
  * For events and actions fired in the overview tab
  */
-//{block name="backend/newsletter_manager/controller/editor"}
+// {block name="backend/newsletter_manager/controller/editor"}
 Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
 
     extend: 'Ext.app.Controller',
@@ -51,15 +51,14 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             errorTitle: '{s name=testNewsletter/errorTitle}Error{/s}',
             errorMessage: '{s name=testNewsletter/errorMessage}An error occured while sending the newsletter{/s}'
         },
-    growl: '{s name=title}Newsletter Manager{/s}'
+        growl: '{s name=title}Newsletter Manager{/s}'
     },
 
-    refs:[
-        { ref:'newsletterEditor', selector:'newsletter-manager-newsletter-editor' },
-        { ref:'newsletterSettings', selector:'newsletter-manager-newsletter-settings' },
-        { ref:'newsletterWindow', selector:'newsletter-manager-newsletter-window' }
+    refs: [
+        { ref: 'newsletterEditor', selector: 'newsletter-manager-newsletter-editor' },
+        { ref: 'newsletterSettings', selector: 'newsletter-manager-newsletter-settings' },
+        { ref: 'newsletterWindow', selector: 'newsletter-manager-newsletter-window' }
     ],
-
 
     /**
      * A template method that is called when your application boots. It is called before the Application's
@@ -68,7 +67,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
     init: function() {
         var me = this;
 
-        me.control(                {
+        me.control({
             'newsletter-manager-newsletter-editor': {
                 'sendTestMail': me.onSendTestMail,
                 'openPreview': me.onOpenPreview
@@ -98,8 +97,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             window = me.getNewsletterWindow();
 
         window.destroy();
-
-
     },
 
     /**
@@ -110,7 +107,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         var me = this,
             window = me.getNewsletterWindow();
 
-        if(form.isValid()){
+        if (form.isValid()) {
             window.toolbar.saveButton.enable();
             return;
         }
@@ -128,7 +125,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // Only save if the form is valid. As formBind: true only works for buttons on the form
         // and as we want to have buttons in the editor as well as in the settings (sw-3195)
         // we use a msgbox here
-        if(!form.isValid()) {
+        if (!form.isValid()) {
             Ext.Msg.show({
                 title: '{s name=fillForm/title}Required fields missing{/s}',
                 msg: '{s name=fillForm/msg}You need to set all required field in the settings first{/s}',
@@ -137,26 +134,25 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             return;
         }
 
-          // persist
-          newsletter.save({
-              callback: function(data, operation){
-                  var records = operation.getRecords(),
-                      record = records[0],
-                      rawData = record.getProxy().getReader().rawData;
+        // persist
+        newsletter.save({
+            callback: function(data, operation) {
+                var records = operation.getRecords(),
+                    record = records[0],
+                    rawData = record.getProxy().getReader().rawData;
 
-                  if(operation.success){
-                      Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.successTitle, me.snippets.saveNewsletter.successMessage, me.snippets.growl);
-                      me.subApplication.mailingStore.reload();
-
-                  }else{
-                      if(rawData && rawData.data) {
-                          Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage + "\r\n<br />" + rawData.data, me.snippets.growl);
-                          return;
-                      }
-                      Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage, me.snippets.growl);
-                  }
-              }
-          });
+                if (operation.success) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.successTitle, me.snippets.saveNewsletter.successMessage, me.snippets.growl);
+                    me.subApplication.mailingStore.reload();
+                } else {
+                    if (rawData && rawData.data) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage + '\r\n<br />' + rawData.data, me.snippets.growl);
+                        return;
+                    }
+                    Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage, me.snippets.growl);
+                }
+            }
+        });
     },
 
     /**
@@ -173,11 +169,11 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // The mail-method of the pre-existing newsletter controller reads the newsletters from db.
         // In order not to add additional overhead, simply write the newsletter to db and clean it up next time
         newsletter.save({
-            callback: function(data, operation){
+            callback: function(data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
-                if(operation.success){
+                if (operation.success) {
                     // do the actual ajax query to send the mail
                     Ext.Ajax.request({
                         url: '{url controller=Newsletter action="mail"}',
@@ -190,20 +186,19 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                             Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.successTitle, me.snippets.testNewsletter.successMessage, me.snippets.growl);
                         },
                         failure: function(response) {
-                            if(rawData && rawData.data) {
-                                Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.errorTitle, me.snippets.testNewsletter.errorMessage + "\r\n<br />" + rawData.data, me.snippets.growl);
+                            if (rawData && rawData.data) {
+                                Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.errorTitle, me.snippets.testNewsletter.errorMessage + '\r\n<br />' + rawData.data, me.snippets.growl);
                                 return;
                             }
                             Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.errorTitle, me.snippets.testNewsletter.errorMessage, me.snippets.growl);
                         }
                     });
-                }else{
+                } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage, me.snippets.growl);
                 }
             }
         });
     },
-
 
     /**
      * A simple helper function which reads out the settings from the newsletters window.
@@ -213,12 +208,12 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
     getSettings: function() {
         var me = this,
             record,
-            count, totalCount = 0,
+            totalCount = 0,
             editor = me.getNewsletterEditor(),
             settingsForm = me.getNewsletterSettings(),
             newsletterGroups = settingsForm.newsletterGroups,
             customerGroups = settingsForm.customerGroups,
-            customerStreamGroups = settingsForm.customerStreamGroups,
+            customerStreamSelection = settingsForm.customerStreamSelection,
             groups = Ext.create('Shopware.apps.NewsletterManager.store.RecipientGroup'),
             content = editor.tinyMce.getEditor().getContent();
 
@@ -228,7 +223,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                 count = checkbox.count,
                 value = checkbox.getValue();
 
-            if(value === true) {
+            if (value === true) {
                 totalCount += count;
 
                 record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {
@@ -248,7 +243,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                 count = checkbox.count,
                 value = checkbox.getValue();
 
-            if(value === true) {
+            if (value === true) {
                 totalCount += count;
 
                 record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {
@@ -262,25 +257,19 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             }
         });
 
-        // Iterate the checkboxes and populate the RecipientGroupStore with checked newsletter groups
-        Ext.each(customerStreamGroups, function(checkbox) {
-            var record = checkbox.record,
-                count = checkbox.count,
-                value = checkbox.getValue();
+        customerStreamSelection.store.each(function(stream) {
+            var count = stream.get('newsletter_count');
+            totalCount += count;
 
-            if(value === true) {
-                totalCount += count;
-
-                record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {
-                    internalId: null,
-                    streamId: record.get('id'),
-                    number: count,
-                    name: record.get('name'),
-                    groupkey: false,
-                    isCustomerGroup: false
-                });
-                groups.add(record);
-            }
+            record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {
+                internalId: null,
+                streamId: stream.get('id'),
+                number: count,
+                name: stream.get('name'),
+                groupkey: false,
+                isCustomerGroup: false
+            });
+            groups.add(record);
         });
 
         var settings = Ext.create('Shopware.apps.NewsletterManager.model.Settings'),
@@ -289,15 +278,15 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // Copy the values from the form into the settings model
         settings.set(values);
 
-        if(settingsForm.record.get('id') !== null){
+        if (settingsForm.record.get('id') !== null) {
             settings.set('id', settingsForm.record.get('id'));
         }
         settings.set('content', content);
         settings.set('groups', groups);
         settings.set('recipients', totalCount);
-        if(values['dispatch'] == 1){
+        if (values['dispatch'] == 1) {
             settings.set('plaintext', false);
-        }else{
+        } else {
             settings.set('plaintext', true);
         }
         var senderRecord = me.subApplication.senderStore.getById(values['senderId']);
@@ -317,7 +306,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             textStore, containerStore,
             settings = me.getSettings();
 
-        //Preview & testmail mode does not have a delivery time
+        // Preview & testmail mode does not have a delivery time
         if (typeof record !== 'undefined') {
             me.createTimedDeliveryDateTime(record);
         }
@@ -325,7 +314,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // Create model and store for the text-field (content)
         ctText = Ext.create('Shopware.apps.NewsletterManager.model.ContainerTypeText', {
             headline: settings.get('subject'),
-            content:settings.get('content'),
+            content: settings.get('content'),
             image: '',
             link: '',
             alignment: 'left'
@@ -344,7 +333,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         containerStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.NewsletterManager.model.Container' });
         containerStore.add(container);
 
-        config =  {
+        config = {
             subject: settings.get('subject'),
             customerGroup: settings.get('customerGroup'),
             recipients: settings.get('recipients'),
@@ -354,20 +343,20 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             groups: settings.get('groups'),
             languageId: settings.get('languageId'),
 
-            date :  null,
+            date: null,
             locked: null
 
         };
 
         // Create model for the newsletter
-        if(record == null) {
+        if (record == null) {
             newsletter = Ext.create('Shopware.apps.NewsletterManager.model.Mailing', config);
-        }else{
+        } else {
             record.set(config);
             newsletter = record;
         }
 
-        if(settings.get('id') !== null){
+        if (settings.get('id') !== null) {
             newsletter.set('id', settings.get('id'));
         }
 
@@ -391,44 +380,40 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // The mail-method of the pre-existing newsletter controller reads the newsletters from db.
         // In order not to add additional overhead, simply write the newsletter to db and clean it up next time
         newsletter.save({
-            callback: function(data, operation){
+            callback: function(data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
-                if(operation.success){
-                    if(!Ext.isEmpty(rawData.data)){
+                if (operation.success) {
+                    if (!Ext.isEmpty(rawData.data)) {
                         // Open up a iframe and show the preview
-                        var pos = location.href.search("/backend");
-                        var url = location.href.substr(0, pos) + "/backend/Newsletter/view?id=" + rawData.data.id;
+                        var pos = location.href.search('/backend');
+                        var url = location.href.substr(0, pos) + '/backend/Newsletter/view?id=' + rawData.data.id;
 
                         new Ext.Window({
-                            title : '{s name=preview}Preview: {/s} ' + newsletter.get('subject'),
-                            width : 940,
+                            title: '{s name=preview}Preview: {/s} ' + newsletter.get('subject'),
+                            width: 940,
                             height: 600,
-                            layout : 'fit',
-                            items : [{
-                                xtype : "component",
-                                id    : 'iframe-win',  // Add id
-                                autoEl : {
-                                    tag : "iframe",
-                                    src : url
+                            layout: 'fit',
+                            items: [{
+                                xtype: 'component',
+                                id: 'iframe-win',  // Add id
+                                autoEl: {
+                                    tag: 'iframe',
+                                    src: url
                                 }
                             }]
                         }).show();
-
                     }
-
-                }else{
-                    if(rawData && rawData.data) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage + "\r\n<br />" + rawData.data, me.snippets.growl);
+                } else {
+                    if (rawData && rawData.data) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage + '\r\n<br />' + rawData.data, me.snippets.growl);
                         return;
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage, me.snippets.growl);
                 }
             }
         });
-
-
     },
 
     /**
@@ -521,4 +506,4 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         return date;
     }
 });
-//{/block}
+// {/block}

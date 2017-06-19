@@ -29,29 +29,36 @@
 
 // {namespace name=backend/customer/view/main}
 
-//{block name="backend/base/attribute/field/Shopware.form.field.CustomerStreamGrid"}
+// {block name="backend/base/attribute/field/Shopware.form.field.CustomerStreamGrid"}
 
 Ext.define('Shopware.form.field.CustomerStreamGrid', {
     extend: 'Shopware.form.field.Grid',
     alias: 'widget.shopware-form-field-customer-stream-grid',
     mixins: ['Shopware.model.Helper'],
+    displayNewsletterCount: false,
 
     createColumns: function() {
         var me = this;
 
         return [
             me.createSortingColumn(),
-            { dataIndex: 'name', flex: 1, renderer: me.nameRenderer },
+            { dataIndex: 'name', flex: 1, renderer: Ext.bind(me.nameRenderer, me) },
             me.createActionColumn()
         ];
     },
 
     nameRenderer: function (value, meta, record) {
-        return '<span class="stream-name-column"><b>' + value + '</b> - '+ record.get('customer_count') +' {s name="customer_count_suffix"}{/s}</span>';
+        if (this.displayNewsletterCount) {
+            return '<span class="stream-name-column"><b>' + value + '</b> - ' + record.get('newsletter_count') + ' {s name="newsletter_count_suffix"}{/s}</span>';
+        } else {
+            return '<span class="stream-name-column"><b>' + value + '</b> - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}</span>';
+        }
     },
 
     createSearchField: function() {
-        return Ext.create('Shopware.form.field.CustomerStreamSingleSelection', this.getComboConfig());
+        var config = this.getComboConfig();
+        config.displayNewsletterCount = this.displayNewsletterCount;
+        return Ext.create('Shopware.form.field.CustomerStreamSingleSelection', config);
     },
 
     createActionColumnItems: function() {
@@ -81,4 +88,4 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
         };
     }
 });
-//{/block}
+// {/block}

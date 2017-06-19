@@ -312,37 +312,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      * @return [Array] Contains the three form fields
      */
     createBaseFormRight: function () {
-        var me = this,
-            pwRequired = false;
-
-        if (me.record.data.id === 0) {
-            pwRequired = true;
-        }
-
-        // create the confirm password field to get access in the create password
-        // button handler to pass the field to the generate password event
-        me.confirmField = Ext.create('Ext.form.field.Text', {
-            name: 'confirm',
-            inputType: 'password',
-            anchor: '95%',
-            labelWidth: 155,
-            allowBlank: !pwRequired,
-            required: pwRequired,
-            fieldLabel: me.snippets.confirm.label,
-            supportText: me.snippets.confirm.support,
-            helpTitle: me.snippets.confirm.helpTitle,
-            helpText: me.snippets.confirm.helpText,
-            validator: function (value) {
-                if (Ext.String.trim(value) == Ext.String.trim(me.passwordField.getValue())) {
-                    me.passwordField.clearInvalid();
-                    return true;
-                } else {
-                    return me.snippets.password.message;
-                }
-            }
-        });
-
-        me.passwordContainer = me.createPasswordContainer();
+        var me = this;
 
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
         me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
@@ -353,8 +323,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             allowDelete: false,
             allowAdd: false,
             fieldLabel: '{s name="customer_streams"}{/s}',
-            store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream"),
-            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
+            store: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream")
         });
 
         return [{
