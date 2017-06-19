@@ -193,7 +193,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         $chart = [];
         for ($i = 0; $i < $total; ++$i) {
             $month = $date->add(new DateInterval('P' . 1 . 'M'));
-            $format = $month->format('Y/m');
+            $format = $month->format('Y-m');
 
             if (array_key_exists($format, $data)) {
                 $chart[] = $data[$format];
@@ -356,8 +356,8 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select([
-            "DATE_FORMAT(orders.ordertime, '%Y/%m')",
-            "DATE_FORMAT(orders.ordertime, '%Y/%m') as yearMonth",
+            "DATE_FORMAT(orders.ordertime, '%Y-%m')",
+            "DATE_FORMAT(orders.ordertime, '%Y-%m') as yearMonth",
             'COUNT(DISTINCT orders.id) count_orders',
             'MIN(orders.invoice_amount / orders.currencyFactor) as invoice_amount_min',
             'MAX(orders.invoice_amount / orders.currencyFactor) as invoice_amount_max',
