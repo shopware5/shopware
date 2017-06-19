@@ -53,19 +53,19 @@
             /** @string defaultPerPageSelector - default per page selector which will be removed **/
             'defaultPerPageSelector': '.action--per-page',
 
-            /** @string defaultChangeLayoutSelector - default change layout select which will be get a new margin **/
+            /** @string defaultChangeLayoutSelector - default change layout select which will get a new margin **/
             'defaultChangeLayoutSelector': '.action--change-layout',
 
-            /** @int threshold - after this threshold reached, auto fetching is disabled and the "load more" button is shown. */
+            /** @int threshold - after this threshold is reached, auto fetching is disabled and the "load more" button is shown. */
             'threshold': 3,
 
             /** @string loadMoreCls - this class will be used for fetching further data by button. */
             'loadMoreCls': 'js--load-more',
 
-            /** @string loadPreviousCls - this class  will be used for fetching previous data by button. */
+            /** @string loadPreviousCls - this class will be used for fetching previous data by button. */
             'loadPreviousCls': 'js--load-previous',
 
-            /** @string Class will be used for load more or previous button */
+            /** @string loadBtnCls - this class will be used for load more or previous button */
             'loadBtnCls': 'btn is--primary is--icon-right',
 
             /** @string loadMoreSnippet - this snippet will be printed inside the load more button */
@@ -74,7 +74,7 @@
             /** @string loadPreviousSnippet - this snippet will be printed inside the load previous button */
             'loadPreviousSnippet': 'Vorherige Artikel laden',
 
-            /** @string listingContainerSelector - will be used for prepending and appending load previous and load more button */
+            /** @string listingContainerSelector - will be used for prepending and appending the load previous and load more button */
             'listingContainerSelector': '.listing--container',
 
             /** @string pagingBottomSelector - this class will be used for removing the bottom paging bar if infinite scrolling is enabled */
@@ -87,7 +87,10 @@
             ajaxUrl: window.controller.ajax_listing || null,
 
             /** @string delegateConSelector - selector for delegate container, used for reload buttons */
-            delegateConSelector: '.listing--wrapper'
+            delegateConSelector: '.listing--wrapper',
+
+            /** @string addArticleSelector - selector for the jquery.add-article plugin to enable support for the off canvas cart */
+            addArticleSelector: '*[data-add-article="true"]'
         },
 
         /**
@@ -243,7 +246,7 @@
                     return $(item).offset().top <= docTop;
                 });
 
-            // First visible Product
+            // First visible product
             var $firstProduct = $(visibleProducts).last(),
                 tmpPageIndex = $firstProduct.attr('data-page-index');
 
@@ -459,7 +462,7 @@
 
             $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [ me, template ]);
 
-            // Cancel is no data provided
+            // cancel if no data provided
             if (!template) {
                 me.isFinished = true;
                 me.closeLoadingIndicator();
@@ -473,6 +476,9 @@
             picturefill();
 
             me.closeLoadingIndicator();
+
+            // update add article plugin to enable off canvas cart support for the new articles
+            StateManager.updatePlugin(me.opts.addArticleSelector, 'swAddArticle');
 
             // enable loading for further pages
             me.isLoading = false;
