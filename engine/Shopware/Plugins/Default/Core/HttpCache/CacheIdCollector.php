@@ -36,7 +36,8 @@ class CacheIdCollector
     /**
      * Returns an array of affected cache ids for this $controller
      *
-     * @param Controller $controller
+     * @param Controller           $controller
+     * @param ShopContextInterface $context
      *
      * @return array
      */
@@ -210,7 +211,7 @@ class CacheIdCollector
         $cacheIds = [];
 
         foreach ($view->getAssign('sArticles') as $article) {
-            $cacheIds[] = $article['articleID'];
+            $cacheIds[] = 'a' . $article['articleID'];
         }
 
         return $cacheIds;
