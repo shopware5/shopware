@@ -74,6 +74,7 @@
 
             {* Paging *}
             {block name="frontend_newsletter_listing_paging"}
+                {$pages = $sNumberPages}
                 {include file="frontend/listing/actions/action-pagination.tpl"}
             {/block}
         </div>
