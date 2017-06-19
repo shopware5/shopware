@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Banner;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -64,32 +65,22 @@ class Repository extends ModelRepository
     {
         $builder = $this->getBannerMainQuery($filter);
         $today = new \DateTime();
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom', '?3'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validFrom', '?4'),
-                    $builder->expr()->isNull('banner.validFrom')
-                )
-            )
-        )->setParameter(3, $today)->setParameter(4, null);
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo', '?5'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validTo', '?6'),
-                    $builder->expr()->isNull('banner.validTo')
-                )
-            )
-        )->setParameter(5, $today)
-         ->setParameter(6, null);
+
+        $builder->andWhere('(banner.validFrom <= ?3 OR (banner.validFrom = ?4 OR banner.validFrom IS NULL))')
+                ->setParameter(3, $today)
+                ->setParameter(4, null);
+
+        $builder->andWhere('(banner.validTo >= ?5 OR (banner.validTo = ?6 OR banner.validTo IS NULL))')
+                ->setParameter(5, $today)
+                ->setParameter(6, null);
+
         $ids = $this->getBannerIds($filter, $limit);
         if (!count($ids)) {
             return false;
         }
 
-        $builder->andWhere($builder->expr()->in('banner.id', '?7'))
-                ->setParameter(7, $ids);
+        $builder->andWhere('banner.id IN (?7)')
+                ->setParameter(7, $ids, Connection::PARAM_INT_ARRAY);
 
         return $builder->getQuery();
     }
@@ -126,25 +117,15 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('banner');
         $today = new \DateTime();
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom', '?3'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validFrom', '?4'),
-                    $builder->expr()->isNull('banner.validFrom')
-                )
-            )
-        )->setParameter(3, $today)->setParameter(4, null);
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo', '?5'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validTo', '?6'),
-                    $builder->expr()->isNull('banner.validTo')
-                )
-            )
-        )->setParameter(5, $today)
-         ->setParameter(6, null);
+
+        $builder->andWhere('(banner.validFrom <= ?3 OR (banner.validFrom = ?4 OR banner.validFrom IS NULL))')
+                ->setParameter(3, $today)
+                ->setParameter(4, null);
+
+        $builder->andWhere('(banner.validTo >= ?5 OR (banner.validTo = ?6 OR banner.validTo IS NULL))')
+                ->setParameter(5, $today)
+                ->setParameter(6, null);
+
         $builder->select(['banner.id as id'])
             ->andWhere('banner.categoryId = ?1')
             ->setParameter(1, $categoryId);

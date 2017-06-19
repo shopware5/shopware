@@ -157,7 +157,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Get documents of a specific type for the given orders
      *
-     * @param $orders
+     * @param $orderIds
      * @param $docType
      *
      * @return \Doctrine\ORM\Query
@@ -173,7 +173,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.documents', 'documents')
             ->where('documents.typeId = :type')
-            ->andWhere($builder->expr()->in('orders.id', $orderIds))
+            ->andWhere('orders.id IN (:orderIds)')
+            ->setParameter('orderIds', $orderIds, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
             ->setParameter(':type', $docType);
 
         return $builder->getQuery();

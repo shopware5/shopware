@@ -237,7 +237,7 @@ class Repository extends ModelRepository
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1']));
+        $builder->andWhere('orders.status != -1');
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
@@ -309,7 +309,7 @@ class Repository extends ModelRepository
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1']));
+        $builder->andWhere('orders.status != -1');
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
@@ -432,7 +432,7 @@ class Repository extends ModelRepository
         ]);
         $builder->from('Shopware\Models\Order\History', 'history')
                 ->leftJoin('history.user', 'user')
-                ->where($builder->expr()->eq('history.orderId', '?1'))
+                ->where('history.orderId = ?1')
                 ->setParameter(1, $orderId);
 
         if (!empty($orderBy)) {
@@ -491,15 +491,11 @@ class Repository extends ModelRepository
         return $builder->select(['voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'])
                        ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                        ->join('voucher.codes', 'codes')
-                       ->where(
-                           $builder->expr()->orX(
-                               $builder->expr()->gte('voucher.validTo', $today),
-                               $builder->expr()->isNull('voucher.validTo')
-                           )
-                       )
-                       ->andWhere($builder->expr()->isNull('codes.customerId'))
-                       ->andWhere($builder->expr()->eq('codes.cashed', 0))
-                       ->andWhere($builder->expr()->eq('voucher.modus', 1))
+                       ->where('(voucher.validTo >= :today OR voucher.validTo IS NULL)')
+                       ->setParameter('today', $today)
+                       ->andWhere('codes.customerId IS NULL')
+                       ->andWhere('codes.cashed = 0')
+                       ->andWhere('voucher.modus = 1')
                        ->getQuery();
     }
 
@@ -522,20 +518,18 @@ class Repository extends ModelRepository
                 }
                 switch ($filter['property']) {
                     case 'free':
-                        $builder->andWhere(
-                            $expr->orX(
-                                $expr->like('orders.number', '?1'),
-                                $expr->like('orders.invoiceAmount', '?1'),
-                                $expr->like('orders.transactionId', '?1'),
-                                $expr->like('billing.company', '?3'),
-                                $expr->like('customer.email', '?3'),
-                                $expr->like('billing.lastName', '?3'),
-                                $expr->like('billing.firstName', '?3'),
-                                $expr->like('orders.comment', '?3'),
-                                $expr->like('orders.customerComment', '?3'),
-                                $expr->like('orders.internalComment', '?3')
-                            )
-                        );
+                        $builder->andWhere('(
+                            orders.number LIKE ?1
+                            OR orders.invoiceAmount LIKE ?1
+                            OR orders.transactionId LIKE ?1
+                            OR billing.company LIKE ?3
+                            OR customer.email LIKE ?3
+                            OR billing.lastName LIKE ?3
+                            OR billing.firstName LIKE ?3
+                            OR orders.comment LIKE ?3
+                            OR orders.customerComment LIKE ?3
+                            OR orders.internalComment LIKE ?3                        
+                        )');
                         $builder->setParameter(1, $filter['value'] . '%');
                         $builder->setParameter(3, '%' . $filter['value'] . '%');
                         break;
