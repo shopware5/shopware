@@ -34,17 +34,20 @@
                             {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
 
                             {if $image.retinaSource}
-                                {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.retinaSource} {$image.maxWidth * 2}w"}
+                                {$retinaSrcSet = "{if $retinaSrcSet}{$retinaSrcSet}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
                             {/if}
                         {/foreach}
                     {else}
                         {$baseSource = $Data.source}
                     {/if}
 
-                    <img src="{$baseSource}"
-                         class="banner--image"
-                         {if $srcSet}sizes="{$itemSize}" srcset="{$srcSet}"{/if}
-                         {if $Data.title}alt="{$Data.title|escape}" {/if}/>
+                    <picture class="banner--image">
+                        <source sizes="{$itemSize}" srcset="{$retinaSrcSet}" media="(min-resolution: 192dpi)">
+                        <source sizes="{$itemSize}" srcset="{$srcSet}">
+
+                        {* Fallback *}
+                        <img src="{$baseSource}"{if $Data.title} alt="{$Data.title|escape}"{/if} />
+                    </picture>
                 {/block}
 
                 {* Banner mapping, based on the same technic as an image map *}
