@@ -35,5 +35,9 @@ Ext.define('Shopware.apps.Attributes.store.Table', {
         url: '{url controller="Attributes" action="getTables"}',
         reader: { type: 'json', root: 'data' }
     },
-    model: 'Shopware.apps.Attributes.model.Table'
+    model: 'Shopware.apps.Attributes.model.Table',
+    sorters: [{
+        property: 'label',
+        direction: 'ASC'
+    }]
 });
