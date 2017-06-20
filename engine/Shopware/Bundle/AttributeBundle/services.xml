@@ -110,7 +110,7 @@
             <tag name="attribute_search_repository" />
         </service>
 
-        <service id="shopware_attribute.category_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
+        <service id="shopware_attribute.category_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CategorySearcher">
             <argument>Shopware\Models\Category\Category</argument>
             <argument type="service" id="models" />
         </service>
