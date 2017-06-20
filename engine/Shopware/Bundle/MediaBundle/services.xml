@@ -69,6 +69,10 @@
             <tag name="shopware_media.optimizer" priority="80" />
         </service>
 
+        <service id="shopware_media.optimizer.guetzli" class="Shopware\Bundle\MediaBundle\Optimizer\GuetzliOptimizer">
+            <tag name="shopware_media.optimizer" priority="110" />
+        </service>
+
         <!-- Media Adapters -->
         <service id="shopware_media.adapter.local" class="Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory">
             <tag name="shopware_media.adapter" />
