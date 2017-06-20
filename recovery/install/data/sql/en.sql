@@ -526,18 +526,20 @@ UPDATE s_search_fields SET `name` = 'Product keywords translation' WHERE id = 8;
 -- s_search_custom_sorting --
 UPDATE s_search_custom_sorting SET label = 'Release date' WHERE id = 1;
 UPDATE s_search_custom_sorting SET label = 'Popularity' WHERE id = 2;
-UPDATE s_search_custom_sorting SET label = 'Cheapest price' WHERE id = 3;
+UPDATE s_search_custom_sorting SET label = 'Lowest price' WHERE id = 3;
 UPDATE s_search_custom_sorting SET label = 'Highest price' WHERE id = 4;
 UPDATE s_search_custom_sorting SET label = 'Article description' WHERE id = 5;
-UPDATE s_search_custom_sorting SET label = 'Beste hits' WHERE id = 7;
-UPDATE s_search_custom_facet SET `name` = 'Categories' WHERE id = 1;
-UPDATE s_search_custom_facet SET `name` = 'Immediate delivery' WHERE id = 2;
-UPDATE s_search_custom_facet SET `name` = 'Manufacturer' WHERE id = 3;
-UPDATE s_search_custom_facet SET `name` = 'Price' WHERE id = 4;
+UPDATE s_search_custom_sorting SET label = 'Best results' WHERE id = 7;
+
+-- s_search_custom_facet --
+UPDATE s_search_custom_facet SET `name` = 'Categories', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\CategoryFacet":{"label":"Categories", "depth": "2"}}' WHERE id = 1;
+UPDATE s_search_custom_facet SET `name` = 'Immediately available', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\ImmediateDeliveryFacet":{"label":"Immediately available"}}' WHERE id = 2;
+UPDATE s_search_custom_facet SET `name` = 'Manufacturer', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\ManufacturerFacet":{"label":"Manufacturer"}}' WHERE id = 3;
+UPDATE s_search_custom_facet SET `name` = 'Price', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\PriceFacet":{"label":"Price"}}' WHERE id = 4;
 UPDATE s_search_custom_facet SET `name` = 'Properties' WHERE id = 5;
-UPDATE s_search_custom_facet SET `name` = 'Shipping free' WHERE id = 6;
-UPDATE s_search_custom_facet SET `name` = 'Rating' WHERE id = 7;
-UPDATE s_search_custom_facet SET `name` = 'Weight' WHERE id = 8;
-UPDATE s_search_custom_facet SET `name` = 'Width' WHERE id = 9;
-UPDATE s_search_custom_facet SET `name` = 'Height' WHERE id = 10;
-UPDATE s_search_custom_facet SET `name` = 'Length' WHERE id = 11;
+UPDATE s_search_custom_facet SET `name` = 'Shipping free', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\ShippingFreeFacet":{"label":"Shipping free"}}' WHERE id = 6;
+UPDATE s_search_custom_facet SET `name` = 'Rating', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\VoteAverageFacet":{"label":"Rating"}}' WHERE id = 7;
+UPDATE s_search_custom_facet SET `name` = 'Weight', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\WeightFacet":{"label":"Weight","suffix":"kg","digits":2}}' WHERE id = 8;
+UPDATE s_search_custom_facet SET `name` = 'Width', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\WidthFacet":{"label":"Width","suffix":"cm","digits":2}}' WHERE id = 9;
+UPDATE s_search_custom_facet SET `name` = 'Height', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\HeightFacet":{"label":"Height","suffix":"cm","digits":2}}' WHERE id = 10;
+UPDATE s_search_custom_facet SET `name` = 'Length', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\LengthFacet":{"label":"Length","suffix":"cm","digits":2}}' WHERE id = 11;
