@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             type: 'Numeric',
             position: 'left',
             fields: me.getAxesFields(),
-            title: '{s name="amount"}{/s}',
+            title: '{s name="amount_axes"}{/s}',
             grid: true,
             minimum: 0,
             label: {
