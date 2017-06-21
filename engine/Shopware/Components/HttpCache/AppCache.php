@@ -284,7 +284,7 @@ class AppCache extends HttpCache
         if (isset($this->options['storeClass'])) {
             $class = $this->options['storeClass'];
 
-            return new $class($this->options);
+            return new $class($this->options, $this->kernel);
         }
 
         return new Store($this->cacheDir ? $this->cacheDir : $this->kernel->getCacheDir() . '/http_cache', $this->options['cache_cookies'], $this->options['lookup_optimization']);
