@@ -11,8 +11,9 @@ module.exports = {
         'picturefill': true,
         'StorageManager': true,
         'Modernizr': true,
-        'Overlay': true
-
+        'Overlay': true,
+        'Shopware': true,
+        'Ext': true
     },
     'rules': {
         'arrow-parens': 0,
