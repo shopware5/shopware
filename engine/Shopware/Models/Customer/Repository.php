@@ -330,7 +330,6 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.paymentStatus', 'paymentStatus');
 
-        $expr = Shopware()->Models()->getExpressionBuilder();
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
             $builder->where('orders.customerId = :customerId');
@@ -351,7 +350,8 @@ class Repository extends ModelRepository
         } else {
             $builder->where('orders.customerId = :customerId')->setParameter('customerId', $customerId);
         }
-        $builder->andWhere('orders.status NOT IN (-1, 4)');
+        $builder->andWhere('orders.status NOT IN (:stati)');
+        $builder->setParameter(':stati', [-1, 4], Connection::PARAM_INT_ARRAY);
 
         $this->addOrderBy($builder, $orderBy);
 
