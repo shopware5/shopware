@@ -2,6 +2,9 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+# 5.2.26
+* Added config check to disable the `Tell a friend` page if it is disabled via config.
+
 ## 5.2.25
 * Added notify event `Shopware_Modules_Basket_AddArticle_Added` in `engine/Shopware/Core/sBasket.php`
 * The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
