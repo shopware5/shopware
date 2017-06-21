@@ -51,20 +51,20 @@ class ManufacturerTest extends TestCase
         $date->modify('-3 day');
         $changed = $date->format(\DateTime::ISO8601);
 
-        $testData = array(
-            "name" => "fooobar",
-            "description" => "foobar description with exceptionell long text",
-            "link" => "http://shopware.com",
-            "image" => [
-                "link" => "http://assets.shopware.com/sw_logo_white.png"
+        $testData = [
+            'name' => 'fooobar',
+            'description' => 'foobar description with exceptionell long text',
+            'link' => 'http://shopware.com',
+            'image' => [
+                'link' => 'http://assets.shopware.com/sw_logo_white.png',
             ],
 
-            "metaTitle" => "test, test",
-            "metaKeywords" => "test, test",
-            "metaDescription" => "Description Test",
+            'metaTitle' => 'test, test',
+            'metaKeywords' => 'test, test',
+            'metaDescription' => 'Description Test',
 
-            "changed" => $changed
-        );
+            'changed' => $changed,
+        ];
 
         $manufacturer = $this->resource->create($testData);
 
@@ -105,9 +105,9 @@ class ManufacturerTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
-            'name'   => uniqid(rand()) . 'foobar supplier'
-        );
+        $testData = [
+            'name' => uniqid(rand()) . 'foobar supplier',
+        ];
 
         $manufacturer = $this->resource->update($id, $testData);
 
@@ -124,7 +124,7 @@ class ManufacturerTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -132,7 +132,7 @@ class ManufacturerTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**
@@ -167,8 +167,8 @@ class ManufacturerTest extends TestCase
         $manufacturer = $this->resource->create([
             'name' => 'foo',
             'image' => [
-                'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
-            ]
+                'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
+            ],
         ]);
 
         $this->assertNotEmpty($manufacturer->getImage());
@@ -184,14 +184,14 @@ class ManufacturerTest extends TestCase
     public function testMediaUploadOnUpdate()
     {
         $manufacturer = $this->resource->create([
-            'name' => 'bar'
+            'name' => 'bar',
         ]);
 
         $this->resource->update($manufacturer->getId(), [
             'name' => 'bar',
             'image' => [
-                'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
-            ]
+                'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
+            ],
         ]);
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);

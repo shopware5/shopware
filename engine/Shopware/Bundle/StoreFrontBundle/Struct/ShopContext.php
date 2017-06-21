@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopContext extends Extendable implements ProductContextInterface, \JsonSerializable

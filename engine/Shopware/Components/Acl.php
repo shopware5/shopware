@@ -24,9 +24,9 @@
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Privilege;
+use Shopware\Models\User\Resource;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\Rule;
-use Shopware\Models\User\Resource;
 
 /**
  * Shopware ACL Components
@@ -48,16 +48,6 @@ class Shopware_Components_Acl extends Zend_Acl
     }
 
     /**
-     * Create shopware acl tree
-     */
-    private function initShopwareAclTree()
-    {
-        $this->initAclResources()
-            ->initAclRoles()
-            ->initAclRoleConditions();
-    }
-
-    /**
      * Get all resources from database and add to acl tree
      *
      * @return \Shopware_Components_Acl
@@ -67,7 +57,7 @@ class Shopware_Components_Acl extends Zend_Acl
         $repository = $this->em->getRepository(Resource::class);
         $resources = $repository->findAll();
 
-        /**@var $resource Shopware\Models\User\Resource */
+        /** @var $resource Shopware\Models\User\Resource */
         foreach ($resources as $resource) {
             $this->addResource($resource);
         }
@@ -137,7 +127,9 @@ class Shopware_Components_Acl extends Zend_Acl
 
     /**
      * Is the resource identified by $resourceName already in database ?
+     *
      * @param $resourceName
+     *
      * @return bool
      */
     public function hasResourceInDatabase($resourceName)
@@ -150,10 +142,12 @@ class Shopware_Components_Acl extends Zend_Acl
 
     /**
      * Create a new resource and optionally privileges, menu item relationships and plugin dependency
+     *
      * @param $resourceName - unique identifier or resource key
-     * @param array|null $privileges - optionally array [a,b,c] of new privileges
-     * @param null $menuItemName - optionally s_core_menu.name item to link to this resource
-     * @param null $pluginID - optionally pluginID that implements this resource
+     * @param array|null $privileges   - optionally array [a,b,c] of new privileges
+     * @param null       $menuItemName - optionally s_core_menu.name item to link to this resource
+     * @param null       $pluginID     - optionally pluginID that implements this resource
+     *
      * @throws Enlight_Exception
      */
     public function createResource($resourceName, array $privileges = null, $menuItemName = null, $pluginID = null)
@@ -189,7 +183,8 @@ class Shopware_Components_Acl extends Zend_Acl
 
     /**
      * Create a privilege in a particular resource
-     * @param int $resourceId
+     *
+     * @param int    $resourceId
      * @param string $name
      */
     public function createPrivilege($resourceId, $name)
@@ -204,7 +199,9 @@ class Shopware_Components_Acl extends Zend_Acl
 
     /**
      * Delete resource and its privileges from database
+     *
      * @param $resourceName
+     *
      * @return bool
      */
     public function deleteResource($resourceName)
@@ -231,5 +228,15 @@ class Shopware_Components_Acl extends Zend_Acl
         $this->em->flush();
 
         return true;
+    }
+
+    /**
+     * Create shopware acl tree
+     */
+    private function initShopwareAclTree()
+    {
+        $this->initAclResources()
+            ->initAclRoles()
+            ->initAclRoleConditions();
     }
 }

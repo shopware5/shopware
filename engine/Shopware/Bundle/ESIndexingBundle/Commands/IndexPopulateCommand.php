@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class IndexPopulateCommand extends ShopwareCommand
@@ -69,7 +69,7 @@ class IndexPopulateCommand extends ShopwareCommand
 
         /** @var Shop $shop */
         foreach ($shops as $shop) {
-            $output->writeln("\n## Indexing shop " . $shop->getName() . " ##");
+            $output->writeln("\n## Indexing shop " . $shop->getName() . ' ##');
             $indexer->index($shop, $helper);
         }
     }

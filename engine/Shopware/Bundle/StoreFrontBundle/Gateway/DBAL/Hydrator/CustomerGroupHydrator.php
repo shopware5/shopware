@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerGroupHydrator extends Hydrator
@@ -48,6 +48,7 @@ class CustomerGroupHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Customer\Group
      */
     public function hydrate(array $data)

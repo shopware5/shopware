@@ -30,7 +30,7 @@ use Shopware\Components\Api\Exception as ApiException;
  * CustomerGroup API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerGroup extends Resource
@@ -44,10 +44,12 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param  int $id
-     * @return array|\Shopware\Models\Customer\Group
+     * @param int $id
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Customer\Group
      */
     public function getOne($id)
     {
@@ -66,7 +68,7 @@ class CustomerGroup extends Resource
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
-        /** @var $category \Shopware\Models\Customer\Group*/
+        /** @var $category \Shopware\Models\Customer\Group */
         $result = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$result) {
@@ -77,13 +79,14 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param  int   $offset
-     * @param  int   $limit
-     * @param  array $criteria
-     * @param  array $orderBy
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $criteria
+     * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -106,14 +109,16 @@ class CustomerGroup extends Resource
         //returns the category data
         $results = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $results, 'total' => $totalResult);
+        return ['data' => $results, 'total' => $totalResult];
     }
 
     /**
-     * @param  array $params
-     * @return \Shopware\Models\Customer\Group
+     * @param array $params
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
+     *
+     * @return \Shopware\Models\Customer\Group
      */
     public function create(array $params)
     {
@@ -143,13 +148,15 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param  int $id
-     * @param  array $params
-     * @return \Shopware\Models\Customer\Group
+     * @param int   $id
+     * @param array $params
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return \Shopware\Models\Customer\Group
      */
     public function update($id, array $params)
     {
@@ -186,31 +193,12 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * Helper function to save discounts for a given group.
-     * @param array $discounts
-     * @param \Shopware\Models\Customer\Group $group
-     */
-    private function saveDiscounts($discounts, $group)
-    {
-        $oldDiscounts = $group->getDiscounts();
-        foreach ($oldDiscounts as $oldDiscount) {
-            if (!in_array($oldDiscount, $discounts)) {
-                $this->getManager()->remove($oldDiscount);
-            }
-        }
-        $this->getManager()->flush();
-        /** @var \Shopware\Models\Customer\Discount $discount */
-        foreach ($discounts as $discount) {
-            $discount->setGroup($group);
-            $this->getManager()->persist($discount);
-        }
-    }
-
-    /**
-     * @param  int $id
-     * @return \Shopware\Models\Customer\Group
+     * @param int $id
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Customer\Group
      */
     public function delete($id)
     {
@@ -234,18 +222,42 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param array $params
+     * Helper function to save discounts for a given group.
+     *
+     * @param array                           $discounts
+     * @param \Shopware\Models\Customer\Group $group
+     */
+    private function saveDiscounts($discounts, $group)
+    {
+        $oldDiscounts = $group->getDiscounts();
+        foreach ($oldDiscounts as $oldDiscount) {
+            if (!in_array($oldDiscount, $discounts)) {
+                $this->getManager()->remove($oldDiscount);
+            }
+        }
+        $this->getManager()->flush();
+        /** @var \Shopware\Models\Customer\Discount $discount */
+        foreach ($discounts as $discount) {
+            $discount->setGroup($group);
+            $this->getManager()->persist($discount);
+        }
+    }
+
+    /**
+     * @param array                           $params
      * @param \Shopware\Models\Customer\Group $customerGroup
+     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
      * @return mixed
      */
     private function prepareCustomerGroupData($params, $customerGroup = null)
     {
-        $defaults = array(
+        $defaults = [
             'taxInput' => 1,
-            'tax'      => 1,
-            'mode'     => 0
-        );
+            'tax' => 1,
+            'mode' => 0,
+        ];
 
         if ($customerGroup === null) {
             if (!isset($params['taxInput'])) {
@@ -280,15 +292,15 @@ class CustomerGroup extends Resource
         $discountRepository = $this->getManager()->getRepository('\Shopware\Models\Customer\Discount');
 
         if (isset($params['discounts'])) {
-            $discounts = array();
+            $discounts = [];
             foreach ($params['discounts'] as $discount) {
                 $discountModel = null;
                 if ($customerGroup) {
-                    $discountModel = $discountRepository->findOneBy(array(
-                        'group'    => $customerGroup,
+                    $discountModel = $discountRepository->findOneBy([
+                        'group' => $customerGroup,
                         'discount' => $discount['discount'],
-                        'value'    => $discount['value']
-                    ));
+                        'value' => $discount['value'],
+                    ]);
                 }
 
                 if ($discountModel === null) {

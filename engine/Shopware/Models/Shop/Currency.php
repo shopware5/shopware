@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Shop;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Default Currency Model Entity
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Currency extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,49 +45,49 @@ class Currency extends ModelEntity
     private $id;
 
     /**
-     * @var string $currency
+     * @var string
      *
      * @ORM\Column(name="currency", type="string", length=255, nullable=false)
      */
     private $currency;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var integer $standard
+     * @var int
      *
      * @ORM\Column(name="standard", type="integer", nullable=false)
      */
     private $default = false;
 
     /**
-     * @var float $factor
+     * @var float
      *
      * @ORM\Column(name="factor", type="float", nullable=false)
      */
     private $factor;
 
     /**
-     * @var string $symbol
+     * @var string
      *
      * @ORM\Column(name="templatechar", type="string", length=255, nullable=false)
      */
     private $symbol = '';
 
     /**
-     * @var integer $symbolPosition
+     * @var int
      *
      * @ORM\Column(name="symbol_position", type="integer", nullable=false)
      */
     private $symbolPosition = 0;
 
     /**
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -96,7 +96,7 @@ class Currency extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -107,11 +107,13 @@ class Currency extends ModelEntity
      * Set currency
      *
      * @param string $currency
+     *
      * @return Currency
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+
         return $this;
     }
 
@@ -129,11 +131,13 @@ class Currency extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Currency
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -150,19 +154,21 @@ class Currency extends ModelEntity
     /**
      * Set default
      *
-     * @param integer $default
+     * @param int $default
+     *
      * @return Currency
      */
     public function setDefault($default)
     {
         $this->default = $default;
+
         return $this;
     }
 
     /**
      * Get default
      *
-     * @return integer
+     * @return int
      */
     public function getDefault()
     {
@@ -173,11 +179,13 @@ class Currency extends ModelEntity
      * Set factor
      *
      * @param float $factor
+     *
      * @return Currency
      */
     public function setFactor($factor)
     {
         $this->factor = $factor;
+
         return $this;
     }
 
@@ -195,11 +203,13 @@ class Currency extends ModelEntity
      * Set symbol
      *
      * @param string $symbol
+     *
      * @return Currency
      */
     public function setSymbol($symbol)
     {
         $this->symbol = $symbol;
+
         return $this;
     }
 
@@ -216,19 +226,21 @@ class Currency extends ModelEntity
     /**
      * Set symbolPosition
      *
-     * @param integer $symbolPosition
+     * @param int $symbolPosition
+     *
      * @return Currency
      */
     public function setSymbolPosition($symbolPosition)
     {
         $this->symbolPosition = $symbolPosition;
+
         return $this;
     }
 
     /**
      * Get symbolPosition
      *
-     * @return integer
+     * @return int
      */
     public function getSymbolPosition()
     {
@@ -238,19 +250,21 @@ class Currency extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Currency
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -270,18 +284,19 @@ class Currency extends ModelEntity
      */
     public function toArray()
     {
-        $options = array(
+        $options = [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'currency' => $this->getCurrency(),
-            'factor' => $this->getFactor()
-        );
+            'factor' => $this->getFactor(),
+        ];
         if ($this->getSymbol()) {
             $options['symbol'] = $this->getSymbol();
         }
         if ($this->getSymbolPosition() > 0) {
             $options['position'] = $this->getSymbolPosition();
         }
+
         return $options;
     }
 }

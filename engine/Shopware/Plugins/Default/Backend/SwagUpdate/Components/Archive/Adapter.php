@@ -29,7 +29,7 @@ use SeekableIterator;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Archive;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Adapter implements SeekableIterator, Countable
@@ -94,7 +94,7 @@ abstract class Adapter implements SeekableIterator, Countable
         if (!$this->valid()) {
             return false;
         }
-        $result = array($this->key(), $this->current());
+        $result = [$this->key(), $this->current()];
         $this->next();
 
         return $result;

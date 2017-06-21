@@ -29,36 +29,37 @@ class ResultMapper
     /**
      * @param $result ValidResult|FinishResult|ErrorResult
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function toExtJs($result)
     {
         if ($result instanceof ValidResult) {
             return [
-                'valid'   => true,
-                'offset'  => $result->getOffset(),
-                'total'   => $result->getTotal(),
+                'valid' => true,
+                'offset' => $result->getOffset(),
+                'total' => $result->getTotal(),
                 'success' => true,
             ];
         }
 
         if ($result instanceof FinishResult) {
             return [
-                'valid'   => false,
-                'offset'  => $result->getOffset(),
-                'total'   => $result->getTotal(),
-                'success' => true
+                'valid' => false,
+                'offset' => $result->getOffset(),
+                'total' => $result->getTotal(),
+                'success' => true,
             ];
         }
 
         if ($result instanceof ErrorResult) {
             return [
-                'valid'    => false,
+                'valid' => false,
                 'errorMsg' => $result->getMessage(),
             ];
         }
 
-        throw new \Exception(sprintf("Result type %s can not be mapped.", get_class($result)));
+        throw new \Exception(sprintf('Result type %s can not be mapped.', get_class($result)));
     }
 }

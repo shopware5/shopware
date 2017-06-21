@@ -35,6 +35,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
 {
     /**
      * Entity Manager
+     *
      * @var null
      */
     protected $manager = null;
@@ -55,82 +56,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     protected $productFeedRepository = null;
 
     /**
-     * Helper function to get access to the productFeed repository.
-     * @return \Shopware\Models\ProductFeed\Repository
-     */
-    private function getProductFeedRepository()
-    {
-        if ($this->productFeedRepository === null) {
-            $this->productFeedRepository = Shopware()->Models()->getRepository('Shopware\Models\ProductFeed\ProductFeed');
-        }
-        return $this->productFeedRepository;
-    }
-
-    /**
-     * Helper function to get access to the shop repository.
-     * @return \Shopware\Models\Shop\Repository
-     */
-    private function getShopRepository()
-    {
-        if ($this->shopRepository === null) {
-            $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        }
-        return $this->shopRepository;
-    }
-
-    /**
-     * Helper function to get access to the article repository.
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getArticleRepository()
-    {
-        if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-        }
-        return $this->articleRepository;
-    }
-
-
-    /**
-     * Internal helper function to get access to the entity manager.
-     * @return null
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager= Shopware()->Models();
-        }
-        return $this->manager;
-    }
-
-    /**
-     * Registers the different acl permission for the different controller actions.
-     *
-     * @return void
-     */
-    protected function initAcl()
-    {
-        /**
-         * permission to list all feeds
-         */
-        $this->addAclPermission('getFeedsAction', 'read', 'Insufficient Permissions');
-
-        /**
-         * permission to show detail information of a feed
-         */
-        $this->addAclPermission('getDetailFeedAction', 'read', 'Insufficient Permissions');
-
-        /**
-         * permission to delete the feed
-         */
-        $this->addAclPermission('deleteFeedAction', 'delete', 'Insufficient Permissions');
-    }
-
-
-    /**
      * returns a JSON string to the view containing all Product Feeds
-     *
-     * @return void
      */
     public function getFeedsAction()
     {
@@ -138,7 +64,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
             /** @var $repository \Shopware\Models\ProductFeed\Repository */
             $repository = Shopware()->Models()->getRepository(ProductFeed::class);
             $dataQuery = $repository->getListQuery(
-                $this->Request()->getParam('sort', array()),
+                $this->Request()->getParam('sort', []),
                 $this->Request()->getParam('start'),
                 $this->Request()->getParam('limit')
             );
@@ -146,42 +72,24 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
             $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
             $feeds = $dataQuery->getArrayResult();
 
-            $this->View()->assign(array('success' => true, 'data' => $feeds, 'totalCount' => $totalCount));
+            $this->View()->assign(['success' => true, 'data' => $feeds, 'totalCount' => $totalCount]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
     /**
      * returns a JSON string to the view containing the detail information of an Product Feed
-     *
-     * @return void
      */
     public function getDetailFeedAction()
     {
         $feedId = intval($this->Request()->feedId);
         $feed = $this->getFeed($feedId);
-        $this->View()->assign(array('success' => true, 'data' => $feed));
-    }
-
-    /**
-     * Returns an array with feed data for the passed feed id.
-     * @param $id
-     * @return mixed
-     */
-    private function getFeed($id)
-    {
-        /** @var $repository \Shopware\Models\ProductFeed\Repository */
-        $repository = Shopware()->Models()->getRepository(ProductFeed::class);
-        $dataQuery = $repository->getDetailQuery($id);
-        $feed = $dataQuery->getArrayResult();
-        return $feed[0];
+        $this->View()->assign(['success' => true, 'data' => $feed]);
     }
 
     /**
      * returns a JSON string to the view containing the supplier information of an Product Feed
-     *
-     * @return void
      */
     public function getSuppliersAction()
     {
@@ -198,14 +106,12 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $data = $dataQuery->getArrayResult();
 
         //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**
      * returns a JSON string to the view containing the shops information of an Product Feed we can't use the base
      * store because we need all shops and children
-     *
-     * @return void
      */
     public function getShopsAction()
     {
@@ -213,14 +119,11 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $data = $shopQuery->getArrayResult();
 
         //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => count($data)]);
     }
-
 
     /**
      * returns a JSON string to the view containing the article information of an Product Feed
-     *
-     * @return void
      */
     public function getArticlesAction()
     {
@@ -236,20 +139,19 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $data = $dataQuery->getArrayResult();
 
         //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**
      * Creates or updates a new Product Feed
      *
      * @throws RuntimeException
-     * @return void
      */
     public function saveFeedAction()
     {
         $params = $this->Request()->getParams();
 
-        $feedId = $params["id"];
+        $feedId = $params['id'];
         if (!empty($feedId)) {
             //edit Product Feed
             $productFeed = Shopware()->Models()->getRepository(ProductFeed::class)->find($feedId);
@@ -261,7 +163,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
             //new Product Feed
             $productFeed = new ProductFeed();
             //to set this value initial
-            $productFeed->setLastExport("now");
+            $productFeed->setLastExport('now');
         }
 
         if (empty($params['shopId'])) {
@@ -298,10 +200,10 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
             if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
             }
         } elseif (!is_writable($cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
         }
 
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
@@ -316,10 +218,141 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
             Shopware()->Models()->flush();
 
             $data = $this->getFeed($productFeed->getId());
-            $this->View()->assign(array('success' => true, 'data' => $data));
+            $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * Deletes a Feed from the database
+     */
+    public function deleteFeedAction()
+    {
+        try {
+            /** @var $model \Shopware\Models\ProductFeed\ProductFeed */
+            $model = Shopware()->Models()->getRepository(ProductFeed::class)->find($this->Request()->id);
+            Shopware()->Models()->remove($model);
+            Shopware()->Models()->flush();
+            $this->View()->assign(['success' => true, 'data' => $this->Request()->getParams()]);
+        } catch (Exception $e) {
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * helper method to prepare the association request data to save it directly
+     * into the model via fromArray
+     *
+     * @param $paramString
+     * @param $modelName
+     * @param $params
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function prepareAssociationDataForSaving($paramString, $modelName, $params)
+    {
+        $collection = new \Doctrine\Common\Collections\ArrayCollection();
+        if (!empty($params[$paramString])) {
+            foreach ($params[$paramString] as $param) {
+                $model = Shopware()->Models()->find($modelName, $param['id']);
+                $collection->add($model);
+            }
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Registers the different acl permission for the different controller actions.
+     */
+    protected function initAcl()
+    {
+        /*
+         * permission to list all feeds
+         */
+        $this->addAclPermission('getFeedsAction', 'read', 'Insufficient Permissions');
+
+        /*
+         * permission to show detail information of a feed
+         */
+        $this->addAclPermission('getDetailFeedAction', 'read', 'Insufficient Permissions');
+
+        /*
+         * permission to delete the feed
+         */
+        $this->addAclPermission('deleteFeedAction', 'delete', 'Insufficient Permissions');
+    }
+
+    /**
+     * Helper function to get access to the productFeed repository.
+     *
+     * @return \Shopware\Models\ProductFeed\Repository
+     */
+    private function getProductFeedRepository()
+    {
+        if ($this->productFeedRepository === null) {
+            $this->productFeedRepository = Shopware()->Models()->getRepository('Shopware\Models\ProductFeed\ProductFeed');
+        }
+
+        return $this->productFeedRepository;
+    }
+
+    /**
+     * Helper function to get access to the shop repository.
+     *
+     * @return \Shopware\Models\Shop\Repository
+     */
+    private function getShopRepository()
+    {
+        if ($this->shopRepository === null) {
+            $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        }
+
+        return $this->shopRepository;
+    }
+
+    /**
+     * Helper function to get access to the article repository.
+     *
+     * @return \Shopware\Models\Article\Repository
+     */
+    private function getArticleRepository()
+    {
+        if ($this->articleRepository === null) {
+            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+        }
+
+        return $this->articleRepository;
+    }
+
+    /**
+     * Internal helper function to get access to the entity manager.
+     */
+    private function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+
+        return $this->manager;
+    }
+
+    /**
+     * Returns an array with feed data for the passed feed id.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function getFeed($id)
+    {
+        /** @var $repository \Shopware\Models\ProductFeed\Repository */
+        $repository = Shopware()->Models()->getRepository(ProductFeed::class);
+        $dataQuery = $repository->getDetailQuery($id);
+        $feed = $dataQuery->getArrayResult();
+
+        return $feed[0];
     }
 
     /**
@@ -328,7 +361,8 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
      * changed are marked as dirty
      *
      * @param ProductFeed $productFeed
-     * @param array $params
+     * @param array       $params
+     *
      * @return ProductFeed
      */
     private function setDirty($productFeed, $params)
@@ -348,44 +382,5 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         }
 
         return $productFeed;
-    }
-
-    /**
-     * Deletes a Feed from the database
-     *
-     * @return void
-     */
-    public function deleteFeedAction()
-    {
-        try {
-            /**@var $model \Shopware\Models\ProductFeed\ProductFeed*/
-            $model = Shopware()->Models()->getRepository(ProductFeed::class)->find($this->Request()->id);
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array('success' => true, 'data' => $this->Request()->getParams()));
-        } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
-        }
-    }
-
-    /**
-     * helper method to prepare the association request data to save it directly
-     * into the model via fromArray
-     *
-     * @param $paramString
-     * @param $modelName
-     * @param $params
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function prepareAssociationDataForSaving($paramString, $modelName, $params)
-    {
-        $collection = new \Doctrine\Common\Collections\ArrayCollection();
-        if (!empty($params[$paramString])) {
-            foreach ($params[$paramString] as $param) {
-                $model = Shopware()->Models()->find($modelName, $param['id']);
-                $collection->add($model);
-            }
-        }
-        return $collection;
     }
 }

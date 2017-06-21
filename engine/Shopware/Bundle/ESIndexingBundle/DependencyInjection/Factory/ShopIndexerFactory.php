@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,8 +56,8 @@ class ShopIndexerFactory
 
     /**
      * @param DataIndexerInterface[] $indexer
-     * @param MappingInterface[] $mappings
-     * @param SettingsInterface[] $settings
+     * @param MappingInterface[]     $mappings
+     * @param SettingsInterface[]    $settings
      */
     public function __construct(array $indexer, array $mappings, array $settings)
     {
@@ -67,8 +68,10 @@ class ShopIndexerFactory
 
     /**
      * @param Container $container
-     * @return ShopIndexerInterface
+     *
      * @throws \Exception
+     *
+     * @return ShopIndexerInterface
      */
     public function factory(Container $container)
     {
@@ -91,8 +94,9 @@ class ShopIndexerFactory
     }
 
     /**
-     * @return DataIndexerInterface[]
      * @throws \Enlight_Event_Exception
+     *
+     * @return DataIndexerInterface[]
      */
     private function collectIndexer()
     {
@@ -106,8 +110,9 @@ class ShopIndexerFactory
     }
 
     /**
-     * @return MappingInterface[]
      * @throws \Enlight_Event_Exception
+     *
+     * @return MappingInterface[]
      */
     private function collectMappings()
     {
@@ -121,8 +126,9 @@ class ShopIndexerFactory
     }
 
     /**
-     * @return SettingsInterface[]
      * @throws \Enlight_Event_Exception
+     *
+     * @return SettingsInterface[]
      */
     private function collectSettings()
     {
@@ -131,6 +137,7 @@ class ShopIndexerFactory
             'Shopware_ESIndexingBundle_Collect_Settings',
             $collection
         );
+
         return array_merge($collection->toArray(), $this->settings);
     }
 }

@@ -51,9 +51,9 @@ class QueryBuilderTest extends TestCase
 
     public function testAddFilterBehavior()
     {
-        $this->querybuilder->setParameters(array('foo' => 'far'));
-        $this->querybuilder->addFilter(array('yoo' => 'yar', 'bar' => 'boo'));
-        $this->querybuilder->addFilter(array('yaa' => 'yaa', 'baa' => 'baa'));
+        $this->querybuilder->setParameters(['foo' => 'far']);
+        $this->querybuilder->addFilter(['yoo' => 'yar', 'bar' => 'boo']);
+        $this->querybuilder->addFilter(['yaa' => 'yaa', 'baa' => 'baa']);
 
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
@@ -66,52 +66,52 @@ class QueryBuilderTest extends TestCase
 
         $result = $this->querybuilder->getParameters()->toArray();
 
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter('foo', 'far'),
             new Parameter($parts[0]->getRightExpr(), 'yar'),
             new Parameter($parts[1]->getRightExpr(), 'boo'),
             new Parameter($parts[2]->getRightExpr(), 'yaa'),
             new Parameter($parts[3]->getRightExpr(), 'baa'),
-        );
+        ];
 
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testEnsureOldDoctrineSetParametersBehavior()
     {
-        $this->querybuilder->setParameters(array('foo' => 'bar'));
-        $this->querybuilder->setParameters(array('bar' => 'foo'));
+        $this->querybuilder->setParameters(['foo' => 'bar']);
+        $this->querybuilder->setParameters(['bar' => 'foo']);
 
         $result = $this->querybuilder->getParameters()->toArray();
 
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter('foo', 'bar'),
-            new Parameter('bar', 'foo')
-        );
+            new Parameter('bar', 'foo'),
+        ];
 
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testAddParameterProvidesOldDoctrineSetParametersBehavior()
     {
-        $this->querybuilder->setParameters(array('foo' => 'bar'));
-        $this->querybuilder->setParameters(array('bar' => 'foo'));
+        $this->querybuilder->setParameters(['foo' => 'bar']);
+        $this->querybuilder->setParameters(['bar' => 'foo']);
 
         $result = $this->querybuilder->getParameters()->toArray();
 
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter('foo', 'bar'),
-            new Parameter('bar', 'foo')
-        );
+            new Parameter('bar', 'foo'),
+        ];
 
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testSimpleFilter()
     {
-        $filter = array(
+        $filter = [
             'name' => 'myname',
-        );
+        ];
 
         $this->querybuilder->addFilter($filter);
 
@@ -122,26 +122,25 @@ class QueryBuilderTest extends TestCase
         $this->assertCount(1, $parts);
         $this->assertSame(strpos($parts[0]->getRightExpr(), ':name'), 0);
 
-        $expectedResult = array(
+        $expectedResult = [
             new Comparison('name', 'LIKE', $parts[0]->getRightExpr()),
-        );
+        ];
 
         $this->assertEquals($expectedResult, $parts);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter($parts[0]->getRightExpr(), 'myname'),
-        );
+        ];
         $this->assertEquals($expectedResult, $params);
     }
 
     public function testMultipleSimpleFilter()
     {
-        $filter = array(
+        $filter = [
             'name' => 'myname',
-            'foo'  => 'fao'
-        );
+            'foo' => 'fao',
+        ];
 
         $this->querybuilder->addFilter($filter);
 
@@ -153,19 +152,18 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(strpos($parts[0]->getRightExpr(), ':name'), 0);
         $this->assertSame(strpos($parts[1]->getRightExpr(), ':foo'), 0);
 
-        $expectedResult = array(
+        $expectedResult = [
             new Comparison('name', 'LIKE', $parts[0]->getRightExpr()),
-            new Comparison('foo', 'LIKE', $parts[1]->getRightExpr())
-        );
+            new Comparison('foo', 'LIKE', $parts[1]->getRightExpr()),
+        ];
 
         $this->assertEquals($expectedResult, $parts);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter($parts[0]->getRightExpr(), 'myname'),
             new Parameter($parts[1]->getRightExpr(), 'fao'),
-        );
+        ];
         $this->assertEquals($expectedResult, $params);
     }
 
@@ -174,18 +172,18 @@ class QueryBuilderTest extends TestCase
      */
     public function testOverwriteFilter()
     {
-        $filter = array(
-            array(
+        $filter = [
+            [
                 'property' => 'number',
                 'expression' => '!=',
-                'value' => '500'
-            ),
-            array(
+                'value' => '500',
+            ],
+            [
                 'property' => 'number',
                 'expression' => '!=',
-                'value' => '100'
-            )
-        );
+                'value' => '100',
+            ],
+        ];
 
         $this->querybuilder->addFilter($filter);
 
@@ -198,29 +196,28 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(strpos($parts[1]->getRightExpr(), ':number'), 0);
         $this->assertNotEquals($parts[0]->getRightExpr(), $parts[1]->getRightExpr());
 
-        $expectedResult = array(
+        $expectedResult = [
             new Comparison('number', '!=', $parts[0]->getRightExpr()),
-            new Comparison('number', '!=', $parts[1]->getRightExpr())
-        );
+            new Comparison('number', '!=', $parts[1]->getRightExpr()),
+        ];
 
         $this->assertEquals($parts, $expectedResult);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter($parts[0]->getRightExpr(), '500'),
             new Parameter($parts[1]->getRightExpr(), '100'),
-        );
+        ];
         $this->assertEquals($expectedResult, $params);
     }
 
     public function testComplexFilter()
     {
-        $filter = array(array(
-            'property'   => 'number',
+        $filter = [[
+            'property' => 'number',
             'expression' => '>',
-            'value'      => '500'
-        ));
+            'value' => '500',
+        ]];
 
         $this->querybuilder->addFilter($filter);
 
@@ -231,30 +228,29 @@ class QueryBuilderTest extends TestCase
         $this->assertCount(1, $parts);
         $this->assertSame(strpos($parts[0]->getRightExpr(), ':number'), 0);
 
-        $expectedResult = array(
-            new Comparison('number', '>', $parts[0]->getRightExpr())
-        );
+        $expectedResult = [
+            new Comparison('number', '>', $parts[0]->getRightExpr()),
+        ];
 
         $this->assertEquals($expectedResult, $parts);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter($parts[0]->getRightExpr(), '500'),
-        );
+        ];
         $this->assertEquals($expectedResult, $params);
     }
 
     public function testMixedFilter()
     {
-        $filter = array(
-            array(
-                'property'   => 'number',
+        $filter = [
+            [
+                'property' => 'number',
                 'expression' => '>',
-                'value'      => '500'
-            ),
+                'value' => '500',
+            ],
             'name' => 'myname',
-        );
+        ];
 
         $this->querybuilder->addFilter($filter);
 
@@ -266,18 +262,17 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(strpos($parts[0]->getRightExpr(), ':number'), 0);
         $this->assertSame(strpos($parts[1]->getRightExpr(), ':name'), 0);
 
-        $expectedResult = array(
+        $expectedResult = [
             new Comparison('number', '>', $parts[0]->getRightExpr()),
-            new Comparison('name', 'LIKE', $parts[1]->getRightExpr())
-        );
+            new Comparison('name', 'LIKE', $parts[1]->getRightExpr()),
+        ];
         $this->assertEquals($expectedResult, $parts);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter($parts[0]->getRightExpr(), '500'),
             new Parameter($parts[1]->getRightExpr(), 'myname'),
-        );
+        ];
         $this->assertEquals($expectedResult, $params);
     }
 
@@ -285,9 +280,9 @@ class QueryBuilderTest extends TestCase
     {
         $this->querybuilder->setParameter('name', 'myname');
 
-        $filter = array(
-            'examplekey' => 'examplevalue'
-        );
+        $filter = [
+            'examplekey' => 'examplevalue',
+        ];
 
         $this->querybuilder->addFilter($filter);
 
@@ -298,41 +293,40 @@ class QueryBuilderTest extends TestCase
         $this->assertCount(1, $parts);
         $this->assertSame(strpos($parts[0]->getRightExpr(), ':examplekey'), 0);
 
-        $expectedResult = array(
-            new Comparison('examplekey', 'LIKE', $parts[0]->getRightExpr())
-        );
+        $expectedResult = [
+            new Comparison('examplekey', 'LIKE', $parts[0]->getRightExpr()),
+        ];
         $this->assertEquals($expectedResult, $parts);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array(
+        $expectedResult = [
             new Parameter('name', 'myname'),
             new Parameter($parts[0]->getRightExpr(), 'examplevalue'),
-        );
+        ];
         $this->assertEquals($expectedResult, $params);
     }
 
     public function testAddFilterArrayOfValues()
     {
-        $testValues = array(
-            'testArrayOfNumbers' => array(
+        $testValues = [
+            'testArrayOfNumbers' => [
                 'type' => Connection::PARAM_INT_ARRAY,
                 'parameterName' => 'numbers',
-                'values' => array(1, 2, 3)
-            ),
-            'testArrayOfStrings' => array(
+                'values' => [1, 2, 3],
+            ],
+            'testArrayOfStrings' => [
                 'type' => Connection::PARAM_STR_ARRAY,
                 'parameterName' => 'strings',
-                'values' => array('A', 'B', 'C')
-            )
-        );
+                'values' => ['A', 'B', 'C'],
+            ],
+        ];
 
-        $filter = array();
+        $filter = [];
         foreach ($testValues as $testValue) {
-            $filter[] = array(
-                'property'   => $testValue['parameterName'],
-                'value'      => $testValue['values']
-            );
+            $filter[] = [
+                'property' => $testValue['parameterName'],
+                'value' => $testValue['values'],
+            ];
         }
 
         $this->querybuilder->addFilter($filter);
@@ -345,22 +339,21 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(strpos($parts[0]->getRightExpr(), '(:number'), 0);
         $this->assertSame(strpos($parts[1]->getRightExpr(), '(:strings'), 0);
 
-        $expectedResult = array();
+        $expectedResult = [];
         $counter = 0;
         foreach ($testValues as $testValue) {
             $expectedResult[] = new Comparison($testValue['parameterName'], 'IN', $parts[$counter]->getRightExpr());
-            $counter++;
+            ++$counter;
         }
 
         $this->assertEquals($expectedResult, $parts);
 
-
         $params = $this->querybuilder->getParameters()->toArray();
-        $expectedResult = array();
+        $expectedResult = [];
         $counter = 0;
         foreach ($testValues as $testValue) {
             $expectedResult[] = new Parameter(trim($parts[$counter]->getRightExpr(), '()'), $testValue['values'], $testValue['type']);
-            $counter++;
+            ++$counter;
         }
 
         $this->assertEquals($expectedResult, $params);

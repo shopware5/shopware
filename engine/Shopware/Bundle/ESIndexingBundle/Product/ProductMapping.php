@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
@@ -32,7 +33,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * Class ProductMapping
- * @package Shopware\Bundle\ESIndexingBundle\Product
  */
 class ProductMapping implements MappingInterface
 {
@@ -59,10 +59,10 @@ class ProductMapping implements MappingInterface
     private $crudService;
 
     /**
-     * @param IdentifierSelector $identifierSelector
+     * @param IdentifierSelector    $identifierSelector
      * @param FieldMappingInterface $fieldMapping
-     * @param TextMappingInterface $textMapping
-     * @param CrudService $crudService
+     * @param TextMappingInterface  $textMapping
+     * @param CrudService           $crudService
      */
     public function __construct(
         IdentifierSelector $identifierSelector,
@@ -91,7 +91,7 @@ class ProductMapping implements MappingInterface
     {
         return [
             '_source' => [
-                'includes' => ['id', 'mainVariantId', 'variantId', 'number']
+                'includes' => ['id', 'mainVariantId', 'variantId', 'number'],
             ],
             'properties' => [
                 //identifiers
@@ -155,13 +155,14 @@ class ProductMapping implements MappingInterface
                 'tax' => $this->getTaxMapping(),
                 'unit' => $this->getUnitMapping(),
 
-                'attributes' => $this->getAttributeMapping()
-            ]
+                'attributes' => $this->getAttributeMapping(),
+            ],
         ];
     }
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getPropertyMapping(Shop $shop)
@@ -172,7 +173,7 @@ class ProductMapping implements MappingInterface
                 'id' => ['type' => 'long'],
                 'name' => $this->fieldMapping->getLanguageField($shop),
                 'position' => ['type' => 'long'],
-            ]
+            ],
         ];
     }
 
@@ -192,12 +193,13 @@ class ProductMapping implements MappingInterface
                 'purchaseStep' => ['type' => 'long'],
                 'purchaseUnit' => ['type' => 'long'],
                 'referenceUnit' => ['type' => 'long'],
-            ]
+            ],
         ];
     }
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getManufacturerMapping(Shop $shop)
@@ -211,8 +213,8 @@ class ProductMapping implements MappingInterface
                 'link' => $this->textMapping->getKeywordField(),
                 'metaTitle' => $this->textMapping->getKeywordField(),
                 'metaDescription' => $this->textMapping->getKeywordField(),
-                'metaKeywords' => $this->textMapping->getKeywordField()
-            ]
+                'metaKeywords' => $this->textMapping->getKeywordField(),
+            ],
         ];
     }
 
@@ -224,8 +226,8 @@ class ProductMapping implements MappingInterface
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'name' => $this->textMapping->getKeywordField()
-            ]
+                'name' => $this->textMapping->getKeywordField(),
+            ],
         ];
     }
 
@@ -243,10 +245,10 @@ class ProductMapping implements MappingInterface
                     'properties' => [
                         'date' => $this->textMapping->getKeywordField(),
                         'timezone' => $this->textMapping->getKeywordField(),
-                        'timezone_type' => ['type' => 'long']
-                    ]
+                        'timezone_type' => ['type' => 'long'],
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -259,13 +261,14 @@ class ProductMapping implements MappingInterface
             'properties' => [
                 'id' => ['type' => 'long'],
                 'name' => $this->textMapping->getKeywordField(),
-                'tax' => ['type' => 'long']
-            ]
+                'tax' => ['type' => 'long'],
+            ],
         ];
     }
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getCalculatedPricesMapping(Shop $shop)
@@ -293,8 +296,8 @@ class ProductMapping implements MappingInterface
             'properties' => [
                 'calculatedPrice' => ['type' => 'double'],
                 'calculatedReferencePrice' => ['type' => 'double'],
-                'calculatedPseudoPrice' => ['type' => 'double']
-            ]
+                'calculatedPseudoPrice' => ['type' => 'double'],
+            ],
         ];
     }
 
@@ -333,9 +336,9 @@ class ProductMapping implements MappingInterface
         return [
             'properties' => [
                 'core' => [
-                    'properties' => $properties
-                ]
-            ]
+                    'properties' => $properties,
+                ],
+            ],
         ];
     }
 }

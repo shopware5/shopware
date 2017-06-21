@@ -28,7 +28,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class MediaMigration
- * @package Shopware\Bundle\MediaBundle
  */
 class MediaMigration
 {
@@ -38,7 +37,7 @@ class MediaMigration
     private $counter = [
         'migrated' => 0,
         'skipped' => 0,
-        'moved' => 0
+        'moved' => 0,
     ];
 
     /**
@@ -46,12 +45,13 @@ class MediaMigration
      *
      * @param MediaServiceInterface $fromFilesystem
      * @param MediaServiceInterface $toFileSystem
-     * @param OutputInterface $output
+     * @param OutputInterface       $output
+     *
      * @throws \Exception
      */
     public function migrate(MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output)
     {
-        $output->writeln("Searching for all media files in your filesystem. This might take some time, depending on the number of media files you have.");
+        $output->writeln('Searching for all media files in your filesystem. This might take some time, depending on the number of media files you have.');
 
         foreach ($fromFilesystem->listFiles('media') as $path) {
             $this->migrateFile($path, $fromFilesystem, $toFileSystem, $output);
@@ -59,22 +59,23 @@ class MediaMigration
 
         $status = join('. ', array_map(
             function ($v, $k) {
-                return $v." ".$k;
+                return $v . ' ' . $k;
             },
             $this->counter,
             array_keys($this->counter)
         ));
 
-        $output->writeln("Job done. ".$status);
+        $output->writeln('Job done. ' . $status);
     }
 
     /**
      * Migrate a single file
      *
-     * @param string $path
+     * @param string                $path
      * @param MediaServiceInterface $fromFilesystem
      * @param MediaServiceInterface $toFileSystem
-     * @param OutputInterface $output
+     * @param OutputInterface       $output
+     *
      * @throws \Exception
      */
     private function migrateFile($path, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output)
@@ -83,23 +84,24 @@ class MediaMigration
         // to read and write all the files
         if ($fromFilesystem->getAdapterType() === 'local') {
             if (!$fromFilesystem->isEncoded($path)) {
-                $this->counter['migrated']++;
-                $output->writeln("Migrate: ".$path);
+                ++$this->counter['migrated'];
+                $output->writeln('Migrate: ' . $path);
                 $fromFilesystem->migrateFile($path);
             }
         }
 
         // file already exists
         if ($toFileSystem->has($path)) {
-            $this->counter['skipped']++;
-            $output->writeln("SKIP: ".$path);
+            ++$this->counter['skipped'];
+            $output->writeln('SKIP: ' . $path);
+
             return;
         }
 
         // move file to new filesystem and remove the old one
         if ($fromFilesystem->has($path)) {
-            $this->counter['moved']++;
-            $output->writeln("Move: ".$path);
+            ++$this->counter['moved'];
+            $output->writeln('Move: ' . $path);
             $success = $this->writeStream($toFileSystem, $path, $fromFilesystem->readStream($path));
             if ($success) {
                 $fromFilesystem->delete($path);
@@ -108,14 +110,15 @@ class MediaMigration
             return;
         }
 
-        throw new \Exception("File not found: ".$path);
+        throw new \Exception('File not found: ' . $path);
     }
 
     /**
      * @param MediaServiceInterface $toFileSystem
-     * @param string $path
-     * @param resource $contents
-     * @return boolean
+     * @param string                $path
+     * @param resource              $contents
+     *
+     * @return bool
      */
     private function writeStream(MediaServiceInterface $toFileSystem, $path, $contents)
     {

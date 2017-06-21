@@ -26,22 +26,22 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Config
 {
     /**
-     * @param \Zend_Cache_Core                          $cache
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql  $db
-     * @param array                                     $config
+     * @param \Zend_Cache_Core                         $cache
+     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param array                                    $config
      *
      * @return null|\Shopware_Components_Config
      */
     public function factory(
         \Zend_Cache_Core $cache,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        $config = array()
+        $config = []
     ) {
         if (!$db) {
             return null;

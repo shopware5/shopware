@@ -26,63 +26,73 @@ namespace Shopware\Models\Mail;
 
 use Shopware\Components\Model\ModelRepository;
 
-/**
- */
 class Repository extends ModelRepository
 {
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects a list of all mails.
+     *
      * @param $mailId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getMailQuery($mailId)
     {
         $builder = $this->getMailQueryBuilder($mailId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getMailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $mailId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getMailQueryBuilder($mailId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('mails', 'attribute'))
+        $builder->select(['mails', 'attribute'])
                 ->from('Shopware\Models\Mail\Mail', 'mails')
                 ->leftJoin('mails.attribute', 'attribute')
                 ->where('mails.id = ?1')
                 ->setParameter(1, $mailId);
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which search the attribute model
      * for the passed mail id.
+     *
      * @param $mailId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getAttributesQuery($mailId)
     {
         $builder = $this->getAttributesQueryBuilder($mailId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $mailId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getAttributesQueryBuilder($mailId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
+        $builder->select(['attribute'])
                       ->from('Shopware\Models\Attribute\Mail', 'attribute')
                       ->where('attribute.mailId = ?1')
                       ->setParameter(1, $mailId);
+
         return $builder;
     }
 
@@ -92,25 +102,29 @@ class Repository extends ModelRepository
      *
      * @param $name
      * @param $mailId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getValidateNameQuery($name, $mailId = null)
     {
         $builder = $this->getValidateNameQueryBuilder($name, $mailId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getValidateNameQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param      $name
      * @param null $mailId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getValidateNameQueryBuilder($name, $mailId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('mail'))
+        $builder->select(['mail'])
                 ->from('Shopware\Models\Mail\Mail', 'mail')
                 ->where('mail.name = :name')
                 ->setParameter('name', $name);

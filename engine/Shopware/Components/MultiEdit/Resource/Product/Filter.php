@@ -39,14 +39,6 @@ class Filter
     protected $dqlHelper;
 
     /**
-     * @return DqlHelper
-     */
-    public function getDqlHelper()
-    {
-        return $this->dqlHelper;
-    }
-
-    /**
      * @param $dqlHelper
      */
     public function __construct($dqlHelper)
@@ -55,9 +47,18 @@ class Filter
     }
 
     /**
+     * @return DqlHelper
+     */
+    public function getDqlHelper()
+    {
+        return $this->dqlHelper;
+    }
+
+    /**
      * Returns a string representation of a given filterArray
      *
      * @param $filterArray
+     *
      * @return string
      */
     public function filterArrayToString($filterArray)
@@ -74,9 +75,10 @@ class Filter
      * @param $offset
      * @param $limit
      * @param $orderBy
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getFilterQuery($tokens, $offset=null, $limit=null, $orderBy=null)
+    public function getFilterQuery($tokens, $offset = null, $limit = null, $orderBy = null)
     {
         $builder = $this->getFilterQueryBuilder($tokens, $orderBy);
         if ($offset) {
@@ -94,6 +96,7 @@ class Filter
      *
      * @param $tokens
      * @param $orderBy
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getFilterQueryBuilder($tokens, $orderBy)
@@ -116,7 +119,6 @@ class Filter
                 ->innerJoin('detail.attribute', 'attr')
                 ->leftJoin('detail.article', 'article');
 
-
         foreach ($joinEntities as $entity) {
             $builder->leftJoin($this->getDqlHelper()->getAssociationForEntity($entity), $this->getDqlHelper()->getPrefixForEntity($entity));
         }
@@ -136,7 +138,6 @@ class Filter
             $builder->orderBy('detail.id', 'DESC');
         }
 
-
         return $builder;
     }
 
@@ -144,15 +145,16 @@ class Filter
      * Query builder to select a product with its dependencies
      *
      * @param $detailId
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getArticleQueryBuilder($detailId)
     {
         $builder = $this->getDqlHelper()->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'partial detail.{id, number}',
             'partial article.{id, name}',
-        ))
+        ])
         ->from('Shopware\Models\Article\Detail', 'detail')
         //~ ->leftJoin('detail.article', 'article')
         ->where('detail.id = ?1')
@@ -163,7 +165,8 @@ class Filter
 
     /**
      * @param $query \Doctrine\ORM\Query
-     * @return Array
+     *
+     * @return array
      */
     public function getPaginatedResult($query)
     {
@@ -181,7 +184,7 @@ class Filter
         // Detach currently handled models in order to avoid invalid models later
         $this->getDqlHelper()->getEntityManager()->clear();
 
-        return array($result, $totalCount);
+        return [$result, $totalCount];
     }
 
     /**
@@ -191,6 +194,7 @@ class Filter
      * @param $offset
      * @param $limit
      * @param $orderBy
+     *
      * @return array
      */
     public function filter($tokens, $offset, $limit, $orderBy)
@@ -198,7 +202,7 @@ class Filter
         $query = $this->getFilterQuery($tokens, $offset, $limit, $orderBy);
         list($result, $totalCount) = $this->getPaginatedResult($query);
 
-        $articles = array();
+        $articles = [];
         foreach ($result as $detailId) {
             // Skip invalid articles like articles not having attributes
             if ($article = $this->getDqlHelper()->getProductForListing($detailId)) {
@@ -206,14 +210,15 @@ class Filter
             }
         }
 
-        return array(
-            'data'  => $articles,
-            'total' => $totalCount
-        );
+        return [
+            'data' => $articles,
+            'total' => $totalCount,
+        ];
     }
 
     /**
      * @param $joinEntities
+     *
      * @return array
      */
     private function filterJoinEntities($joinEntities)

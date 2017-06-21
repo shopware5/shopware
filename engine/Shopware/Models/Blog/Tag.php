@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Blog;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Blog Tag Model
@@ -36,7 +36,16 @@ use Doctrine\ORM\Mapping as ORM;
 class Tag extends ModelEntity
 {
     /**
-     * @var integer $id
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Blog\Blog
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Blog\Blog", inversedBy="tags")
+     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     */
+    protected $blog;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,31 +54,22 @@ class Tag extends ModelEntity
     private $id;
 
     /**
-     * @var integer $blogId
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=true)
      */
     private $blogId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * OWNING SIDE
-     *
-     * @var \Shopware\Models\Blog\Blog $blog
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Blog\Blog", inversedBy="tags")
-     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
-     */
-    protected $blog;
-
-    /**
      * Gets the Id
+     *
      * @return int
      */
     public function getId()

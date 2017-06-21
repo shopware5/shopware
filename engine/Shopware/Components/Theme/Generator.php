@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 use Shopware\Models\Shop\Template;
@@ -30,7 +31,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * Class to generate shopware themes.
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Generator
@@ -94,94 +95,94 @@ EOD;
      *
      * @var array
      */
-    private $structure = array(
-        '_private' => array(
+    private $structure = [
+        '_private' => [
             'smarty',
-            'snippets'
-        ),
+            'snippets',
+        ],
         'documents',
-        'frontend' => array(
-            '_public' => array(
-                'src' => array(
+        'frontend' => [
+            '_public' => [
+                'src' => [
                     'css',
                     'fonts',
-                    'img' => array(
+                    'img' => [
                         'icons',
-                        'logos'
-                    ),
-                    'js' => array(
-                        'vendors'
-                    ),
-                    'less' => array(
+                        'logos',
+                    ],
+                    'js' => [
+                        'vendors',
+                    ],
+                    'less' => [
                         '_components',
                         '_mixins',
                         '_modules',
-                        '_variables'
-                    )
-                )
-            ),
+                        '_variables',
+                    ],
+                ],
+            ],
             '_includes',
             'account',
             'address',
-            'blog' => array(
-                'comment'
-            ),
+            'blog' => [
+                'comment',
+            ],
             'campaign',
-            'checkout' => array(
-                'items'
-            ),
+            'checkout' => [
+                'items',
+            ],
             'compare',
             'custom',
-            'detail' => array(
+            'detail' => [
                 'comment',
-                'tabs'
-            ),
+                'tabs',
+            ],
             'error',
             'forms',
             'home',
             'index',
-            'listing' => array(
+            'listing' => [
                 'actions',
                 'filter',
-                'product-box'
-            ),
+                'product-box',
+            ],
             'newsletter',
             'note',
             'paypal',
-            'plugins' => array(
+            'plugins' => [
                 'compare',
                 'index',
                 'notification',
                 'payment',
-                'seo'
-            ),
+                'seo',
+            ],
             'register',
             'robots_txt',
             'search',
             'sitemap',
             'sitemap_xml',
-            'tellafriend'
-        ),
-        'newsletter' => array(
+            'tellafriend',
+        ],
+        'newsletter' => [
             'alt',
             'container',
-            'index'
-        ),
-        'widgets' => array(
+            'index',
+        ],
+        'widgets' => [
             'checkout',
             'compare',
-            'emotion' => array(
-                'components'
-            ),
+            'emotion' => [
+                'components',
+            ],
             'index',
             'listing',
-            'recommendation'
-        )
-    );
+            'recommendation',
+        ],
+    ];
 
     /**
-     * @param PathResolver $pathResolver
-     * @param Filesystem $fileSystem
+     * @param PathResolver                $pathResolver
+     * @param Filesystem                  $fileSystem
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
@@ -195,8 +196,9 @@ EOD;
      * Function which generates a new shopware theme
      * into the engine/Shopware/Themes directory.
      *
-     * @param array $data
+     * @param array    $data
      * @param Template $parent
+     *
      * @throws \Exception
      */
     public function generateTheme(array $data, Template $parent = null)
@@ -226,10 +228,10 @@ EOD;
             $directory
         );
 
-        $this->eventManager->notify('Theme_Generator_Structure_Generated', array(
+        $this->eventManager->notify('Theme_Generator_Structure_Generated', [
             'data' => $data,
-            'directory' => $directory
-        ));
+            'directory' => $directory,
+        ]);
 
         $this->movePreviewImage(
             $this->getThemeDirectory($data['template'])
@@ -246,13 +248,14 @@ EOD;
             $directory . '/preview.png'
         );
 
-        $this->eventManager->notify('Theme_Generator_Preview_Image_Created', array(
-            'directory' => $directory
-        ));
+        $this->eventManager->notify('Theme_Generator_Preview_Image_Created', [
+            'directory' => $directory,
+        ]);
     }
 
     /**
      * Generates the theme directory in engine/Shopware/Themes
+     *
      * @param $name
      */
     private function createThemeDirectory($name)
@@ -260,10 +263,10 @@ EOD;
         $directory = $this->getThemeDirectory($name);
         $this->fileSystem->mkdir($directory);
 
-        $this->eventManager->notify('Theme_Generator_Theme_Directory_Created', array(
+        $this->eventManager->notify('Theme_Generator_Theme_Directory_Created', [
             'name' => $name,
-            'directory' => $directory
-        ));
+            'directory' => $directory,
+        ]);
     }
 
     /**
@@ -271,6 +274,7 @@ EOD;
      * example: /var/www/engine/Shopware/Themes/MyTheme
      *
      * @param $name
+     *
      * @return string
      */
     private function getThemeDirectory($name)
@@ -281,7 +285,7 @@ EOD;
     /**
      * Generates the Theme.php file for the theme.
      *
-     * @param array $data
+     * @param array    $data
      * @param Template $parent
      */
     private function generateThemePhp(array $data, Template $parent = null)
@@ -301,12 +305,12 @@ EOD;
 
         $output = new \SplFileObject(
             $this->getThemeDirectory($data['template']) . DIRECTORY_SEPARATOR . 'Theme.php',
-            "w+"
+            'w+'
         );
 
         $source = $this->eventManager->filter('Theme_Generator_Theme_Source_Generated',
             $source,
-            array('data' => $data, 'parent' => $parent)
+            ['data' => $data, 'parent' => $parent]
         );
 
         $output->fwrite($source);
@@ -318,9 +322,10 @@ EOD;
      * default value.
      *
      * @param string $placeholder Placeholder name, without surrounding '$'
-     * @param string $content Content which should be placed into the source
-     * @param string $source Source template where the content should be injected.
-     * @param string $default Fallback if the passed content is empty or isn't set
+     * @param string $content     Content which should be placed into the source
+     * @param string $source      source template where the content should be injected
+     * @param string $default     Fallback if the passed content is empty or isn't set
+     *
      * @return mixed
      */
     private function replacePlaceholder($placeholder, $content, $source, $default = '')
@@ -355,7 +360,7 @@ EOD;
                 if (strpos($value, '.') !== false) {
                     $output = new \SplFileObject(
                         $baseDir . DIRECTORY_SEPARATOR . $value,
-                        "w+"
+                        'w+'
                     );
                     $output->fwrite('');
                 } else {

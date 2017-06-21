@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\AccountBundle\Constraint\Password;
-use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -44,22 +43,22 @@ class ResetPasswordFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Customer::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('password', PasswordType::class, [
-            'constraints' => [new Password()]
+            'constraints' => [new Password()],
         ]);
 
         $builder->add('passwordConfirmation', PasswordType::class, [
-            'mapped' => false
+            'mapped' => false,
         ]);
     }
 

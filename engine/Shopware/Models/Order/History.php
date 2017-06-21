@@ -24,11 +24,10 @@
 
 namespace   Shopware\Models\Order;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware order history model represents the status history for a single order.
  * If the order or payment status are changed a new entry will be saved in the history.
  * The following data will be saved: The orderID of the changed order, the change date, the previous and current order and payment status,
@@ -65,7 +64,7 @@ class History extends ModelEntity
      * Unique identifier field for the history model.
      * This is the primary key field. (strategy="IDENTITY")
      *
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -76,7 +75,7 @@ class History extends ModelEntity
      * The $orderId property contains the order identifier for the associated order.
      * Used for the $order association property.
      *
-     * @var integer $orderId
+     * @var int
      * @ORM\Column(name="orderID", type="integer", nullable=false)
      */
     private $orderId;
@@ -85,7 +84,7 @@ class History extends ModelEntity
      * The $userId property contains the unique user id of the user which changed the order status.
      * Used for the $user association property.
      *
-     * @var integer $userId
+     * @var int
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
     private $userId = null;
@@ -94,7 +93,7 @@ class History extends ModelEntity
      * The $previousOrderStatusId property contains the id of the previous order status of the order.
      * Used for the $previousOrderStatus association property.
      *
-     * @var integer
+     * @var int
      * @ORM\Column(name="previous_order_status_id", type="integer", nullable=true)
      */
     private $previousOrderStatusId = null;
@@ -103,7 +102,7 @@ class History extends ModelEntity
      * The $orderStatusId property contains the id of the current order status of the order.
      * Used for the $orderStatus association property.
      *
-     * @var integer $orderStatusId
+     * @var int
      * @ORM\Column(name="order_status_id", type="integer", nullable=true)
      */
     private $orderStatusId = null;
@@ -112,7 +111,7 @@ class History extends ModelEntity
      * The $previousPaymentStatusId property contains the id of the previous payment status of the order.
      * Used for the $previousPaymentStatus association property.
      *
-     * @var integer $previousPaymentStatusId
+     * @var int
      * @ORM\Column(name="previous_payment_status_id", type="integer", nullable=true)
      */
     private $previousPaymentStatusId = null;
@@ -121,7 +120,7 @@ class History extends ModelEntity
      * The $paymentStatusId property contains the id of the current payment status of the order.
      * Used for the $paymentStatus association property.
      *
-     * @var integer $paymentStatusId
+     * @var int
      * @ORM\Column(name="payment_status_id", type="integer", nullable=true)
      */
     private $paymentStatusId = null;
@@ -130,7 +129,7 @@ class History extends ModelEntity
      * The $comment property allows the user to add a comment for the status change.
      * It will be saved in the s_order_history.comment field.
      *
-     * @var string $comment
+     * @var string
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
     private $comment = '';
@@ -142,7 +141,8 @@ class History extends ModelEntity
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-     * @var \Shopware\Models\Order\Order $order
+     *
+     * @var \Shopware\Models\Order\Order
      */
     private $order;
 
@@ -154,7 +154,8 @@ class History extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\User")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
-     * @var \Shopware\Models\User\User $order
+     *
+     * @var \Shopware\Models\User\User
      */
     private $user;
 
@@ -166,7 +167,8 @@ class History extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_order_status_id", referencedColumnName="id")
-     * @var \Shopware\Models\Order\Status $previousOrderStatus
+     *
+     * @var \Shopware\Models\Order\Status
      */
     private $previousOrderStatus;
 
@@ -178,7 +180,8 @@ class History extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="order_status_id", referencedColumnName="id")
-     * @var \Shopware\Models\Order\Status $orderStatus
+     *
+     * @var \Shopware\Models\Order\Status
      */
     private $orderStatus;
 
@@ -190,7 +193,8 @@ class History extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_payment_status_id", referencedColumnName="id")
-     * @var \Shopware\Models\Order\Status $previousPaymentStatus
+     *
+     * @var \Shopware\Models\Order\Status
      */
     private $previousPaymentStatus;
 
@@ -202,13 +206,16 @@ class History extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Order\Status
      */
     private $paymentStatus;
 
     /**
      * Contains the date when the order status or payment status has been changed.
+     *
      * @ORM\Column(name="change_date", type="datetime", nullable=false)
+     *
      * @var \DateTime
      */
     private $changeDate;
@@ -233,11 +240,13 @@ class History extends ModelEntity
      * don't know anything about the order status history.
      *
      * @param \Shopware\Models\User\User $user
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setUser($user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -261,11 +270,13 @@ class History extends ModelEntity
      * It will be saved in the s_order_history.comment field.
      *
      * @param string $comment
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
+
         return $this;
     }
 
@@ -288,11 +299,13 @@ class History extends ModelEntity
      * order model. The $history property of the order model is the inverse side of this association.
      *
      * @param \Shopware\Models\Order\Order $order
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setOrder($order)
     {
         $this->order = $order;
+
         return $this;
     }
 
@@ -343,11 +356,13 @@ class History extends ModelEntity
      * status model don't know anything about the order status history.
      *
      * @param \Shopware\Models\Order\Status $orderStatus
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setOrderStatus($orderStatus)
     {
         $this->orderStatus = $orderStatus;
+
         return $this;
     }
 
@@ -399,11 +414,13 @@ class History extends ModelEntity
      * status model don't know anything about the order status history.
      *
      * @param \Shopware\Models\Order\Status $paymentStatus
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setPaymentStatus($paymentStatus)
     {
         $this->paymentStatus = $paymentStatus;
+
         return $this;
     }
 
@@ -456,11 +473,13 @@ class History extends ModelEntity
      * status model don't know anything about the order status history.
      *
      * @param \Shopware\Models\Order\Status $previousOrderStatus
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setPreviousOrderStatus($previousOrderStatus)
     {
         $this->previousOrderStatus = $previousOrderStatus;
+
         return $this;
     }
 
@@ -510,11 +529,13 @@ class History extends ModelEntity
      * status model don't know anything about the order status history.
      *
      * @param \Shopware\Models\Order\Status $previousPaymentStatus
+     *
      * @return \Shopware\Models\Order\History
      */
     public function setPreviousPaymentStatus($previousPaymentStatus)
     {
         $this->previousPaymentStatus = $previousPaymentStatus;
+
         return $this;
     }
 
@@ -598,6 +619,7 @@ class History extends ModelEntity
     /**
      * Setter function for the changeDate property.
      * Contains the date when the order status or payment status has been changed.
+     *
      * @param \DateTime $changeDate
      */
     public function setChangeDate($changeDate)

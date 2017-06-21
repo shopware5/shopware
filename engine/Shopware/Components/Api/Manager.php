@@ -31,13 +31,14 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  * API Manger
  *
  * @category  Shopware
- * @package   Shopware\Components\Api
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {
     /**
      * @param $name
+     *
      * @return Resource\Resource
      */
     public static function getResource($name)

@@ -24,9 +24,8 @@
 
 namespace Shopware\Models\Order;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -36,26 +35,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Esd extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \DateTime $date
-     *
-     * @ORM\Column(name="datum", type="datetime", nullable=true)
-     */
-    private $date = null;
-
-    /**
      * OWNING SIDE
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\EsdSerial", inversedBy="esdOrder")
      * @ORM\JoinColumn(name="serialID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\EsdSerial
      */
     protected $serial;
@@ -65,6 +49,7 @@ class Esd extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Order", inversedBy="esd")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Order\Order
      */
     protected $order;
@@ -74,6 +59,7 @@ class Esd extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Detail", inversedBy="esd")
      * @ORM\JoinColumn(name="orderdetailsID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Order\Detail
      */
     protected $orderDetail;
@@ -81,9 +67,25 @@ class Esd extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Customer\Customer
      */
     protected $customer;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datum", type="datetime", nullable=true)
+     */
+    private $date = null;
 
     /**
      * @return int

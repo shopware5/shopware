@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Customer;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware customer price group model represents a single customer price group.
@@ -47,10 +47,18 @@ use Doctrine\ORM\Mapping as ORM;
 class PriceGroup extends ModelEntity
 {
     /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="priceGroup")
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $customers;
+    /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field.
      *
-     * @var integer $id
+     * @var int
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -60,7 +68,7 @@ class PriceGroup extends ModelEntity
     /**
      * Contains the customer price group name value.
      *
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -68,7 +76,7 @@ class PriceGroup extends ModelEntity
     /**
      * Flag which indicates a net price.
      *
-     * @var integer $netto
+     * @var int
      * @ORM\Column(name="netto", type="integer", nullable=false)
      */
     private $netto;
@@ -76,16 +84,10 @@ class PriceGroup extends ModelEntity
     /**
      * Flag which indicates if a price group is active or not.
      *
-     * @var integer $taxInput
+     * @var int
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active;
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="priceGroup")
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $customers;
 
     /**
      * Class constructor which initials the discounts association.
@@ -101,7 +103,7 @@ class PriceGroup extends ModelEntity
      * doctrine association can be declared over this field.
      * The id field has no setter function, because the value is generated automatically.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -113,11 +115,13 @@ class PriceGroup extends ModelEntity
      * a column property for the database field name.
      *
      * @param string $name
+     *
      * @return Group
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -168,11 +172,13 @@ class PriceGroup extends ModelEntity
 
     /**
      * @param int $netto
+     *
      * @return \Shopware\Models\Customer\PriceGroup
      */
     public function setNetto($netto)
     {
         $this->netto = $netto;
+
         return $this;
     }
 
@@ -186,11 +192,13 @@ class PriceGroup extends ModelEntity
 
     /**
      * @param int $active
+     *
      * @return \Shopware\Models\Customer\PriceGroup
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 }

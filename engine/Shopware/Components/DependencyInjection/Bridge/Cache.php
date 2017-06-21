@@ -32,7 +32,7 @@ use Zend_Locale_Data;
  * + call of Zend_Locale_Data::setCache.
  *
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Cache
@@ -41,11 +41,12 @@ class Cache
      * @param string $backend
      * @param array  $frontendOptions
      * @param array  $backendOptions
+     *
      * @return Zend_Cache_Core
      */
     public function factory($backend, $frontendOptions = [], $backendOptions = [])
     {
-        $backend   = $this->createBackend($backend, $backendOptions);
+        $backend = $this->createBackend($backend, $backendOptions);
         $cacheCore = $this->createCacheCore($frontendOptions);
 
         $cacheCore->setBackend($backend);
@@ -59,6 +60,7 @@ class Cache
     /**
      * @param $backend
      * @param $backendOptions
+     *
      * @return \Zend_Cache_Backend
      */
     private function createBackend($backend, $backendOptions)
@@ -78,6 +80,7 @@ class Cache
 
     /**
      * @param array $backendOptions
+     *
      * @return \Zend_Cache_Backend
      */
     private function createAutomaticBackend($backendOptions = [])
@@ -105,6 +108,7 @@ class Cache
 
     /**
      * @param array $frontendOptions
+     *
      * @return Zend_Cache_Core
      */
     private function createCacheCore($frontendOptions = [])

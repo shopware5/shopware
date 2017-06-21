@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class GenericReader implements ReaderInterface
@@ -46,7 +46,8 @@ class GenericReader implements ReaderInterface
 
     /**
      * GenericReader constructor.
-     * @param string $entity
+     *
+     * @param string       $entity
      * @param ModelManager $entityManager
      */
     public function __construct($entity, ModelManager $entityManager)
@@ -57,6 +58,7 @@ class GenericReader implements ReaderInterface
 
     /**
      * @param \int[]|\string[] $identifiers
+     *
      * @return array[]
      */
     public function getList($identifiers)
@@ -78,6 +80,7 @@ class GenericReader implements ReaderInterface
 
     /**
      * @param int|string $identifier
+     *
      * @return array
      */
     public function get($identifier)
@@ -86,6 +89,7 @@ class GenericReader implements ReaderInterface
         $query->andWhere($this->getIdentifierField() . ' = :id');
         $query->setParameter('id', $identifier);
         $data = $query->getQuery()->getArrayResult();
+
         return array_shift($data);
     }
 
@@ -105,6 +109,7 @@ class GenericReader implements ReaderInterface
         $query = $this->entityManager->createQueryBuilder();
         $query->select('entity');
         $query->from($this->entity, 'entity', $this->getIdentifierField());
+
         return $query;
     }
 

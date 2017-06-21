@@ -25,13 +25,13 @@
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
 use Doctrine\DBAL\Connection;
-use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class EmotionTemplateCheck implements CheckInterface
@@ -49,7 +49,7 @@ class EmotionTemplateCheck implements CheckInterface
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @param Connection       $connection
      * @param SnippetNamespace $namespace
      */
     public function __construct(Connection $connection, SnippetNamespace $namespace)
@@ -68,6 +68,7 @@ class EmotionTemplateCheck implements CheckInterface
 
     /**
      * @param array $requirement
+     *
      * @return array
      */
     public function check($requirement)
@@ -78,7 +79,7 @@ class EmotionTemplateCheck implements CheckInterface
             return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message' => $this->namespace->get('controller/check_emotiontemplate_success')
+                'message' => $this->namespace->get('controller/check_emotiontemplate_success'),
             ];
         }
 
@@ -90,7 +91,7 @@ class EmotionTemplateCheck implements CheckInterface
             'message' => sprintf(
                 $this->namespace->get('check_emotiontemplate_failure'),
                 implode(',', $names)
-            )
+            ),
         ];
     }
 

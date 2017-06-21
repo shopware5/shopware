@@ -42,10 +42,10 @@ class BcryptTest extends TestCase
     {
         parent::setUp();
 
-        $this->hasher = new Bcrypt(array(
+        $this->hasher = new Bcrypt([
             // test should run fast, use minimum cost
             'cost' => 4,
-        ));
+        ]);
 
         if (!$this->hasher->isCompatible()) {
             $this->markTestSkipped(
@@ -122,9 +122,9 @@ class BcryptTest extends TestCase
     public function testRehash2()
     {
         $hash = $this->hasher->encodePassword('foobar');
-        $this->hasher = new Bcrypt(array(
+        $this->hasher = new Bcrypt([
             'cost' => 5,
-        ));
+        ]);
 
         $this->assertTrue($this->hasher->isReencodeNeeded($hash));
     }

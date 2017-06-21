@@ -30,7 +30,6 @@ use Shopware\Components\Theme\Inheritance;
 use Shopware\Components\Theme\Installer;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
-use Shopware\Recovery\Install\Service\ThemeService;
 
 class InheritanceTest extends Base
 {
@@ -52,9 +51,9 @@ class InheritanceTest extends Base
     {
         if ($template->getParent() === null) {
             return $this->getBareTheme();
-        } else {
-            return $this->getResponsiveTheme();
         }
+
+        return $this->getResponsiveTheme();
     }
 
     public function testBuildInheritance()
@@ -68,7 +67,7 @@ class InheritanceTest extends Base
                 $this->equalTo($custom),
                 $this->equalTo($custom->getParent())
             ))
-            ->will($this->returnCallback(array($this, 'getTheme')));
+            ->will($this->returnCallback([$this, 'getTheme']));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             Shopware()->Container()->get('models'),
@@ -196,7 +195,7 @@ class InheritanceTest extends Base
         $connection->executeQuery('DELETE FROM s_core_templates_config_values');
 
         $connection->executeQuery(
-            "INSERT INTO s_core_templates_config_values (element_id, shop_id, `value`) VALUES (:elementId, :shopId, :value)",
+            'INSERT INTO s_core_templates_config_values (element_id, shop_id, `value`) VALUES (:elementId, :shopId, :value)',
             [':elementId' => $elementId, ':shopId' => $shop->getId(), ':value' => serialize('#000')]
         );
 
@@ -217,7 +216,6 @@ class InheritanceTest extends Base
         $connection->rollBack();
     }
 
-
     private function getDummyTemplates()
     {
         $master = new \Shopware\Models\Shop\Template();
@@ -236,6 +234,7 @@ class InheritanceTest extends Base
 
         Shopware()->Container()->get('models')->persist($slave);
         Shopware()->Container()->get('models')->flush();
+
         return $slave;
     }
 }

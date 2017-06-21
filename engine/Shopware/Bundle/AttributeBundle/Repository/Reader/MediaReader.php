@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class MediaReader extends GenericReader
@@ -41,8 +41,9 @@ class MediaReader extends GenericReader
 
     /**
      * MediaReader constructor.
-     * @param string $entity
-     * @param ModelManager $entityManager
+     *
+     * @param string                $entity
+     * @param ModelManager          $entityManager
      * @param MediaServiceInterface $mediaService
      */
     public function __construct(
@@ -54,35 +55,39 @@ class MediaReader extends GenericReader
         $this->mediaService = $mediaService;
     }
 
-
     public function getList($identifiers)
     {
         $list = parent::getList($identifiers);
         foreach ($list as &$media) {
             $media['thumbnail'] = $this->getMediaThumbnail($media);
         }
+
         return $list;
     }
 
     /**
      * @param int|string $identifier
+     *
      * @return array
      */
     public function get($identifier)
     {
         $media = parent::get($identifier);
         $media['thumbnail'] = $this->getMediaThumbnail($media);
+
         return $media;
     }
 
     /**
      * @param $media
+     *
      * @return null|string
      */
     private function getMediaThumbnail($media)
     {
         $path = str_replace($media['name'], $media['name'] . '_140x140', $media['path']);
         $path = str_replace('media/image/', 'media/image/thumbnail/', $path);
+
         return $this->mediaService->getUrl($path);
     }
 }

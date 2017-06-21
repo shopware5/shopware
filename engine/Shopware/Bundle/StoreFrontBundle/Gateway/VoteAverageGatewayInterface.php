@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface VoteAverageGatewayInterface
@@ -38,8 +39,9 @@ interface VoteAverageGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Product\VoteAverage Indexed by the product order number
      */
     public function getList($products, Struct\ShopContextInterface $context);
@@ -52,8 +54,9 @@ interface VoteAverageGatewayInterface
      * Required conditions for the selection:
      * - Only activated votes
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Product\VoteAverage
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

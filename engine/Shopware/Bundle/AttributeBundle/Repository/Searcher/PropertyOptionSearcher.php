@@ -29,7 +29,7 @@ use Shopware\Models\Property\Value;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PropertyOptionSearcher extends GenericSearcher
@@ -40,18 +40,20 @@ class PropertyOptionSearcher extends GenericSearcher
         $query->select($this->getIdentifierField());
         $query->from(Value::class, 'entity');
         $query->innerJoin('entity.option', 'option');
+
         return $query;
     }
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)
     {
         return [
             'entity.value',
-            'option.name'
+            'option.name',
         ];
     }
 }

@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components_Test_Plugin_TestCase
@@ -44,25 +44,25 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
 
     public function testSeoCategory()
     {
-        $this->dispatch("/");
+        $this->dispatch('/');
 
         $data = $this->getSimpleTestData();
 
-        $data['categories'] = Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 5, 10");
+        $data['categories'] = Shopware()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
 
         $first = $data['categories'][3];
         $second = $data['categories'][4];
 
-        $data['seoCategories'] = array(
-            array('shopId' => 1, 'categoryId' => $first['id']),
-            array('shopId' => 2, 'categoryId' => $second['id']),
-        );
+        $data['seoCategories'] = [
+            ['shopId' => 1, 'categoryId' => $first['id']],
+            ['shopId' => 2, 'categoryId' => $second['id']],
+        ];
 
         $article = $this->resource->create($data);
 
         $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
 
-        /**@var $article Shopware\Models\Article\Article*/
+        /** @var $article Shopware\Models\Article\Article */
         $article = $this->resource->getOne($article->getId());
 
         $german = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
@@ -83,25 +83,25 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
 
     private function getSimpleTestData()
     {
-        return array(
+        return [
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,
-            'mainDetail' => array(
+            'mainDetail' => [
                 'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
                         'from' => 1,
                         'to' => '-',
                         'price' => 400,
-                    )
-                )
-            ),
+                    ],
+                ],
+            ],
             'taxId' => 1,
-            'supplierId' => 2
-        );
+            'supplierId' => 2,
+        ];
     }
 }

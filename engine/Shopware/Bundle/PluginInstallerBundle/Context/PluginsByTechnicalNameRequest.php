@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class PluginsByTechnicalNameRequest extends BaseRequest
 {
     /**
@@ -37,7 +34,7 @@ class PluginsByTechnicalNameRequest extends BaseRequest
     /**
      * @param string $technicalNames
      * @param string $locale
-     * @param array $shopwareVersion
+     * @param array  $shopwareVersion
      */
     public function __construct($locale, $shopwareVersion, $technicalNames)
     {

@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Form;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware field model represents a single form
@@ -42,8 +42,7 @@ use Doctrine\ORM\Mapping as ORM;
  * </code>
  *
  * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Form
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @license    http://shopware.de/license
  *
@@ -54,7 +53,24 @@ use Doctrine\ORM\Mapping as ORM;
 class Form extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $fields;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Form
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -63,102 +79,88 @@ class Form extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $text
+     * @var string
      *
      * @ORM\Column(name="text", type="text", nullable=false)
      */
     private $text = '';
 
     /**
-     * @var string $email
+     * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
     private $email;
 
     /**
-     * @var string $emailTemplate
+     * @var string
      *
      * @ORM\Column(name="email_template", type="text", nullable=false)
      */
     private $emailTemplate = '';
 
     /**
-     * @var string $emailSubject
+     * @var string
      *
      * @ORM\Column(name="email_subject", type="string", length=255, nullable=false)
      */
     private $emailSubject = '';
 
     /**
-     * @var string $text2
+     * @var string
      *
      * @ORM\Column(name="text2", type="text", nullable=false)
      */
     private $text2 = '';
 
     /**
-     * @var integer $ticketTypeid
+     * @var int
      *
      * @ORM\Column(name="ticket_typeID", type="integer", nullable=false)
      */
     private $ticketTypeid = 0;
 
     /**
-     * @var string $isocode
+     * @var string
      *
      * @ORM\Column(name="isocode", type="string", length=3, nullable=false)
      */
     private $isocode = 'de';
 
     /**
-     * @var string $metaTitle
+     * @var string
      *
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
      */
     private $metaTitle = '';
 
     /**
-     * @var string $metaKeywords
+     * @var string
      *
      * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
      */
     private $metaKeywords = '';
 
     /**
-     * @var string $metaDescription
+     * @var string
      *
      * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
     private $metaDescription = '';
 
     /**
-     * @var string $shopIds
+     * @var string
      *
      * @ORM\Column(name="shop_ids", type="string", nullable=false)
      */
     private $shopIds;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $fields;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Form
-     */
-    protected $attribute;
 
     /**
      * Constructor of Form
@@ -170,6 +172,7 @@ class Form extends ModelEntity
 
     /**
      * Returns a clone of this form incl. it's fields
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function getClone()
@@ -184,6 +187,7 @@ class Form extends ModelEntity
             // update owning side
             $clonedField->setForm($clonedForm);
         }
+
         return $clonedForm;
     }
 
@@ -197,6 +201,7 @@ class Form extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $fields
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setFields($fields)
@@ -206,7 +211,9 @@ class Form extends ModelEntity
 
     /**
      * Adds a field
+     *
      * @param \Shopware\Models\Form\Field $field
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function addField(Field $field)
@@ -222,7 +229,7 @@ class Form extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -243,6 +250,7 @@ class Form extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setName($name)
@@ -256,11 +264,13 @@ class Form extends ModelEntity
      * Set text
      *
      * @param string $text
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setText($text)
     {
         $this->text = $text;
+
         return $this;
     }
 
@@ -278,11 +288,13 @@ class Form extends ModelEntity
      * Set email
      *
      * @param string $email
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -300,11 +312,13 @@ class Form extends ModelEntity
      * Set emailTemplate
      *
      * @param string $emailTemplate
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setEmailTemplate($emailTemplate)
     {
         $this->emailTemplate = $emailTemplate;
+
         return $this;
     }
 
@@ -322,11 +336,13 @@ class Form extends ModelEntity
      * Set emailSubject
      *
      * @param string $emailSubject
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setEmailSubject($emailSubject)
     {
         $this->emailSubject = $emailSubject;
+
         return $this;
     }
 
@@ -344,11 +360,13 @@ class Form extends ModelEntity
      * Set text2
      *
      * @param string $text2
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setText2($text2)
     {
         $this->text2 = $text2;
+
         return $this;
     }
 
@@ -365,19 +383,21 @@ class Form extends ModelEntity
     /**
      * Set ticketTypeid
      *
-     * @param integer $ticketTypeid
+     * @param int $ticketTypeid
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setTicketTypeid($ticketTypeid)
     {
         $this->ticketTypeid = $ticketTypeid;
+
         return $this;
     }
 
     /**
      * Get ticketTypeid
      *
-     * @return integer
+     * @return int
      */
     public function getTicketTypeid()
     {
@@ -388,11 +408,13 @@ class Form extends ModelEntity
      * Set isocode
      *
      * @param string $isocode
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setIsocode($isocode)
     {
         $this->isocode = $isocode;
+
         return $this;
     }
 
@@ -464,6 +486,7 @@ class Form extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Form|array|null $attribute
+     *
      * @return \Shopware\Models\Form\Form
      */
     public function setAttribute($attribute)

@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_FormTest extends Enlight_Components_Test_Controller_TestCase
@@ -52,27 +52,27 @@ class Shopware_Tests_Controllers_Backend_FormTest extends Enlight_Components_Tes
 
     public function testGetFormsShouldBeFilterAndSortable()
     {
-        $queryParams = array(
-            'page'  => '1',
+        $queryParams = [
+            'page' => '1',
             'start' => '0',
             'limit' => 25,
-            'sort'  => json_encode(
-                array(
-                    array(
-                        'property'  => 'name',
+            'sort' => json_encode(
+                [
+                    [
+                        'property' => 'name',
                         'direction' => 'ASC',
-                    )
-                )
+                    ],
+                ]
             ),
-            'filter'  => json_encode(
-                array(
-                    array(
-                        'property'  => 'name',
+            'filter' => json_encode(
+                [
+                    [
+                        'property' => 'name',
                         'value' => 'def%',
-                    )
-                )
-            )
-        );
+                    ],
+                ]
+            ),
+        ];
 
         $query = http_build_query($queryParams);
 

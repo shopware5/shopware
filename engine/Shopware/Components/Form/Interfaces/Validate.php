@@ -26,7 +26,6 @@ namespace Shopware\Components\Form\Interfaces;
 
 /**
  * Interface Validate
- * @package Shopware\Components\Form\Interfaces
  */
 interface Validate
 {

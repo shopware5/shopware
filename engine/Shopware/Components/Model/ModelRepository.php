@@ -25,7 +25,6 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr;
 
 /**
  * Interface for the various standard models.
@@ -39,7 +38,7 @@ use Doctrine\ORM\Query\Expr;
  * </code>
  *
  * @category  Shopware
- * @package   Shopware\Components\Model
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelRepository extends EntityRepository
@@ -48,7 +47,7 @@ class ModelRepository extends EntityRepository
      * Creates a new QueryBuilder instance that is prepopulated for this entity name.
      *
      * @param string $alias
-     * @param string $indexBy The index for the from.
+     * @param string $indexBy the index for the from
      *
      * @return QueryBuilder
      */
@@ -65,26 +64,28 @@ class ModelRepository extends EntityRepository
      * Returns an instance of a \Doctrine\ORM\Query object which uses the createQueryBuilder function to generate
      * the sql statements.
      *
-     * @param   int $limit Max count of returned rows.
-     * @param   int $offset Start value for the limitation.
-     * @return  \Doctrine\ORM\Query
+     * @param int $limit  max count of returned rows
+     * @param int $offset start value for the limitation
+     *
+     * @return \Doctrine\ORM\Query
      */
     public function queryAll($limit = null, $offset = null)
     {
-        return $this->queryBy(array(), array(), $limit, $offset);
+        return $this->queryBy([], [], $limit, $offset);
     }
 
     /**
      * Returns an instance of a \Doctrine\ORM\Query object which uses the createQueryBuilder function to generate
      * the sql statements. The query object is limited with the given extensions (where, order, limit).
      *
-     * @param   array  $criteria Expects an array of Doctrine\ORM\Query\Expr to limit the result
-     * @param   array  $orderBy  Expects an array of order conditions (example: array('expression' => 'name', [OPTIONAL] 'direction' => 'ASC'))
-     * @param   int    $limit    Max count of returned rows.
-     * @param   int    $offset   Start value for the limitation.
-     * @return  \Doctrine\ORM\Query
+     * @param array $criteria Expects an array of Doctrine\ORM\Query\Expr to limit the result
+     * @param array $orderBy  Expects an array of order conditions (example: array('expression' => 'name', [OPTIONAL] 'direction' => 'ASC'))
+     * @param int   $limit    max count of returned rows
+     * @param int   $offset   start value for the limitation
+     *
+     * @return \Doctrine\ORM\Query
      */
-    public function queryBy(array $criteria, array $orderBy = array(), $limit = null, $offset = null)
+    public function queryBy(array $criteria, array $orderBy = [], $limit = null, $offset = null)
     {
         $builder = $this->createQueryBuilder($this->getEntityName());
 
@@ -112,7 +113,8 @@ class ModelRepository extends EntityRepository
      * </code>
      *
      * @param QueryBuilder $builder
-     * @param array $filter
+     * @param array        $filter
+     *
      * @return QueryBuilder
      */
     public function addFilter(QueryBuilder $builder, array $filter)
@@ -131,7 +133,8 @@ class ModelRepository extends EntityRepository
      * </code>
      *
      * @param QueryBuilder $builder
-     * @param array $orderBy
+     * @param array        $orderBy
+     *
      * @return QueryBuilder
      */
     public function addOrderBy(QueryBuilder $builder, array $orderBy)

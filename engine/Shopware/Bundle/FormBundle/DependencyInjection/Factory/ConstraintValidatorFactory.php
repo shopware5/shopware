@@ -49,9 +49,9 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  *         return 'some_alias';
  *     }
  *
- * @package Shopware\Bundle\FormBundle\DependencyInjection\Factory
  *
- * @link    https://github.com/symfony/framework-bundle/blob/master/Validator/ConstraintValidatorFactory.php
+ * @see    https://github.com/symfony/framework-bundle/blob/master/Validator/ConstraintValidatorFactory.php
+ *
  * @license https://opensource.org/licenses/MIT MIT License
  */
 class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
@@ -69,22 +69,23 @@ class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container The service container
-     * @param array $validators
+     * @param ContainerInterface $container  The service container
+     * @param array              $validators
      */
     public function __construct(ContainerInterface $container, array $validators = [])
     {
         $this->container = $container;
         $this->validators = $validators;
     }
+
     /**
      * Returns the validator for the supplied constraint.
      *
      * @param Constraint $constraint A constraint
      *
-     * @return ConstraintValidatorInterface A validator for the supplied constraint
-     *
      * @throws UnexpectedTypeException When the validator is not an instance of ConstraintValidatorInterface
+     *
+     * @return ConstraintValidatorInterface A validator for the supplied constraint
      */
     public function getInstance(Constraint $constraint)
     {
@@ -98,6 +99,7 @@ class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
         if (!$this->validators[$name] instanceof ConstraintValidatorInterface) {
             throw new UnexpectedTypeException($this->validators[$name], 'Symfony\Component\Validator\ConstraintValidatorInterface');
         }
+
         return $this->validators[$name];
     }
 }

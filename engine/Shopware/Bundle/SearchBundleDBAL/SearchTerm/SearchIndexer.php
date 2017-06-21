@@ -29,7 +29,7 @@ use Shopware\Components\MemoryLimit;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchIndexer implements SearchIndexerInterface
@@ -51,8 +51,8 @@ class SearchIndexer implements SearchIndexerInterface
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
-     * @param TermHelperInterface $termHelper
+     * @param Connection                  $connection
+     * @param TermHelperInterface         $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -76,8 +76,7 @@ class SearchIndexer implements SearchIndexerInterface
             return;
         }
 
-
-        $interval = (int)$this->config->get('cacheSearch');
+        $interval = (int) $this->config->get('cacheSearch');
 
         if (empty($interval) || $interval < 360) {
             $interval = 86400;
@@ -155,7 +154,7 @@ class SearchIndexer implements SearchIndexerInterface
                 }
 
                 // Build array from columns fieldIDs and fields
-                $fields = array_combine(explode(', ', $table["fieldIDs"]), explode(', ', $table["fields"]));
+                $fields = array_combine(explode(', ', $table['fieldIDs']), explode(', ', $table['fields']));
                 $keywords = [];
                 $sqlIndex = [];
 
@@ -235,7 +234,7 @@ class SearchIndexer implements SearchIndexerInterface
 
         $sql_join = '';
         foreach ($tables as $table) {
-            if (empty($table["foreign_key"])) {
+            if (empty($table['foreign_key'])) {
                 continue;
             }
             if (empty($table['referenz_table'])) {

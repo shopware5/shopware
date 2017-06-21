@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_RegressionTests_Ticket5219 extends Enlight_Components_Test_Controller_TestCase
@@ -36,7 +36,7 @@ class Shopware_RegressionTests_Ticket5219 extends Enlight_Components_Test_Contro
     {
         parent::tearDown();
 
-        $sql= "UPDATE `s_core_customergroups` SET `taxinput` = '1' WHERE`groupkey` = 'EK'";
+        $sql = "UPDATE `s_core_customergroups` SET `taxinput` = '1' WHERE`groupkey` = 'EK'";
         Shopware()->Db()->query($sql);
     }
 
@@ -51,7 +51,7 @@ class Shopware_RegressionTests_Ticket5219 extends Enlight_Components_Test_Contro
         $this->Response()->clearBody();
 
         //change customer group settings
-        $sql= "UPDATE `s_core_customergroups` SET `taxinput` = '0' WHERE`groupkey` = 'EK'";
+        $sql = "UPDATE `s_core_customergroups` SET `taxinput` = '0' WHERE`groupkey` = 'EK'";
         Shopware()->Db()->query($sql);
 
         $csvData = $this->getExportData();
@@ -71,10 +71,10 @@ class Shopware_RegressionTests_Ticket5219 extends Enlight_Components_Test_Contro
         $this->dispatch('/backend/ImportExport/exportPrices?type=prices&exportVariants=0');
         $header = $this->Response()->getHeaders();
 
-        $this->assertEquals("Content-Disposition", $header[1]["name"]);
-        $this->assertEquals("Content-Transfer-Encoding", $header[2]["name"]);
-        $this->assertEquals("binary", $header[2]["value"]);
-        $this->assertEquals("text/x-comma-separated-values;charset=utf-8", $header[0]["value"]);
+        $this->assertEquals('Content-Disposition', $header[1]['name']);
+        $this->assertEquals('Content-Transfer-Encoding', $header[2]['name']);
+        $this->assertEquals('binary', $header[2]['value']);
+        $this->assertEquals('text/x-comma-separated-values;charset=utf-8', $header[0]['value']);
         $csvOutput = $this->Response()->getBody();
 
         return explode("\n", $csvOutput);
@@ -90,8 +90,8 @@ class Shopware_RegressionTests_Ticket5219 extends Enlight_Components_Test_Contro
     private function assertArticlePrice($csvData, $orderNumber, $price)
     {
         foreach ($csvData as $row) {
-            $columns = explode(";", $row);
-            if ($columns[0] == $orderNumber && $columns[2] == "EK") {
+            $columns = explode(';', $row);
+            if ($columns[0] == $orderNumber && $columns[2] == 'EK') {
                 $this->assertEquals($price, $columns[1]);
             }
         }

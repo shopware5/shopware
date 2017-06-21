@@ -26,7 +26,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
 /**
  * Class Backlog
- * @package Shopware\Bundle\ESIndexingBundle\Struct
  */
 class Backlog
 {
@@ -51,9 +50,9 @@ class Backlog
     private $time;
 
     /**
-     * @param string $event
-     * @param string $payload
-     * @param string $time
+     * @param string   $event
+     * @param string   $payload
+     * @param string   $time
      * @param null|int $id
      */
     public function __construct($event, $payload, $time = 'now', $id = null)

@@ -28,8 +28,6 @@ namespace Shopware\Recovery\Common\Service;
  * Class UniqueIdGenerator
  *
  * Generates a random unique Id and caches it in a local file.
- *
- * @package Shopware\Recovery\Common\Service
  */
 class UniqueIdGenerator
 {
@@ -63,8 +61,9 @@ class UniqueIdGenerator
     }
 
     /**
-     * @param int $length
+     * @param int    $length
      * @param string $keyspace
+     *
      * @return string
      */
     private function generateUniqueId($length = 32, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')

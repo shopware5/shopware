@@ -29,8 +29,6 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 {
     /**
      * Check licence first
-     *
-     * @return void
      */
     public function preDispatch()
     {
@@ -39,8 +37,8 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 
     /**
      * Show Ticket formular
+     *
      * @deprecated
-     * @return void
      */
     public function indexAction()
     {
@@ -48,8 +46,8 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 
     /**
      * Show ticket history
+     *
      * @deprecated
-     * @return void
      */
     public function listingAction()
     {
@@ -57,8 +55,8 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 
     /**
      * Open new ticket mask
+     *
      * @deprecated
-     * @return void
      */
     public function requestAction()
     {
@@ -66,8 +64,8 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 
     /**
      * Show ticket details
+     *
      * @deprecated
-     * @return void
      */
     public function detailAction()
     {
@@ -75,8 +73,8 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 
     /**
      * Show ticket direct link
+     *
      * @deprecated
-     * @return void
      */
     public function directAction()
     {
@@ -84,8 +82,8 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
 
     /**
      * Save new ticket into database
+     *
      * @deprecated
-     * @return void
      */
     public function commitForm()
     {

@@ -28,7 +28,7 @@ use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigWriter
@@ -47,7 +47,8 @@ class ConfigWriter
     }
 
     /**
-     * @param  DatabaseConnectionInformation $info
+     * @param DatabaseConnectionInformation $info
+     *
      * @throws \RuntimeException
      */
     public function writeConfig(DatabaseConnectionInformation $info)
@@ -55,7 +56,7 @@ class ConfigWriter
         $databaseConfigFile = $this->configPath;
 
         $config = [
-            'db' => []
+            'db' => [],
         ];
 
         $mapping = [
@@ -64,10 +65,10 @@ class ConfigWriter
         ];
 
         foreach ($info as $key => $parameter) {
-            if ($key == "port" && empty($parameter)) {
+            if ($key == 'port' && empty($parameter)) {
                 continue;
             }
-            if ($key == "socket" && empty($parameter)) {
+            if ($key == 'socket' && empty($parameter)) {
                 continue;
             }
 

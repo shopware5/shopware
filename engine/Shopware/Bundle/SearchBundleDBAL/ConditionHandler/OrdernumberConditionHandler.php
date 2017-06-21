@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class OrdernumberConditionHandler implements ConditionHandlerInterface
@@ -56,7 +56,7 @@ class OrdernumberConditionHandler implements ConditionHandlerInterface
     ) {
         $query->andWhere('variant.ordernumber IN (:ordernumbers)');
 
-        /** @var OrdernumberCondition $condition */
+        /* @var OrdernumberCondition $condition */
         $query->setParameter(
             ':ordernumbers',
             $condition->getOrdernumbers(),

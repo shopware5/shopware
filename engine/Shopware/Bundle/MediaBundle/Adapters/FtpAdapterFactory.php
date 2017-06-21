@@ -29,7 +29,7 @@ use League\Flysystem\Adapter\Ftp;
 class FtpAdapterFactory implements AdapterFactoryInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create(array $config)
     {
@@ -38,7 +38,7 @@ class FtpAdapterFactory implements AdapterFactoryInterface
             'username' => $config['username'],
             'password' => $config['password'],
 
-            /** optional config settings */
+            /* optional config settings */
             'port' => $config['port'],
             'root' => $config['root'],
             'passive' => $config['passive'],
@@ -48,7 +48,7 @@ class FtpAdapterFactory implements AdapterFactoryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getType()
     {

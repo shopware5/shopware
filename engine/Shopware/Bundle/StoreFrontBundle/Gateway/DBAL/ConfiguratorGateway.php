@@ -26,12 +26,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
@@ -67,9 +67,9 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
+     * @param Connection                                                      $connection
+     * @param FieldHelper                                                     $fieldHelper
+     * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      */
     public function __construct(
@@ -85,7 +85,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -101,7 +101,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         $query->where('products.id = :id')
             ->setParameter(':id', $product->getId());
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -110,7 +110,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -130,7 +130,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query->select([
             'optionRelation.option_id',
-            '(' . $subQuery->getSQL() . ') as media_id'
+            '(' . $subQuery->getSQL() . ') as media_id',
         ]);
 
         $query->from('s_articles', 'product')
@@ -139,7 +139,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->groupBy('optionRelation.option_id')
             ->setParameter(':articleId', $product->getId());
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -159,7 +159,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductCombinations(Struct\BaseProduct $product)
     {
@@ -167,7 +167,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query->select([
             'relations.option_id',
-            "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations"
+            "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations",
         ]);
 
         $query->from('s_article_configurator_option_relations', 'relations')
@@ -177,7 +177,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->groupBy('relations.option_id')
             ->setParameter(':articleId', $product->getId());
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);

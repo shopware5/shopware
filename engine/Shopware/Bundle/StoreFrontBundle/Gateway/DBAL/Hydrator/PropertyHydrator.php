@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyHydrator extends Hydrator
@@ -45,7 +45,7 @@ class PropertyHydrator extends Hydrator
 
     /**
      * @param AttributeHydrator $attributeHydrator
-     * @param MediaHydrator $mediaHydrator
+     * @param MediaHydrator     $mediaHydrator
      */
     public function __construct(
         AttributeHydrator $attributeHydrator,
@@ -57,6 +57,7 @@ class PropertyHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Property\Set[]
      */
     public function hydrateValues(array $data)
@@ -108,28 +109,7 @@ class PropertyHydrator extends Hydrator
 
     /**
      * @param array $data
-     * @return Struct\Property\Set
-     */
-    private function hydrateSet(array $data)
-    {
-        $set = new Struct\Property\Set();
-        $translation = $this->getTranslation($data, '__propertySet', ['groupName' => 'name']);
-        $data = array_merge($data, $translation);
-
-        $set->setId((int) $data['__propertySet_id']);
-        $set->setName($data['__propertySet_name']);
-        $set->setComparable((bool) $data['__propertySet_comparable']);
-        $set->setSortMode((int) $data['__propertySet_sortmode']);
-
-        if ($data['__propertySetAttribute_id']) {
-            $this->attributeHydrator->addAttribute($set, $data, 'propertySetAttribute');
-        }
-
-        return $set;
-    }
-
-    /**
-     * @param array $data
+     *
      * @return Struct\Property\Group
      */
     public function hydrateGroup(array $data)
@@ -145,11 +125,13 @@ class PropertyHydrator extends Hydrator
         if ($data['__propertyGroupAttribute_id']) {
             $this->attributeHydrator->addAttribute($group, $data, 'propertyGroupAttribute');
         }
+
         return $group;
     }
 
     /**
      * @param array $data
+     *
      * @return Struct\Property\Option
      */
     public function hydrateOption(array $data)
@@ -176,6 +158,29 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
+     * @param array $data
+     *
+     * @return Struct\Property\Set
+     */
+    private function hydrateSet(array $data)
+    {
+        $set = new Struct\Property\Set();
+        $translation = $this->getTranslation($data, '__propertySet', ['groupName' => 'name']);
+        $data = array_merge($data, $translation);
+
+        $set->setId((int) $data['__propertySet_id']);
+        $set->setName($data['__propertySet_name']);
+        $set->setComparable((bool) $data['__propertySet_comparable']);
+        $set->setSortMode((int) $data['__propertySet_sortmode']);
+
+        if ($data['__propertySetAttribute_id']) {
+            $this->attributeHydrator->addAttribute($set, $data, 'propertySetAttribute');
+        }
+
+        return $set;
+    }
+
+    /**
      * Sort groups by position in set
      *
      * @param array $data
@@ -191,7 +196,6 @@ class PropertyHydrator extends Hydrator
         });
     }
 
-
     /**
      * @param $options Struct\Property\Option[]
      * @param int $sortMode
@@ -200,11 +204,13 @@ class PropertyHydrator extends Hydrator
     {
         if ($sortMode == Struct\Property\Set::SORT_POSITION) {
             $this->sortOptionsByPosition($options);
+
             return;
         }
 
         if ($sortMode == Struct\Property\Set::SORT_NUMERIC) {
             $this->sortOptionsNumercialValue($options);
+
             return;
         }
 

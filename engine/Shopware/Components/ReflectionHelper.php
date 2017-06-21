@@ -26,13 +26,15 @@ namespace Shopware\Components;
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ReflectionHelper
 {
     /**
      * @param string $className
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return object
      */
     public function createInstanceFromNamedArguments($className, $arguments)

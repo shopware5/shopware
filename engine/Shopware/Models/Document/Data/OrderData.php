@@ -26,10 +26,9 @@
  * Order demo data
  */
 
-return array(
+return [
     '_id' => 59,
-    '_order' =>
-        new ArrayObject(array(
+    '_order' => new ArrayObject([
             'id' => '59',
             'ordernumber' => '20003',
             'userID' => '3',
@@ -63,8 +62,7 @@ return array(
             'currencyID' => '1',
             'templatechar' => '&euro;',
             'currencyName' => 'Euro',
-            'attributes' =>
-                array(
+            'attributes' => [
                     'id' => '3',
                     'orderID' => '59',
                     'attribute1' => '',
@@ -73,12 +71,10 @@ return array(
                     'attribute4' => '',
                     'attribute5' => '',
                     'attribute6' => '',
-                ),
-        )),
-    '_positions' =>
-        new ArrayObject(array(
-            0 =>
-                array(
+                ],
+        ]),
+    '_positions' => new ArrayObject([
+            0 => [
                     'id' => '209',
                     'orderID' => '59',
                     'ordernumber' => '20003',
@@ -117,8 +113,7 @@ return array(
                     'attr18' => '',
                     'attr19' => '',
                     'attr20' => '',
-                    'attributes' =>
-                        array(
+                    'attributes' => [
                             'id' => '9',
                             'detailID' => '209',
                             'attribute1' => '',
@@ -127,14 +122,13 @@ return array(
                             'attribute4' => '',
                             'attribute5' => '',
                             'attribute6' => '',
-                        ),
+                        ],
                     'tax' => '19',
                     'netto' => 16.764705882352938,
                     'amount_netto' => 16.760000000000002,
                     'amount' => 19.949999999999999,
-                ),
-            1 =>
-                array(
+                ],
+            1 => [
                     'id' => '210',
                     'orderID' => '59',
                     'ordernumber' => '20003',
@@ -173,8 +167,7 @@ return array(
                     'attr18' => '',
                     'attr19' => '',
                     'attr20' => '',
-                    'attributes' =>
-                        array(
+                    'attributes' => [
                             'id' => '10',
                             'detailID' => '210',
                             'attribute1' => '',
@@ -183,14 +176,13 @@ return array(
                             'attribute4' => '',
                             'attribute5' => '',
                             'attribute6' => '',
-                        ),
+                        ],
                     'tax' => '19',
                     'netto' => 29.403361344537814,
                     'amount_netto' => 29.399999999999999,
                     'amount' => 34.990000000000002,
-                ),
-            2 =>
-                array(
+                ],
+            2 => [
                     'id' => '211',
                     'orderID' => '59',
                     'ordernumber' => '20003',
@@ -229,8 +221,7 @@ return array(
                     'attr18' => null,
                     'attr19' => null,
                     'attr20' => null,
-                    'attributes' =>
-                        array(
+                    'attributes' => [
                             'id' => '11',
                             'detailID' => '211',
                             'attribute1' => '',
@@ -239,14 +230,13 @@ return array(
                             'attribute4' => '',
                             'attribute5' => '',
                             'attribute6' => '',
-                        ),
+                        ],
                     'tax' => '19',
                     'netto' => -1.680672268907563,
                     'amount_netto' => -1.6799999999999999,
                     'amount' => -2,
-                ),
-            3 =>
-                array(
+                ],
+            3 => [
                     'quantity' => 1,
                     'netto' => 3.2773109243697482,
                     'tax' => 19,
@@ -256,11 +246,10 @@ return array(
                     'amount_netto' => 3.2773109243697482,
                     'articleordernumber' => '',
                     'name' => 'Versandkosten',
-                ),
-        )),
+                ],
+        ]),
     '_userID' => '3',
-    '_user' =>
-        new ArrayObject(array(
+    '_user' => new ArrayObject([
             'id' => '3',
             'password' => '$2y$10$GAGAC6.1kMRvN4RRcLrYleDx.EfWhHcW./cmoOQg11sjFUY73SO.C',
             'encoder' => 'bcrypt',
@@ -286,9 +275,8 @@ return array(
             'failedlogins' => '0',
             'lockeduntil' => null,
             'customergroupID' => '1',
-        )),
-    '_billing' =>
-        new ArrayObject(array(
+        ]),
+    '_billing' => new ArrayObject([
             'id' => '3',
             'userID' => '3',
             'orderID' => '59',
@@ -306,8 +294,7 @@ return array(
             'ustid' => '',
             'additional_address_line1' => '',
             'additional_address_line2' => '',
-            'country' =>
-                new ArrayObject(array(
+            'country' => new ArrayObject([
                     'id' => '2',
                     'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
@@ -323,12 +310,10 @@ return array(
                     'iso3' => 'DEU',
                     'display_state_in_registration' => '0',
                     'force_state_in_registration' => '0',
-                )),
-            'state' =>
-                array(
-                ),
-            'attributes' =>
-                array(
+                ]),
+            'state' => [
+                ],
+            'attributes' => [
                     'id' => '3',
                     'billingID' => '3',
                     'text1' => '',
@@ -337,10 +322,9 @@ return array(
                     'text4' => '',
                     'text5' => '',
                     'text6' => '',
-                ),
-        )),
-    '_shipping' =>
-        new ArrayObject(array(
+                ],
+        ]),
+    '_shipping' => new ArrayObject([
             'id' => '3',
             'userID' => '3',
             'orderID' => '59',
@@ -356,8 +340,7 @@ return array(
             'stateID' => '0',
             'additional_address_line1' => '',
             'additional_address_line2' => '',
-            'attributes' =>
-                array(
+            'attributes' => [
                     'id' => '3',
                     'shippingID' => '3',
                     'text1' => '',
@@ -366,9 +349,8 @@ return array(
                     'text4' => '',
                     'text5' => '',
                     'text6' => '',
-                ),
-            'country' =>
-                new ArrayObject(array(
+                ],
+            'country' => new ArrayObject([
                     'id' => '2',
                     'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
@@ -384,13 +366,11 @@ return array(
                     'iso3' => 'DEU',
                     'display_state_in_registration' => '0',
                     'force_state_in_registration' => '0',
-                )),
-            'state' =>
-                array(
-                ),
-        )),
-    '_payment' =>
-        new ArrayObject(array(
+                ]),
+            'state' => [
+                ],
+        ]),
+    '_payment' => new ArrayObject([
             'id' => '5',
             'name' => 'prepayment',
             'description' => 'Vorkasse',
@@ -411,11 +391,9 @@ return array(
             'pluginID' => null,
             'source' => null,
             'mobile_inactive' => '0',
-        )),
-    '_paymentInstances' =>
-        new ArrayObject(array(
-            0 =>
-                array(
+        ]),
+    '_paymentInstances' => new ArrayObject([
+            0 => [
                     'id' => '1',
                     'payment_mean_id' => '5',
                     'order_id' => '59',
@@ -433,30 +411,27 @@ return array(
                     'iban' => null,
                     'amount' => '56.8400',
                     'created_at' => '2014-08-12',
-                ),
-        )),
-    '_dispatch' =>
-        new ArrayObject(array(
+                ],
+        ]),
+    '_dispatch' => new ArrayObject([
             'name' => 'Standard Versand',
             'description' => '',
-        )),
+        ]),
     '_net' => false,
     '_summaryNet' => false,
     '_amountNetto' => 47.757310924369747,
     '_amount' => 56.839999999999996,
-    '_tax' =>
-        array(
+    '_tax' => [
             '19.00' => 9.0826890756302507,
-        ),
-    '_currency' =>
-        new ArrayObject(array(
+        ],
+    '_currency' => new ArrayObject([
             'currency' => 'EUR',
             'name' => 'Euro',
             'factor' => '1',
             'char' => '&euro;',
-        )),
+        ]),
     '_shippingCosts' => '3.9',
     '_shippingCostsAsPosition' => true,
     '_discount' => -2,
     '_taxRepository' => null,
-);
+];

@@ -24,20 +24,20 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ApcuCache;
+use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\CacheProvider;
-use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\ORM\Repository\RepositoryFactory;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Model
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Configuration extends BaseConfiguration
@@ -57,8 +57,8 @@ class Configuration extends BaseConfiguration
     protected $cacheNamespace = null;
 
     /**
-     * @param array $options
-     * @param \Zend_Cache_Core $cache
+     * @param array             $options
+     * @param \Zend_Cache_Core  $cache
      * @param RepositoryFactory $repositoryFactory
      */
     public function __construct($options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory)
@@ -99,14 +99,15 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param  CacheProvider $cache
+     * @param CacheProvider $cache
+     *
      * @return Configuration
      */
     public function setCache(CacheProvider $cache)
     {
         // Set namespace for doctrine cache provider to avoid collisions
-        $namespace =  ! is_null($this->cacheNamespace) ? $this->cacheNamespace : md5($this->getProxyDir() . \Shopware::REVISION);
-        $cache->setNamespace("dc2_" . $namespace  . "_");
+        $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5($this->getProxyDir() . \Shopware::REVISION);
+        $cache->setNamespace('dc2_' . $namespace . '_');
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
@@ -133,6 +134,7 @@ class Configuration extends BaseConfiguration
 
     /**
      * @param string $provider
+     *
      * @throws \Exception
      */
     public function setCacheProvider($provider)
@@ -151,7 +153,7 @@ class Configuration extends BaseConfiguration
                 $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
             }
             if (!class_exists($provider)) {
-                throw new \Exception('Doctrine cache provider "' . $provider. "' not found failure.");
+                throw new \Exception('Doctrine cache provider "' . $provider . "' not found failure.");
             }
 
             $cache = new $provider();
@@ -177,7 +179,7 @@ class Configuration extends BaseConfiguration
      */
     public function getAnnotationsReader()
     {
-        $reader = new AnnotationReader;
+        $reader = new AnnotationReader();
         $cache = $this->getMetadataCacheImpl();
 
         $reader = new CachedReader(
@@ -190,7 +192,9 @@ class Configuration extends BaseConfiguration
 
     /**
      * @param string $dir
+     *
      * @throws \RuntimeException
+     *
      * @return Configuration
      */
     public function setAttributeDir($dir)
@@ -222,6 +226,7 @@ class Configuration extends BaseConfiguration
      * Sets the directory where Doctrine generates any necessary proxy class files.
      *
      * @param string $dir
+     *
      * @throws \RuntimeException
      */
     public function setProxyDir($dir)

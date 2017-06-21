@@ -25,7 +25,6 @@
 namespace Shopware\Components;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Form as Form;
 
 /**
  * Base class for the shopware themes.
@@ -33,13 +32,14 @@ use Shopware\Components\Form as Form;
  * Contains the inheritance and config definition of a theme.
  *
  * @category  Shopware
- * @package   Shopware\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Theme
 {
     /**
      * Defines the parent theme
+     *
      * @var null
      */
     protected $extend = null;
@@ -47,6 +47,7 @@ class Theme
     /**
      * Defines the human readable theme name
      * which displayed in the backend
+     *
      * @var string
      */
     protected $name = '';
@@ -54,12 +55,14 @@ class Theme
     /**
      * Allows to define a description text
      * for the theme
+     *
      * @var null
      */
     protected $description = null;
 
     /**
      * Name of the theme author.
+     *
      * @var null
      */
     protected $author = null;
@@ -96,7 +99,7 @@ class Theme
      *
      * @var array
      */
-    protected $javascript = array();
+    protected $javascript = [];
 
     /**
      * The css property allows to define .css files
@@ -106,7 +109,7 @@ class Theme
      *
      * @var array
      */
-    protected $css = array();
+    protected $css = [];
 
     /**
      * Defines if theme assets should be injected before or after plugin assets.
@@ -121,6 +124,7 @@ class Theme
      * Don't override this function. Used
      * from the backend template module
      * to get the template hierarchy
+     *
      * @return null|string
      */
     public function getExtend()
@@ -128,33 +132,21 @@ class Theme
         return $this->extend;
     }
 
-    /**
-     * @return null
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @return null
-     */
     final public function getAuthor()
     {
         return $this->author;
     }
 
-    /**
-     * @return null
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * @return null
-     */
     public function getLicense()
     {
         return $this->license;
@@ -169,7 +161,8 @@ class Theme
     public function getTemplate()
     {
         $class = get_class($this);
-        $paths = explode("\\", $class);
+        $paths = explode('\\', $class);
+
         return $paths[count($paths) - 2];
     }
 
@@ -185,6 +178,7 @@ class Theme
 
     /**
      * Returns the javascript files definition.
+     *
      * @return array
      */
     public function getJavascript()
@@ -194,6 +188,7 @@ class Theme
 
     /**
      * Returns the css files definition.
+     *
      * @return array
      */
     public function getCss()
@@ -248,7 +243,7 @@ class Theme
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function injectBeforePlugins()
     {
@@ -257,28 +252,34 @@ class Theme
 
     /**
      * Creates a ext js tab panel.
+     *
      * @param $name
      * @param array $options
+     *
      * @return Form\Container\TabContainer
      */
-    protected function createTabPanel($name, array $options = array())
+    protected function createTabPanel($name, array $options = [])
     {
         $element = new Form\Container\TabContainer($name);
         $element->fromArray($options);
+
         return $element;
     }
 
     /**
      * Creates a ext js form field.
+     *
      * @param $name
      * @param $title
      * @param array $options
+     *
      * @return Form\Container\FieldSet
      */
-    protected function createFieldSet($name, $title, array $options = array())
+    protected function createFieldSet($name, $title, array $options = [])
     {
         $element = new Form\Container\FieldSet($name, $title);
         $element->fromArray($options);
+
         return $element;
     }
 
@@ -289,24 +290,28 @@ class Theme
      * @param $name
      * @param $title
      * @param array $options
+     *
      * @return Form\Container\Tab
      */
-    protected function createTab($name, $title, array $options = array())
+    protected function createTab($name, $title, array $options = [])
     {
         $element = new Form\Container\Tab($name, $title);
         $element->fromArray($options);
+
         return $element;
     }
 
     /**
      * Creates a ext js text field.
+     *
      * @param $name
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Text
      */
-    protected function createTextField($name, $label, $defaultValue, array $options = array())
+    protected function createTextField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Text($name);
         $element->fromArray($options);
@@ -318,35 +323,41 @@ class Theme
 
     /**
      * Creates a ext js number field.
+     *
      * @param $name
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Number
      */
-    protected function createNumberField($name, $label, $defaultValue, array $options = array())
+    protected function createNumberField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Number($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
     /**
      * Creates a ext js check box field.
+     *
      * @param $name
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Boolean
      */
-    protected function createCheckboxField($name, $label, $defaultValue, array $options = array())
+    protected function createCheckboxField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Boolean($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
@@ -357,14 +368,16 @@ class Theme
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Color
      */
-    protected function createColorPickerField($name, $label, $defaultValue, array $options = array())
+    protected function createColorPickerField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Color($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
@@ -375,48 +388,56 @@ class Theme
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Date
      */
-    protected function createDateField($name, $label, $defaultValue, array $options = array())
+    protected function createDateField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Date($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
     /**
      * Creates a ext js text field with auto suffix `em`
+     *
      * @param $name
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Em
      */
-    protected function createEmField($name, $label, $defaultValue, array $options = array())
+    protected function createEmField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Em($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
     /**
      * Creates a single media selection field.
+     *
      * @param $name
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Media
      */
-    protected function createMediaField($name, $label, $defaultValue, array $options = array())
+    protected function createMediaField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Media($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
@@ -427,14 +448,16 @@ class Theme
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Percent
      */
-    protected function createPercentField($name, $label, $defaultValue, array $options = array())
+    protected function createPercentField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Percent($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
@@ -445,14 +468,16 @@ class Theme
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\Pixel
      */
-    protected function createPixelField($name, $label, $defaultValue, array $options = array())
+    protected function createPixelField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\Pixel($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
@@ -462,16 +487,18 @@ class Theme
      * @param $name
      * @param $label
      * @param $defaultValue
-     * @param array[] $store [['text' => 'displayText', 'value'  => 10], ...]
-     * @param array $options
+     * @param array[] $store   [['text' => 'displayText', 'value'  => 10], ...]
+     * @param array   $options
+     *
      * @return Form\Field\Selection
      */
-    protected function createSelectField($name, $label, $defaultValue, array $store, array $options = array())
+    protected function createSelectField($name, $label, $defaultValue, array $store, array $options = [])
     {
         $element = new Form\Field\Selection($name, $store);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 
@@ -482,14 +509,16 @@ class Theme
      * @param $label
      * @param $defaultValue
      * @param array $options
+     *
      * @return Form\Field\TextArea
      */
-    protected function createTextAreaField($name, $label, $defaultValue, array $options = array())
+    protected function createTextAreaField($name, $label, $defaultValue, array $options = [])
     {
         $element = new Form\Field\TextArea($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);
+
         return $element;
     }
 }

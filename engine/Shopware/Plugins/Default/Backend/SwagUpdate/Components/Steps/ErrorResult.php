@@ -26,7 +26,7 @@ namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Steps;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ErrorResult
@@ -51,11 +51,11 @@ class ErrorResult
      * @param \Exception $exception
      * @param array      $args
      */
-    public function __construct($message, \Exception $exception = null, $args = array())
+    public function __construct($message, \Exception $exception = null, $args = [])
     {
-        $this->message   = $message;
+        $this->message = $message;
         $this->exception = $exception;
-        $this->args      = $args;
+        $this->args = $args;
     }
 
     /**

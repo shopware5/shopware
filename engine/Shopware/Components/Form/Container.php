@@ -30,7 +30,6 @@ use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class Container
- * @package Shopware\Components\Form
  */
 class Container extends Base implements ContainerInterface
 {
@@ -44,9 +43,18 @@ class Container extends Base implements ContainerInterface
      * config field.
      *
      * @optional
+     *
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
+
+    /**
+     * Initials the elements collection.
+     */
+    public function __construct()
+    {
+        $this->elements = new ArrayCollection();
+    }
 
     /**
      * @param array $attributes
@@ -62,14 +70,6 @@ class Container extends Base implements ContainerInterface
     public function getAttributes()
     {
         return $this->attributes;
-    }
-
-    /**
-     * Initials the elements collection.
-     */
-    public function __construct()
-    {
-        $this->elements = new ArrayCollection();
     }
 
     /**
@@ -90,11 +90,13 @@ class Container extends Base implements ContainerInterface
 
     /**
      * @param $element
+     *
      * @return $this
      */
     public function addElement(Element $element)
     {
         $this->elements->add($element);
+
         return $this;
     }
 }

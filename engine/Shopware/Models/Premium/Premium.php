@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Premium;
 
-use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\LazyFetchModelEntity;
 
 /**
  * Shopware Model Premium
@@ -40,43 +40,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Premium extends LazyFetchModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var float $startPrice
-     *
-     * @ORM\Column(name="startprice", type="decimal", nullable=false)
-     */
-    private $startPrice;
-
-    /**
-     * @var string $orderNumber
-     *
-     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
-     */
-    private $orderNumber;
-
-    /**
-     * @var string $orderNumberExport
-     *
-     * @ORM\Column(name="ordernumber_export", type="string", length=255, nullable=false)
-     */
-    private $orderNumberExport;
-
-    /**
-     * @var integer $subShopId
-     *
-     * @ORM\Column(name="subshopID", type="integer", nullable=false)
-     */
-    private $shopId;
-
-    /**
      * @var
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Shop\Shop")
@@ -89,11 +52,47 @@ class Premium extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
      */
     protected $articleDetail;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="startprice", type="decimal", nullable=false)
+     */
+    private $startPrice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
+     */
+    private $orderNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ordernumber_export", type="string", length=255, nullable=false)
+     */
+    private $orderNumberExport;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="subshopID", type="integer", nullable=false)
+     */
+    private $shopId;
 
     /**
      * Returns the primary-key id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -104,11 +103,13 @@ class Premium extends LazyFetchModelEntity
      * Sets the startprice for a premium-article
      *
      * @param float $startPrice
+     *
      * @return Premium
      */
     public function setStartPrice($startPrice)
     {
         $this->startPrice = $startPrice;
+
         return $this;
     }
 
@@ -126,11 +127,13 @@ class Premium extends LazyFetchModelEntity
      * Sets the ordernumber for a premium-article
      *
      * @param string $orderNumber
+     *
      * @return Premium
      */
     public function setOrderNumber($orderNumber)
     {
         $this->orderNumber = $orderNumber;
+
         return $this;
     }
 
@@ -148,11 +151,13 @@ class Premium extends LazyFetchModelEntity
      * Sets the pseudoId for a premium-article
      *
      * @param string $orderNumberExport
+     *
      * @return Premium
      */
     public function setOrderNumberExport($orderNumberExport)
     {
         $this->orderNumberExport = $orderNumberExport;
+
         return $this;
     }
 
@@ -168,6 +173,7 @@ class Premium extends LazyFetchModelEntity
 
     /**
      * Sets the assigned subShop
+     *
      * @param  $shop
      */
     public function setShop($shop)
@@ -177,6 +183,7 @@ class Premium extends LazyFetchModelEntity
 
     /**
      * Returns the instance of the assigned subShop
+     *
      * @return mixed
      */
     public function getShop()
@@ -188,36 +195,43 @@ class Premium extends LazyFetchModelEntity
      * Sets the assigned article
      *
      * @param $articleDetail  \Shopware\Models\Article\Detail
+     *
      * @return \Shopware\Models\Premium\Premium
      */
     public function setArticleDetail($articleDetail)
     {
         $this->articleDetail = $articleDetail;
+
         return $this;
     }
 
     /**
      * Gets the instance of the assigned article
+     *
      * @return \Shopware\Models\Article\Detail
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, array('number' => $this->orderNumber));
+        return $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
     }
 
     /**
      * Sets the shopId of a premium-article
+     *
      * @param $shopId int Contains the shopId
+     *
      * @return \Shopware\Models\Premium\Premium
      */
     public function setShopId($shopId)
     {
         $this->shopId = $shopId;
+
         return $this;
     }
 
     /**
      * Sets the shopId of a premium-article
+     *
      * @return int
      */
     public function getShopId()

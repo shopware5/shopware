@@ -198,10 +198,12 @@
     }
 
     /** Icons */
-	.icon-pdf, .icon-video, .icon-music, .icon-archive, .icon-model, .icon-unknown {
+	.icon-image, .icon-vector, .icon-pdf, .icon-video, .icon-music, .icon-archive, .icon-model, .icon-unknown {
 	    width: 70px;
 	    height: 70px;
 	}
+	.icon-image { background: theme-image($theme, 'media_manager_icon_image.png') no-repeat }
+	.icon-vector { background: theme-image($theme, 'media_manager_icon_vector.png') no-repeat }
 	.icon-pdf { background: theme-image($theme, 'media_manager_icon_pdf.png') no-repeat }
 	.icon-video { background: theme-image($theme, 'media_manager_icon_video.png') no-repeat }
 	.icon-music { background: theme-image($theme, 'media_manager_icon_music.png') no-repeat }

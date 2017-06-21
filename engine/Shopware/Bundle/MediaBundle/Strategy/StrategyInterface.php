@@ -26,7 +26,6 @@ namespace Shopware\Bundle\MediaBundle\Strategy;
 
 /**
  * Interface StrategyInterface
- * @package Shopware\Bundle\MediaBundle\Strategy
  */
 interface StrategyInterface
 {
@@ -37,6 +36,7 @@ interface StrategyInterface
      *     '/var/www/web1/media/image/foobar.png' -> '/media/image/foobar.png'
      *
      * @param string $path
+     *
      * @return string
      */
     public function normalize($path);
@@ -45,6 +45,7 @@ interface StrategyInterface
      * Builds the path on the filesystem
      *
      * @param string $path
+     *
      * @return string
      */
     public function encode($path);
@@ -53,6 +54,7 @@ interface StrategyInterface
      * Checks if the provided path matches the algorithm format
      *
      * @param string $path
+     *
      * @return bool
      */
     public function isEncoded($path);

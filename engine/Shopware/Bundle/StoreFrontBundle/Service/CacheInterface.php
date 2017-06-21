@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 interface CacheInterface
@@ -34,21 +34,21 @@ interface CacheInterface
     /**
      * Fetches an entry from the cache.
      *
-     * @param string $id The id of the cache entry to fetch.
+     * @param string $id the id of the cache entry to fetch
      *
-     * @return mixed The cached data or FALSE, if no cache entry exists for the given id.
+     * @return mixed the cached data or FALSE, if no cache entry exists for the given id
      */
     public function fetch($id);
 
     /**
      * Puts data into the cache.
      *
-     * @param string $id       The cache id.
-     * @param mixed  $data     The cache entry/data.
+     * @param string $id       the cache id
+     * @param mixed  $data     the cache entry/data
      * @param int    $lifeTime The cache lifetime.
      *                         If != 0, sets a specific lifetime for this cache entry (0 => infinite lifeTime).
      *
-     * @return boolean TRUE if the entry was successfully stored in the cache, FALSE otherwise.
+     * @return bool tRUE if the entry was successfully stored in the cache, FALSE otherwise
      */
     public function save($id, $data, $lifeTime = 0);
 }

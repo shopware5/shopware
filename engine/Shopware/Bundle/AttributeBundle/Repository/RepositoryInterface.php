@@ -26,31 +26,35 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 interface RepositoryInterface
 {
     /**
      * @param $entity
-     * @return boolean
+     *
+     * @return bool
      */
     public function supports($entity);
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return SearchResult
      */
     public function search(SearchCriteria $criteria);
 
     /**
      * @param int[]|string[] $identifiers
+     *
      * @return array[]
      */
     public function getList($identifiers);
 
     /**
      * @param int|string $identifier
+     *
      * @return array
      */
     public function get($identifier);

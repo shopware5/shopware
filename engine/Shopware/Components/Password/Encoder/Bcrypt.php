@@ -26,7 +26,7 @@ namespace Shopware\Components\Password\Encoder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Password\Encoder
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Bcrypt implements PasswordEncoderInterface
@@ -34,7 +34,7 @@ class Bcrypt implements PasswordEncoderInterface
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @param array $options
@@ -55,7 +55,7 @@ class Bcrypt implements PasswordEncoderInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCompatible()
     {
@@ -63,8 +63,9 @@ class Bcrypt implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
+     * @param string $password
+     * @param string $hash
+     *
      * @return bool
      */
     public function isPasswordValid($password, $hash)
@@ -73,7 +74,8 @@ class Bcrypt implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
+     * @param string $password
+     *
      * @return string
      */
     public function encodePassword($password)
@@ -82,7 +84,8 @@ class Bcrypt implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $hash
+     * @param string $hash
+     *
      * @return bool
      */
     public function isReencodeNeeded($hash)

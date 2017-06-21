@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 
 /**
@@ -39,7 +40,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Registers the different acl permission for the different controller actions.
-     *
      */
     public function initAcl()
     {
@@ -80,10 +80,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->container->get('multi_edit.' . $resourceName);
         $data = $resource->getColumnConfig();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data' => $data
-        ));
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -101,19 +101,18 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                 continue;
             }
             list($entity, $field) = explode('_', $key);
-            $value = array('entity' => $entity, 'field' => $field, 'value' => $value);
+            $value = ['entity' => $entity, 'field' => $field, 'value' => $value];
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
         $data = $resource->save($params);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data' => $data
-        ));
+            'data' => $data,
+        ]);
     }
-
 
     /**
      * Backup related operations
@@ -131,9 +130,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->container->get('multi_edit.' . $resource);
         $success = $resource->deleteBackup($id);
 
-        $this->View()->assign(array(
-            'success' => $success
-        ));
+        $this->View()->assign([
+            'success' => $success,
+        ]);
     }
 
     /**
@@ -149,12 +148,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->container->get('multi_edit.' . $resource);
         $data = $resource->restoreBackup($id, $offset);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data' => $data
-        ));
+            'data' => $data,
+        ]);
     }
-
 
     /**
      * Returns the backups available for the current resource
@@ -173,7 +171,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $this->View()->assign($result);
     }
 
-
     /**
      * Batch process related operations
      */
@@ -183,15 +180,15 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     public function getOperationsAction()
     {
-        $data = array(
-            array()
-        );
+        $data = [
+            [],
+        ];
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => $data
-            )
+                'data' => $data,
+            ]
         );
     }
 
@@ -207,20 +204,20 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $columns = $resource->getBatchColumns();
 
         // Extract the operators and build array for the extjs store
-        $operators = array();
+        $operators = [];
         foreach ($columns as $columnOperators) {
             foreach ($columnOperators as $operator) {
                 if (!array_key_exists($operator, $operators)) {
-                    $operators[$operator] = array('name' => $operator);
+                    $operators[$operator] = ['name' => $operator];
                 }
             }
         }
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => array_values($operators)
-            )
+                'data' => array_values($operators),
+            ]
         );
     }
 
@@ -243,23 +240,23 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             function ($column, $operators) {
                 $operators = array_map(
                     function ($operator, $id) {
-                        return array('id' => $id, 'name' => $operator);
+                        return ['id' => $id, 'name' => $operator];
                     },
                     $operators,
                     array_keys($operators)
                 );
 
-                return array('name' => $column, 'operators' => $operators);
+                return ['name' => $column, 'operators' => $operators];
             },
             array_keys($columns),
             $columns
         );
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => $columns
-            )
+                'data' => $columns,
+            ]
         );
     }
 
@@ -277,18 +274,16 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $data = $resource->batchProcess($queueId);
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => $data
-            )
+                'data' => $data,
+            ]
         );
     }
-
 
     /**
      * Filter related operations
      */
-
 
     /**
      * Controller action which will return the grammar of the requested resource
@@ -302,10 +297,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $grammar = $resource->getGrammar();
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => $grammar
-            )
+                'data' => $grammar,
+            ]
         );
     }
 
@@ -321,7 +316,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         // The offset needs to be decreased by one as ExtJs starts counting by 1
         $limit = $this->Request()->getParam('limit', 25);
         $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
-        $filter = $this->Request()->getParam('filter', array());
+        $filter = $this->Request()->getParam('filter', []);
         $filter = isset($filter[0]['value']) ? $filter[0]['value'] : null;
         if (!$filter) {
             $filter = $this->Request()->getParam('query', null);
@@ -332,7 +327,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $data = $resource->getValuesFor(
             $attribute,
             $operator,
-            array('offset' => $offset, 'limit' => $limit, 'filter' => $filter)
+            ['offset' => $offset, 'limit' => $limit, 'filter' => $filter]
         );
         $data['success'] = true;
 
@@ -348,7 +343,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $ast = $this->Request()->getParam('ast');
         $limit = $this->Request()->getParam('limit', 25);
         $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
-        $sort = $this->Request()->getParam('sort', array());
+        $sort = $this->Request()->getParam('sort', []);
 
         if (!empty($sort)) {
             $sort = array_pop($sort);
@@ -368,41 +363,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
                 'data' => $result['data'],
-                'total' => $result['total']
-            )
+                'total' => $result['total'],
+            ]
         );
-    }
-
-    /**
-     * Normalize filter
-     *
-     * @param $filter
-     * @return string
-     */
-    private function normalizeFilter($filter)
-    {
-        return strtolower(preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
-    }
-
-    /**
-     * Translate filter name and description
-     *
-     * @param $filter
-     * @return mixed
-     */
-    private function translateFilter($filter)
-    {
-        $name = 'filterName-' . $this->normalizeFilter($filter['name']);
-        $description = 'filterDescription-' . $this->normalizeFilter($filter['description']);
-
-        $namespace = Shopware()->Snippets()->getNamespace('backend/article_list/main');
-        $filter['name'] = $namespace->get($name, $filter['name']);
-        $filter['description'] = $namespace->get($description, $filter['description']);
-
-        return $filter;
     }
 
     /**
@@ -419,10 +385,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => $results
-            )
+                'data' => $results,
+            ]
         );
     }
 
@@ -446,9 +412,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         Shopware()->Models()->flush();
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-            )
+            ]
         );
     }
 
@@ -467,9 +433,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-            )
+            ]
         );
     }
 
@@ -505,11 +471,75 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $return = $resource->createQueue($filterArray, $operations, $offset, $limit, $queueId);
 
         $this->View()->assign(
-            array(
+            [
                 'success' => true,
-                'data' => $return
-            )
+                'data' => $return,
+            ]
         );
+    }
+
+    /**
+     * Event listener function of the article store of the backend module.
+     *
+     * @return mixed
+     */
+    public function deleteProductAction()
+    {
+        $id = (int) $this->Request()->getParam('Detail_id');
+
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        $articleDetail = $this->getDetailRepository()->find($id);
+        if (!is_object($articleDetail)) {
+            $this->View()->assign([
+                'success' => false,
+            ]);
+        } else {
+            $articleResource = new Shopware\Components\Api\Resource\Article();
+            $articleResource->setManager($this->get('models'));
+
+            if ($articleDetail->getKind() == 1) {
+                $articleResource->delete($articleDetail->getArticle()->getId());
+            } else {
+                Shopware()->Models()->remove($articleDetail);
+            }
+
+            Shopware()->Models()->flush();
+
+            $this->View()->assign([
+                'success' => true,
+            ]);
+        }
+    }
+
+    /**
+     * Normalize filter
+     *
+     * @param $filter
+     *
+     * @return string
+     */
+    private function normalizeFilter($filter)
+    {
+        return strtolower(preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
+    }
+
+    /**
+     * Translate filter name and description
+     *
+     * @param $filter
+     *
+     * @return mixed
+     */
+    private function translateFilter($filter)
+    {
+        $name = 'filterName-' . $this->normalizeFilter($filter['name']);
+        $description = 'filterDescription-' . $this->normalizeFilter($filter['description']);
+
+        $namespace = Shopware()->Snippets()->getNamespace('backend/article_list/main');
+        $filter['name'] = $namespace->get($name, $filter['name']);
+        $filter['description'] = $namespace->get($description, $filter['description']);
+
+        return $filter;
     }
 
     /**
@@ -523,40 +553,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Event listener function of the article store of the backend module.
-     *
-     * @return mixed
-     */
-    public function deleteProductAction()
-    {
-        $id = (int) $this->Request()->getParam('Detail_id');
-
-        /** @var $articleDetail \Shopware\Models\Article\Detail   */
-        $articleDetail = $this->getDetailRepository()->find($id);
-        if (!is_object($articleDetail)) {
-            $this->View()->assign(array(
-                'success' => false
-            ));
-        } else {
-            $articleResource = new Shopware\Components\Api\Resource\Article();
-            $articleResource->setManager($this->get('models'));
-
-            if ($articleDetail->getKind() == 1) {
-                $articleResource->delete($articleDetail->getArticle()->getId());
-            } else {
-                Shopware()->Models()->remove($articleDetail);
-            }
-
-            Shopware()->Models()->flush();
-
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        }
-    }
-
-    /**
      * @param array[] $result
+     *
      * @return array[]
      */
     private function addAdditionalText($result)
@@ -574,11 +572,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             $product = $products[$number];
             $item['Detail_additionalText_dynamic'] = $product->getAdditional();
         }
+
         return $result;
     }
 
     /**
      * @param array[] $result
+     *
      * @return ListProduct[]
      */
     private function buildListProducts($result)
@@ -597,11 +597,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             }
             $products[$number] = $product;
         }
+
         return $products;
     }
 
     /**
      * @param array[] $ast
+     *
      * @return bool
      */
     private function displayVariants($ast)
@@ -614,11 +616,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
      */
     private function getAdditionalTexts($products)

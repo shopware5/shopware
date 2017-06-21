@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleES\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class OrdernumberConditionHandler implements HandlerInterface
@@ -44,7 +44,7 @@ class OrdernumberConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof OrdernumberCondition);
+        return $criteriaPart instanceof OrdernumberCondition;
     }
 
     /**

@@ -136,10 +136,10 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 );
                 break;
             case -1:
-                $this->forward('genericError', null, null, array('code' => $targetErrorCode));
+                $this->forward('genericError', null, null, ['code' => $targetErrorCode]);
                 break;
             default:
-                $this->forward('index', 'campaign', 'frontend', array('emotionId' => $targetEmotionId));
+                $this->forward('index', 'campaign', 'frontend', ['emotionId' => $targetEmotionId]);
         }
     }
 
@@ -158,12 +158,12 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
 
         $error = $this->Request()->getParam('error_handler');
 
-        /**
+        /*
          * If the system is configured to display the exception data, we need
          * to pass it to the template
         */
         if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() === 'backend') {
-            $path = Shopware()->Container()->getParameter('kernel.root_dir').'/';
+            $path = Shopware()->Container()->getParameter('kernel.root_dir') . '/';
 
             /** @var \Exception $exception */
             $exception = $error->exception;
@@ -177,7 +177,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 'error' => $exception->getMessage(),
                 'error_message' => $exception->getMessage(),
                 'error_file' => $errorFile,
-                'error_trace' => $errorTrace
+                'error_trace' => $errorTrace,
             ]);
         }
 
@@ -194,19 +194,6 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     }
 
     /**
-     * Ensure the backend theme is enabled.
-     * This is important in cases when a backend request uses the storefront context eg. "$shop->registerResources($this)".
-     */
-    private function enableBackendTheme()
-    {
-        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
-        Shopware()->Container()->get('template')->setTemplateDir([
-            'backend' => $directory,
-            'include_dir' => '.'
-        ]);
-    }
-
-    /**
      * Returns a list with actions which should not be validated for CSRF protection
      *
      * @return string[]
@@ -218,8 +205,21 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             'cli',
             'pageNotFoundError',
             'genericError',
-            'service'
+            'service',
         ];
+    }
+
+    /**
+     * Ensure the backend theme is enabled.
+     * This is important in cases when a backend request uses the storefront context eg. "$shop->registerResources($this)".
+     */
+    private function enableBackendTheme()
+    {
+        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
+        Shopware()->Container()->get('template')->setTemplateDir([
+            'backend' => $directory,
+            'include_dir' => '.',
+        ]);
     }
 
     /**
@@ -238,6 +238,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 return true;
             }
         }
+
         return false;
     }
 }

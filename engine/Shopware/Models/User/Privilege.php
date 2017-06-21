@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\User;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware privilege model represents a single authentication privilege.
@@ -47,7 +47,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Privilege extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -56,14 +56,14 @@ class Privilege extends ModelEntity
     private $id;
 
     /**
-     * @var integer $resourceId
+     * @var int
      *
      * @ORM\Column(name="resourceID", type="integer", nullable=false)
      */
     private $resourceId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -81,7 +81,7 @@ class Privilege extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -117,7 +117,8 @@ class Privilege extends ModelEntity
     /**
      * Set resourceId
      *
-     * @param integer $resourceId
+     * @param int $resourceId
+     *
      * @return Privilege
      */
     public function setResourceId($resourceId)
@@ -126,13 +127,14 @@ class Privilege extends ModelEntity
             $this->resource = Shopware()->Models()->find("Shopware\Models\User\Resource", $resourceId);
         }
         $this->resourceId = $resourceId;
+
         return $this;
     }
 
     /**
      * Get resourceId
      *
-     * @return integer
+     * @return int
      */
     public function getResourceId()
     {
@@ -143,11 +145,13 @@ class Privilege extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Privilege
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -171,7 +175,7 @@ class Privilege extends ModelEntity
      */
     public function onRemove()
     {
-        $sql= "DELETE FROM s_core_acl_roles WHERE resourceID = ? AND privilegeID = ?";
-        Shopware()->Db()->query($sql, array($this->resourceId, $this->id));
+        $sql = 'DELETE FROM s_core_acl_roles WHERE resourceID = ? AND privilegeID = ?';
+        Shopware()->Db()->query($sql, [$this->resourceId, $this->id]);
     }
 }

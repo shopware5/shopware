@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EsdHydrator extends Hydrator
@@ -48,6 +48,7 @@ class EsdHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Product\Esd
      */
     public function hydrate(array $data)

@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ProductRepository extends GenericRepository
@@ -35,7 +35,7 @@ class ProductRepository extends GenericRepository
     {
         return in_array($entity, [
             'Shopware\Models\Article\Article',
-            'Shopware\Models\Article\Detail'
+            'Shopware\Models\Article\Detail',
         ]);
     }
 }

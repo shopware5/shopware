@@ -26,15 +26,12 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StoreListCommand extends StoreCommand
@@ -60,8 +57,8 @@ class StoreListCommand extends StoreCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $version = $this->setupShopwareVersion($input);
-        $token   = $this->setupAuth($input, $output);
-        $domain  = $this->setupDomain($input, $output);
+        $token = $this->setupAuth($input, $output);
+        $domain = $this->setupDomain($input, $output);
 
         $context = new LicenceRequest(
             null,
@@ -75,24 +72,25 @@ class StoreListCommand extends StoreCommand
                 ->getLicences($context);
         } catch (\Exception $e) {
             $this->handleError([
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
+
             return;
         }
 
-        /**@var $licence LicenceStruct*/
+        /** @var $licence LicenceStruct */
         foreach ($licences as $licence) {
             $result[] = [
                 'technicalName' => $licence->getTechnicalName(),
-                'label'         => $licence->getLabel(),
-                'domain'        => $licence->getShop(),
-                'createDate'    => $licence->getCreationDate()->format('Y-m-d'),
-                'type'          => $licence->getPriceModel()->getType()
+                'label' => $licence->getLabel(),
+                'domain' => $licence->getShop(),
+                'createDate' => $licence->getCreationDate()->format('Y-m-d'),
+                'type' => $licence->getPriceModel()->getType(),
             ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Technical name', 'Description', 'domain', 'Creation date', 'Type'))
+        $table->setHeaders(['Technical name', 'Description', 'domain', 'Creation date', 'Type'])
               ->setRows($result);
 
         $table->render($output);

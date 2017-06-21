@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class PriceStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class SubscriptionStateStruct implements \JsonSerializable
 {
@@ -51,10 +50,10 @@ class SubscriptionStateStruct implements \JsonSerializable
     private $expiredPluginSubscriptions;
 
     /**
-     * @param boolean $isShopUpgraded
-     * @param [] $notUpgradedPlugins
-     * @param [] $wrongVersionPlugins
-     * @param [] $expiredPluginSubscriptions
+     * @param bool $isShopUpgraded
+     * @param []   $notUpgradedPlugins
+     * @param []   $wrongVersionPlugins
+     * @param []   $expiredPluginSubscriptions
      */
     public function __construct($isShopUpgraded, $notUpgradedPlugins, $wrongVersionPlugins, $expiredPluginSubscriptions)
     {
@@ -65,7 +64,7 @@ class SubscriptionStateStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -73,7 +72,7 @@ class SubscriptionStateStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsShopUpgraded()
     {

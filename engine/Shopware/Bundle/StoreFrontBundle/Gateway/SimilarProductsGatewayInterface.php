@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SimilarProductsGatewayInterface
@@ -48,8 +49,9 @@ interface SimilarProductsGatewayInterface
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return array Indexed by the product number
      */
     public function getList($products, Struct\ShopContextInterface $context);
@@ -60,8 +62,9 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return array Array of order numbers
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -76,9 +79,11 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return array Array of order numbers
+     *
      * @deprecated since version 5.1.4, to be removed in 5.3 - Use SimilarProductCondition instead
      */
     public function getByCategory(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -101,9 +106,11 @@ interface SimilarProductsGatewayInterface
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return array Indexed by the product number
+     *
      * @deprecated since version 5.1.4, to be removed in 5.3 - Use SimilarProductCondition instead
      */
     public function getListByCategory($products, Struct\ShopContextInterface $context);

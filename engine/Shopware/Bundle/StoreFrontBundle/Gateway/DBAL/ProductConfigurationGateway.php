@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductConfigurationGateway implements Gateway\ProductConfigurationGatewayInterface
@@ -61,8 +61,8 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection                    $connection
+     * @param FieldHelper                   $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -86,7 +86,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
@@ -102,7 +102,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $query = $this->getQuery($ids, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
@@ -118,6 +118,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     /**
      * @param $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery($ids, Struct\ShopContextInterface $context)
@@ -141,6 +142,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
         $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
+
         return $query;
     }
 }

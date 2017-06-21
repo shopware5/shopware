@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ProductServiceInterface
@@ -38,6 +38,7 @@ interface ProductServiceInterface
      *
      * @param $numbers
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product[] Indexed by the product order number
      */
     public function getList(array $numbers, Struct\ProductContextInterface $context);
@@ -48,6 +49,7 @@ interface ProductServiceInterface
      *
      * @param $number
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product
      */
     public function get($number, Struct\ProductContextInterface $context);

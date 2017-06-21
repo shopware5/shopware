@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchTermLogger implements SearchTermLoggerInterface
@@ -53,9 +53,9 @@ class SearchTermLogger implements SearchTermLoggerInterface
     /**
      * Traces the search result into the s_statistic_search
      *
-     * @param Criteria $criteria
+     * @param Criteria                  $criteria
      * @param ProductNumberSearchResult $result
-     * @param Shop $shop
+     * @param Shop                      $shop
      */
     public function logResult(
         Criteria $criteria,
@@ -74,7 +74,7 @@ class SearchTermLogger implements SearchTermLoggerInterface
             'datum' => $now->format('Y-m-d H:i:s'),
             'searchterm' => $condition->getTerm(),
             'results' => $result->getTotalCount(),
-            'shop_id' => $shop->getId()
+            'shop_id' => $shop->getId(),
         ]);
     }
 }

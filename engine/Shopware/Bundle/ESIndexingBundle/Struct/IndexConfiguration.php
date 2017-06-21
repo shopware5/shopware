@@ -26,7 +26,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
 /**
  * Class IndexConfiguration
- * @package Shopware\Bundle\ESIndexingBundle\Struct
  */
 class IndexConfiguration
 {
@@ -51,8 +50,8 @@ class IndexConfiguration
     private $numberOfReplicas = null;
 
     /**
-     * @param string $name
-     * @param string $alias
+     * @param string   $name
+     * @param string   $alias
      * @param int|null $numberOfShards
      * @param int|null $numberOfReplicas
      */

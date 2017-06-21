@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter\ContainerType;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware text model represents a banner container type.
@@ -36,9 +36,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Banner extends ModelEntity
 {
     /**
+     * OWNING SIDE
+     * Owning side of relation between container type 'article' and parent container
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="banner")
+     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Newsletter\Container
+     */
+    protected $container;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -49,25 +59,16 @@ class Banner extends ModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var integer $containerId
+     * @var int
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
     private $containerId = null;
 
     /**
-     * OWNING SIDE
-     * Owning side of relation between container type 'article' and parent container
-     *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="banner")
-     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     * @var \Shopware\Models\Newsletter\Container
-     */
-    protected $container;
-
-    /**
      * Image of the banner
-     * @var string $image
+     *
+     * @var string
      *
      * @ORM\Column(name="image", type="string", nullable=false)
      */
@@ -75,7 +76,8 @@ class Banner extends ModelEntity
 
     /**
      * link of the banner
-     * @var string $link
+     *
+     * @var string
      *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
@@ -83,11 +85,19 @@ class Banner extends ModelEntity
 
     /**
      * Link target, e.g. _blank / _parent
-     * @var string $target
+     *
+     * @var string
      *
      * @ORM\Column(name="linkTarget", type="string", nullable=false)
      */
     private $target;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", nullable=false)
+     */
+    private $description;
 
     /**
      * @param string $description
@@ -154,15 +164,8 @@ class Banner extends ModelEntity
     }
 
     /**
-     * @var string $description
-     *
-     * @ORM\Column(name="description", type="string", nullable=false)
-     */
-    private $description;
-
-
-    /**
      * @param \Shopware\Models\Newsletter\Container $container
+     *
      * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)

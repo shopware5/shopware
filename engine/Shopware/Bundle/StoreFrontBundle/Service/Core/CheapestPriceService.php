@@ -21,15 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CheapestPriceService implements Service\CheapestPriceServiceInterface
@@ -46,7 +47,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
 
     /**
      * @param Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway
-     * @param \Shopware_Components_Config $config
+     * @param \Shopware_Components_Config           $config
      */
     public function __construct(
         Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway,
@@ -57,7 +58,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
@@ -67,7 +68,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ProductContextInterface $context)
     {
@@ -108,9 +109,10 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Product\PriceRule[] $prices
+     * @param Struct\ListProduct[]           $products
+     * @param Struct\Product\PriceRule[]     $prices
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product\PriceRule[]
      */
     private function calculatePriceGroupDiscounts($products, $prices, $context)
@@ -145,9 +147,10 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * Helper function which iterates the products and builds a price array which indexed
      * with the product order number.
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]       $products
      * @param Struct\Product\PriceRule[] $priceRules
-     * @param Struct\Customer\Group $group
+     * @param Struct\Customer\Group      $group
+     *
      * @return array
      */
     private function buildPrices($products, array $priceRules, Struct\Customer\Group $group)
@@ -161,7 +164,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
                 continue;
             }
 
-            /**@var $cheapestPrice Struct\Product\PriceRule */
+            /** @var $cheapestPrice Struct\Product\PriceRule */
             $cheapestPrice = $priceRules[$key];
 
             $cheapestPrice->setCustomerGroup($group);
@@ -179,9 +182,10 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * If the product has no configured price group or the price group has no discount defined for the
      * current customer group, the function returns null.
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\ListProduct             $product
      * @param Struct\ProductContextInterface $context
      * @param $quantity
+     *
      * @return null|Struct\Product\PriceDiscount
      */
     private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
@@ -198,7 +202,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
 
         $priceGroup = $priceGroups[$id];
 
-        /**@var $highest Struct\Product\PriceDiscount*/
+        /** @var $highest Struct\Product\PriceDiscount */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

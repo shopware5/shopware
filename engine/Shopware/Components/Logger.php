@@ -28,14 +28,14 @@ use Monolog\Logger as BaseLogger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Logger extends BaseLogger
 {
     /**
      * @param string|array $label
-     * @param null|array $data
+     * @param null|array   $data
      */
     public function table($label, $data = null)
     {
@@ -43,7 +43,7 @@ class Logger extends BaseLogger
             list($label, $data) = $label;
         }
 
-        $this->log(BaseLogger::DEBUG, $label, array('table' => $data));
+        $this->log(BaseLogger::DEBUG, $label, ['table' => $data]);
     }
 
     /**
@@ -51,6 +51,6 @@ class Logger extends BaseLogger
      */
     public function trace($label)
     {
-        $this->log(BaseLogger::DEBUG, $label, array('trace' => true));
+        $this->log(BaseLogger::DEBUG, $label, ['trace' => true]);
     }
 }

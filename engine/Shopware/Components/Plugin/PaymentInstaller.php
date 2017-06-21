@@ -46,8 +46,10 @@ class PaymentInstaller
 
     /**
      * Inserts or updates the payment row
+     *
      * @param string $pluginName
-     * @param array $options
+     * @param array  $options
+     *
      * @return Payment
      */
     public function createOrUpdate($pluginName, array $options)

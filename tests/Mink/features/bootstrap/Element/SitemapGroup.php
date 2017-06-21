@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -17,19 +39,20 @@ class SitemapGroup extends MultipleElement
     protected $selector = ['css' => '.sitemap--navigation-head'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
         return [
             'titleLink' => 'a',
             'level1' => 'li ~ ul > li > a',
-            'level2' => 'li ~ ul > li > ul > li > a'
+            'level2' => 'li ~ ul > li > ul > li > a',
         ];
     }
 
     /**
      * Returns the group title
+     *
      * @return string
      */
     public function getTitle()
@@ -39,7 +62,9 @@ class SitemapGroup extends MultipleElement
 
     /**
      * Returns the title links
+     *
      * @param NodeElement[] $element
+     *
      * @return string[]
      */
     public function getTitleLinkData(array $element)
@@ -49,13 +74,15 @@ class SitemapGroup extends MultipleElement
 
         return [
             'title' => $titleLink->getAttribute('title'),
-            'link' => $titleLink->getAttribute('href')
+            'link' => $titleLink->getAttribute('href'),
         ];
     }
 
     /**
      * Returns the data of entries on 1st level
+     *
      * @param NodeElement[] $elements
+     *
      * @return array[]
      */
     public function getLevel1Data(array $elements)
@@ -67,7 +94,7 @@ class SitemapGroup extends MultipleElement
             $result[] = [
                 'value' => $element->getText(),
                 'title' => $element->getAttribute('title'),
-                'link' => $element->getAttribute('href')
+                'link' => $element->getAttribute('href'),
             ];
         }
 
@@ -76,7 +103,9 @@ class SitemapGroup extends MultipleElement
 
     /**
      * Returns the data of entries on 2nd level
+     *
      * @param NodeElement[] $elements
+     *
      * @return array[]
      */
     public function getLevel2Data(array $elements)

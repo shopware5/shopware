@@ -24,18 +24,27 @@
 
 namespace   Shopware\Models\Country;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Entity
  * @ORM\Table(name="s_core_countries_areas")
  */
 class Area extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     * The countries property is the inverse side of the association between area and countries.
+     * The association is joined over the area id field and the areaID field of the country.
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\Country", mappedBy="area", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $countries;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -44,32 +53,23 @@ class Area extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name = null;
 
     /**
-     * @var integer $active
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
     private $active = null;
 
     /**
-     * INVERSE SIDE
-     * The countries property is the inverse side of the association between area and countries.
-     * The association is joined over the area id field and the areaID field of the country.
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\Country", mappedBy="area", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $countries;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -80,11 +80,13 @@ class Area extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Country
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -101,19 +103,21 @@ class Area extends ModelEntity
     /**
      * Set active
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return Country
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -130,6 +134,7 @@ class Area extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $countries
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setCountries($countries)

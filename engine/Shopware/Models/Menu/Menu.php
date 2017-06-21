@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Menu;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Model Menu
@@ -37,7 +37,49 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Menu extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var string
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    public $label;
+
+    /**
+     * @var string
+     * @ORM\Column(name="onclick", type="string", length=255, nullable=true)
+     */
+    public $onclick;
+
+    /**
+     * @var string
+     * @ORM\Column(name="class", type="string", length=255, nullable=false)
+     */
+    public $class;
+
+    /**
+     * @var string
+     * @ORM\Column(name="controller", type="string", length=255, nullable=true)
+     */
+    public $controller;
+
+    /**
+     * @var string
+     * @ORM\Column(name="action", type="string", length=255, nullable=true)
+     */
+    public $action;
+
+    /**
+     * @var string
+     * @ORM\Column(name="shortcut", type="string", length=255, nullable=true)
+     */
+    public $shortcut;
+
+    /**
+     * @var \Shopware\Models\Plugin\Plugin
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="menuItems")
+     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
+     */
+    protected $plugin;
+    /**
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -45,61 +87,25 @@ class Menu extends ModelEntity
     private $id;
 
     /**
-     * @var string $label
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    public $label;
-
-    /**
-     * @var string $onclick
-     * @ORM\Column(name="onclick", type="string", length=255, nullable=true)
-     */
-    public $onclick;
-
-    /**
-     * @var string $class
-     * @ORM\Column(name="class", type="string", length=255, nullable=false)
-     */
-    public $class;
-
-    /**
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
-     * @var boolean $active
+     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
 
     /**
-     * @var integer $pluginId
+     * @var int
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var string $controller
-     * @ORM\Column(name="controller", type="string", length=255, nullable=true)
-     */
-    public $controller;
-
-    /**
-     * @var string $action
-     * @ORM\Column(name="action", type="string", length=255, nullable=true)
-     */
-    public $action;
-
-    /**
-     * @var string $shortcut
-     * @ORM\Column(name="shortcut", type="string", length=255, nullable=true)
-     */
-    public $shortcut;
-
-    /**
-     * @var integer $parent
+     * @var int
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
     private $parentId;
@@ -117,13 +123,6 @@ class Menu extends ModelEntity
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $children;
-
-    /**
-     * @var \Shopware\Models\Plugin\Plugin
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="menuItems")
-     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
-     */
-    protected $plugin;
 
     /**
      * Class constructor.
@@ -206,7 +205,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -214,7 +213,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

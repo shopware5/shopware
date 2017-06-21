@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopTest extends TestCase

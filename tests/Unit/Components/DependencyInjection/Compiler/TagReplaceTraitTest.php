@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
- * @package   Components\DependencyInjection
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class TagReplaceTraitTest extends TestCase
@@ -100,7 +100,7 @@ class TagReplaceTraitTest extends TestCase
 
     /**
      * @param ContainerBuilder $container
-     * @param array[] $services
+     * @param array[]          $services
      */
     private function registerServices(ContainerBuilder $container, array $services)
     {

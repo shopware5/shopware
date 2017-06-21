@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ProductPropertyGatewayInterface
@@ -38,8 +39,9 @@ interface ProductPropertyGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Property\Set[] Indexed by the product order number
      */
     public function getList($products, Struct\ShopContextInterface $context);
@@ -63,8 +65,9 @@ interface ProductPropertyGatewayInterface
      * - Sort mode equals to 3, the values are sorted by the position
      * - In all other cases the values are sorted by their alphanumeric value
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Property\Set
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

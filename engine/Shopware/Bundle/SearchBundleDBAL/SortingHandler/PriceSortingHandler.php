@@ -24,16 +24,16 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
-use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SortingHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceSortingHandler implements SortingHandlerInterface
@@ -56,7 +56,7 @@ class PriceSortingHandler implements SortingHandlerInterface
      */
     public function supportsSorting(SortingInterface $sorting)
     {
-        return ($sorting instanceof PriceSorting);
+        return $sorting instanceof PriceSorting;
     }
 
     /**
@@ -70,9 +70,9 @@ class PriceSortingHandler implements SortingHandlerInterface
         $selection = $this->priceHelper->getSelection($context);
 
         $this->priceHelper->joinPrices($query, $context);
-        $query->addSelect('MIN('. $selection .') as cheapest_price');
+        $query->addSelect('MIN(' . $selection . ') as cheapest_price');
 
-        /** @var PriceSorting $sorting */
+        /* @var PriceSorting $sorting */
         $query->addOrderBy('cheapest_price', $sorting->getDirection())
             ->addOrderBy('product.id', $sorting->getDirection());
     }

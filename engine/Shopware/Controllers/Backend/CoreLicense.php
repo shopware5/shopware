@@ -50,8 +50,9 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
         if (empty($licenseString)) {
             $this->View()->assign([
                 'success' => false,
-                'message' => 'Empty license information cannot be validated.'
+                'message' => 'Empty license information cannot be validated.',
             ]);
+
             return;
         }
 
@@ -64,6 +65,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
                 'message' => $e->getMessage(),
                 'errorType' => $this->resolveLicenseException($e),
             ]);
+
             return;
         }
 
@@ -75,6 +77,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+
             return;
         }
 
@@ -82,13 +85,12 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
 
         $this->View()->assign([
             'success' => true,
-            'licenseData' => $licenseData
+            'licenseData' => $licenseData,
         ]);
     }
 
     /**
      * Outputs the current license information if present in db
-     *
      */
     public function loadSavedLicenseAction()
     {
@@ -99,6 +101,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+
             return;
         }
 
@@ -106,6 +109,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
             $this->View()->assign([
                 'success' => false,
             ]);
+
             return;
         }
 
@@ -120,6 +124,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
                 'errorType' => 'LicenseHostException',
                 'licenseData' => $this->reFormatLicenseString($license),
             ]);
+
             return;
         } catch (Exception $e) {
             $this->View()->assign([
@@ -127,6 +132,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
                 'message' => $e->getMessage(),
                 'errorType' => $this->resolveLicenseException($e),
             ]);
+
             return;
         }
 
@@ -134,7 +140,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
 
         $this->View()->assign([
             'success' => true,
-            'licenseData' => $licenseData
+            'licenseData' => $licenseData,
         ]);
     }
 
@@ -151,6 +157,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
                 'message' => $e->getMessage(),
                 'errorType' => 'COMMON',
             ]);
+
             return;
         }
 
@@ -163,12 +170,14 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
      * Returns the license string from a currently installed
      * core license, if present.
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     private function getInstalledLicense()
     {
         $sql = 'SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"';
+
         return $this->container->get('dbal_connection')->query($sql)->fetchColumn();
     }
 
@@ -178,8 +187,10 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
      * Returns LicenseInformation on success.
      *
      * @param string $licenseString
-     * @return LicenseInformation
+     *
      * @throws \RuntimeException
+     *
+     * @return LicenseInformation
      */
     private function unpackLicense($licenseString)
     {
@@ -204,12 +215,13 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
             $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
             $this->container->get('dbal_connection')->query($sql);
         } catch (\PDOException $e) {
-            throw new \RuntimeException("Could not remove license from database", 0, $e);
+            throw new \RuntimeException('Could not remove license from database', 0, $e);
         }
     }
 
     /**
      * @param $e
+     *
      * @return string
      */
     private function resolveLicenseException($e)
@@ -219,24 +231,26 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
 
         if (in_array($exceptionType, $this->licenseException)) {
             $errorType = $exceptionType;
-            return $errorType;
-        } else {
-            $errorType = 'COMMON';
+
             return $errorType;
         }
+        $errorType = 'COMMON';
+
+        return $errorType;
     }
 
     /**
      * Creates a readable string from a minified license key.
      *
      * @param LicenseInformation $licenseInformation
+     *
      * @return LicenseInformation
      */
     private function reFormatLicenseString(LicenseInformation $licenseInformation)
     {
         $license = $licenseInformation->license;
 
-        $license = preg_replace('#--.+?--#', '', (string)$license);
+        $license = preg_replace('#--.+?--#', '', (string) $license);
         $license = preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
         $license = chunk_split($license, 32);
         $license = "-------- LICENSE BEGIN ---------\r\n" . $license . "--------- LICENSE END ----------\r\n";

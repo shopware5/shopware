@@ -26,14 +26,15 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
-use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class SitemapXMLRepository
@@ -64,10 +65,10 @@ class SitemapXMLRepository
     private $storeFrontCriteriaFactory;
 
     /**
-     * @param ProductNumberSearchInterface $productNumberSearch
+     * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
-     * @param ModelManager $em
-     * @param ContextServiceInterface $contextService
+     * @param ModelManager                       $em
+     * @param ContextServiceInterface            $contextService
      */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
@@ -91,20 +92,21 @@ class SitemapXMLRepository
         $categories = $this->readCategoryUrls($parentId);
         $categoryIds = array_column($categories, 'id');
 
-        return array(
-            'categories'   => $categories,
-            'articles'     => $this->readArticleUrls($categoryIds),
-            'blogs'        => $this->readBlogUrls($parentId),
-            'customPages'  => $this->readStaticUrls(),
-            'suppliers'    => $this->readSupplierUrls(),
-            'landingPages' => $this->readLandingPageUrls()
-        );
+        return [
+            'categories' => $categories,
+            'articles' => $this->readArticleUrls($categoryIds),
+            'blogs' => $this->readBlogUrls($parentId),
+            'customPages' => $this->readStaticUrls(),
+            'suppliers' => $this->readSupplierUrls(),
+            'landingPages' => $this->readLandingPageUrls(),
+        ];
     }
 
     /**
      * Print category urls
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return array
      */
     private function readCategoryUrls($parentId)
@@ -115,11 +117,11 @@ class SitemapXMLRepository
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);
 
-            $category['urlParams'] = array(
+            $category['urlParams'] = [
                 'sViewport' => 'cat',
                 'sCategory' => $category['id'],
-                'title' => $category['name']
-            );
+                'title' => $category['name'],
+            ];
 
             if ($category['blog']) {
                 $category['urlParams']['sViewport'] = 'blog';
@@ -133,8 +135,10 @@ class SitemapXMLRepository
      * Read article urls
      *
      * @param int[] $categoryIds
-     * @return array
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array
      */
     private function readArticleUrls(array $categoryIds)
     {
@@ -158,13 +162,13 @@ class SitemapXMLRepository
             [':articleIds' => Connection::PARAM_INT_ARRAY]
         );
 
-        $articles = array();
+        $articles = [];
         while ($article = $statement->fetch()) {
             $article['changed'] = new \DateTime($article['changetime']);
-            $article['urlParams'] = array(
+            $article['urlParams'] = [
                 'sViewport' => 'detail',
-                'sArticle'  => $article['id']
-            );
+                'sArticle' => $article['id'],
+            ];
 
             $articles[] = $article;
         }
@@ -175,30 +179,31 @@ class SitemapXMLRepository
     /**
      * Reads the blog item urls
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return array
      */
     private function readBlogUrls($parentId)
     {
-        $blogs = array();
+        $blogs = [];
 
         $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
         $query = $categoryRepository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
-        $blogIds = array();
+        $blogIds = [];
         foreach ($blogCategories as $blogCategory) {
-            $blogIds[] = $blogCategory["id"];
+            $blogIds[] = $blogCategory['id'];
         }
         if (empty($blogIds)) {
             return $blogs;
         }
 
-        $sql = "
+        $sql = '
             SELECT id, category_id, DATE(display_date) as changed
             FROM s_blog
             WHERE active = 1 AND category_id IN(?)
-        ";
+        ';
 
         $result = $this->connection->executeQuery(
             $sql,
@@ -208,12 +213,12 @@ class SitemapXMLRepository
 
         while ($blog = $result->fetch()) {
             $blog['changed'] = new \DateTime($blog['changed']);
-            $blog['urlParams'] = array(
+            $blog['urlParams'] = [
                 'sViewport' => 'blog',
                 'sAction' => 'detail',
                 'sCategory' => $blog['category_id'],
-                'blogArticle' => $blog['id']
-            );
+                'blogArticle' => $blog['id'],
+            ];
 
             $blogs[] = $blog;
         }
@@ -238,10 +243,10 @@ class SitemapXMLRepository
         }
 
         foreach ($sites as &$site) {
-            $site['urlParams'] = array(
+            $site['urlParams'] = [
                 'sViewport' => 'custom',
-                'sCustom' => $site['id']
-            );
+                'sCustom' => $site['id'],
+            ];
 
             $site['show'] = $this->filterLink($site['link'], $site['urlParams']);
         }
@@ -252,26 +257,27 @@ class SitemapXMLRepository
     /**
      * Helper function to read all static pages of a shop from the database
      *
-     * @param integer $shopId
+     * @param int $shopId
+     *
      * @return array
      */
     private function getSitesByShopId($shopId)
     {
-        $sql = "
+        $sql = '
             SELECT groups.key
             FROM s_core_shop_pages shopPages
               INNER JOIN s_cms_static_groups groups
                 ON groups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
-        ";
+        ';
 
-        $statement = $this->connection->executeQuery($sql, array($shopId));
+        $statement = $this->connection->executeQuery($sql, [$shopId]);
 
         $keys = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
         $siteRepository = $this->em->getRepository('Shopware\Models\Site\Site');
 
-        $sites = array();
+        $sites = [];
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
@@ -290,7 +296,8 @@ class SitemapXMLRepository
      * Returns false, if the link is not allowed
      *
      * @param string $link
-     * @param array $userParams
+     * @param array  $userParams
+     *
      * @return bool
      */
     private function filterLink($link, &$userParams)
@@ -302,7 +309,7 @@ class SitemapXMLRepository
         $userParams = parse_url($link, PHP_URL_QUERY);
         parse_str($userParams, $userParams);
 
-        $blacklist = array('', 'sitemap', 'sitemapXml');
+        $blacklist = ['', 'sitemap', 'sitemapXml'];
 
         if (in_array($userParams['sViewport'], $blacklist)) {
             return false;
@@ -320,11 +327,11 @@ class SitemapXMLRepository
     {
         $suppliers = $this->getSupplierForSitemap();
         foreach ($suppliers as &$supplier) {
-            $supplier['urlParams'] = array(
+            $supplier['urlParams'] = [
                 'sViewport' => 'listing',
                 'sAction' => 'manufacturer',
-                'sSupplier' => $supplier['id']
-            );
+                'sSupplier' => $supplier['id'],
+            ];
         }
 
         return $suppliers;
@@ -333,15 +340,16 @@ class SitemapXMLRepository
     /**
      * Gets all suppliers that have products for the current shop
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     private function getSupplierForSitemap()
     {
         $context = $this->contextService->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /**@var $query QueryBuilder */
+        /** @var $query QueryBuilder */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -352,7 +360,7 @@ class SitemapXMLRepository
 
         $query->groupBy('manufacturer.id');
 
-        /**@var $statement \PDOStatement */
+        /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -374,10 +382,10 @@ class SitemapXMLRepository
 
         foreach ($campaigns as &$campaign) {
             $campaign['show'] = $this->filterCampaign($campaign['validFrom'], $campaign['validTo']);
-            $campaign['urlParams'] = array(
+            $campaign['urlParams'] = [
                 'sViewport' => 'campaign',
                 'emotionId' => $campaign['id'],
-            );
+            ];
         }
 
         return $campaigns;
@@ -389,6 +397,7 @@ class SitemapXMLRepository
      *
      * @param null $from
      * @param null $to
+     *
      * @return bool
      */
     private function filterCampaign($from = null, $to = null)

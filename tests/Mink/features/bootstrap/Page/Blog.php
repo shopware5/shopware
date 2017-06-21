@@ -1,32 +1,55 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace  Shopware\Tests\Mink\Page;
 
-use Shopware\Tests\Mink\Element\BlogComment;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Element\BlogComment;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
 
 class Blog extends Page implements HelperSelectorInterface
 {
     /**
-     * @var string $path
+     * @var string
      */
     protected $path = '/blog/index/sCategory/{categoryId}';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
         return [
             'commentForm' => 'div.blog--comments-form > form',
             'articleRating' => 'div.blog--box-metadata .product--rating > meta',
-            'articleRatingCount' => 'div.blog--box-metadata .blog--metadata-comments > a'
+            'articleRatingCount' => 'div.blog--box-metadata .blog--metadata-comments > a',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -34,12 +57,13 @@ class Blog extends Page implements HelperSelectorInterface
             'rssFeed' => ['de' => 'RSS-Feed', 'en' => 'RSS-Feed'],
             'atomFeed' => ['de' => 'Atom-Feed', 'en' => 'Atom-Feed'],
             'commentFormSubmit' => ['de' => 'Speichern', 'en' => 'Save'],
-            'writeCommentButton' => ['de' => 'Kommentar schreiben', 'en' => 'Write a comment']
+            'writeCommentButton' => ['de' => 'Kommentar schreiben', 'en' => 'Write a comment'],
         ];
     }
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     *
      * @throws \Exception
      */
     public function verifyPage()
@@ -54,13 +78,14 @@ class Blog extends Page implements HelperSelectorInterface
 
     /**
      * Fills out the comment form and submits it
+     *
      * @param array $data
      */
     public function writeComment(array $data)
     {
         $writeCommentLink = $this->getSession()
             ->getPage()
-            ->find("css", ".blog--comments-form a.btn--create-entry");
+            ->find('css', '.blog--comments-form a.btn--create-entry');
 
         if ($writeCommentLink) {
             $writeCommentLink->click();
@@ -73,9 +98,11 @@ class Blog extends Page implements HelperSelectorInterface
 
     /**
      * Checks the evaluations of the current article
+     *
      * @param BlogComment $blogComments
      * @param $average
      * @param array $comments
+     *
      * @throws \Exception
      */
     public function checkComments(BlogComment $blogComments, $average, array $comments)
@@ -105,8 +132,10 @@ class Blog extends Page implements HelperSelectorInterface
 
     /**
      * Helper function to check the rating of a blog comment
+     *
      * @param BlogComment $blogComments
      * @param $average
+     *
      * @throws \Exception
      */
     protected function checkRating(BlogComment $blogComments, $average)
@@ -115,7 +144,7 @@ class Blog extends Page implements HelperSelectorInterface
 
         $check = [
             'articleRating' => [$elements['articleRating']->getAttribute('content'), $average],
-            'articleRatingCount' => [$elements['articleRatingCount']->getText(), count($blogComments)]
+            'articleRatingCount' => [$elements['articleRatingCount']->getText(), count($blogComments)],
         ];
 
         $check = Helper::floatArray($check);

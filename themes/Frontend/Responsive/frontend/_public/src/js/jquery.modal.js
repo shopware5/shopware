@@ -621,9 +621,10 @@
          */
         center: function () {
             var me = this,
-                $modalBox = me._$modalBox;
+                $modalBox = me._$modalBox,
+                windowHeight = window.innerHeight || $(window).height();
 
-            $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
+            $modalBox.css('top', (windowHeight - $modalBox.height()) / 2);
 
             $.publish('plugin/swModal/onCenter', [ me ]);
         },
@@ -798,4 +799,3 @@
         }
     });
 })(jQuery, window);
-

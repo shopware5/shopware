@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 
@@ -24,11 +47,10 @@ use Shopware\Models\Shop\Shop;
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @var $shopRepository \Shopware\Models\Shop\Repository
+     * @var \Shopware\Models\Shop\Repository
      */
     private $shopRepository;
 
@@ -41,7 +63,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         parent::setUp();
 
         $this->shopRepository = Shopware()->Models()->getRepository(Shop::class);
-        $this->mainShop  = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
+        $this->mainShop = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
 
         // Backup and change existing main shop
         $this->mainShopBackup = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
@@ -49,10 +71,10 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         Shopware()->Db()->update('s_core_shops', [
             'host' => 'fallbackhost',
             'secure' => 1,
-            'secure_base_path' => '/secure'
+            'secure_base_path' => '/secure',
         ], 'id = 1');
 
-        $this->mainShop  = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
+        $this->mainShop = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
 
         // Create test shops
         $sql = "
@@ -65,11 +87,11 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
         ";
         Shopware()->Db()->query($sql, [
-            $this->mainShop['base_path']. '/english', $this->mainShop['secure_base_path']. '/english',
-            $this->mainShop['base_path']. '/en/uk', $this->mainShop['secure_base_path']. '/en/uk',
-            $this->mainShop['base_path']. '/en', $this->mainShop['secure_base_path']. '/en',
-            $this->mainShop['base_path']. '/en/us', $this->mainShop['secure_base_path']. '/en/us',
-            $this->mainShop['base_path']. '/aus/en', $this->mainShop['secure_base_path']. '/aus/en'
+            $this->mainShop['base_path'] . '/english', $this->mainShop['secure_base_path'] . '/english',
+            $this->mainShop['base_path'] . '/en/uk', $this->mainShop['secure_base_path'] . '/en/uk',
+            $this->mainShop['base_path'] . '/en', $this->mainShop['secure_base_path'] . '/en',
+            $this->mainShop['base_path'] . '/en/us', $this->mainShop['secure_base_path'] . '/en/us',
+            $this->mainShop['base_path'] . '/aus/en', $this->mainShop['secure_base_path'] . '/aus/en',
         ]);
     }
 
@@ -92,58 +114,58 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
     public function testGetActiveByRequest()
     {
         // Tests copied for SW-6768
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
 
         //check virtual url with superfluous / like localhost/en/
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en/', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/', 'testShop3');
 
         //check virtual url with direct controller call like localhost/en/blog
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en/blog', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/blog', 'testShop3');
 
         //check base shop with direct controller call like localhost/en/blog
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/blog', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/blog', $this->mainShop['name']);
 
         //check without virtual url but an url with the same beginning like localhost/entsorgung
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/entsorgung', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/entsorgung', $this->mainShop['name']);
 
         //check different virtual url with like localhost/ente
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en/uk', 'testShop2');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
 
         //check without virtual url it has to choose the main shop instead of the language shop without the virtual url
         $this->callGetActiveShopByRequest($this->mainShop['base_path'], $this->mainShop['name']);
 
         // These are just some basic urls
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/en', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/entsorgung', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/fenglish', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/english', 'testShop1');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/entsorgung', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/fenglish', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/english', 'testShop1');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
 
         // These cover the cases affected by the ticket, where the base_path would be present in the middle of the url
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/english', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/en', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/enaaa/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/uk/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/en/uk/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/foo/en/uk/things', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/english', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/enaaa/', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/uk/', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en/uk/', $this->mainShop['name']);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en/uk/things', $this->mainShop['name']);
 
         // And these are some extreme cases, due to the overlapping of urls
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en/ukfoooo', 'testShop3');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en/uk', 'testShop2');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en', 'testShop3');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path']. '/en/uk/things', 'testShop2');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
 
         // Tests for secure
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/us', 'testShop4', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/us', 'testShop4', false);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/ukfoooo', 'testShop3', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/ukfoooo', 'testShop3', false);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk', 'testShop2', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk', 'testShop2', false);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk/things', 'testShop2', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk/things', 'testShop2', false);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/us', 'testShop4', true);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/us', 'testShop4', false);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/ukfoooo', 'testShop3', true);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/ukfoooo', 'testShop3', false);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk', 'testShop2', true);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk', 'testShop2', false);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk/things', 'testShop2', true);
+        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk/things', 'testShop2', false);
     }
 
     /**
@@ -151,7 +173,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      *
      * @param string $url
      * @param string $shopName
-     * @param bool $secure
+     * @param bool   $secure
      */
     public function callGetActiveShopByRequest($url, $shopName, $secure = false)
     {
@@ -172,7 +194,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
             ['test.in', 'fr.test.in'],
             ['test.in', 'nl.test.in'],
             ['2test.in', '2fr.test.in'],
-            ['2test.in', '2nl.test.in']
+            ['2test.in', '2nl.test.in'],
         ];
     }
 

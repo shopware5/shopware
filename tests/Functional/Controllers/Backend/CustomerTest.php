@@ -24,16 +24,15 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components_Test_Controller_TestCase
 {
+    /** @var $model \Shopware\Models\Customer\Customer */
+    protected $repository = null;
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
-
-    /**@var $model \Shopware\Models\Customer\Customer*/
-    protected $repository = null;
 
     /**
      * Standard set up for every test - just disable auth
@@ -42,7 +41,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         parent::setUp();
 
-        $this->manager    = Shopware()->Models();
+        $this->manager = Shopware()->Models();
         $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
 
         // disable auth and acl
@@ -63,12 +62,12 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         $debit = $this->manager
             ->getRepository('Shopware\Models\Payment\Payment')
-            ->findOneBy(array('name' => 'debit'));
+            ->findOneBy(['name' => 'debit']);
 
-        $params = array(
+        $params = [
             'id' => $customer->getId(),
             'paymentId' => $debit->getId(),
-        );
+        ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
@@ -90,9 +89,9 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         $debit = $this->manager
             ->getRepository('Shopware\Models\Payment\Payment')
-            ->findOneBy(array('name' => 'debit'));
+            ->findOneBy(['name' => 'debit']);
 
-        $params = array(
+        $params = [
             'paymentId' => $debit->getId(),
             'email' => 'test@shopware.de',
             'newPassword' => '222',
@@ -102,19 +101,19 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
                     'lastName' => 'test',
                     'zipCode' => 'test',
                     'city' => 'test',
-                    'countryId' => 2
-                ]
+                    'countryId' => 2,
+                ],
             ],
-            'paymentData' => array(array(
-                'accountHolder'  => 'Account Holder Name',
-                'accountNumber'  => '1234567890',
-                'bankCode'       => '2345678901',
-                'bankName'       => 'Bank name',
-                'bic'            => '',
-                'iban'           => '',
-                'useBillingData' => false
-            ))
-        );
+            'paymentData' => [[
+                'accountHolder' => 'Account Holder Name',
+                'accountNumber' => '1234567890',
+                'bankCode' => '2345678901',
+                'bankName' => 'Bank name',
+                'bic' => '',
+                'iban' => '',
+                'useBillingData' => false,
+            ]],
+        ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
@@ -151,27 +150,27 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $dummyData = $this->repository->find($dummyDataId);
         $sepa = $this->manager
             ->getRepository('Shopware\Models\Payment\Payment')
-            ->findOneBy(array('name' => 'sepa'));
+            ->findOneBy(['name' => 'sepa']);
         $debit = $this->manager
             ->getRepository('Shopware\Models\Payment\Payment')
-            ->findOneBy(array('name' => 'debit'));
+            ->findOneBy(['name' => 'debit']);
 
         $this->assertEquals($debit->getId(), $dummyData->getPaymentId());
         $this->assertCount(1, $dummyData->getPaymentData()->toArray());
 
-        $params = array(
+        $params = [
             'id' => $dummyData->getId(),
             'paymentId' => $sepa->getId(),
-            'paymentData' => array(array(
-                'accountHolder'  => '',
-                'accountNumber'  => '',
-                'bankCode'       => '',
-                'bankName'       => 'European bank name',
-                'bic'            => '123bic312',
-                'iban'           => '456iban654',
-                'useBillingData' => true
-            ))
-        );
+            'paymentData' => [[
+                'accountHolder' => '',
+                'accountNumber' => '',
+                'bankCode' => '',
+                'bankName' => 'European bank name',
+                'bic' => '123bic312',
+                'iban' => '456iban654',
+                'useBillingData' => true,
+            ]],
+        ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
@@ -225,11 +224,11 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         /** @var Enlight_Controller_Response_ResponseTestCase $response */
         $response = $this->dispatch('backend/Customer/performOrder');
 
-        $headerLocation = $response->getHeader("Location");
+        $headerLocation = $response->getHeader('Location');
         $this->reset();
         $this->assertNotEmpty($headerLocation);
         $newLocation = explode('/backend/', $headerLocation);
-        $response = $this->dispatch('backend/'.$newLocation[1]);
+        $response = $this->dispatch('backend/' . $newLocation[1]);
 
         $cookie = $response->getFullCookie('session-1');
         $this->assertTrue(strpos($headerLocation, $cookie['value']) !== false);
@@ -267,7 +266,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             'zipcode' => 'test',
             'city' => 'test',
             'customer' => $dummyData,
-            'country' => $this->manager->find('Shopware\Models\Country\Country', 2)
+            'country' => $this->manager->find('Shopware\Models\Country\Country', 2),
         ]);
         $this->manager->persist($address);
         $this->manager->flush();
@@ -282,6 +281,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         $this->manager->persist($dummyData);
         $this->manager->flush();
+
         return $dummyData;
     }
 }

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
@@ -7,34 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CheapestPriceTest extends TestCase
 {
-    private function getConfiguratorProduct($number, ShopContextInterface $context) // ShopContext
-    {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        $configurator = $this->helper->getConfigurator(
-            $context->getCurrentCustomerGroup(),
-            $number,
-            array('farbe' => array('rot', 'blau', 'grün', 'schwarz', 'weiß'))
-        );
-        $product = array_merge($product, $configurator);
-        $product['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
-
-        foreach ($product['variants'] as $index => &$variant) {
-            $offset = ($index + 1) * -10;
-
-            $variant['prices'] = $this->helper->getGraduatedPrices(
-                $context->getCurrentCustomerGroup()->getKey(),
-                $offset
-            );
-        }
-
-        return $product;
-    }
-
     public function testCheapestPriceWithVariants()
     {
         $number = __FUNCTION__;
@@ -98,13 +92,13 @@ class CheapestPriceTest extends TestCase
         $data = $this->getConfiguratorProduct($number, $context);
 
         $last = array_pop($data['variants']);
-        $last['prices'] = array(array(
+        $last['prices'] = [[
             'from' => 1,
             'to' => null,
             'price' => 5,
             'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
-            'pseudoPrice' => 6
-        ));
+            'pseudoPrice' => 6,
+        ]];
         $last['minPurchase'] = 3;
         $data['variants'][] = $last;
 
@@ -112,7 +106,7 @@ class CheapestPriceTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $cheapestPrice = $listProduct->getCheapestPrice();
 
-        /**
+        /*
          * Expect price * minPurchase calculation
          */
         $this->assertEquals(15, $cheapestPrice->getCalculatedPrice());
@@ -127,15 +121,15 @@ class CheapestPriceTest extends TestCase
         $data = $this->getConfiguratorProduct($number, $context);
 
         $last = array_pop($data['variants']);
-        $last['prices'] = array(array(
+        $last['prices'] = [[
             'from' => 1,
             'to' => null,
             'price' => 5,
             'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
-            'pseudoPrice' => 6
-        ));
+            'pseudoPrice' => 6,
+        ]];
 
-        /**
+        /*
          * Variant isn't active because minPurchase > inStock
          */
         $last['minPurchase'] = 3;
@@ -156,27 +150,27 @@ class CheapestPriceTest extends TestCase
         $number = __FUNCTION__;
         $context = $this->getContext();
         $data = $this->getConfiguratorProduct($number, $context);
-        $this->helper->createCustomerGroup(array('key' => 'FORCE'));
+        $this->helper->createCustomerGroup(['key' => 'FORCE']);
 
-        /**
+        /*
          * Creates a 1€ price for the customer group FORCE
          * This is the "whole" cheapest price for all customer groups
          */
         foreach ($data['variants'] as &$variant) {
-            $variant['prices'][] = array(
+            $variant['prices'][] = [
                 'from' => 1,
                 'to' => null,
                 'price' => 1,
                 'customerGroupKey' => 'FORCE',
-                'pseudoPrice' => 2
-            );
+                'pseudoPrice' => 2,
+            ];
         }
 
         $this->helper->createArticle($data);
         $listProduct = $this->helper->getListProduct($number, $context);
         $cheapestPrice = $listProduct->getCheapestPrice();
 
-        /**
+        /*
          * Expect that the cheapest price calculation works
          * correctly with only the fallback and current customer group
          *
@@ -208,7 +202,7 @@ class CheapestPriceTest extends TestCase
 
         $cheapestPrice = $listProduct->getCheapestPrice();
 
-        /**
+        /*
          * Expect that no FORCE-FALLBACK customer group prices found.
          */
         $this->assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
@@ -225,9 +219,9 @@ class CheapestPriceTest extends TestCase
 
         $priceGroup = $this->helper->createPriceGroup();
         $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
-        $context->setPriceGroups(array(
-            $priceGroupStruct->getId() => $priceGroupStruct
-        ));
+        $context->setPriceGroups([
+            $priceGroupStruct->getId() => $priceGroupStruct,
+        ]);
 
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
@@ -237,7 +231,7 @@ class CheapestPriceTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $cheapestPrice = $listProduct->getCheapestPrice();
 
-        /**
+        /*
          * Expect cheapest variant 50€
          * And price group discount 10%
          */
@@ -252,16 +246,16 @@ class CheapestPriceTest extends TestCase
 
         $priceGroup = $this->helper->createPriceGroup();
         $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
-        $context->setPriceGroups(array(
-            $priceGroupStruct->getId() => $priceGroupStruct
-        ));
+        $context->setPriceGroups([
+            $priceGroupStruct->getId() => $priceGroupStruct,
+        ]);
 
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
         $count = count($data['variants']) - 1;
         $data['lastStock'] = true;
 
-        /**
+        /*
          * Cheapest variant is now 80,- €
          */
         $data['variants'][$count]['inStock'] = 0;
@@ -273,7 +267,7 @@ class CheapestPriceTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $cheapestPrice = $listProduct->getCheapestPrice();
 
-        /**
+        /*
          * Expect cheapest variant 80,- €
          * And price group discount 10%
          */
@@ -296,12 +290,12 @@ class CheapestPriceTest extends TestCase
 
         $data = $this->createPriceGroupProduct($number, $context, false, [
             ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 1,  'discount' => 10],
-            ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 20,  'discount' => 20]
+            ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 20,  'discount' => 20],
         ]);
         $this->helper->createArticle($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
-            'useLastGraduationForCheapestPrice' => true
+            'useLastGraduationForCheapestPrice' => true,
         ]);
 
         $this->assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
@@ -324,7 +318,7 @@ class CheapestPriceTest extends TestCase
         $this->helper->createArticle($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
-            'useLastGraduationForCheapestPrice' => false
+            'useLastGraduationForCheapestPrice' => false,
         ]);
 
         $this->assertEquals(90, $listProduct->getCheapestPrice()->getCalculatedPrice());
@@ -347,10 +341,10 @@ class CheapestPriceTest extends TestCase
         $this->helper->createArticle($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
-            'useLastGraduationForCheapestPrice' => true
+            'useLastGraduationForCheapestPrice' => true,
         ]);
 
-        /** @var ListProduct $listProduct */
+        /* @var ListProduct $listProduct */
         $this->assertEquals(7, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
@@ -372,10 +366,38 @@ class CheapestPriceTest extends TestCase
         $this->helper->createArticle($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
-            'useLastGraduationForCheapestPrice' => false
+            'useLastGraduationForCheapestPrice' => false,
         ]);
 
         $this->assertEquals(9, $listProduct->getCheapestPrice()->getCalculatedPrice());
+    }
+
+    private function getConfiguratorProduct($number, ShopContextInterface $context) // ShopContext
+    {
+        $product = $this->helper->getSimpleProduct(
+            $number,
+            array_shift($context->getTaxRules()),
+            $context->getCurrentCustomerGroup()
+        );
+
+        $configurator = $this->helper->getConfigurator(
+            $context->getCurrentCustomerGroup(),
+            $number,
+            ['farbe' => ['rot', 'blau', 'grün', 'schwarz', 'weiß']]
+        );
+        $product = array_merge($product, $configurator);
+        $product['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
+
+        foreach ($product['variants'] as $index => &$variant) {
+            $offset = ($index + 1) * -10;
+
+            $variant['prices'] = $this->helper->getGraduatedPrices(
+                $context->getCurrentCustomerGroup()->getKey(),
+                $offset
+            );
+        }
+
+        return $product;
     }
 
     /**
@@ -395,9 +417,10 @@ class CheapestPriceTest extends TestCase
      *
      * @param $number
      * @param TestContext $context
-     * @param bool $configurator
-     * @param array $discounts
-     * @param float|int $cheapestVariantPrice
+     * @param bool        $configurator
+     * @param array       $discounts
+     * @param float|int   $cheapestVariantPrice
+     *
      * @return array
      */
     private function createPriceGroupProduct(
@@ -420,7 +443,7 @@ class CheapestPriceTest extends TestCase
                     'to' => 'beliebig',
                     'price' => 100,
                     'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
-                    'pseudoPrice' => 10
+                    'pseudoPrice' => 10,
                 ]];
             }
             $last = array_pop($data['variants']);
@@ -429,7 +452,7 @@ class CheapestPriceTest extends TestCase
                 'to' => 'beliebig',
                 'price' => $cheapestVariantPrice,
                 'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
-                'pseudoPrice' => 10
+                'pseudoPrice' => 10,
             ]];
             $data['variants'][] = $last;
         } else {
@@ -440,6 +463,7 @@ class CheapestPriceTest extends TestCase
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
         $data['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
+
         return $data;
     }
 }

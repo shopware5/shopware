@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface LinkGatewayInterface
@@ -38,8 +39,9 @@ interface LinkGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]                                          $products
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+     *
      * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link array
      */
     public function getList($products, Struct\ShopContextInterface $context);
@@ -49,8 +51,9 @@ interface LinkGatewayInterface
      * - Link base data
      * - Core attribute of the link
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Product\Link[]
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

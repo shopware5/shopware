@@ -27,12 +27,11 @@ namespace Shopware\Commands;
 use Shopware\Components\Snippet\SnippetValidator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsValidateCommand extends ShopwareCommand
@@ -63,7 +62,7 @@ class SnippetsValidateCommand extends ShopwareCommand
         $validator = $this->container->get('shopware.snippet_validator');
 
         if (empty($argument)) {
-            $invalidPaths = $validator->validate($this->container->getParameter('kernel.root_dir').'/snippets');
+            $invalidPaths = $validator->validate($this->container->getParameter('kernel.root_dir') . '/snippets');
             $invalidPaths = array_merge(
                 $invalidPaths,
                 $this->validatePlugins($validator)
@@ -77,15 +76,17 @@ class SnippetsValidateCommand extends ShopwareCommand
         } else {
             $output->writeln('<error>The following errors occurred:</error>');
             foreach ($invalidPaths as $error) {
-                $output->writeln('<error>'.$error.'</error>');
+                $output->writeln('<error>' . $error . '</error>');
             }
         }
     }
 
     /**
      * @param SnippetValidator $validator
-     * @return \string[]
+     *
      * @throws \Exception
+     *
+     * @return \string[]
      */
     protected function validatePlugins(SnippetValidator $validator)
     {
@@ -93,8 +94,8 @@ class SnippetsValidateCommand extends ShopwareCommand
 
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
         foreach ($pluginDirectories as $pluginBasePath) {
-            foreach (array('Backend', 'Core', 'Frontend') as $namespace) {
-                foreach (new \DirectoryIterator($pluginBasePath.$namespace) as $pluginDir) {
+            foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
+                foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
                     if ($pluginDir->isDot() || !$pluginDir->isDir()) {
                         continue;
                     }

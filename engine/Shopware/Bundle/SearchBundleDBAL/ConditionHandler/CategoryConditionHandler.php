@@ -27,13 +27,13 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryConditionHandler implements ConditionHandlerInterface
@@ -48,7 +48,7 @@ class CategoryConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof CategoryCondition);
+        return $condition instanceof CategoryCondition;
     }
 
     /**
@@ -73,7 +73,7 @@ class CategoryConditionHandler implements ConditionHandlerInterface
             AND productCategory{$suffix}.categoryID IN (:category{$suffix})"
         );
 
-        /** @var CategoryCondition $condition */
+        /* @var CategoryCondition $condition */
         $query->setParameter(
             ":category{$suffix}",
             $condition->getCategoryIds(),

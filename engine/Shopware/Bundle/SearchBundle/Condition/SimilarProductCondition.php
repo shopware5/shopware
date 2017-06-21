@@ -36,8 +36,9 @@ class SimilarProductCondition implements ConditionInterface
     private $productId;
 
     /**
-     * @param int $productId
+     * @param int    $productId
      * @param string $productName
+     *
      * @throws \Exception
      */
     public function __construct($productId, $productName)

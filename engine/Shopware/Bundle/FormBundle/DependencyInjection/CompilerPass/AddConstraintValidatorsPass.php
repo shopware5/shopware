@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class AddConstraintValidatorsPass
  *
- * @package Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass
  *
- * @link    https://github.com/symfony/framework-bundle/blob/master/DependencyInjection/Compiler/AddConstraintValidatorsPass.php
+ * @see    https://github.com/symfony/framework-bundle/blob/master/DependencyInjection/Compiler/AddConstraintValidatorsPass.php
+ *
  * @license https://opensource.org/licenses/MIT MIT License
  */
 class AddConstraintValidatorsPass implements CompilerPassInterface
@@ -42,7 +42,7 @@ class AddConstraintValidatorsPass implements CompilerPassInterface
         if (!$container->hasDefinition('validator.validator_factory')) {
             return;
         }
-        $validators = array();
+        $validators = [];
         foreach ($container->findTaggedServiceIds('validator.constraint_validator') as $id => $attributes) {
             if (isset($attributes[0]['alias'])) {
                 $validators[$attributes[0]['alias']] = $id;

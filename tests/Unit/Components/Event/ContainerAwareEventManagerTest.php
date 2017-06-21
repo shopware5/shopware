@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ContainerAwareEventManagerTest extends TestCase
@@ -65,7 +65,7 @@ class ContainerAwareEventManagerTest extends TestCase
         ;
 
         $this->container->set('service.listener', $service);
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
 
         $this->eventManager->notify('onEvent', $eventArgs);
     }
@@ -83,7 +83,7 @@ class ContainerAwareEventManagerTest extends TestCase
         ;
 
         $this->container->set('service.listener', $service);
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
 
         $this->eventManager->notify('onEvent', $eventArgs);
         $this->eventManager->notify('onEvent', $eventArgs);
@@ -129,8 +129,8 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $this->container->set('service.listener', $service);
 
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'), 5);
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'), 10);
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent'], 5);
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent'], 10);
 
         $this->eventManager->notify('onEvent', $eventArgs);
     }
@@ -142,7 +142,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $this->container->set('service.listener', $service);
 
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
         $service
             ->expects($this->once())
             ->method('onEvent')
@@ -152,12 +152,13 @@ class ContainerAwareEventManagerTest extends TestCase
             $this->eventManager->notify('onEvent');
         }
     }
+
     public function testGetListenersOnLazyLoad()
     {
         $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
 
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
         $listeners = $this->eventManager->getAllListeners();
 
         $this->assertTrue(isset($listeners['onevent']));
@@ -171,9 +172,9 @@ class ContainerAwareEventManagerTest extends TestCase
         $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
 
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
 
-        $handler = new \Enlight_Event_Handler_Default('onEvent', array($this->container->get('service.listener'), 'onEvent'));
+        $handler = new \Enlight_Event_Handler_Default('onEvent', [$this->container->get('service.listener'), 'onEvent']);
 
         $this->eventManager->notify('onEvent', $eventArgs);
 
@@ -186,9 +187,9 @@ class ContainerAwareEventManagerTest extends TestCase
     {
         $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
-        $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
+        $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
 
-        $this->eventManager->removeListener(new \Enlight_Event_Handler_Default('onEvent', array($this->container->get('service.listener'), 'onEvent')));
+        $this->eventManager->removeListener(new \Enlight_Event_Handler_Default('onEvent', [$this->container->get('service.listener'), 'onEvent']));
 
         $this->assertFalse($this->eventManager->hasListeners('onEvent'));
     }
@@ -204,18 +205,21 @@ class SubscriberService implements SubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'onEvent' => 'onEvent',
-            'onEventWithPriority' => array('onEventWithPriority', 10),
-            'onEventNested' => array(array('onEventNested')),
-        );
+            'onEventWithPriority' => ['onEventWithPriority', 10],
+            'onEventNested' => [['onEventNested']],
+        ];
     }
+
     public function onEvent(\Enlight_Event_EventArgs $e)
     {
     }
+
     public function onEventWithPriority(\Enlight_Event_EventArgs $e)
     {
     }
+
     public function onEventNested(\Enlight_Event_EventArgs $e)
     {
     }

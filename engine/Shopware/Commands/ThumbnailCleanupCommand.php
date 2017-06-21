@@ -24,7 +24,6 @@
 
 namespace Shopware\Commands;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * media albums. If no album is defined, all album thumbnails will be removed.
  *
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThumbnailCleanupCommand extends ShopwareCommand
@@ -65,12 +64,12 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $albumId = (int)$input->getOption('albumid');
+        $albumId = (int) $input->getOption('albumid');
 
         $em = $this->getContainer()->get('models');
 
         $builder = $em->createQueryBuilder();
-        $builder->select(array('album', 'settings', 'media'))
+        $builder->select(['album', 'settings', 'media'])
             ->from('Shopware\Models\Media\Album', 'album')
             ->leftJoin('album.settings', 'settings')
             ->leftJoin('album.media', 'media');
@@ -110,7 +109,7 @@ EOF
             }
         }
 
-        $output->writeln("Cleanup was finished successfully");
+        $output->writeln('Cleanup was finished successfully');
     }
 
     /**
@@ -118,14 +117,15 @@ EOF
      *
      * @param $media
      * @param $sizes
+     *
      * @return array
      */
     private function getMediaThumbnailPaths($media, $sizes)
     {
-        $sizes = array_merge($sizes, array('140x140'));
+        $sizes = array_merge($sizes, ['140x140']);
         $sizes = array_unique($sizes);
 
-        $thumbnails = array();
+        $thumbnails = [];
 
         //iterate thumbnail sizes
         foreach ($sizes as $size) {
@@ -153,6 +153,7 @@ EOF
      * Removes special characters from a filename
      *
      * @param $name
+     *
      * @return string
      */
     private function removeSpecialCharacters($name)
@@ -161,6 +162,7 @@ EOF
         $name = preg_replace('#[^A-z0-9\-_]#', '-', $name);
         $name = preg_replace('#-{2,}#', '-', $name);
         $name = trim($name, '-');
+
         return mb_substr($name, 0, 180);
     }
 }

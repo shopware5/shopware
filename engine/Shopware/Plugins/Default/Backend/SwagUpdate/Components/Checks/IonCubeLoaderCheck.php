@@ -24,13 +24,13 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
+use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
-use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class IonCubeLoaderCheck implements CheckInterface
@@ -60,6 +60,7 @@ class IonCubeLoaderCheck implements CheckInterface
 
     /**
      * @param array $requirement
+     *
      * @return array
      */
     public function check($requirement)
@@ -71,39 +72,39 @@ class IonCubeLoaderCheck implements CheckInterface
         }
 
         if (!function_exists('ioncube_loader_version')) {
-            return array(
-                'type'       => self::CHECK_TYPE,
+            return [
+                'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
-                'message'    => sprintf(
+                'message' => sprintf(
                     $this->namespace->get('controller/check_ioncubeloaderversion_unknown'),
                     $requiredVersion
-                )
-            );
+                ),
+            ];
         }
 
         $installedVersion = ioncube_loader_version();
 
         $isValid = version_compare(strtolower($installedVersion), $requiredVersion, '>');
         if ($isValid) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message'    => sprintf(
+                'message' => sprintf(
                     $this->namespace->get('controller/check_ioncubeloaderversion_success'),
                     $requiredVersion,
                     $installedVersion
-                )
-            );
-        } else {
-            return array(
+                ),
+            ];
+        }
+
+        return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
-                'message'    => sprintf(
+                'message' => sprintf(
                     $this->namespace->get('check_ioncubeloaderversion_failure'),
                     $requiredVersion,
                     $installedVersion
-                )
-            );
-        }
+                ),
+            ];
     }
 }

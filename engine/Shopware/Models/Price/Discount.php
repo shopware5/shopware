@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Price;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Price Model
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Discount extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,28 +45,28 @@ class Discount extends ModelEntity
     private $id;
 
     /**
-     * @var Group $group
+     * @var Group
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Price\Group", inversedBy="discounts")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
      */
     private $group;
 
     /**
-     * @var \Shopware\Models\Customer\Group $group
+     * @var \Shopware\Models\Customer\Group
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customergroupID", referencedColumnName="id")
      */
     private $customerGroup;
 
     /**
-     * @var float $discount
+     * @var float
      *
      * @ORM\Column(name="discount", type="float", nullable=false)
      */
     private $discount;
 
     /**
-     * @var float $start
+     * @var float
      *
      * @ORM\Column(name="discountstart", type="float", nullable=false)
      */
@@ -87,7 +87,7 @@ class Discount extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -98,11 +98,13 @@ class Discount extends ModelEntity
      * Set group
      *
      * @param Group $group
+     *
      * @return discount
      */
     public function setGroup($group)
     {
         $this->group = $group;
+
         return $this;
     }
 
@@ -118,11 +120,13 @@ class Discount extends ModelEntity
      * Set customerGroup
      *
      * @param $customerGroup
+     *
      * @return Discount
      */
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = $customerGroup;
+
         return $this;
     }
 
@@ -138,11 +142,13 @@ class Discount extends ModelEntity
      * Set discount
      *
      * @param float $discount
+     *
      * @return discount
      */
     public function setDiscount($discount)
     {
         $this->discount = $discount;
+
         return $this;
     }
 
@@ -160,11 +166,13 @@ class Discount extends ModelEntity
      * Set start
      *
      * @param float $start
+     *
      * @return discount
      */
     public function setStart($start)
     {
         $this->start = $start;
+
         return $this;
     }
 

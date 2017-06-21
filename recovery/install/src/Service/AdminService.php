@@ -28,7 +28,7 @@ use Shopware\Recovery\Install\Struct\AdminUser;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AdminService
@@ -47,7 +47,8 @@ class AdminService
     }
 
     /**
-     * @param  AdminUser         $user
+     * @param AdminUser $user
+     *
      * @throws \RuntimeException
      */
     public function createAdmin(AdminUser $user)
@@ -55,7 +56,7 @@ class AdminService
         $localeId = $this->getLocaleId($user);
 
         // Drop previous inserted admins
-        $this->connection->query("DELETE FROM s_core_auth");
+        $this->connection->query('DELETE FROM s_core_auth');
 
         $sql = <<<EOT
 INSERT INTO s_core_auth
@@ -70,35 +71,8 @@ EOT;
             $this->saltPassword($user->password),
             $localeId,
             $user->name,
-            $user->email
+            $user->email,
         ]);
-    }
-
-    /**
-     * @param AdminUser $user
-     * @return int
-     */
-    private function getLocaleId(AdminUser $user)
-    {
-        $localeId = $this->connection->prepare("SELECT id FROM s_core_locales WHERE locale = ?");
-        $localeId->execute([$user->locale]);
-        $localeId = $localeId->fetchColumn();
-
-        if (!$localeId) {
-            throw new \RuntimeException("Could not resolve language " . $user->locale);
-        }
-
-        return (int)$localeId;
-    }
-
-    /**
-     * @param string $password
-     *
-     * @return string
-     */
-    private function saltPassword($password)
-    {
-        return md5("A9ASD:_AD!_=%a8nx0asssblPlasS$" . md5($password));
     }
 
     public function addWidgets(AdminUser $adminUser)
@@ -113,5 +87,33 @@ EOT;
 
         $insert = $this->connection->prepare('INSERT INTO s_core_widget_views (widget_id, auth_id) VALUES (?, ?)');
         $insert->execute([$widgetId, $userId]);
+    }
+
+    /**
+     * @param AdminUser $user
+     *
+     * @return int
+     */
+    private function getLocaleId(AdminUser $user)
+    {
+        $localeId = $this->connection->prepare('SELECT id FROM s_core_locales WHERE locale = ?');
+        $localeId->execute([$user->locale]);
+        $localeId = $localeId->fetchColumn();
+
+        if (!$localeId) {
+            throw new \RuntimeException('Could not resolve language ' . $user->locale);
+        }
+
+        return (int) $localeId;
+    }
+
+    /**
+     * @param string $password
+     *
+     * @return string
+     */
+    private function saltPassword($password)
+    {
+        return md5('A9ASD:_AD!_=%a8nx0asssblPlasS$' . md5($password));
     }
 }

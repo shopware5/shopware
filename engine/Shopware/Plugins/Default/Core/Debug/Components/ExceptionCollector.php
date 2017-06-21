@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ExceptionCollector implements CollectorInterface
@@ -41,7 +41,7 @@ class ExceptionCollector implements CollectorInterface
     /**
      * @var \Exception[]
      */
-    protected $exceptions = array();
+    protected $exceptions = [];
 
     /**
      * @var Utils
@@ -50,7 +50,7 @@ class ExceptionCollector implements CollectorInterface
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
-     * @param Utils $utils
+     * @param Utils                       $utils
      */
     public function __construct(\Enlight_Event_EventManager $eventManager, Utils $utils)
     {
@@ -58,14 +58,11 @@ class ExceptionCollector implements CollectorInterface
         $this->utils = $utils;
     }
 
-    /**
-     * @return void
-     */
     public function start()
     {
         $this->eventManager->addListener(
             'Enlight_Controller_Front_PostDispatch',
-            array($this, 'onPostDispatch')
+            [$this, 'onPostDispatch']
         );
     }
 
@@ -86,6 +83,7 @@ class ExceptionCollector implements CollectorInterface
 
     /**
      * @param Logger $log
+     *
      * @return mixed
      */
     public function logResults(Logger $log)
@@ -94,20 +92,20 @@ class ExceptionCollector implements CollectorInterface
             return;
         }
 
-        $rows = array(array('code', 'name', 'message', 'line', 'file', 'trace'));
+        $rows = [['code', 'name', 'message', 'line', 'file', 'trace']];
 
         foreach ($this->exceptions as $exception) {
-            $rows[] = $this->utils->encode(array(
+            $rows[] = $this->utils->encode([
                 $exception->getCode(),
                 get_class($exception),
                 $exception->getMessage(),
                 $exception->getLine(),
                 $exception->getFile(),
-                explode("\n", $exception->getTraceAsString())
-            ));
+                explode("\n", $exception->getTraceAsString()),
+            ]);
         }
 
-        $table = array('Exception Log (' . count($this->exceptions) . ')', $rows);
+        $table = ['Exception Log (' . count($this->exceptions) . ')', $rows];
         $log->table($table);
 
         foreach ($this->exceptions as $exception) {

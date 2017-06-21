@@ -37,19 +37,19 @@ class Value
     protected $dqlHelper;
 
     /**
-     * @return DqlHelper
-     */
-    public function getDqlHelper()
-    {
-        return $this->dqlHelper;
-    }
-
-    /**
      * @param $dqlHelper DqlHelper
      */
     public function __construct(DqlHelper $dqlHelper)
     {
         $this->dqlHelper = $dqlHelper;
+    }
+
+    /**
+     * @return DqlHelper
+     */
+    public function getDqlHelper()
+    {
+        return $this->dqlHelper;
     }
 
     /**
@@ -90,7 +90,7 @@ class Value
 
         $paginator = Shopware()->Models()->createPaginator($query);
         $totalCount = $paginator->count();
-        $results = array();
+        $results = [];
 
         // Iterate results, do some formatting if needed
         foreach ($paginator->getIterator()->getArrayCopy() as $item) {
@@ -98,16 +98,16 @@ class Value
             if ($item instanceof \DateTime) {
                 if ($columnType == 'date') {
                     $item = $item->format('Y-m-d');
-                } elseif ($columnType== 'datetime') {
+                } elseif ($columnType == 'datetime') {
                     $item = $item->format('Y-m-d H:i:s');
                 }
             }
-            $results[] = array('title' => $item);
+            $results[] = ['title' => $item];
         }
 
-        return array(
+        return [
             'data' => $results,
-            'total' => $totalCount
-        );
+            'total' => $totalCount,
+        ];
     }
 }

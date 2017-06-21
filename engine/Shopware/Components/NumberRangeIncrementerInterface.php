@@ -21,11 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\NumberRangeIncrementer
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface NumberRangeIncrementerInterface
@@ -37,8 +38,10 @@ interface NumberRangeIncrementerInterface
      * value until the update is committed. Finally the next number is returned.
      *
      * @param string $name
-     * @return int
+     *
      * @throws \RuntimeException
+     *
+     * @return int
      */
     public function increment($name);
 }

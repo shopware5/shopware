@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CountryGatewayInterface
@@ -36,8 +37,9 @@ interface CountryGatewayInterface
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Country\State requires the following data:
      * - Country area base data
      *
-     * @param int $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Country\Area
      */
     public function getArea($id, Struct\ShopContextInterface $context);
@@ -48,8 +50,9 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getState()
      *
-     * @param array $ids
+     * @param array                       $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Country\State[]
      */
     public function getStates(array $ids, Struct\ShopContextInterface $context);
@@ -60,8 +63,9 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getCountry()
      *
-     * @param array $ids
+     * @param array                       $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Country[]
      */
     public function getCountries(array $ids, Struct\ShopContextInterface $context);
@@ -72,8 +76,9 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getArea()
      *
-     * @param array $ids
+     * @param array                       $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Country\Area[]
      */
     public function getAreas(array $ids, Struct\ShopContextInterface $context);
@@ -86,8 +91,9 @@ interface CountryGatewayInterface
      * Required translation in the provided context language:
      * - Country base data
      *
-     * @param int $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country
      */
     public function getCountry($id, Struct\ShopContextInterface $context);
@@ -102,13 +108,15 @@ interface CountryGatewayInterface
      *
      * @param $id
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Country\State
      */
     public function getState($id, Struct\ShopContextInterface $context);
 
     /**
-     * @param int[] $countryIds
+     * @param int[]                       $countryIds
      * @param Struct\ShopContextInterface $context
+     *
      * @return array indexed by country id contains an array of Struct\Country\State
      */
     public function getCountryStates($countryIds, Struct\ShopContextInterface $context);

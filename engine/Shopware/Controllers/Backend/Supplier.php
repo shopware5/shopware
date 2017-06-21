@@ -26,7 +26,7 @@
  * Shopware Supplier Management
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend_ExtJs
@@ -37,42 +37,26 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     private $repository;
 
     /**
-     * Internal helper function to get access to the form repository.
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-        }
-
-        return $this->repository;
-    }
-
-    /**
      * Deletes a Supplier from the database
      * Feeds the view with an json encoded array containing
      * - success : boolean Set to true if everything went well otherwise it is set to false
      * - data    : int  Id of the deleted supplier
-     *
-     * @return void
      */
     public function deleteSupplierAction()
     {
         if (!$this->Request()->isPost()) {
-            $this->View()->assign(array('success' => false));
+            $this->View()->assign(['success' => false]);
 
             return;
         }
 
-        $id = (int)$this->Request()->get('id');
+        $id = (int) $this->Request()->get('id');
         $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
 
         Shopware()->Models()->remove($supplierModel);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true, 'data' => $id));
+        $this->View()->assign(['success' => true, 'data' => $id]);
     }
 
     /**
@@ -86,8 +70,6 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      *          - link : String
      *          - articleCounter : Int
      *          - description : String
-     *
-     * @return void
      */
     public function getSuppliersAction()
     {
@@ -97,7 +79,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', array(array('property' => 'name')));
+        $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
 
@@ -108,15 +90,15 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($suppliers as &$supplier) {
-            $supplier["description"] = strip_tags($supplier["description"]);
+            $supplier['description'] = strip_tags($supplier['description']);
             $supplier['image'] = $mediaService->getUrl($supplier['image']);
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => !empty($suppliers),
             'data' => $suppliers,
-            'total' => $total
-        ));
+            'total' => $total,
+        ]);
     }
 
     /**
@@ -152,18 +134,16 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      *          - articleCounter : Int
      *          - description : String
      * [-errorMsg] : String containing the error message
-     *
-     * @return void
      */
     public function saveSuppliers()
     {
         if (!$this->Request()->isPost()) {
-            $this->View()->assign(array('success' => false));
+            $this->View()->assign(['success' => false]);
 
             return;
         }
 
-        $id = (int)$this->Request()->get('id');
+        $id = (int) $this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
         } else {
@@ -185,14 +165,13 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $mediaService = $this->get('shopware_media.media_service');
         $supplierModel->setImage($mediaService->normalize($supplierModel->getImage()));
 
-
         // backend checks
         $name = $supplierModel->getName();
         if (empty($name)) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'errorMsg' => 'No supplier name given'
-            ));
+                'errorMsg' => 'No supplier name given',
+            ]);
 
             return;
         }
@@ -201,9 +180,28 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $manager->persist($supplierModel);
         $manager->flush();
         $params['id'] = $supplierModel->getId();
-        $this->View()->assign(array('success' => true, 'data' => $params));
+        $this->View()->assign(['success' => true, 'data' => $params]);
+    }
 
-        return;
+    /**
+     * Returns all known Suppliers from the database. there are ordered by there name
+     *
+     * @return mixed
+     */
+    public function getAllSupplier()
+    {
+        $filter = $this->Request()->getParam('filter', null);
+        $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+
+        $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
+        $count = Shopware()->Models()->getQueryCount($query);
+
+        return [
+            'result' => $query->getArrayResult(),
+            'total' => $count,
+        ];
     }
 
     /**
@@ -218,36 +216,12 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $data[0]['image'] = $data[0]['image'] ? $mediaService->getUrl($data[0]['image']) : null;
 
         if (empty($data)) {
-            $this->View()->assign(array('success' => false, 'message' => 'Supplier not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Supplier not found']);
 
             return;
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
-
-        return;
-    }
-
-    /**
-     * Returns all known Suppliers from the database. there are ordered by there name
-     *
-     * @access private
-     * @return mixed
-     */
-    public function getAllSupplier()
-    {
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', array(array('property' => 'name')));
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
-
-        $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
-        $count = Shopware()->Models()->getQueryCount($query);
-
-        return array(
-            'result' => $query->getArrayResult(),
-            'total' => $count
-        );
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
     }
 
     /**
@@ -264,5 +238,19 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $this->addAclPermission('deleteSupplierAction', 'delete', $namespace->get('no_list_rights', 'Delete access denied.'));
         $this->addAclPermission('updateSupplierAction', 'update', $namespace->get('no_update_rights', 'Update access denied.'));
         $this->addAclPermission('createSupplierAction', 'create', $namespace->get('no_create_rights', 'Create access denied.'));
+    }
+
+    /**
+     * Internal helper function to get access to the form repository.
+     *
+     * @return \Shopware\Models\Article\Repository
+     */
+    private function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+        }
+
+        return $this->repository;
     }
 }

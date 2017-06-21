@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Model\Query\Mysql;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
@@ -34,9 +35,10 @@ use Doctrine\ORM\Query\Lexer;
  * which it is used.
  *
  * @category  Shopware
- * @package   Shopware\Components\Model\Query\Mysql
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @author    Andrew Mackrodt <andrew@ajmm.org>
+ *
  * @version   2011.06.12
  */
 class IfNull extends FunctionNode

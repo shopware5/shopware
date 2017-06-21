@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Media;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * The album settings model contains all settings around one album.
@@ -47,8 +47,16 @@ use Doctrine\ORM\Mapping as ORM;
 class Settings extends ModelEntity
 {
     /**
+     * @var \Shopware\Models\Media\Album
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Media\Album", inversedBy="settings")
+     * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
+     */
+    protected $album;
+    /**
      * Unique identifier
-     * @var integer $id
+     *
+     * @var int
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -57,74 +65,77 @@ class Settings extends ModelEntity
 
     /**
      * Id of the album
-     * @var integer $albumId
+     *
+     * @var int
      * @ORM\Column(name="albumID", type="integer", nullable=false)
      */
     private $albumId;
 
     /**
      * Flag whether thumbnails will be created on this album.
-     * @var integer $createThumbnails
+     *
+     * @var int
      * @ORM\Column(name="create_thumbnails", type="integer", nullable=false)
      */
     private $createThumbnails;
 
     /**
      * Sizes of the thumbnails. Format => WIDTHxHEIGHT;
-     * @var string $thumbnailSize
+     *
+     * @var string
      * @ORM\Column(name="thumbnail_size", type="text", nullable=false)
      */
     private $thumbnailSize;
 
     /**
      * Css class for the album
-     * @var string $icon
+     *
+     * @var string
      * @ORM\Column(name="icon", type="string", length=50, nullable=false)
      */
     private $icon;
 
     /**
      * Generate high dpi thumbnails
-     * @var bool $thumbnailHighDpi
+     *
+     * @var bool
      * @ORM\Column(name="thumbnail_high_dpi", type="boolean", nullable=false)
      */
     private $thumbnailHighDpi;
 
     /**
      * Thumbnail quality
-     * @var int $thumbnailHighDpi
+     *
+     * @var int
      * @ORM\Column(name="thumbnail_quality", type="integer", nullable=false)
      */
     private $thumbnailQuality;
 
     /**
      * high dpi thumbnails quality
-     * @var int $thumbnailHighDpi
+     *
+     * @var int
      * @ORM\Column(name="thumbnail_high_dpi_quality", type="integer", nullable=false)
      */
     private $thumbnailHighDpiQuality;
 
     /**
-     * @var \Shopware\Models\Media\Album $album
-     *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Media\Album", inversedBy="settings")
-     * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
-     */
-    protected $album;
-
-    /**
      * Sets whether thumbnails will be created on this album.
+     *
      * @param int $createThumbnails
+     *
      * @return \Shopware\Models\Media\Settings
      */
     public function setCreateThumbnails($createThumbnails)
     {
         $this->createThumbnails = $createThumbnails;
+
         return $this;
     }
 
     /**
      * Returns whether thumbnails will be created on this album.
+     *
      * @return int
      */
     public function getCreateThumbnails()
@@ -134,17 +145,21 @@ class Settings extends ModelEntity
 
     /**
      * Sets the icon css class
+     *
      * @param $icon
+     *
      * @return \Shopware\Models\Media\Settings
      */
     public function setIcon($icon)
     {
         $this->icon = $icon;
+
         return $this;
     }
 
     /**
      * Returns the icon css class
+     *
      * @return string
      */
     public function getIcon()
@@ -154,6 +169,7 @@ class Settings extends ModelEntity
 
     /**
      * Returns the identifier id
+     *
      * @return int
      */
     public function getId()
@@ -163,7 +179,9 @@ class Settings extends ModelEntity
 
     /**
      * Sets the property for the thumbnail sizes.
+     *
      * @param string|array $thumbnailSize
+     *
      * @return \Shopware\Models\Media\Settings
      */
     public function setThumbnailSize($thumbnailSize)
@@ -172,6 +190,7 @@ class Settings extends ModelEntity
             $thumbnailSize = implode(';', $thumbnailSize);
         }
         $this->thumbnailSize = $thumbnailSize;
+
         return $this;
     }
 
@@ -180,10 +199,15 @@ class Settings extends ModelEntity
      * Example:
      *  Database value: '70x70;150x150;90x90'
      *  Return   value: array('70x70', '150x150', '90x90')
+     *
      * @return array
      */
     public function getThumbnailSize()
     {
+        if (empty($this->thumbnailSize)) {
+            return [];
+        }
+
         return explode(';', $this->thumbnailSize);
     }
 
@@ -196,11 +220,11 @@ class Settings extends ModelEntity
      * and whether new thumbnail files must be generated.
      *
      * @ORM\PreUpdate
+     *
      * @deprecated
      */
     public function onUpdate()
     {
-        return;
     }
 
     /**
@@ -236,7 +260,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isThumbnailHighDpi()
     {
@@ -244,7 +268,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param boolean $thumbnailHighDpi
+     * @param bool $thumbnailHighDpi
      */
     public function setThumbnailHighDpi($thumbnailHighDpi)
     {

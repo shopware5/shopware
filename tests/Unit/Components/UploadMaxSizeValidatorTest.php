@@ -40,30 +40,13 @@ class UploadMaxSizeValidatorTest extends TestCase
         $this->SUT = new UploadMaxSizeValidator();
     }
 
-    /**
-     * @param int $contentLength
-     * @return \Enlight_Controller_EventArgs
-     */
-    private function getMockEnlightControllerEventArgs($contentLength = 0)
-    {
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
-        $request = new \Enlight_Controller_Request_RequestTestCase();
-        $request->setServer('CONTENT_LENGTH', $contentLength);
-        $request->setMethod('POST');
-
-        return new \Enlight_Controller_EventArgs([
-            'request' => $request,
-            'response' => $response
-        ]);
-    }
-
     public function testEmptyContentLength()
     {
         $eventArgs = $this->getMockEnlightControllerEventArgs();
 
         $this->SUT->validateContentLength($eventArgs);
 
-        $this->assertTrue(true, "Empty Content-Length should not throw an Exception");
+        $this->assertTrue(true, 'Empty Content-Length should not throw an Exception');
     }
 
     public function testContentLengthInRange()
@@ -73,7 +56,7 @@ class UploadMaxSizeValidatorTest extends TestCase
 
         $this->SUT->validateContentLength($eventArgs);
 
-        $this->assertTrue(true, "In range Content-Length should not throw an Exception");
+        $this->assertTrue(true, 'In range Content-Length should not throw an Exception');
     }
 
     public function testExceededContentLength()
@@ -86,5 +69,23 @@ class UploadMaxSizeValidatorTest extends TestCase
         $this->expectExceptionMessage('The uploaded file was too large. Please try to upload a smaller file.');
 
         $this->SUT->validateContentLength($eventArgs);
+    }
+
+    /**
+     * @param int $contentLength
+     *
+     * @return \Enlight_Controller_EventArgs
+     */
+    private function getMockEnlightControllerEventArgs($contentLength = 0)
+    {
+        $response = new \Enlight_Controller_Response_ResponseTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setServer('CONTENT_LENGTH', $contentLength);
+        $request->setMethod('POST');
+
+        return new \Enlight_Controller_EventArgs([
+            'request' => $request,
+            'response' => $response,
+        ]);
     }
 }

@@ -26,13 +26,14 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Tax extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier of the tax struct.
+     *
      * @var int
      */
     protected $id;
@@ -100,7 +101,7 @@ class Tax extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

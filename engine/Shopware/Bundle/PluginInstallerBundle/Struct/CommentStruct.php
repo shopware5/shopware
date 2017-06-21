@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class CommentStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class CommentStruct implements \JsonSerializable
 {
@@ -56,7 +55,7 @@ class CommentStruct implements \JsonSerializable
     private $creationDate = null;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

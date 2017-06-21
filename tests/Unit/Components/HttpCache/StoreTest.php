@@ -29,7 +29,7 @@ use Shopware\Components\HttpCache\Store;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StoreTest extends TestCase
@@ -48,6 +48,7 @@ class StoreTest extends TestCase
 
     /**
      * @dataProvider provideUrls
+     *
      * @param string $url
      * @param string $expected
      */

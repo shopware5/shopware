@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Cache;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheTest extends TestCase
@@ -43,7 +43,7 @@ class CacheTest extends TestCase
         parent::setUp();
 
         $httpCacheDir = Shopware()->Container()->getParameter('shopware.httpCache.cache_dir');
-        $templateCacheDir   = Shopware()->Container()->getParameter('shopware.template.cacheDir');
+        $templateCacheDir = Shopware()->Container()->getParameter('shopware.template.cacheDir');
 
         @mkdir($httpCacheDir, 0777, true);
         @mkdir($templateCacheDir, 0777, true);

@@ -46,9 +46,9 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
             );
         }
 
-        $this->apiBaseUrl =  'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
+        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', array(sha1('demo')));
+        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -60,12 +60,12 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $password = sha1('demo');
 
         $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig(array(
-            'curloptions' => array(
-                CURLOPT_HTTPAUTH    => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD     => "$username:$password"
-            )
-        ));
+        $adapter->setConfig([
+            'curloptions' => [
+                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD => "$username:$password",
+            ],
+        ]);
 
         $client = new Zend_Http_Client();
         $client->setAdapter($adapter);
@@ -141,10 +141,10 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
 
-        $requestData = array(
-            'album'  => -1,
-            'description' => 'flipflops'
-        );
+        $requestData = [
+            'album' => -1,
+            'description' => 'flipflops',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -167,11 +167,11 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
 
-        $requestData = array(
-            'album'  => -1,
-            'file'   => 'http://assets.shopware.com/sw_logo_white.png',
-            'description' => 'flipflops'
-        );
+        $requestData = [
+            'album' => -1,
+            'file' => 'http://assets.shopware.com/sw_logo_white.png',
+            'description' => 'flipflops',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -190,7 +190,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -250,11 +250,11 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
 
-        $fileSource = __DIR__ . '/fixtures/'.self::UPLOAD_FILE_NAME.'.jpg';
-        $requestData = array(
-            'album'  => -1,
-            'description' => 'flipflops'
-        );
+        $fileSource = __DIR__ . '/fixtures/' . self::UPLOAD_FILE_NAME . '.jpg';
+        $requestData = [
+            'album' => -1,
+            'description' => 'flipflops',
+        ];
 
         $client->setFileUpload($fileSource, 'file');
         $client->setParameterPost($requestData);
@@ -273,7 +273,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -311,12 +311,12 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
 
-        $fileSource = __DIR__ . '/fixtures/'.self::UPLOAD_FILE_NAME.'.jpg';
-        $requestData = array(
-            'album'  => -1,
+        $fileSource = __DIR__ . '/fixtures/' . self::UPLOAD_FILE_NAME . '.jpg';
+        $requestData = [
+            'album' => -1,
             'description' => 'flipflops',
-            'name' => self::UPLOAD_OVERWRITTEN_FILE_NAME
-        );
+            'name' => self::UPLOAD_OVERWRITTEN_FILE_NAME,
+        ];
 
         $client->setFileUpload($fileSource, 'file');
         $client->setParameterPost($requestData);
@@ -335,7 +335,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);

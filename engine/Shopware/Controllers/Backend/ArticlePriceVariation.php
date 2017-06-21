@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Controllers_Backend_ExtJs
@@ -36,6 +36,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
      * Shopware_Controller_Backend_Article::getArticle function
      *
      * @param $configuratorSetId
+     *
      * @return array
      */
     public function getArticlePriceVariations($configuratorSetId)
@@ -50,39 +51,6 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
         }
 
         return $variationRules;
-    }
-
-    /**
-     * Coverts a Price Variation's options from a squashed array into its details
-     *
-     * @param array $variation
-     * @return array
-     */
-    private function explodePriceVariation($variation)
-    {
-        if (empty($variation['options'])) {
-            return $variation;
-        }
-
-        $optionIds = explode('|', trim($variation['options'], '|'));
-
-        $options = Shopware()->Models()
-            ->getRepository('Shopware\Models\Article\Article')
-            ->getAllConfiguratorOptionsIndexedByIdQuery(array('options.id' => $optionIds))
-            ->getResult();
-
-        $variation['option_names'] = array();
-
-        foreach ($options as $option) {
-            $variation['option_names'][] = array(
-                'group' => $option->getGroup()->getName(),
-                'option' => $option->getName()
-            );
-        }
-
-        unset($variation['options']);
-
-        return $variation;
     }
 
     public function createPriceVariationAction()
@@ -109,15 +77,15 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
             $data['id'] = $priceVariation->getId();
             $data = $this->explodePriceVariation($data);
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
-                'data' => $data
-            ));
+                'data' => $data,
+            ]);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -148,15 +116,15 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
             $data['id'] = $priceVariation->getId();
             $data = $this->explodePriceVariation($data);
 
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
-                'data' => $data
-            ));
+                'data' => $data,
+            ]);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -167,7 +135,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
 
             // If we get a request to delete only one element, wrap it in an array, then iterate
             if (!empty($postData['id'])) {
-                $postData = array($postData);
+                $postData = [$postData];
             }
 
             foreach ($postData as $data) {
@@ -179,22 +147,78 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
                 Shopware()->Models()->remove($priceVariation);
                 Shopware()->Models()->flush();
 
-                $this->View()->assign(array(
-                    'success' => true
-                ));
+                $this->View()->assign([
+                    'success' => true,
+                ]);
             }
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
         }
+    }
+
+    public function getPriceVariationsAction()
+    {
+        $configuratorSetId = $this->Request()->get('configuratorSetId');
+
+        if (!$configuratorSetId) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'Configurator set id is required',
+            ]);
+
+            return;
+        }
+
+        $data = $this->getArticlePriceVariations($configuratorSetId);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Coverts a Price Variation's options from a squashed array into its details
+     *
+     * @param array $variation
+     *
+     * @return array
+     */
+    private function explodePriceVariation($variation)
+    {
+        if (empty($variation['options'])) {
+            return $variation;
+        }
+
+        $optionIds = explode('|', trim($variation['options'], '|'));
+
+        $options = Shopware()->Models()
+            ->getRepository('Shopware\Models\Article\Article')
+            ->getAllConfiguratorOptionsIndexedByIdQuery(['options.id' => $optionIds])
+            ->getResult();
+
+        $variation['option_names'] = [];
+
+        foreach ($options as $option) {
+            $variation['option_names'][] = [
+                'group' => $option->getGroup()->getName(),
+                'option' => $option->getName(),
+            ];
+        }
+
+        unset($variation['options']);
+
+        return $variation;
     }
 
     /**
      * Coverts a Price Variation's options from detailed options into the squashed array
      *
      * @param array $variation
+     *
      * @return array
      */
     private function implodePriceVariation($variation)
@@ -205,28 +229,9 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
         asort($variation['options']);
 
         if (!empty($variation['options'])) {
-            $variation['options'] = '|'.implode('|', $variation['options']).'|';
+            $variation['options'] = '|' . implode('|', $variation['options']) . '|';
         }
+
         return $variation;
-    }
-
-    public function getPriceVariationsAction()
-    {
-        $configuratorSetId = $this->Request()->get('configuratorSetId');
-
-        if (!$configuratorSetId) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => 'Configurator set id is required'
-            ));
-            return;
-        }
-
-        $data = $this->getArticlePriceVariations($configuratorSetId);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $data
-        ));
     }
 }

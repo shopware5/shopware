@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class PluginInformationResultStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class PluginInformationResultStruct implements \JsonSerializable
 {
@@ -36,13 +35,13 @@ class PluginInformationResultStruct implements \JsonSerializable
     private $plugins;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isShopUpgraded;
 
     /**
      * @param PluginInformationStruct[] $plugins
-     * @param bool $isShopUpgraded
+     * @param bool                      $isShopUpgraded
      */
     public function __construct(array $plugins, $isShopUpgraded = true)
     {
@@ -51,7 +50,7 @@ class PluginInformationResultStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -67,7 +66,7 @@ class PluginInformationResultStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function IsShopUpgraded()
     {

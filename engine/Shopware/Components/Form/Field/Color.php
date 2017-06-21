@@ -28,12 +28,12 @@ use Shopware\Components\Form\Field;
 
 /**
  * Class Color
- * @package Shopware\Components\Form\Field
  */
 class Color extends Field
 {
     /**
      * Requires to set a name for the field
+     *
      * @param $name
      */
     public function __construct($name)

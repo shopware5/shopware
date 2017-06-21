@@ -26,18 +26,21 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 interface CheckInterface
 {
     /**
      * @param array $requirement
+     *
      * @return bool
      */
     public function canHandle($requirement);
 
     /**
      * @param array $requirement
+     *
      * @return array
      */
     public function check($requirement);

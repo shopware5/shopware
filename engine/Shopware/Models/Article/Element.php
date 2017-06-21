@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @deprecated since 5.2 will be removed in 5.3 use \Shopware\Models\Attribute\Configuration instead
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Element extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -44,61 +44,61 @@ class Element extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $type
+     * @var string
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     private $type;
 
     /**
-     * @var string $default
+     * @var string
      * @ORM\Column(name="`default`", type="string", nullable=true)
      */
     private $default;
 
     /**
-     * @var string $store
+     * @var string
      * @ORM\Column(name="store", type="string", nullable=true)
      */
     private $store;
 
     /**
-     * @var string $label
+     * @var string
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
-     * @var boolean $required
+     * @var bool
      * @ORM\Column(name="required", type="boolean")
      */
     private $required = false;
 
     /**
-     * @var string $help
+     * @var string
      * @ORM\Column(name="help", type="string", nullable=true)
      */
     private $help;
 
     /**
-     * @var boolean $translatable
+     * @var bool
      * @ORM\Column(name="translatable", type="boolean")
      */
     private $translatable = false;
 
     /**
-     * @var boolean $variantable
+     * @var bool
      * @ORM\Column(name="variantable", type="boolean")
      */
     private $variantable = false;
 
     /**
-     * @var string $position
+     * @var string
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
@@ -192,7 +192,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getRequired()
     {
@@ -200,7 +200,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param boolean $required
+     * @param bool $required
      */
     public function setRequired($required)
     {
@@ -224,7 +224,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getTranslatable()
     {
@@ -232,7 +232,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param boolean $translatable
+     * @param bool $translatable
      */
     public function setTranslatable($translatable)
     {
@@ -240,7 +240,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getVariantable()
     {
@@ -248,7 +248,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param boolean $variantable
+     * @param bool $variantable
      */
     public function setVariantable($variantable)
     {

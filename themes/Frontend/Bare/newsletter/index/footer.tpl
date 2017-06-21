@@ -37,7 +37,7 @@
   <tr>
     <td width="20" style="font-size:13px;margin:0;padding:0;padding-left:10px;">&rArr;&nbsp;</td>
     <td style="font-size:13px;margin:0;padding:0;">
-    <a href="{$sStart|dirname}/backend/newsletter?campaign={$sCampaign.id}&mailaddress={$sUser.mailaddressID}&hash={$sCampaignHash}" target="_blank" style="color:#000 !important;">
+    <a href="{$sStart}/backend/newsletter?campaign={$sCampaign.id}&mailaddress={$sUser.mailaddressID}&hash={$sCampaignHash}" target="_blank" style="color:#000 !important;">
         {s name='NewsletterFooterLinkNewWindow'}{/s}</a>
     </a>
     </td>

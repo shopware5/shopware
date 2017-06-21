@@ -26,8 +26,8 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
+use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\MetaStruct;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
@@ -36,9 +36,6 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Service
- */
 class DownloadService
 {
     /**
@@ -62,10 +59,10 @@ class DownloadService
     private $rootDir;
 
     /**
-     * @param string $rootDir
-     * @param array $pluginDirectories
+     * @param string      $rootDir
+     * @param array       $pluginDirectories
      * @param StoreClient $storeClient
-     * @param Connection $connection
+     * @param Connection  $connection
      */
     public function __construct(
         $rootDir,
@@ -81,6 +78,7 @@ class DownloadService
 
     /**
      * @param RangeDownloadRequest $request
+     *
      * @return FinishResult|ValidResult
      */
     public function downloadRange(RangeDownloadRequest $request)
@@ -89,18 +87,20 @@ class DownloadService
         Shopware()->Plugins()->Backend()->SwagUpdate();
 
         $version = new Version([
-            'uri'  => $request->getUri(),
+            'uri' => $request->getUri(),
             'size' => $request->getSize(),
-            'sha1' => $request->getSha1()
+            'sha1' => $request->getSha1(),
         ]);
 
         $step = new DownloadStep($version, $request->getDestination());
+
         return $step->run($request->getOffset());
     }
 
     /**
      * @param string $file
      * @param string $pluginName
+     *
      * @throws \Exception
      */
     public function extractPluginZip($file, $pluginName)
@@ -127,6 +127,7 @@ class DownloadService
 
     /**
      * @param MetaRequest $request
+     *
      * @return MetaStruct
      */
     public function getMetaInformation(MetaRequest $request)
@@ -134,18 +135,18 @@ class DownloadService
         $params = [
             'domain' => $request->getDomain(),
             'technicalName' => $request->getTechnicalName(),
-            'shopwareVersion' => $request->getVersion()
+            'shopwareVersion' => $request->getVersion(),
         ];
 
         if ($request->getToken()) {
             $result = $this->storeClient->doAuthGetRequestRaw(
                 $request->getToken(),
-                '/pluginFiles/'.$request->getTechnicalName().'/data',
+                '/pluginFiles/' . $request->getTechnicalName() . '/data',
                 $params
             );
         } else {
             $result = $this->storeClient->doGetRequestRaw(
-                '/pluginFiles/'.$request->getTechnicalName().'/data',
+                '/pluginFiles/' . $request->getTechnicalName() . '/data',
                 $params
             );
         }
@@ -163,6 +164,7 @@ class DownloadService
 
     /**
      * @param DownloadRequest $request
+     *
      * @return bool
      */
     public function download(DownloadRequest $request)
@@ -189,7 +191,8 @@ class DownloadService
 
     /**
      * @param $content
-     * @return string File path to the downloaded file.
+     *
+     * @return string file path to the downloaded file
      */
     private function createDownloadZip($content)
     {
@@ -204,6 +207,7 @@ class DownloadService
 
     /**
      * @param $name
+     *
      * @return string
      */
     private function getPluginSource($name)
@@ -215,7 +219,7 @@ class DownloadService
             ->setParameter(':name', $name)
             ->setMaxResults(1);
 
-        /**@var $statement \PDOStatement*/
+        /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_COLUMN);

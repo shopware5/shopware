@@ -41,14 +41,14 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit  = $this->Request()->getParam('limit', 1000);
+        $limit = $this->Request()->getParam('limit', 1000);
         $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
-        $result = $this->resource->getList($offset, $limit, $filter, $sort, array(
-            'language' => $this->Request()->getParam('language')
-        ));
+        $result = $this->resource->getList($offset, $limit, $filter, $sort, [
+            'language' => $this->Request()->getParam('language'),
+        ]);
 
         $this->View()->assign($result);
         $this->View()->assign('success', true);
@@ -62,18 +62,18 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $article = $this->resource->getOneByNumber($id, array(
+            $article = $this->resource->getOneByNumber($id, [
                 'language' => $this->Request()->getParam('language'),
                 'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
-            ));
+            ]);
         } else {
-            $article = $this->resource->getOne($id, array(
+            $article = $this->resource->getOne($id, [
                 'language' => $this->Request()->getParam('language'),
-                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
-            ));
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            ]);
         }
 
         $this->View()->assign('data', $article);
@@ -90,12 +90,12 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $article = $this->resource->create($this->Request()->getPost());
 
         $location = $this->apiBaseUrl . 'articles/' . $article->getId();
-        $data = array(
-            'id'       => $article->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $article->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
         $this->Response()->setHeader('Location', $location);
     }
 
@@ -108,7 +108,7 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $article = $this->resource->updateByNumber($id, $params);
@@ -117,12 +117,12 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         }
 
         $location = $this->apiBaseUrl . 'articles/' . $article->getId();
-        $data = array(
-            'id'       => $article->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $article->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -133,7 +133,7 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
@@ -141,7 +141,6 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
             $this->resource->delete($id);
         }
 
-
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

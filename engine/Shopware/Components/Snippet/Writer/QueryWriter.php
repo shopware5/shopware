@@ -26,7 +26,7 @@ namespace Shopware\Components\Snippet\Writer;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Snippet\Writer
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryWriter
@@ -47,6 +47,7 @@ class QueryWriter
 
         if (!$this->update) {
             $this->generateInsertQueries($data, $namespace, $localeId, $shopId);
+
             return $this;
         }
 
@@ -55,25 +56,49 @@ class QueryWriter
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getQueries()
+    {
+        return $this->queries;
+    }
+
+    /**
+     * @param bool $update
+     */
+    public function setUpdate($update)
+    {
+        $this->update = $update;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUpdate()
+    {
+        return $this->update;
+    }
+
     private function generateUpdateInsertQueries($data, $namespace, $localeId, $shopId)
     {
         foreach ($data as $name => $value) {
-            $queryData = array(
-                'namespace' => '\''.addslashes($namespace).'\'',
-                'shopID'    => $shopId,
-                'localeID'  => $localeId,
-                'name'      => '\''.addslashes($name).'\'',
-                'value'     => '\''.addslashes($value).'\'',
-                'created'   => '\''.date('Y-m-d H:i:s', time()).'\'',
-                'updated'   => '\''.date('Y-m-d H:i:s', time()).'\'',
-                'dirty'     => 0
-            );
+            $queryData = [
+                'namespace' => '\'' . addslashes($namespace) . '\'',
+                'shopID' => $shopId,
+                'localeID' => $localeId,
+                'name' => '\'' . addslashes($name) . '\'',
+                'value' => '\'' . addslashes($value) . '\'',
+                'created' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                'updated' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                'dirty' => 0,
+            ];
 
-            $updateData = array(
-                'updated=IF(dirty = 1, updated, \''.date('Y-m-d H:i:s', time()).'\')',
-                'value=IF(dirty = 1, value, \''.addslashes($value).'\')',
-                'dirty=IF(value = \''.addslashes($value).'\', 0, 1)'
-            );
+            $updateData = [
+                'updated=IF(dirty = 1, updated, \'' . date('Y-m-d H:i:s', time()) . '\')',
+                'value=IF(dirty = 1, value, \'' . addslashes($value) . '\')',
+                'dirty=IF(value = \'' . addslashes($value) . '\', 0, 1)',
+            ];
 
             $this->queries[] = 'INSERT INTO s_core_snippets'
                 . ' (' . implode(', ', array_keys($queryData)) . ')'
@@ -88,21 +113,21 @@ class QueryWriter
 
         $counter = 0;
         foreach ($data as $name => $value) {
-            $queryData = array(
-                    'namespace' => '\''.addslashes($namespace).'\'',
-                    'shopID'    => $shopId,
-                    'localeID'  => $localeId,
-                    'name'      => '\''.addslashes($name).'\'',
-                    'value'     => '\''.addslashes($value).'\'',
-                    'created'   => '\''.date('Y-m-d H:i:s', time()).'\'',
-                    'updated'   => '\''.date('Y-m-d H:i:s', time()).'\'',
-                    'dirty'     => 0
-            );
+            $queryData = [
+                    'namespace' => '\'' . addslashes($namespace) . '\'',
+                    'shopID' => $shopId,
+                    'localeID' => $localeId,
+                    'name' => '\'' . addslashes($name) . '\'',
+                    'value' => '\'' . addslashes($value) . '\'',
+                    'created' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                    'updated' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                    'dirty' => 0,
+            ];
 
             $values[] = '(' . implode(', ', array_values($queryData)) . ')';
             if (++$counter % 50 == 0) {
                 $this->queries[] = $insertSql . implode(', ', $values) . ';';
-                $values = array();
+                $values = [];
             }
         }
 
@@ -111,29 +136,5 @@ class QueryWriter
         }
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQueries()
-    {
-        return $this->queries;
-    }
-
-    /**
-     * @param boolean $update
-     */
-    public function setUpdate($update)
-    {
-        $this->update = $update;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getUpdate()
-    {
-        return $this->update;
     }
 }

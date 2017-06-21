@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class SearchResult
@@ -43,7 +43,8 @@ class SearchResult
 
     /**
      * SearchResult constructor.
-     * @param int $count
+     *
+     * @param int   $count
      * @param array $data
      */
     public function __construct($count, array $data)

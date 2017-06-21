@@ -649,7 +649,7 @@
 
                     $.publish('plugin/swProductSlider/onLoadItemsSuccess', [ me, response ]);
 
-                    if (typeof callback === 'function') {
+                    if (typeof callback === 'function' && me.itemsCount > 0) {
                         callback.call(me, response);
                     }
                 }

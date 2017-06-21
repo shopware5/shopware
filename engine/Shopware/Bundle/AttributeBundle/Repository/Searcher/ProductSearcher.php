@@ -29,7 +29,7 @@ use Shopware\Models\Article\Detail;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ProductSearcher extends GenericSearcher
@@ -46,11 +46,13 @@ class ProductSearcher extends GenericSearcher
         }
 
         $builder->setAlias('entity');
+
         return $builder;
     }
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)

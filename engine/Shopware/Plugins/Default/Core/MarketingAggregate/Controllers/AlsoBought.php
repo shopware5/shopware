@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\MarketingAggregate\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backend_ExtJs
@@ -39,16 +39,15 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
         return Shopware()->Container()->get('AlsoBought');
     }
 
-
     /**
      * Controller action which can be access over an ajax request.
      * This function is used to get the also bought count.
      */
     public function getAlsoBoughtCountAction()
     {
-        $sql = "SELECT COUNT(id) FROM s_articles";
+        $sql = 'SELECT COUNT(id) FROM s_articles';
         $count = Shopware()->Db()->fetchOne($sql);
-        $this->View()->assign(array('success' => true, 'data' => array('count' => $count)));
+        $this->View()->assign(['success' => true, 'data' => ['count' => $count]]);
     }
 
     /**
@@ -63,12 +62,12 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
         @set_time_limit(1200);
 
         if ($offset == 0) {
-            $sql = "DELETE FROM s_articles_also_bought_ro";
+            $sql = 'DELETE FROM s_articles_also_bought_ro';
             Shopware()->Db()->query($sql);
         }
 
         $this->AlsoBought()->initAlsoBought($offset, $limit);
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

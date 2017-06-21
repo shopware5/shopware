@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Plugins_Core_Debug_Debug extends Enlight_Components_Test_Plugin_TestCase
@@ -35,7 +35,7 @@ class Shopware_Tests_Plugins_Core_Debug_Debug extends Enlight_Components_Test_Pl
     public function testStartDispatch()
     {
         $front = Shopware()->Front();
-        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setClientIp('127.0.0.1');
         $front->setRequest($request);
 

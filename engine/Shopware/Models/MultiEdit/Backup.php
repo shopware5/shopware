@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware SwagMultiEdit Plugin - Backup Model
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagMultiEdit\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -42,7 +42,7 @@ class Backup extends ModelEntity
     /**
      * Unique identifier
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -65,12 +65,11 @@ class Backup extends ModelEntity
     private $operationString;
 
     /**
-     * @var integer $items
+     * @var int
      *
      * @ORM\Column(name="items", type="integer", nullable=false)
      */
     private $items;
-
 
     /**
      * @var \DateTime
@@ -80,7 +79,7 @@ class Backup extends ModelEntity
     private $date;
 
     /**
-     * @var integer $items
+     * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */

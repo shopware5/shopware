@@ -26,7 +26,6 @@ namespace Shopware\Components\Install;
 
 /**
  * Class Database
- * @package Shopware\Components\Install
  */
 class Database
 {
@@ -46,6 +45,7 @@ class Database
     /**
      * @param string $dbName
      * @param string $file
+     *
      * @throws \Exception
      */
     public function importFile($dbName, $file)
@@ -78,7 +78,7 @@ class Database
         $isSecure = $parts['scheme'] === 'https';
         $host = $parts['host'];
         $path = array_key_exists('path', $parts) ? $parts['path'] : '';
-        $host .= array_key_exists('port', $parts) ? ':'.$parts['port'] : '';
+        $host .= array_key_exists('port', $parts) ? ':' . $parts['port'] : '';
 
         if ($path === '/') {
             $path = '';
@@ -86,16 +86,16 @@ class Database
 
         if (!empty($path)) {
             $path = trim($path, '/');
-            $path = '/'.$path;
+            $path = '/' . $path;
         }
 
         $this->connection->query(sprintf('use `%s`', $dbName));
 
         $stmt = $this->connection->prepare('UPDATE `s_core_shops` SET `host` = :host, `base_path` = :path, `secure` = :isSecure, `always_secure` = :isSecure WHERE `main_id` IS NULL');
         $stmt->execute([
-            'host'     => $host,
-            'path'     => $path,
-            'isSecure' => $isSecure
+            'host' => $host,
+            'path' => $path,
+            'isSecure' => $isSecure,
         ]);
     }
 

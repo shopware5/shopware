@@ -33,7 +33,6 @@ use Doctrine\ORM\Query\SqlWalker;
  * Custom query extension to allow Replace() in DQL
  *
  * Class Replace
- * @package Shopware\Components\Model\Query\Mysql
  */
 class Replace extends FunctionNode
 {
@@ -62,14 +61,15 @@ class Replace extends FunctionNode
      * Return plain SQL string
      *
      * @param SqlWalker $sqlWalker
+     *
      * @return string
      */
     public function getSql(SqlWalker $sqlWalker)
     {
         return 'REPLACE(' .
             $this->subjectExpression->dispatch($sqlWalker) . ', ' .
-            $sqlWalker->walkStringPrimary($this->findExpression)  . ', ' .
-            $sqlWalker->walkStringPrimary($this->replaceExpression)   .
+            $sqlWalker->walkStringPrimary($this->findExpression) . ', ' .
+            $sqlWalker->walkStringPrimary($this->replaceExpression) .
         ')';
     }
 }

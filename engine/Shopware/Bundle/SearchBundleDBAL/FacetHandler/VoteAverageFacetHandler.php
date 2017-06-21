@@ -27,19 +27,19 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverageFacetHandler implements FacetHandlerInterface
@@ -65,10 +65,10 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
+     * @param \Doctrine\DBAL\Connection            $connection
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -89,8 +89,9 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
      * Generates the facet data for the passed query, criteria and context object.
      *
      * @param FacetInterface|VoteAverageFacet $facet
-     * @param Criteria $criteria
-     * @param Struct\ShopContextInterface $context
+     * @param Criteria                        $criteria
+     * @param Struct\ShopContextInterface     $context
+     *
      * @return \Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult|null
      */
     public function generateFacet(
@@ -118,7 +119,7 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
 
         $query->select('COUNT(vote.id) as hasVotes');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $data = $statement->fetch(\PDO::FETCH_COLUMN);
 
@@ -128,7 +129,7 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
 
         $activeAverage = null;
         if ($criteria->hasCondition($facet->getName())) {
-            /**@var $condition VoteAverageCondition*/
+            /** @var $condition VoteAverageCondition */
             $condition = $criteria->getCondition($facet->getName());
             $activeAverage = $condition->getAverage();
         }
@@ -154,11 +155,13 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
 
     /**
      * Checks if the passed facet can be handled by this class.
+     *
      * @param FacetInterface $facet
+     *
      * @return bool
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof VoteAverageFacet);
+        return $facet instanceof VoteAverageFacet;
     }
 }

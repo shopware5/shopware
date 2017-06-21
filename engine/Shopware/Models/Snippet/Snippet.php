@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Snippet;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware snippet model represents a single snippet
@@ -43,7 +43,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Snippet extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
+     *
+     * @ORM\Column(name="dirty", type="boolean", nullable=false)
+     */
+    protected $dirty = false;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -52,65 +58,58 @@ class Snippet extends ModelEntity
     private $id;
 
     /**
-     * @var string $namespace
+     * @var string
      *
      * @ORM\Column(name="namespace", type="string", length=255, nullable=false)
      */
     private $namespace;
 
     /**
-     * @var integer $shopid
+     * @var int
      *
      * @ORM\Column(name="shopID", type="integer", nullable=false)
      */
     private $shopId;
 
     /**
-     * @var integer $localeid
+     * @var int
      *
      * @ORM\Column(name="localeID", type="integer", nullable=false)
      */
     private $localeId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $value
+     * @var string
      *
      * @ORM\Column(name="value", type="text", nullable=false)
      */
     private $value;
 
     /**
-     * @var \DateTime $created
+     * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
     /**
-     * @var \DateTime $updated
+     * @var \DateTime
      *
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     private $updated;
 
     /**
-     * @var integer $dirty
-     *
-     * @ORM\Column(name="dirty", type="boolean", nullable=false)
-     */
-    protected $dirty = false;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -121,11 +120,13 @@ class Snippet extends ModelEntity
      * Set namespace
      *
      * @param string $namespace
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
+
         return $this;
     }
 
@@ -142,19 +143,21 @@ class Snippet extends ModelEntity
     /**
      * Set shopId
      *
-     * @param integer $shopid
+     * @param int $shopid
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setShopId($shopid)
     {
         $this->shopId = $shopid;
+
         return $this;
     }
 
     /**
      * Get shopId
      *
-     * @return integer
+     * @return int
      */
     public function getShopId()
     {
@@ -164,19 +167,21 @@ class Snippet extends ModelEntity
     /**
      * Set localeId
      *
-     * @param integer $localeid
+     * @param int $localeid
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setLocaleId($localeid)
     {
         $this->localeId = $localeid;
+
         return $this;
     }
 
     /**
      * Get localeId
      *
-     * @return integer
+     * @return int
      */
     public function getLocaleId()
     {
@@ -187,11 +192,13 @@ class Snippet extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -209,11 +216,13 @@ class Snippet extends ModelEntity
      * Set value
      *
      * @param string $value
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -231,6 +240,7 @@ class Snippet extends ModelEntity
      * Set created
      *
      * @param \DateTime|string $created
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setCreated($created = 'now')
@@ -258,6 +268,7 @@ class Snippet extends ModelEntity
      * Set updated
      *
      * @param \DateTime|string $updated
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setUpdated($updated = 'now')

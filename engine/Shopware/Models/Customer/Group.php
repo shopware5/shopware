@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Customer;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware customer group model represents a single customer group.
@@ -48,11 +48,37 @@ use Doctrine\ORM\Mapping as ORM;
 class Group extends ModelEntity
 {
     /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Discount", mappedBy="group", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $discounts;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerGroup", mappedBy="customerGroup", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\CustomerGroup
+     */
+    protected $attribute;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="group")
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $customers;
+    /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field.
      * Column property for the database field id.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -63,7 +89,7 @@ class Group extends ModelEntity
     /**
      * Contains a alphanumeric key for the group.
      *
-     * @var string $key
+     * @var string
      * @ORM\Column(name="groupkey", type="string", length=5, nullable=false)
      */
     private $key;
@@ -72,7 +98,7 @@ class Group extends ModelEntity
      * Contains the customer group description value.
      * Column property for the database field description
      *
-     * @var string $name
+     * @var string
      * @ORM\Column(name="description", type="string", length=30, nullable=false)
      */
     private $name;
@@ -80,7 +106,8 @@ class Group extends ModelEntity
     /**
      * Contains the tax value for the customer group.
      * Column property for the database field tax
-     * @var integer $tax
+     *
+     * @var int
      * @ORM\Column(name="tax", type="boolean", nullable=false)
      */
     private $tax;
@@ -88,7 +115,8 @@ class Group extends ModelEntity
     /**
      * Contains the customer group tax input.
      * Column property for the database field taxinput
-     * @var integer $taxInput
+     *
+     * @var int
      * @ORM\Column(name="taxinput", type="boolean", nullable=false)
      */
     private $taxInput;
@@ -97,7 +125,7 @@ class Group extends ModelEntity
      * Contains the mode of the customer group.
      * Column property for the database field mode
      *
-     * @var boolean $mode
+     * @var bool
      * @ORM\Column(name="mode", type="boolean", nullable=false)
      */
     private $mode;
@@ -105,7 +133,8 @@ class Group extends ModelEntity
     /**
      * Contains the discount value of the customer group.
      * Column property for the database field discount
-     * @var float $discount
+     *
+     * @var float
      * @ORM\Column(name="discount", type="float", nullable=false)
      */
     private $discount = 0;
@@ -114,7 +143,7 @@ class Group extends ModelEntity
      * Contains the minimum value of an order for this customer group.
      * Column property for the database field minimumorder
      *
-     * @var float $minimumOrder
+     * @var float
      * @ORM\Column(name="minimumorder", type="float", nullable=false)
      */
     private $minimumOrder = 0;
@@ -123,31 +152,10 @@ class Group extends ModelEntity
      * Contains the minimum surcharge value of an order for this customer group.
      * Column property for the database field minimumordersurcharge
      *
-     * @var float $minimumOrderSurcharge
+     * @var float
      * @ORM\Column(name="minimumordersurcharge", type="float", nullable=false)
      */
     private $minimumOrderSurcharge = 0;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Discount", mappedBy="group", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $discounts;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerGroup", mappedBy="customerGroup", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\CustomerGroup
-     */
-    protected $attribute;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="group")
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $customers;
 
     /**
      * Class constructor which initials the discounts association.
@@ -162,7 +170,7 @@ class Group extends ModelEntity
      * doctrine association can be declared over this field.
      * The id field has no setter function, because the value is generated automatically.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -174,11 +182,13 @@ class Group extends ModelEntity
      * Column property for the database field groupkey
      *
      * @param string $key
+     *
      * @return Group
      */
     public function setKey($key)
     {
         $this->key = $key;
+
         return $this;
     }
 
@@ -199,11 +209,13 @@ class Group extends ModelEntity
      * a column property for the database field description.
      *
      * @param string $name
+     *
      * @return Group
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -223,11 +235,13 @@ class Group extends ModelEntity
      * a column property for the database field tax.
      *
      * @param bool $tax
+     *
      * @return Group
      */
     public function setTax($tax)
     {
         $this->tax = (bool) $tax;
+
         return $this;
     }
 
@@ -247,11 +261,13 @@ class Group extends ModelEntity
      * a column property for the database field taxinput.
      *
      * @param bool $taxInput
+     *
      * @return Group
      */
     public function setTaxInput($taxInput)
     {
         $this->taxInput = (bool) $taxInput;
+
         return $this;
     }
 
@@ -270,12 +286,14 @@ class Group extends ModelEntity
      * Setter function for the mode property which is
      * a column property for the database field mode.
      *
-     * @param integer $mode
+     * @param int $mode
+     *
      * @return Group
      */
     public function setMode($mode)
     {
         $this->mode = $mode;
+
         return $this;
     }
 
@@ -283,7 +301,7 @@ class Group extends ModelEntity
      * Getter function for the mode property which is
      * a column property for the database field mode.
      *
-     * @return integer
+     * @return int
      */
     public function getMode()
     {
@@ -295,11 +313,13 @@ class Group extends ModelEntity
      * a column property for the database field discount.
      *
      * @param float $discount
+     *
      * @return Group
      */
     public function setDiscount($discount)
     {
         $this->discount = $discount;
+
         return $this;
     }
 
@@ -319,11 +339,13 @@ class Group extends ModelEntity
      * a column property for the database field minimumorder.
      *
      * @param float $minimumOrder
+     *
      * @return Group
      */
     public function setMinimumOrder($minimumOrder)
     {
         $this->minimumOrder = $minimumOrder;
+
         return $this;
     }
 
@@ -343,11 +365,13 @@ class Group extends ModelEntity
      * a column property for the database field minimumordersurcharge.
      *
      * @param float $minimumOrderSurcharge
+     *
      * @return Group
      */
     public function setMinimumOrderSurcharge($minimumOrderSurcharge)
     {
         $this->minimumOrderSurcharge = $minimumOrderSurcharge;
+
         return $this;
     }
 
@@ -372,6 +396,7 @@ class Group extends ModelEntity
 
     /**
      * @param $discounts \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Customer\Discount[]
+     *
      * @return Group
      */
     public function setDiscounts($discounts)
@@ -389,6 +414,7 @@ class Group extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\CustomerGroup|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\CustomerGroup
      */
     public function setAttribute($attribute)
@@ -401,14 +427,14 @@ class Group extends ModelEntity
      */
     public function toArray()
     {
-        return array(
+        return [
             'id' => $this->getId(),
             'key' => $this->getKey(),
             'tax' => $this->getTax(),
             'mode' => $this->getMode(),
             'minimumorder' => $this->getMinimumOrder(),
             'minimumordersurcharge' => $this->getMinimumOrderSurcharge(),
-            'basketdiscount' => $this->getDiscount()
-        );
+            'basketdiscount' => $this->getDiscount(),
+        ];
     }
 }

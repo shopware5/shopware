@@ -33,9 +33,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Service
- */
 class AccountManagerService
 {
     /**
@@ -64,17 +61,18 @@ class AccountManagerService
     private $guzzleHttpClient;
 
     /**
-     * @var String
+     * @var string
      */
     private $apiEndPoint;
 
     /**
-     * @param StoreClient $storeClient
-     * @param StructHydrator $structHydrator
+     * @param StoreClient                          $storeClient
+     * @param StructHydrator                       $structHydrator
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param ModelManager $entityManager
-     * @param GuzzleFactory $guzzleFactory
-     * @param String $apiEndPoint
+     * @param ModelManager                         $entityManager
+     * @param GuzzleFactory                        $guzzleFactory
+     * @param string                               $apiEndPoint
+     *
      * @internal param ClientInterface $guzzleHttpClient
      */
     public function __construct(
@@ -109,7 +107,8 @@ class AccountManagerService
      * Pings SBP to see if a connection is available and the service is up
      *
      * @throws \Exception
-     * @return boolean
+     *
+     * @return bool
      */
     public function pingServer()
     {
@@ -130,17 +129,19 @@ class AccountManagerService
      * @param string $shopwareId
      * @param string $email
      * @param string $password
-     * @param int $localeId
-     * @return array
+     * @param int    $localeId
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function registerAccount($shopwareId, $email, $password, $localeId)
     {
         $postData = [
             'shopwareId' => $shopwareId,
-            'email'      => $email,
-            'password'   => $password,
-            'localeId'   => $localeId
+            'email' => $email,
+            'password' => $password,
+            'localeId' => $localeId,
         ];
 
         try {
@@ -153,13 +154,14 @@ class AccountManagerService
     /**
      * Gets a list of locales supported by the SBP
      *
-     * @return LocaleStruct[] array of locale details
      * @throws \Exception
+     *
+     * @return LocaleStruct[] array of locale details
      */
     public function getLocales()
     {
         try {
-            $responseBody = $this->storeClient->doGetRequest("/locales");
+            $responseBody = $this->storeClient->doGetRequest('/locales');
         } catch (StoreException $se) {
             throw $this->translateExceptionMessage($se);
         }
@@ -171,15 +173,17 @@ class AccountManagerService
      * Get the list of shops (and details) associated to the given user
      *
      * @param AccessTokenStruct $token
-     * @return array Array of shop details
+     *
      * @throws \Exception
+     *
+     * @return array Array of shop details
      */
     public function getShops(AccessTokenStruct $token)
     {
         $query = ['shopwareId' => $token->getShopwareId()];
 
         try {
-            return $this->storeClient->doAuthGetRequest($token, "/shops", $query);
+            return $this->storeClient->doAuthGetRequest($token, '/shops', $query);
         } catch (StoreException $se) {
             throw $this->translateExceptionMessage($se);
         }
@@ -189,17 +193,19 @@ class AccountManagerService
      * Requests the domain hash and filename needed to generate the
      * validation key, so that the current domain can be validated
      *
-     * @param string $domain
+     * @param string            $domain
      * @param AccessTokenStruct $token
-     * @return array Filename and domain hash of the domain validation file
+     *
      * @throws \Exception
+     *
+     * @return array Filename and domain hash of the domain validation file
      */
     public function getDomainHash($domain, AccessTokenStruct $token)
     {
         $postData = ['domain' => $domain];
 
         try {
-            return $this->storeClient->doAuthPostRequest($token, "/domainhashes", $postData);
+            return $this->storeClient->doAuthPostRequest($token, '/domainhashes', $postData);
         } catch (StoreException $se) {
             throw $this->translateExceptionMessage($se);
         }
@@ -208,22 +214,24 @@ class AccountManagerService
     /**
      * Requests the validation of the current installation's domain
      *
-     * @param string $domain
-     * @param string $shopwareVersion Current Shopware version
+     * @param string            $domain
+     * @param string            $shopwareVersion Current Shopware version
      * @param AccessTokenStruct $token
-     * @return array Result of the validation operation (empty if successful)
+     *
      * @throws \Exception
+     *
+     * @return array Result of the validation operation (empty if successful)
      */
     public function verifyDomain($domain, $shopwareVersion, AccessTokenStruct $token)
     {
         $postData = [
             'shopwareId' => $token->getShopwareId(),
             'domain' => $domain,
-            'shopwareVersion' => $shopwareVersion
+            'shopwareVersion' => $shopwareVersion,
         ];
 
         try {
-            return $this->storeClient->doAuthPostRequest($token, "/domainverifications", $postData);
+            return $this->storeClient->doAuthPostRequest($token, '/domainverifications', $postData);
         } catch (StoreException $se) {
             throw $this->translateExceptionMessage($se);
         }
@@ -234,8 +242,10 @@ class AccountManagerService
      *
      * @param string $shopwareId
      * @param string $password
-     * @return AccessTokenStruct Token to access the API
+     *
      * @throws \Exception
+     *
+     * @return AccessTokenStruct Token to access the API
      */
     public function getToken($shopwareId = null, $password = null)
     {
@@ -248,6 +258,7 @@ class AccountManagerService
 
     /**
      * @param StoreException $exception
+     *
      * @return \Exception
      */
     private function translateExceptionMessage(StoreException $exception)

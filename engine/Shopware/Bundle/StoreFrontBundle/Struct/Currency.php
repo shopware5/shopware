@@ -28,7 +28,7 @@ use Shopware\Models\Shop\Currency as CurrencyEntity;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Currency extends Extendable implements \JsonSerializable
@@ -65,6 +65,7 @@ class Currency extends Extendable implements \JsonSerializable
 
     /**
      * @param CurrencyEntity $currency
+     *
      * @return Currency
      */
     public static function createFromCurrencyEntity(CurrencyEntity $currency)
@@ -161,7 +162,7 @@ class Currency extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

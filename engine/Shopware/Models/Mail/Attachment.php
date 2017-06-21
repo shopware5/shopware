@@ -68,15 +68,15 @@ class Attachment extends File
     protected $mail;
 
     /**
-     * @param \Shopware\Models\Mail\Mail $mail
-     * @param \Shopware\Models\Media\Media $media
+     * @param \Shopware\Models\Mail\Mail      $mail
+     * @param \Shopware\Models\Media\Media    $media
      * @param null|\Shopware\Models\Shop\Shop $shop
      */
     public function __construct(\Shopware\Models\Mail\Mail $mail, \Shopware\Models\Media\Media $media, \Shopware\Models\Shop\Shop $shop = null)
     {
-        $this->mail  = $mail;
+        $this->mail = $mail;
         $this->media = $media;
-        $this->shop  = $shop;
+        $this->shop = $shop;
     }
 
     /**

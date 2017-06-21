@@ -21,15 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle;
 
-use Elasticsearch\Client;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Class FieldMapping
- * @package Shopware\Bundle\ESIndexingBundle
  */
 class FieldMapping implements FieldMappingInterface
 {
@@ -45,7 +44,7 @@ class FieldMapping implements FieldMappingInterface
 
     /**
      * @param ShopAnalyzerInterface $shopAnalyzer
-     * @param TextMappingInterface $textMapping
+     * @param TextMappingInterface  $textMapping
      */
     public function __construct(
         ShopAnalyzerInterface $shopAnalyzer,
@@ -57,17 +56,20 @@ class FieldMapping implements FieldMappingInterface
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return string
      */
     public function getPriceField(ShopContextInterface $context)
     {
         $key = $context->getCurrentCustomerGroup()->getKey();
         $currency = $context->getCurrency()->getId();
+
         return 'calculatedPrices.' . $key . '_' . $currency . '.calculatedPrice';
     }
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     public function getLanguageField(Shop $shop)

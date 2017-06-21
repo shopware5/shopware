@@ -29,12 +29,14 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 {
     /**
      * List with auth adapters
+     *
      * @var array
      */
-    protected $_adapter = array();
+    protected $_adapter = [];
 
     /**
      * Adapter that is current active - has a valid user session
+     *
      * @var null
      */
     protected $_baseAdapter = null; // Current active adapter
@@ -43,6 +45,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      * Get all adapters or certain one
      *
      * @param null $index
+     *
      * @return array|Zend_Auth_Adapter_Interface
      */
     public function getAdapter($index = null)
@@ -50,17 +53,21 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
         if (isset($index)) {
             return $this->_adapter[$index];
         }
+
         return $this->_adapter;
     }
 
     /**
      * Add adapter to list
+     *
      * @param Zend_Auth_Adapter_Interface $adapter
+     *
      * @return Shopware_Components_Auth
      */
     public function addAdapter(Zend_Auth_Adapter_Interface $adapter)
     {
         $this->_adapter[] = $adapter;
+
         return $this;
     }
 
@@ -69,6 +76,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      *
      * @param string $username
      * @param string $password
+     *
      * @return Zend_Auth_Result
      */
     public function login($username, $password)
@@ -82,10 +90,12 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
             $result = $this->authenticate($adapter);
             if ($result->isValid()) {
                 $this->setBaseAdapter($adapter);
+
                 return $result;
             }
         }
         $this->setBaseAdapter(null);
+
         return $result;
     }
 
@@ -93,11 +103,13 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      * Set current active adapter
      *
      * @param $adapter
+     *
      * @return \Shopware_Components_Auth
      */
     public function setBaseAdapter($adapter)
     {
         $this->_baseAdapter = $adapter;
+
         return $this;
     }
 
@@ -115,6 +127,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      * Do a authentication approve with a defined adapter
      *
      * @param null|Zend_Auth_Adapter_Interface $adapter
+     *
      * @return Zend_Auth_Result
      */
     public function authenticate(Zend_Auth_Adapter_Interface $adapter = null)
@@ -140,6 +153,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      * Refresh authentication - for example expire date -
      *
      * @param null|Zend_Auth_Adapter_Interface $adapter
+     *
      * @return mixed
      */
     public function refresh(Zend_Auth_Adapter_Interface $adapter = null)
@@ -158,7 +172,9 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 
     /**
      * Get an instance from this object
+     *
      * @static
+     *
      * @return Shopware_Components_Auth
      */
     public static function getInstance()
@@ -175,6 +191,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      *
      * @param string $username
      * @param string $password
+     *
      * @return bool
      */
     public function isPasswordValid($username, $password)
@@ -190,11 +207,13 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
             $result = $this->authenticate($adapter);
             if ($result->isValid()) {
                 $this->setStorage($storage);
+
                 return true;
             }
         }
 
         $this->setStorage($storage);
+
         return false;
     }
 }

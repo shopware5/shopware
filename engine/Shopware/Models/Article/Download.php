@@ -24,19 +24,35 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_articles_downloads")
  * @ORM\Entity
  */
 class Download extends ModelEntity
 {
     /**
-     * @var integer $id
+     * OWNING SIDE
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="downloads")
+     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Article\Article
+     */
+    protected $article;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ArticleDownload
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,50 +62,36 @@ class Download extends ModelEntity
 
     /**
      * @ORM\Column(name="articleID", type="integer", nullable=false)
+     *
      * @var
      */
     private $articleId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $file
+     * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     private $file;
 
     /**
-     * @var float $size
+     * @var float
      *
      * @ORM\Column(name="size", type="float", nullable=false)
      */
     private $size;
 
     /**
-     * OWNING SIDE
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="downloads")
-     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     * @var \Shopware\Models\Article\Article
-     */
-    protected $article;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
-     * @var \Shopware\Models\Attribute\ArticleDownload
-     */
-    protected $attribute;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -100,11 +102,13 @@ class Download extends ModelEntity
      * Set article
      *
      * @param Article $article
+     *
      * @return Download
      */
     public function setArticle($article)
     {
         $this->article = $article;
+
         return $this;
     }
 
@@ -122,11 +126,13 @@ class Download extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Download
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -144,11 +150,13 @@ class Download extends ModelEntity
      * Set file
      *
      * @param string $file
+     *
      * @return Download
      */
     public function setFile($file)
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -166,11 +174,13 @@ class Download extends ModelEntity
      * Set size
      *
      * @param float $size
+     *
      * @return Download
      */
     public function setSize($size)
     {
         $this->size = $size;
+
         return $this;
     }
 
@@ -194,6 +204,7 @@ class Download extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ArticleDownload|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ArticleDownload
      */
     public function setAttribute($attribute)

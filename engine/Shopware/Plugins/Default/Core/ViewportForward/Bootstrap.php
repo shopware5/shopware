@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -114,10 +112,10 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
 
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => false,
-            'update' => true
-        );
+            'update' => true,
+        ];
     }
 }

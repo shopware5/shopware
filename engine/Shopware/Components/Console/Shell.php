@@ -28,7 +28,7 @@ use Symfony\Component\Console\Shell as BaseShell;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shell extends BaseShell
@@ -50,6 +50,6 @@ class Shell extends BaseShell
                     |_|
 </info>
 EOF
-        .parent::getHeader();
+        . parent::getHeader();
     }
 }

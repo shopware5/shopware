@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CronListCommand extends ShopwareCommand
@@ -46,7 +46,6 @@ class CronListCommand extends ShopwareCommand
 The <info>%command.name%</info> lists cronjobs.
 EOF
             );
-        ;
     }
 
     /**
@@ -58,21 +57,21 @@ EOF
 
         /** @var $manager $manager */
         $manager = $this->container->get('cron');
-        $rows = array();
+        $rows = [];
 
         foreach ($manager->getAllJobs() as $job) {
-            $rows[] = array(
+            $rows[] = [
                 $job->getName(),
                 $job->getAction(),
                 $job->getActive() ? 'Yes' : 'No',
                 $job->getInterval(),
                 $job->getNext(),
-                $job->getEnd()
-            );
+                $job->getEnd(),
+            ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Name', 'Action', 'Active', 'Interval', 'Next run', 'Last run'))
+        $table->setHeaders(['Name', 'Action', 'Active', 'Interval', 'Next run', 'Last run'])
               ->setRows($rows);
 
         $table->render($output);

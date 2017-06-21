@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class CategoryStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class CategoryStruct implements \JsonSerializable
 {
@@ -82,7 +81,6 @@ class CategoryStruct implements \JsonSerializable
         $this->name = $name;
     }
 
-
     /**
      * @return int
      */
@@ -116,7 +114,7 @@ class CategoryStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

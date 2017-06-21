@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EventManagerTest extends TestCase
@@ -62,7 +62,7 @@ class EventManagerTest extends TestCase
 
         $result = $this->eventManager->collect(
             'Example',
-            new ArrayCollection(array('foo', 'bar'))
+            new ArrayCollection(['foo', 'bar'])
         );
 
         $this->assertCount(3, $result->getValues());
@@ -90,7 +90,6 @@ class EventManagerTest extends TestCase
             100
         );
         $this->eventManager->registerListener($handler1);
-
 
         $result = $this->eventManager->collect(
             'Example',
@@ -121,7 +120,6 @@ class EventManagerTest extends TestCase
             1
         );
         $this->eventManager->registerListener($handler1);
-
 
         $handler2 = new \Enlight_Event_Handler_Default(
             'Example',
@@ -162,20 +160,19 @@ class EventManagerTest extends TestCase
         );
     }
 
-
     public function testAppendEventWithArray()
     {
         $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithArray',
-            array(
+            [
                 $this,
-                'appendEventWithArrayListener'
-            )
+                'appendEventWithArrayListener',
+            ]
         );
 
         $this->eventManager->registerListener($event);
 
-        $values = new ArrayCollection(array('foo', 'bar'));
+        $values = new ArrayCollection(['foo', 'bar']);
         $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithArray',
             $values
@@ -184,35 +181,35 @@ class EventManagerTest extends TestCase
         $this->assertCount(4, $values->getValues());
         $this->assertEquals('foo', $values->get(0));
         $this->assertEquals('bar', $values->get(1));
-        $this->assertEquals(array('foo2'), $values->get(2));
+        $this->assertEquals(['foo2'], $values->get(2));
         $this->assertEquals('bar2', $values->get(3));
     }
 
     public function appendEventWithArrayListener(\Enlight_Event_EventArgs $args)
     {
-        return new ArrayCollection(array(
-            array('foo2'),
-            'bar2'
-        ));
+        return new ArrayCollection([
+            ['foo2'],
+            'bar2',
+        ]);
     }
 
     public function testAppendEventWithSingleValue()
     {
-        $values = new ArrayCollection(array('foo', 'bar'));
+        $values = new ArrayCollection(['foo', 'bar']);
 
         $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithSingleValue',
-            array(
+            [
                 $this,
-                'appendEventWithSingleValueListener'
-            )
+                'appendEventWithSingleValueListener',
+            ]
         );
         $this->eventManager->registerListener($event);
 
         $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithSingleValue',
             $values,
-            array()
+            []
         );
 
         $this->assertCount(3, $values);
@@ -228,21 +225,21 @@ class EventManagerTest extends TestCase
 
     public function testAppendEventWithNullValue()
     {
-        $values = new ArrayCollection(array('foo', 'bar'));
+        $values = new ArrayCollection(['foo', 'bar']);
 
         $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNullValue',
-            array(
+            [
                 $this,
-                'appendEventWithNullValueListener'
-            )
+                'appendEventWithNullValueListener',
+            ]
         );
         $this->eventManager->registerListener($event);
 
         $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNullValue',
             $values,
-            array()
+            []
         );
         $this->assertCount(2, $values->getValues());
         $this->assertEquals('foo', $values->get(0));
@@ -254,17 +251,16 @@ class EventManagerTest extends TestCase
         return null;
     }
 
-
     public function testAppendEventWithBooleanValue()
     {
-        $values = new ArrayCollection(array('foo', 'bar'));
+        $values = new ArrayCollection(['foo', 'bar']);
 
         $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithBooleanValue',
-            array(
+            [
                 $this,
-                'appendEventWithBooleanValueListener'
-            )
+                'appendEventWithBooleanValueListener',
+            ]
         );
         $this->eventManager->registerListener($event);
 
@@ -281,14 +277,14 @@ class EventManagerTest extends TestCase
 
     public function appendEventWithBooleanValueListener(\Enlight_Event_EventArgs $args)
     {
-        return new ArrayCollection(array(
-            true
-        ));
+        return new ArrayCollection([
+            true,
+        ]);
     }
 
     public function testAppendEventWithNoListener()
     {
-        $values = new ArrayCollection(array('foo', 'bar'));
+        $values = new ArrayCollection(['foo', 'bar']);
         $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNoListener',
             $values
@@ -345,21 +341,19 @@ class EventManagerTest extends TestCase
     }
 }
 
-
-
 class EventSubsciberTest implements SubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'eventName0' => 'callback0',
-            'eventName1' => array('callback1'),
-            'eventName2' => array('callback2', 10),
-            'eventName3' => array(
-                array('callback3_0', 5),
-                array('callback3_1'),
-                array('callback3_2')
-            )
-        );
+            'eventName1' => ['callback1'],
+            'eventName2' => ['callback2', 10],
+            'eventName3' => [
+                ['callback3_0', 5],
+                ['callback3_1'],
+                ['callback3_2'],
+            ],
+        ];
     }
 }

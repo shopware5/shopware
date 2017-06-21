@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @category  Shopware
- * @package   Components\DependencyInjection
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class RegisterControllerCompilerPassTest extends TestCase

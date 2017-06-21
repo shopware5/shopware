@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeCacheGenerateCommand extends ShopwareCommand
@@ -61,7 +61,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
         $repository = $this->container->get('models')->getRepository(Shop::class);
 
         $shopIds = $input->getOption('shopId');
-        
+
         /** @var Shop[] $shopsWithThemes */
         $shopsWithThemes = $repository->getShopsWithThemes()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
@@ -73,6 +73,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
 
         if (empty($shopsWithThemes)) {
             $output->writeln('No theme shops found');
+
             return;
         }
 

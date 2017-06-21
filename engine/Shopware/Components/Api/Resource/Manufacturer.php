@@ -33,7 +33,7 @@ use Shopware\Models\Media\Media as MediaModel;
  * Supplier API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manufacturer extends Resource
@@ -46,12 +46,13 @@ class Manufacturer extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Article\Supplier');
     }
 
-
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Article\Supplier
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Article\Supplier
      */
     public function getOne($id)
     {
@@ -74,13 +75,14 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -95,13 +97,15 @@ class Manufacturer extends Resource
         //returns the manufacturer data
         $manufacturers = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $manufacturers, 'total' => $totalResult);
+        return ['data' => $manufacturers, 'total' => $totalResult];
     }
 
     /**
      * @param array $params
-     * @return \Shopware\Models\Article\Supplier
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
+     *
+     * @return \Shopware\Models\Article\Supplier
      */
     public function create(array $params)
     {
@@ -132,12 +136,14 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Article\Supplier
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     *
+     * @return \Shopware\Models\Article\Supplier
      */
     public function update($id, array $params)
     {
@@ -170,9 +176,11 @@ class Manufacturer extends Resource
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Article\Supplier
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Article\Supplier
      */
     public function delete($id)
     {
@@ -197,19 +205,21 @@ class Manufacturer extends Resource
 
     /**
      * @param array $params
-     * @return array
+     *
      * @throws ApiException\CustomValidationException
+     *
+     * @return array
      */
     private function prepareManufacturerData(array $params)
     {
         if (!isset($params['name'])) {
-            throw new ApiException\CustomValidationException("A name is required");
+            throw new ApiException\CustomValidationException('A name is required');
         }
 
         if (!empty($params['attribute'])) {
             foreach ($params['attribute'] as $key => $value) {
                 if (is_numeric($key)) {
-                    $params['attribute']['attribute'.$key] = $value;
+                    $params['attribute']['attribute' . $key] = $value;
                     unset($params[$key]);
                 }
             }
@@ -219,10 +229,12 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param array $data
+     * @param array             $data
      * @param ManufacturerModel $manufacturerModel
-     * @return array
+     *
      * @throws ApiException\CustomValidationException
+     *
+     * @return array
      */
     private function prepareMediaData(array $data, ManufacturerModel $manufacturerModel)
     {
@@ -243,7 +255,7 @@ class Manufacturer extends Resource
             );
 
             if (!($media instanceof MediaModel)) {
-                throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $data['image']['mediaId']));
+                throw new ApiException\CustomValidationException(sprintf('Media by mediaId %s not found', $data['image']['mediaId']));
             }
         }
 

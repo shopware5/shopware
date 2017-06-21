@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\FacetResult
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TreeFacetResult extends Extendable implements FacetResultInterface
@@ -66,11 +66,11 @@ class TreeFacetResult extends Extendable implements FacetResultInterface
     private $template = null;
 
     /**
-     * @param string $facetName
-     * @param string $fieldName
-     * @param boolean $active
-     * @param string $label
-     * @param TreeItem[] $values
+     * @param string      $facetName
+     * @param string      $fieldName
+     * @param bool        $active
+     * @param string      $label
+     * @param TreeItem[]  $values
      * @param null|string $template
      * @param Attribute[] $attributes
      */
@@ -109,7 +109,7 @@ class TreeFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -133,7 +133,7 @@ class TreeFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplate()
     {

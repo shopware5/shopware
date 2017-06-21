@@ -35,6 +35,7 @@ class DetachedShop extends Shop
 {
     /**
      * @param Shop $shop
+     *
      * @return DetachedShop
      */
     public static function createFromShop(Shop $shop)

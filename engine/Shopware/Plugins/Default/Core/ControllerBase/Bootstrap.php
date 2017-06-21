@@ -39,6 +39,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             'onPostDispatch',
             100
         );
+
         return true;
     }
 
@@ -96,6 +97,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getBasketAmount()
     {
         $amount = Shopware()->Modules()->Basket()->sGetAmount();
+
         return empty($amount) ? 0 : array_shift($amount);
     }
 
@@ -103,23 +105,25 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      * Returns current category id
      *
      * @param $default
+     *
      * @return int
      */
     public function getCategoryCurrent($default)
     {
         if (!empty(Shopware()->System()->_GET['sCategory'])) {
-            return (int)Shopware()->System()->_GET['sCategory'];
+            return (int) Shopware()->System()->_GET['sCategory'];
         } elseif (Shopware()->Front()->Request()->get('sCategory')) {
-            return (int)Shopware()->Front()->Request()->get('sCategory');
-        } else {
-            return (int)$default;
+            return (int) Shopware()->Front()->Request()->get('sCategory');
         }
+
+        return (int) $default;
     }
 
     /**
      * Return current categories
      *
      * @param $parentId
+     *
      * @return array
      */
     public function getCategories($parentId)
@@ -130,9 +134,10 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return cms menu items
      *
-     * @param   null|int $shopId
-     * @param   null|int $activePageId
-     * @return  array
+     * @param null|int $shopId
+     * @param null|int $activePageId
+     *
+     * @return array
      */
     public function getMenu($shopId = null, $activePageId = null)
     {
@@ -151,30 +156,32 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      * Return box campaigns items
      *
      * @param $parentId
+     *
      * @return array
      */
     public function getCampaigns($parentId)
     {
-        $campaigns = array(
-            'leftTop' => array(),
-            'leftMiddle' => array(),
-            'leftBottom' => array(),
-            'rightMiddle' => array(),
-            'rightBottom' => array()
-        );
+        $campaigns = [
+            'leftTop' => [],
+            'leftMiddle' => [],
+            'leftBottom' => [],
+            'rightMiddle' => [],
+            'rightBottom' => [],
+        ];
 
         foreach ($campaigns as $position => $content) {
             $campaigns[$position] = Shopware()->Modules()->Marketing()->sCampaignsGetList(
                 $parentId, $position
             );
         }
+
         return $campaigns;
     }
 
     /**
      * Gets the Blog articles for the index page
      *
-     * @return Array | blog article array
+     * @return array | blog article array
      */
     public function getBlog()
     {
@@ -183,36 +190,35 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         if (!empty(Shopware()->Config()->BlogCategory)) {
             /** @var $repository \Shopware\Models\Blog\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
-            $blogArticlesQuery = $repository->getListQuery(array(Shopware()->Config()->BlogCategory), 0,
+            $blogArticlesQuery = $repository->getListQuery([Shopware()->Config()->BlogCategory], 0,
                 Shopware()->Config()->BlogLimit + 1);
 
             $blogArticleData = $blogArticlesQuery->getArrayResult();
 
             //adding thumbnails to the blog article
             foreach ($blogArticleData as $key => $blogArticle) {
-                /** @var $mediaModel \Shopware\Models\Media\Media */
-                if (!empty($blogArticle["media"][0]['mediaId'])) {
+                /* @var $mediaModel \Shopware\Models\Media\Media */
+                if (!empty($blogArticle['media'][0]['mediaId'])) {
                     $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media',
-                        $blogArticle["media"][0]['mediaId']);
+                        $blogArticle['media'][0]['mediaId']);
                     if ($mediaModel != null) {
-                        $blogArticleData[$key]["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
-                        $blogArticleData[$key]["preview"]["srchd"] = array_values($mediaModel->getHighDpiThumbnails());
+                        $blogArticleData[$key]['preview']['thumbNails'] = array_values($mediaModel->getThumbnails());
+                        $blogArticleData[$key]['preview']['srchd'] = array_values($mediaModel->getHighDpiThumbnails());
                     }
                 }
 
                 //adding vote average
-                $avgVoteQuery = $repository->getAverageVoteQuery($blogArticle["id"]);
-                $blogArticleData[$key]["sVoteAverage"] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
+                $avgVoteQuery = $repository->getAverageVoteQuery($blogArticle['id']);
+                $blogArticleData[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
                 //adding number of comments to the blog article
-                $blogArticleData[$key]["numberOfComments"] = count($blogArticle["comments"]);
+                $blogArticleData[$key]['numberOfComments'] = count($blogArticle['comments']);
             }
-            $blog["sArticles"] = $blogArticleData;
+            $blog['sArticles'] = $blogArticleData;
         }
 
         return $blog;
     }
-
 
     /**
      * Returns capabilities
@@ -221,10 +227,10 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => false,
-            'update' => true
-        );
+            'update' => true,
+        ];
     }
 }

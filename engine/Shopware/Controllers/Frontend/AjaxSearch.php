@@ -33,8 +33,6 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 {
     /**
      * Index action - get search term from request (sSearch) and start search
-     *
-     * @return void
      */
     public function indexAction()
     {
@@ -51,13 +49,13 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             return;
         }
 
-        /**@var ShopContextInterface $context */
+        /** @var ShopContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createAjaxSearchCriteria($this->Request(), $context);
 
-        /**@var ProductSearchResult $result */
+        /** @var ProductSearchResult $result */
         $result = $this->get('shopware_search.product_search')->search($criteria, $context);
 
         if ($result->getTotalCount() > 0) {
@@ -66,13 +64,14 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             $this->View()->assign('sSearchRequest', ['sSearch' => $term]);
             $this->View()->assign('sSearchResults', [
                 'sResults' => $articles,
-                'sArticlesCount' => $result->getTotalCount()
+                'sArticlesCount' => $result->getTotalCount(),
             ]);
         }
     }
 
     /**
      * @param ProductSearchResult $result
+     *
      * @return array
      */
     private function convertProducts(ProductSearchResult $result)
@@ -85,7 +84,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
                 'controller' => 'detail',
                 'sArticle' => $product->getId(),
                 'number' => $product->getNumber(),
-                'title' => $product->getName()
+                'title' => $product->getName(),
             ]);
             $article['name'] = $product->getName();
             $articles[] = $article;

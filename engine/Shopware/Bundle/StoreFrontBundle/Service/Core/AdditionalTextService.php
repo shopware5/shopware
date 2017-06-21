@@ -26,13 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AdditionalTextService implements AdditionalTextServiceInterface
@@ -51,7 +51,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function buildAdditionalText(ListProduct $product, ShopContextInterface $context)
     {
@@ -61,7 +61,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
@@ -81,7 +81,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
             $context
         );
 
-        /**@var $required ListProduct[]*/
+        /** @var $required ListProduct[] */
         foreach ($required as &$product) {
             if (!array_key_exists($product->getNumber(), $configurations)) {
                 continue;
@@ -97,6 +97,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
 
     /**
      * @param Group[] $configurations
+     *
      * @return string
      */
     private function buildTextDynamic($configurations)
@@ -107,6 +108,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
                 $text[] = $option->getName();
             }
         }
+
         return implode(' ', $text);
     }
 }

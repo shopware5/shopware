@@ -21,14 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-
 class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
@@ -97,18 +97,18 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
-            $this->assertArrayHasKey("sSepaIban", $validationResult['sErrorFlag']);
-            $this->assertArrayHasKey("sSepaBic", $validationResult['sErrorFlag']);
-            $this->assertArrayHasKey("sSepaBankName", $validationResult['sErrorFlag']);
+            $this->assertArrayHasKey('sSepaIban', $validationResult['sErrorFlag']);
+            $this->assertArrayHasKey('sSepaBic', $validationResult['sErrorFlag']);
+            $this->assertArrayHasKey('sSepaBankName', $validationResult['sErrorFlag']);
         }
     }
 
     public function testValidateFaultyIban()
     {
         $data = [
-            "sSepaIban" => "Some Invalid Iban",
-            "sSepaBic" => "Some Valid Bic",
-            "sSepaBankName" => "Some Valid Bank Name"
+            'sSepaIban' => 'Some Invalid Iban',
+            'sSepaBic' => 'Some Valid Bic',
+            'sSepaBankName' => 'Some Valid Bank Name',
         ];
 
         $validationResult = self::$sepaPaymentMethod->validate($data);
@@ -118,17 +118,17 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
             $this->assertContains(Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN'), $validationResult['sErrorMessages']);
-            $this->assertFalse(array_key_exists("sSepaBic", $validationResult['sErrorFlag']));
-            $this->assertFalse(array_key_exists("sSepaBankName", $validationResult['sErrorFlag']));
+            $this->assertFalse(array_key_exists('sSepaBic', $validationResult['sErrorFlag']));
+            $this->assertFalse(array_key_exists('sSepaBankName', $validationResult['sErrorFlag']));
         }
     }
 
     public function testValidateCorrectData()
     {
         $data = [
-            "sSepaIban" => "AL47 2121 1009 0000 0002 3569 8741",
-            "sSepaBic" => "Some Valid Bic",
-            "sSepaBankName" => "Some Valid Bank Name"
+            'sSepaIban' => 'AL47 2121 1009 0000 0002 3569 8741',
+            'sSepaBic' => 'Some Valid Bic',
+            'sSepaBankName' => 'Some Valid Bank Name',
         ];
 
         $validationResult = self::$sepaPaymentMethod->validate($data);
@@ -153,7 +153,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
         $paymentInstance = Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
-            ->findOneBy(array('order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId));
+            ->findOneBy(['order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId]);
 
         $this->assertInstanceOf('Shopware\Models\Payment\PaymentInstance', $paymentInstance);
         $this->assertInstanceOf('Shopware\Models\Order\Order', $paymentInstance->getOrder());
@@ -191,20 +191,20 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
      */
     public function testSavePaymentDataUpdatePrevious()
     {
-        $this->Request()->setQuery(array(
-            "sSepaIban" => "AL47 2121 1009 0000 0002 3569 8741",
-            "sSepaBic" => "Some Valid Bic",
-            "sSepaBankName" => "Some Valid Bank Name",
-            "sSepaUseBillingData" => "true"
-        ));
+        $this->Request()->setQuery([
+            'sSepaIban' => 'AL47 2121 1009 0000 0002 3569 8741',
+            'sSepaBic' => 'Some Valid Bic',
+            'sSepaBankName' => 'Some Valid Bank Name',
+            'sSepaUseBillingData' => 'true',
+        ]);
         Shopware()->Front()->setRequest($this->Request());
 
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
         $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
-        $this->assertEquals("Some Valid Bank Name", $lastPayment['sSepaBankName']);
-        $this->assertEquals("Some Valid Bic", $lastPayment['sSepaBic']);
-        $this->assertEquals("AL47212110090000000235698741", $lastPayment['sSepaIban']);
+        $this->assertEquals('Some Valid Bank Name', $lastPayment['sSepaBankName']);
+        $this->assertEquals('Some Valid Bic', $lastPayment['sSepaBic']);
+        $this->assertEquals('AL47212110090000000235698741', $lastPayment['sSepaIban']);
         $this->assertEquals(true, $lastPayment['sSepaUseBillingData']);
     }
 
@@ -222,7 +222,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
         $paymentInstance = Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
-            ->findOneBy(array('order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId));
+            ->findOneBy(['order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId]);
 
         $this->assertInstanceOf('Shopware\Models\Payment\PaymentInstance', $paymentInstance);
         $this->assertInstanceOf('Shopware\Models\Order\Order', $paymentInstance->getOrder());
@@ -230,14 +230,14 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $this->assertInstanceOf('Shopware\Models\Payment\Payment', $paymentInstance->getPaymentMean());
         $this->assertEquals('sepa', $paymentInstance->getPaymentMean()->getName());
 
-        $this->assertEquals("Some Valid Bank Name", $paymentInstance->getBankName());
-        $this->assertEquals("Some Valid Bic", $paymentInstance->getBic());
-        $this->assertEquals("AL47212110090000000235698741", $paymentInstance->getIban());
-        $this->assertEquals("Max", $paymentInstance->getFirstName());
-        $this->assertEquals("Mustermann", $paymentInstance->getLastName());
-        $this->assertEquals("Musterstr. 55", $paymentInstance->getAddress());
-        $this->assertEquals("55555", $paymentInstance->getZipCode());
-        $this->assertEquals("Musterhausen", $paymentInstance->getCity());
+        $this->assertEquals('Some Valid Bank Name', $paymentInstance->getBankName());
+        $this->assertEquals('Some Valid Bic', $paymentInstance->getBic());
+        $this->assertEquals('AL47212110090000000235698741', $paymentInstance->getIban());
+        $this->assertEquals('Max', $paymentInstance->getFirstName());
+        $this->assertEquals('Mustermann', $paymentInstance->getLastName());
+        $this->assertEquals('Musterstr. 55', $paymentInstance->getAddress());
+        $this->assertEquals('55555', $paymentInstance->getZipCode());
+        $this->assertEquals('Musterhausen', $paymentInstance->getCity());
         $this->assertNotNull($paymentInstance->getAmount());
     }
 }

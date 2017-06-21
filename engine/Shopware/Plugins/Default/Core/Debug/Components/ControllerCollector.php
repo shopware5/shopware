@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ControllerCollector implements CollectorInterface
@@ -44,9 +44,9 @@ class ControllerCollector implements CollectorInterface
     protected $utils;
 
     /**
-     * @var array Contains all measured events.
+     * @var array contains all measured events
      */
-    protected $results = array();
+    protected $results = [];
 
     /**
      * @var float Contains the start time of the Benchmarking
@@ -60,7 +60,7 @@ class ControllerCollector implements CollectorInterface
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
-     * @param Utils $utils
+     * @param Utils                       $utils
      */
     public function __construct(\Enlight_Event_EventManager $eventManager, Utils $utils)
     {
@@ -68,9 +68,6 @@ class ControllerCollector implements CollectorInterface
         $this->utils = $utils;
     }
 
-    /**
-     *
-     */
     public function start()
     {
         $this->eventManager->registerSubscriber($this->getListeners());
@@ -83,9 +80,30 @@ class ControllerCollector implements CollectorInterface
     {
         $total_time = $this->utils->formatTime(microtime(true) - $this->startTime);
         $label = "Benchmark Controller ($total_time sec)";
-        $table = array($label, $this->results);
+        $table = [$label, $this->results];
 
         $log->table($table);
+    }
+
+    /**
+     * Logs all controller events into the internal log object.
+     * Each logged events contains the event name, the execution time and the allocated peak of memory.
+     *
+     * @param \Enlight_Event_EventArgs $args
+     */
+    public function onBenchmarkEvent(\Enlight_Event_EventArgs $args)
+    {
+        if (empty($this->results)) {
+            $this->results[] = ['name', 'memory', 'time'];
+            $this->startTime = microtime(true);
+            $this->startMemory = memory_get_peak_usage(true);
+        }
+
+        $this->results[] = [
+            0 => str_replace('Enlight_Controller_', '', $args->getName()),
+            1 => $this->utils->formatMemory(memory_get_peak_usage(true) - $this->startMemory),
+            2 => $this->utils->formatTime(microtime(true) - $this->startTime),
+        ];
     }
 
     /**
@@ -95,7 +113,7 @@ class ControllerCollector implements CollectorInterface
      */
     private function getListeners()
     {
-        $events = array(
+        $events = [
             'Enlight_Controller_Front_RouteStartup',
             'Enlight_Controller_Front_RouteShutdown',
             'Enlight_Controller_Front_DispatchLoopStartup',
@@ -108,40 +126,18 @@ class ControllerCollector implements CollectorInterface
             'Enlight_Controller_Action_PostDispatch',
 
             'Enlight_Plugins_ViewRenderer_PreRender',
-            'Enlight_Plugins_ViewRenderer_PostRender'
-        );
+            'Enlight_Plugins_ViewRenderer_PostRender',
+        ];
 
         $listeners = new \Enlight_Event_Subscriber_Array();
         foreach ($events as $event) {
             $listeners->registerListener(
                 new \Enlight_Event_Handler_Default(
-                    $event, array($this, 'onBenchmarkEvent'), -99
+                    $event, [$this, 'onBenchmarkEvent'], -99
                 )
             );
         }
 
         return $listeners;
-    }
-
-    /**
-     * Logs all controller events into the internal log object.
-     * Each logged events contains the event name, the execution time and the allocated peak of memory.
-     *
-     * @param \Enlight_Event_EventArgs $args
-     * @return void
-     */
-    public function onBenchmarkEvent(\Enlight_Event_EventArgs $args)
-    {
-        if (empty($this->results)) {
-            $this->results[] = array('name', 'memory', 'time');
-            $this->startTime = microtime(true);
-            $this->startMemory = memory_get_peak_usage(true);
-        }
-
-        $this->results[] = array(
-            0 => str_replace('Enlight_Controller_', '', $args->getName()),
-            1 => $this->utils->formatMemory(memory_get_peak_usage(true) - $this->startMemory),
-            2 => $this->utils->formatTime(microtime(true) - $this->startTime)
-        );
     }
 }

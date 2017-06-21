@@ -26,7 +26,7 @@ use Shopware\Models\Voucher\Voucher;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
@@ -46,7 +46,7 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
      *
      * @var array
      */
-    private $testData = array(
+    private $testData = [
         'description' => 'description',
         'minimumCharge' => '20',
         'modus' => '1',
@@ -62,8 +62,8 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
         'strict' => 0,
         'shopId' => 0,
         'bindToSupplier' => 0,
-        'value' => '10'
-    );
+        'value' => '10',
+    ];
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -82,7 +82,7 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
      */
     protected function tearDown()
     {
-        $voucher = $this->repo->findOneBy(array('description' => 'description'));
+        $voucher = $this->repo->findOneBy(['description' => 'description']);
 
         if (!empty($voucher)) {
             $this->em->remove($voucher);

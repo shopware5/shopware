@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TaxHydrator extends Hydrator
@@ -38,6 +38,7 @@ class TaxHydrator extends Hydrator
      * data array.
      *
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
      */
     public function hydrate(array $data)
@@ -56,6 +57,7 @@ class TaxHydrator extends Hydrator
      * data array.
      *
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
      */
     public function hydrateRule(array $data)

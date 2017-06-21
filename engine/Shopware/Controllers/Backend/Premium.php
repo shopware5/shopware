@@ -36,44 +36,28 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $articleDetailRepository = null;
+    /**
      * @var Shopware\Models\Premium\Repository
      */
     private $repository;
 
-
-    /**
-     * @var \Shopware\Components\Model\ModelRepository
-     */
-    protected $articleDetailRepository = null;
-
-    /**
-     * Helper function to get access to the articleDetail repository.
-     * @return \Shopware\Components\Model\ModelRepository
-     */
-    private function getArticleDetailRepository()
-    {
-        if ($this->articleDetailRepository === null) {
-            $this->articleDetailRepository = Shopware()->Models()->getRepository(Detail::class);
-        }
-        return $this->articleDetailRepository;
-    }
-
     public function initAcl()
     {
-        $this->addAclPermission("getPremiumArticles", "read", "You're not allowed to see the articles.");
-        $this->addAclPermission("createPremiumArticle", "create", "You're not allowed to create an article.");
-        $this->addAclPermission("editPremiumArticle", "update", "You're not allowed to update the article.");
-        $this->addAclPermission("deletePremiumArticle", "delete", "You're not allowed to delete the article.");
+        $this->addAclPermission('getPremiumArticles', 'read', "You're not allowed to see the articles.");
+        $this->addAclPermission('createPremiumArticle', 'create', "You're not allowed to create an article.");
+        $this->addAclPermission('editPremiumArticle', 'update', "You're not allowed to update the article.");
+        $this->addAclPermission('deletePremiumArticle', 'delete', "You're not allowed to delete the article.");
     }
 
     /**
      * Disable template engine for all actions
-     *
-     * @return void
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'validateArticle'))) {
+        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'validateArticle'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -84,12 +68,12 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         $repository = Shopware()->Models()->getRepository(Shop::class);
 
         $builder = $repository->createQueryBuilder('shops');
-        $builder->select(array(
+        $builder->select([
             'shops.id as id',
             'shopLocale.id as locale',
             'category.id as categoryId',
-            'shops.name as name'
-        ));
+            'shops.name as name',
+        ]);
         $builder->join('shops.category', 'category');
         $builder->leftJoin('shops.locale', 'shopLocale');
         $query = $builder->getQuery();
@@ -98,13 +82,12 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         $data = $query->getArrayResult();
 
         //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
      * Function to get all premium-articles and it's name and subshop-name
      * Also used to enable the search of articles
-     * @return void
      */
     public function getPremiumArticlesAction()
     {
@@ -114,11 +97,10 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         $limit = $this->Request()->get('limit');
 
         //order data
-        $order = (array) $this->Request()->getParam('sort', array());
+        $order = (array) $this->Request()->getParam('sort', []);
 
         //If a search-filter is set
         if ($this->Request()->get('filter')) {
-
             //Get the value itself
             $filter = $this->Request()->get('filter');
             $filter = $filter[count($filter) - 1];
@@ -134,34 +116,35 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         try {
             $data = $query->getArrayResult();
 
-            $this->View()->assign(array("success" => true, 'data' => $data, 'total' => $totalResult));
+            $this->View()->assign(['success' => true, 'data' => $data, 'total' => $totalResult]);
         } catch (Exception $e) {
-            $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
     /**
      * Function to create a premium-article
+     *
      * @throws Exception
-     * @return void
      */
     public function createPremiumArticleAction()
     {
         if (!$this->Request()->isPost()) {
-            echo Zend_Json::encode(array('success' => false, 'errorMsg' => 'Empty Post Request'));
+            echo Zend_Json::encode(['success' => false, 'errorMsg' => 'Empty Post Request']);
+
             return;
         }
 
         $params = $this->Request()->getParams();
-        $params['startPrice'] = str_replace(",", ".", $params['startPrice']);
-        $premiumModel = new Shopware\Models\Premium\Premium;
+        $params['startPrice'] = str_replace(',', '.', $params['startPrice']);
+        $premiumModel = new Shopware\Models\Premium\Premium();
 
         try {
             if (empty($params['orderNumberExport'])) {
                 $params['orderNumberExport'] = $params['orderNumber'];
             }
             if (empty($params['orderNumber'])) {
-                throw new Exception("No ordernumber was entered.");
+                throw new Exception('No ordernumber was entered.');
             }
             //Fills the model by using the array $params
             $premiumModel->fromArray($params);
@@ -170,19 +153,20 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $shop = Shopware()->Models()->find(Shop::class, $params['shopId']);
             $premiumModel->setShop($shop);
 
-            $articleDetail = $this->getArticleDetailRepository()->findOneBy(array('number' => $params['orderNumber']));
+            $articleDetail = $this->getArticleDetailRepository()->findOneBy(['number' => $params['orderNumber']]);
             $premiumModel->setArticleDetail($articleDetail);
 
             //If the article is already set as a premium-article
             /**
-             * @var $repository Shopware\Models\Premium\Premium
+             * @var Shopware\Models\Premium\Premium
              */
             $repository = Shopware()->Models()->getRepository(Premium::class);
             $result = $repository->findByOrderNumber($params['orderNumber']);
             $result = Shopware()->Models()->toArray($result);
 
             if (!empty($result) && $params['shopId'] == $result[0]['shopId']) {
-                $this->View()->assign(array("success" => false, 'errorMsg' => "The article is already a premium-article."));
+                $this->View()->assign(['success' => false, 'errorMsg' => 'The article is already a premium-article.']);
+
                 return;
             }
 
@@ -192,21 +176,21 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
 
             $data = Shopware()->Models()->toArray($premiumModel);
 
-            $this->View()->assign(array("success" => true, "data" => $data));
+            $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
-            $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
     /**
      * Function to update a premium-article
-     * @return void
      */
     public function editPremiumArticleAction()
     {
         $errorMsg = null;
         if (!$this->Request()->isPost()) {
-            echo Zend_Json::encode(array('success' => false, 'errorMsg' => 'Empty Post Request'));
+            echo Zend_Json::encode(['success' => false, 'errorMsg' => 'Empty Post Request']);
+
             return;
         }
 
@@ -218,29 +202,29 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
                 $params['orderNumberExport'] = $params['orderNumber'];
             }
             //Replace a comma with a dot
-            $params['startPrice'] = str_replace(",", ".", $params['startPrice']);
+            $params['startPrice'] = str_replace(',', '.', $params['startPrice']);
 
-            /**@var $premiumModel Premium  */
+            /* @var $premiumModel Premium */
             $premiumModel->fromArray($params);
 
             Shopware()->Models()->persist($premiumModel);
             Shopware()->Models()->flush();
 
-            $this->View()->assign(array("success" => true, "data" => $params));
+            $this->View()->assign(['success' => true, 'data' => $params]);
         } catch (Exception $e) {
-            $this->View()->assign(array("success" => false, 'errorMsg', $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg', $e->getMessage()]);
         }
     }
 
     /**
      * Function to delete a single or multiple premium-article(s)
-     * @return void
      */
     public function deletePremiumArticleAction()
     {
         try {
             if (!$this->Request()->isPost()) {
-                $this->View()->assign(array("success" => false, 'errorMsg' => 'Empty Post Request'));
+                $this->View()->assign(['success' => false, 'errorMsg' => 'Empty Post Request']);
+
                 return;
             }
             $repository = Shopware()->Models()->getRepository(Premium::class);
@@ -252,7 +236,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             unset($params['_dc']);
 
             if ($params[0]) {
-                $data = array();
+                $data = [];
                 foreach ($params as $values) {
                     $id = $values['id'];
                     $model = $repository->find($id);
@@ -268,15 +252,14 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
                 Shopware()->Models()->flush();
                 $data = Shopware()->Models()->toArray($model);
             }
-            $this->View()->assign(array("success" => true, 'data'=>$data));
+            $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
-            $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
     /**
      * Function to check if an article exists or is already added as a premium-article
-     * @return void
      */
     public function validateArticleAction()
     {
@@ -305,5 +288,19 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         }
 
         echo true;
+    }
+
+    /**
+     * Helper function to get access to the articleDetail repository.
+     *
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    private function getArticleDetailRepository()
+    {
+        if ($this->articleDetailRepository === null) {
+            $this->articleDetailRepository = Shopware()->Models()->getRepository(Detail::class);
+        }
+
+        return $this->articleDetailRepository;
     }
 }

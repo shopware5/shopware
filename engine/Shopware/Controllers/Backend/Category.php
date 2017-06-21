@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Models\Category\Category;
 
@@ -32,7 +33,7 @@ use Shopware\Models\Category\Category;
  * add and edit items. On the detail page the category data is displayed and can be edited
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend_ExtJs
@@ -57,32 +58,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected $customerRepository = null;
 
     /**
-     * Method to define acl dependencies in backend controllers
-     * <code>
-     * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
-     * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
-     * </code>
-     */
-    protected function initAcl()
-    {
-        // read
-        $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getDetail', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getPathByQuery', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getIdPath', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getTemplateSettings', 'read', 'Insufficient Permissions');
-
-        // update
-        $this->addAclPermission('updateDetail', 'update', 'Insufficient Permissions');
-
-        //delete
-        $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
-
-        // create
-        $this->addAclPermission('createDetail', 'create', 'Insufficient Permissions');
-    }
-
-    /**
      * Helper Method to get access to the category repository.
      *
      * @return Shopware\Models\Category\Repository
@@ -92,33 +67,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         if ($this->repository === null) {
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         }
+
         return $this->repository;
-    }
-
-    /**
-     * Helper Method to get access to the media repository.
-     *
-     * @return \Shopware\Models\Media\Repository
-     */
-    private function getMediaRepository()
-    {
-        if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
-        }
-        return $this->mediaRepository;
-    }
-
-    /**
-     * Helper Method to get access to the customer repository.
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getCustomerRepository()
-    {
-        if ($this->customerRepository === null) {
-            $this->customerRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
-        }
-        return $this->customerRepository;
     }
 
     /**
@@ -135,18 +85,18 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function getListAction()
     {
         /** @var $filter array */
-        $filter = $this->Request()->getParam('filter', array());
-        $node = (int)$this->Request()->getParam('node');
+        $filter = $this->Request()->getParam('filter', []);
+        $node = (int) $this->Request()->getParam('node');
         $preselectedNodes = $this->Request()->getParam('preselected');
 
         if (empty($filter)) {
             $node = !empty($node) ? $node : 1;
-            $filter[] = array('property' => 'c.parentId', 'value' => $node);
+            $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
 
         $query = $this->getRepository()->getBackendListQuery(
             $filter,
-            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
         )->getQuery();
@@ -158,7 +108,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         foreach ($data as $key => $category) {
             $data[$key]['text'] = $category['name'];
             $data[$key]['cls'] = 'folder';
-            $data[$key]['childrenCount'] = (int)$category['childrenCount'];
+            $data[$key]['childrenCount'] = (int) $category['childrenCount'];
             $data[$key]['leaf'] = empty($data[$key]['childrenCount']);
             $data[$key]['allowDrag'] = true;
             if ($preselectedNodes !== null) {
@@ -166,11 +116,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
         }
 
-        $this->View()->assign(array(
-            'success' => true, 'data' => $data, 'total' => $count
-        ));
+        $this->View()->assign([
+            'success' => true, 'data' => $data, 'total' => $count,
+        ]);
     }
-
 
     /**
      * Controller action which can be accessed over an request.
@@ -203,91 +152,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * Internal function which is used to remove the passed article ids
-     * from the assigned category.
-     *
-     * @param int $categoryId
-     * @param array $articleIds
-     * @return array
-     */
-    protected function removeCategoryArticles($categoryId, $articleIds)
-    {
-        if (empty($articleIds)) {
-            return array('success' => false, 'error' => 'No articles selected');
-        }
-
-        if (empty($categoryId)) {
-            return array('success' => false, 'error' => 'No category id passed.');
-        }
-
-        /** @var Category $category */
-        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
-
-        $counter = 0;
-        foreach ($articleIds as $articleId) {
-            if (empty($articleId)) {
-                continue;
-            }
-
-            /** @var \Shopware\Models\Article\Article $article */
-            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int)$articleId);
-            $article->removeCategory($category);
-
-            $counter++;
-        }
-
-        Shopware()->Models()->flush();
-
-        return array('success' => true, 'counter' => $counter);
-    }
-
-    /**
-     * Helper function to add multiple articles to an category.
-     *
-     * @param int $categoryId
-     * @param array $articleIds
-     * @return array
-     */
-    protected function addCategoryArticles($categoryId, $articleIds)
-    {
-        if (empty($articleIds)) {
-            return array('success' => false, 'error' => 'No articles selected');
-        }
-
-        if (empty($categoryId)) {
-            return array('success' => false, 'error' => 'No category id passed.');
-        }
-
-        /** @var Category $category */
-        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
-
-        $counter = 0;
-        foreach ($articleIds as $articleId) {
-            if (empty($articleId)) {
-                continue;
-            }
-
-            /** @var \Shopware\Models\Article\Article $article */
-            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int)$articleId);
-            $article->addCategory($category);
-
-            $counter++;
-        }
-
-        Shopware()->Models()->flush();
-
-        return array('success' => true, 'counter' => $counter);
-    }
-
-    /**
      * Gets all category detail information by the category node
      */
     public function getDetailAction()
     {
         $node = $this->Request()->getParam('node', 1);
         if ($node !== null) {
-            $node = is_numeric($node) ? (int)$node : 1;
-            $filter[] = array('property' => 'c.parentId', 'value' => $node);
+            $node = is_numeric($node) ? (int) $node : 1;
+            $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -295,9 +167,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
 
-        $data["imagePath"] = $data["media"]["path"];
+        $data['imagePath'] = $data['media']['path'];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -308,7 +180,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $separator = $this->Request()->getParam('separator', '>');
 
         if (($ids = $this->Request()->getParam('id')) !== null) {
-            $result = array();
+            $result = [];
             if (is_string($ids)) {
                 $ids = explode(', ', $ids);
             }
@@ -317,21 +189,21 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
         } else {
             $query = $this->Request()->getParam('query');
-            $parents = (bool)$this->Request()->getParam('parents', false);
+            $parents = (bool) $this->Request()->getParam('parents', false);
             $result = $this->getPathByQuery($query, $separator, $parents);
         }
 
-        $data = array();
+        $data = [];
 
         if ($this->Request()->getParam('includeRoot', false)) {
-            $data[] = array('id' => 1, 'name' => 'Shopware');
+            $data[] = ['id' => 1, 'name' => 'Shopware'];
         }
 
         foreach ($result as $id => $name) {
-            $data[] = array('id' => $id, 'name' => $name);
+            $data[] = ['id' => $id, 'name' => $name];
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => count($data)]);
     }
 
     /**
@@ -340,25 +212,26 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function getIdPathAction()
     {
         $separator = $this->Request()->getParam('separator', '/');
-        $categoryIds = (array)$this->Request()->getParam('categoryIds', array());
+        $categoryIds = (array) $this->Request()->getParam('categoryIds', []);
 
-        $data = array();
+        $data = [];
         if (empty($categoryIds)) {
-            $categoryIds = array('1');
+            $categoryIds = ['1'];
         }
         foreach ($categoryIds as $categoryId) {
             $data[] = $separator . $this->getRepository()->getPathById($categoryId, 'id', $separator);
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => count($data)]);
     }
 
     /**
      * helper method used in the getPathByQueryAction to return the path information
      *
-     * @param null $query
+     * @param null   $query
      * @param string $separator
-     * @param bool $parents
+     * @param bool   $parents
+     *
      * @return array
      */
     public function getPathByQuery($query = null, $separator = '>', $parents = false)
@@ -366,12 +239,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         if (empty($query)) {
             $where = 'parent=1';
         } elseif (is_numeric($query)) {
-            $where = 'parent=' . (int)$query;
+            $where = 'parent=' . (int) $query;
         } else {
             $where = 'description LIKE ' . Shopware()->Db()->quote('%' . trim($query) . '%');
         }
 
-        $paths = array();
+        $paths = [];
 
         $sql = '
             SELECT id, description as name, parent
@@ -396,6 +269,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 }
             }
         }
+
         return $paths;
     }
 
@@ -405,12 +279,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function getTemplateSettingsAction()
     {
         $categoryTemplates = array_filter(explode(';', Shopware()->Config()->categoryTemplates));
-        $data = array();
+        $data = [];
         foreach ($categoryTemplates as $templateConfigRaw) {
             list($template, $name) = explode(':', $templateConfigRaw);
-            $data[] = array('template' => $template, 'name' => $name);
+            $data[] = ['template' => $template, 'name' => $name];
         }
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => count($data)]);
     }
 
     /**
@@ -431,8 +305,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     /**
      * returns a JSON string to the view the articles for the article mapping
-     *
-     * @return void
      */
     public function getArticlesAction()
     {
@@ -441,16 +313,16 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $limit = $this->Request()->getParam('limit', 20);
         $search = $this->Request()->getParam('search', '');
         $params = [
-            'categoryId' => $categoryId
+            'categoryId' => $categoryId,
         ];
         /** @var QueryBuilder $builder */
         $builder = $this->get('dbal_connection')->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'SQL_CALC_FOUND_ROWS articles.id as articleId',
             'articles.name',
             'details.ordernumber as number',
-            'suppliers.name as supplierName'
-        ));
+            'suppliers.name as supplierName',
+        ]);
         $builder->from('s_articles', 'articles')
             ->leftJoin('articles', 's_articles_categories', 'categories', 'articles.id = categories.articleID AND categories.categoryID = :categoryId')
             ->join('articles', 's_articles_supplier', 'suppliers', 'articles.supplierID = suppliers.id')
@@ -459,7 +331,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         if (!empty($search)) {
             $builder->andWhere('(articles.name LIKE :search OR details.ordernumber LIKE :search OR suppliers.name LIKE :search)');
-            $params['search'] = "%".$search."%";
+            $params['search'] = '%' . $search . '%';
         }
 
         $builder->setFirstResult($offset);
@@ -467,13 +339,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $builder->setParameters($params);
         $result = $builder->execute()->fetchAll();
 
-        $count = $this->get('dbal_connection')->fetchColumn("SELECT FOUND_ROWS()");
+        $count = $this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $result,
-            'total' => (int) $count
-        ));
+            'total' => (int) $count,
+        ]);
     }
 
     /**
@@ -488,18 +360,18 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $search = $this->Request()->getParam('search', '');
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'articles.id as articleId',
             'articles.name',
             'details.number',
-            'suppliers.name as supplierName'
-        ));
+            'suppliers.name as supplierName',
+        ]);
         $builder->from('Shopware\Models\Article\Article', 'articles')
             ->innerJoin('articles.categories', 'categories')
             ->innerJoin('articles.supplier', 'suppliers')
             ->innerJoin('articles.mainDetail', 'details')
             ->where('categories.id = :categoryId')
-            ->setParameters(array('categoryId' => $categoryId));
+            ->setParameters(['categoryId' => $categoryId]);
 
         if (!empty($search)) {
             $builder->andWhere('(articles.name LIKE :search OR suppliers.name LIKE :search OR details.number LIKE :search)');
@@ -518,17 +390,15 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $data = $paginator->getIterator()->getArrayCopy();
         $count = $paginator->count();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => $count
-        ));
+            'total' => $count,
+        ]);
     }
 
     /**
      * returns a JSON string to the view the customers for the customer group mapping
-     *
-     * @return void
      */
     public function getCustomerGroupsAction()
     {
@@ -545,7 +415,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $data = $dataQuery->getArrayResult();
 
         //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**
@@ -553,16 +423,16 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function moveTreeItemAction()
     {
-        $itemId = (int)$this->Request()->getParam('id');
-        $parentId = (int)$this->Request()->getParam('parentId', 1);
+        $itemId = (int) $this->Request()->getParam('id');
+        $parentId = (int) $this->Request()->getParam('parentId', 1);
 
         /** @var $item Category */
         $item = $this->getRepository()->find($itemId);
         if ($item === null) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => "Category by id $itemId not found"
-            ));
+                'message' => "Category by id $itemId not found",
+            ]);
 
             return;
         }
@@ -570,10 +440,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         /** @var $parent Category */
         $parent = $this->getRepository()->find($parentId);
         if ($parent === null) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => "Parent by id $parentId not found"
-            ));
+                'message' => "Parent by id $parentId not found",
+            ]);
 
             return;
         }
@@ -606,10 +476,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             Shopware()->Models()->flush($item);
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'needsRebuild' => $needsRebuild,
-        ));
+        ]);
     }
 
     /**
@@ -625,7 +495,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -645,7 +515,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             Shopware()->Models()->persist($categoryModel);
 
             // Find parent for newly created category
-            $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
+            $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
             $parentCategory = $this->getRepository()->find($params['parentId']);
             $categoryModel->setParent($parentCategory);
 
@@ -689,9 +559,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $paginator = $this->getModelManager()->createPaginator($query);
         $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
-        $data["imagePath"] = $data["media"]["path"];
+        $data['imagePath'] = $data['media']['path'];
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => count($data)]);
     }
 
     /**
@@ -700,12 +570,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function deleteAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid form Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
+
             return;
         }
         $result = $this->getRepository()->find($id);
         if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Category not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Category not found']);
+
             return;
         }
 
@@ -713,48 +585,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         Shopware()->Models()->remove($result);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
-    }
-
-    /**
-     * This method loads the customer group models for the passed ids in the "customerGroups" parameter.
-     *
-     * @param $data
-     * @return array
-     */
-    private function prepareCustomerGroupsAssociatedData($data)
-    {
-        $customerGroups = array();
-        foreach ($data['customerGroups'] as $customerGroupData) {
-            if (!empty($customerGroupData['id'])) {
-                $model = Shopware()->Models()->find('Shopware\Models\Customer\Group', $customerGroupData['id']);
-                $customerGroups[] = $model;
-            }
-        }
-        $data['customerGroups'] = $customerGroups;
-
-        return $data;
-    }
-
-    /**
-     * This method finds the mediaId by the media path to save it in the right way
-     *
-     * @param $data
-     * @return array
-     */
-    protected function prepareMediaAssociatedData($data)
-    {
-        if (!empty($data["imagePath"])) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $data['imagePath'] = $mediaService->normalize($data['imagePath']);
-            $mediaQuery = $this->getMediaRepository()->getMediaByPathQuery($data["imagePath"]);
-            $mediaModel = $mediaQuery->getOneOrNullResult();
-            $data["media"] = $mediaModel;
-        } else {
-            $data["media"] = null;
-        }
-
-        return $data;
+        $this->View()->assign(['success' => true]);
     }
 
     public function getRebuildCategoryPathCountAction()
@@ -763,13 +594,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $count = $this->getCategoryComponent()->rebuildCategoryPathCount($categoryId);
 
-        $this->view->assign(array(
+        $this->view->assign([
             'success' => true,
-            'data' => array(
+            'data' => [
                 'count' => $count,
-                'batchSize' => 20
-            )
-        ));
+                'batchSize' => 20,
+            ],
+        ]);
     }
 
     public function rebuildCategoryPathAction()
@@ -783,9 +614,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $this->getCategoryComponent()->rebuildCategoryPath($categoryId, $count, $offset);
 
-        $this->view->assign(array(
+        $this->view->assign([
             'success' => true,
-        ));
+        ]);
     }
 
     public function getRemoveOldAssignmentsCountAction()
@@ -794,13 +625,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $count = $this->getCategoryComponent()->removeOldAssignmentsCount($categoryId);
 
-        $this->view->assign(array(
+        $this->view->assign([
             'success' => true,
-            'data' => array(
+            'data' => [
                 'count' => $count,
-                'batchSize' => 1
-            )
-        ));
+                'batchSize' => 1,
+            ],
+        ]);
     }
 
     public function removeOldAssignmentsAction()
@@ -814,9 +645,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $this->getCategoryComponent()->removeOldAssignments($categoryId, $count, $offset);
 
-        $this->view->assign(array(
+        $this->view->assign([
             'success' => true,
-        ));
+        ]);
     }
 
     public function getRebuildAssignmentsCountAction()
@@ -825,13 +656,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $count = $this->getCategoryComponent()->rebuildAssignmentsCount($categoryId);
 
-        $this->view->assign(array(
+        $this->view->assign([
             'success' => true,
-            'data' => array(
+            'data' => [
                 'count' => $count,
-                'batchSize' => 1
-            )
-        ));
+                'batchSize' => 1,
+            ],
+        ]);
     }
 
     public function rebuildAssignmentsAction()
@@ -845,9 +676,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $this->getCategoryComponent()->rebuildAssignments($categoryId, $count, $offset);
 
-        $this->view->assign(array(
+        $this->view->assign([
             'success' => true,
-        ));
+        ]);
     }
 
     /**
@@ -860,13 +691,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $count = $this->getRepository()->getChildrenCountList($categoryId);
 
         $this->view->assign(
-            array(
+            [
                 'success' => true,
-                'data' => array(
+                'data' => [
                     'count' => $count,
-                    'batchSize' => 1
-                )
-            )
+                    'batchSize' => 1,
+                ],
+            ]
         );
     }
 
@@ -901,18 +732,194 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             if (count($children)) {
                 $result[] = [
                     'categoryId' => $newCategoryId,
-                    'children' => $children
+                    'children' => $children,
                 ];
             }
         }
 
         $this->view->assign(
-            array(
+            [
                 'success' => true,
                 'processed' => count($categoryIds),
                 'needsRebuild' => true,
-                'result' => $result
-            )
+                'result' => $result,
+            ]
         );
+    }
+
+    /**
+     * Method to define acl dependencies in backend controllers
+     * <code>
+     * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
+     * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
+     * </code>
+     */
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getDetail', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getPathByQuery', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getIdPath', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getTemplateSettings', 'read', 'Insufficient Permissions');
+
+        // update
+        $this->addAclPermission('updateDetail', 'update', 'Insufficient Permissions');
+
+        //delete
+        $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
+
+        // create
+        $this->addAclPermission('createDetail', 'create', 'Insufficient Permissions');
+    }
+
+    /**
+     * Internal function which is used to remove the passed article ids
+     * from the assigned category.
+     *
+     * @param int   $categoryId
+     * @param array $articleIds
+     *
+     * @return array
+     */
+    protected function removeCategoryArticles($categoryId, $articleIds)
+    {
+        if (empty($articleIds)) {
+            return ['success' => false, 'error' => 'No articles selected'];
+        }
+
+        if (empty($categoryId)) {
+            return ['success' => false, 'error' => 'No category id passed.'];
+        }
+
+        /** @var Category $category */
+        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+
+        $counter = 0;
+        foreach ($articleIds as $articleId) {
+            if (empty($articleId)) {
+                continue;
+            }
+
+            /** @var \Shopware\Models\Article\Article $article */
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article->removeCategory($category);
+
+            ++$counter;
+        }
+
+        Shopware()->Models()->flush();
+
+        return ['success' => true, 'counter' => $counter];
+    }
+
+    /**
+     * Helper function to add multiple articles to an category.
+     *
+     * @param int   $categoryId
+     * @param array $articleIds
+     *
+     * @return array
+     */
+    protected function addCategoryArticles($categoryId, $articleIds)
+    {
+        if (empty($articleIds)) {
+            return ['success' => false, 'error' => 'No articles selected'];
+        }
+
+        if (empty($categoryId)) {
+            return ['success' => false, 'error' => 'No category id passed.'];
+        }
+
+        /** @var Category $category */
+        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+
+        $counter = 0;
+        foreach ($articleIds as $articleId) {
+            if (empty($articleId)) {
+                continue;
+            }
+
+            /** @var \Shopware\Models\Article\Article $article */
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article->addCategory($category);
+
+            ++$counter;
+        }
+
+        Shopware()->Models()->flush();
+
+        return ['success' => true, 'counter' => $counter];
+    }
+
+    /**
+     * This method finds the mediaId by the media path to save it in the right way
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    protected function prepareMediaAssociatedData($data)
+    {
+        if (!empty($data['imagePath'])) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $data['imagePath'] = $mediaService->normalize($data['imagePath']);
+            $mediaQuery = $this->getMediaRepository()->getMediaByPathQuery($data['imagePath']);
+            $mediaModel = $mediaQuery->getOneOrNullResult();
+            $data['media'] = $mediaModel;
+        } else {
+            $data['media'] = null;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Helper Method to get access to the media repository.
+     *
+     * @return \Shopware\Models\Media\Repository
+     */
+    private function getMediaRepository()
+    {
+        if ($this->mediaRepository === null) {
+            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+        }
+
+        return $this->mediaRepository;
+    }
+
+    /**
+     * Helper Method to get access to the customer repository.
+     *
+     * @return \Shopware\Models\Article\Repository
+     */
+    private function getCustomerRepository()
+    {
+        if ($this->customerRepository === null) {
+            $this->customerRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+        }
+
+        return $this->customerRepository;
+    }
+
+    /**
+     * This method loads the customer group models for the passed ids in the "customerGroups" parameter.
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    private function prepareCustomerGroupsAssociatedData($data)
+    {
+        $customerGroups = [];
+        foreach ($data['customerGroups'] as $customerGroupData) {
+            if (!empty($customerGroupData['id'])) {
+                $model = Shopware()->Models()->find('Shopware\Models\Customer\Group', $customerGroupData['id']);
+                $customerGroups[] = $model;
+            }
+        }
+        $data['customerGroups'] = $customerGroups;
+
+        return $data;
     }
 }

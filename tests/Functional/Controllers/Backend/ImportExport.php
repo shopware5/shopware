@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Components_Test_Controller_TestCase
@@ -73,7 +73,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
      */
     public function testNewsletterImportTest1()
     {
-        $this->controller->importNewsletter(__DIR__.'/testdata/test1.csv');
+        $this->controller->importNewsletter(__DIR__ . '/testdata/test1.csv');
 
         $contactData = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\ContactData')->findAll();
         $addressData = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Address')->findAll();
@@ -106,7 +106,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
      */
     public function testNewsletterImportTest2()
     {
-        $this->controller->importNewsletter(__DIR__.'/testdata/test2.csv');
+        $this->controller->importNewsletter(__DIR__ . '/testdata/test2.csv');
 
         $contactData = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\ContactData')->findAll();
         $addressData = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Address')->findAll();
@@ -140,7 +140,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
         //New data with no (fallback to default) group can be added
         $contactDataFour = array_shift($contactData);
         $this->assertSame('email4@shopware.de', $contactDataFour->getEmail());
-        $this->assertSame((int)Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP"), $contactDataFour->getGroupID());
+        $this->assertSame((int) Shopware()->Config()->get('sNEWSLETTERDEFAULTGROUP'), $contactDataFour->getGroupID());
         $this->assertSame('Maria', $contactDataFour->getFirstName());
         $this->assertSame('Four', $contactDataFour->getLastName());
         $this->assertSame('street4', $contactDataFour->getStreet());
@@ -159,7 +159,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
     public function testArticleXMLExportDuplicateRows()
     {
         // Set up test data
-        $sql= "INSERT IGNORE INTO `s_order_documents` (`date`, `type`, `userID`, `orderID`, `amount`, `docID`, `hash`) VALUES
+        $sql = "INSERT IGNORE INTO `s_order_documents` (`date`, `type`, `userID`, `orderID`, `amount`, `docID`, `hash`) VALUES
             ('2013-04-26', 1, 2, 15, 998.56, 20001, 'bb4eef5a6d79acb7fab2b9da19b59ce7'),
             ('2013-04-26', 1, 1, 57, 201.86, 20002, '110068dc105c9651c2cd1f202f0c9be1'),
             ('2013-04-26', 2, 2, 15, 998.56, 20001, '15d2f8a284a648576608f1f26a54948c'),
@@ -170,24 +170,24 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
         $this->dispatch('/backend/ImportExport/exportOrders?format=csv');
         $header = $this->Response()->getHeaders();
 
-        $this->assertEquals("Content-Disposition", $header[1]["name"]);
-        $this->assertEquals("Content-Transfer-Encoding", $header[2]["name"]);
-        $this->assertEquals("binary", $header[2]["value"]);
-        $this->assertEquals("text/x-comma-separated-values;charset=utf-8", $header[0]["value"]);
+        $this->assertEquals('Content-Disposition', $header[1]['name']);
+        $this->assertEquals('Content-Transfer-Encoding', $header[2]['name']);
+        $this->assertEquals('binary', $header[2]['value']);
+        $this->assertEquals('text/x-comma-separated-values;charset=utf-8', $header[0]['value']);
         $csvOutput = $this->Response()->getBody();
 
         $csvData = explode("\n", $csvOutput);
 
         foreach ($csvData as $key => $row) {
-            if (!empty($csvData[$key - 1]) && !empty($row) && $key - 1  != 0) {
-                $result = array_diff(array($csvData[$key - 1]), array($row));
+            if (!empty($csvData[$key - 1]) && !empty($row) && $key - 1 != 0) {
+                $result = array_diff([$csvData[$key - 1]], [$row]);
                 $this->assertNotEmpty($result);
             }
         }
 
         // Cleanup test data
-        $sql= "DELETE FROM`s_order_documents` WHERE `docID` IN (20001,20002);";
-        Shopware()->Db()->query($sql, array());
+        $sql = 'DELETE FROM`s_order_documents` WHERE `docID` IN (20001,20002);';
+        Shopware()->Db()->query($sql, []);
     }
 
     /**
@@ -203,9 +203,9 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
         $this->dispatch('/backend/ImportExport/exportArticles?format=xml&exportVariants=1');
         $header = $this->Response()->getHeaders();
 
-        $this->assertEquals("Content-Disposition", $header[1]["name"]);
-        $this->assertEquals("Content-Transfer-Encoding", $header[2]["name"]);
-        $this->assertEquals("binary", $header[2]["value"]);
+        $this->assertEquals('Content-Disposition', $header[1]['name']);
+        $this->assertEquals('Content-Transfer-Encoding', $header[2]['name']);
+        $this->assertEquals('binary', $header[2]['value']);
         $xmlOutput = $this->Response()->getBody();
 
         $xml = simplexml_load_string($xmlOutput, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -213,58 +213,58 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
         $articleData = $this->simpleXml2array($results);
 
         //check if the output data is correct
-        foreach ($articleData["article"] as $article) {
+        foreach ($articleData['article'] as $article) {
             //check the main variant attribute data
-            $mainDetailData = $article["mainDetail"];
-            $attributeData = $mainDetailData["attribute"];
+            $mainDetailData = $article['mainDetail'];
+            $attributeData = $mainDetailData['attribute'];
             if (!empty($attributeData)) {
-                $this->assertNotEmpty($attributeData["id"]);
-                $this->assertNotEmpty($attributeData["articleId"]);
-                $this->assertNotEmpty($attributeData["articleDetailId"]);
-                $this->assertEquals($article["mainDetailId"], $attributeData["articleDetailId"]);
+                $this->assertNotEmpty($attributeData['id']);
+                $this->assertNotEmpty($attributeData['articleId']);
+                $this->assertNotEmpty($attributeData['articleDetailId']);
+                $this->assertEquals($article['mainDetailId'], $attributeData['articleDetailId']);
             }
 
             //check the variant attribute data
-            if (!empty($article["variants"])) {
-                foreach ($article["variants"]["variant"] as $key => $variant) {
+            if (!empty($article['variants'])) {
+                foreach ($article['variants']['variant'] as $key => $variant) {
                     if (!is_int($key)) {
-                        $variant = $article["variants"]["variant"];
+                        $variant = $article['variants']['variant'];
                     }
                     if (!empty($variant)) {
-                        $this->assertNotEmpty($variant["articleId"]);
-                        $variantAttributeData = $variant["attribute"];
+                        $this->assertNotEmpty($variant['articleId']);
+                        $variantAttributeData = $variant['attribute'];
                         if (!empty($variantAttributeData)) {
-                            $variantArticleId = $variant["articleId"];
-                            $this->assertNotEmpty($variantAttributeData["id"]);
-                            $this->assertNotEmpty($variantAttributeData["articleId"]);
-                            $this->assertNotEmpty($variantAttributeData["articleDetailId"]);
-                            $this->assertEquals($variantArticleId, $variantAttributeData["articleId"]);
-                            $this->assertEquals($variant["id"], $variantAttributeData["articleDetailId"]);
+                            $variantArticleId = $variant['articleId'];
+                            $this->assertNotEmpty($variantAttributeData['id']);
+                            $this->assertNotEmpty($variantAttributeData['articleId']);
+                            $this->assertNotEmpty($variantAttributeData['articleDetailId']);
+                            $this->assertEquals($variantArticleId, $variantAttributeData['articleId']);
+                            $this->assertEquals($variant['id'], $variantAttributeData['articleDetailId']);
                         }
                         //check if the variant prices are set
-                        $this->assertNotEmpty($variant["prices"]);
-                        $this->assertNotEmpty($variant["prices"]["price"]);
+                        $this->assertNotEmpty($variant['prices']);
+                        $this->assertNotEmpty($variant['prices']['price']);
                     }
                 }
             }
             //check if the main prices are set
-            $this->assertNotEmpty($mainDetailData["prices"]);
-            $this->assertNotEmpty($mainDetailData["prices"]["price"]);
+            $this->assertNotEmpty($mainDetailData['prices']);
+            $this->assertNotEmpty($mainDetailData['prices']['price']);
         }
     }
-
 
     /**
      * helper method to convert the object to an array
      *
      * @param SimpleXMLElement
+     *
      * @return array|string
      */
     private function simpleXml2array($xml)
     {
         if (get_class($xml) == 'SimpleXMLElement') {
             $attributes = $xml->attributes();
-            foreach ($attributes as $k=>$v) {
+            foreach ($attributes as $k => $v) {
                 if ($v) {
                     $a[$k] = (string) $v;
                 }
@@ -276,7 +276,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
             if (count($xml) == 0) {
                 return (string) $x;
             } // for CDATA
-            foreach ($xml as $key=>$value) {
+            foreach ($xml as $key => $value) {
                 $r[$key] = $this->simpleXml2array($value);
             }
             if (isset($a)) {
@@ -284,6 +284,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
             }    // Attributes
             return $r;
         }
+
         return (string) $xml;
     }
 }

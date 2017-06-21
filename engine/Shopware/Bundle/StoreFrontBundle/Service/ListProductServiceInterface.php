@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ListProductServiceInterface
@@ -39,9 +39,10 @@ interface ListProductServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
-     * @param array $numbers
+     * @param array                          $numbers
      * @param Struct\ProductContextInterface $context
-     * @return Struct\ListProduct[] Indexed by the product order number.
+     *
+     * @return Struct\ListProduct[] indexed by the product order number
      */
     public function getList(array $numbers, Struct\ProductContextInterface $context);
 
@@ -49,8 +50,9 @@ interface ListProductServiceInterface
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct object.
      * A list product contains all required data to display products in small views like listings, sliders or emotions.
      *
-     * @param string $number
+     * @param string                         $number
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\ListProduct
      */
     public function get($number, Struct\ProductContextInterface $context);

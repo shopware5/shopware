@@ -43,8 +43,9 @@ class DBALConfigReader implements ConfigReader
     }
 
     /**
-     * @param string $pluginName
+     * @param string    $pluginName
      * @param Shop|null $shop
+     *
      * @return array
      */
     public function getByPluginName($pluginName, Shop $shop = null)
@@ -80,9 +81,9 @@ SQL;
         $stmt = $this->connection->prepare($sql);
         $stmt->execute([
             'fallbackShopId' => 1, //Shop parent id
-            'parentShopId'   => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
-            'currentShopId'  => $shop !== null ? $shop->getId() : null,
-            'pluginName'     => $pluginName,
+            'parentShopId' => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
+            'currentShopId' => $shop !== null ? $shop->getId() : null,
+            'pluginName' => $pluginName,
         ]);
 
         $config = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);

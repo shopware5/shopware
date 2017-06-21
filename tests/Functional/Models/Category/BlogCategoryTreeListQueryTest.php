@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
@@ -34,9 +34,9 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
      */
     protected $repo = null;
 
-    protected $expected = array(
-        1 => array(
-            0 => array(
+    protected $expected = [
+        1 => [
+            0 => [
                 'id' => 3,
                 'name' => 'Deutsch',
                 'position' => 0,
@@ -44,8 +44,8 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
                 'childrenCount' => '1',
                 'emotions' => null,
                 'articles' => null,
-            ),
-            1 => array(
+            ],
+            1 => [
                 'id' => 39,
                 'name' => 'English',
                 'position' => 1,
@@ -53,10 +53,10 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
                 'childrenCount' => '1',
                 'emotions' => null,
                 'articles' => null,
-            ),
-        ),
-        3 => array(
-            0 => array(
+            ],
+        ],
+        3 => [
+            0 => [
                 'id' => 17,
                 'name' => 'Trends + News',
                 'position' => 5,
@@ -64,10 +64,10 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
                 'childrenCount' => '0',
                 'emotions' => null,
                 'articles' => null,
-            ),
-        ),
-        39 => array(
-            0 => array(
+            ],
+        ],
+        39 => [
+            0 => [
                 'id' => 42,
                 'name' => 'Trends + News',
                 'position' => 0,
@@ -75,9 +75,19 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
                 'childrenCount' => '0',
                 'emotions' => null,
                 'articles' => null,
-            ),
-        )
-    );
+            ],
+        ],
+    ];
+
+    public function testQuery()
+    {
+        foreach ($this->expected as $id => $expected) {
+            $filter = [['property' => 'c.parentId', 'value' => $id]];
+            $query = $this->getRepo()->getBlogCategoryTreeListQuery($filter);
+            $data = $this->removeDates($query->getArrayResult());
+            $this->assertEquals($data, $expected);
+        }
+    }
 
     /**
      * @return Shopware\Models\Category\Repository
@@ -87,17 +97,8 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
         if ($this->repo === null) {
             $this->repo = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         }
-        return $this->repo;
-    }
 
-    public function testQuery()
-    {
-        foreach ($this->expected as $id => $expected) {
-            $filter = array(array('property' => 'c.parentId', 'value' => $id));
-            $query = $this->getRepo()->getBlogCategoryTreeListQuery($filter);
-            $data = $this->removeDates($query->getArrayResult());
-            $this->assertEquals($data, $expected);
-        }
+        return $this->repo;
     }
 
     protected function removeDates($data)
@@ -116,6 +117,7 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
                 unset($article['mainDetail']['releaseDate']);
             }
         }
+
         return $data;
     }
 }

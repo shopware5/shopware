@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryGateway implements Gateway\CategoryGatewayInterface
@@ -61,8 +61,8 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection                $connection
+     * @param FieldHelper               $fieldHelper
      * @param Hydrator\CategoryHydrator $categoryHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
@@ -86,7 +86,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
     {
@@ -118,9 +118,8 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         return $result;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
@@ -129,7 +128,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getRelatedProductStreamFields())
-            ->addSelect("GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups")
+            ->addSelect('GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups')
         ;
 
         $query->from('s_categories', 'category')
@@ -148,7 +147,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -158,6 +157,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             if ($a['__category_position'] === $b['__category_position']) {
                 return $a['__category_id'] > $b['__category_id'];
             }
+
             return $a['__category_position'] > $b['__category_position'];
         });
 
@@ -173,7 +173,8 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
     /**
      * @param int[] $ids
-     * @return string[] indexed by product id.
+     *
+     * @return string[] indexed by product id
      */
     private function getMapping(array $ids)
     {
@@ -187,11 +188,13 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->groupBy('mapping.articleID');
 
         $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
         return $mapping;
     }
 
     /**
      * @param string[] $mapping
+     *
      * @return int[]
      */
     private function getMappingIds(array $mapping)
@@ -201,12 +204,14 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             $ids = array_merge($ids, explode(',', $row));
         }
         $ids = array_unique($ids);
+
         return $ids;
     }
 
     /**
-     * @param int[] $mapping
+     * @param int[]             $mapping
      * @param Struct\Category[] $categories
+     *
      * @return Struct\Category[]
      */
     private function getProductCategories(array $mapping, array $categories)
@@ -218,6 +223,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             }
             $productCategories[] = $categories[$categoryId];
         }
+
         return $productCategories;
     }
 }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Form\Container;
 
 use Shopware\Components\Form\Container;
@@ -28,7 +29,6 @@ use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class TabContainer
- * @package Shopware\Components\Form\Container
  */
 class TabContainer extends Container
 {
@@ -43,8 +43,10 @@ class TabContainer extends Container
 
     /**
      * @param Element $element
-     * @return $this
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return $this
      */
     public function addElement(Element $element)
     {
@@ -53,11 +55,13 @@ class TabContainer extends Container
                 '$element must be instance of Shopware\Components\Form\Container\Tab'
             );
         }
+
         return $this->addTab($element);
     }
 
     /**
      * @param Tab $element
+     *
      * @return $this
      */
     public function addTab(Tab $element)

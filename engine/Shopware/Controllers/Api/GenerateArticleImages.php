@@ -42,7 +42,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $id = $this->resource->getIdFromNumber($id);
@@ -50,7 +50,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
 
         $this->resource->generateVariantImages($id);
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**

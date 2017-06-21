@@ -1,15 +1,42 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink;
 
-use \Behat\Behat\Tester\Exception\PendingException;
-use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Behat\Behat\Tester\Exception\PendingException;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\MultipleElement;
 
 class Helper
 {
+    const EXCEPTION_GENERIC = 1;
+    const EXCEPTION_PENDING = 2;
     private static $language;
+
+    /** @var MultipleElement */
+    private static $filterElements;
 
     public static function setCurrentLanguage($language)
     {
@@ -21,10 +48,13 @@ class Helper
      * If each second sub-element of a row is equal or in its first, function returns true
      * If not, the key of the element will be returned (can be used for more detailed descriptions of faults)
      * Throws an exception if $check has an incorrect format
+     *
      * @param array $check
-     * @param bool $strict
-     * @return bool|int|string
+     * @param bool  $strict
+     *
      * @throws \Exception
+     *
+     * @return bool|int|string
      */
     public static function checkArray(array $check, $strict = false)
     {
@@ -43,8 +73,8 @@ class Helper
                 return $key;
             }
 
-            $haystack = (string)$comparison[0];
-            $needle = (string)$comparison[1];
+            $haystack = (string) $comparison[0];
+            $needle = (string) $comparison[1];
 
             if (strlen($needle) === 0) {
                 if (strlen($haystack) === 0) {
@@ -64,7 +94,9 @@ class Helper
 
     /**
      * Converts the value to a float
+     *
      * @param string $value
+     *
      * @return float
      */
     public static function floatValue($value)
@@ -74,15 +106,17 @@ class Helper
         }
 
         $float = str_replace([' ', '.', ','], ['', '', '.'], $value);
-        preg_match("/([0-9]+[\\.]?[0-9]*)/", $float, $matches);
+        preg_match('/([0-9]+[\\.]?[0-9]*)/', $float, $matches);
 
         return floatval($matches[0]);
     }
 
     /**
      * Converts values with key in $keys to floats
+     *
      * @param array $values
      * @param array $keys
+     *
      * @return array
      */
     public static function floatArray(array $values, array $keys = [])
@@ -113,9 +147,10 @@ class Helper
      * If the number is equal to $count, the function will return true.
      * If the number is not equal to $count, the function will return the count of the element.
      *
-     * @param  Element $parent
-     * @param  string $elementLocator
-     * @param  int $count
+     * @param Element $parent
+     * @param string  $elementLocator
+     * @param int     $count
+     *
      * @return bool|int
      */
     public static function countElements($parent, $elementLocator, $count = 0)
@@ -132,8 +167,10 @@ class Helper
 
     /**
      * Recursive Helper function to compare two arrays over all their levels
-     * @param  array $array1
-     * @param  array $array2
+     *
+     * @param array $array1
+     * @param array $array2
+     *
      * @return array|bool
      */
     public static function compareArrays($array1, $array2)
@@ -144,7 +181,7 @@ class Helper
                     'error' => 'keyNotExists',
                     'key' => $key,
                     'value' => $value,
-                    'value2' => null
+                    'value2' => null,
                 ];
             }
 
@@ -166,7 +203,7 @@ class Helper
                     'error' => 'comparisonFailed',
                     'key' => $key,
                     'value' => $value,
-                    'value2' => $array2[$key]
+                    'value2' => $array2[$key],
                 ];
             }
         }
@@ -176,11 +213,14 @@ class Helper
 
     /**
      * Finds elements by their selectors
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param array $keys
-     * @param bool $throwExceptions
-     * @return Element[]
+     * @param array                                $keys
+     * @param bool                                 $throwExceptions
+     *
      * @throws \Exception|PendingException
+     *
+     * @return Element[]
      */
     public static function findElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
@@ -216,11 +256,14 @@ class Helper
 
     /**
      * Finds all elements of their selectors
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param array $keys
-     * @param bool $throwExceptions
-     * @return array
+     * @param array                                $keys
+     * @param bool                                 $throwExceptions
+     *
      * @throws \Exception|PendingException
+     *
+     * @return array
      */
     public static function findAllOfElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
@@ -256,12 +299,15 @@ class Helper
 
     /**
      * Returns the requested element css selectors
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param array $keys
-     * @param bool $throwExceptions
-     * @return array
+     * @param array                                $keys
+     * @param bool                                 $throwExceptions
+     *
      * @throws \Exception
      * @throws PendingException
+     *
+     * @return array
      */
     public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
@@ -301,8 +347,10 @@ class Helper
 
     /**
      * Returns the css selector of the element
+     *
      * @param HelperSelectorInterface $parent
-     * @param string $key
+     * @param string                  $key
+     *
      * @return string|bool
      */
     public static function getRequiredSelector(HelperSelectorInterface $parent, $key)
@@ -312,13 +360,12 @@ class Helper
         return (isset($selectors[$key])) ? $selectors[$key] : false;
     }
 
-    const EXCEPTION_GENERIC = 1;
-    const EXCEPTION_PENDING = 2;
-
     /**
      * Throws a generic or pending exception, shows the backtrace to the first context class call
+     *
      * @param array|string $messages
-     * @param int $type
+     * @param int          $type
+     *
      * @throws \Exception|PendingException
      */
     public static function throwException($messages = [], $type = self::EXCEPTION_GENERIC)
@@ -368,8 +415,10 @@ EOD
 
     /**
      * Checks if a page or element has the requested named link
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string $key
+     * @param string                               $key
+     *
      * @return bool
      */
     public static function hasNamedLink(HelperSelectorInterface $parent, $key)
@@ -379,8 +428,10 @@ EOD
 
     /**
      * Searches for named links given by $keys. Returns true if all exist, otherwise an array of the not found keys.
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string[] $keys
+     * @param string[]                             $keys
+     *
      * @return bool|string[]
      */
     public static function hasNamedLinks(HelperSelectorInterface $parent, array $keys)
@@ -405,8 +456,10 @@ EOD
 
     /**
      * Clicks the requested named link
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string $key
+     * @param string                               $key
+     *
      * @throws \Exception
      * @throws PendingException
      */
@@ -423,8 +476,10 @@ EOD
 
     /**
      * Checks if a page or element has the requested named link
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string $key
+     * @param string                               $key
+     *
      * @return bool
      */
     public static function hasNamedButton(HelperSelectorInterface $parent, $key)
@@ -434,8 +489,10 @@ EOD
 
     /**
      * Searches for named buttons given by $keys. Returns true if all exist, otherwise an array of the not found keys.
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string[] $keys
+     * @param string[]                             $keys
+     *
      * @return bool|string[]
      */
     public static function hasNamedButtons(HelperSelectorInterface $parent, array $keys)
@@ -460,8 +517,9 @@ EOD
 
     /**
      * Presses the requested named button
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string $key
+     * @param string                               $key
      */
     public static function pressNamedButton(HelperSelectorInterface $parent, $key)
     {
@@ -476,15 +534,18 @@ EOD
 
     /**
      * Helper method that returns the content block of a page
+     *
      * @param Page $parent
-     * @return \Behat\Mink\Element\NodeElement
+     *
      * @throws \Exception
+     *
+     * @return \Behat\Mink\Element\NodeElement
      */
     public static function getContentBlock(Page $parent)
     {
         $contentBlocks = [
             'emotion' => 'div#content > div.inner',
-            'responsive' => 'div.content-main--inner'
+            'responsive' => 'div.content-main--inner',
         ];
 
         foreach ($contentBlocks as $locator) {
@@ -500,9 +561,10 @@ EOD
 
     /**
      * Fills a the inputs of a form
+     *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param string $formKey
-     * @param array $values
+     * @param string                               $formKey
+     * @param array                                $values
      */
     public static function fillForm(HelperSelectorInterface $parent, $formKey, $values)
     {
@@ -518,10 +580,10 @@ EOD
                     $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
                 }
 
-                if (strpos($fieldName, ".") !== false) {
-                    $fieldName = str_replace(".", "][", $fieldName);
+                if (strpos($fieldName, '.') !== false) {
+                    $fieldName = str_replace('.', '][', $fieldName);
                 }
-                
+
                 $field = $form->findField($fieldName);
 
                 if (empty($field)) {
@@ -562,6 +624,7 @@ EOD
 
     /**
      * Helper function to get the current language ('de' or 'en')
+     *
      * @return string
      */
     public static function getCurrentLanguage()
@@ -573,20 +636,22 @@ EOD
      * Helper function to get some information about the current page
      * Possible modes are 'controller', 'action' and 'template' or a combination of them
      * Please note, that 'template' only works in combination with 'controller' and/or 'action'.
+     *
      * @param \Behat\Mink\Session $session
-     * @param array $selectionMode
+     * @param array               $selectionMode
+     *
      * @return array|bool
      */
     public static function getPageInfo(\Behat\Mink\Session $session, array $selectionMode)
     {
         $prefixes = [
             'emotion' => [
-                'controller' => 'ctl_'
+                'controller' => 'ctl_',
             ],
             'responsive' => [
                 'controller' => 'is--ctl-',
-                'action' => 'is--act-'
-            ]
+                'action' => 'is--act-',
+            ],
         ];
 
         $body = $session->getPage()->find('css', 'body');
@@ -635,7 +700,8 @@ EOD
 
     /**
      * @param HelperSelectorInterface $element
-     * @param bool $throwExceptions
+     * @param bool                    $throwExceptions
+     *
      * @return array
      */
     public static function getElementData(HelperSelectorInterface $element, $throwExceptions = true)
@@ -657,9 +723,10 @@ EOD
     }
 
     /**
-     * @param array $hash
+     * @param array  $hash
      * @param string $keyKey
      * @param string $valueKey
+     *
      * @return array
      */
     public static function convertTableHashToArray(array $hash, $keyKey = 'property', $valueKey = 'value')
@@ -677,9 +744,12 @@ EOD
 
     /**
      * Returns the unique value of an array, throws in exception if there are differences
+     *
      * @param $array
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getUnique(array $array)
     {
@@ -698,21 +768,22 @@ EOD
     }
 
     /**
-     *
      * @param Element $element
-     * @param string $propertyName
+     * @param string  $propertyName
+     *
      * @return string|float|array
      */
     public static function getElementProperty(Element $element, $propertyName)
     {
-        $method = 'get' . ucFirst($propertyName) . 'Property';
+        $method = 'get' . ucfirst($propertyName) . 'Property';
+
         return $element->$method();
     }
 
     /**
-     *
      * @param Element $element
-     * @param array $properties
+     * @param array   $properties
+     *
      * @return bool|array
      */
     public static function assertElementProperties(Element $element, array $properties)
@@ -733,36 +804,14 @@ EOD
         return [
             'key' => $result,
             'value' => $check[$result][0],
-            'value2' => $check[$result][1]
+            'value2' => $check[$result][1],
         ];
     }
 
-    /** @var  MultipleElement */
-    private static $filterElements;
-
     /**
-     *
-     * @param $var
-     * @return bool
-     */
-    private static function filter($var)
-    {
-        /** @var MultipleElement $element */
-        foreach (self::$filterElements as $element) {
-            if (self::assertElementProperties($element, $var) === true) {
-                self::$filterElements->remove();
-
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @param array $needles
+     * @param array           $needles
      * @param MultipleElement $haystack
+     *
      * @return bool|array
      */
     public static function searchElements(array $needles, MultipleElement $haystack)
@@ -778,9 +827,9 @@ EOD
     }
 
     /**
-     *
-     * @param array $needles
+     * @param array           $needles
      * @param MultipleElement $haystack
+     *
      * @return array|bool
      */
     public static function assertElements(array $needles, MultipleElement $haystack)
@@ -794,7 +843,7 @@ EOD
             if ($result !== true) {
                 $failures[] = [
                     'properties' => $item,
-                    'result' => $result
+                    'result' => $result,
                 ];
             }
         }
@@ -808,8 +857,9 @@ EOD
 
     /**
      * Global method to check the count of an MultipleElement
+     *
      * @param MultipleElement $elements
-     * @param int              $count
+     * @param int             $count
      */
     public static function assertElementCount(MultipleElement $elements, $count = 0)
     {
@@ -822,5 +872,24 @@ EOD
             );
             self::throwException($message);
         }
+    }
+
+    /**
+     * @param $var
+     *
+     * @return bool
+     */
+    private static function filter($var)
+    {
+        /** @var MultipleElement $element */
+        foreach (self::$filterElements as $element) {
+            if (self::assertElementProperties($element, $var) === true) {
+                self::$filterElements->remove();
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }

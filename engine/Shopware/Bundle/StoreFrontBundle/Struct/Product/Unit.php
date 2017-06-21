@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Unit extends Extendable implements \JsonSerializable
@@ -119,7 +119,6 @@ class Unit extends Extendable implements \JsonSerializable
 
     /**
      * @param int $id
-     *
      */
     public function setId($id)
     {
@@ -152,7 +151,6 @@ class Unit extends Extendable implements \JsonSerializable
 
     /**
      * @param string $unit
-     *
      */
     public function setUnit($unit)
     {
@@ -264,7 +262,7 @@ class Unit extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

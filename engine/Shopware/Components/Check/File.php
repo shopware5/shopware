@@ -31,7 +31,7 @@
  * </code>
  *
  * @category  Shopware
- * @package   Shopware\Components\Check\File
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Check_File
@@ -39,7 +39,7 @@ class Shopware_Components_Check_File
     /**
      * @var array
      */
-    protected $list = array();
+    protected $list = [];
 
     /**
      * @var string
@@ -49,14 +49,14 @@ class Shopware_Components_Check_File
     /**
      * @var array
      */
-    private $skipList = array();
+    private $skipList = [];
 
     /**
      * @param string $filePath
      * @param string $testDir
-     * @param array $skipList List of filenames to be skipped
+     * @param array  $skipList List of filenames to be skipped
      */
-    public function __construct($filePath, $testDir = null, $skipList = array())
+    public function __construct($filePath, $testDir = null, $skipList = [])
     {
         $this->filePath = $filePath;
         $this->skipList = $skipList;
@@ -78,8 +78,8 @@ class Shopware_Components_Check_File
         $md5Sums = trim(file_get_contents($this->filePath));
         $md5Sums = explode("\n", $md5Sums);
 
-        $good = array();
-        $bad  = array();
+        $good = [];
+        $bad = [];
 
         foreach ($md5Sums as $row) {
             list($expectedMd5Sum, $file) = explode('  ', trim($row));
@@ -97,17 +97,17 @@ class Shopware_Components_Check_File
             }
 
             if ($md5SumMatch) {
-                $good[] = array(
-                    'name'      => $file,
+                $good[] = [
+                    'name' => $file,
                     'available' => $fileAvailable,
-                    'result'    => $md5SumMatch
-                );
+                    'result' => $md5SumMatch,
+                ];
             } else {
-                $bad[] = array(
-                    'name'      => $file,
+                $bad[] = [
+                    'name' => $file,
                     'available' => $fileAvailable,
-                    'result'    => $md5SumMatch
-                );
+                    'result' => $md5SumMatch,
+                ];
             }
         }
 

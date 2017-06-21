@@ -24,9 +24,8 @@
 
 namespace Shopware\Models\Article\Image;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Article Image Rule model.
@@ -37,30 +36,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Rule extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="mapping_id", type="integer", nullable=false)
-     */
-    private $mappingId;
-
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="option_id", type="integer", nullable=false)
-     */
-    private $optionId;
-
-    /**
      * OWNING SIDE - BI DIRECTIONAL
+     *
      * @var \Shopware\Models\Article\Image\Mapping
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image\Mapping", inversedBy="rules")
      * @ORM\JoinColumn(name="mapping_id", referencedColumnName="id")
@@ -69,11 +46,34 @@ class Rule extends ModelEntity
 
     /**
      * OWNING SIDE - UNI DIRECTIONAL
+     *
      * @var \Shopware\Models\Article\Configurator\Option
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Option")
      * @ORM\JoinColumn(name="option_id", referencedColumnName="id")
      */
     protected $option;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="mapping_id", type="integer", nullable=false)
+     */
+    private $mappingId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="option_id", type="integer", nullable=false)
+     */
+    private $optionId;
 
     /**
      * @return int

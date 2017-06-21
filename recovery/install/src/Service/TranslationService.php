@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Service;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TranslationService
@@ -45,7 +45,8 @@ class TranslationService
     }
 
     /**
-     * @param  string $key
+     * @param string $key
+     *
      * @return string
      */
     public function translate($key)
@@ -54,11 +55,12 @@ class TranslationService
             return $this->mappings[$key];
         }
 
-        return '(!)'.$key;
+        return '(!)' . $key;
     }
 
     /**
-     * @param  string $key
+     * @param string $key
+     *
      * @return string
      */
     public function t($key)

@@ -40,19 +40,8 @@ class ORMBacklogSaveSubscriber implements SubscriberInterface
     private $container;
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Enlight_Controller_Front_DispatchLoopShutdown' => 'onTerminate',
-            'Shopware_Command_After_Run' => 'onTerminate'
-        ];
-    }
-
-    /**
      * @param ORMBacklogSubscriber $backlog
-     * @param Container $container
+     * @param Container            $container
      */
     public function __construct(
         ORMBacklogSubscriber $backlog,
@@ -60,6 +49,17 @@ class ORMBacklogSaveSubscriber implements SubscriberInterface
     ) {
         $this->backlog = $backlog;
         $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'Enlight_Controller_Front_DispatchLoopShutdown' => 'onTerminate',
+            'Shopware_Command_After_Run' => 'onTerminate',
+        ];
     }
 
     public function onTerminate()

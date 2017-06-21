@@ -214,10 +214,8 @@ class LicenceStruct implements \JsonSerializable
         $this->priceModel = $priceModel;
     }
 
-
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -273,7 +271,7 @@ class LicenceStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isLicenseCheckEnabled()
     {
@@ -281,7 +279,7 @@ class LicenceStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $isLicenseCheckEnabled
+     * @param bool $isLicenseCheckEnabled
      */
     public function setIsLicenseCheckEnabled($isLicenseCheckEnabled)
     {

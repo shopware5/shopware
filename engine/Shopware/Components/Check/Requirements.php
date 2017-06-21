@@ -26,7 +26,7 @@ namespace Shopware\Components\Check;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Update
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Requirements
@@ -43,7 +43,7 @@ class Requirements
 
     /**
      * @param string $sourceFile
-     * @param \PDO $connection
+     * @param \PDO   $connection
      */
     public function __construct($sourceFile, $connection)
     {
@@ -63,21 +63,21 @@ class Requirements
     public function toArray()
     {
         $result = [
-            'hasErrors'   => false,
+            'hasErrors' => false,
             'hasWarnings' => false,
-            'checks'      => [],
+            'checks' => [],
         ];
 
         foreach ($this->runChecks() as $requirement) {
             $check = [];
-            $check['name']     = (string) $requirement->name;
-            $check['group']    = (string) $requirement->group;
-            $check['notice']   = (string) $requirement->notice;
+            $check['name'] = (string) $requirement->name;
+            $check['group'] = (string) $requirement->group;
+            $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
-            $check['version']  = (string) $requirement->version;
-            $check['check']   = (bool) (string) $requirement->result;
-            $check['result']   = (bool) $requirement->result;
-            $check['error']    = (bool) $requirement->error;
+            $check['version'] = (string) $requirement->version;
+            $check['check'] = (bool) (string) $requirement->result;
+            $check['result'] = (bool) $requirement->result;
+            $check['error'] = (bool) $requirement->error;
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
@@ -126,8 +126,9 @@ class Requirements
     /**
      * Checks a requirement
      *
-     * @param  string                   $name
-     * @return bool|string|integer|null
+     * @param string $name
+     *
+     * @return bool|string|int|null
      */
     private function getRuntimeValue($name)
     {
@@ -143,20 +144,21 @@ class Requirements
                 return false;
             } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
                 return true;
-            } else {
-                return $value;
             }
-        } else {
-            return null;
+
+            return $value;
         }
+
+        return null;
     }
 
     /**
      * Compares the requirement with the version
      *
-     * @param  string $name
-     * @param  string $value
-     * @param  string $requiredValue
+     * @param string $name
+     * @param string $value
+     * @param string $requiredValue
+     *
      * @return bool
      */
     private function compare($name, $value, $requiredValue)
@@ -170,9 +172,9 @@ class Requirements
             return $this->decodeSize($requiredValue) <= $this->decodeSize($value);
         } elseif (preg_match('#^[0-9][0-9\.]+$#', $requiredValue)) {
             return version_compare($requiredValue, $value, '<=');
-        } else {
-            return $requiredValue == $value;
         }
+
+        return $requiredValue == $value;
     }
 
     /**
@@ -202,9 +204,9 @@ class Requirements
     {
         if (strpos(phpversion(), '-')) {
             return substr(phpversion(), 0, strpos(phpversion(), '-'));
-        } else {
-            return phpversion();
         }
+
+        return phpversion();
     }
 
     private function checkMysqlStrictMode()
@@ -232,9 +234,9 @@ class Requirements
         $v = $this->connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
         if (strpos($v, '-')) {
             return substr($v, 0, strpos($v, '-'));
-        } else {
-            return $v;
         }
+
+        return $v;
     }
 
     /**
@@ -250,9 +252,9 @@ class Requirements
             return $curl['version'];
         } elseif (function_exists('curl_init')) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -264,9 +266,9 @@ class Requirements
     {
         if (defined('LIBXML_DOTTED_VERSION')) {
             return LIBXML_DOTTED_VERSION;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -287,9 +289,9 @@ class Requirements
             }
 
             return $gd['GD Version'];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -303,9 +305,9 @@ class Requirements
             $gd = gd_info();
 
             return !empty($gd['JPEG Support']) || !empty($gd['JPG Support']);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -319,9 +321,9 @@ class Requirements
             $gd = gd_info();
 
             return !empty($gd['FreeType Support']);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -335,9 +337,9 @@ class Requirements
             return (bool) session_save_path();
         } elseif (ini_get('session.save_path')) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -352,9 +354,9 @@ class Requirements
             $freeSpace = @disk_free_space(__DIR__);
 
             return $this->encodeSize($freeSpace);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -367,9 +369,9 @@ class Requirements
         $length = (int) ini_get('suhosin.get.max_value_length');
         if ($length === 0) {
             return 2000;
-        } else {
-            return $length;
         }
+
+        return $length;
     }
 
     /**
@@ -380,18 +382,20 @@ class Requirements
     private function checkIncludePath()
     {
         if (function_exists('set_include_path')) {
-            $old = set_include_path(get_include_path().PATH_SEPARATOR. __DIR__ .DIRECTORY_SEPARATOR);
-            return $old && get_include_path()!=$old;
-        } else {
-            return false;
+            $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
+
+            return $old && get_include_path() != $old;
         }
+
+        return false;
     }
 
     /**
      * Compare max execution time config
      *
-     * @param  string $version
-     * @param  string $required
+     * @param string $version
+     * @param string $required
+     *
      * @return bool
      */
     private function compareMaxExecutionTime($version, $required)
@@ -406,7 +410,8 @@ class Requirements
     /**
      * Decode php size format
      *
-     * @param  string $val
+     * @param string $val
+     *
      * @return float
      */
     private function decodePhpSize($val)
@@ -415,10 +420,10 @@ class Requirements
         $last = strtolower($val[strlen($val) - 1]);
         $val = (float) $val;
         switch ($last) {
-            /** @noinspection PhpMissingBreakStatementInspection */
+            /* @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $val *= 1024;
-            /** @noinspection PhpMissingBreakStatementInspection */
+            /* @noinspection PhpMissingBreakStatementInspection */
             case 'm':
                 $val *= 1024;
             case 'k':
@@ -431,7 +436,8 @@ class Requirements
     /**
      * Decode byte size format
      *
-     * @param  string $val
+     * @param string $val
+     *
      * @return float
      */
     private function decodeSize($val)
@@ -440,7 +446,7 @@ class Requirements
         list($val, $last) = explode(' ', $val);
         $val = (float) $val;
         switch (strtoupper($last)) {
-            /** @noinspection PhpMissingBreakStatementInspection */
+            /* @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
             case 'GB':
@@ -459,14 +465,15 @@ class Requirements
     /**
      * Encode byte size format
      *
-     * @param  float  $bytes
+     * @param float $bytes
+     *
      * @return string
      */
     private function encodeSize($bytes)
     {
         $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++) ;
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
-        return (round($bytes, 2) . ' ' . $types[$i]);
+        return round($bytes, 2) . ' ' . $types[$i];
     }
 }

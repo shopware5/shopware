@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FirstRunWizardEnableCommand extends ShopwareCommand
@@ -56,8 +56,8 @@ class FirstRunWizardEnableCommand extends ShopwareCommand
 
         $data = [
             'element_id' => $elementId,
-            'shop_id'    => 1,
-            'value'      => serialize(true),
+            'shop_id' => 1,
+            'value' => serialize(true),
         ];
 
         if ($valueid) {
@@ -74,6 +74,6 @@ class FirstRunWizardEnableCommand extends ShopwareCommand
         $cacheManager = $this->container->get('shopware.cache_manager');
         $cacheManager->clearConfigCache();
 
-        $output->writeln("<info>First Run Wizard enabled</info>");
+        $output->writeln('<info>First Run Wizard enabled</info>');
     }
 }

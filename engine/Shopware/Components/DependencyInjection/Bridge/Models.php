@@ -38,7 +38,7 @@ use Shopware\Components\Model\ModelManager;
  * which required for the entity manager.
  *
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Models
@@ -46,11 +46,11 @@ class Models
     /**
      * Creates the entity manager for the application.
      *
-     * @param EventManager      $eventManager
-     * @param Configuration     $config
-     * @param \Enlight_Loader   $loader
-     * @param Connection        $connection
-     * @param AnnotationDriver  $modelAnnotation
+     * @param EventManager     $eventManager
+     * @param Configuration    $config
+     * @param \Enlight_Loader  $loader
+     * @param Connection       $connection
+     * @param AnnotationDriver $modelAnnotation
      *
      * @return ModelManager
      */

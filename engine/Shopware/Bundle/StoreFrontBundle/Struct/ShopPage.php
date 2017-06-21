@@ -26,13 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopPage extends Extendable implements \JsonSerializable
 {
     /**
-     * @var int $id
+     * @var int
      */
     protected $id;
 
@@ -92,7 +92,7 @@ class ShopPage extends Extendable implements \JsonSerializable
     protected $html;
 
     /**
-     * @var string[] $grouping
+     * @var string[]
      */
     protected $grouping = [];
 
@@ -122,22 +122,22 @@ class ShopPage extends Extendable implements \JsonSerializable
     protected $shops;
 
     /**
-     * @var \DateTime $changed
+     * @var \DateTime
      */
     protected $changed;
 
     /**
-     * @var ShopPage[] $children
+     * @var ShopPage[]
      */
     protected $children = [];
 
     /**
-     * @var int $parentId
+     * @var int
      */
     protected $parentId;
 
     /**
-     * @var ShopPage $parent
+     * @var ShopPage
      */
     protected $parent;
 
@@ -494,7 +494,7 @@ class ShopPage extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

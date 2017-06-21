@@ -42,7 +42,7 @@ class MigrationsMigrateCommand extends ShopwareCommand
             'mode',
             null,
             InputOption::VALUE_REQUIRED,
-            "Mode to run: Install or Update",
+            'Mode to run: Install or Update',
             'update'
         );
     }

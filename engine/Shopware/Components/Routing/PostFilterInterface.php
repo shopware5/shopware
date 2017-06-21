@@ -26,14 +26,15 @@ namespace Shopware\Components\Routing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PostFilterInterface
 {
     /**
-     * @param string $url
+     * @param string  $url
      * @param Context $context
+     *
      * @return string
      */
     public function postFilter($url, Context $context);

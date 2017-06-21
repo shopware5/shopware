@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Sorting
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchRankingSorting extends Sorting

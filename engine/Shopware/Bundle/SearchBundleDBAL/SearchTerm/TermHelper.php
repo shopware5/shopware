@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TermHelper implements TermHelperInterface
@@ -48,6 +48,7 @@ class TermHelper implements TermHelperInterface
      * Parse a string / search term into a keyword array
      *
      * @param string $string
+     *
      * @return array
      */
     public function splitTerm($string)
@@ -61,7 +62,7 @@ class TermHelper implements TermHelperInterface
         $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
 
         // Remove not required chars from string
-        $string = trim(preg_replace("/[^\pL_0-9]/u", " ", $string));
+        $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
 
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
@@ -84,6 +85,7 @@ class TermHelper implements TermHelperInterface
      * Filter out bad keywords before starting search
      *
      * @param array $words
+     *
      * @return array|bool
      */
     private function filterBadWordsFromString(array $words)
@@ -107,6 +109,7 @@ class TermHelper implements TermHelperInterface
      * Check if a keyword is on blacklist or not
      *
      * @param string $word
+     *
      * @return bool
      */
     private function filterBadWordFromString($word)

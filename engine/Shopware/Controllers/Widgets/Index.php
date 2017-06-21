@@ -25,7 +25,6 @@
 /**
  * Shopware Application
  */
-
 class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
 {
     /**

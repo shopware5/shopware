@@ -36,7 +36,7 @@ use Shopware\Models\Shop\Shop as ShopModel;
  * Address API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Address extends Resource
@@ -61,9 +61,11 @@ class Address extends Resource
 
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Customer\Address
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Customer\Address
      */
     public function getOne($id)
     {
@@ -86,13 +88,14 @@ class Address extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -107,14 +110,16 @@ class Address extends Resource
         //returns the address data
         $addresses = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $addresses, 'total' => $totalResult);
+        return ['data' => $addresses, 'total' => $totalResult];
     }
 
     /**
      * @param array $params
-     * @return \Shopware\Models\Customer\Address
+     *
      * @throws ApiException\CustomValidationException
      * @throws ApiException\NotFoundException
+     *
+     * @return \Shopware\Models\Customer\Address
      */
     public function create(array $params)
     {
@@ -131,7 +136,7 @@ class Address extends Resource
         $this->setupContext($customer->getShop()->getId());
 
         if (!$params['country']) {
-            throw new ApiException\CustomValidationException("A country is required.");
+            throw new ApiException\CustomValidationException('A country is required.');
         }
 
         $params = $this->prepareAddressData($params);
@@ -153,12 +158,14 @@ class Address extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Customer\Address
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     *
+     * @return \Shopware\Models\Customer\Address
      */
     public function update($id, array $params)
     {
@@ -195,9 +202,11 @@ class Address extends Resource
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Customer\Address
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Customer\Address
      */
     public function delete($id)
     {
@@ -223,6 +232,7 @@ class Address extends Resource
      * Sets the correct context for e.g. validation
      *
      * @param int $shopId
+     *
      * @throws \RuntimeException
      */
     private function setupContext($shopId)
@@ -232,7 +242,7 @@ class Address extends Resource
 
         $shop = $shopRepository->getActiveById($shopId);
         if (!$shop) {
-            throw new \RuntimeException("A valid shopId is required.");
+            throw new \RuntimeException('A valid shopId is required.');
         }
 
         $shop->registerResources();
@@ -242,7 +252,8 @@ class Address extends Resource
      * Resolves id's to models
      *
      * @param array $data
-     * @param bool $filter
+     * @param bool  $filter
+     *
      * @return array
      */
     private function prepareAddressData(array $data, $filter = false)

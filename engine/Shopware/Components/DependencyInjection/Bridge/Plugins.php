@@ -28,17 +28,18 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Plugins
 {
     /**
-     * @param Container $container
-     * @param \Enlight_Loader $loader
+     * @param Container                   $container
+     * @param \Enlight_Loader             $loader
      * @param \Enlight_Event_EventManager $eventManager
-     * @param \Shopware $application
-     * @param array $pluginDirectories
+     * @param \Shopware                   $application
+     * @param array                       $pluginDirectories
+     *
      * @return \Enlight_Plugin_PluginManager
      */
     public function factory(

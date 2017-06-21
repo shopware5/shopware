@@ -28,23 +28,11 @@ use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TopSellerTest extends AbstractMarketing
 {
-    protected function resetTopSeller($condition = '')
-    {
-        $this->Db()->query("DELETE FROM s_articles_top_seller_ro " . $condition);
-    }
-
-    protected function getAllTopSeller($condition = '')
-    {
-        return $this->Db()->fetchAll("SELECT * FROM s_articles_top_seller_ro " . $condition);
-    }
-
-
-
     public function testInitTopSeller()
     {
         $this->resetTopSeller();
@@ -62,7 +50,6 @@ class TopSellerTest extends AbstractMarketing
             $this->getAllTopSeller()
         );
     }
-
 
     public function testUpdateElapsedTopSeller()
     {
@@ -94,19 +81,18 @@ class TopSellerTest extends AbstractMarketing
         );
     }
 
-
     public function testIncrementTopSeller()
     {
         $this->resetTopSeller();
         $this->TopSeller()->initTopSeller();
 
-        $topSeller = $this->getAllTopSeller(" LIMIT 1 ");
+        $topSeller = $this->getAllTopSeller(' LIMIT 1 ');
         $topSeller = $topSeller[0];
         $initialValue = $topSeller['sales'];
 
         $this->TopSeller()->incrementTopSeller($topSeller['article_id'], 10);
 
-        $topSeller = $this->getAllTopSeller(" WHERE article_id = " . $topSeller['article_id']);
+        $topSeller = $this->getAllTopSeller(' WHERE article_id = ' . $topSeller['article_id']);
         $this->assertCount(1, $topSeller);
         $topSeller = $topSeller[0];
 
@@ -118,7 +104,7 @@ class TopSellerTest extends AbstractMarketing
         $this->resetTopSeller();
         $this->TopSeller()->initTopSeller();
 
-        $topSeller = $this->getAllTopSeller(" LIMIT 1 ");
+        $topSeller = $this->getAllTopSeller(' LIMIT 1 ');
         $topSeller = $topSeller[0];
 
         $this->resetTopSeller();
@@ -127,7 +113,7 @@ class TopSellerTest extends AbstractMarketing
         $allTopSeller = $this->getAllTopSeller();
         $this->assertCount(1, $allTopSeller);
 
-        $this->assertArrayEquals($topSeller, $allTopSeller[0], array('article_id', 'sales'));
+        $this->assertArrayEquals($topSeller, $allTopSeller[0], ['article_id', 'sales']);
     }
 
     /**
@@ -199,5 +185,15 @@ class TopSellerTest extends AbstractMarketing
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         $this->assertCount(0, $topSeller);
+    }
+
+    protected function resetTopSeller($condition = '')
+    {
+        $this->Db()->query('DELETE FROM s_articles_top_seller_ro ' . $condition);
+    }
+
+    protected function getAllTopSeller($condition = '')
+    {
+        return $this->Db()->fetchAll('SELECT * FROM s_articles_top_seller_ro ' . $condition);
     }
 }

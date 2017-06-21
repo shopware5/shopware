@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
 
 /**
  * Class Product
- * @package Shopware\Bundle\ESIndexingBundle\Struct
  */
 class Product extends ListProduct
 {
@@ -61,6 +60,7 @@ class Product extends ListProduct
 
     /**
      * @param ListProduct $listProduct
+     *
      * @return Product
      */
     public static function createFromListProduct(ListProduct $listProduct)
@@ -73,6 +73,7 @@ class Product extends ListProduct
         foreach ($listProduct as $key => $value) {
             $product->$key = $value;
         }
+
         return $product;
     }
 

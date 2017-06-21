@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 /**
  * Interface CSRFWhitelistAware
- * @package Shopware\Components
  */
 interface CSRFWhitelistAware
 {

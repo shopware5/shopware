@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components_Test_Controller_TestCase
@@ -34,12 +34,12 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
      *
      * @var array
      */
-    private $supplierData = array(
+    private $supplierData = [
         'name' => '__supplierTest',
         'link' => 'www.example.com',
         'description' => 'Test Supplier added by <a href="http://www.phpunit.de">unit test.</a>',
-        'image' => 'media/image/testImage.jpg'
-    );
+        'image' => 'media/image/testImage.jpg',
+    ];
 
     /**
      * Standard set up for every test - just disable auth
@@ -58,12 +58,11 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
      *
      * a) can this action be dispatched
      * b) is the answer encapsulated in a JSON header
-     *
      */
     public function testGetSuppliers()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/supplier/getSuppliers');
         $this->assertTrue($this->View()->success);
 
@@ -78,7 +77,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
      * Method to test: adding a supplier to the db
      * This method has to be called before the delete test
      *
-     * @return Array
+     * @return array
      */
     public function testAddSupplier()
     {
@@ -90,17 +89,20 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
 
         $this->assertArrayHasKey('data', $jsonBody);
         $this->assertArrayHasKey('success', $jsonBody);
+
         return $jsonBody['data'];
     }
 
     /**
      * @depends testAddSupplier
+     *
      * @param $lastSupplier
+     *
      * @return array
      */
     public function testUpdateSupplier($lastSupplier)
     {
-        foreach ($lastSupplier as $key=>$value) {
+        foreach ($lastSupplier as $key => $value) {
             if (!is_null($value)) {
                 $supplier[$key] = $value;
             }
@@ -124,11 +126,12 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
      * The lastId is the id from the last add test
      *
      * @depends testUpdateSupplier
+     *
      * @param array $lastSupplier
      */
     public function testDeleteSupplier(array $lastSupplier)
     {
-        $this->Request()->setMethod('POST')->setPost(array('id'=>$lastSupplier['id']));
+        $this->Request()->setMethod('POST')->setPost(['id' => $lastSupplier['id']]);
         $this->dispatch('backend/supplier/deleteSupplier');
         $this->assertTrue($this->View()->success);
     }

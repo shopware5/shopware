@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\CreateDateCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ class CreateDateConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof CreateDateCondition);
+        return $criteriaPart instanceof CreateDateCondition;
     }
 
     /**
@@ -51,14 +51,14 @@ class CreateDateConditionHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /**@var CreateDateCondition $criteriaPart */
+        /** @var CreateDateCondition $criteriaPart */
         $date = new \DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';
         $interval = new \DateInterval($intervalSpec);
         $date->sub($interval);
 
         $filter = new RangeQuery('formattedCreatedAt', [
-            'gte' => $date->format('Y-m-d')
+            'gte' => $date->format('Y-m-d'),
         ]);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {

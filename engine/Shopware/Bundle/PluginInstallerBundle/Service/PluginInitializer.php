@@ -51,8 +51,9 @@ class PluginInitializer
     }
 
     /**
-     * @return Plugin[]
      * @throws \RuntimeException
+     *
+     * @return Plugin[]
      */
     public function initializePlugins()
     {
@@ -70,13 +71,13 @@ class PluginInitializer
             }
 
             $pluginName = $pluginDir->getBasename();
-            $pluginFile = $pluginDir->getPathname() . '/'. $pluginName . '.php';
+            $pluginFile = $pluginDir->getPathname() . '/' . $pluginName . '.php';
             if (!is_file($pluginFile)) {
                 continue;
             }
 
             $namespace = $pluginName;
-            $className = '\\' . $namespace . '\\' .  $pluginName;
+            $className = '\\' . $namespace . '\\' . $pluginName;
             $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
             if (!class_exists($className)) {

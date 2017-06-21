@@ -34,9 +34,9 @@ trait TagReplaceTrait
      * identified by the provided argument index, with the collected services
      *
      * @param ContainerBuilder $container
-     * @param string $serviceName di container name of the service
-     * @param string $tagName name of the tag
-     * @param int $argumentIndex index of the constructor parameter to replace
+     * @param string           $serviceName   di container name of the service
+     * @param string           $tagName       name of the tag
+     * @param int              $argumentIndex index of the constructor parameter to replace
      */
     private function replaceArgumentWithTaggedServices(ContainerBuilder $container, $serviceName, $tagName, $argumentIndex)
     {

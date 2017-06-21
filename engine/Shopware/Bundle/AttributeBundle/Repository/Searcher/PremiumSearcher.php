@@ -25,12 +25,11 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Premium\Premium;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PremiumSearcher extends GenericSearcher
@@ -43,11 +42,13 @@ class PremiumSearcher extends GenericSearcher
         $query->innerJoin('entity.articleDetail', 'variant');
         $query->innerJoin('variant.article', 'article');
         $query->leftJoin('entity.shop', 's');
+
         return $query;
     }
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)
@@ -56,7 +57,7 @@ class PremiumSearcher extends GenericSearcher
             'entity.orderNumberExport',
             'variant.number',
             'article.name',
-            's.name'
+            's.name',
         ];
     }
 }

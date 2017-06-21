@@ -26,14 +26,15 @@ namespace Shopware\Components\Routing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface MatcherInterface
 {
     /**
-     * @param string $pathInfo
+     * @param string  $pathInfo
      * @param Context $context
+     *
      * @return array|false
      */
     public function match($pathInfo, Context $context);

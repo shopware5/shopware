@@ -29,6 +29,7 @@ interface BacklogReaderInterface
     /**
      * @param int $lastId
      * @param int $limit
+     *
      * @return Struct\Backlog[]
      */
     public function read($lastId, $limit);

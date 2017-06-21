@@ -30,7 +30,6 @@ use Shopware\Models\Plugin\Plugin;
 
 /**
  * Class CronjobSynchronizer
- * @package Shopware\Components\Plugin
  */
 class CronjobSynchronizer
 {
@@ -41,6 +40,7 @@ class CronjobSynchronizer
 
     /**
      * CronjobSyncronizer constructor.
+     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)
@@ -50,7 +50,8 @@ class CronjobSynchronizer
 
     /**
      * @param Plugin $plugin
-     * @param array $cronjobs
+     * @param array  $cronjobs
+     *
      * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $cronjobs)
@@ -90,7 +91,7 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param int $pluginId
+     * @param int   $pluginId
      * @param array $cronjobActions
      */
     private function removeNotExistingEntries($pluginId, array $cronjobActions)

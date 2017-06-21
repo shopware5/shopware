@@ -37,9 +37,6 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
     }
 
-    /**
-     *
-     */
     public function refreshCaptchaAction()
     {
         $rand = \Shopware\Components\Random::getAlphanumericString(32);
@@ -55,7 +52,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         imagedestroy($imgResource);
         $img = base64_encode($img);
 
-        $body = '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
+        $body = '<img src="data:image/png;base64,' . $img . '" alt="Captcha" />';
         $body .= '<input type="hidden" name="sRand" value="' . $rand . '" />';
 
         $this->Response()->setBody($body);
@@ -86,6 +83,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      * to terminate the used font and background.
      *
      * @param string $string
+     *
      * @return resource
      */
     public function getImageResource($string)
@@ -118,14 +116,14 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
-            for ($i = 0; $i <= strlen($string); $i++) {
+            for ($i = 0; $i <= strlen($string); ++$i) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
                 $rand3 = rand(60, 70);
                 imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
                 imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
             }
-            for ($i = 0; $i < 8; $i++) {
+            for ($i = 0; $i < 8; ++$i) {
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
             }
@@ -143,6 +141,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      * If the file exists, the full file path will be returned, otherwise null
      *
      * @param $fileName
+     *
      * @return null|string
      */
     private function getCaptchaFile($fileName)

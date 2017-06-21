@@ -29,7 +29,8 @@ use Slim\Http\Request;
 class Utils
 {
     /**
-     * @param  string $file
+     * @param string $file
+     *
      * @return bool
      */
     public static function check($file)
@@ -37,9 +38,9 @@ class Utils
         if (file_exists($file)) {
             if (!is_writeable($file)) {
                 return $file;
-            } else {
-                return true;
             }
+
+            return true;
         }
 
         return self::check(dirname($file));
@@ -72,10 +73,10 @@ class Utils
     {
         $results = [];
         foreach ($paths as $path) {
-            $name   = $basePath . '/' . $path;
+            $name = $basePath . '/' . $path;
             $result = file_exists($name) && is_readable($name) && is_writeable($name);
             $results[] = [
-                'name'   => $path,
+                'name' => $path,
                 'result' => $result,
             ];
         }
@@ -127,7 +128,7 @@ class Utils
         } catch (\Exception $e) {
             // todo: add error handling
             // empty catch intendded.
-        };
+        }
 
         if ($includeDir) {
             @rmdir($dir);
@@ -149,14 +150,15 @@ class Utils
     }
 
     /**
-     * @param  \Slim\Http\Request $request
-     * @param  string             $lang
+     * @param \Slim\Http\Request $request
+     * @param string             $lang
+     *
      * @return string
      */
     public static function getLanguage(Request $request, $lang = null)
     {
-        $allowedLanguages = ["de", "en"];
-        $selectedLanguage = "de";
+        $allowedLanguages = ['de', 'en'];
+        $selectedLanguage = 'de';
 
         if ($lang && in_array($lang, $allowedLanguages)) {
             return $lang;
@@ -168,16 +170,16 @@ class Utils
         }
 
         if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
-            $selectedLanguage = "de";
+            $selectedLanguage = 'de';
         }
 
-        if (isset($_POST["language"]) && in_array($_POST["language"], $allowedLanguages)) {
-            $selectedLanguage     = $_POST["language"];
-            $_SESSION["language"] = $selectedLanguage;
-        } elseif (isset($_SESSION["language"]) && in_array($_SESSION["language"], $allowedLanguages)) {
-            $selectedLanguage = $_SESSION["language"];
+        if (isset($_POST['language']) && in_array($_POST['language'], $allowedLanguages)) {
+            $selectedLanguage = $_POST['language'];
+            $_SESSION['language'] = $selectedLanguage;
+        } elseif (isset($_SESSION['language']) && in_array($_SESSION['language'], $allowedLanguages)) {
+            $selectedLanguage = $_SESSION['language'];
         } else {
-            $_SESSION["language"] = $selectedLanguage;
+            $_SESSION['language'] = $selectedLanguage;
         }
 
         return $selectedLanguage;
@@ -235,28 +237,6 @@ class Utils
     }
 
     /**
-     * @param $conn
-     */
-    protected static function setNonStrictSQLMode(\PDO $conn)
-    {
-        $conn->exec("SET @@session.sql_mode = ''");
-    }
-
-    /**
-     * @param  \PDO              $conn
-     * @throws \RuntimeException
-     */
-    private static function checkSQLMode(\PDO $conn)
-    {
-        $sql = "SELECT @@SESSION.sql_mode;";
-        $result = $conn->query($sql)->fetchColumn(0);
-
-        if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
-            throw new \RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
-        }
-    }
-
-    /**
      * @param string $dir
      *
      * @return array
@@ -298,5 +278,28 @@ class Utils
         }
 
         return array_keys($errorFiles);
+    }
+
+    /**
+     * @param $conn
+     */
+    protected static function setNonStrictSQLMode(\PDO $conn)
+    {
+        $conn->exec("SET @@session.sql_mode = ''");
+    }
+
+    /**
+     * @param \PDO $conn
+     *
+     * @throws \RuntimeException
+     */
+    private static function checkSQLMode(\PDO $conn)
+    {
+        $sql = 'SELECT @@SESSION.sql_mode;';
+        $result = $conn->query($sql)->fetchColumn(0);
+
+        if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+            throw new \RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
+        }
     }
 }

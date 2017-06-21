@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Attribute extends Struct implements \JsonSerializable
@@ -40,6 +40,7 @@ class Attribute extends Struct implements \JsonSerializable
 
     /**
      * @param array $data
+     *
      * @throws \Exception
      */
     public function __construct($data = [])
@@ -57,6 +58,7 @@ class Attribute extends Struct implements \JsonSerializable
      * Checks if a storage key exists
      *
      * @param $key
+     *
      * @return bool
      */
     public function exists($key)
@@ -71,6 +73,7 @@ class Attribute extends Struct implements \JsonSerializable
      *
      * @param $name
      * @param $value
+     *
      * @throws \Exception
      */
     public function set($name, $value)
@@ -86,7 +89,38 @@ class Attribute extends Struct implements \JsonSerializable
     }
 
     /**
+     * Returns the whole storage data.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->storage;
+    }
+
+    /**
+     * Returns a single storage value.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function get($name)
+    {
+        return $this->storage[$name];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->storage;
+    }
+
+    /**
      * @param mixed $value
+     *
      * @return bool
      */
     private function isValid($value)
@@ -108,34 +142,5 @@ class Attribute extends Struct implements \JsonSerializable
         }
 
         return true;
-    }
-
-    /**
-     * Returns the whole storage data.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->storage;
-    }
-
-    /**
-     * Returns a single storage value.
-     *
-     * @param $name
-     * @return mixed
-     */
-    public function get($name)
-    {
-        return $this->storage[$name];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return $this->storage;
     }
 }

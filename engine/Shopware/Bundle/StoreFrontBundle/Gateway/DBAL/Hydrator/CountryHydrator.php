@@ -29,7 +29,7 @@ use Shopware\Models\Country\Area;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CountryHydrator extends Hydrator
@@ -49,6 +49,7 @@ class CountryHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Area
      */
     public function hydrateArea(array $data)
@@ -56,11 +57,13 @@ class CountryHydrator extends Hydrator
         $area = new Struct\Country\Area();
         $area->setId((int) $data['__countryArea_id']);
         $area->setName($data['__countryArea_name']);
+
         return $area;
     }
 
     /**
      * @param array $data
+     *
      * @return Struct\Country
      */
     public function hydrateCountry(array $data)
@@ -126,6 +129,7 @@ class CountryHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country\State
      */
     public function hydrateState(array $data)

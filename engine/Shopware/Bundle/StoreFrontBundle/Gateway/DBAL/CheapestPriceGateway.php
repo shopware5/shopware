@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
@@ -66,9 +66,9 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
-     * @param Hydrator\PriceHydrator $priceHydrator
+     * @param Connection                  $connection
+     * @param FieldHelper                 $fieldHelper
+     * @param Hydrator\PriceHydrator      $priceHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -84,7 +84,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(
         Struct\BaseProduct $product,
@@ -97,7 +97,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(
         $products,
@@ -127,7 +127,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $this->fieldHelper->addVariantTranslation($query, $context);
         $this->fieldHelper->addPriceTranslation($query, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -137,14 +137,16 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             $product = $row['__price_articleID'];
             $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
         }
+
         return $prices;
     }
 
     /**
      * Pre selection of the cheapest prices ids.
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]  $products
      * @param Struct\Customer\Group $customerGroup
+     *
      * @return array
      */
     private function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
@@ -160,7 +162,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $subQuery->select('prices.id')
             ->from('s_articles_prices', 'prices');
 
-        /**
+        /*
          * joins the product variants for the min purchase calculation.
          * The cheapest price is defined by prices.price * variant.minpurchase (the real basket price)
          */
@@ -171,7 +173,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             'variant.id = prices.articledetailsID'
         );
 
-        /**
+        /*
          * Joins the products for the closeout validation.
          * Required to select only product prices which product variant can be added to the basket and purchased
          */
@@ -202,7 +204,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             ->andWhere('variant.active = 1')
             ->andWhere('prices.articleID = outerPrices.articleID');
 
-        /**
+        /*
          * This part of the query handles the closeout products.
          *
          * The `laststock` column contains "1" if the product is a closeout product.
@@ -219,12 +221,12 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $subQuery->setMaxResults(1);
 
         if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
-            /**
+            /*
              * Sorting by the cheapest available price
              */
             $subQuery->orderBy('(prices.price * variant.minpurchase)');
         } else {
-            /**
+            /*
              * Sorting by the cheapest unit price
              */
             $subQuery->orderBy('prices.price');

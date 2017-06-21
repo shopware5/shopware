@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\MultiEdit\Resource;
 
-use Shopware\Components\MultiEdit\Resource\Product\DqlHelper;
-use Shopware\Components\MultiEdit\Resource\Product\Grammar;
-use Shopware\Components\MultiEdit\Resource\Product\Filter;
-use Shopware\Components\MultiEdit\Resource\Product\BatchProcess;
-use Shopware\Components\MultiEdit\Resource\Product\Queue;
 use Shopware\Components\MultiEdit\Resource\Product\Backup;
+use Shopware\Components\MultiEdit\Resource\Product\BatchProcess;
+use Shopware\Components\MultiEdit\Resource\Product\DqlHelper;
+use Shopware\Components\MultiEdit\Resource\Product\Filter;
+use Shopware\Components\MultiEdit\Resource\Product\Grammar;
+use Shopware\Components\MultiEdit\Resource\Product\Queue;
 use Shopware\Components\MultiEdit\Resource\Product\Value;
 
 /**
@@ -80,7 +80,7 @@ class Product implements ResourceInterface
         $this->backup = $backup;
     }
 
-     /**
+    /**
      * Returns the grammar for the product resource
      *
      * @return array
@@ -96,6 +96,7 @@ class Product implements ResourceInterface
      * @param $attribute
      * @param $operator
      * @param $queryConfig
+     *
      * @return array
      */
     public function getValuesFor($attribute, $operator, $queryConfig)
@@ -106,7 +107,7 @@ class Product implements ResourceInterface
     /**
      * Returns products matching a given filter
      */
-    public function filter($ast, $offset, $limit, $orderBy=null)
+    public function filter($ast, $offset, $limit, $orderBy = null)
     {
         return $this->filter->filter($ast, $offset, $limit, $orderBy);
     }
@@ -125,6 +126,7 @@ class Product implements ResourceInterface
      * The actual batch processing
      *
      * @param $queueId
+     *
      * @return mixed
      */
     public function batchProcess($queueId)
@@ -140,6 +142,7 @@ class Product implements ResourceInterface
      * @param $offset
      * @param $limit
      * @param $queueId
+     *
      * @return mixed
      */
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId)
@@ -163,16 +166,17 @@ class Product implements ResourceInterface
      * Saves a single modified instance of the entity
      *
      * @param $params
+     *
      * @return mixed
      */
     public function save($params)
     {
         $entityManager = $this->dqlHelper->getEntityManager();
 
-        $primaryIdentifiers = array();
+        $primaryIdentifiers = [];
 
         // Group fields by entity, collect primary identifiers
-        $groups = array();
+        $groups = [];
         foreach ($params as $key => $info) {
             $prefix = strtolower($info['entity']);
             $groups[$prefix][] = $info;
@@ -199,7 +203,7 @@ class Product implements ResourceInterface
 
                     $field['value'] = $this->dqlHelper->formatValue($prefix, $field, $field['value']);
 
-                    $setter = 'set'.ucfirst($field['field']);
+                    $setter = 'set' . ucfirst($field['field']);
                     $model->$setter($field['value']);
                 }
                 $entityManager->persist($model);
@@ -209,7 +213,7 @@ class Product implements ResourceInterface
                 // store net prices
                 $tax = $detailModel->getArticle()->getTax()->getTax() / 100 + 1;
                 $priceModel = $entityManager->getRepository($entity)->findOneBy(
-                    array('articleDetailsId' => $detailModel->getId(), 'customerGroupKey' => 'EK', 'from' => 1)
+                    ['articleDetailsId' => $detailModel->getId(), 'customerGroupKey' => 'EK', 'from' => 1]
                 );
                 foreach ($fields as $field) {
                     // Do not persist non-editable fields
@@ -220,7 +224,7 @@ class Product implements ResourceInterface
 
                     $price = str_replace(',', '.', $field['value']);
                     $price = ($tax != 0 ? $price / $tax : 0);
-                    $setter = 'set'.ucfirst($field['field']);
+                    $setter = 'set' . ucfirst($field['field']);
                     $priceModel->$setter($price);
                 }
                 $entityManager->persist($priceModel);
@@ -236,6 +240,7 @@ class Product implements ResourceInterface
      *
      * @param $offset
      * @param $limit
+     *
      * @return mixed
      */
     public function listBackups($offset, $limit)
@@ -248,6 +253,7 @@ class Product implements ResourceInterface
      *
      * @param $id
      * @param $offset
+     *
      * @return mixed
      */
     public function restoreBackup($id, $offset)
@@ -259,6 +265,7 @@ class Product implements ResourceInterface
      * Delete a given backup
      *
      * @param $id
+     *
      * @return mixed
      */
     public function deleteBackup($id)

@@ -34,41 +34,49 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 {
     /**
      * Table to do authentication against
+     *
      * @var string
      */
     protected $_tableName = 's_core_auth';
     /**
      * Column that holds the username
+     *
      * @var string
      */
     protected $_identityColumn = 'username';
     /**
      * Column that holds the password
+     *
      * @var string
      */
     protected $_credentialColumn = 'password';
     /**
      * Array with conditions that have to be true in auth request
+     *
      * @var array
      */
-    protected $conditions = array('active=1', 'lockeduntil <= NOW()');
+    protected $conditions = ['active=1', 'lockeduntil <= NOW()'];
     /**
      * Column that holds the expire date
+     *
      * @var string
      */
     protected $expiryColumn = 'lastlogin';
     /**
      * Column that holds the session id
+     *
      * @var string
      */
     protected $sessionIdColumn = 'sessionID';
     /**
      * For bruce force protection - column that holds the date until the login is permitted
+     *
      * @var string
      */
     protected $lockedUntilColumn = 'lockeduntil';
     /**
      * How many seconds is a login is valid?
+     *
      * @var int
      */
     protected $expiry = 21600;
@@ -94,6 +102,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      * table and attempt to find a record matching the provided identity.
      *
      * @throws Zend_Auth_Adapter_Exception if answering the authentication query is impossible
+     *
      * @return Zend_Auth_Result
      */
     public function authenticate()
@@ -103,15 +112,15 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         $select = $this->_zendDb->select();
         $select->from($this->_tableName);
         $select->where($this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity);
-        $user = $this->_zendDb->fetchRow($select, array(), Zend_Db::FETCH_OBJ);
+        $user = $this->_zendDb->fetchRow($select, [], Zend_Db::FETCH_OBJ);
 
         if ($result->isValid()) {
             // Check if user role is active
             $sql = 'SELECT enabled FROM s_core_auth_roles WHERE id = ?';
-            if ($this->_zendDb->fetchOne($sql, array($user->roleID)) == false) {
+            if ($this->_zendDb->fetchOne($sql, [$user->roleID]) == false) {
                 return new Zend_Auth_Result(
                     Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
-                    $this->_identity, array()
+                    $this->_identity, []
                 );
             }
 
@@ -141,11 +150,51 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
                 return new Zend_Auth_Result(
                     -4,
                     $this->_identity,
-                    array('lockedUntil' => $lockedUntil)
+                    ['lockedUntil' => $lockedUntil]
                 );
             }
         }
+
         return $result;
+    }
+
+    /**
+     * @param $plaintext
+     * @param $hash
+     * @param $encoderName
+     */
+    public function rehash($plaintext, $hash, $encoderName)
+    {
+        $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
+
+        if ($newHash === $hash) {
+            return;
+        }
+
+        $this->_zendDb->update(
+            $this->_tableName,
+            [$this->_credentialColumn => $newHash],
+            $this->_zendDb->quoteInto(
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+            )
+        );
+    }
+
+    /**
+     * @param string $plaintext
+     * @param string $defaultEncoderName
+     */
+    public function updateHash($plaintext, $defaultEncoderName)
+    {
+        $newHash = Shopware()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
+
+        $this->_zendDb->update(
+            $this->_tableName,
+            ['encoder' => $defaultEncoderName, $this->_credentialColumn => $newHash],
+            $this->_zendDb->quoteInto(
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+            )
+        );
     }
 
     protected function updateExpiry()
@@ -158,7 +207,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 
         $this->_zendDb->update(
            $this->_tableName,
-           array($this->expiryColumn => Zend_Date::now()),
+           [$this->expiryColumn => Zend_Date::now()],
            $this->_zendDb->quoteInto(
                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $user->username
            )
@@ -167,18 +216,21 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 
     /**
      * Set the property failed logins to a new value
+     *
      * @param $number
+     *
      * @return Shopware_Components_Auth_Adapter_Default
      */
     protected function setFailedLogins($number)
     {
         $this->_zendDb->update(
             $this->_tableName,
-            array('failedlogins' => $number),
+            ['failedlogins' => $number],
             $this->_zendDb->quoteInto(
                 $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
             )
         );
+
         return $this;
     }
 
@@ -192,7 +244,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     {
         // get select
         $dbSelect = clone $this->getDbSelect();
-        $dbSelect->from($this->_tableName, array('*'))
+        $dbSelect->from($this->_tableName, ['*'])
                 ->where($this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity);
 
         return $dbSelect;
@@ -204,6 +256,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      * identity provided to this adapter.
      *
      * @param array $resultIdentity
+     *
      * @return Zend_Auth_Result
      */
     protected function _authenticateValidateResult($resultIdentity)
@@ -215,9 +268,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
                 $passwordValid = true;
             }
         } else {
-            $encoderName  = $resultIdentity['encoder'];
-            $plaintext    = $this->_credential;
-            $hash         = $resultIdentity[$this->_credentialColumn];
+            $encoderName = $resultIdentity['encoder'];
+            $plaintext = $this->_credential;
+            $hash = $resultIdentity[$this->_credentialColumn];
 
             $passwordValid = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
             if ($passwordValid) {
@@ -244,44 +297,5 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         $this->_authenticateResultInfo['messages'][] = 'Authentication successful.';
 
         return $this->_authenticateCreateAuthResult();
-    }
-
-    /**
-     * @param $plaintext
-     * @param $hash
-     * @param $encoderName
-     */
-    public function rehash($plaintext, $hash, $encoderName)
-    {
-        $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
-
-        if ($newHash === $hash) {
-            return;
-        }
-
-        $this->_zendDb->update(
-            $this->_tableName,
-            array($this->_credentialColumn => $newHash),
-            $this->_zendDb->quoteInto(
-                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
-            )
-        );
-    }
-
-    /**
-     * @param string $plaintext
-     * @param string $defaultEncoderName
-     */
-    public function updateHash($plaintext, $defaultEncoderName)
-    {
-        $newHash = Shopware()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
-
-        $this->_zendDb->update(
-            $this->_tableName,
-            array('encoder' => $defaultEncoderName, $this->_credentialColumn => $newHash),
-            $this->_zendDb->quoteInto(
-                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
-            )
-        );
     }
 }

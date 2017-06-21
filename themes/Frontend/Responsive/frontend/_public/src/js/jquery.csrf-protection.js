@@ -140,6 +140,8 @@
          * @private
          */
         _ajaxBeforeSend: function(event, request, settings) {
+            settings = settings || {};
+
             if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true) {
                 return;
             }
@@ -147,6 +149,7 @@
             if (!settings.dataType || settings.dataType.toLowerCase() === 'jsonp') {
                 return;
             }
+
             request.setRequestHeader('X-CSRF-Token', this.getToken());
         },
 
@@ -158,14 +161,19 @@
          * @private
          */
         _jsonpBeforeSend: function(event, request, settings) {
-            if (!settings.type || settings.type.toLowerCase() !== 'get') {
+            if (!settings.type || settings.type.toLowerCase() !== 'get' ||
+                !settings.dataType || settings.dataType.toLowerCase() !== 'jsonp') {
                 return;
             }
 
             if (settings.url.indexOf('__csrf_token=') !== -1) {
                 return;
             }
-            settings.url += ( settings.url.indexOf('?') >= 0 ? '&' : '?' ) + '__csrf_token=' + this.getToken();
+
+            if (!settings.appendCSRFToken || settings.appendCSRFToken !== true) {
+                return;
+            }
+            settings.url += (settings.url.indexOf('?') >= 0 ? '&' : '?') + '__csrf_token=' + this.getToken();
         },
 
         /**

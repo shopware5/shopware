@@ -49,7 +49,7 @@ class PluginCheck
     public function __construct(StoreApi $storeApi, \PDO $conn, $shopwareVersion)
     {
         $this->storeApi = $storeApi;
-        $this->conn     = $conn;
+        $this->conn = $conn;
         $this->shopwareVersion = $shopwareVersion;
     }
 
@@ -77,30 +77,30 @@ class PluginCheck
         foreach ($compatiblePlugins as $pluginName => $info) {
             $result[] = [
                 'plugin_name' => $pluginName,
-                'in_store'     => true,
-                'compatible'  => true,
-                'link'        => $info['store_url'],
-                'shopware_compatible' => $info['shopware_compatible']
+                'in_store' => true,
+                'compatible' => true,
+                'link' => $info['store_url'],
+                'shopware_compatible' => $info['shopware_compatible'],
             ];
         }
 
         foreach ($inCompatiblePlugins as $pluginName => $info) {
             $result[] = [
                 'plugin_name' => $pluginName,
-                'in_store'     => true,
-                'compatible'  => false,
-                'link'        => $info['store_url'],
-                'shopware_compatible' => $info['shopware_compatible']
+                'in_store' => true,
+                'compatible' => false,
+                'link' => $info['store_url'],
+                'shopware_compatible' => $info['shopware_compatible'],
             ];
         }
 
         foreach ($localPluginNames as $pluginName) {
             $result[] = [
                 'plugin_name' => $pluginName,
-                'in_store'     => false,
-                'compatible'  => false,
-                'link'        => null,
-                'shopware_compatible' => null
+                'in_store' => false,
+                'compatible' => false,
+                'link' => null,
+                'shopware_compatible' => null,
             ];
         }
 
@@ -111,6 +111,7 @@ class PluginCheck
      * Internal helper function to get the passed shopware version as a numeric value with four positions.
      *
      * @param string $version
+     *
      * @return int
      */
     private function getNumericShopwareVersion($version)
@@ -144,7 +145,8 @@ EOT;
 
     /**
      * @param $result1
-     * @param  array $localPluginNames
+     * @param array $localPluginNames
+     *
      * @return mixed
      */
     private function getCompatiblePlugins($result1, &$localPluginNames)
@@ -175,7 +177,8 @@ EOT;
 
     /**
      * @param $result1
-     * @param  array $localPluginNames
+     * @param array $localPluginNames
+     *
      * @return mixed
      */
     private function getInCompatiblePlugins($result1, &$localPluginNames)

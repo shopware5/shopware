@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Facet
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductAttributeFacet implements FacetInterface
@@ -64,11 +64,11 @@ class ProductAttributeFacet implements FacetInterface
     private $template = null;
 
     /**
-     * @param string $field
-     * @param string $mode
+     * @param string        $field
+     * @param string        $mode
      * @param string string $formFieldName
-     * @param string $label
-     * @param string|null $template
+     * @param string        $label
+     * @param string|null   $template
      */
     public function __construct(
         $field,

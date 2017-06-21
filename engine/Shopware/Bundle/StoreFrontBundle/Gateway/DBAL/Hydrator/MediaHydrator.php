@@ -25,14 +25,13 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
-use Shopware\Models;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaHydrator extends Hydrator
@@ -58,10 +57,10 @@ class MediaHydrator extends Hydrator
     private $database;
 
     /**
-     * @param AttributeHydrator $attributeHydrator
+     * @param AttributeHydrator                      $attributeHydrator
      * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
-     * @param MediaService $mediaService
-     * @param Connection $database
+     * @param MediaService                           $mediaService
+     * @param Connection                             $database
      */
     public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaService $mediaService, Connection $database)
     {
@@ -73,6 +72,7 @@ class MediaHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Media
      */
     public function hydrate(array $data)
@@ -106,7 +106,7 @@ class MediaHydrator extends Hydrator
             $media->setFile($this->mediaService->getUrl($data['__media_path']));
         }
 
-        /**
+        /*
          * Live Migration to add width/height to images
          */
         if ($this->isUpdateRequired($media, $data)) {
@@ -131,33 +131,13 @@ class MediaHydrator extends Hydrator
         if (!empty($data['__mediaAttribute_id'])) {
             $this->attributeHydrator->addAttribute($media, $data, 'mediaAttribute', 'media');
         }
+
         return $media;
     }
 
     /**
-     * @param Struct\Media $media
      * @param array $data
-     * @return bool
-     */
-    private function isUpdateRequired(Struct\Media $media, array $data)
-    {
-        if ($media->getType() != Struct\Media::TYPE_IMAGE) {
-            return false;
-        }
-        if (!array_key_exists('__media_width', $data)) {
-            return false;
-        }
-        if (!array_key_exists('__media_height', $data)) {
-            return false;
-        }
-        if ($data['__media_width'] !== null && $data['__media_height'] !== null) {
-            return false;
-        }
-        return $this->mediaService->has($data['__media_path']);
-    }
-
-    /**
-     * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media
      */
     public function hydrateProductImage(array $data)
@@ -178,7 +158,32 @@ class MediaHydrator extends Hydrator
     }
 
     /**
+     * @param Struct\Media $media
+     * @param array        $data
+     *
+     * @return bool
+     */
+    private function isUpdateRequired(Struct\Media $media, array $data)
+    {
+        if ($media->getType() != Struct\Media::TYPE_IMAGE) {
+            return false;
+        }
+        if (!array_key_exists('__media_width', $data)) {
+            return false;
+        }
+        if (!array_key_exists('__media_height', $data)) {
+            return false;
+        }
+        if ($data['__media_width'] !== null && $data['__media_height'] !== null) {
+            return false;
+        }
+
+        return $this->mediaService->has($data['__media_path']);
+    }
+
+    /**
      * @param array $data Contains the array data for the media
+     *
      * @return array
      */
     private function getMediaThumbnails(array $data)
@@ -215,6 +220,7 @@ class MediaHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return array
      */
     private function updateMedia(array $data)
@@ -225,12 +231,13 @@ class MediaHydrator extends Hydrator
             [
                 ':width' => $width,
                 ':height' => $height,
-                ':id' => $data['__media_id']
+                ':id' => $data['__media_id'],
             ]
         );
 
         $data['__media_width'] = $width;
         $data['__media_height'] = $height;
+
         return $data;
     }
 }

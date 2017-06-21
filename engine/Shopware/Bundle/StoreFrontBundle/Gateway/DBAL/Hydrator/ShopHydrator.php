@@ -54,10 +54,10 @@ class ShopHydrator extends Hydrator
     private $customerGroupHydrator;
 
     /**
-     * @param TemplateHydrator $templateHydrator
-     * @param CategoryHydrator $categoryHydrator
-     * @param LocaleHydrator $localeHydrator
-     * @param CurrencyHydrator $currencyHydrator
+     * @param TemplateHydrator      $templateHydrator
+     * @param CategoryHydrator      $categoryHydrator
+     * @param LocaleHydrator        $localeHydrator
+     * @param CurrencyHydrator      $currencyHydrator
      * @param CustomerGroupHydrator $customerGroupHydrator
      */
     public function __construct(
@@ -76,6 +76,7 @@ class ShopHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Shop
      */
     public function hydrate($data)

@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\CustomerGroup;
 
 /**
  * @CustomerGroup  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerGroupTest extends TestCase
@@ -52,25 +52,25 @@ class CustomerGroupTest extends TestCase
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
         // required parameter 'name' is missing
-        $testData = array(
-            'key'      => 'TS',
-            'tax'      => 0,
+        $testData = [
+            'key' => 'TS',
+            'tax' => 0,
             'taxInput' => true,
-            'mode'     => 0
-        );
+            'mode' => 0,
+        ];
 
         $this->resource->create($testData);
     }
 
     public function testCreateShouldBeSuccessful()
     {
-        $testData = array(
-            'key'      => 'TS',
-            'name'     => 'Test',
-            'tax'      => 0,
+        $testData = [
+            'key' => 'TS',
+            'name' => 'Test',
+            'tax' => 0,
             'taxInput' => 0,
-            'mode'     => 0
-        );
+            'mode' => 0,
+        ];
 
         $customerGroup = $this->resource->create($testData);
 
@@ -109,19 +109,18 @@ class CustomerGroupTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $result['data']);
     }
 
-
     /**
      * @depends testCreateShouldBeSuccessful
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
+        $testData = [
             'key' => 'TS',
             'name' => 'Test update',
             'tax' => true,
             'taxInput' => 1,
-            'mode' => 1
-        );
+            'mode' => 1,
+        ];
 
         $customerGroup = $this->resource->update($id, $testData);
 
@@ -142,7 +141,7 @@ class CustomerGroupTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -150,7 +149,7 @@ class CustomerGroupTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**
@@ -185,16 +184,16 @@ class CustomerGroupTest extends TestCase
      */
     public function testCreateShouldShouldPopulateDefaultValues()
     {
-        $defaults = array(
+        $defaults = [
             'taxInput' => 1,
-            'tax'      => 1,
-            'mode'     => 0
-        );
+            'tax' => 1,
+            'mode' => 0,
+        ];
 
-        $testData = array(
-            'key'  => 'DT',
+        $testData = [
+            'key' => 'DT',
             'name' => 'Default-Test',
-        );
+        ];
 
         $customerGroup = $this->resource->create($testData);
 

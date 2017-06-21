@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface MediaGatewayInterface
@@ -38,8 +39,9 @@ interface MediaGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param array $ids
+     * @param array                       $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media[] Indexed by the media id
      */
     public function getList($ids, Struct\ShopContextInterface $context);
@@ -52,6 +54,7 @@ interface MediaGatewayInterface
      *
      * @param $id
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media
      */
     public function get($id, Struct\ShopContextInterface $context);

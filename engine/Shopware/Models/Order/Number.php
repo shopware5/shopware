@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Order;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware order number table.
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Number extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,21 +45,21 @@ class Number extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="`desc`", type="string", length=255, nullable=false)
      */
     private $description;
 
     /**
-     * @var integer $number
+     * @var int
      *
      * @ORM\Column(name="`number`", type="integer", nullable=false)
      */

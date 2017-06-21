@@ -28,16 +28,16 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FilterTest extends TestCase
 {
-    /** @var  \Shopware_Plugins_Frontend_InputFilter_Bootstrap */
+    /** @var \Shopware_Plugins_Frontend_InputFilter_Bootstrap */
     private $inputFilter;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -50,22 +50,22 @@ class FilterTest extends TestCase
     public function sqlProvider()
     {
         return [
-            ["SELECT * FROM s_core_auth"],
-            ["SELECT * FROM s_order_details"],
-            ["SELECT * FROM benchmark.foo"],
+            ['SELECT * FROM s_core_auth'],
+            ['SELECT * FROM s_order_details'],
+            ['SELECT * FROM benchmark.foo'],
             ["INSERT INTO foo (bar) VALUES ('moo')"],
             ["REPLACE INSERT INTO foo (bar) VALUES ('moo')"],
             ["REPLACE INTO foo (bar) VALUES ('moo')"],
-            ["UPDATE foo SET a=2 WHERE x=y"],
-            ["DELETE FROM foo WHERE id > 1"],
-            ["ALTER TABLE foo ADD COLUMN bar int(1)"],
-            ["RENAME TABLE foo TO foobar"],
-            ["CREATE TABLE foobar (id int(11))"],
-            ["DROP TABLE foobar"],
-            ["TRUNCATE TABLE foobar"],
-            ["ALTER DATABASE `shopware` UPGRADE DATA DIRECTORY NAME;"],
-            ["RENAME DATABASE shopware TO shopware_foo"],
-            ["SELECT * FROM s_user UNION ALL SELECT * FROM s_user_addresses"],
+            ['UPDATE foo SET a=2 WHERE x=y'],
+            ['DELETE FROM foo WHERE id > 1'],
+            ['ALTER TABLE foo ADD COLUMN bar int(1)'],
+            ['RENAME TABLE foo TO foobar'],
+            ['CREATE TABLE foobar (id int(11))'],
+            ['DROP TABLE foobar'],
+            ['TRUNCATE TABLE foobar'],
+            ['ALTER DATABASE `shopware` UPGRADE DATA DIRECTORY NAME;'],
+            ['RENAME DATABASE shopware TO shopware_foo'],
+            ['SELECT * FROM s_user UNION ALL SELECT * FROM s_user_addresses'],
             ["SELECT CONCAT(CHAR(60),CHAR(63),CHAR(112),CHAR(104),CHAR(112),CHAR(32),CHAR(115),CHAR(121),CHAR(115),CHAR(116),CHAR(101),CHAR(109),CHAR(40),CHAR(36),CHAR(95),CHAR(71),CHAR(69),CHAR(84),CHAR(91),CHAR(39),CHAR(99),CHAR(111),CHAR(109),CHAR(109),CHAR(97),CHAR(110),CHAR(100),CHAR(39),CHAR(93),CHAR(41),CHAR(59),CHAR(32),CHAR(63),CHAR(62)) INTO   OUTFILE '/var/www/backdoor.php'"],
             ["SELECT CONCAT(CHAR(60),CHAR(63),CHAR(112),CHAR(104),CHAR(112),CHAR(32),CHAR(115),CHAR(121),CHAR(115),CHAR(116),CHAR(101),CHAR(109),CHAR(40),CHAR(36),CHAR(95),CHAR(71),CHAR(69),CHAR(84),CHAR(91),CHAR(39),CHAR(99),CHAR(111),CHAR(109),CHAR(109),CHAR(97),CHAR(110),CHAR(100),CHAR(39),CHAR(93),CHAR(41),CHAR(59),CHAR(32),CHAR(63),CHAR(62)) INTO   OUTFILE '/var/www/backdoor.php'"],
             ["SELECT CONCAT(CHAR(60),CHAR(63),CHAR(112),CHAR(104),CHAR(112),CHAR(32),CHAR(115),CHAR(121),CHAR(115),CHAR(116),CHAR(101),CHAR(109),CHAR(40),CHAR(36),CHAR(95),CHAR(71),CHAR(69),CHAR(84),CHAR(91),CHAR(39),CHAR(99),CHAR(111),CHAR(109),CHAR(109),CHAR(97),CHAR(110),CHAR(100),CHAR(39),CHAR(93),CHAR(41),CHAR(59),CHAR(32),CHAR(63),CHAR(62)) INTO OUTFILE '/var/www/backdoor.php'"],
@@ -85,35 +85,36 @@ class FilterTest extends TestCase
                 '<foo',
                 [
                     'enabled' => '',
-                    'disabled' => '<foo'
-                ]
+                    'disabled' => '<foo',
+                ],
             ],
             [
                 'The rest will be cut <foo',
                 [
                     'enabled' => 'The rest will be cut ',
-                    'disabled' => 'The rest will be cut <foo'
-                ]
+                    'disabled' => 'The rest will be cut <foo',
+                ],
             ],
             [
                 'This should not < be touched',
                 [
                     'enabled' => 'This should not < be touched',
-                    'disabled' => 'This should not < be touched'
-                ]
+                    'disabled' => 'This should not < be touched',
+                ],
             ],
             [
                 'This should <be> touched',
                 [
                     'enabled' => 'This should  touched',
-                    'disabled' => 'This should <be> touched'
-                ]
+                    'disabled' => 'This should <be> touched',
+                ],
             ],
         ];
     }
 
     /**
      * @dataProvider sqlProvider
+     *
      * @param string $statement
      */
     public function testSql($statement)
@@ -126,8 +127,9 @@ class FilterTest extends TestCase
 
     /**
      * @dataProvider striptagsDataProvider
+     *
      * @param string $input
-     * @param array $expected
+     * @param array  $expected
      */
     public function testStripTagsEnabled($input, array $expected)
     {
@@ -139,6 +141,7 @@ class FilterTest extends TestCase
 
     /**
      * @dataProvider striptagsDataProvider
+     *
      * @param string $input
      * @param $expected
      */

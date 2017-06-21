@@ -24,13 +24,13 @@
 
 namespace Shopware\Components\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Compiler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DoctrineEventSubscriberCompilerPass implements CompilerPassInterface
@@ -52,7 +52,7 @@ class DoctrineEventSubscriberCompilerPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall(
                 'addEventSubscriber',
-                array(new Reference($id))
+                [new Reference($id)]
             );
         }
     }

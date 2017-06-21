@@ -29,13 +29,10 @@ use Enlight_Controller_EventArgs;
 use Enlight_Controller_Request_Request;
 use Enlight_Controller_Response_Response;
 
-/**
- * @package Shopware\Components
- */
 class UploadMaxSizeValidator implements SubscriberInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -46,6 +43,7 @@ class UploadMaxSizeValidator implements SubscriberInterface
 
     /**
      * @param Enlight_Controller_EventArgs $args
+     *
      * @throws UploadMaxSizeException
      */
     public function validateContentLength(Enlight_Controller_EventArgs $args)
@@ -65,24 +63,10 @@ class UploadMaxSizeValidator implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Controller_Response_Response $response
-     * @return bool
-     */
-    private function hasUploadMaxSizeExceptions(Enlight_Controller_Response_Response $response)
-    {
-        foreach ($response->getException() as $exception) {
-            if ($exception instanceof UploadMaxSizeException) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Returns true if the POST max size has been exceeded in the request.
      *
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return bool
      */
     public function hasPostMaxSizeBeenExceeded(Enlight_Controller_Request_Request $request)
@@ -133,5 +117,21 @@ class UploadMaxSizeValidator implements SubscriberInterface
     public function getNormalizedIniPostMaxSize()
     {
         return strtoupper(trim(ini_get('post_max_size')));
+    }
+
+    /**
+     * @param Enlight_Controller_Response_Response $response
+     *
+     * @return bool
+     */
+    private function hasUploadMaxSizeExceptions(Enlight_Controller_Response_Response $response)
+    {
+        foreach ($response->getException() as $exception) {
+            if ($exception instanceof UploadMaxSizeException) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

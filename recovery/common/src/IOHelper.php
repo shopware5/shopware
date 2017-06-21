@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Recovery\Common;
 
@@ -11,7 +33,7 @@ use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Common
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class IOHelper
@@ -78,6 +100,7 @@ class IOHelper
 
     /**
      * Return true if output is ver verbose (or debug)
+     *
      * @return bool
      */
     public function isVeryVerbose()
@@ -118,8 +141,9 @@ class IOHelper
     /**
      * Ask a $question
      *
-     * @param  string|Question $question
-     * @param  null            $default
+     * @param string|Question $question
+     * @param null            $default
+     *
      * @return string
      */
     public function ask($question, $default = null)
@@ -132,8 +156,9 @@ class IOHelper
     /**
      * Ask for confirmation
      *
-     * @param  string|Question $question
-     * @param  null            $default
+     * @param string|Question $question
+     * @param null            $default
+     *
      * @return string
      */
     public function askConfirmation($question, $default = null)
@@ -171,7 +196,8 @@ class IOHelper
     }
 
     /**
-     * @param  Question $question
+     * @param Question $question
+     *
      * @return string
      */
     public function askMultiLineQuestion(Question $question)
@@ -180,7 +206,7 @@ class IOHelper
 
         $lines = [];
         if (!empty($line)) {
-            $lines [] = $line;
+            $lines[] = $line;
         }
 
         while (!empty($line) || empty($lines)) {
@@ -194,7 +220,8 @@ class IOHelper
     }
 
     /**
-     * @param  int         $max Maximum steps (0 if unknown)
+     * @param int $max Maximum steps (0 if unknown)
+     *
      * @return ProgressBar
      */
     public function createProgressBar($max = 0)
@@ -212,8 +239,8 @@ class IOHelper
         }
 
         // http://en.wikipedia.org/wiki/ANSI_escape_code
-        $this->output->write(chr(27) . "[2J"); // ED – Erase Display
-        $this->output->write(chr(27) . "[1;1H"); // CUP – Set Cursor Position to upper left
+        $this->output->write(chr(27) . '[2J'); // ED – Erase Display
+        $this->output->write(chr(27) . '[1;1H'); // CUP – Set Cursor Position to upper left
     }
 
     /**

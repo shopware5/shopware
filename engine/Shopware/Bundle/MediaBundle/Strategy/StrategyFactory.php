@@ -26,7 +26,6 @@ namespace Shopware\Bundle\MediaBundle\Strategy;
 
 /**
  * Class StrategyFactory
- * @package Shopware\Bundle\MediaBundle\Strategy
  */
 class StrategyFactory
 {
@@ -34,8 +33,10 @@ class StrategyFactory
      * Return a new storage strategy instance based on the configured strategy type
      *
      * @param string $strategy
-     * @return StrategyInterface
+     *
      * @throws \Exception
+     *
+     * @return StrategyInterface
      */
     public function factory($strategy)
     {

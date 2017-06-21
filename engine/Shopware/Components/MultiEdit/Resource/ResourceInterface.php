@@ -26,21 +26,23 @@ namespace Shopware\Components\MultiEdit\Resource;
 
 /**
  * Interface ResourceInterface
- * @package Shopware\Components\MultiEdit\Resource
  */
 interface ResourceInterface
 {
     /**
      * Needs to return the grammar for out lexer
+     *
      * @return mixed
      */
     public function getGrammar();
 
     /**
      * Returns values to be suggested for the current attribute
+     *
      * @param $attribute
      * @param $operator
      * @param $queryConfig
+     *
      * @return mixed
      */
     public function getValuesFor($attribute, $operator, $queryConfig);
@@ -52,9 +54,10 @@ interface ResourceInterface
      * @param $offset
      * @param $limit
      * @param $orderBy
+     *
      * @return mixed
      */
-    public function filter($ast, $offset, $limit, $orderBy=null);
+    public function filter($ast, $offset, $limit, $orderBy = null);
 
     /**
      * Returns columns to be shown in the batchProcess window
@@ -67,6 +70,7 @@ interface ResourceInterface
      * The actual batch processing
      *
      * @param $queueId
+     *
      * @return mixed
      */
     public function batchProcess($queueId);
@@ -79,6 +83,7 @@ interface ResourceInterface
      * @param $offset
      * @param $limit
      * @param $queueId
+     *
      * @return mixed
      */
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId);
@@ -94,6 +99,7 @@ interface ResourceInterface
      * Saves a single modified instance of the entity
      *
      * @param $params
+     *
      * @return mixed
      */
     public function save($params);
@@ -103,6 +109,7 @@ interface ResourceInterface
      *
      * @param $offset
      * @param $limit
+     *
      * @return mixed
      */
     public function listBackups($offset, $limit);
@@ -112,6 +119,7 @@ interface ResourceInterface
      *
      * @param $id
      * @param $offset
+     *
      * @return mixed
      */
     public function restoreBackup($id, $offset);
@@ -120,6 +128,7 @@ interface ResourceInterface
      * Delete a given backup
      *
      * @param $id
+     *
      * @return mixed
      */
     public function deleteBackup($id);

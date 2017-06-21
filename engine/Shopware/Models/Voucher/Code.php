@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Voucher;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Standard Code Model Entity
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Code extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,28 +45,28 @@ class Code extends ModelEntity
     private $id;
 
     /**
-     * @var integer $voucherId
+     * @var int
      *
      * @ORM\Column(name="voucherID", type="integer", nullable=false)
      */
     private $voucherId;
 
     /**
-     * @var integer $customerId
+     * @var int
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
     private $customerId = null;
 
     /**
-     * @var string $code
+     * @var string
      *
      * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
     private $code;
 
     /**
-     * @var integer $cashed
+     * @var int
      *
      * @ORM\Column(name="cashed", type="integer", nullable=false)
      */
@@ -88,7 +88,7 @@ class Code extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -98,19 +98,21 @@ class Code extends ModelEntity
     /**
      * Set voucherId
      *
-     * @param integer $voucherId
+     * @param int $voucherId
+     *
      * @return Code
      */
     public function setVoucherId($voucherId)
     {
         $this->voucherId = $voucherId;
+
         return $this;
     }
 
     /**
      * Get voucherId
      *
-     * @return integer
+     * @return int
      */
     public function getVoucherId()
     {
@@ -120,19 +122,21 @@ class Code extends ModelEntity
     /**
      * Set customerId
      *
-     * @param integer $customerId
+     * @param int $customerId
+     *
      * @return Code
      */
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
+
         return $this;
     }
 
     /**
      * Get customerId
      *
-     * @return integer
+     * @return int
      */
     public function getCustomerId()
     {
@@ -143,11 +147,13 @@ class Code extends ModelEntity
      * Set code
      *
      * @param string $code
+     *
      * @return Code
      */
     public function setCode($code)
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -164,19 +170,21 @@ class Code extends ModelEntity
     /**
      * Set cashed
      *
-     * @param integer $cashed
+     * @param int $cashed
+     *
      * @return Code
      */
     public function setCashed($cashed)
     {
         $this->cashed = $cashed;
+
         return $this;
     }
 
     /**
      * Get cashed
      *
-     * @return integer
+     * @return int
      */
     public function getCashed()
     {
