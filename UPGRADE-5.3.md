@@ -133,7 +133,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
 * Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
 * Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
-
+* Added new search builder class `Shopware\Components\Model\SearchBuilder`
+* Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
+* Added new `FunctionNode` for IF-ELSE statements in ORM query builder
+ 
 ### Changes
 
 * Updated `FPDF` to 1.8.1

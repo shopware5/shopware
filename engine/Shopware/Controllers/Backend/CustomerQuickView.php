@@ -30,6 +30,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
     protected $model = Customer::class;
     protected $alias = 'customer';
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteAction()
     {
         if (!$this->_isAllowed('delete', 'customer')) {
@@ -38,6 +41,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         parent::deleteAction();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save($data)
     {
         if (!$this->_isAllowed('save', 'customer')) {
@@ -46,6 +52,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         parent::save($data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detailAction()
     {
         if (!$this->_isAllowed('detail', 'customer')) {
@@ -54,6 +63,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         parent::detailAction();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function listAction()
     {
         if (!$this->_isAllowed('read', 'customer')) {
@@ -62,6 +74,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         parent::listAction();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete($id)
     {
         $this->get('dbal_connection')->executeQuery(
@@ -77,6 +92,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         return parent::delete($id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getListQuery()
     {
         $query = $this->container->get('models')->createQueryBuilder();
@@ -109,11 +127,42 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         $query->leftJoin('customer.attribute', 'attribute');
         $query->leftJoin('customer.group', 'groups');
 
+        $filters = $this->Request()->getParam('filter', []);
+        $search = null;
+        foreach ($filters as $index => $filter) {
+            if ($filter['property'] === 'search') {
+                $search = $filter['value'];
+                break;
+            }
+        }
+
+        if ($search) {
+            $builder = $this->container->get('shopware.model.search_builder');
+            $builder->addSearchTerm($query, $search, [
+                'customer.number^2',
+                'customer.email^2',
+                'customer.firstname^3',
+                'customer.lastname^3',
+                'billing.zipcode^0.5',
+                'billing.city^0.5',
+                'billing.company^0.5',
+            ]);
+        }
+
         return $query;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
     {
+        foreach ($filter as $index => $f) {
+            if ($f['property'] === 'search') {
+                unset($filter[$index]);
+            }
+        }
+
         $list = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
 
         $ids = array_column($list['data'], 'id');
@@ -131,6 +180,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         return $list;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getModelFields($model, $alias = null)
     {
         $fields = parent::getModelFields($model, $alias);

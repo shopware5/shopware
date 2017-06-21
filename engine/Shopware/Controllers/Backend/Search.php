@@ -112,35 +112,36 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getArticles($search)
     {
-        $search2 = Shopware()->Db()->quote("$search%");
-        $search = Shopware()->Db()->quote("%$search%");
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
 
-        $sql = "
-            SELECT DISTINCT
-                a.id,
-                a.name,
-                a.description_long,
-                a.description,
-                IFNULL(d.ordernumber, m.ordernumber) as ordernumber
-            FROM s_articles as a
-            JOIN s_articles_details as m
-            ON m.id = a.main_detail_id
-            LEFT JOIN s_articles_details as d
-            ON a.id = d.articleID
-            AND d.ordernumber LIKE $search2
-            LEFT JOIN s_articles_translations AS t
-            ON a.id=t.articleID
-            LEFT JOIN s_articles_supplier AS s
-            ON a.supplierID=s.id
-            WHERE ( a.name LIKE $search
-                OR t.name LIKE $search
-                OR s.name LIKE $search
-                OR d.id IS NOT NULL
-            )
-        ";
-        $sql = Shopware()->Db()->limit($sql, 5);
+        $query->select([
+            'article.id',
+            'article.name',
+            'article.description_long',
+            'article.description',
+            'variant.ordernumber',
+        ]);
+        $query->from('s_articles', 'article');
+        $query->innerJoin('article', 's_articles_details', 'variant', 'variant.articleID = article.id');
+        $query->leftJoin('article', 's_articles_translations', 'translation', 'article.id= translation.articleID');
+        $query->leftJoin('article', 's_articles_supplier', 'manufacturer', 'article.supplierID = manufacturer.id');
 
-        return Shopware()->Db()->fetchAll($sql);
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            [
+                'article.name^3',
+                'variant.ordernumber^2',
+                'translation.name^1',
+                'manufacturer.name^1',
+            ]
+        );
+        $query->addGroupBy('article.id');
+        $query->setFirstResult(0);
+        $query->setMaxResults(5);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -250,6 +251,14 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     private function hydrateSearchResult($entity, $data)
     {
+        $data = array_map(function ($row) {
+            if (array_key_exists('_score', $row)) {
+                return $row[0];
+            }
+
+            return $row;
+        }, $data);
+
         switch ($entity) {
             case 'Shopware\Models\Category\Category':
                 $data = $this->resolveCategoryPath($data);
@@ -270,7 +279,20 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $entityManager = $this->get('models');
         $metaData = $entityManager->getClassMetadata($entity);
 
-        return $metaData->getFieldNames();
+        $fields = array_filter(
+            $metaData->getFieldNames(),
+            function ($field) use ($metaData) {
+                $type = $metaData->getTypeOfField($field);
+
+                return in_array($type, ['string', 'text', 'date', 'datetime', 'decimal', 'float']);
+            }
+        );
+
+        if (empty($fields)) {
+            return $metaData->getFieldNames();
+        }
+
+        return $fields;
     }
 
     /**
@@ -323,40 +345,14 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function addSearchTermCondition($entity, $query, $term)
     {
         $fields = $this->getEntitySearchFields($entity);
-        $where = [];
-        foreach ($fields as $field) {
-            $field = 'entity.' . $field;
-            $where[] = $field . ' LIKE :search';
-        }
 
-        foreach ($this->getCustomSearchConditions($entity) as $condition) {
-            $where[] = $condition;
-        }
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
 
-        $where = implode(' OR ', $where);
-        $query->andWhere('(' . $where . ')');
-        $query->setParameter('search', '%' . $term . '%');
-    }
+        $fields = array_map(function ($field) {
+            return 'entity.' . $field;
+        }, $fields);
 
-    /**
-     * Gets custom search conditions
-     *
-     * @param string $entity
-     *
-     * @return array
-     */
-    private function getCustomSearchConditions($entity)
-    {
-        $where = [];
-        switch ($entity) {
-            case 'Shopware\Models\Article\Article':
-                $where[] = $this->createCustomFieldToSearchTermCondition('details', 'number');
-                break;
-            default:
-                break;
-        }
-
-        return $where;
+        $builder->addSearchTerm($query, $term, $fields);
     }
 
     /**
