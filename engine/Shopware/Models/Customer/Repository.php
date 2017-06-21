@@ -346,7 +346,8 @@ class Repository extends ModelRepository
             )
             ->setParameter(1, $filter . '%')
             ->setParameter(2, '%' . $filter)
-            ->setParameter(3, str_replace('.', '_', str_replace(',', '_', $filter)) . '%');
+            ->setParameter(3, str_replace('.', '_', str_replace(',', '_', $filter)) . '%')
+            ->setParameter('customerId', $customerId);
         } else {
             $builder->where('orders.customerId = :customerId')->setParameter('customerId', $customerId);
         }
