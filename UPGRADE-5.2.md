@@ -3,16 +3,35 @@
 This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.25
+
+[View all changes from v5.2.24...v5.2.25](https://github.com/shopware/shopware/compare/v5.2.24...v5.2.25)
+
+
 * Added notify event `Shopware_Modules_Basket_AddArticle_Added` in `engine/Shopware/Core/sBasket.php`
 * The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
 
+# 5.2.24
+
+[View all changes from v5.2.23...v5.2.24](https://github.com/shopware/shopware/compare/v5.2.23...v5.2.24)
+
+* Fixed custom datefield format for articles
+* Fixed styling of image slider on tablet landscape view
+
 ## 5.2.23
+
+[View all changes from v5.2.22...v5.2.23](https://github.com/shopware/shopware/compare/v5.2.22...v5.2.23)
+
+
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
 * Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
 * Added default `limit` of 100 in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyIndexer::populate`
 * Added a base store for `Shopware.apps.Base.model.DocType`
 
 ## 5.2.22
+
+[View all changes from v5.2.21...v5.2.22](https://github.com/shopware/shopware/compare/v5.2.21...v5.2.22)
+
+
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
 * Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
