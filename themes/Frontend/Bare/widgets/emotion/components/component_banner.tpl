@@ -12,6 +12,7 @@
 
                     {if $Data.thumbnails}
                         {$baseSource = $Data.thumbnails[0].source}
+                        {$retinaBaseSource = $Data.thumbnails[0].retinaSource}
 
                         {foreach $element.viewports as $viewport}
                             {$cols = ($viewport.endCol - $viewport.startCol) + 1}
@@ -42,11 +43,11 @@
                     {/if}
 
                     <picture class="banner--image">
-                        <source sizes="{$itemSize}" srcset="{$retinaSrcSet}" media="(min-resolution: 192dpi)">
+                        <source sizes="{$itemSize}" srcset="{$retinaSrcSet}" media="(min-resolution: 192dpi), (-webkit-min-device-pixel-ratio: 2)">
                         <source sizes="{$itemSize}" srcset="{$srcSet}">
 
                         {* Fallback *}
-                        <img src="{$baseSource}"{if $Data.title} alt="{$Data.title|escape}"{/if} />
+                        <img src="{$baseSource}" srcset="{$retinaBaseSource} 2x"{if $Data.title} alt="{$Data.title|escape}"{/if} />
                     </picture>
                 {/block}
 
@@ -76,3 +77,4 @@
         {/block}
     </div>
 {/block}
+
