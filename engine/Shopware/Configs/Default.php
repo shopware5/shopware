@@ -200,6 +200,7 @@ return array_replace_recursive([
         'locking' => false,
     ],
     'template_security' => [
-        'php_modifiers' => ['nl2br', 'escape', 'count'],
+        'php_modifiers' => include __DIR__ . '/smarty_functions.php',
+        'php_functions' => include __DIR__ . '/smarty_functions.php',
     ],
 ], $customConfig);
