@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
 
@@ -47,7 +47,7 @@ class MediaHydrator extends Hydrator
     private $thumbnailManager;
 
     /**
-     * @var MediaService
+     * @var MediaServiceInterface
      */
     private $mediaService;
 
@@ -59,10 +59,10 @@ class MediaHydrator extends Hydrator
     /**
      * @param AttributeHydrator                      $attributeHydrator
      * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
-     * @param MediaService                           $mediaService
+     * @param MediaServiceInterface                  $mediaService
      * @param Connection                             $database
      */
-    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaService $mediaService, Connection $database)
+    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaServiceInterface $mediaService, Connection $database)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->thumbnailManager = $thumbnailManager;
