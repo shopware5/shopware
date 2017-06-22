@@ -241,6 +241,9 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.addConditionButton = Ext.create('Ext.button.Split', {
             text: '{s name="add_condition"}{/s}',
             iconCls: 'sprite-plus-circle-frame',
+            handler: function(btn) {
+                btn.menu.showBy(btn);
+            },
             menu: me.createConditionsMenu()
         });
 
