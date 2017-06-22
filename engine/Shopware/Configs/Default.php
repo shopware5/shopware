@@ -199,4 +199,7 @@ return array_replace_recursive([
         'use_trans_sid' => 0,
         'locking' => false,
     ],
+    'template_security' => [
+        'php_modifiers' => ['nl2br', 'escape', 'count'],
+    ],
 ], $customConfig);
