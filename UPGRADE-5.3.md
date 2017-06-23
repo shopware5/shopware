@@ -133,6 +133,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
 * Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
 * Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
+* Added `type` parameter to `Shopware_Controllers_Widgets_Listing::productSliderAction` and `Shopware_Controllers_Widgets_Listing::productsAction` which allows to load product sliders or product boxes.
 * Added new search builder class `Shopware\Components\Model\SearchBuilder`
 * Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
 * Added new `FunctionNode` for IF-ELSE statements in ORM query builder
@@ -187,7 +188,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
 * Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
 * Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
-
+* Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
+* Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
+ 
 ### Removals
 
 * Removed unused Zend Framework Components. See below for more information

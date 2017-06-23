@@ -107,14 +107,18 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $this->View()->assign('perPage', $perPage);
     }
 
-    public function productSliderAction()
+    public function productsAction()
     {
         $numbers = $this->Request()->getParam('numbers');
         if (is_string($numbers)) {
             $numbers = array_filter(explode('|', $numbers));
         }
 
-        $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+        if ($this->Request()->get('type') == 'slider') {
+            $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+        } else {
+            $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+        }
 
         if (!is_array($numbers)) {
             return;
@@ -129,15 +133,19 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $articles = $this->container->get('legacy_struct_converter')
             ->convertListProductStructList($products);
 
-        $this->View()->assign('articles', $articles);
+        $this->View()->assign(['sArticles' => $articles, 'articles' => $articles]);
         $this->View()->assign($this->Request()->getParams());
     }
 
-    public function streamSliderAction()
+    public function streamAction()
     {
         $streamId = $this->Request()->getParam('streamId');
 
-        $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+        if ($this->Request()->get('type') == 'slider') {
+            $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+        } else {
+            $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+        }
 
         if (!$streamId) {
             return;
@@ -158,7 +166,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $articles = $this->container->get('legacy_struct_converter')
             ->convertListProductStructList($products->getProducts());
 
-        $this->View()->assign('articles', $articles);
+        $this->View()->assign(['sArticles' => $articles, 'articles' => $articles]);
         $this->View()->assign($this->Request()->getParams());
     }
 
