@@ -76,7 +76,7 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
     public function postAction()
     {
         if ($this->Request()->has('buildSearchIndex')) {
-            $this->resource->buildSearchIndex(null, true);
+            $this->resource->buildSearchIndex(0, true);
             $this->resource->cleanupIndexSearchIndex();
             $this->View()->assign(['success' => true]);
 
