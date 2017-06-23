@@ -120,6 +120,17 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     },
 
     nameRenderer: function (value, meta, record) {
+        var qtip = '<b>' + record.get('name') + '</b>';
+        qtip += ' - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}';
+
+        if (record.get('freezeUp')) {
+            qtip += '<p>{s name="frozen"}{/s}: ' + Ext.util.Format.date(record.get('freezeUp')) + '</p>';
+        }
+
+        qtip += '<br><p>' + record.get('description') +'</p>';
+
+        meta.tdAttr = 'data-qtip="' + qtip + '"';
+
         return '<span class="stream-name-column"><b>' + value + '</b> - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}</span>';
     }
 });

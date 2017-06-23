@@ -246,6 +246,8 @@ class CustomerStream extends Resource
 
     public function delete($id)
     {
+        $this->checkPrivilege('delete');
+
         $stream = $this->manager->find(CustomerStreamEntity::class, $id);
 
         $this->manager->remove($stream);
@@ -259,6 +261,8 @@ class CustomerStream extends Resource
 
     public function buildSearchIndex($lastId, $full)
     {
+        $this->checkPrivilege('search_index');
+
         $ids = $this->streamRepository->fetchSearchIndexIds($lastId, $full);
 
         if (!empty($ids)) {
@@ -279,6 +283,8 @@ class CustomerStream extends Resource
 
     public function indexStream(CustomerStreamEntity $stream, $offset = null, $limit = null)
     {
+        $this->checkPrivilege('save');
+
         $now = new \DateTime();
         if ($stream->getFreezeUp() < $now) {
             $stream->setFreezeUp(null);
