@@ -370,7 +370,7 @@
         },
 
         /**
-         * Sets the title of the modal box.
+         * Sets the transition of the modal box.
          *
          * @public
          * @method setTransition
