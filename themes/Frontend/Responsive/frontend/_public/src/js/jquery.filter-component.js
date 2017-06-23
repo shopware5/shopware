@@ -280,6 +280,9 @@
                 me.datePicker = me.$datePickerEl.data('plugin_swDatePicker');
                 me.isRangeSlider = me.$datePickerEl.attr('data-mode') == 'range';
 
+                me.$form = me.$el.parents('form');
+                me._bufferID = null;
+
                 me.registerComponentEvents();
             },
 
@@ -290,8 +293,7 @@
             },
 
             onChange: function(event) {
-                var me = this,
-                    $el = $(event.currentTarget);
+                var me = this;
 
                 me.disableComponent(false);
 
@@ -300,10 +302,37 @@
                  * Used to silently reset the input values.
                  */
                 if (!me.datePicker.suspended) {
-                    me.$el.trigger('onChange', [me, $el]);
+
+                    /**
+                     * If product live reload and time input are active, delay the ajax request, so the user is
+                     * able to finish typing.
+                     */
+                    if (me.datePicker.opts.enableTime && me.$form.attr('data-instant-filter-result') === 'true') {
+                        me.buffer($.proxy(me.triggerChange, me, event), 850);
+                    } else {
+                        me.triggerChange(event);
+                    }
                 }
 
                 $.publish('plugin/swFilterComponent/onChange', [ me, event ]);
+            },
+
+            triggerChange: function (event) {
+                var me = this,
+                    $el = $(event.currentTarget);
+
+                $el.trigger('onChange', [me, $el]);
+                me._bufferID = null;
+            },
+
+            buffer: function(callback, duration) {
+                var me = this;
+
+                if (me._bufferID) {
+                    window.clearTimeout(me._bufferID);
+                }
+
+                me._bufferID = window.setTimeout(callback, duration);
             },
 
             updateFacet: function(data) {
