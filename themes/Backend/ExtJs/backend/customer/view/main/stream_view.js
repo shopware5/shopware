@@ -192,7 +192,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.streamStore = Ext.create('Shopware.apps.Customer.store.CustomerStream', {
             sorters: [
                 { property: 'stream.name', direction: 'ASC'}
-            ]
+            ],
+            pageSize: 50000
         }).load();
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.Preview', {
