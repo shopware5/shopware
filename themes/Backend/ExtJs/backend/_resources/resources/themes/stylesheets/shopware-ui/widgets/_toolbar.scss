@@ -66,6 +66,14 @@
 				@include reset-box-shadow;
 	 		}
 	    }
+
+        .#{$prefix}btn-disabled {
+            @include opacity(0.5);
+
+            span {
+                @include opacity(1);
+            }
+        }
 	}
 }
 .#{$prefix}ie9 .#{$prefix}window, .#{$prefix}ie9 .#{$prefix}window-default {
