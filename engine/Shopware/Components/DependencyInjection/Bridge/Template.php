@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\Escaper\EscaperInterface;
+use Shopware\Components\Template\Security;
 
 /**
  * @category  Shopware
@@ -45,11 +46,15 @@ class Template
         \Enlight_Event_EventManager $eventManager,
         \Enlight_Components_Snippet_Resource $snippetResource,
         EscaperInterface $escaper,
-        array $templateConfig
+        array $templateConfig,
+        array $securityConfig
     ) {
         /** @var $template \Enlight_Template_Manager */
         $template = \Enlight_Class::Instance('Enlight_Template_Manager');
 
+        $template->enableSecurity(
+            new Security($template, $securityConfig)
+        );
         $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
 
