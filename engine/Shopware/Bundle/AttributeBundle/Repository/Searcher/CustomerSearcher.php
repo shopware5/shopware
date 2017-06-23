@@ -60,12 +60,13 @@ class CustomerSearcher extends GenericSearcher
     protected function getSearchFields(SearchCriteria $criteria)
     {
         return [
-            'entity.email',
-            'entity.number',
-            'billing.firstName',
-            'billing.lastName',
-            'billing.company',
-            'customerGroup.name',
+            'entity.number^2',
+            'entity.email^2',
+            'entity.firstname^3',
+            'entity.lastname^3',
+            'billing.zipCode^0.5',
+            'billing.city^0.5',
+            'billing.company^0.5',
         ];
     }
 }

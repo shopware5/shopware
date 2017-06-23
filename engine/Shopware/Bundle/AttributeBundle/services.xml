@@ -56,6 +56,7 @@
         <service id="shopware_attribute.media_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
             <argument>Shopware\Models\Media\Media</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.media_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\MediaReader">
@@ -75,6 +76,7 @@
         <service id="shopware_attribute.blog_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
             <argument>Shopware\Models\Blog\Blog</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.blog_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\BlogReader">
@@ -93,6 +95,7 @@
         <service id="shopware_attribute.product_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\ProductSearcher">
             <argument>Shopware\Models\Article\Detail</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.product_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\ProductReader">
@@ -113,6 +116,7 @@
         <service id="shopware_attribute.category_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CategorySearcher">
             <argument>Shopware\Models\Category\Category</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.category_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CategoryReader">
@@ -131,6 +135,7 @@
         <service id="shopware_attribute.property_option_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\PropertyOptionSearcher">
             <argument>Shopware\Models\Property\Value</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.property_option_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\PropertyOptionReader">
@@ -149,6 +154,7 @@
         <service id="shopware_attribute.emotion_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\EmotionSearcher">
             <argument>Shopware\Models\Emotion\Emotion</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.emotion_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\GenericReader">
@@ -167,6 +173,7 @@
         <service id="shopware_attribute.customer_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CustomerSearcher">
             <argument>Shopware\Models\Customer\Customer</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.customer_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CustomerReader">
@@ -185,6 +192,7 @@
         <service id="shopware_attribute.premium_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\PremiumSearcher">
             <argument>Shopware\Models\Premium\Premium</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.premium_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\PremiumReader">
@@ -203,6 +211,7 @@
         <service id="shopware_attribute.shop_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
             <argument>Shopware\Models\Shop\Shop</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.shop_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\ShopReader">
@@ -221,6 +230,7 @@
         <service id="shopware_attribute.customer_stream_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CustomerStreamSearcher">
             <argument>Shopware\Models\CustomerStream\CustomerStream</argument>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware.model.search_builder" />
         </service>
 
         <service id="shopware_attribute.customer_stream_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CustomerStreamReader">

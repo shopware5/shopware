@@ -689,8 +689,15 @@ class Repository extends ModelRepository
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select(['DISTINCT customer.id']);
         $query->from('s_user', 'customer');
-        $query->where('customer.email LIKE :search');
-        $query->setParameter(':search', '%' . $term . '%');
+
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'customer.customernumber^1',
+            'customer.email^2',
+            'customer.firstname^3',
+            'customer.lastname^3',
+        ]);
+
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -726,18 +733,15 @@ class Repository extends ModelRepository
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select('address.orderID');
         $query->from($table, 'address');
-
-        $fields = [
-            'address.company LIKE :search',
-            'address.street LIKE :search',
-            'address.zipcode LIKE :search',
-            'address.city LIKE :search',
-            'address.lastname LIKE :search',
-            'address.firstname LIKE :search',
-        ];
-
-        $query->andWhere('(' . implode(' OR ', $fields) . ')');
-        $query->setParameter(':search', '%' . $term . '%');
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'address.company^1',
+            'address.street^1',
+            'address.zipcode^1',
+            'address.city^2',
+            'address.lastname^3',
+            'address.firstname^3',
+        ]);
 
         if (!empty($excludedOrderIds)) {
             $query->andWhere('address.orderID NOT IN (:ids)');
@@ -758,16 +762,15 @@ class Repository extends ModelRepository
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select('orders.id');
         $query->from('s_order', 'orders');
-        $fields = [
-            'orders.ordernumber LIKE :search',
-            'orders.transactionID LIKE :search',
-            'orders.comment LIKE :search',
-            'orders.customercomment LIKE :search',
-            'orders.internalcomment LIKE :search',
-        ];
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'orders.ordernumber^3',
+            'orders.transactionID^1',
+            'orders.comment^0.2',
+            'orders.customercomment^0.2',
+            'orders.internalcomment^0.2',
+        ]);
 
-        $query->andWhere('(' . implode(' OR ', $fields) . ')');
-        $query->setParameter(':search', '%' . $term . '%');
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);

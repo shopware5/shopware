@@ -673,5 +673,10 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.logaware_reflection_helper" />
         </service>
+
+        <service id="shopware.model.search_builder" class="Shopware\Components\Model\SearchBuilder">
+            <argument id="shopware_searchdbal.search_term_helper" type="service"/>
+        </service>
+
     </services>
 </container>
