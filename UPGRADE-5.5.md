@@ -85,6 +85,21 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new DIC parameter `shopware.es.batchsize` (configurable via `config.php`) to change the number of products that are send to elasticsearch in one batch
 * Added JShrink as replacement for JSMin
 * Added confirm dialog when changing variant price with a price scale
+* Added services and classes to support dynamic (time-based) cache invalidation via the HttpCache plugin
+    * Added `InvalidationDateInterface` and implementations
+        - `AbstractInvalidationDate`
+        - `BlogDate`
+        - `BlogListingDate`
+        - `ListingDate`
+        - `ListingDateFrontpage`
+        - `ProductDetailDate`
+    * Added services
+        - `CacheRouteGenerationService`
+        - `DefaultRouteService`
+    * Added `CacheTimeServiceInterface` and implementations
+        - `DefaultCacheTimeService`
+        - `DynamicCacheTimeService`
+    * Added `invalidation_date_provider` tag to the DIC
 
 ### Changes
 
@@ -134,6 +149,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `ShopIndexer::createAlias`, it now deletes indexes that are named like the index alias
 * Changed `Subscription expired` growl message, to hide it for a week
 * Changed form controller to allow multiple receivers comma separated
+* Changed behaviour of the `HttpCache` core plugin. The max-age for the cached content of shopping-worlds, blog-categories, product detail pages and blog detail pages is now set based on the activation date of the respective resource.
 * Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressHydrator` to correctly hydrate additionalAddressLine2
 
 ### Removals

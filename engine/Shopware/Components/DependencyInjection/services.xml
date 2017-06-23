@@ -4,6 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <imports>
+        <import resource="../HttpCache/services.xml"/>
+    </imports>
+
     <parameters>
         <parameter key="shopware.slug.config" type="collection">
             <parameter key="regexp">/([^A-Za-z0-9\.]|-)+/</parameter>
@@ -395,12 +399,6 @@
             <argument type="service" id="shopware_plugininstaller.store_client" />
         </service>
 
-        <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="corelogger" />
-            <argument type="service" id="guzzle_http_client_factory" />
-        </service>
-
         <service id="shop_page_menu" class="Shopware\Components\SitePageMenu">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="router"/>
@@ -530,10 +528,6 @@
 
         <service id="shopware.plugin_payment_installer" class="Shopware\Components\Plugin\PaymentInstaller">
             <argument type="service" id="models" />
-        </service>
-
-        <service id="shopware.http_cache.route_installer" class="Shopware\Components\HttpCache\CacheRouteInstaller">
-            <argument type="service" id="config_writer"/>
         </service>
 
         <service id="basket_persister" class="Shopware\Components\BasketSignature\BasketPersister">
