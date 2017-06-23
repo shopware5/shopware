@@ -246,7 +246,7 @@ class Repository extends ModelRepository
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1']));
+        $builder->andWhere('orders.status != -1');
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
@@ -328,7 +328,7 @@ class Repository extends ModelRepository
         ]);
         $builder->from('Shopware\Models\Order\History', 'history')
             ->leftJoin('history.user', 'user')
-            ->where($builder->expr()->eq('history.orderId', '?1'))
+            ->where('history.orderId = ?1')
             ->setParameter(1, $orderId);
 
         if (!empty($orderBy)) {
@@ -385,18 +385,16 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
 
         return $builder->select(['voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'])
-            ->from('Shopware\Models\Voucher\Voucher', 'voucher')
-            ->join('voucher.codes', 'codes')
-            ->where(
-                $builder->expr()->orX(
-                    $builder->expr()->gte('voucher.validTo', $today),
-                    $builder->expr()->isNull('voucher.validTo')
-                )
-            )
-            ->andWhere($builder->expr()->isNull('codes.customerId'))
-            ->andWhere($builder->expr()->eq('codes.cashed', 0))
-            ->andWhere($builder->expr()->eq('voucher.modus', 1))
-            ->getQuery();
+                       ->from('Shopware\Models\Voucher\Voucher', 'voucher')
+                       ->join('voucher.codes', 'codes')
+                       ->where(
+                           '(voucher.validTo>= :todayORvoucher.validToIS NULL)')
+                           ->setParameter('today', $today
+                       )
+                       ->andWhere('codes.customerIdIS NULL')
+                       ->andWhere('codes.cashed= 0')
+                       ->andWhere('voucher.modus= 1')
+                       ->getQuery();
     }
 
     /**
