@@ -138,6 +138,7 @@ class EmotionExporter implements EmotionExporterInterface
 
         $exportData = [
             'requiredPlugins' => json_decode($preset->getRequiredPlugins(), true),
+            'emotionTranslations' => $preset->getEmotionTranslations(),
             'presetData' => json_encode($presetData),
         ];
 
@@ -166,6 +167,7 @@ class EmotionExporter implements EmotionExporterInterface
             'hidden' => true,
             'presetData' => $emotionData['presetData'],
             'requiredPlugins' => $emotionData['requiredPlugins'],
+            'emotionTranslations' => $emotionData['emotionTranslations'],
         ];
 
         return $this->presetResource->create($presetData);

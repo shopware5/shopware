@@ -234,62 +234,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 filePath: path
             },
             callback: function(options, success, response) {
-                var result = Ext.JSON.decode(response.responseText),
-                    preset;
+                var result = Ext.JSON.decode(response.responseText);
 
                 if (result.success && result.presetId && result.presetData) {
-                    preset = Ext.create('Shopware.apps.Emotion.model.Preset', {
-                        id: result.presetId,
-                        presetData: result.presetData
-                    });
-
-                    me.importAssets(preset, function(success) {
-                        me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
-
-                        if (!success) {
-                            if (me.progressbarWindow) {
-                                me.progressbarWindow.destroy();
-                            }
-                            me.cleanupImport(preset.get('id'), path);
-
-                            return Shopware.Notification.createGrowlMessage(
-                                '{s name=preset/assets_import_failure}{/s}',
-                                '{s name=preset/assets_import_failure_message}{/s}'
-                            );
-                        }
-
-                        me.loadPreset(preset, function(result) {
-                            if (me.progressbarWindow) {
-                                me.progressbarWindow.destroy();
-                            }
-                            var emotion,
-                                store = me.getListing().getStore();
-
-                            if (result.success && result.data) {
-                                emotion = me.decodeEmotionPresetData(result.data);
-
-                                emotion.save({
-                                    callback: function(record, operation) {
-                                        me.cleanupImport(preset.get('id'), path);
-                                        if (operation.success) {
-                                            store.load();
-
-                                            me.loadEmotionRecord(
-                                                record.get('id'),
-                                                Ext.bind(me.openDetailWindow, me)
-                                            );
-                                        } else {
-                                            Shopware.Notification.createGrowlMessage(
-                                                me.snippets.errorTitle,
-                                                me.snippets.saveErrorMessage + '<br>' + rawData.message,
-                                                me.snippets.growlMessage
-                                            );
-                                        }
-                                    }
-                                });
-                            }
-                        }, me);
-                    }, me);
+                    me.onImportSuccess(result, path);
                 } else {
                     me.getMainWindow().setLoading(false);
 
@@ -304,9 +252,130 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         });
     },
 
-    cleanupImport: function(presetId, filePath) {
-        var me = this;
+    /**
+     *
+     * @param { Object } result
+     * @param { string } path
+     * @return { Ext.panel.Panel }
+     */
+    onImportSuccess: function(result, path) {
+        var me = this,
+            preset = Ext.create('Shopware.apps.Emotion.model.Preset', {
+                id: result.presetId,
+                presetData: result.presetData,
+                emotionTranslations: result.emotionTranslations
+            });
 
+        me.importAssets(preset, function(success) {
+            me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
+
+            if (!success) {
+                if (me.progressbarWindow) {
+                    me.progressbarWindow.destroy();
+                }
+                me.cleanupImport(preset.get('id'), path);
+
+                return Shopware.Notification.createGrowlMessage(
+                    '{s name=preset/assets_import_failure}{/s}',
+                    '{s name=preset/assets_import_failure_message}{/s}'
+                );
+            }
+
+            me.loadPreset(preset, function(result) {
+                if (me.progressbarWindow) {
+                    me.progressbarWindow.destroy();
+                }
+                var emotion;
+
+                if (result.success && result.data) {
+                    emotion = me.decodeEmotionPresetData(result.data);
+
+                    emotion.save({
+                        callback: function(record, operation) {
+                            var store = me.getListing().getStore();
+
+                            me.cleanupImport(preset.get('id'), path);
+
+                            if (operation.success) {
+                                if (!Ext.isEmpty(preset.get('emotionTranslations'))) {
+                                    me.importEmotionTranslations(record, preset);
+
+                                    return;
+                                }
+                                store.load();
+
+                                me.loadEmotionRecord(
+                                    record.get('id'),
+                                    Ext.bind(me.openDetailWindow, me)
+                                );
+                            } else {
+                                Shopware.Notification.createGrowlMessage(
+                                    me.snippets.errorTitle,
+                                    me.snippets.saveErrorMessage + '<br>' + rawData.message,
+                                    me.snippets.growlMessage
+                                );
+                            }
+                        }
+                    });
+                }
+            }, me);
+        }, me);
+    },
+
+    /**
+     * @param { Shopware.apps.Emotion.model.Emotion } record
+     * @param { Shopware.apps.Emotion.model.Preset } preset
+     */
+    importEmotionTranslations: function(record, preset) {
+        var me = this,
+            store = me.getListing().getStore();
+
+        Ext.Ajax.request({
+            url: '{url controller=Emotion action=importTranslations}',
+            jsonData: {
+                emotionId: record.get('id'),
+                emotionTranslations: preset.get('emotionTranslations'),
+                autoMapping: true
+            },
+            callback: function(options, success, response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (!result.success && result.mappingRequired) {
+                    me.getMainWindow().setLoading(false);
+                    Ext.create('Shopware.apps.Emotion.view.translation.Window', {
+                        emotionId: record.get('id'),
+                        emotionTranslations: preset.get('emotionTranslations'),
+                        shops: result.shops,
+                        listeners: {
+                            close: function() {
+                                store.load();
+
+                                me.loadEmotionRecord(
+                                    record.get('id'),
+                                    Ext.bind(me.openDetailWindow, me)
+                                );
+                            }
+                        }
+                    });
+
+                    return;
+                }
+                store.load();
+
+                me.loadEmotionRecord(
+                    record.get('id'),
+                    Ext.bind(me.openDetailWindow, me)
+                );
+            }
+        });
+    },
+
+    /**
+     *
+     * @param { int } presetId
+     * @param { string } filePath
+     */
+    cleanupImport: function(presetId, filePath) {
         Ext.Ajax.request({
             url: '{url controller=Emotion action=afterImport}',
             jsonData: {
@@ -518,7 +587,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      */
     onSaveAsPreset: function(record) {
         var me = this,
-            emotionRecord,
             settings = me.getSettingsForm(),
             sidebar = me.getSidebar(),
             layout = me.getLayoutForm();
@@ -538,14 +606,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             return false;
         }
 
-        emotionRecord = record.copy();
-        emotionRecord.set('id', 0);
-        emotionRecord.set('active', 0);
-        emotionRecord['getElementsStore'] = record.getElements();
-        emotionRecord['getShopsStore'] = record.getShops();
-
         Ext.create('Shopware.apps.Emotion.view.presets.Form', {
-            emotion: emotionRecord
+            emotion: record
         }).show();
     },
 
@@ -557,6 +619,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this,
             form = win.down('form'),
             record = win.emotion,
+            deletionRequired = record.get('id') === 0,
             values;
 
         if (!form.getForm().isValid()) {
@@ -596,7 +659,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         callback: function(operation, success, response) {
                             var result = Ext.JSON.decode(response.responseText);
                             win.setLoading(false);
-                            me.deleteDummyEmotion(values.emotionId);
+                            if (deletionRequired) {
+                                me.deleteDummyEmotion(values.emotionId);
+                            }
 
                             if (!result.success) {
                                 return Shopware.Notification.createGrowlMessage(

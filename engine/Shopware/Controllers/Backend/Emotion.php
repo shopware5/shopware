@@ -26,6 +26,7 @@ use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
+use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
@@ -336,6 +337,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             'success' => true,
             'presetId' => $preset->getId(),
             'presetData' => $preset->getPresetData(),
+            'emotionTranslations' => $preset->getEmotionTranslations(),
         ]);
     }
 
@@ -357,6 +359,46 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         $emotionImporter = $this->container->get('shopware.emotion.emotion_importer');
         $emotionImporter->cleanupImport($filePath, $presetId);
+
+        $this->View()->assign([
+            'success' => true,
+        ]);
+    }
+
+    public function importTranslationsAction()
+    {
+        /** @var Enlight_Controller_Request_Request $request */
+        $request = $this->Request();
+        $emotionId = $request->get('emotionId');
+        $emotionTranslations = $request->get('emotionTranslations');
+        $autoMapping = $request->get('autoMapping');
+
+        if (!isset($autoMapping)) {
+            $autoMapping = true;
+        }
+
+        if (!$emotionId || !$emotionTranslations) {
+            $this->View()->assign([
+                'success' => false,
+            ]);
+
+            return;
+        }
+        $emotionTranslations = json_decode($emotionTranslations, true);
+        $translationImporter = $this->container->get('shopware.emotion.translation_importer');
+
+        try {
+            $translationImporter->importTranslations($emotionId, $emotionTranslations, $autoMapping);
+        } catch (MappingRequiredException $e) {
+            $this->View()->assign([
+                'success' => false,
+                'mappingRequired' => true,
+                'emotionTranslations' => $emotionTranslations,
+                'shops' => $translationImporter->getLocaleMapping(),
+            ]);
+
+            return;
+        }
 
         $this->View()->assign([
             'success' => true,
