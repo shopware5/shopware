@@ -11,6 +11,8 @@ Disallow: {url controller=register fullPath=false}
 
 Disallow: {url controller=account fullPath=false}
 
+Disallow: {url controller=address fullPath=false}
+
 Disallow: {url controller=note fullPath=false}
 
 Disallow: {url controller=widgets fullPath=false}
