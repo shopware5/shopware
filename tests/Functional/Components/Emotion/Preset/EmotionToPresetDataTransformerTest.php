@@ -79,7 +79,41 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
         $this->assertArrayHasKey('presetData', $data);
         $this->assertJson($data['presetData']);
+
+        $presetData = json_decode($data['presetData'], true);
+
+        $this->assertArrayNotHasKey('id', $presetData);
+
+        $this->assertArrayNotHasKey('id', $presetData['elements'][0]);
+        $this->assertInternalType('string', $presetData['elements'][0]['componentId']);
+        $this->assertArrayHasKey('syncKey', $presetData['elements'][0]);
+
+        $this->assertArrayHasKey('data', $presetData['elements'][0]);
+
         $this->assertInternalType('array', $data['requiredPlugins']);
+    }
+
+    public function testTransformWithTranslationsShouldSucceed()
+    {
+        $emotionId = $this->connection->executeQuery('SELECT id FROM s_emotion LIMIT 1')->fetchColumn();
+
+        $translation = serialize([]);
+        $this->connection->insert('s_core_translations', ['objecttype' => 'emotion', 'objectdata' => 'a:1:{s:4:"name";s:11:"My homepage";}', 'objectkey' => $emotionId, 'objectlanguage' => 2, 'dirty' => 1]);
+
+        $data = $this->transformer->transform($emotionId);
+
+        $this->assertArrayHasKey('emotionTranslations', $data);
+        $this->assertJson($data['emotionTranslations']);
+
+        $translationData = json_decode($data['emotionTranslations'], true);
+
+        $this->assertSame('en_GB', $translationData[0]['locale']);
+        $this->assertSame('emotion', $translationData[0]['objecttype']);
+
+        $this->assertArrayHasKey('presetData', $data);
+        $this->assertJson($data['presetData']);
+        $this->assertArrayHasKey('requiredPlugins', $data);
+        $this->assertEmpty($data['requiredPlugins']);
     }
 
     public function testGettingRequiredPluginsByIdShouldSucceed()
