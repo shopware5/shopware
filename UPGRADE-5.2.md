@@ -2,6 +2,9 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+# 5.2.26
+* Added config check to disable the `Tell a friend` page if it is disabled via config.
+
 ## 5.2.25
 
 [View all changes from v5.2.24...v5.2.25](https://github.com/shopware/shopware/compare/v5.2.24...v5.2.25)
