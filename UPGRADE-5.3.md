@@ -139,7 +139,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new `FunctionNode` for IF-ELSE statements in ORM query builder
 * Added `/address` to robots.txt 
 * Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
- 
+* Added smarty security class for all requests.
+* Added whitelist for allowed php functions and php modifiers in smarty
+
 ### Changes
 
 * Updated `FPDF` to 1.8.1
