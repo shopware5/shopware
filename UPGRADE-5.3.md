@@ -23,6 +23,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Added whitelist for allowed php functions and php modifiers in smarty
     * template_security.php_modifiers
     * template_security.php_functions
+* Added new option `showPagingToolbar` to `Shopware.DragAndDropSelector.js`. Default is `false`.
 
 ### Changes
 

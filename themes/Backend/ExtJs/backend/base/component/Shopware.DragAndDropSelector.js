@@ -162,6 +162,11 @@ Ext.define('Shopware.DragAndDropSelector',
     gridHeight: null,
 
     /**
+     * show paging toolbar
+     */
+    showPagingToolbar: false,
+
+    /**
      * standard layout
      */
     layout:{
@@ -201,7 +206,7 @@ Ext.define('Shopware.DragAndDropSelector',
         me.refreshStore();
         me.fromStore.load();
 
-        me.fromField = me.createGrid({
+        var config = {
             title: me.fromTitle,
             store: me.fromStore,
             columns :me.fromColumns,
@@ -219,7 +224,16 @@ Ext.define('Shopware.DragAndDropSelector',
                     }
                 }
             }
-        });
+        };
+
+        if (me.showPagingToolbar) {
+            config.bbar = Ext.create('Ext.toolbar.Paging', {
+                store: me.fromStore,
+                displayInfo: true
+            });
+        }
+
+        me.fromField = me.createGrid(config);
 
         me.toField = me.createGrid({
             title : me.toTitle,
