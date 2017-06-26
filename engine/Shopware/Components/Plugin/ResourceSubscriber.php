@@ -31,7 +31,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- *
+ * @package   Shopware\Components\Plugin
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ResourceSubscriber implements SubscriberInterface
@@ -70,6 +70,8 @@ class ResourceSubscriber implements SubscriberInterface
         if ($files) {
             return new ArrayCollection($files);
         }
+
+        return null;
     }
 
     /**
@@ -81,6 +83,8 @@ class ResourceSubscriber implements SubscriberInterface
         if ($files) {
             return new ArrayCollection($files);
         }
+
+        return null;
     }
 
     /**
@@ -100,8 +104,8 @@ class ResourceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param string $baseDir resource basedirectory
-     * @param string $type    `css` or `js`
+     * @param string $baseDir resource base directory
+     * @param string $type `css` or `js`
      *
      * @return string[]
      */

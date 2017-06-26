@@ -56,11 +56,15 @@ class PaymentInstaller
     {
         Assertion::notEmptyKey($options, 'name', 'Payment name must not be empty');
 
-        $repo = $this->em->getRepository(Payment::class);
-        $payment = $repo->findOneBy(['name' => $options['name']]);
+        $paymentRepository = $this->em->getRepository(Payment::class);
+        $payment = $paymentRepository->findOneBy([
+            'name' => $options['name']
+        ]);
 
-        $repo = $this->em->getRepository(Plugin::class);
-        $plugin = $repo->findOneBy(['name' => $pluginName]);
+        $pluginRepository = $this->em->getRepository(Plugin::class);
+        $plugin = $pluginRepository->findOneBy([
+            'name' => $pluginName
+        ]);
 
         if (!$payment) {
             $payment = new Payment();

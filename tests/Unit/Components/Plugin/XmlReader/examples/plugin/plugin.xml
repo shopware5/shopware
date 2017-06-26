@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
 
     <label lang="de">My plugin</label>
     <label lang="en">My plugin</label>
@@ -35,6 +35,14 @@
         <changes lang="de">German changes</changes>
         <changes lang="en">English changes</changes>
     </changelog>
+
+    <requiredPlugins>
+        <requiredPlugin pluginName="SwagSloganOfTheDay" minVersion="1.0.0" maxVersion="2.0.0">
+            <blacklist>1.0.2</blacklist>
+            <blacklist>1.0.3</blacklist>
+        </requiredPlugin>
+        <requiredPlugin pluginName="SwagImportExport" />
+    </requiredPlugins>
 
     <compatibility minVersion="5.1.0" maxVersion="5.2.5">
         <blacklist>5.1.2</blacklist>

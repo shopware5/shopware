@@ -18,7 +18,7 @@
 
     <xsd:complexType name="entryType">
         <xsd:sequence>
-            <xsd:element name="name" type="xsd:token" minOccurs="1"/>
+            <xsd:element name="name" type="xsd:token"/>
             <xsd:element name="label" type="labelType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="controller" type="xsd:string" minOccurs="0"/>
             <xsd:element name="action" type="xsd:string" minOccurs="0"/>

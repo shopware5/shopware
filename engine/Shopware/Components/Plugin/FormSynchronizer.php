@@ -128,10 +128,10 @@ class FormSynchronizer
     /**
      * Removes no more existing form elements and their translations
      *
-     * @param Plugin   $plugin
-     * @param string[] $names
+     * @param Plugin $plugin
+     * @param array $names
      */
-    private function removeNotExistingElements(Plugin $plugin, $names)
+    private function removeNotExistingElements(Plugin $plugin, array $names)
     {
         $query = $this->em->getConnection()->createQueryBuilder();
         $query->select('elements.id');
@@ -179,7 +179,9 @@ class FormSynchronizer
     private function getForm(Plugin $plugin)
     {
         /** @var Form $form */
-        $form = $this->formRepository->findOneBy(['pluginId' => $plugin->getId()]);
+        $form = $this->formRepository->findOneBy([
+            'pluginId' => $plugin->getId()
+        ]);
 
         if (!$form) {
             $form = $this->initForm($plugin);
@@ -298,17 +300,15 @@ class FormSynchronizer
     }
 
     /**
-     * @param Form   $form
-     * @param string $translationArray
+     * @param Form $form
+     * @param array $translationArray
      * @param Locale $locale
-     *
-     * @return array
      */
-    private function addFormTranslation(Form $form, $translationArray, Locale $locale)
+    private function addFormTranslation(Form $form, array $translationArray, Locale $locale)
     {
         $isUpdate = false;
         foreach ($form->getTranslations() as $existingTranslation) {
-            // Check if trarnslation for this locale already exists
+            // Check if translation for this locale already exists
             if ($existingTranslation->getLocale()->getLocale() != $locale->getLocale()) {
                 continue;
             }

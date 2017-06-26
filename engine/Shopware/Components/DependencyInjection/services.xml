@@ -469,11 +469,15 @@
             <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="shopware.plugin_xml_plugin_info_reader" class="Shopware\Components\Plugin\XmlPluginInfoReader"/>
+        <service id="shopware.plugin_xml_plugin_reader" class="Shopware\Components\Plugin\XmlReader\XmlPluginReader" />
+
+        <service id="shopware.plugin_xml_plugin_info_reader" alias="shopware.plugin_xml_plugin_reader">
+            <deprecated>The "%service_id%" service id is deprecated since 5.2 use `shopware.plugin_xml_plugin_reader` instead.</deprecated>
+        </service>
 
         <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">
             <argument type="service" id="models" />
-            <argument type="service" id="shopware.plugin_xml_plugin_info_reader" />
+            <argument type="service" id="shopware.plugin_xml_plugin_reader" />
         </service>
 
         <service id="slugify" class="Cocur\Slugify\Slugify" public="false">
