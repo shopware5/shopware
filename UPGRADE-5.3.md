@@ -138,6 +138,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
 * Added new `FunctionNode` for IF-ELSE statements in ORM query builder
 * Added `/address` to robots.txt 
+* Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
  
 ### Changes
 
@@ -191,6 +192,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
 * Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
 * Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
+* Changed snippet `DetailBuyActionAdd` in `snippets/frontend/detail/buy.ini`, it now contains <span> tags
+* Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
  
 ### Removals
 
