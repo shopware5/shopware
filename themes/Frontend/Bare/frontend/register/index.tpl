@@ -1,5 +1,10 @@
 {extends file="frontend/index/index.tpl"}
 
+{block name="frontend_index_header"}
+    {$toAccount = ($sTarget == "account" || $sTarget == "address")}
+    {$smarty.block.parent}
+{/block}
+
 {* Title *}
 {block name='frontend_index_header_title'}
     {s name="RegisterTitle"}{/s} | {{config name=shopName}|escapeHtml}
@@ -7,7 +12,7 @@
 
 {* Back to the shop button *}
 {block name='frontend_index_logo_trusted_shops' append}
-    {if $theme.checkoutHeader && $sTarget != "account"}
+    {if $theme.checkoutHeader && !$toAccount}
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
            title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
@@ -19,21 +24,21 @@
 
 {* Hide breadcrumb *}
 {block name='frontend_index_breadcrumb'}
-    {if $sTarget == "account"}
+    {if $toAccount}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Hide shop navigation *}
 {block name='frontend_index_shop_navigation'}
-    {if !$theme.checkoutHeader || $sTarget == "account"}
+    {if !$theme.checkoutHeader || $toAccount}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
-    {if $sTarget == "account"}
+    {if $toAccount}
         {$smarty.block.parent}
     {else}
         {if !$theme.checkoutHeader}
@@ -45,13 +50,13 @@
 
 {* Hide top bar *}
 {block name='frontend_index_top_bar_container'}
-    {if !$theme.checkoutHeader || $sTarget == "account"}
+    {if !$theme.checkoutHeader || $toAccount}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {block name="frontend_index_logo_supportinfo"}
-    {if $sTarget != "account"}
+    {if !$toAccount}
         {$smarty.block.parent}
     {/if}
 {/block}
@@ -63,7 +68,7 @@
 
 {* Footer *}
 {block name="frontend_index_footer"}
-    {if !$theme.checkoutFooter || $sTarget == "account"}
+    {if !$theme.checkoutFooter || $toAccount}
         {$smarty.block.parent}
     {else}
         {block name="frontend_index_register_footer"}
