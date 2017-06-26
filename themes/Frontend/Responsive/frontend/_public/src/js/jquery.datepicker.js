@@ -311,7 +311,7 @@
             var me = this;
 
             $input.val('');
-            $input.trigger('change');
+            me.$el.trigger('change');
 
             me.setDatePickerValFromInputs();
 
