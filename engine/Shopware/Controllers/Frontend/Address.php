@@ -70,6 +70,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             return $this->forward('index', 'register', 'frontend', $this->getForwardParameters());
         }
 
+        $this->View()->assign('userInfo', $this->get('shopware_account.store_front_greeting_service')->fetch());
         $this->View()->assign('sUserData', $this->admin->sGetUserData());
         $this->View()->assign('sAction', $this->Request()->getActionName());
     }

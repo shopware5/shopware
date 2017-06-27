@@ -52,58 +52,11 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
     {
         $view = $this->View();
 
-        $this->assignUserInfo();
-
+        $view->assign('userInfo', $this->get('shopware_account.store_front_greeting_service')->fetch());
         $view->sBasketQuantity = isset($this->session->sBasketQuantity) ? $this->session->sBasketQuantity : 0;
         $view->sBasketAmount = isset($this->session->sBasketAmount) ? $this->session->sBasketAmount : 0;
         $view->sNotesQuantity = isset($this->session->sNotesQuantity) ? $this->session->sNotesQuantity : $this->module->sCountNotes();
         $view->sUserLoggedIn = !empty(Shopware()->Session()->sUserId);
         $view->sOneTimeAccount = $this->session->sOneTimeAccount;
-    }
-
-    private function assignUserInfo()
-    {
-        $session = $this->container->get('session');
-
-        $config = $this->container->get('config');
-
-        if (!$config->get('useSltCookie')) {
-            return;
-        }
-        if ($session->sOneTimeAccount) {
-            return;
-        }
-
-        if (!isset($session->userInfo)) {
-            $session->userInfo = $this->fetchUserInfo();
-        }
-
-        $this->View()->assign('userInfo', $session->userInfo);
-        if ($session->userInfo['accountmode'] == 1) {
-            $session->sOneTimeAccount = true;
-            $this->View()->assign('userInfo', []);
-            $session->userInfo = [];
-        }
-    }
-
-    private function fetchUserInfo()
-    {
-        $session = $this->container->get('session');
-
-        $userId = $session->offsetGet('sUserId');
-        if (!$userId) {
-            $userId = $session->offsetGet('auto-user');
-        }
-
-        if (!$userId) {
-            return null;
-        }
-
-        $connection = $this->container->get('dbal_connection');
-
-        return $connection->fetchAssoc(
-            'SELECT firstname, lastname, email, salutation, title, birthday, accountmode FROM s_user WHERE id = :id',
-            [':id' => $userId]
-        );
     }
 }

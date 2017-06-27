@@ -235,7 +235,50 @@ More precise designations are commented inside the document.
     }
 }
 
-    // Drowdown menu for account navigation
+.account--menu.is--personalized {
+    .navigation--logout-personalized {
+        display: inline-block;
+    }
+
+    .navigation--logout {
+        display: block;
+        .unitize(padding-left, 23);
+    }
+
+    .navigation--link.link--logout.navigation--personalized  {
+        .unitize(padding-top, 9);
+        .unitize(padding-bottom, 9);
+
+        [class^="icon--"] {
+            .unitize-margin(0, 5, 0, 0);
+            display: inline-block;
+        }
+
+        .unitize(line-height, 20);
+        color: @text-color;
+        font-weight: @font-base-weight;
+
+        .icon--logout {
+            position: relative;
+            .unitize(top, 10);
+        }
+
+        &:hover {
+            color: @brand-primary;
+        }
+    }
+}
+
+.off-canvas {
+    .account--menu.is--personalized {
+        .navigation--signin {
+            border-bottom: none;
+        }
+    }
+}
+
+
+// Drowdown menu for account navigation
 .account--dropdown-navigation {
     display: none;
     text-align: left;

@@ -75,7 +75,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
         $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
         $this->View()->assign('sUserData', $userData);
-        $this->assignUserInfo();
+        $this->View()->assign('userInfo', $this->get('shopware_account.store_front_greeting_service')->fetch());
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
         $this->View()->assign('sAction', $this->Request()->getActionName());
     }
@@ -805,51 +805,5 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             'sTarget' => $this->Request()->getParam('sTarget'),
             'sTargetAction' => $this->Request()->getParam('sTargetAction'),
         ];
-    }
-
-    private function assignUserInfo()
-    {
-        $session = $this->container->get('session');
-
-        $config = $this->container->get('config');
-
-        if (!$config->get('useSltCookie')) {
-            return;
-        }
-        if ($session->sOneTimeAccount) {
-            return;
-        }
-
-        if (!isset($session->userInfo)) {
-            $session->userInfo = $this->fetchUserInfo();
-        }
-
-        $this->View()->assign('userInfo', $session->userInfo);
-        if ($session->userInfo['accountmode'] == 1) {
-            $session->sOneTimeAccount = true;
-            $this->View()->assign('userInfo', []);
-            $session->userInfo = [];
-        }
-    }
-
-    private function fetchUserInfo()
-    {
-        $session = $this->container->get('session');
-
-        $userId = $session->offsetGet('sUserId');
-        if (!$userId) {
-            $userId = $session->offsetGet('auto-user');
-        }
-
-        if (!$userId) {
-            return null;
-        }
-
-        $connection = $this->container->get('dbal_connection');
-
-        return $connection->fetchAssoc(
-            'SELECT firstname, lastname, email, salutation, title, birthday, accountmode FROM s_user WHERE id = :id',
-            [':id' => $userId]
-        );
     }
 }
