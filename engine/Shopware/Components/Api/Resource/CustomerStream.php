@@ -274,6 +274,8 @@ class CustomerStream extends Resource
         }
 
         $this->searchIndexer->populate($ids);
+
+        return $ids;
     }
 
     public function cleanupIndexSearchIndex()
@@ -301,10 +303,8 @@ class CustomerStream extends Resource
         $criteria = $this->criteriaFactory->createCriteria($stream->getId());
 
         $criteria->setFetchCount(false);
+        $criteria->offset((int) $offset);
 
-        if ($offset !== null) {
-            $criteria->offset($offset);
-        }
         if ($limit !== null) {
             $criteria->limit($limit);
         }
