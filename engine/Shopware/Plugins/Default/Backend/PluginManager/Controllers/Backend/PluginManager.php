@@ -313,13 +313,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function toggleSafeModeAction()
     {
-        $query = $this->container->get('models')->createQueryBuilder();
-        $query->select(['plugin']);
-        $query->from(Plugin::class, 'plugin');
-        $query->where('plugin.source != :source');
-        $query->andWhere('plugin.name NOT LIKE :name');
-        $query->setParameter(':source', 'Default');
-        $query->setParameter(':name', 'Swag%');
+        $query = $this->getThirdPartyPluginsQuery();
 
         /** @var Plugin[] $plugins */
         $plugins = $query->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
@@ -356,15 +350,25 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function isInSafeModeAction()
     {
-        $em = $this->container->get('models');
+        $query = $this->getThirdPartyPluginsQuery();
+        $query->andWhere('plugin.inSafeMode = true');
+        $query->andWhere('plugin.active = false');
 
-        $plugins = $em->getRepository(Plugin::class)->findAll();
+        /** @var Plugin[] $plugins */
+        $plugins = $query->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
-        $inSafeMode = ($this->getPluginsInSafeMode($plugins)) ? true : false;
+        $inSafeMode = !empty($plugins);
+
+        $query = $this->getThirdPartyPluginsQuery();
+        $query->andWhere('plugin.active = true');
+
+        /** @var Plugin[] $plugins */
+        $plugins = $query->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
         $this->View()->assign([
             'success' => true,
             'inSafeMode' => $inSafeMode,
+            'hasActiveThirdPartyPlugins' => !empty($plugins),
         ]);
     }
 
@@ -716,6 +720,22 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
         ]);
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    protected function getThirdPartyPluginsQuery()
+    {
+        $query = $this->container->get('models')->createQueryBuilder();
+        $query->select(['plugin']);
+        $query->from(Plugin::class, 'plugin');
+        $query->where('plugin.source != :source');
+        $query->andWhere('plugin.name NOT LIKE :name');
+        $query->setParameter(':source', 'Default');
+        $query->setParameter(':name', 'Swag%');
+
+        return $query;
     }
 
     /**

@@ -817,6 +817,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             Shopware.Notification.createStickyGrowlMessage({ text: message });
         }
 
+        Shopware.app.Application.fireEvent('plugin-state-changed', plugin);
+
         var caches = this.getResponseCacheClearTask(response);
         if (caches !== null) {
             this.clearCache(caches, plugin, callback, scope);

@@ -146,6 +146,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'destroy-login',
         'store-register',
         'clear-all-cache',
+        'plugin-state-changed',
         'refresh-account-data'
     ],
 
