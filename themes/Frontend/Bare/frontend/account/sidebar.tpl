@@ -4,9 +4,19 @@
 
         {* Sidebar navigation headline *}
         {block name="frontend_account_menu_title"}
-            <h2 class="navigation--headline">
-                {s name="AccountHeaderNavigation"}{/s}
-            </h2>
+            {if {config name=useSltCookie} && $userInfo}
+                <h2 class="navigation--headline">
+                    {block name="frontend_account_menu_greeting"}
+                        {s namespace="frontend/account/sidebar_personal" name="AccountGreetingBefore"}{/s}
+                        {$userInfo['firstname']}
+                        {s namespace="frontend/account/sidebar_personal" name="AccountGreetingAfter"}{/s}
+                    {/block}
+                </h2>
+            {else}
+                <h2 class="navigation--headline">
+                    {s name="AccountHeaderNavigation"}{/s}
+                </h2>
+            {/if}
         {/block}
 
         {* Sidebar menu container *}
@@ -18,6 +28,29 @@
                     {block name="frontend_account_menu_list"}
                         {* Link to the account overview page *}
                         {block name="frontend_account_menu_link_overview"}
+
+                            {if {config name=useSltCookie} && !$userInfo}
+                                <li class="navigation--entry">
+                                    <span class="navigation--signin">
+                                        <a href="{url module='frontend' controller='account'}#hide-registration"
+                                           class="blocked--link btn is--primary navigation--signin-btn{if $register} registration--menu-entry entry--close-off-canvas{/if}"
+                                           data-collapseTarget="#registration"
+                                           data-action="close">
+                                            {s namespace="frontend/account/sidebar_personal" name="AccountLogin"}{/s}
+                                        </a>
+                                        <span class="navigation--register">
+                                            {s name="AccountOr"}{/s}
+                                            <a href="{url module='frontend' controller='account'}#show-registration"
+                                               class="blocked--link{if $register} registration--menu-entry entry--close-off-canvas{/if}"
+                                               data-collapseTarget="#registration"
+                                               data-action="open">
+                                                {s namespace="frontend/account/sidebar_personal" name="AccountRegister"}{/s}
+                                            </a>
+                                        </span>
+                                    </span>
+                                </li>
+                            {/if}
+
                             <li class="navigation--entry">
                                 <a href="{url module='frontend' controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'index'} is--active{/if}" rel="nofollow">
                                     {s name="AccountLinkOverview"}{/s}
@@ -36,11 +69,19 @@
 
                         {* Link to the user addresses *}
                         {block name="frontend_account_menu_link_addresses"}
-                            <li class="navigation--entry">
-                                <a href="{url module='frontend' controller='address' action='index'}" title="{s name="AccountLinkAddresses"}My addresses{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}" rel="nofollow">
-                                    {s name="AccountLinkAddresses"}My addresses{/s}
-                                </a>
-                            </li>
+                            {if $addressOverSidebar}
+                                <li class="navigation--entry">
+                                    <a href="{url module='frontend' controller='address' action='index' sidebar=''}" title="{s name="AccountLinkAddresses" namespace="frontend/account/sidebar"}{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}" rel="nofollow">
+                                        {s name="AccountLinkAddresses" namespace="frontend/account/sidebar"}{/s}
+                                    </a>
+                                </li>
+                            {else}
+                                <li class="navigation--entry">
+                                    <a href="{url module='frontend' controller='address' action='index'}" title="{s name="AccountLinkAddresses"}My addresses{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}" rel="nofollow">
+                                        {s name="AccountLinkAddresses"}My addresses{/s}
+                                    </a>
+                                </li>
+                            {/if}
                         {/block}
 
                         {* Link to the user payment method settings *}
@@ -83,18 +124,35 @@
 
                         {* Link to the partner statistics *}
                         {block name="frontend_account_menu_link_partner_statistics"}
-                            {if $sUserLoggedIn && !$sOneTimeAccount}
+                            {if $sUserLoggedIn && !$sOneTimeAccount && $displayPartnerLink}
                                 {action module='frontend' controller="account" action="partnerStatisticMenuItem"}
                             {/if}
                         {/block}
 
                         {* Logout action *}
+
                         {block name="frontend_account_menu_link_logout"}
-                            <li class="navigation--entry">
-                                <a href="{url module='frontend' controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout" rel="nofollow">
-                                    <i class="icon--logout"></i> {s name="AccountLinkLogout2"}{/s}
-                                </a>
-                            </li>
+                            {if {config name=useSltCookie} && $userInfo}
+                                <li class="navigation--entry">
+                                    <a href="{url controller='account' action='logout'}" title="{s namespace="frontend/account/sidebar_personal" name="AccountLogout"}{/s}"
+                                       class="navigation--link link--logout navigation--personalized">
+                                        {block name="frontend_account_menu_logout_personalized"}
+                                            <span class="navigation--logout-personalized blocked--link">
+                                                <i class="icon--logout blocked--link"></i>
+                                                {s namespace="frontend/account/sidebar_personal" name="AccountNot"}{/s}
+                                                {$userInfo['firstname']|truncate:15:"..."}?
+                                            </span>
+                                            <span class="navigation--logout blocked--link">{s namespace="frontend/account/sidebar_personal" name="AccountLogout"}{/s}</span>
+                                        {/block}
+                                    </a>
+                                </li>
+                            {else}
+                                <li class="navigation--entry">
+                                    <a href="{url module='frontend' controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout" rel="nofollow">
+                                        <i class="icon--logout"></i> {s name="AccountLinkLogout2"}{/s}
+                                    </a>
+                                </li>
+                            {/if}
                         {/block}
                     {/block}
                 </ul>
