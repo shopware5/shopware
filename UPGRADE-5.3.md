@@ -137,6 +137,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new search builder class `Shopware\Components\Model\SearchBuilder`
 * Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
 * Added new `FunctionNode` for IF-ELSE statements in ORM query builder
+* Added `/address` to robots.txt 
  
 ### Changes
 
