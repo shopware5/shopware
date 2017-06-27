@@ -158,7 +158,7 @@ class Repository extends ModelRepository
 
         // Set the filtering logic
         if (null !== $filter) {
-            $builder->andWhere('(dispatch.name LIKE ?1 OR dispatch.description LIKE ?2)');
+            $builder->andWhere('(dispatch.name LIKE ?1 OR dispatch.description LIKE ?1)');
             $builder->setParameter(1, '%' . $filter . '%');
         }
 

@@ -388,10 +388,10 @@ class Repository extends ModelRepository
                        ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                        ->join('voucher.codes', 'codes')
                        ->where(
-                           '(voucher.validTo>= :todayORvoucher.validToIS NULL)')
+                           '(voucher.validTo>= :today OR voucher.validTo IS NULL)')
                            ->setParameter('today', $today
                        )
-                       ->andWhere('codes.customerIdIS NULL')
+                       ->andWhere('codes.customerId IS NULL')
                        ->andWhere('codes.cashed= 0')
                        ->andWhere('voucher.modus= 1')
                        ->getQuery();
