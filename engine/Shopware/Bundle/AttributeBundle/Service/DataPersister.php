@@ -85,17 +85,19 @@ class DataPersister
         }
         $data = $this->filter($table, $data);
 
+        $exists = $this->dataLoader->load($table, $foreignKey);
+
+        if (!$exists) {
+            $this->create($table, $data, $foreignKey);
+
+            return;
+        }
+
         if (empty($data)) {
             return;
         }
 
-        $exists = $this->dataLoader->load($table, $foreignKey);
-
-        if ($exists) {
-            $this->update($table, $data, $foreignKey);
-        } else {
-            $this->create($table, $data, $foreignKey);
-        }
+        $this->update($table, $data, $foreignKey);
     }
 
     /**
