@@ -39,6 +39,7 @@ class Template
      * @param \Enlight_Components_Snippet_Resource $snippetResource
      * @param EscaperInterface                     $escaper
      * @param array                                $templateConfig
+     * @param array                                $securityConfig
      *
      * @return \Enlight_Template_Manager
      */
