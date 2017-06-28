@@ -2424,7 +2424,7 @@ class sArticles
             }
 
             if ($this->config->get('forceArticleMainImageInListing') && $configurator->getType() !== ConfiguratorService::CONFIGURATOR_TYPE_STANDARD && empty($selection)) {
-                $data['image'] = $this->legacyStructConverter->convertMediaStruct($product->getCover());
+                $data['image'] = (!is_null($product->getCover())) ? $this->legacyStructConverter->convertMediaStruct($product->getCover()) : '';
                 $data['images'] = [];
                 foreach ($product->getMedia() as $image) {
                     if ($image->getId() !== $product->getCover()->getId()) {
