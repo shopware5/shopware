@@ -623,6 +623,7 @@
             <argument type="service" id="events" />
             <!--preset element handlers-->
             <argument type="collection" />
+            <argument>%kernel.root_dir%</argument>
         </service>
 
         <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
