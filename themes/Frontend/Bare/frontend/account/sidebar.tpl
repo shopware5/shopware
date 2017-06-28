@@ -71,8 +71,8 @@
                         {block name="frontend_account_menu_link_addresses"}
                             {if $inHeader}
                                 <li class="navigation--entry">
-                                    <a href="{url module='frontend' controller='address' action='index' sidebar=''}" title="{s name="AccountLinkAddresses" namespace="frontend/account/sidebar"}{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}" rel="nofollow">
-                                        {s name="AccountLinkAddresses" namespace="frontend/account/sidebar"}{/s}
+                                    <a href="{url module='frontend' controller='address' action='index' sidebar=''}" title="{s name="AccountLinkAddresses"}{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}" rel="nofollow">
+                                        {s name="AccountLinkAddresses"}{/s}
                                     </a>
                                 </li>
                             {else}
