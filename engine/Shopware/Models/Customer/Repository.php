@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Customer;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -66,7 +67,7 @@ class Repository extends ModelRepository
         $subQueryBuilder->select('SUM(canceledOrders.invoiceAmount)')
             ->from('Shopware\Models\Customer\Customer', 'customer2')
             ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
-            ->where($subQueryBuilder->expr()->eq('customer2', $customerId));
+            ->where('customer2.id = :customerId');
 
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
@@ -91,7 +92,8 @@ class Repository extends ModelRepository
                 ->leftJoin('subShop.locale', 'locale')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
-                ->where($builder->expr()->eq('customer.id', $customerId));
+                ->where('customer.id = :customerId')
+                ->setParameter('customerId', $customerId);
 
         $builder->groupBy('customer.id');
 
@@ -180,30 +182,29 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.paymentStatus', 'paymentStatus');
 
-        $expr = Shopware()->Models()->getExpressionBuilder();
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $builder->where(
-                $expr->andX(
-                    $expr->eq('orders.customerId', $customerId),
-                    $expr->orX(
-                        $expr->like('orders.number', '?1'),        //Search only the beginning of the order number.
-                        $expr->like('orders.invoiceAmount', '?3'),      //Search only the beginning of the order amount, replace , and . with _ wildcard
-                        $expr->like('orders.orderTime', '?2'),          //Search only for the end of the order date.
-                        $expr->like('payment.description', '?1'),       //Search only the beginning of the payment description.
-                        $expr->like('dispatch.name', '?1'),             //Search only the beginning of the dispatch name.
-                        $expr->like('orderStatus.description', '?1'),    //Search only the beginning of the order state.
-                        $expr->like('paymentStatus.description', '?1')
-                    )
-                )
+            $builder->where('orders.customerId = :customerId');
+            $builder->andWhere(
+                '(
+                    orders.number LIKE ?1 
+                    OR orders.invoiceAmount LIKE ?3 
+                    OR orders.orderTime LIKE ?2 
+                    OR payment.description LIKE ?1 
+                    OR dispatch.name LIKE ?1 
+                    OR orderStatus.description LIKE ?1
+                    OR paymentStatus.description LIKE ?1
+                )'
             )
             ->setParameter(1, $filter . '%')
             ->setParameter(2, '%' . $filter)
-            ->setParameter(3, str_replace('.', '_', str_replace(',', '_', $filter)) . '%');
+            ->setParameter(3, str_replace('.', '_', str_replace(',', '_', $filter)) . '%')
+            ->setParameter('customerId', $customerId);
         } else {
-            $builder->where($expr->eq('orders.customerId', $customerId));
+            $builder->where('orders.customerId = :customerId')->setParameter('customerId', $customerId);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1', '4']));
+        $builder->andWhere('orders.status NOT IN (:stati)');
+        $builder->setParameter(':stati', [-1, 4], Connection::PARAM_INT_ARRAY);
 
         $this->addOrderBy($builder, $orderBy);
 
@@ -289,7 +290,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['groups'])->from('Shopware\Models\Customer\Group', 'groups');
         if (!empty($usedIds)) {
-            $builder->where($builder->expr()->notIn('groups.id', $usedIds));
+            $builder->where('groups.id NOT IN (:usedIds)')
+                ->setParameter('usedIds', $usedIds, Connection::PARAM_INT_ARRAY);
         }
         if ($limit !== null) {
             $builder->setFirstResult($offset)

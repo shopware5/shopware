@@ -60,7 +60,8 @@ class Repository extends ModelRepository
         $builder = $this->filterListQuery($builder, $filter);
         $this->addOrderBy($builder, $orderBy);
 
-        $builder->andWhere($builder->expr()->eq('documents.orderId', $orderId));
+        $builder->andWhere('documents.orderId = :orderId')
+            ->setParameter('orderId', $orderId);
 
         if ($limit !== null) {
             $builder->setFirstResult($offset)
