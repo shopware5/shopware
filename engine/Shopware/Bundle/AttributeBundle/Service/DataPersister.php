@@ -85,6 +85,10 @@ class DataPersister
         }
         $data = $this->filter($table, $data);
 
+        if (empty($data)) {
+            return;
+        }
+
         $exists = $this->dataLoader->load($table, $foreignKey);
 
         if ($exists) {
