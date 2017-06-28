@@ -131,7 +131,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
         $full = $this->Request()->getParam('full');
 
-        $this->getApiResource()->buildSearchIndex($lastId, $full);
+        $ids = $this->getApiResource()->buildSearchIndex($lastId, $full);
 
         $snippets = $this->container->get('snippets')->getNamespace('backend/customer/view/main');
 
