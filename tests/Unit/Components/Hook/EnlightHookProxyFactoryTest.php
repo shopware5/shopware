@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 interface MyInterface
 {
-    public function myPublic($bar, $foo = 'bar');
+    public function myPublic($bar, $foo = 'bar', array $barBar = array(), MyInterface $fooFoo = null);
 }
 
 interface MyReferenceInterface
@@ -38,7 +38,7 @@ interface MyReferenceInterface
 
 class MyBasicTestClass implements MyInterface
 {
-    public function myPublic($bar, $foo = 'bar')
+    public function myPublic($bar, $foo = 'bar', array $barBar = array(), MyInterface $fooFoo = null)
     {
         return $bar . $foo;
     }
@@ -84,31 +84,43 @@ class EnlightHookProxyFactoryTest extends TestCase
         $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyBasicTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
-class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends Shopware\Tests\Unit\Components\MyBasicTestClass implements Enlight_Hook_Proxy
+class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\MyBasicTestClass implements \Enlight_Hook_Proxy
 {
+
     public function executeParent($method, $args = array())
     {
-        return call_user_func_array(array($this, 'parent::' . $method), $args);
+        return call_user_func_array([$this, 'parent::' . $method], $args);
     }
 
     public static function getHookMethods()
     {
-        return array (  0 => 'myPublic',  1 => 'myProtected',);
+        return ['myPublic', 'myProtected'];
     }
-    
-    public function myPublic($bar, $foo = 'bar')
+
+    /**
+     * @inheritdoc
+     */
+    public function myPublic($bar, $foo = 'bar', array $barBar = array(), \Shopware\Tests\Unit\Components\MyInterface $fooFoo = null)
     {
         return Shopware()->Hooks()->executeHooks(
-            $this, 'myPublic', array('bar'=>$bar, 'foo'=>$foo)
+            $this,
+            'myPublic',
+            ['bar' => $bar, 'foo' => $foo, 'barBar' => $barBar, 'fooFoo' => $fooFoo]
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function myProtected($bar)
     {
         return Shopware()->Hooks()->executeHooks(
-            $this, 'myProtected', array('bar'=>$bar)
+            $this,
+            'myProtected',
+            ['bar' => $bar]
         );
     }
+
 
 }
 
@@ -121,24 +133,31 @@ EOT;
         $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyReferenceTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
-class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends Shopware\Tests\Unit\Components\MyReferenceTestClass implements Enlight_Hook_Proxy
+class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\MyReferenceTestClass implements \Enlight_Hook_Proxy
 {
+
     public function executeParent($method, $args = array())
     {
-        return call_user_func_array(array($this, 'parent::' . $method), $args);
+        return call_user_func_array([$this, 'parent::' . $method], $args);
     }
 
     public static function getHookMethods()
     {
-        return array (  0 => 'myPublic',);
+        return ['myPublic'];
     }
-    
+
+    /**
+     * @inheritdoc
+     */
     public function myPublic(&$bar, $foo)
     {
         return Shopware()->Hooks()->executeHooks(
-            $this, 'myPublic', array('bar'=>&$bar, 'foo'=>$foo)
+            $this,
+            'myPublic',
+            ['bar' => &$bar, 'foo' => $foo]
         );
     }
+
 
 }
 
