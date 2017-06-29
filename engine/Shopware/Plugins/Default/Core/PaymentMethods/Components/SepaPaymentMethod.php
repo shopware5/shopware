@@ -52,7 +52,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $sErrorFlag = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Validate_Data_Required', $sErrorFlag, [
             'subject' => $this,
-            'paymentData' => $paymentData
+            'paymentData' => $paymentData,
         ]);
 
         if (count($sErrorFlag)) {
@@ -93,7 +93,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $data = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Save_Payment_Data', $data, [
             'subject' => $this,
-            'params' => $request->getParams()
+            'params' => $request->getParams(),
         ]);
 
         if (!$lastPayment) {
@@ -130,7 +130,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
             $arrayData = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Current_Payment_Data_Array', $arrayData, [
                 'subject' => $this,
-                'paymentData' => $paymentData
+                'paymentData' => $paymentData,
             ]);
 
             return $arrayData;
@@ -179,7 +179,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $data = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Create_Payment_Instance_Data', $data, [
             'subject' => $this,
-            'paymentData' => $paymentData
+            'paymentData' => $paymentData,
         ]);
 
         Shopware()->Db()->insert('s_core_payment_instance', $data);
@@ -264,7 +264,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'sepaSellerId' => Shopware()->Config()->get('sepaSellerId'),
         ]);
 
-        $data = Shopware()->Template()->fetch(__DIR__ . '/../Views/frontend/plugins/sepa/email.tpl');
+        Shopware()->Template()->addTemplateDir(__DIR__ . '/../Views/');
+        $data = Shopware()->Template()->fetch('frontend/plugins/sepa/email.tpl');
 
         $mpdf = new \mPDF('utf-8', 'A4', '', '');
         $mpdf->WriteHTML($data);

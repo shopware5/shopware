@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Template\Security;
 use Shopware\Models\Shop\Locale;
 
 /**
@@ -678,13 +677,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $content = preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $params['content']);
-
-        $this->View()->Engine()->enableSecurity(
-            new Security(
-                $this->View()->Engine(),
-                $this->container->getParameter('shopware.template_security')
-            )
-        );
 
         $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
         $defaultContext = [

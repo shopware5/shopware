@@ -47,6 +47,7 @@
             <argument type="service" id="snippet_resource"/>
             <argument type="service" id="shopware.escaper" />
             <argument>%shopware.template%</argument>
+            <argument>%shopware.template_security%</argument>
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
