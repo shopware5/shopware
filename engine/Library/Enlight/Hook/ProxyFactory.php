@@ -21,6 +21,12 @@
  * @author     $Author$
  */
 
+use ProxyManager\Generator\ClassGenerator;
+use ProxyManager\Generator\MethodGenerator;
+use ProxyManager\Generator\Util\ClassGeneratorUtils;
+use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;
+use Zend\Code\Reflection\MethodReflection;
+
 /**
  * The Enlight_Hook_ProxyFactory is the factory for the class proxies.
  *
@@ -54,38 +60,6 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      * @var string extension of the hook files.
      */
     protected $fileExtension = '.php';
-
-    /**
-     * @var string Default proxy class template.
-     */
-    protected $proxyClassTemplate =
-        '<?php
-class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_Proxy
-{
-    public function executeParent($method, $args = array())
-    {
-        return call_user_func_array(array($this, \'parent::\' . $method), $args);
-    }
-
-    public static function getHookMethods()
-    {
-        return <arrayHookMethods>;
-    }
-    <methods>
-}
-';
-    /**
-     * @var string Default proxy method template
-     */
-    protected $proxyMethodTemplate =
-        '
-    <methodModifiers> function <methodName>(<methodParameters>)
-    {
-        return Shopware()->Hooks()->executeHooks(
-            $this, \'<methodName>\', array(<arrayMethodParameters>)
-        );
-    }
-';
 
     /**
      * Standard Constructor method.
@@ -187,28 +161,114 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      */
     protected function generateProxyClass($class)
     {
-        $methods = $this->generateMethods($class);
-        $proxyClassName = $this->formatClassName($class);
+        $reflectionClass = new ReflectionClass($class);
 
-        $search = array(
-            '<namespace>',
-            '<proxyClassName>',
-            '<className>',
-            '<methods>',
-            '<arrayHookMethods>'
+        // Make sure the we can create a proxy of the class
+        CanProxyAssertion::assertClassCanBeProxied($reflectionClass, false);
+
+        // Generate the base class
+        $proxyClassName = $this->getProxyClassName($class);
+        $classGenerator = new ClassGenerator($proxyClassName);
+        $classGenerator->setExtendedClass($reflectionClass->getName());
+        $classGenerator->setImplementedInterfaces([
+            'Enlight_Hook_Proxy'
+        ]);
+
+        // Prepare generators for the hooked methods
+        $hookMethods = $this->getHookedMethods($reflectionClass);
+        $hookMethodGenerators = [];
+        foreach ($hookMethods as $method) {
+            $hookMethodGenerators[$method->getName()] = $this->createMethodGenerator($method);
+        }
+
+        // Add the default 'executeParent' method
+        $executeParentGenerator = MethodGenerator::fromArray([
+            'name' => 'executeParent',
+            'parameters' => [
+                [
+                    'name' => 'method'
+                ],
+                [
+                    'name' => 'args',
+                    'defaultValue' => []
+                ]
+            ],
+            'body' => "return call_user_func_array([\$this, 'parent::' . \$method], \$args);\n"
+        ]);
+        ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $executeParentGenerator);
+
+        // Add the default 'getHookMethods' method
+        $hookMethodNameString = (count($hookMethodGenerators) > 0) ? ("'" . implode("', '", array_keys($hookMethodGenerators)) . "'") : '';
+        $getHookMethodsGenerator = MethodGenerator::fromArray([
+            'name' => 'getHookMethods',
+            'static' => true,
+            'body' => "return [" . $hookMethodNameString . "];\n"
+        ]);
+        ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getHookMethodsGenerator);
+
+        // Add the hooked methods
+        foreach ($hookMethodGenerators as $methodGenerator) {
+            ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $methodGenerator);
+        }
+
+        // Generate the proxy file contents
+        return "<?php\n" . $classGenerator->generate();
+    }
+
+    /**
+     * @param ReflectionClass $class
+     * @return ReflectionMethod[]
+     */
+    protected function getHookedMethods(ReflectionClass $class)
+    {
+        return array_filter(
+            $class->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED),
+            function (ReflectionMethod $method) use ($class) {
+                return !$method->isConstructor()
+                    && !$method->isFinal()
+                    && !$method->isStatic()
+                    && substr($method->getName(), 0, 2) !== '__'
+                    && $this->hookManager->hasHooks($class->getName(), $method->getName());
+            }
         );
-        $replace = array(
-            $this->proxyNamespace,
-            $proxyClassName,
-            $class,
-            $methods['methods'],
-            str_replace("\n", '', var_export($methods['array'], true))
+    }
+
+    /**
+     * @param ReflectionMethod $method
+     * @return MethodGenerator
+     */
+    protected function createMethodGenerator(ReflectionMethod $method)
+    {
+        $originalMethod = new MethodReflection(
+            $method->getDeclaringClass()->getName(),
+            $method->getName()
         );
 
-        $file = $this->proxyClassTemplate;
-        $file = str_replace($search, $replace, $file);
+        // Prepare parameters for the hook manager
+        $params = array_map(
+            function ($parameter) {
+                $value = '$' . $parameter->getName();
+                if ($parameter->isPassedByReference()) {
+                    $value = '&' . $value;
+                }
 
-        return $file;
+                return "'" . $parameter->getName() . "' => " . $value;
+            },
+            $originalMethod->getParameters()
+        );
+
+        // Create the method
+        $methodGenerator = MethodGenerator::fromReflection($originalMethod);
+        $methodGenerator->setDocblock('@inheritdoc');
+        $methodGenerator->setBody(
+            "return Shopware()->Hooks()->executeHooks(\n" .
+            "    \$this,\n" .
+            "    '" . $originalMethod->getName() . "',\n" .
+            "    [" . implode(", ", $params) . "]\n" .
+            ");\n"
+        );
+
+        return $methodGenerator;
     }
 
     /**
@@ -228,85 +288,6 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
         }
 
         throw new Enlight_Exception('Unable to write file "' . $fileName . '"');
-    }
-
-    /**
-     * Generate the class source code for the hooked method of the given class.
-     * First all methods of the class are iterated.
-     * Final, static, magic and private methods can't be hooked.
-     * If the method is hooked, enlight iterates all method parameters to generate
-     * the parameter definition. At last all hooked methods are implemented by the
-     * $proxyMethodTemplate.
-     *
-     * @param  string $class
-     * @return array
-     */
-    protected function generateMethods($class)
-    {
-        $rc = new ReflectionClass($class);
-        $methodsArray = array();
-        $methods = '';
-
-        //iterate all class methods
-        foreach ($rc->getMethods() as $rm) {
-
-            //final, static and private methods can't be hooked.
-            if ($rm->isFinal() || $rm->isStatic() || $rm->isPrivate()) {
-                continue;
-            }
-            if (substr($rm->getName(), 0, 2) == '__') {
-                continue;
-            }
-            //checks if the current method hooks exists.
-            if (!$this->hookManager->hasHooks($class, $rm->getName())) {
-                continue;
-            }
-
-            //adds the hooked method to the array.
-            $methodsArray[] = $rm->getName();
-            $params = '';
-            $proxy_params = '';
-            $array_params = '';
-
-            //iterates all parameters to generate the parameter definition.
-            foreach ($rm->getParameters() as $rp) {
-                if ($params) {
-                    $params .= ', ';
-                    $proxy_params .= ', ';
-                    $array_params .= ', ';
-                }
-
-                $array_param = '';
-                if ($rp->isPassedByReference()) {
-                    $params .= '&';
-                    $proxy_params .= '$';
-                    $array_param .= '&';
-                }
-                $params .= '$' . $rp->getName();
-                $proxy_params .= '$' . $rp->getName();
-                $array_param .= '$' . $rp->getName();
-                $array_params .= '\'' . $rp->getName() . '\'=>' . $array_param;
-                if ($rp->isOptional() && $rp->isDefaultValueAvailable()) {
-                    $params .= ' = ' . str_replace("\n", '', var_export($rp->getDefaultValue(), true));
-                }
-            }
-            $modifiers = Reflection::getModifierNames($rm->getModifiers());
-            $modifiers = implode(' ', $modifiers);
-            $search = array(
-                '<methodName>',
-                '<methodModifiers>',
-                '<methodParameters>',
-                '<proxyMethodParameters>',
-                '<arrayMethodParameters>',
-                '<className>'
-            );
-            $replace = array($rm->getName(), $modifiers, $params, $proxy_params, $array_params, $class);
-            $method = $this->proxyMethodTemplate;
-            $method = str_replace($search, $replace, $method);
-            $methods .= $method;
-        }
-
-        return array('array' => $methodsArray, 'methods' => $methods);
     }
 
     /**
