@@ -1300,6 +1300,11 @@ class FieldHelper
         $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
     }
 
+    public function addCategoryTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('categoryAttribute', 's_categories_attributes', $query, $context, 'category.id');
+    }
+
     public function getCustomerFields()
     {
         $fields = [
