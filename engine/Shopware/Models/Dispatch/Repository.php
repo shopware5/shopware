@@ -290,7 +290,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $filters = [];
-        if (null !== $filter && !empty($filter)) {
+        if (null !== $filter && is_array($filter)) {
             foreach ($filter as $singleFilter) {
                 $filters[$singleFilter['property']] = $singleFilter['value'];
             }
@@ -344,7 +344,7 @@ class Repository extends ModelRepository
     public function getCountryQueryBuilder($filter = null, $order = null)
     {
         $filters = [];
-        if (null !== $filter && !empty($filter)) {
+        if (null !== $filter && is_array($filter)) {
             foreach ($filter as $singleFilter) {
                 $filters[$singleFilter['property']] = $singleFilter['value'];
             }

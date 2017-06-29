@@ -112,6 +112,7 @@ class Repository
         $builder = $this->createDailyVisitorsBuilder($from, $to);
 
         foreach ($shopIds as $shopId) {
+            $shopId = (int) $shopId;
             $builder->addSelect(
                 'SUM(IF(visitor.shopID = ' . $shopId . ', visitor.uniquevisits, 0)) as visits' . $shopId
             );
@@ -1104,6 +1105,7 @@ class Repository
         ]);
 
         foreach ($shopIds as $shopId) {
+            $shopId = (int) $shopId;
             $builder->addSelect(
                 'SUM( IF(
                     orders.language = ' . $shopId . ' AND orders.status NOT IN (-1, 4),

@@ -87,7 +87,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function init()
     {
-        if (in_array($this->Request()->getActionName(), ['performOrderRedirect'])) {
+        if ($this->Request()->getActionName() === 'performOrderRedirect') {
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         }
         $currency = Shopware()->Db()->fetchRow(
@@ -220,8 +220,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Event listener method which fires when the detail page of a customer is loaded.
      * Returns an array of grouped order data to display them in a line chart.
-     *
-     * @return array Contains all customer orders group by year-month
      */
     public function getOrderChartAction()
     {
@@ -755,7 +753,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['paymentPreset'] = $params['paymentId'];
         }
 
-        if (empty($id) && empty($params['shipping'][0]['firstName']) && empty($params['shipping'][0]['lastName'])) {
+        if (empty($params['shipping'][0]['firstName']) && empty($params['shipping'][0]['lastName'])) {
             //shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }

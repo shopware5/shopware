@@ -292,6 +292,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $elementRepository = $modelManager->getRepository(Element::class);
         $formRepository = $modelManager->getRepository(Form::class);
 
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
         if (strpos($name, ':') !== false) {
@@ -558,7 +559,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
+                'valid' => extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 3,

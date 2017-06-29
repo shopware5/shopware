@@ -292,8 +292,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Tests connectivity to SBP server
      *
      * @throws Exception
-     *
-     * @return Enlight_View|Enlight_View_Default
      */
     public function pingServerAction()
     {

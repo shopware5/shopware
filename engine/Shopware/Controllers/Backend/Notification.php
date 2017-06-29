@@ -35,8 +35,8 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
     public function getArticleListAction()
     {
         try {
-            $limit = intval($this->Request()->limit);
-            $offset = intval($this->Request()->start);
+            $limit = (int) $this->Request()->limit;
+            $offset = (int) $this->Request()->start;
 
             /** @var $filter array */
             $filter = $this->Request()->getParam('filter', []);
@@ -76,8 +76,8 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
     public function getCustomerListAction()
     {
         try {
-            $limit = intval($this->Request()->limit);
-            $offset = intval($this->Request()->start);
+            $limit = (int) $this->Request()->limit;
+            $offset = (int) $this->Request()->start;
             $articleOrderNumber = $this->Request()->orderNumber;
 
             /** @var $filter array */

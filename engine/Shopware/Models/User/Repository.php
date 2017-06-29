@@ -184,9 +184,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\User', 'attribute')
-                      ->where('attribute.userId = ?1')
-                      ->setParameter(1, $userId);
+                ->from('Shopware\Models\Attribute\User', 'attribute')
+                ->where('attribute.userId = ?1')
+                ->setParameter(1, $userId);
 
         return $builder;
     }

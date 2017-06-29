@@ -648,7 +648,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      *
      * @param $id
      *
-     * @return array
+     * @return array|bool
      */
     private function getMail($id)
     {

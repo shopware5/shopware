@@ -317,8 +317,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Event listener function of the history store in the order backend module.
      * Returns the status history of the passed order.
-     *
-     * @return array
      */
     public function getStatusHistoryAction()
     {
@@ -781,8 +779,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * The sendMailAction fired from the batch window in the order backend module when the user want to send the order
      * status mail manually.
-     *
-     * @return array
      */
     public function sendMailAction()
     {
@@ -832,6 +828,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $documentId = $this->request->getParam('documentId');
         $documentPath = $this->container->getParameter('kernel.root_dir') . '/files/documents/';
+        /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->container->get('dbal_connection');
         $queryBuilder = $connection->createQueryBuilder();
 
@@ -1517,6 +1514,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function getDefaultName($typeId)
     {
+        /** @var $queryBuilder \Doctrine\DBAL\Query\QueryBuilder $builder */
         $queryBuilder = $this->container->get('dbal_connection')->createQueryBuilder();
 
         return $queryBuilder->select('name')

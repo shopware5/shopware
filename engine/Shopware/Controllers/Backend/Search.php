@@ -112,6 +112,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getArticles($search)
     {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
 
         $query->select([
@@ -227,7 +228,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $builder
+     * @param $builder \Doctrine\ORM\QueryBuilder
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */

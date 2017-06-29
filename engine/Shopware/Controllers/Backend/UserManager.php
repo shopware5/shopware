@@ -98,16 +98,11 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
     /**
      * Delete role from database
-     * Identified by request paramter id
+     * Identified by request parameter id
      *
      * @param id - Id of role to delete
      *
-     * @return
-     * <code>
-     *  success = true / false
-     *  data = data that has been written to database
-     *  message = possible error message in  case that the update failed
-     * </code>
+     * @throws Exception
      */
     public function deleteRoleAction()
     {
@@ -144,14 +139,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      * @param name
      * @param parentId
      * @param source
-     * </code>
-     *
-     * @return
-     * <code>
-     *  success = true / false
-     *  data = data that has been written to database
-     *  message = possible error message in  case that the update failed
-     * </code>
      */
     public function updateRoleAction()
     {
@@ -193,16 +180,16 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $this->View()->assign([
                 'success' => true,
-                'data' => Shopware()->Models()->toArray($role), ]
-        );
+                'data' => Shopware()->Models()->toArray($role),
+        ]);
     }
 
     /**
      * Get all roles available in database
-     * Strip roles that have parentid set - cause
+     * Strip roles that have parentID set - cause
      * this roles are assigned to particular users
      *
-     * @return Sample json return value
+     * Sample json return value
      *                <code>
      *                {"success":true,"data":[{"id":1,"parentId":null,"name":"Administrators","description":"Default group that gains access to all shop functions","source":"build-in","enabled":1,"admin":1},{"id":2,"parentId":null,"name":"Test-Group1A","description":"Group that has restricted access ","source":"test","enabled":0,"admin":0},{"id":3,"parentId":null,"name":"Test-Group2","description":"Group that has restricted access ","source":"test","enabled":0,"admin":0},{"id":4,"parentId":3,"name":"Test-Group3","description":"Group that has restricted access ","source":"test","enabled":1,"admin":0}],"total":4}
      *                </code>
@@ -278,8 +265,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $this->View()->assign([
                 'success' => true,
-                'data' => Shopware()->Models()->toArray($user), ]
-        );
+                'data' => Shopware()->Models()->toArray($user),
+        ]);
     }
 
     /**
@@ -309,15 +296,13 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $this->View()->assign([
                 'success' => true,
-                'data' => $this->Request()->getParams(), ]
-        );
+                'data' => $this->Request()->getParams(),
+        ]);
     }
 
     /**
      * Event listener method which is used from the rules store to load first time the
      * resource and on node expand the privileges of the passed resource id.
-     *
-     * @return array
      */
     public function getResourcesAction()
     {
@@ -441,8 +426,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Event listener method of the user manager backend module, which is fired
      * when the role detail store is loading.
-     *
-     * @return mixed
      */
     public function getRolesDetailsAction()
     {
@@ -469,8 +452,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Event listener method of the user manager backend module, which is fired
      * when the user want to create a new resource.
-     *
-     * @return mixed
      */
     public function saveResourceAction()
     {
@@ -492,8 +473,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Event listener method of the user manager backend module, which is fired
      * when the user want to create a new resource.
-     *
-     * @return mixed
      */
     public function savePrivilegeAction()
     {

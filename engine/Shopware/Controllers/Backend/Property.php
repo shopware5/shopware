@@ -48,8 +48,8 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      */
     public function getSetsAction()
     {
-        $limit = intval($this->Request()->limit);
-        $offset = intval($this->Request()->start);
+        $limit = (int) $this->Request()->limit;
+        $offset = (int) $this->Request()->start;
         $filter = $this->Request()->getParam('filter', []);
         $query = $this->getPropertyRepository()->getSetsQuery($offset, $limit, $filter);
         $totalCount = $this->getManager()->getQueryCount($query);
@@ -263,8 +263,8 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      */
     public function getGroupsAction()
     {
-        $limit = intval($this->Request()->limit);
-        $offset = intval($this->Request()->start);
+        $limit = (int) $this->Request()->limit;
+        $offset = (int) $this->Request()->start;
         $filter = $this->Request()->getParam('filter', []);
         $query = $this->getPropertyRepository()->getOptionsQuery($offset, $limit, $filter);
         $totalCount = $this->getManager()->getQueryCount($query);

@@ -75,7 +75,9 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     {
         // if id is provided return a single form instead of a collection
         if ($id = $this->Request()->getParam('id')) {
-            return $this->getSingleSupplier($id);
+            $this->getSingleSupplier($id);
+
+            return;
         }
 
         $filter = $this->Request()->getParam('filter', null);
