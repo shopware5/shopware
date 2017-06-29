@@ -200,6 +200,7 @@
                         '{$key}': '{$value}',
                     {/foreach}
                     'articleId': ~~('{$sArticle.articleID}'),
+                    'orderNumber': '{$sArticle.ordernumber}',
                     'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
                     'articleName': '{$sArticle.articleName|escape:"javascript"}{if $sArticle.additionaltext} {$sArticle.additionaltext|escape:"javascript"}{/if}',
                     'imageTitle': '{$sArticle.image.description|escape:"javascript"}',
