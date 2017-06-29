@@ -46,9 +46,12 @@ class Manager
     /**
      * @param \Shopware_Components_Config $config
      */
-    public function __construct(\Shopware_Components_Config $config)
+    public function __construct(\Shopware_Components_Config $config, array $encoders = [])
     {
         $this->config = $config;
+        foreach ($encoders as $encoder) {
+            $this->addEncoder($encoder);
+        }
     }
 
     /**
