@@ -342,6 +342,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed `modernizr` option `CSS Transforms`
 * Removed `modernizr` option `CSS Transforms 3D`
 * Removed `modernizr` option `CSS Transitions`
+* Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
 
 ### Deprecations
 
