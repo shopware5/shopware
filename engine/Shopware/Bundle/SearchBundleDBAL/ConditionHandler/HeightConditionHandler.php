@@ -56,18 +56,20 @@ class HeightConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var HeightCondition $condition */
+        $min = ':minHeight' . md5(json_encode($condition));
+        $max = ':maxHeight' . md5(json_encode($condition));
 
+        /* @var HeightCondition $condition */
         $this->variantHelper->joinVariants($query);
 
         if ($condition->getMinHeight() > 0) {
-            $query->andWhere('allVariants.height >= :minHeight');
-            $query->setParameter(':minHeight', $condition->getMinHeight());
+            $query->andWhere('allVariants.height >= ' . $min);
+            $query->setParameter($min, $condition->getMinHeight());
         }
 
         if ($condition->getMaxHeight() > 0) {
-            $query->andWhere('allVariants.height <= :maxHeight');
-            $query->setParameter(':maxHeight', $condition->getMaxHeight());
+            $query->andWhere('allVariants.height <= ' . $max);
+            $query->setParameter($max, $condition->getMaxHeight());
         }
     }
 }

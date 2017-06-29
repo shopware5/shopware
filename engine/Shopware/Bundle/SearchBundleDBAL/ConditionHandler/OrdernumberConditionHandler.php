@@ -54,11 +54,13 @@ class OrdernumberConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->andWhere('variant.ordernumber IN (:ordernumbers)');
+        $key = ':ordernumbers' . md5(json_encode($condition));
+
+        $query->andWhere('variant.ordernumber IN (' . $key . ')');
 
         /* @var OrdernumberCondition $condition */
         $query->setParameter(
-            ':ordernumbers',
+            $key,
             $condition->getOrdernumbers(),
             Connection::PARAM_STR_ARRAY
         );

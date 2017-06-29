@@ -63,7 +63,7 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
             throw new \Exception('ProductAttributeCondition class requires a defined operator!');
         }
 
-        $placeholder = ':' . $condition->getField();
+        $placeholder = ':' . $condition->getField() . md5(json_encode($condition));
         $field = 'productAttribute.' . $condition->getField();
 
         switch (true) {

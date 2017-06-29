@@ -60,14 +60,17 @@ class WidthConditionHandler implements ConditionHandlerInterface
 
         $this->variantHelper->joinVariants($query);
 
+        $min = ':minWidth' . md5(json_encode($condition));
+        $max = ':maxWidth' . md5(json_encode($condition));
+
         if ($condition->getMinWidth() > 0) {
-            $query->andWhere('allVariants.width >= :minWidth');
-            $query->setParameter(':minWidth', $condition->getMinWidth());
+            $query->andWhere('allVariants.width >= ' . $min);
+            $query->setParameter($min, $condition->getMinWidth());
         }
 
         if ($condition->getMaxWidth() > 0) {
-            $query->andWhere('allVariants.width <= :maxWidth');
-            $query->setParameter(':maxWidth', $condition->getMaxWidth());
+            $query->andWhere('allVariants.width <= ' . $max);
+            $query->setParameter($max, $condition->getMaxWidth());
         }
     }
 }

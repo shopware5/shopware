@@ -54,17 +54,19 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $key = ':manufacturer' . md5(json_encode($condition));
+
         $query->innerJoin(
             'product',
             's_articles_supplier',
             'manufacturer',
             'manufacturer.id = product.supplierID
-             AND product.supplierID IN (:manufacturer)'
+             AND product.supplierID IN (' . $key . ')'
         );
 
         /* @var ManufacturerCondition $condition */
         $query->setParameter(
-            ':manufacturer',
+            $key,
             $condition->getManufacturerIds(),
             Connection::PARAM_INT_ARRAY
         );

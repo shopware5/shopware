@@ -59,7 +59,10 @@ class CreateDateConditionHandler implements ConditionHandlerInterface
         $interval = new \DateInterval($intervalSpec);
         $date->sub($interval);
 
-        $query->andWhere('product.datum >= :createDateFrom')
-            ->setParameter(':createDateFrom', $date->format('Y-m-d'));
+        $suffix = md5(json_encode($condition));
+        $key = ':createDateFrom' . $suffix;
+
+        $query->andWhere('product.datum >= ' . $key)
+            ->setParameter($key, $date->format('Y-m-d'));
     }
 }

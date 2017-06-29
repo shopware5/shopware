@@ -46,7 +46,11 @@ class CombinedCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'combined_facet_' . md5(json_encode($this->conditions));
+        $classes = array_map(function ($class) {
+            return get_class($class);
+        }, $this->conditions);
+
+        return 'combined_facet_' . md5(json_encode($this->conditions) . json_encode($classes));
     }
 
     /**
