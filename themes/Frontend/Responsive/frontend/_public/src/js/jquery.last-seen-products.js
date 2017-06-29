@@ -197,7 +197,8 @@
                     'html': [
                         me.createProductImage(article),
                         me.createProductTitle(article)
-                    ]
+                    ],
+                    'data-ordernumber': article.orderNumber
                 });
 
             $.publish('plugin/swLastSeenProducts/onCreateTemplate', [ me, $template, article ]);
