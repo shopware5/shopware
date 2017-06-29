@@ -531,7 +531,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: 's_categories_attributes',
-            allowTranslation: false,
             fieldSetPadding: 0
         });
         return me.attributeForm;
