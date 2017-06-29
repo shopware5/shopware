@@ -58,7 +58,7 @@ return [
     Ficamos muito satisfeitos com a sua intenção de integrar a nossa Comunidade Shopware, uma rede mundial impressionante.
 </p>
 <p>
-    Fazemos um acompanhamento passo a passo ao longo de todo o processo de instalação. Caso tenha dúvidas, passe pelo nosso <a href="https://forum.shopware.com" target="_blank">fórum</a> ou contacte-nos telefonicamente através do <a href="tel:+492555928850">(+49) 2555 928850</a> ou por <a href="mailto:info@shopware.com">correio eletrónico</a>.
+    Fazemos um acompanhamento passo a passo ao longo de todo o processo de instalação. Caso tenha dúvidas, passe pelo nosso <a href="https://forum.shopware.com" target="_blank">fórum</a> ou contacte-nos telefonicamente através do <a href="tel:0080074676260">00 800 746 7626 0 (grátis)</a> ou por <a href="mailto:info@shopware.com">correio eletrónico</a>.
 </p>
 <p>
     <strong>Mãos à obra</strong>
