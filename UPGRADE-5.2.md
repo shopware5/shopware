@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.26...v5.2.27](https://github.com/shopware/shopware/compare/v5.2.26...v5.2.27)
 
 * Fixed id collision in `themes/Backend/ExtJs/backend/base/component/Shopware.ModuleManager.js`
+* Added guetzli media optimizer
 
 # 5.2.26
 
