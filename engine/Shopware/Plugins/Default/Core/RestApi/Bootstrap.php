@@ -146,7 +146,12 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
             if ($rawBody != '') {
                 $input = Zend_Json::decode($rawBody);
             } else {
-                $input = null;
+                $rawPost = $request->getPost('application/json');
+                if ($rawPost != '') {
+                    $input = Zend_Json::decode($rawPost);
+                } else {
+                    $input = null;
+                }
             }
         } catch (Zend_Json_Exception $e) {
             $response->setHttpResponseCode(400);
