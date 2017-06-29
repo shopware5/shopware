@@ -13,8 +13,35 @@
 
     <services>
         <service id="application"     synthetic="true" />
-        <service id="PasswordEncoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
+
+        <service id="PasswordEncoder" class="Shopware\Components\Password\Manager">
+            <argument type="service" id="config" />
+            <argument type="collection">
+                <argument type="service" id="password.encoder.bcrypt" />
+                <argument type="service" id="password.encoder.sha256" />
+                <argument type="service" id="password.encoder.legacy_backend_md5" />
+                <argument type="service" id="password.encoder.md5" />
+                <argument type="service" id="password.encoder.pre_hashed" />
+            </argument>
+        </service>
+
+        <service id="password.encoder.bcrypt" class="Shopware\Components\Password\Encoder\Bcrypt">
+            <argument type="collection">
+                <argument key="cost">10</argument>
+            </argument>
+        </service>
+        <service id="password.encoder.sha256" class="Shopware\Components\Password\Encoder\Sha256">
+            <argument type="collection">
+                <argument key="iterations">100000</argument>
+                <argument key="salt_len">22</argument>
+            </argument>
+        </service>
+        <service id="password.encoder.legacy_backend_md5" class="Shopware\Components\Password\Encoder\LegacyBackendMd5" />
+        <service id="password.encoder.md5" class="Shopware\Components\Password\Encoder\Md5" />
+        <service id="password.encoder.pre_hashed" class="Shopware\Components\Password\Encoder\PreHashed" />
+
+
 
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>
