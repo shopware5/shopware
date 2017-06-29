@@ -32,12 +32,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SimpleCondition implements ConditionInterface
+class SimpleCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @param string $name
@@ -55,5 +55,13 @@ class SimpleCondition implements ConditionInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

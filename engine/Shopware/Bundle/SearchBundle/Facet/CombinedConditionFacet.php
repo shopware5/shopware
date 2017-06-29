@@ -34,17 +34,17 @@ class CombinedConditionFacet implements FacetInterface
     /**
      * @var ConditionInterface[]
      */
-    private $conditions;
+    protected $conditions;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string
      */
-    private $requestParameter;
+    protected $requestParameter;
 
     /**
      * @param string|array $conditions

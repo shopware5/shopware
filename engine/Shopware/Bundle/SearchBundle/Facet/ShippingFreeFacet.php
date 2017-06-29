@@ -36,7 +36,7 @@ class ShippingFreeFacet implements FacetInterface
     /**
      * @var null|string
      */
-    private $label;
+    protected $label;
 
     /**
      * @param string|null $label
