@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
 
         me.radiogroup = Ext.create('Ext.form.RadioGroup', {
             columns: 1,
+            hidden: true,
             vertical: true,
             margin: '10 0 0 0',
             items: [
@@ -92,6 +93,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
                         value = newValue.save;
 
                     combo.clearValue();
+                    me.mediafield.reset();
+                    me.down('textfield[name=name]').reset();
+                    me.down('textarea[name=description]').reset();
                     combo.setDisabled(value !== 2);
                     combo.setVisible(value === 2);
                 }
@@ -115,9 +119,8 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
                 ],
                 listeners: {
                     load: function(store) {
-                        if (store.getCount() === 0) {
-                            me.radiogroup.down('#create').hide();
-                            me.radiogroup.down('#update').destroy();
+                        if (store.getCount() > 0) {
+                            me.radiogroup.setVisible(true);
                         }
                     }
                 }
