@@ -57,7 +57,7 @@
                     {/block}
 
                     {block name="frontend_index_checkout_actions_account_menu"}
-                        {include file="frontend/account/sidebar_personal.tpl" showSidebar=true}
+                        {include file="frontend/account/sidebar.tpl" showSidebar=true inHeader=true}
                     {/block}
                 </div>
             {/block}
