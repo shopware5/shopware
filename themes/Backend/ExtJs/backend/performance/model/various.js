@@ -47,9 +47,9 @@ Ext.define('Shopware.apps.Performance.model.Various', {
         //{block name="backend/performance/model/various/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'disableShopwareStatistics', type: 'bool'},
-        { name: 'LastArticles:show', type: 'bool'},
+        { name: 'LastArticles:lastarticles_show', type: 'bool'},
         { name: 'LastArticles:lastarticlestoshow', type: 'int'},
-        { name: 'disableArticleNavigation', type: 'bool'},
+        { name: 'disableArticleNavigation', type: 'bool'}
     ]
 
 });
