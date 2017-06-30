@@ -34,17 +34,17 @@ class CombinedConditionFacet implements FacetInterface
     /**
      * @var ConditionInterface[]
      */
-    private $conditions;
+    protected $conditions;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string
      */
-    private $requestParameter;
+    protected $requestParameter;
 
     /**
      * @param string|array $conditions
@@ -80,7 +80,11 @@ class CombinedConditionFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'combined_facet_' . md5(json_encode($this->conditions));
+        $classes = array_map(function ($class) {
+            return get_class($class);
+        }, $this->conditions);
+
+        return 'combined_facet_' . md5(json_encode($this->conditions) . json_encode($classes));
     }
 
     /**

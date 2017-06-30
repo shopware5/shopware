@@ -57,17 +57,19 @@ class WeightConditionHandler implements ConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var WeightCondition $condition */
-
         $this->variantHelper->joinVariants($query);
 
+        $min = ':minLength' . md5(json_encode($condition));
+        $max = ':maxLength' . md5(json_encode($condition));
+
         if ($condition->getMinWeight() > 0) {
-            $query->andWhere('allVariants.weight >= :minWeight');
-            $query->setParameter(':minWeight', $condition->getMinWeight());
+            $query->andWhere('allVariants.weight >= ' . $min);
+            $query->setParameter($min, $condition->getMinWeight());
         }
 
         if ($condition->getMaxWeight() > 0) {
-            $query->andWhere('allVariants.weight <= :maxWeight');
-            $query->setParameter(':maxWeight', $condition->getMaxWeight());
+            $query->andWhere('allVariants.weight <= ' . $max);
+            $query->setParameter($max, $condition->getMaxWeight());
         }
     }
 }

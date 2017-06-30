@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ReleaseDateCondition implements ConditionInterface
+class ReleaseDateCondition implements ConditionInterface, \JsonSerializable
 {
     const DIRECTION_PAST = 'past';
     const DIRECTION_FUTURE = 'future';
@@ -40,12 +40,12 @@ class ReleaseDateCondition implements ConditionInterface
     /**
      * @var string
      */
-    private $direction;
+    protected $direction;
 
     /**
      * @var int
      */
-    private $days;
+    protected $days;
 
     /**
      * @param string $direction
@@ -83,5 +83,13 @@ class ReleaseDateCondition implements ConditionInterface
     public function getDays()
     {
         return $this->days;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

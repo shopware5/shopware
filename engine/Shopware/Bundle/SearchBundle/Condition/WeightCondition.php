@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class WeightCondition implements ConditionInterface
+class WeightCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var float|null
@@ -67,5 +67,13 @@ class WeightCondition implements ConditionInterface
     public function getMaxWeight()
     {
         return $this->maxWeight;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

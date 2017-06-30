@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class WidthCondition implements ConditionInterface
+class WidthCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var float|null
@@ -67,5 +67,13 @@ class WidthCondition implements ConditionInterface
     public function getMaxWidth()
     {
         return $this->maxWidth;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

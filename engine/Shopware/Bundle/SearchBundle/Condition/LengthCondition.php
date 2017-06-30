@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class LengthCondition implements ConditionInterface
+class LengthCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var float|null
@@ -67,5 +67,13 @@ class LengthCondition implements ConditionInterface
     public function getMaxLength()
     {
         return $this->maxLength;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

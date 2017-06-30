@@ -32,12 +32,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CategoryCondition implements ConditionInterface
+class CategoryCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var int[]
      */
-    private $categoryIds;
+    protected $categoryIds;
 
     /**
      * @param int[] $categoryIds
@@ -63,5 +63,13 @@ class CategoryCondition implements ConditionInterface
     public function getName()
     {
         return 'category';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class IsNewCondition implements ConditionInterface
+class IsNewCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * {@inheritdoc}
@@ -39,5 +39,13 @@ class IsNewCondition implements ConditionInterface
     public function getName()
     {
         return 'is_new_condition';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

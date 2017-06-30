@@ -57,17 +57,19 @@ class LengthConditionHandler implements ConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var LengthCondition $condition */
-
         $this->variantHelper->joinVariants($query);
 
+        $min = ':minLength' . md5(json_encode($condition));
+        $max = ':maxLength' . md5(json_encode($condition));
+
         if ($condition->getMinLength() > 0) {
-            $query->andWhere('allVariants.length >= :minLength');
-            $query->setParameter(':minLength', $condition->getMinLength());
+            $query->andWhere('allVariants.length >= ' . $min);
+            $query->setParameter($min, $condition->getMinLength());
         }
 
         if ($condition->getMaxLength() > 0) {
-            $query->andWhere('allVariants.length <= :maxLength');
-            $query->setParameter(':maxLength', $condition->getMaxLength());
+            $query->andWhere('allVariants.length <= ' . $max);
+            $query->setParameter($max, $condition->getMaxLength());
         }
     }
 }

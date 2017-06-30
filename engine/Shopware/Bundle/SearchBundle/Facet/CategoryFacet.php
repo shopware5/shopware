@@ -36,12 +36,12 @@ class CategoryFacet implements FacetInterface
     /**
      * @var null|string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var int
      */
-    private $depth;
+    protected $depth;
 
     /**
      * @param string|null $label

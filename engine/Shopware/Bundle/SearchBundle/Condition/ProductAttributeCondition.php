@@ -32,22 +32,22 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductAttributeCondition implements ConditionInterface
+class ProductAttributeCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var string
      */
-    private $field;
+    protected $field;
 
     /**
      * @var string|array
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     /**
      * @param string       $field
@@ -116,5 +116,13 @@ class ProductAttributeCondition implements ConditionInterface
     public function setOperator($operator)
     {
         $this->operator = $operator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

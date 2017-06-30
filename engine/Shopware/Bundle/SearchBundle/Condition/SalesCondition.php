@@ -32,12 +32,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class SalesCondition implements ConditionInterface
+class SalesCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var int
      */
-    private $minSales;
+    protected $minSales;
 
     /**
      * @param int $minSales
@@ -62,5 +62,13 @@ class SalesCondition implements ConditionInterface
     public function getMinSales()
     {
         return $this->minSales;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

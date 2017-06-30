@@ -54,17 +54,19 @@ class CustomerGroupConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $key = ':customerGroupIds' . md5(json_encode($condition));
+
         $query->leftJoin(
             'product',
             's_articles_avoid_customergroups',
             'avoidCustomerGroup',
             'avoidCustomerGroup.articleID = product.id
-             AND avoidCustomerGroup.customerGroupId IN (:customerGroupIds)'
+             AND avoidCustomerGroup.customerGroupId IN (' . $key . ')'
         );
 
         /* @var CustomerGroupCondition $condition */
         $query->setParameter(
-            ':customerGroupIds',
+            $key,
             $condition->getCustomerGroupIds(),
             Connection::PARAM_INT_ARRAY
         );
