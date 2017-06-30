@@ -6,19 +6,18 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 [View all changes from v5.2.26...v5.2.27](https://github.com/shopware/shopware/compare/v5.2.26...v5.2.27)
 
+* Added config check to disable the `Tell a friend` page if it is disabled via config.
 * Fixed id collision in `themes/Backend/ExtJs/backend/base/component/Shopware.ModuleManager.js`
 * Added guetzli media optimizer
+* Added new event `Shopware_Plugins_HttpCache_ContextCookieValue` to modify HttpCache Context-Cookie.
 
 # 5.2.26
 
 [View all changes from v5.2.25...v5.2.26](https://github.com/shopware/shopware/compare/v5.2.25...v5.2.26)
 
-* Added config check to disable the `Tell a friend` page if it is disabled via config.
-
 ## 5.2.25
 
 [View all changes from v5.2.24...v5.2.25](https://github.com/shopware/shopware/compare/v5.2.24...v5.2.25)
-
 
 * Added notify event `Shopware_Modules_Basket_AddArticle_Added` in `engine/Shopware/Core/sBasket.php`
 * The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
@@ -35,7 +34,6 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 [View all changes from v5.2.22...v5.2.23](https://github.com/shopware/shopware/compare/v5.2.22...v5.2.23)
 
-
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
 * Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
 * Added default `limit` of 100 in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyIndexer::populate`
@@ -44,7 +42,6 @@ This changelog references changes done in Shopware 5.2 patch versions.
 ## 5.2.22
 
 [View all changes from v5.2.21...v5.2.22](https://github.com/shopware/shopware/compare/v5.2.21...v5.2.22)
-
 
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
