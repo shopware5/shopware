@@ -30,7 +30,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend: 'Enlight.app.SubWindow',
+    extend: 'Enlight.app.Window',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
@@ -39,44 +39,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     alias: 'widget.performance-main-multi-request-tasks',
 
     /**
-     * Define window width
-     * @integer
-     */
-    width: 360,
-
-    /**
-     * Define window height
-     * @integer
-     */
-    height: 450,
-
-    /**
-     * Display no footer button for the detail window
-     * @boolean
-     */
-    footerButton: false,
-
-    /**
-     * Set vbox layout and stretch align to display the toolbar on top and the button container
-     * under the toolbar.
-     * @object
-     */
-    layout: {
-        align: 'stretch',
-        type: 'vbox'
-    },
-
-    /**
      * If the modal property is set to true, the user can't change the window focus to another window.
      * @boolean
      */
     modal: true,
-
-    /**
-     * The body padding is used in order to have a smooth side clearance.
-     * @integer
-     */
-    bodyPadding: 10,
 
     /**
      * Disable the close icon in the window header
@@ -95,56 +61,104 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
      * @boolean
      */
     maximizable: false,
+
+    /**
+     * Remove the height property of Enlight.app.Window
+     * @null
+     */
+    height: null,
+
+    /**
+     * Set width of the window
+     * @integer
+     */
+    width: 360,
+
     /**
      * Disables the minimize button in the window header
      * @boolean
      */
     minimizable: false,
 
+    seo: {
+        article: {
+            initialText: '{s name=listing/articles}Article URLs{/s}',
+            progressText: '{s name=progress/articles}[0] of [1] article urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoArticle"}'
+        },
+        category: {
+            initialText: '{s name=listing/category}Category URLs{/s}',
+            progressText: '{s name=progress/category}[0] of [1] category urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoArticle"}'
+        },
+        emotion: {
+            initialText: '{s name=listing/emotion}Emotion URLs{/s}',
+            progressText: '{s name=progress/emotion}[0] of [1] emotion urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoEmotion"}'
+        },
+        blog: {
+            initialText: '{s name=listing/blog}Blog URLs{/s}',
+            progressText: '{s name=progress/blog}[0] of [1] blog urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoBlog"}'
+        },
+        static: {
+            initialText: '{s name=listing/static}Static URLs{/s}',
+            progressText: '{s name=progress/static}[0] of [1] static urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoStatic"}'
+        },
+        content: {
+            initialText: '{s name=listing/content}Content URLs{/s}',
+            progressText: '{s name=progress/content}[0] of [1] content urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoContent"}'
+        },
+        supplier: {
+            initialText: '{s name=listing/supplier}Supplier URLs{/s}',
+            progressText: '{s name=progress/supplier}[0] of [1] supplier urls{/s}',
+            requestUrl: '{url controller="Seo" action="seoSupplier"}'
+        }
+    },
+
+    httpCache: {
+        article: {
+            initialText: '{s name=progress/initialArticles}Article URLs...{/s}',
+            progressText: '{s name=progress/articles}[0] of [1] article URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=article}'
+        },
+        category: {
+            initialText: '{s name=progress/initialCategory}Category URLs...{/s}',
+            progressText: '{s name=progress/category}[0] of [1] category URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=category}'
+        },
+        blog: {
+            initialText: '{s name=progress/initialBlog}Blog URLs...{/s}',
+            progressText: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}'
+        },
+        static: {
+            initialText: '{s name=progress/initialStatic}Static URLs...{/s}',
+            progressText: '{s name=progress/httpCacheWarmer/static}[0] of [1] static URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=static}'
+        },
+        supplier: {
+            initialText: '{s name=progress/initialSupplier}Supplier URLs...{/s}',
+            progressText: '{s name=progress/supplier}[0] of [1] supplier URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=supplier}'
+        }
+    },
+
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        cancel:'{s name=progress/cancel}Cancel process{/s}',
-        start:'{s name=progress/start}Start process{/s}',
-        close:'{s name=progress/close}Close window{/s}',
-        seo: {
-            article: '{s name=progress/articles}[0] of [1] article urls{/s}',
-            category: '{s name=progress/category}[0] of [1] category urls{/s}',
-            emotion: '{s name=progress/emotion}[0] of [1] emotion urls{/s}',
-            blog: '{s name=progress/blog}[0] of [1] blog urls{/s}',
-            static: '{s name=progress/static}[0] of [1] static urls{/s}',
-            content: '{s name=progress/content}[0] of [1] content urls{/s}',
-            supplier: '{s name=progress/supplier}[0] of [1] supplier urls{/s}'
-        },
-        seoListing: {
-            article: '{s name=listing/articles}Article URLs{/s}',
-            category: '{s name=listing/category}Category URLs{/s}',
-            emotion: '{s name=listing/emotion}Emotion URLs{/s}',
-            blog: '{s name=listing/blog}Blog URLs{/s}',
-            static: '{s name=listing/static}Static URLs{/s}',
-            content: '{s name=listing/content}Content URLs{/s}',
-            supplier: '{s name=listing/supplier}Supplier URLs{/s}'
-        },
-        httpCacheWarmer: {
-            initialArticle: '{s name=progress/initialArticles}Article URLs...{/s}',
-            initialCategory: '{s name=progress/initialCategory}Category URLs...{/s}',
-            initialBlog: '{s name=progress/initialBlog}Blog URLs...{/s}',
-            initialStatic: '{s name=progress/initialStatic}Static URLs...{/s}',
-            initialSupplier: '{s name=progress/initialSupplier}Supplier URLs...{/s}',
-            article: '{s name=progress/articles}[0] of [1] article URLs{/s}',
-            category: '{s name=progress/category}[0] of [1] category URLs{/s}',
-            blog: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
-            static: '{s name=progress/httpCacheWarmer/static}[0] of [1] static URLs{/s}',
-            supplier: '{s name=progress/supplier}[0] of [1] supplier URLs{/s}'
-        }
+        cancel: '{s name=progress/cancel}Cancel process{/s}',
+        start: '{s name=progress/start}Start process{/s}',
+        close: '{s name=progress/close}Close window{/s}'
     },
 
     batchSize: 50,
 
     currentType: 'seo',
-
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -159,10 +173,27 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     initComponent: function () {
         var me = this;
         me.registerEvents();
-        me.items = me.createItems();
+
+        me.items = [{
+            xtype: 'panel',
+            unstyled: true,
+            bodyPadding: 10,
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
+            items: me.createItems()
+        }];
+
+        me.dockedItems = [{
+            xtype: 'toolbar',
+            items: me.createButtons(),
+            ui: 'shopware-ui',
+            dock: 'bottom'
+        }];
+
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to create the window items.
@@ -179,39 +210,31 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         }
     },
 
-
     /**
      * Helper function to create the window items for the seo index
      * @returns Array
      */
     createSeoItems: function() {
-        var me = this;
+        var me = this,
+            items = [];
 
-        me.articleProgress = me.createProgressBar('article', me.snippets.seoListing.article);
-        me.categoryProgress = me.createProgressBar('category', me.snippets.seoListing.category);
-        me.emotionProgress = me.createProgressBar('emotion', me.snippets.seoListing.emotion);
-        me.staticProgress = me.createProgressBar('static', me.snippets.seoListing.static);
-        me.blogProgress = me.createProgressBar('blog', me.snippets.seoListing.blog);
-        me.contentProgress = me.createProgressBar('content', me.snippets.seoListing.content);
-        me.supplierProgress = me.createProgressBar('supplier', me.snippets.seoListing.supplier);
+        me.iterateConfig('seo', function(err, config, configName) {
+            if (err) {
+                throw err;
+            }
+
+            me[configName + 'Bar'] = me.createProgressBar(configName, config.initialText);
+            items.push(me[configName + 'Bar']);
+        });
 
         return [
-            me.createShopCombo(),
+            me.createShopCombo('seo'),
             {
                 xtype: 'container',
                 padding: '20 0',
-                items: [
-                    me.articleProgress,
-                    me.categoryProgress,
-                    me.emotionProgress,
-                    me.blogProgress,
-                    me.staticProgress,
-                    me.contentProgress,
-                    me.supplierProgress
-                ]
+                items: items
             },
-            me.createBatchSizeCombo(),
-            me.createButtons()
+            me.createBatchSizeCombo()
         ];
     },
 
@@ -220,38 +243,34 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
      * @returns Array
      */
     createHttpCacheWarmerItems: function() {
-        var me = this;
+        var me = this,
+            items = [];
 
-        me.articleProgress = me.createProgressBar('article', me.snippets.httpCacheWarmer.initialArticle);
-        me.categoryProgress = me.createProgressBar('category', me.snippets.httpCacheWarmer.initialCategory);
-        me.staticProgress = me.createProgressBar('static', me.snippets.httpCacheWarmer.initialStatic);
-        me.blogProgress = me.createProgressBar('blog', me.snippets.httpCacheWarmer.initialBlog);
-        me.supplierProgress = me.createProgressBar('supplier', me.snippets.httpCacheWarmer.initialSupplier);
+        me.iterateConfig('httpCache', function(err, config, configName) {
+            if (err) {
+                throw err;
+            }
+
+            me[configName + 'Bar'] = me.createProgressBar(configName, config.initialText);
+            items.push(me[configName + 'Bar']);
+        });
 
         return [
-            me.createShopCombo(),
+            me.createShopCombo('httpCache'),
             {
                 xtype: 'container',
                 padding: '20 0',
-                items: [
-                    me.articleProgress,
-                    me.categoryProgress,
-                    me.blogProgress,
-                    me.staticProgress,
-                    me.supplierProgress
-                ]
+                items: items
             },
-            me.createBatchSizeCombo(),
-            me.createButtons()
+            me.createBatchSizeCombo()
         ];
     },
-
 
     /**
      * Creates the shop combo box for the multi request window
      * for the seo and search index generation.
      */
-    createShopCombo: function() {
+    createShopCombo: function(taskName) {
         var me = this;
 
         me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
@@ -264,7 +283,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             editable: false,
             listeners: {
                 select: function() {
-                    me.fireEvent('onShopSelected', me, this.getValue());
+                    me.fireEvent('onShopSelected', me, this.getValue(), taskName);
                 }
             }
         });
@@ -304,9 +323,9 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             displayField: 'batchSize',
             store: Ext.create('Ext.data.Store', {
                 fields: [
-                    { name: 'batchSize',  type: 'int' }
+                    { name: 'batchSize', type: 'int' }
                 ],
-                data : [
+                data: [
                     { batchSize: '1' },
                     { batchSize: '5' },
                     { batchSize: '10' },
@@ -332,15 +351,13 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
      * Creates the progress which displays the progress status for the document creation.
      */
     createProgressBar: function(name, text) {
-        var me = this;
-
         return Ext.create('Ext.ProgressBar', {
             animate: true,
             name: name,
             text: text,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
     },
 
@@ -362,8 +379,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 me.closeButton.disable();
                 if (me.currentType === 'seo') {
                     me.fireEvent('startSeoIndex', me);
-                }
-                else if (me.currentType === 'httpCacheWarmer') {
+                } else if (me.currentType === 'httpCacheWarmer') {
                     me.fireEvent('startHttpCacheWarmUp', me);
                 }
             }
@@ -402,7 +418,6 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
         return Ext.create('Ext.button.Button', {
             text: me.snippets.close,
-            flex: 1,
             action: 'closeWindow',
             cls: 'secondary',
             handler: function() {
@@ -414,23 +429,70 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     /**
      * Creates the button container for the close and cancel button
      *
-     * @return Ext.container.Container
+     * @return { array }
      */
     createButtons: function() {
         var me = this;
 
-        me.startButton  = me.createStartButton();
-        me.closeButton  = me.createCloseButton();
+        me.startButton = me.createStartButton();
+        me.closeButton = me.createCloseButton();
         me.cancelButton = me.createCancelButton();
 
-        return Ext.create('Ext.container.Container', {
-            layout: 'hbox',
-            items: [
-                me.startButton,
-                me.cancelButton,
-                me.closeButton
-            ]
-        });
+        return [
+            me.startButton,
+            me.cancelButton,
+            '->',
+            me.closeButton
+        ];
+    },
+
+    /**
+     * Iterates over the seo/httpCache config, depending on the "configName" parameter using the given callback.
+     *
+     * @param { string } configName
+     * @param { function(object, string) } callback
+     * @oaram { object } scope
+     * @return { boolean }
+     */
+    iterateConfig: function(configName, callback, scope) {
+        scope = scope || this;
+
+        if (!this[configName]) {
+            callback.apply(scope, [ new Error(Ext.String.format('Configuration [0] not found', configName)) ]);
+            return false;
+        }
+
+        for (var key in this[configName]) {
+            var config;
+
+            if (!this[configName].hasOwnProperty(key)) {
+                continue;
+            }
+
+            config = this[configName][key];
+            callback.apply(scope, [null, config, key]);
+        }
+
+        return true;
+    },
+
+    /**
+     * Adds a progress bar to the SEO URL generator / HttpCache warmer.
+     * Leave param 'target' empty to add the new progress bar to both windows.
+     *
+     * @param { object } configuration
+     * @param { string } name
+     * @param { string } [target]
+     */
+    addProgressBar: function(configuration, name, target) {
+        if (!target) {
+            this.seo[name] = configuration;
+            this.httpCache[name] = configuration;
+
+            return;
+        }
+
+        this[target][name] = configuration;
     }
 });
 //{/block}

@@ -56,65 +56,49 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     cancelOperation: false,
 
     requestConfig: {
-        topseller:  {
+        topseller: {
             title: '{s name=multi_request/topseller}Build index for TopSeller{/s}',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
             requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
             batchSize: 100
         },
 
-        search:  {
+        search: {
             title: '{s name=multi_request/search}Build index for frontend search{/s}',
             requestUrl: '{url controller="SearchIndex" action="build"}',
             batchSize: 100
         },
 
-        seo:  {
+        seo: {
+            initUrl: '{url controller="Seo" action="initSeo"}',
             title: '{s name=multi_request/sei}Build index for SEO{/s}',
             snippetResource: 'seo',
             totalCountUrl: '{url controller="Seo" action="getCount"}',
-            requestUrls: {
-                init: '{url controller="Seo" action="initSeo"}',
-                article: '{url controller="Seo" action="seoArticle"}',
-                category: '{url controller="Seo" action="seoCategory"}',
-                emotion: '{url controller="Seo" action="seoEmotion"}',
-                blog: '{url controller="Seo" action="seoBlog"}',
-                static: '{url controller="Seo" action="seoStatic"}',
-                content: '{url controller="Seo" action="seoContent"}',
-                supplier: '{url controller="Seo" action="seoSupplier"}'
-            },
             batchSize: 100
         },
 
-        similarShown:  {
+        similarShown: {
             title: '{s name=multi_request/viewed}Build index for: Customers also viewed{/s}',
             totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
             batchSize: 100
         },
-        alsoBought:  {
+        alsoBought: {
             title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
             batchSize: 100
         },
-        category:  {
+        category: {
             title: '{s name=multi_request/categories}Repair categories{/s}',
             totalCountUrl: '{url controller="Performance" action="prepareTree"}',
             requestUrl: '{url controller="Performance" action="fixCategories"}',
             batchSize: 100
         },
-        httpCacheWarmer:  {
+        httpCacheWarmer: {
             title: '{s name=multi_request/http_cache_warmer/windowTitle}Warm up cache{/s}',
             snippetResource: 'httpCacheWarmer',
             totalCountUrl: '{url controller="Performance" action="getHttpURLs"}',
-            requestUrls: {
-                article: '{url controller="Performance" action="warmUpCache" resource=article}',
-                category: '{url controller="Performance" action="warmUpCache" resource=category}',
-                blog: '{url controller="Performance" action="warmUpCache" resource=blog}',
-                static: '{url controller="Performance" action="warmUpCache" resource=static}',
-                supplier: '{url controller="Performance" action="warmUpCache" resource=supplier}'
-            },
             batchSize: 10
         }
     },
@@ -142,7 +126,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         me.callParent(arguments);
     },
 
-    onShopSelected: function(window, shopId) {
+    onShopSelected: function(window, shopId, taskName) {
         var me = this;
 
         var taskConfig = window.taskConfig;
@@ -157,68 +141,41 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 var json = Ext.decode(response.responseText);
                 taskConfig.totalCounts = json.data.counts;
 
-                me.updateProgressBars(window);
+                me.updateProgressBars(taskName, window);
 
                 window.startButton.enable();
             }
         });
     },
 
-    updateProgressBars: function(window) {
-        var taskConfig = window.taskConfig;
+    updateProgressBars: function(taskName, win) {
+        var taskConfig = win.taskConfig;
 
-        if (!Ext.isEmpty(taskConfig.totalCounts.article)) {
-            window.articleProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].article, 0, taskConfig.totalCounts.article)
-            );
-        }
-        if (!Ext.isEmpty(taskConfig.totalCounts.category)) {
-            window.categoryProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].category, 0, taskConfig.totalCounts.category)
-            );
-        }
-        if (!Ext.isEmpty(taskConfig.totalCounts.emotion)) {
-            window.emotionProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].emotion, 0, taskConfig.totalCounts.emotion)
-            );
-        }
-        if (!Ext.isEmpty(taskConfig.totalCounts.static)) {
-            window.staticProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].static, 0, taskConfig.totalCounts.static)
-            );
-        }
-        if (!Ext.isEmpty(taskConfig.totalCounts.blog)) {
-            window.blogProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].blog, 0, taskConfig.totalCounts.blog)
-            );
-        }
-        if (!Ext.isEmpty(taskConfig.totalCounts.content)) {
-            window.contentProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].content, 0, taskConfig.totalCounts.content)
-            );
-        }
-        if (!Ext.isEmpty(taskConfig.totalCounts.supplier)) {
-            window.supplierProgress.updateProgress(
-                0, Ext.String.format(window.snippets[taskConfig.snippetResource].supplier, 0, taskConfig.totalCounts.supplier)
-            );
-        }
+        win.iterateConfig(taskName, function (err, config, configName) {
+            if (err) {
+                throw err;
+            }
+
+            if (!Ext.isEmpty(taskConfig.totalCounts[configName])) {
+                win[configName + 'Bar'].updateProgress(
+                    0, Ext.String.format(config.progressText, 0, taskConfig.totalCounts[configName])
+                );
+            }
+        });
     },
 
-    getRequestConfig: function(window, progress, taskName, resource) {
-        var me = this;
-
+    getRequestConfig: function(win, progress, taskName, resource) {
         return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window[progress],
-            requestUrl: me.requestConfig[taskName].requestUrls[resource],
-            totalCount: window.taskConfig.totalCounts[resource] * 1,
-            snippet: window.snippets[taskName][resource],
+            batchSize: win.batchSizeCombo.getValue(),
+            progress: win[progress],
+            requestUrl: win[taskName][resource].requestUrl,
+            totalCount: win.taskConfig.totalCounts[resource] * 1,
+            snippet: win[taskName][resource].progressText,
             params: {
-                shopId: window.shopCombo.getValue()
+                shopId: win.shopCombo.getValue()
             }
         };
     },
-
 
     getSeoInitRequestConfig: function(window) {
         var me = this;
@@ -226,7 +183,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         return {
             totalCount: 1,
             progress: null,
-            requestUrl: me.requestConfig.seo.requestUrls.init,
+            requestUrl: me.requestConfig.seo.initUrl,
             batchSize: 2,
             params: {
                 shopId: window.shopCombo.getValue()
@@ -237,51 +194,52 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     /**
      * Called after the user hits the 'start' button of the multiRequestDialog
      */
-    onStartSeoIndex: function(window) {
+    onStartSeoIndex: function(win) {
         var me = this, configs = [];
 
-        me.updateProgressBars(window);
+        me.updateProgressBars('seo', win);
 
-        configs.push(me.getSeoInitRequestConfig(window, me.requestConfig.seo));
+        configs.push(me.getSeoInitRequestConfig(win, me.requestConfig.seo));
 
-        configs.push(me.getRequestConfig(window, 'articleProgress', 'seo', 'article'));
-        configs.push(me.getRequestConfig(window, 'categoryProgress', 'seo', 'category'));
-        configs.push(me.getRequestConfig(window, 'emotionProgress', 'seo', 'emotion'));
-        configs.push(me.getRequestConfig(window, 'blogProgress', 'seo', 'blog'));
-        configs.push(me.getRequestConfig(window, 'staticProgress', 'seo', 'static'));
-        configs.push(me.getRequestConfig(window, 'contentProgress', 'seo', 'content'));
-        configs.push(me.getRequestConfig(window, 'supplierProgress', 'seo', 'supplier'));
+        win.iterateConfig('seo', function (err, seoConfig, seoConfigName) {
+            if (err) {
+                throw err;
+            }
 
-        window.startButton.hide();
-        window.cancelButton.show();
-        window.cancelButton.enable();
+            configs.push(me.getRequestConfig(win, seoConfigName + 'Bar', 'seo', seoConfigName));
+        });
+
+        win.startButton.hide();
+        win.cancelButton.show();
+        win.cancelButton.enable();
         me.cancelOperation = false;
 
-        me.runRequest(0, window, null, configs);
-
+        me.runRequest(0, win, null, configs);
     },
+
     /**
      * Called after the user hits the 'start' button of the multiRequestDialog
      */
-    onStartHttpCacheWarmUp: function(window) {
+    onStartHttpCacheWarmUp: function(win) {
         var me = this, configs = [];
 
-        me.updateProgressBars(window);
+        me.updateProgressBars('httpCache', win);
 
-        configs.push(me.getRequestConfig(window, 'articleProgress', 'httpCacheWarmer', 'article'));
-        configs.push(me.getRequestConfig(window, 'categoryProgress', 'httpCacheWarmer', 'category'));
-        configs.push(me.getRequestConfig(window, 'blogProgress', 'httpCacheWarmer', 'blog'));
-        configs.push(me.getRequestConfig(window, 'staticProgress', 'httpCacheWarmer', 'static'));
-        configs.push(me.getRequestConfig(window, 'supplierProgress', 'httpCacheWarmer', 'supplier'));
+        win.iterateConfig('httpCache', function (err, seoConfig, seoConfigName) {
+            if (err) {
+                throw err;
+            }
 
-        window.startButton.hide();
-        window.cancelButton.show();
-        window.cancelButton.enable();
+            configs.push(me.getRequestConfig(win, seoConfigName + 'Bar', 'httpCache', seoConfigName));
+        });
+
+        win.startButton.hide();
+        win.cancelButton.show();
+        win.cancelButton.enable();
         me.cancelOperation = false;
 
-        me.runRequest(0, window, null, configs);
+        me.runRequest(0, win, null, configs);
     },
-
 
     /**
      *
@@ -290,7 +248,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this,
             config = me.requestConfig[type];
 
-        var window = me.getView('main.MultiRequestTasks').create({
+        var win = me.getView('main.MultiRequestTasks').create({
             title: config.title,
             currentType: type,
             taskConfig: config,
@@ -298,6 +256,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         }).show();
 
         me.cancelOperation = false;
+
+        return win;
     },
 
     /**
@@ -307,9 +267,9 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     runRequest: function(offset, dialog, currentConfig, configs) {
         var me = this;
 
-        //support for multiple batch operation.
+        // support for multiple batch operation.
         if (currentConfig === null) {
-            //get next request configuration
+            // get next request configuration
             currentConfig = configs.shift();
         }
 
@@ -318,15 +278,14 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             params = { };
         }
 
-        //last batch size processed?
+        // last batch size processed?
         if (offset >= currentConfig.totalCount) {
-
-            //is progress bar configured?
+            // is progress bar configured?
             if (currentConfig.progress) {
                 currentConfig.progress.updateProgress(1, me.snippets.done.message, true);
             }
 
-            //no more request configurations exists?
+            // no more request configurations exists?
             if (configs.length === 0) {
                 // Enable close button, set progressBar to 'finish'
                 dialog.closeButton.enable();
@@ -336,7 +295,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 // Show 'finished' message
                 Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
             } else {
-                //cancel button pushed?
+                // cancel button pushed?
                 if (me.cancelOperation) {
                     dialog.closeButton.enable();
                     dialog.startButton.show();
@@ -344,14 +303,14 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                     return;
                 }
 
-                //get next config and call again
+                // get next config and call again
                 currentConfig = configs.shift();
                 me.runRequest(0, dialog, currentConfig, configs);
             }
             return;
         }
 
-        //cancel button pushed?
+        // cancel button pushed?
         if (me.cancelOperation) {
             dialog.closeButton.enable();
             dialog.startButton.show();
@@ -359,19 +318,19 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             return;
         }
 
-        //has the current request a progress bar?
+        // has the current request a progress bar?
         if (currentConfig.progress) {
             // updates the progress bar value and text, the last parameter is the animation flag
             currentConfig.progress.updateProgress(
-                (offset + currentConfig.batchSize) / currentConfig.totalCount,
-                Ext.String.format(currentConfig.snippet, ( offset + currentConfig.batchSize), currentConfig.totalCount),
+                ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)) / currentConfig.totalCount,
+                Ext.String.format(currentConfig.snippet, ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)), currentConfig.totalCount),
                 true
             );
         }
 
-        //set the params single, to support additional request params
+        // set the params single, to support additional request params
         params.offset = offset;
-        params.limit  = currentConfig.batchSize;
+        params.limit = currentConfig.batchSize;
 
         Ext.Ajax.request({
             url: currentConfig.requestUrl,
