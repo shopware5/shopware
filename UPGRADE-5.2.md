@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added config check to disable the `Tell a friend` page if it is disabled via config.
 * Fixed id collision in `themes/Backend/ExtJs/backend/base/component/Shopware.ModuleManager.js`
 * Added guetzli media optimizer
+* Renamed `Shopware.model.AttributeConfig` to `Shopware.apps.Base.model.AttributeConfig`
 * Added new event `Shopware_Plugins_HttpCache_ContextCookieValue` to modify HttpCache Context-Cookie.
 
 # 5.2.26
