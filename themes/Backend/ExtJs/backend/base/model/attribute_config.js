@@ -1,8 +1,7 @@
 
 //{namespace name="backend/attributes/main"}
 
-Ext.define('Shopware.apps.Base.model.AttributeConfig', {
-    alternateClassName: 'Shopware.model.AttributeConfig',
+Ext.define('Shopware.model.AttributeConfig', {
     extend: 'Shopware.data.Model',
 
     fields: [
