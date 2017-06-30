@@ -2076,7 +2076,9 @@ class Media extends ModelEntity
             }
 
             $mediaService->write($this->path, file_get_contents($this->file->getRealPath()));
-            unlink($this->file->getPathname());
+            if (is_uploaded_file($this->file->getPathname())) {
+                unlink($this->file->getPathname());
+            }
         }
 
         return true;
