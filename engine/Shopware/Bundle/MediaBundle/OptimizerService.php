@@ -47,6 +47,9 @@ class OptimizerService implements OptimizerServiceInterface
      */
     public function optimize($filepath)
     {
+        if(!file_exists($filepath)) {
+            return;
+        }
         $mime = $this->getMimeTypeByFile($filepath);
 
         $optimizer = $this->getOptimizerByMimeType($mime);
