@@ -36,6 +36,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
 * Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
 * Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
+* Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once
 
 ### Removals
 
