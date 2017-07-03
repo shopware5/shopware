@@ -39,6 +39,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 ### Removals
 
 * Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
+* Removed `eval` from block `frontend_forms_index_headline` in `index.tpl` of `themes\Frontend\Bare\frontend\forms` for `$sSupport.text`
 
 ## 5.3.0 - RC1
 

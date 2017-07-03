@@ -53,7 +53,7 @@
             <div class="forms--headline panel panel--body is--wide has--border is--rounded">
                 {if $sSupport.sElements}
                     <h1 class="forms--title">{$sSupport.name}</h1>
-                    <div class="forms--text">{eval var=$sSupport.text}</div>
+                    <div class="forms--text">{$sSupport.text}</div>
                 {elseif $sSupport.text2}
                     {include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
                 {/if}
