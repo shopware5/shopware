@@ -2,9 +2,47 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
-## 5.3.0
+## 5.3.0 - RC2
 
-[View all changes from v5.2.23...v5.3.0](https://github.com/shopware/shopware/compare/v5.2.23...v5.3.0)
+View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopware/compare/v5.3.0-RC1...v5.3.0-RC2)
+
+### Additions
+
+* Added `selecttree` and `combotree` config elements for plugins
+* Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
+* Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
+* Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
+* Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
+* Added `type` parameter to `Shopware_Controllers_Widgets_Listing::productSliderAction` and `Shopware_Controllers_Widgets_Listing::productsAction` which allows to load product sliders or product boxes.
+* Added new search builder class `Shopware\Components\Model\SearchBuilder`
+* Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
+* Added new `FunctionNode` for IF-ELSE statements in ORM query builder
+* Added `/address` to robots.txt 
+* Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
+* Added `Shopware\Components\Template\Security` class for all requests.
+* Added whitelist for allowed php functions and php modifiers in smarty
+    * template_security.php_modifiers
+    * template_security.php_functions
+
+### Changes
+
+* Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
+* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
+* Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
+* Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
+* Changed snippet `DetailBuyActionAdd` in `snippets/frontend/detail/buy.ini`, it now contains <span> tags
+* Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
+* Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
+* Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
+* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
+
+### Removals
+
+* Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
+
+## 5.3.0 - RC1
+
+[View all changes from v5.2.23...v5.3.0-RC1](https://github.com/shopware/shopware/compare/v5.2.23...v5.3.0)
 
 ### Additions
 
@@ -128,26 +166,12 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added `Shopware\Bundle\SearchBundleDBAL\VariantHelper` which joins all variants for dbal search
 * Added smarty blocks `frontend_checkout_shipping_payment_core_button_top` and `frontend_checkout_shipping_payment_core_button_top` for shipping
 * Added new Interface for facet result template switch `Shopware\Bundle\SearchBundle\TemplateSwitchable`
-* Added `selecttree` and `combotree` config elements for plugins
-* Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
-* Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
-* Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
-* Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
-* Added `type` parameter to `Shopware_Controllers_Widgets_Listing::productSliderAction` and `Shopware_Controllers_Widgets_Listing::productsAction` which allows to load product sliders or product boxes.
-* Added new search builder class `Shopware\Components\Model\SearchBuilder`
-* Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
-* Added new `FunctionNode` for IF-ELSE statements in ORM query builder
-* Added `/address` to robots.txt 
-* Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
-* Added `Shopware\Components\Template\Security` class for all requests.
-* Added whitelist for allowed php functions and php modifiers in smarty
-    * template_security.php_modifiers
-    * template_security.php_functions
-        
+
 ### Changes
 
 * Updated `FPDF` to 1.8.1
 * Updated `FPDI` to 1.6.1
+* Updated `flatpickr` to 2.5.7
 * Updated `jquery` to 2.2.4
 * Updated `grunt` to 1.0.1
 * Updated `grunt-contrib-clean` to 1.1.0
@@ -192,16 +216,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Refactored backend customer module. Please take a look into the different template files to see what has changed.
 * Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
 * Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
-* Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
-* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
-* Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
-* Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
-* Changed snippet `DetailBuyActionAdd` in `snippets/frontend/detail/buy.ini`, it now contains <span> tags
-* Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
-* Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
-* Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
-* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
- 
+
 ### Removals
 
 * Removed unused Zend Framework Components. See below for more information
@@ -349,7 +364,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed `modernizr` option `CSS Transforms`
 * Removed `modernizr` option `CSS Transforms 3D`
 * Removed `modernizr` option `CSS Transitions`
-* Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
 
 ### Deprecations
 
