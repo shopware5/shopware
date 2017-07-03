@@ -84,6 +84,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - Frontend/Compare.php
         - Frontend/Note.php
         - Widgets/Listing.php
+* Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once
 
 ### Removals
 
