@@ -168,6 +168,11 @@ class StructConverter
                 }
 
                 $product = $this->converter->convertListProductStruct($element->getData()->get('product'));
+
+                if ($element->getConfig()->get('article_type') === ArticleComponentHandler::TYPE_STATIC_VARIANT) {
+                    $product['linkDetails'] = $product['linkVariant'];
+                }
+
                 $elementArray['data'] = array_merge($elementArray['data'], $product);
                 break;
 
@@ -175,9 +180,20 @@ class StructConverter
                 if (!$element->getData()->get('products') || !array_filter($element->getData()->get('products'))) {
                     break;
                 }
+
                 $elementArray['data']['categoryId'] = (int) $elementArray['article_slider_category'];
 
                 $products = $this->converter->convertListProductStructList($element->getData()->get('products'));
+
+                $type = $element->getConfig()->get('article_slider_type', ArticleSliderComponentHandler::TYPE_STATIC_PRODUCT);
+                if ($type === ArticleSliderComponentHandler::TYPE_STATIC_VARIANT) {
+                    $products = array_map(function ($product) {
+                        $product['linkDetails'] = $product['linkVariant'];
+
+                        return $product;
+                    }, $products);
+                }
+
                 $elementArray['data']['values'] = array_values($products);
                 break;
 

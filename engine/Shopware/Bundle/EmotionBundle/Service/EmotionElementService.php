@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\EmotionBundle\Service;
 
+use Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
@@ -138,7 +139,7 @@ class EmotionElementService implements EmotionElementServiceInterface
     /**
      * @param Element $element
      *
-     * @return mixed|null
+     * @return ComponentHandlerInterface
      */
     private function findElementHandler(Element $element)
     {
