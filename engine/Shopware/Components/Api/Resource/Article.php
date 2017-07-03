@@ -1843,7 +1843,7 @@ class Article extends Resource implements BatchInterface
             foreach ($mappingData as $option) {
                 $conditions = [];
 
-                if ($option['id']) {
+                if (isset($option['id']) && $option['id']) {
                     $conditions['id'] = $option['id'];
                 }
 
