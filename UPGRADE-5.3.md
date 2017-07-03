@@ -223,6 +223,24 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Refactored backend customer module. Please take a look into the different template files to see what has changed.
 * Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
 * Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
+* Changed templates to support custom targets for category links
+    * `themes/Frontend/Bare/frontend/index/main-navigation.tpl`
+    * `themes/Frontend/Bare/frontend/index/sidebar-categories.tpl`
+    * `themes/Frontend/Bare/frontend/sitemap/index.tpl`
+    * `themes/Frontend/Bare/frontend/sitemap/recurse.tpl`
+    * `engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl`
+* Changed `engine\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator` to support the custom target property
+* Changed `engine\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper` to support the custom target property
+* Changed `engine\Shopware\Components\Compatibility\LegacyStructConverter` to support the custom target property
+* Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
+* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
+* Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
+* Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
+* Changed snippet `DetailBuyActionAdd` in `snippets/frontend/detail/buy.ini`, it now contains <span> tags
+* Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
+* Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
+* Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
+* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 
 ### Removals
 

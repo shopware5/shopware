@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Hook
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -37,21 +38,21 @@
  * by the manager and overwriting the return of the corresponding method.
  *
  * @category   Enlight
- * @package    Enlight_Hook
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Hook_HookManager extends Enlight_Class
 {
     /**
-     * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory.
+     * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory
      */
     protected $proxyFactory = null;
 
     /**
-     * @var array Internal list of all registered hook aliases.
+     * @var array internal list of all registered hook aliases
      */
-    protected $aliases = array();
+    protected $aliases = [];
 
     /**
      * @var Enlight_Event_EventManager
@@ -60,8 +61,9 @@ class Enlight_Hook_HookManager extends Enlight_Class
 
     /**
      * @param Enlight_Event_EventManager $eventManager
-     * @param Enlight_Loader $loader
-     * @param array $options
+     * @param Enlight_Loader             $loader
+     * @param array                      $options
+     *
      * @throws Exception
      */
     public function __construct(\Enlight_Event_EventManager $eventManager, \Enlight_Loader $loader, $options)
@@ -97,36 +99,43 @@ class Enlight_Hook_HookManager extends Enlight_Class
     }
 
     /**
-     * Checks if the given class has registered hooks.
-     * If a method is given the examination is limited to the method.
-     *
-     * @param   $class
-     * @param   $method
-     * @return  bool
+     * @return Enlight_Event_EventManager
      */
-    public function hasHooks($class, $method)
+    public function getEventManager()
     {
-        $eventManager = $this->eventManager;
-
-        return $eventManager->hasListeners($this->getHookEvent($class, $method, 'replace'))
-            || $eventManager->hasListeners($this->getHookEvent($class, $method, 'before'))
-            || $eventManager->hasListeners($this->getHookEvent($class, $method, 'after'));
+        return $this->eventManager;
     }
 
     /**
-     * Returns all registered hooks of the given arguments.
+     * Checks if the given class has registered hooks.
+     * If a method is given the examination is limited to the method.
      *
-     * @param   $class
-     * @param   $method
-     * @param   $type
-     * @return  array
+     * @param string $class
+     * @param string $method
+     *
+     * @return bool
+     */
+    public function hasHooks($class, $method)
+    {
+        return $this->eventManager->hasListeners($this->getHookEvent($class, $method, Enlight_Hook_HookHandler::TypeReplace))
+            || $this->eventManager->hasListeners($this->getHookEvent($class, $method, Enlight_Hook_HookHandler::TypeBefore))
+            || $this->eventManager->hasListeners($this->getHookEvent($class, $method, Enlight_Hook_HookHandler::TypeAfter));
+    }
+
+    /**
+     * @param string $class
+     * @param string $method
+     * @param string $type
+     *
+     * @return string
      */
     public function getHookEvent($class, $method, $type)
     {
-        $class = isset($this->aliases[$class]) ? $this->aliases[$class] : $class;
-        $event = $class . '::' . $method . '::' . $type;
-
-        return $event;
+        return Enlight_Hook_HookExecutionContext::createHookEventName(
+            (isset($this->aliases[$class])) ? $this->aliases[$class] : $class,
+            $method,
+            $type
+        );
     }
 
     /**
@@ -134,6 +143,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * already instantiated it, the function instantiates it automatically.
      *
      * @param $class
+     *
      * @return mixed
      */
     public function getProxy($class)
@@ -145,6 +155,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * Checks if a proxy exists for the given class.
      *
      * @param $class
+     *
      * @return bool
      */
     public function hasProxy($class)
@@ -153,42 +164,26 @@ class Enlight_Hook_HookManager extends Enlight_Class
     }
 
     /**
-     * Executes all registered hooks for the given hook arguments.
-     * First, all hooks of the typeBefore type executed.
-     * Then the typeReplace hooks are executed.
-     * If no typeReplace hook exists, the function checks if the executeParent method on the subject exists.
-     * If this is the case, the executeParent function will be executed.
-     * At the end the typeAfter hooks are executed.
+     * Creates a new hook execution context using the given $class, $method and $args and executes it. Finally the
+     * execution result is returned.
      *
-     * @param   Enlight_Class|Enlight_Hook_Proxy $class
-     * @param   string $method
-     * @param   array $args
-     * @return  mixed
+     * @param Enlight_Hook_Proxy $class
+     * @param string             $method
+     * @param array              $args
+     *
+     * @return mixed
      */
-    public function executeHooks($class, $method, $args)
+    public function executeHooks(Enlight_Hook_Proxy $class, $method, array $args)
     {
-        $args = new Enlight_Hook_HookArgs(array_merge(array(
-            'class' => $class,
-            'method' => $method,
-        ), $args));
         $className = get_parent_class($class);
-        $eventManager = $this->eventManager;
+        $context = new Enlight_Hook_HookExecutionContext(
+            $this,
+            $class,
+            $method,
+            $args
+        );
 
-        $event = $this->getHookEvent($className, $method, 'before');
-        $eventManager->notify($event, $args);
-
-        $event = $this->getHookEvent($className, $method, 'replace');
-        if ($eventManager->hasListeners($event)) {
-            $eventManager->notify($event, $args);
-        } else {
-            $args->setReturn($args->getSubject()->executeParent(
-                $method,
-                $args->getArgs()
-            ));
-        }
-
-        $event = $this->getHookEvent($className, $method, 'after');
-        return $eventManager->filter($event, $args->getReturn(), $args);
+        return $context->execute();
     }
 
     /**
@@ -196,31 +191,35 @@ class Enlight_Hook_HookManager extends Enlight_Class
      *
      * @param $name
      * @param $target
+     *
      * @return Enlight_Hook_HookManager
      */
     public function setAlias($name, $target)
     {
         $this->aliases[$target] = $name;
+
         return $this;
     }
 
     /**
      * Returns the alias for the given name.
+     *
      * @param $name
-     * @return null
      */
     public function getAlias($name)
     {
-        return isset($this->_aliases[$name]) ? $this->_aliases[$name] : null;
+        return isset($this->aliases[$name]) ? $this->aliases[$name] : null;
     }
 
     /**
      * Resets the aliases and registered hooks.
+     *
      * @return Enlight_Hook_HookManager
      */
     public function resetHooks()
     {
-        $this->aliases = array();
+        $this->aliases = [];
+
         return $this;
     }
 }
