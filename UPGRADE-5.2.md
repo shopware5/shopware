@@ -11,6 +11,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added guetzli media optimizer
 * Added new event `Shopware_Plugins_HttpCache_ContextCookieValue` to modify HttpCache Context-Cookie.
 * Added support for uploading media with ftps in Rest-API
+* Added `{$smarty.block.parent}` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
+* Added new block `frontend_checkout_cart_item_details_essential_features` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
 
 # 5.2.26
 
