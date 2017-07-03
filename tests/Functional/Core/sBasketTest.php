@@ -1797,6 +1797,102 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * Assert that rounding basket totals works correctly for a basket that has a decimal-binary conversion inaccuracies
+     * which results in a total that is very slightly below zero.
+     *
+     * The example used here is:
+     *
+     * Article                   29.97
+     * Shipping discount         -2.80
+     * Customer group discount  -27.17 = 90.65 % of the item total
+     * ------------------------------
+     * Total (double arithmetic) -0.0000000000000035527136788005
+     * Total (real world)         0.00
+     *
+     * @covers \sBasket::sGetBasketData()
+     */
+    public function testsGetBasketDataNegativeCloseToZeroTotal()
+    {
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+        try {
+            // Setup article for the first basket position - an article that costs EUR 29.97
+            $article = $resourceHelper->createArticle([
+                'name' => 'Testartikel',
+                'description' => 'Test description',
+                'active' => true,
+                'mainDetail' => [
+                    'number' => 'swTEST' . uniqid(rand()),
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'EK',
+                            'from' => 1,
+                            'to' => '-',
+                            'price' => 29.97,
+                        ],
+                    ],
+                ],
+                'taxId' => 4,
+                'supplierId' => 2,
+                'categories' => [10],
+            ]);
+            // Setup discount for the second basket position - a shipping discount of EUR -2.8
+            $dispatchDiscountId = $this->db->fetchCol(
+                'SELECT * FROM s_premium_dispatch WHERE type = 3'
+            );
+            $this->db->update(
+                's_premium_shippingcosts',
+                ['value' => 2.8],
+                ['dispatchID' => $dispatchDiscountId]
+            );
+            // Setup discount for the third basket position - a basket discount covering the remainder of the basket (-27.17)
+            $customerGroup = $resourceHelper->createCustomerGroup();
+            $this->db->insert(
+                's_core_customergroups_discounts',
+                [
+                    'groupID' => $customerGroup->getId(),
+                    // discount by the full remaining value of the basket - EUR 27.17 / EUR 29.97 = 90.65 %
+                    'basketdiscount' => 90.65,
+                    'basketdiscountstart' => 10,
+                ]
+            );
+            $customerGroupDiscountId = $this->db->lastInsertId('s_core_customergroups_discounts');
+            // Setup the user and their session
+            $customer = $this->createDummyCustomer();
+            $this->db->update(
+                's_user',
+                ['customergroup' => $customerGroup->getKey()],
+                ['id = ?' => $customer->getId()]
+            );
+            $this->session['sUserId'] = $customer->getId();
+            $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+            $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+            $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
+
+            // Actually add the article to the basket
+            $this->module->sAddArticle($article->getMainDetail()->getNumber(), 1);
+            // Run sBasket::sRefreshBasket() in order to add the discounts to the basket
+            $this->module->sRefreshBasket();
+            // Run sGetBasketData() to show the rounding error aborting the computation
+            $basketData = $this->module->sGetBasketData();
+            // Run sGetAmount() to show that this function is affected by the issue as well
+            $amount = $this->module->sGetAmount();
+
+            // Assert that a valid basket was returned
+            $this->assertNotEmpty($basketData);
+            // Assert that the total is approximately 0.00
+            $this->assertEquals(0, $basketData['AmountNumeric'], 'total is approxmately 0.00', 0.0001);
+        } finally {
+            // Delete test resources
+            if ($customerGroupDiscountId) {
+                $this->db->delete('s_core_customergroups_discounts', ['id' => $customerGroupDiscountId]);
+            }
+            $resourceHelper->cleanUp();
+        }
+    }
+
+    /**
      * @covers \sBasket::sAddNote
      */
     public function testsAddNote()
@@ -2226,6 +2322,80 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             's_order_basket',
             ['sessionID = ?' => $this->session->get('sessionId')]
         );
+    }
+
+    /**
+     * @covers \sBasket::getTaxesForUpdateArticle
+     */
+    public function testsPriceCalculationTaxfreeWithPriceGroupDiscount()
+    {
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+
+        // Create pricegroup
+        $priceGroup = $resourceHelper->createPriceGroup([
+            [
+                'key' => 'EK',
+                'quantity' => 1,
+                'discount' => 15,
+            ],
+        ]);
+
+        // Create test article
+        $article = $resourceHelper->createArticle([
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid(rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 38.90,
+                    ],
+                ],
+            ],
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [10],
+            'priceGroupActive' => true,
+            'priceGroupId' => $priceGroup->getId(),
+        ]);
+
+        // Set customergroup to taxfree in session
+        $customerGroupData = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_core_customergroups WHERE groupkey = :key',
+            [':key' => 'EK']
+        );
+        $customerGroupData['tax'] = 0;
+        $this->module->sSYSTEM->sUSERGROUPDATA = $customerGroupData;
+        Shopware()->Session()->sUserGroupData = $customerGroupData;
+
+        // Setup session
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        $basketItemId = $this->module->sAddArticle($article->getMainDetail()->getNumber(), 1);
+
+        // Check that the article has been added to the basket
+        $this->assertNotEquals(false, $basketItemId);
+
+        // Check that the final price equals the net price for the basket item
+        $basketItem = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_order_basket WHERE id = :id',
+            [':id' => $basketItemId]
+        );
+        $this->assertEquals($basketItem['price'], $basketItem['netprice']);
+
+        // Check that the final price equals the net price for the whole basket
+        $basketData = $this->module->sGetBasketData();
+        $this->assertEquals($basketData['AmountNumeric'], $basketData['AmountNetNumeric']);
+
+        // Delete test resources
+        $resourceHelper->cleanUp();
     }
 
     private function generateBasketSession()
