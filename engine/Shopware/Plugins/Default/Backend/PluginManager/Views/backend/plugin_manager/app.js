@@ -142,7 +142,6 @@ Ext.define('Shopware.apps.PluginManager', {
         'enable-connect-introduction-mode',
         'enable-premium-plugins-mode',
         'enable-importexport-teaser-mode',
-        'reload-main-menu',
         'destroy-login',
         'store-register',
         'clear-all-cache',
