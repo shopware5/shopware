@@ -325,12 +325,16 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         if (form.getForm().isValid()) {
             var stream = Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues());
             var type = stream.get('type');
-            
+            var freezeUp = stream.get('freezeUp');
+
             stream.set('type', 'dynamic');
+            stream.set('freezeUp', null);
+
             window.destroy();
 
             me.saveStream(stream, function() {
                 stream.set('type', type);
+                stream.set('freezeUp', freezeUp);
                 stream.save();
                 me.resetProgressbar();
                 me.getStreamView().resetFilterPanel();
