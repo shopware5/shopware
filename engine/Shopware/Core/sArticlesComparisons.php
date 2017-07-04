@@ -226,7 +226,9 @@ class sArticlesComparisons
 
         foreach ($checkForArticle as $article) {
             if ($article['articleID']) {
-                $articles[] = $this->articleModule->sGetPromotionById('fix', 0, (int) $article['articleID']);
+                $promotion = $this->articleModule->sGetPromotionById('fix', 0, (int) $article['articleID']);
+                $promotion['linkDetails'] = $promotion['linkVariant'];
+                $articles[] = $promotion;
             }
         }
 
