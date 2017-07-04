@@ -159,16 +159,37 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller="index" action="changeLocale"}',
+            url: '{url controller="cache" action="clearCache"}',
             method: 'POST',
             params: {
-                localeId: localeId
+                'cache[template]': 'on',
+                'cache[proxy]': 'on'
             },
             success: function(response, opts) {
-                if (!Ext.isEmpty(me.callback)) {
-                    me.callback();
-                }
-                location.reload();
+
+                Ext.Ajax.request({
+                    url: '{url controller="index" action="changeLocale"}',
+                    method: 'POST',
+                    params: {
+                        localeId: localeId
+                    },
+                    success: function(response, opts) {
+                        if (!Ext.isEmpty(me.callback)) {
+                            me.callback();
+                        }
+                        location.reload();
+                    },
+                    failure: function(response, opts) {
+                        var result = Ext.JSON.decode(response.responseText);
+
+                        Shopware.Notification.createGrowlMessage(
+                            me.snippets.switchLocaleError.errorTitle,
+                            Ext.String.format(me.snippets.switchLocaleError.errorServerMessage, result.message),
+                            me.snippets.growlMessage
+                        );
+                    }
+                });
+
             },
             failure: function(response, opts) {
                 var result = Ext.JSON.decode(response.responseText);

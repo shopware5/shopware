@@ -58,7 +58,7 @@ return [
     Siamo lieti che tu voglia entrare a far parte della nostra grande Shopware Community mondiale.
 </p>
 <p>
-    Ti accompagniamo ora passo passo nel processo di installazione. Per qualsiasi domanda, consulta il nostro <a href="https://forum.shopware.com" target="_blank">Forum</a> o contattaci telefonicamente al numero <a href="tel:+492555928850">(+49) 2555 928850</a> o inviaci una <a href="mailto:info@shopware.com">e-mail</a>.
+    Ti accompagniamo ora passo passo nel processo di installazione. Per qualsiasi domanda, consulta il nostro <a href="https://forum.shopware.com" target="_blank">Forum</a> o contattaci telefonicamente al numero <a href="tel:0080074676260">00 800 746 7626 0 (gratis)</a> o inviaci una <a href="mailto:info@shopware.com">e-mail</a>.
 </p>
 <p>
     <strong>Si parte</strong>

@@ -181,7 +181,7 @@ $app->view()->setData('app', $app);
 $app->view()->setData('error', false);
 $app->view()->setData('parameters', $_SESSION['parameters']);
 
-$app->setCookie('installed-locale', localeForLanguage($selectedLanguage), time() + 7200, str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']));
+$app->setCookie('installed-locale', localeForLanguage($selectedLanguage), time() + 7200, '/');
 
 $app->error(function (\Exception $e) use ($app) {
     if (!$app->request()->isAjax()) {
@@ -437,7 +437,7 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
             'username' => $_SESSION['parameters']['c_config_admin_username'],
             'name' => $_SESSION['parameters']['c_config_admin_name'],
             'password' => $_SESSION['parameters']['c_config_admin_password'],
-            'locale' => $_SESSION['parameters']['c_config_shop_language'], // This is intentional
+            'locale' => localeForLanguage($_SESSION['language']),
         ]);
 
         $shop = new \Shopware\Recovery\Install\Struct\Shop([

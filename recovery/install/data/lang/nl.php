@@ -58,7 +58,7 @@ return [
     We vinden het ontzettend fijn dat je je bij onze geweldige wereldwijde Shopware-community wilt aansluiten.
 </p>
 <p>
-    We begeleiden je nu stapsgewijs door het installatieproces. Mocht je vragen hebben, kijk dan eens op ons <a href="https://forum.shopware.com" target="_blank">forum</a>, neem telefonische contact met ons op via <a href="tel:+492555928850">(+49) 2555 928850</a> of stuur ons een <a href="mailto:info@shopware.com">e-mail</a>.
+    We begeleiden je nu stapsgewijs door het installatieproces. Mocht je vragen hebben, kijk dan eens op ons <a href="https://forum.shopware.com" target="_blank">forum</a>, neem telefonische contact met ons op via <a href="tel:0080074676260">00 800 746 7626 0 (gratis)</a> of stuur ons een <a href="mailto:info@shopware.com">e-mail</a>.
 </p>
 <p>
     <strong>Daar gaan we</strong>
