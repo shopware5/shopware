@@ -36,11 +36,12 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Shopware\Components\DependencyInjection\ContainerInterface as ShopwareContainerInterface;
 
 abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
     /**
-     * @var ContainerInterface
+     * @var ShopwareContainerInterface
      */
     protected $container;
 
