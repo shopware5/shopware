@@ -159,7 +159,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $sql = 'SELECT id
             FROM s_order_basket
             WHERE modus = 0
-            AND datum >= :startDate AND datum <= DATE_ADD(:endDate,INTERVAL 1 DAY)
+            AND datum >= :startDate AND datum <= DATE_ADD(:endDate, INTERVAL 1 DAY)
             GROUP BY sessionID';
         $result = Shopware()->Db()->query($sql, $params);
         $total = $result->rowCount();

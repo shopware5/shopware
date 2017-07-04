@@ -148,6 +148,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
      */
     private function getExceptionMessage(StoreException $exception)
     {
+        /** @var \Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')
             ->getNamespace('backend/plugin_manager/exceptions');
 

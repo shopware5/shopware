@@ -83,7 +83,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
      */
     public function getDetailFeedAction()
     {
-        $feedId = intval($this->Request()->feedId);
+        $feedId = (int) $this->Request()->feedId;
         $feed = $this->getFeed($feedId);
         $this->View()->assign(['success' => true, 'data' => $feed]);
     }

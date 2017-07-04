@@ -292,6 +292,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $elementRepository = $modelManager->getRepository(Element::class);
         $formRepository = $modelManager->getRepository(Form::class);
 
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
         if (strpos($name, ':') !== false) {

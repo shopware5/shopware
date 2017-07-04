@@ -364,8 +364,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      * If no album id passed, the uploaded media is assigned to the unsorted album.
      *
      * @throws Exception
-     *
-     * @return bool
      */
     public function uploadAction()
     {
@@ -407,6 +405,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media = new Media();
 
         $albumId = !empty($params['albumID']) ? $params['albumID'] : -10;
+        /* @var $album \Shopware\Models\Media\Album */
         $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
 
         if (!$album) {

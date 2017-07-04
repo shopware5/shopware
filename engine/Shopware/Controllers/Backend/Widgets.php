@@ -275,9 +275,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         '
         );
 
-        if (empty($timeBack)) {
-            $timeBack = 7;
-        }
+        $timeBack = 7;
 
         $sql = "
         SELECT
@@ -338,9 +336,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getVisitorsAction()
     {
-        if (empty($timeBack)) {
-            $timeBack = 8;
-        }
+        $timeBack = 8;
 
         // Get visitors in defined time-range
         $sql = '
@@ -421,32 +417,18 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getLastOrdersAction()
     {
-        $addSqlPayment = '';
-        $addSqlSubshop = '';
-        if (!empty($subshopID)) {
-            $addSqlSubshop = '
-            AND s_order.subshopID = ' . Shopware()->Container()->get('db')->quote($subshopID);
-        }
-
-        if (!empty($restrictPayment)) {
-            $addSqlPayment = '
-            AND s_order.paymentID = ' . Shopware()->Container()->get('db')->quote($restrictPayment);
-        }
-
-        $sql = "
+        $sql = '
         SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, ordertime AS `date`, status, cleared
         FROM s_order
         LEFT JOIN s_order_billingaddress ON s_order_billingaddress.userID = s_order.userID
         WHERE
             s_order.status != -1
-        $addSqlSubshop
-        $addSqlPayment
         AND
             ordertime >= DATE_SUB(now(),INTERVAL 14 DAY)
         GROUP BY s_order.id
         ORDER BY ordertime DESC
         LIMIT 20
-        ";
+        ';
 
         $result = Shopware()->Container()->get('db')->fetchAll($sql);
         foreach ($result as &$order) {

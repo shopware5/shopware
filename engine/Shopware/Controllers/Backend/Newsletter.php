@@ -492,7 +492,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $id
      *
-     * @return array
+     * @return array|bool
      */
     public function getMailingVoucher($id)
     {
@@ -518,7 +518,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $id
      *
-     * @return array
+     * @return array|bool
      */
     public function getMailingEmails($id)
     {

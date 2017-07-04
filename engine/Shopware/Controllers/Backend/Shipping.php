@@ -125,7 +125,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         if (is_array($filter) && isset($filter[0]['value'])) {
             $filter = $filter[0]['value'];
         }
-        $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter, $sort, $limit, $offset);
+        $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter, $limit, $offset);
         $result = $query->getArrayResult();
 
         // if minChange was not passed, get it in order to show a proper cost matrix
@@ -312,8 +312,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
     /**
      * Get all used means of payment for a given dispatch id
-     *
-     * @return array
      */
     public function getPaymentsAction()
     {
@@ -330,9 +328,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
-     * Get all countires who are selected for this dispatch id
-     *
-     * @return array
+     * Get all countries who are selected for this dispatch id
      */
     public function getCountriesAction()
     {
@@ -351,7 +347,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     /**
      * Get all countries who are selected for this dispatch id
 
-     * @return array
      */
     public function getHolidaysAction()
     {
@@ -444,7 +439,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         if (!isset($params['shippingFree']) || $params['shippingFree'] === '' || $params['shippingFree'] === '0') {
             $params['shippingFree'] = null;
         } else {
-            $params['shippingFree'] = floatval(str_replace(',', '.', $params['shippingFree']));
+            $params['shippingFree'] = (float) str_replace(',', '.', $params['shippingFree']);
         }
 
         $params['payments'] = new \Doctrine\Common\Collections\ArrayCollection();
@@ -482,6 +477,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $params['bindTimeTo'] = $bindTimeTo;
         } else {
             $params['bindTimeTo'] = null;
+        }
+
+        if (!$this->_isAllowed('sql_rule', 'shipping')) {
+            unset($params['calculationSql'], $params['bindSql']);
         }
 
         // convert params to model

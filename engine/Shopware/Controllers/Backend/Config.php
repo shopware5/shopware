@@ -296,8 +296,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getTableListAction()
     {
         $name = $this->Request()->get('_repositoryClass');
-        $limit = intval($this->Request()->get('limit'));
-        $start = intval($this->Request()->get('start'));
+        $limit = (int) $this->Request()->get('limit');
+        $start = (int) $this->Request()->get('start');
         $table = $this->getTable($name);
         $filter = $this->Request()->get('filter');
         $data = [];

@@ -514,7 +514,7 @@ class Repository extends ModelRepository
                 ->setParameter('articleId', $articleId);
 
         foreach ($options as $key => $option) {
-            $alias = 'o' . $key;
+            $alias = 'o' . (int) $key;
             $builder->innerJoin('details.configuratorOptions', $alias, \Doctrine\ORM\Query\Expr\Join::WITH, $alias . '.id = :' . $alias);
 
             //in some cases the options parameter can contains an array of option models, an two dimensional array with option data, or an one dimensional array with ids.

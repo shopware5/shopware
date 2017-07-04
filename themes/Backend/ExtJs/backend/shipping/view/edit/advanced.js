@@ -201,10 +201,18 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             {
                 xtype       : 'textarea',
                 name        : 'bindSql',
+                hidden: true,
+                /*{if {acl_is_allowed privilege=sql_rule}}*/
+                    hidden: false,
+                /*{/if}*/
                 fieldLabel  : '{s name=bind_sql_label}Own terms{/s}'
             }, {
                 xtype       : 'textarea',
                 name        : 'calculationSql',
+                hidden: true,
+                /*{if {acl_is_allowed privilege=sql_rule}}*/
+                    hidden: false,
+                /*{/if}*/
                 fieldLabel  : '{s name=bind_calculation_sql_label}Own calculations{/s}'
             }
         ];
