@@ -168,6 +168,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Added `Shopware\Bundle\SearchBundleDBAL\VariantHelper` which joins all variants for dbal search
 * Added smarty blocks `frontend_checkout_shipping_payment_core_button_top` and `frontend_checkout_shipping_payment_core_button_top` for shipping
 * Added new Interface for facet result template switch `Shopware\Bundle\SearchBundle\TemplateSwitchable`
+* Added new service `Shopware\Bundle\MediaBundle\CdnOptimizerService` for optimizing remote images on CDNs
 
 ### Changes
 
