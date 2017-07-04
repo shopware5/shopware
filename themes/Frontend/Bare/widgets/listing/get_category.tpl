@@ -49,7 +49,15 @@
                 {block name="widgets_listing_get_category_categories_show"}
                     <li class="navigation--entry" role="menuitem">
                         {block name="widgets_listing_get_category_categories_show_link"}
-                            <a href="{$category.link}" title="{s name="ButtonShowPrepend"}{/s} {$category.name|escape} {s name="ButtonShowAppend"}{/s}" class="navigation--link is--display-button">
+
+                            {$categoryLink = $category.link}
+                            {if $category.external}
+                                {$categoryLink = $category.external}
+                            {/if}
+
+                            <a href="{$categoryLink}" title="{s name="ButtonShowPrepend"}{/s} {$category.name|escape} {s name="ButtonShowAppend"}{/s}"
+                               class="navigation--link is--display-button"
+                               {if $category.external}target="{$category.externalTarget}"{/if}>
                                 {block name="widgets_listing_get_category_categories_show_link_name"}
                                     {s name="ButtonShowPrepend"}{/s} {$category.name} {s name="ButtonShowAppend"}{/s}
                                 {/block}
@@ -64,10 +72,17 @@
                         {if $children.active}
                             <li class="navigation--entry" role="menuitem">
                                 {block name="widgets_listing_get_category_categories_item_link"}
-                                    <a href="{$children.link}" title="{$children.name|escape}"
+                                
+                                    {$link = $children.link}
+                                    {if $children.external}
+                                        {$link = $children.external}
+                                    {/if}
+                                    
+                                    <a href="{$link}" title="{$children.name|escape}"
                                        class="navigation--link{if $children.childrenCount} link--go-forward{/if}"
                                        data-category-id="{$children.id}"
-                                       data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}">
+                                       data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}"
+                                       {if $children.external}target="{$children.externalTarget}"{/if}>
 
                                         {block name="widgets_listing_get_category_categories_item_link_name"}
                                             {$children.name}
