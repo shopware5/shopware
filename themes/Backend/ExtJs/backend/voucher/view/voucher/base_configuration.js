@@ -222,6 +222,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 helpText:'{s name=detail_general/field/minimum_charge/help}The minimum basket value for this voucher{/s}',
                 validator:function (value) {
                     var form = me.getForm();
+                    value = parseFloat(value.replace(',','.'));
                     if (form.getFieldValues().percental != 1) {
                         if (value < form.getFieldValues().value) {
                             return '{s name=detail_general/field/minimum_charge/error/minimum_charge_bigger_than_value}The minimum charge has to be bigger then the voucher value{/s}';
