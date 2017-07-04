@@ -57,12 +57,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        if (Shopware()->Session()->offsetGet('sOneTimeAccount')) {
-            $this->logoutAction();
-
-            return $this->redirect(['controller' => 'register']);
-        }
-
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
         if ($this->shouldForwardToRegister()) {
             return $this->forward('index', 'register', 'frontend', $this->getForwardParameters());
@@ -78,6 +72,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->assign('userInfo', $this->get('shopware_account.store_front_greeting_service')->fetch());
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
         $this->View()->assign('sAction', $this->Request()->getActionName());
+
+        if ($this->isOneTimeAccount()) {
+            $this->logoutAction();
+            $this->redirect(['controller' => 'register']);
+        }
     }
 
     /**
@@ -805,5 +804,14 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             'sTarget' => $this->Request()->getParam('sTarget'),
             'sTargetAction' => $this->Request()->getParam('sTargetAction'),
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    private function isOneTimeAccount()
+    {
+        return $this->container->get('session')->offsetGet('sOneTimeAccount')
+            || $this->View()->sUserData['additional']['user']['accountmode'] == 1;
     }
 }
