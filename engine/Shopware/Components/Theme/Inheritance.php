@@ -383,12 +383,12 @@ class Inheritance
                 $row['value'] = unserialize($row['value']);
             }
 
-            if ($lessCompatible && $row['type'] === 'theme-media-selection') {
-                $row['value'] = '"' . $row['value'] . '"';
-            }
-
             if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], 'media/') !== false) {
                 $row['value'] = $this->mediaService->getUrl($row['value']);
+            }
+
+            if ($lessCompatible && $row['type'] === 'theme-media-selection') {
+                $row['value'] = '"' . $row['value'] . '"';
             }
         }
 
