@@ -1507,7 +1507,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function setAddressAction()
     {
-        $this->View()->loadTemplate('');
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
         $target = $this->Request()->getParam('target', 'shipping');
         $sessionKey = $target == 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
 
