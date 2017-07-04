@@ -68,6 +68,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected $categoryRepository = null;
 
     /**
+     * @var \Shopware\Models\Tax\Repository
+     */
+    protected $taxRepository = null;
+
+    /**
      * @var \Shopware\Components\Model\ModelRepository
      */
     protected $articleDetailRepository = null;
@@ -2134,6 +2139,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Internal helper function to get access on the tax repository.
+     * @return null|Shopware\Models\Tax\Repository
+     */
+    protected function getTaxRepository()
+    {
+        if ($this->taxRepository === null) {
+            $this->taxRepository = Shopware()->Models()->getRepository('Shopware\Models\Tax\Tax');
+        }
+
+        return $this->taxRepository;
+    }
+
+    /**
      * Helper function to get access to the ConfiguratorDependency repository.
      *
      * @return \Shopware\Components\Model\ModelRepository
@@ -2982,9 +3000,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
+            $_tax = $this->getTaxRepository()->getTaxRateByConditions($tax['id'],'','','',$customerGroup['id']);
             if ($customerGroup['taxInput']) {
-                $price['price'] = $price['price'] / 100 * (100 + $tax['tax']);
-                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']);
+                $price['price'] = $price['price'] / 100 * (100 + $_tax);
+                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $_tax);
             }
             $prices[$key] = $price;
         }
@@ -3843,8 +3862,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                $_tax = $this->getTaxRepository()->getTaxRateByConditions($tax->getId(),'','','',$customerGroup->getId());
+                $priceData['price'] = $priceData['price'] / (100 + $_tax) * 100;
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $_tax) * 100;
             }
 
             //resolve the oneToMany association of ExtJs to an oneToOne association for doctrine.

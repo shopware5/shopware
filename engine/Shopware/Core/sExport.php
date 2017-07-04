@@ -903,18 +903,18 @@ class sExport
                 s.name as supplier,
                 u.unit,
                 u.description as unit_description,
-                t.tax,
+                IFNULL(tr.tax, t.tax) AS tax,
                 CONCAT(i.img, '.', i.extension) as image,
 
                 a.configurator_set_id as configurator,
 
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as netprice,
                 IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} as netprice_numeric,
-                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as price,
-                IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} as price_numeric,
+                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+IFNULL(tr.tax, t.tax))/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as price,
+                IFNULL($grouppricefield, $pricefield)*(100+IFNULL(tr.tax, t.tax))/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup['discount']})/100*{$this->sCurrency['factor']} as price_numeric,
                 pd.discount,
                 ROUND(CAST($pseudoprice*{$this->sCurrency['factor']} AS DECIMAL(10,3)),2) as netpseudoprice,
-                ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency['factor']}/100 AS DECIMAL(10,3)),2) as pseudoprice,
+                ROUND(CAST($pseudoprice*(100+IFNULL(tr.tax, t.tax))*{$this->sCurrency['factor']}/100 AS DECIMAL(10,3)),2) as pseudoprice,
                 IF(file IS NULL,0,1) as esd
 
                 $sql_add_select
@@ -930,14 +930,20 @@ class sExport
             ON d.unitID = u.id
             LEFT JOIN `s_core_tax` as `t`
             ON a.taxID = t.id
+            LEFT JOIN `s_core_tax_rules` as `tr`
+            ON t.id = tr.groupID
+            AND tr.customer_groupID = {$this->sCustomergroup['id']}
+            AND tr.areaID IS NULL
+            AND tr.countryID IS NULL 
+            AND tr.stateID IS NULL
             LEFT JOIN `s_articles_supplier` as `s`
             ON a.supplierID = s.id
 
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
-            AND a.pricegroupID=groupID
-            AND customergroupID = 1
-            AND discountstart=1
+            AND a.pricegroupID=pd.groupID
+            AND pd.customergroupID = 1
+            AND pd.discountstart=1
 
             LEFT JOIN s_articles_esd e ON e.articledetailsID=d.id
 
