@@ -421,7 +421,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * calculates the number of all urls to create a cache entry for
+     * Calculates the number of all urls to create a cache entry for
      */
     public function getHttpURLsAction()
     {
@@ -430,16 +430,23 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         /** @var $cacheWarmer CacheWarmer */
         $cacheWarmer = $this->get('http_cache_warmer');
 
+        $counts = [
+            'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
+            'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
+            'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
+            'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
+            'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId),
+        ];
+
+        $counts = $this->get('events')->filter(
+            'Shopware_Controllers_Performance_filterCounts',
+            $counts
+        );
+
         $this->View()->assign([
             'success' => true,
             'data' => [
-                'counts' => [
-                    'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
-                    'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
-                    'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
-                    'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
-                    'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId),
-                ],
+                'counts' => $counts,
             ],
         ]);
     }

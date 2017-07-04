@@ -81,17 +81,24 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $static = $this->SeoIndex()->countStatic($shopId);
         $supplier = $this->SeoIndex()->countSuppliers($shopId);
 
+        $counts = [
+            'category' => $category,
+            'article' => $article,
+            'blog' => $blog,
+            'emotion' => $emotion,
+            'static' => $static,
+            'content' => $content,
+            'supplier' => $supplier,
+        ];
+
+        $counts = $this->get('events')->filter(
+            'Shopware_Controllers_Seo_filterCounts',
+            $counts
+        );
+
         $this->View()->assign([
             'success' => true,
-            'data' => ['counts' => [
-                'category' => $category,
-                'article' => $article,
-                'blog' => $blog,
-                'emotion' => $emotion,
-                'static' => $static,
-                'content' => $content,
-                'supplier' => $supplier,
-            ]],
+            'data' => ['counts' => $counts],
         ]);
     }
 
