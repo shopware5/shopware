@@ -376,6 +376,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->saveDefaultAddresses();
         $this->resetTemporaryAddresses();
 
+        $this->session->offsetUnset('sComment');
+
         $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
         $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');

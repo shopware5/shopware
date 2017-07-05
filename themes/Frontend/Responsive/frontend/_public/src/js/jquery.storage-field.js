@@ -12,12 +12,37 @@
 
         defaults: {
 
+            /**
+             * Select the type of local storage in which the value schould be stored.
+             *
+             * @property storageType ( session | local )
+             * @type {String}
+             */
             storageType: 'session',
 
+            /**
+             * Define a prefix for the storage key.
+             *
+             * @property storageKeyPrefix
+             * @type {String}
+             */
             storageKeyPrefix: 'sw-local-',
 
+            /**
+             * Define a specific storage key name.
+             * If this is not defined the name attribute of the field is used.
+             *
+             * @property storageKeyName
+             * @type {String}
+             */
             storageKeyName: null,
 
+            /**
+             * Define the event on which the value should be stored to the storage.
+             *
+             * @property storeEvent
+             * @type {String}
+             */
             storeEvent: 'blur'
         },
 
@@ -75,6 +100,11 @@
 
             if (value && value.length) {
                 me.$el.val(value);
+            }
+
+            // When the field is just a pseudo field also fill the original field.
+            if (me.$el.is('[data-selector]')) {
+                $(me.$el.attr('data-selector')).val(value);
             }
 
             $.publish('plugin/swStorageField/setFieldValueFromStorage', [ me ]);
