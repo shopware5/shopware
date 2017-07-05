@@ -1263,8 +1263,9 @@ class sBasket
         /** @var $product ListProduct */
         foreach ($products as $product) {
             $note = $notes[$product->getNumber()];
-
-            $promotions[] = $this->convertListProductToNote($product, $note);
+            $promotion = $this->convertListProductToNote($product, $note);
+            $promotion['linkDetails'] = $promotion['linkVariant'];
+            $promotions[] = $promotion;
         }
 
         return $this->eventManager->filter(
