@@ -1042,19 +1042,6 @@ class sBasket
      */
     public function sGetBasket()
     {
-        // Refresh basket prices
-        $basketData = $this->db->fetchAll(
-            'SELECT id, modus, quantity
-            FROM s_order_basket
-            WHERE sessionID = ?',
-            [$this->session->get('sessionId')]
-        );
-        foreach ($basketData as $basketContent) {
-            if (empty($basketContent['modus'])) {
-                $this->sUpdateArticle($basketContent['id'], $basketContent['quantity']);
-            }
-        }
-
         // Check, if we have some free products for the client
         $this->sInsertPremium();
 
@@ -1647,7 +1634,9 @@ class sBasket
     {
         // Update basket data
         $this->moduleManager->Admin()->sGetUserData();
-        $this->sGetBasket();
+
+        $this->sUpdateBaskets();
+
         $this->moduleManager->Admin()->sGetPremiumShippingcosts();
 
         // Update basket data in session
@@ -1655,6 +1644,25 @@ class sBasket
         $this->session->offsetSet('sBasketQuantity', $this->sCountBasket());
         $amount = $this->sGetAmount();
         $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
+    }
+
+    /**
+     * Refreshes baskets - quantities, prices, etc.
+     */
+    private function sUpdateBaskets() {
+        // Refresh basket prices
+        $basketData = $this->db->fetchAll(
+            'SELECT id, modus, quantity
+            FROM s_order_basket
+            WHERE sessionID = ?',
+            [$this->session->get('sessionId')]
+        );
+
+        foreach ($basketData as $basketContent) {
+            if (empty($basketContent['modus'])) {
+                $this->sUpdateArticle($basketContent['id'], $basketContent['quantity']);
+            }
+        }
     }
 
     /**
