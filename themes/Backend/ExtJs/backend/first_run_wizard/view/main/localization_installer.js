@@ -187,6 +187,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
             cls: 'primary',
             handler: function() {
                 me.fireEvent('installLanguage', me.pluginName, installerLocale);
+                me.fireEvent('closeWindow');
+                me.destroy();
             }
         });
 

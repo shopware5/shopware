@@ -73,7 +73,7 @@ EOT
     'requirements_tablefiles_colstatus' => 'Estado',
     'requirements_error' => '<h3 class="alert-heading">¡Atención!</h3>No se cumplen todos los requisitos necesarios para una instalación correcta',
     'requirements_success' => '<h3 class="alert-heading">¡Felicidades!</h3>Se cumplen todos los requisitos necesarios para una instalación correcta',
-    'requirements_ioncube' => '<small><strong>* Nota:</strong> No tienes instalado el software de codificación ionCube en tu sistema. Este software solo es necesario si más tarde quieres instalar ampliaciones cifradas con ionCube a través de nuestra <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a>. También puedes retomar la instalación de ionCube siempre que quieras.</small>',
+    'requirements_ioncube' => '<small><strong>* Nota:</strong> No tienes instalado el software de codificación ionCube en tu sistema. Este software solo es necesario si más tarde quieres instalar ampliaciones cifradas con ionCube a través de nuestra <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a>. También puedes retomar la instalación de ionCube siempre que quieras.</small>',
     'requirements_php_info' => 'Tu servidor debe cumplir los siguientes requisitos del sistema para que Shopware sea ejecutable',
     'requirements_system_colcheck' => 'Requisito',
     'requirements_system_colrequired' => 'Obligatorio',
