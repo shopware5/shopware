@@ -184,6 +184,24 @@ class PluginLocalService
             if (isset($translations[$locale]['description'])) {
                 $row['description'] = $translations[$locale]['description'];
             }
+
+            if (!empty($row['changelog'])) {
+                $changelog = [];
+                $row['changelog'] = json_decode($row['changelog'], true);
+
+                foreach ($row['changelog'] as $version => $item) {
+                    $lang = isset($item[$locale]) ? $locale : 'en';
+
+                    if (isset($item[$lang])) {
+                        $changelog[] = [
+                            'version' => $version,
+                            'text'    => $item[$lang]
+                        ];
+                    }
+                }
+
+                $row['changelog'] = $changelog;
+            }
         }
 
         return $this->hydrator->hydrateLocalPlugins($plugins);
@@ -240,6 +258,7 @@ class PluginLocalService
             'plugin.author',
             'plugin.link',
             'plugin.support',
+            'plugin.changelog',
 
             'licence.id as __licence_id',
             'licence.host as __licence_host',
