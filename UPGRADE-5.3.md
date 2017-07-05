@@ -27,6 +27,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Added proper expandability to the manual 'SEO URL generation' and the 'HttpCache Warmer' window in `themes/Backend/ExtJs/backend/performance/view/main/multi_request_tasks.js`
 * Added new filter event `Shopware_Controllers_Performance_filterCounts` to `engine/Shopware/Controllers/Backend/Performance.php` to add custom count of the HttpCache warmer URLs
 * Added new filter event `Shopware_Controllers_Seo_filterCounts` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php` to add a custom SEO URL count
+* Added new notify event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php` to be notified when the SEO URLs are generated via cronjob
 
 ### Changes
 
