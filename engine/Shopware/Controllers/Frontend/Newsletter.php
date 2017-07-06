@@ -148,7 +148,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         $content = [];
         while ($row = $result->fetch()) {
-            $row['link'] = $this->Front()->Router()->assemble(['action' => 'detail', 'sID' => $row['id']]);
+            $row['link'] = $this->Front()->Router()->assemble(['action' => 'detail', 'sID' => $row['id'], 'sPage' => $page]);
             $content[] = $row;
         }
 
@@ -198,7 +198,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->View()->sContentItem = $content;
-        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']);
+        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing', 'sPage' => $this->Request()->getParam('sPage', 1)]);
     }
 
     /**
