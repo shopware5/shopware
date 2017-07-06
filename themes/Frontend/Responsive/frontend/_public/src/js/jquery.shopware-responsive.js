@@ -119,9 +119,7 @@
         .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
         .addPlugin('*[data-cookie-permission="true"]', 'swCookiePermission')
         .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
-
-        //Checkout Comment Plugin
-        .addPlugin('*[data-store-user-comment="true"]', 'swStoreCheckoutComment')
+        .addPlugin('*[data-storage-field="true"]', 'swStorageField')
     ;
 
     $(function($) {
