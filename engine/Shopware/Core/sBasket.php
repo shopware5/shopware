@@ -1991,7 +1991,7 @@ class sBasket
     {
         $sErrorMessages = [];
 
-        if (!empty($voucherDetails['restrictarticles']) && strlen($voucherDetails['restrictarticles']) > 5) {
+        if (!empty($voucherDetails['restrictarticles'])) {
             $restrictedArticles = array_filter(explode(';', $voucherDetails['restrictarticles']));
             if (count($restrictedArticles) == 0) {
                 $restrictedArticles[] = $voucherDetails['restrictarticles'];
