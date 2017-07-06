@@ -79,6 +79,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             ->leftJoin('component.fields', 'fields')
             ->leftJoin('elements.data', 'data')
             ->where('emotion.id = :emotionId')
+            ->orderBy('elements.id')
             ->setParameter('emotionId', $emotionId)
             ->getQuery()
             ->getSingleResult(Query::HYDRATE_ARRAY);
@@ -266,9 +267,11 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
                 unset($translations[$key]);
                 continue;
             }
-            if ($translation['objecttype'] === 'emotionElement' && $elementIds[$translation['objectkey']]) {
+            if ($translation['objecttype'] === 'emotionElement' && array_key_exists($translation['objectkey'], $elementIds)) {
                 $translation['objectkey'] = 'elementIndex-' . $elementIds[$translation['objectkey']];
+                continue;
             }
+            unset($translation['objectkey']);
         }
         unset($translation);
 
