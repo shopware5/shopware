@@ -150,6 +150,18 @@ return array_replace_recursive([
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir() . '/html',
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
+        'ignored_url_parameters' => [
+            'utm_source',
+            'utm_medium',
+            'utm_campaign',
+            'utm_content',
+            'gclid',
+            'cx',
+            'ie',
+            'cof',
+            'siteurl',
+            '_ga',
+        ],
     ],
     'session' => [
         'cookie_lifetime' => 0,

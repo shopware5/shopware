@@ -47,15 +47,28 @@ class Store extends BaseStore
     private $lookupOptimization;
 
     /**
+     * @var array
+     */
+    private $ignoredUrlParameters;
+
+    /**
      * @param string   $root
      * @param string[] $cacheCookies
+     * @param bool     $lookupOptimization
+     * @param array    $ignoredUrlParameters
      */
-    public function __construct($root, array $cacheCookies, $lookupOptimization)
-    {
+    public function __construct(
+        string $root,
+        array $cacheCookies,
+        bool $lookupOptimization,
+        array $ignoredUrlParameters
+    ) {
         $this->cacheCookies = $cacheCookies;
 
         parent::__construct($root);
+
         $this->lookupOptimization = $lookupOptimization;
+        $this->ignoredUrlParameters = $ignoredUrlParameters;
     }
 
     /**
@@ -205,7 +218,7 @@ class Store extends BaseStore
      */
     protected function generateCacheKey(Request $request)
     {
-        $uri = $this->sortQueryStringParameters($request->getUri());
+        $uri = $this->processQueryStringParameters($request->getUri());
 
         foreach ($this->cacheCookies as $cookieName) {
             if ($request->cookies->has($cookieName)) {
@@ -217,11 +230,13 @@ class Store extends BaseStore
     }
 
     /**
+     * Process the query url for a better cache hit rate
+     *
      * @param string $url
      *
-     * @return string
+     * @return string $url
      */
-    private function sortQueryStringParameters($url)
+    private function processQueryStringParameters($url)
     {
         $pos = strpos($url, '?');
         if ($pos === false) {
@@ -233,11 +248,39 @@ class Store extends BaseStore
 
         $queryParts = [];
         parse_str($queryString, $queryParts);
-        ksort($queryParts, SORT_STRING);
+
+        $queryParts = $this->sortQueryStringParameters($queryParts);
+        $queryParts = $this->removeIgnoredParameters($queryParts);
 
         $queryString = http_build_query($queryParts);
 
         return $urlPath . $queryString;
+    }
+
+    /**
+     * @param array $queryParts
+     *
+     * @return array
+     */
+    private function removeIgnoredParameters($queryParts)
+    {
+        $queryParts = array_filter($queryParts, function ($k) {
+            return !in_array($k, $this->ignoredUrlParameters);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $queryParts;
+    }
+
+    /**
+     * @param array $queryParts
+     *
+     * @return array
+     */
+    private function sortQueryStringParameters($queryParts)
+    {
+        ksort($queryParts, SORT_STRING);
+
+        return $queryParts;
     }
 
     /**
