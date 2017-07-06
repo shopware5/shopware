@@ -56,7 +56,7 @@ class StoreTest extends TestCase
     {
         $object = $this->createPartialMock(Store::class, []);
         $class = new \ReflectionClass($object);
-        $method = $class->getMethod('sortQueryStringParameters');
+        $method = $class->getMethod('processQueryStringParameters');
         $method->setAccessible(true);
 
         $this->assertSame($expected, $method->invokeArgs($object, [$url]));
