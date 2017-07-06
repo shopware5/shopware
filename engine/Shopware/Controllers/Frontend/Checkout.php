@@ -938,8 +938,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getBasket()
     {
-        $this->updateArticles();
-
         $shippingcosts = $this->getShippingCosts();
 
         $basket = $this->basket->sGetBasket();
