@@ -82,7 +82,7 @@ class DataLoader
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        return $query->execute()->fetch(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetch(\PDO::FETCH_ASSOC) ?: [];
     }
 
     /**
