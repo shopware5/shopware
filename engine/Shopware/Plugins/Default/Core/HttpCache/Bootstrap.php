@@ -143,6 +143,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postUpdate', 'onPostPersist');
 
+        $this->subscribeEvent('Shopware\Models\Site\Site::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Site\Site::postUpdate', 'onPostPersist');
+
         $this->installForm();
 
         return true;
@@ -693,6 +696,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
             case Shopware\Models\Emotion\Emotion::class:
                 $cacheIds[] = 'e' . $entity->getId();
+                break;
+            case Shopware\Models\Site\Site::class:
+                $cacheIds[] = 's' . $entity->getId();
                 break;
         }
 
