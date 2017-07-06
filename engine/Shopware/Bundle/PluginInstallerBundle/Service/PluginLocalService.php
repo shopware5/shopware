@@ -185,11 +185,11 @@ class PluginLocalService
                 $row['description'] = $translations[$locale]['description'];
             }
 
-            if (!empty($row['changelog'])) {
+            if (!empty($row['changes'])) {
+                $row['changes'] = json_decode($row['changes'], true);
                 $changelog = [];
-                $row['changelog'] = json_decode($row['changelog'], true);
 
-                foreach ($row['changelog'] as $version => $item) {
+                foreach ($row['changes'] as $version => $item) {
                     $lang = isset($item[$locale]) ? $locale : 'en';
 
                     if (isset($item[$lang])) {
@@ -258,7 +258,7 @@ class PluginLocalService
             'plugin.author',
             'plugin.link',
             'plugin.support',
-            'plugin.changelog',
+            'plugin.changes',
 
             'licence.id as __licence_id',
             'licence.host as __licence_host',

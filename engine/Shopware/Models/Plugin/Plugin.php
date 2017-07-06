@@ -196,12 +196,6 @@ class Plugin extends ModelEntity
     private $translations;
 
     /**
-     * @var string
-     * @ORM\Column(name="changelog", type="text")
-     */
-    private $changelog;
-
-    /**
      * INVERSE SIDE
      *
      * @var \Shopware\Models\Config\Form[]|ArrayCollection
@@ -757,21 +751,5 @@ class Plugin extends ModelEntity
     public function setInSafeMode($inSafeMode)
     {
         $this->inSafeMode = $inSafeMode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChangelog()
-    {
-        return $this->changelog;
-    }
-
-    /**
-     * @param mixed $changelog
-     */
-    public function setChangelog($changelog)
-    {
-        $this->changelog = $changelog;
     }
 }
