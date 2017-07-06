@@ -17,7 +17,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Added new search builder class `Shopware\Components\Model\SearchBuilder`
 * Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
 * Added new `FunctionNode` for IF-ELSE statements in ORM query builder
-* Added `/address` to robots.txt 
+* Added `/address` to robots.txt
 * Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
 * Added `Shopware\Components\Template\Security` class for all requests.
 * Added whitelist for allowed php functions and php modifiers in smarty
@@ -28,6 +28,8 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Added new filter event `Shopware_Controllers_Performance_filterCounts` to `engine/Shopware/Controllers/Backend/Performance.php` to add custom count of the HttpCache warmer URLs
 * Added new filter event `Shopware_Controllers_Seo_filterCounts` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php` to add a custom SEO URL count
 * Added new notify event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php` to be notified when the SEO URLs are generated via cronjob
+* Added cache ids for static shop pages `s<id>` and HTTP cache invalidation for those
+* Added the cache id `c<id>` for category pages
 
 ### Changes
 
@@ -40,11 +42,13 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
 * Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
 * Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
+* Changed the cache ids for the listing back to a<id> instead of <id>
 
 ### Removals
 
 * Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
 * Removed `eval` from block `frontend_forms_index_headline` in `index.tpl` of `themes\Frontend\Bare\frontend\forms` for `$sSupport.text`
+* Removed ambiguous variant cache ids from the emotion pages (`a<variantId>`)
 
 ## 5.3.0 - RC1
 
@@ -145,7 +149,7 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
     * `Shopware\Components\Emotion\EmotionImporter` - handle emotion imports
     * `Shopware\Components\Emotion\EmotionExporter` - handle emotion exports
     * `Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer` - transform emotion to preset
-    * `Shopware\Components\Emotion\Preset\PresetDataSynchronizer` - uses component handlers to support import / export of emotions  
+    * `Shopware\Components\Emotion\Preset\PresetDataSynchronizer` - uses component handlers to support import / export of emotions
     * `Shopware\Components\Emotion\Preset\PresetInstaller` - installer for preset plugins
     * `Shopware\Components\Emotion\Preset\PresetLoader` - loads presets and refreshes preset data to match current database
     * `Shopware\Components\Emotion\Preset\PresetMetaDataInterface` - interface to use for preset plugin development
