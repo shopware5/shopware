@@ -69,7 +69,7 @@ class EmotionTranslationImporter
         $shops = $this->connection->createQueryBuilder()
             ->select('locale.locale, shop.id, shop.name')
             ->from('s_core_shops', 'shop')
-            ->leftJoin('s', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
+            ->leftJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->execute()
             ->fetchAll(\PDO::FETCH_GROUP);
 
