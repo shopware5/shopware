@@ -210,7 +210,7 @@ class CacheIdCollector
         $cacheIds = [];
 
         foreach ($view->getAssign('sArticles') as $article) {
-            $cacheIds[] = $article['articleID'];
+            $cacheIds[] = 'a' . $article['articleID'];
         }
 
         return $cacheIds;
