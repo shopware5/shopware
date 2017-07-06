@@ -107,7 +107,7 @@ class EmotionTranslationImporter
                     $elementIndex = explode('-', $translation['objectkey']);
                     $key = $elements[$elementIndex[1]];
 
-                    if (!$key) {
+                    if (!isset($key)) {
                         continue 2;
                     }
                     $translation['objectkey'] = $key;
