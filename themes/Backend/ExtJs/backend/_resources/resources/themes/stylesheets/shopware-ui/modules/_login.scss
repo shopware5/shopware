@@ -121,6 +121,7 @@
         	@include border-radius(6px 0 0 6px);
             width: 226px !important;
             line-height: 16px;
+            padding-left: 48px;
         }
 
         .#{$prefix}trigger-cell {
