@@ -58,9 +58,9 @@ class Store extends BaseStore
      * @param array    $ignoredUrlParameters
      */
     public function __construct(
-        string $root,
+        $root,
         array $cacheCookies,
-        bool $lookupOptimization,
+        $lookupOptimization,
         array $ignoredUrlParameters
     ) {
         $this->cacheCookies = $cacheCookies;
@@ -249,12 +249,12 @@ class Store extends BaseStore
         $queryParts = [];
         parse_str($queryString, $queryParts);
 
-        $queryParts = $this->sortQueryStringParameters($queryParts);
         $queryParts = $this->removeIgnoredParameters($queryParts);
+        $queryParts = $this->sortQueryStringParameters($queryParts);
 
         $queryString = http_build_query($queryParts);
 
-        return $urlPath . $queryString;
+        return rtrim($urlPath . $queryString, '?');
     }
 
     /**
