@@ -1279,7 +1279,6 @@ class sAdmin
                 $mainShop->getId(),
             ]
         );
-        $foundOrdersCount = (int) Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
         foreach ($getOrders as $orderKey => $orderValue) {
             $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
@@ -1302,7 +1301,9 @@ class sAdmin
                 'subshopID' => $this->contextService->getShopContext()->getShop()->getId(),
             ]
         );
-
+        
+        
+        $foundOrdersCount = count($getOrders);
         $orderData['orderData'] = $getOrders;
 
         if ($limitEnd != 0) {
