@@ -64,7 +64,13 @@
                         {if $children.active}
                             <li class="navigation--entry" role="menuitem">
                                 {block name="widgets_listing_get_category_categories_item_link"}
-                                    <a href="{$children.link}" title="{$children.name|escape}"
+                                
+                                    {$link = $children.link}
+                                    {if $children.external}
+                                        {$link = $children.external}
+                                    {/if}
+                                    
+                                    <a href="{$link}" title="{$children.name|escape}"
                                        class="navigation--link{if $children.childrenCount} link--go-forward{/if}"
                                        data-category-id="{$children.id}"
                                        data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}">
