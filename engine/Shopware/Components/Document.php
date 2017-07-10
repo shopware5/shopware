@@ -580,7 +580,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if (!empty($checkForExistingDocument['ID'])) {
             // Document already exist. Update date and amount!
             $update = '
-            UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
+            UPDATE `s_order_documents` SET `date` = ?,`amount` = ?
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
             ';
             $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
@@ -588,6 +588,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $amount *= -1;
             }
             Shopware()->Db()->query($update, [
+                    DateTime::createFromFormat('d.m.Y', $this->_config['date'])->format('Y-m-d'),
                     $amount,
                     $typID,
                     $this->_order->userID,
