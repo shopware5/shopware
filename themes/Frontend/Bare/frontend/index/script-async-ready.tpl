@@ -14,7 +14,7 @@
 
         document.asyncReady = function (callback) {
             if (typeof callback === 'function') {
-                callback.call(document);
+                window.setTimeout(callback.apply(document), 0);
             }
         }
     });
