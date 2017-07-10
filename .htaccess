@@ -55,7 +55,7 @@ DirectoryIndex shopware.php
 
 # Enable gzip compression
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/javascript application/json application/x-font-woff image/svg+xml
 </IfModule>
 
 <Files ~ "\.(jpe?g|png|gif|css|js|woff|eot)$">
