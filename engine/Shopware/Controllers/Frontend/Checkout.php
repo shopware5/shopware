@@ -1880,7 +1880,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         /** @var BasketSignatureGeneratorInterface $generator */
         $generator = $this->get('basket_signature_generator');
         $basket = $this->session->offsetGet('sOrderVariables')->getArrayCopy();
-        $signature = $generator->generateSignature($basket, $this->session->get('sUserId'));
+        $signature = $generator->generateSignature($basket['sBasket'], $this->session->get('sUserId'));
 
         /** @var BasketPersister $persister */
         $persister = $this->get('basket_persister');
