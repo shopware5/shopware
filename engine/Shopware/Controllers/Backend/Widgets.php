@@ -437,14 +437,11 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $sql = "
         SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, ordertime AS `date`, status, cleared
         FROM s_order
-        LEFT JOIN s_order_billingaddress ON s_order_billingaddress.userID = s_order.userID
+        LEFT JOIN s_order_billingaddress ON s_order_billingaddress.orderID = s_order.id
         WHERE
             s_order.status != -1
         $addSqlSubshop
         $addSqlPayment
-        AND
-            ordertime >= DATE_SUB(now(),INTERVAL 14 DAY)
-        GROUP BY s_order.id
         ORDER BY ordertime DESC
         LIMIT 20
         ";
