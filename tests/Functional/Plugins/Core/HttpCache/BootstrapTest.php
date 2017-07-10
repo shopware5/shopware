@@ -234,7 +234,11 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Container()->set(
             'http_cache.cache_control',
-            new CacheControl(Shopware()->Container()->get('session'), $config)
+            new CacheControl(
+                Shopware()->Container()->get('session'),
+                $config,
+                Shopware()->Container()->get('events')
+            )
         );
 
         $this->cacheManager->clearHttpCache();

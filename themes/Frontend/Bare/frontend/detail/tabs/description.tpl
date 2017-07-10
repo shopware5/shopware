@@ -66,11 +66,13 @@
         {block name='frontend_detail_description_links_list'}
             <ul class="content--list list--unstyled">
                 {block name='frontend_detail_actions_contact'}
-                    <li class="list--entry">
-                        <a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{"{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}"|escape}">
-                            <i class="icon--arrow-right"></i> {s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
-                        </a>
-                    </li>
+                    {if $sInquiry}
+                        <li class="list--entry">
+                            <a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{"{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}"|escape}">
+                                <i class="icon--arrow-right"></i> {s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
+                            </a>
+                        </li>
+                    {/if}
                 {/block}
 
                 {foreach $sArticle.sLinks as $information}

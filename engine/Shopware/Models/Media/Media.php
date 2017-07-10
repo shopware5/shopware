@@ -2041,6 +2041,14 @@ class Media extends ModelEntity
         $this->articles = $articles;
     }
 
+    public function removeThumbnails()
+    {
+        $thumbnailSizes = $this->getAllThumbnailSizes();
+
+        $this->removeDefaultThumbnails($this->getFileName());
+        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
+    }
+
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
      *
@@ -2054,14 +2062,6 @@ class Media extends ModelEntity
             Shopware()->Models()->persist($article);
         }
         Shopware()->Models()->flush();
-    }
-
-    public function removeThumbnails()
-    {
-        $thumbnailSizes = $this->getAllThumbnailSizes();
-
-        $this->removeDefaultThumbnails($this->getFileName());
-        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 
     /****************************************************************
@@ -2093,7 +2093,9 @@ class Media extends ModelEntity
             }
 
             $mediaService->write($this->path, file_get_contents($this->file->getRealPath()));
-            unlink($this->file->getPathname());
+            if (is_uploaded_file($this->file->getPathname())) {
+                unlink($this->file->getPathname());
+            }
         }
 
         return true;
@@ -2310,9 +2312,9 @@ class Media extends ModelEntity
         }
 
         // make sure that the name don't contains the file extension.
-        $name = str_replace('.' . $extension, '', $name);
+        $name = str_ireplace('.' . $extension, '', $name);
         if ($extension === 'jpeg') {
-            $name = str_replace('.jpg', '', $name);
+            $name = str_ireplace('.jpg', '', $name);
         }
 
         //set the file type using the type mapping

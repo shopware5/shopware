@@ -50,13 +50,19 @@ class CacheControl
     private $config;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param Session         $session
      * @param HttpCacheConfig $config
      */
-    public function __construct(Session $session, HttpCacheConfig $config)
+    public function __construct(Session $session, HttpCacheConfig $config, \Enlight_Event_EventManager $eventManager)
     {
         $this->session = $session;
         $this->config = $config;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -469,14 +475,18 @@ class CacheControl
      */
     private function setContextCookie(Request $request, ShopContextInterface $context, Response $response)
     {
-        $hash = sha1(
-            json_encode($context->getTaxRules()) .
-            json_encode($context->getCurrentCustomerGroup())
-        );
+        $hash = json_encode($context->getTaxRules()) . json_encode($context->getCurrentCustomerGroup());
+
+        $hash = $this->eventManager->filter('Shopware_Plugins_HttpCache_ContextCookieValue', $hash, [
+            'shopContext' => $context,
+            'session' => $this->session,
+            'request' => $request,
+            'response' => $response,
+        ]);
 
         $response->setCookie(
             'x-cache-context-hash',
-            $hash,
+            sha1($hash),
             0,
             $request->getBasePath() . '/',
             ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()

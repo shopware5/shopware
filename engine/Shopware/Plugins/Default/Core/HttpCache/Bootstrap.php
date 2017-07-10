@@ -152,7 +152,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     {
         return new CacheControl(
             $this->get('session'),
-            $this->Config()
+            $this->Config(),
+            $this->get('events')
         );
     }
 

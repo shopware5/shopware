@@ -38,6 +38,18 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         $this->sSYSTEM = Shopware()->System();
     }
 
+    public function preDispatch()
+    {
+        $config = $this->container->get('config');
+
+        if (!$config->get('showTellAFriend')) {
+            throw new Enlight_Controller_Exception(
+                'Tell a friend is not activated for the current shop',
+                404
+            );
+        }
+    }
+
     public function successAction()
     {
         $this->View()->loadTemplate('frontend/tellafriend/index.tpl');
@@ -57,7 +69,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         }
 
         // Get Article-Information
-        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, intval($id));
+        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
         if (empty($sArticle['articleName'])) {
             return $this->forward('index', 'index');
         }

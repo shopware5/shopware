@@ -131,7 +131,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         // But sGetArticleBundlesByArticleID() always returned false.
         $article['sBundles'] = false;
 
-        if (!empty(Shopware()->Config()->InquiryValue)) {
+        if (!empty(Shopware()->Config()->InquiryID)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
                 'sFid' => Shopware()->Config()->InquiryID,
