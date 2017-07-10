@@ -201,6 +201,12 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
          * we have to calculate the the price for the other currency.
          */
         $price = $price * $context->getCurrency()->getFactor();
+        
+        $price = Shopware()->Events()->filter('Shopware_StoreFrontBundle_PriceCalculationService_Filter_Price', $price, [
+            'tax' => $tax,
+            'context' => $context,
+            'customerGroup' => $customerGroup,
+        ]);
 
         /*
          * check if the customer group should see gross prices.
