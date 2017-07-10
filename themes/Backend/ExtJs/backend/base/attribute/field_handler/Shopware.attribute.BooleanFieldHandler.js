@@ -38,6 +38,11 @@ Ext.define('Shopware.attribute.BooleanFieldHandler', {
         field.xtype = 'checkbox';
         field.uncheckedValue = 0;
         field.inputValue = 1;
+
+        if (attribute.get('defaultValue') !== null) {
+            field.checked = parseInt(attribute.get('defaultValue')) === 1;
+        }
+
         return field;
     }
 });
