@@ -77,6 +77,16 @@ Ext.define('Shopware.attribute.Form', {
      */
     translationPlugin: null,
 
+    /**
+     * @var boolean
+     */
+    showSaveButton: true,
+
+    /**
+     * @var integer
+     */
+    currentId: null,
+
     initComponent: function() {
         var me = this;
 
@@ -133,6 +143,8 @@ Ext.define('Shopware.attribute.Form', {
             callback();
             return;
         }
+
+        me.currentId = foreignKey;
 
         if (!me.configLoaded) {
             me.on('config-loaded', function() {
@@ -356,6 +368,21 @@ Ext.define('Shopware.attribute.Form', {
                 fields.push(handler.create(field, attribute));
             }
         });
+
+        if (me.showSaveButton) {
+            fields.push({
+                xtype: 'button',
+                text: '{s name="save_button" namespace="backend/attributes/main"}{/s}',
+                cls: 'secondary',
+                handler: function () {
+                    if (me.currentId) {
+                        me.saveAttribute(me.currentId, function () {
+                            Shopware.Notification.createGrowlMessage('Attribute', '{s name="attributes_has_been_saved" namespace="backend/attributes/main"}{/s}')
+                        });
+                    }
+                }
+            })
+        }
 
         return fields;
     },

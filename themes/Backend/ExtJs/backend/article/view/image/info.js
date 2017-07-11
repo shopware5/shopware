@@ -113,7 +113,8 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             table: 's_articles_img_attributes',
             allowTranslation: false,
             translationForm: me,
-            margin: '10 0 0'
+            margin: '10 0 0',
+            showSaveButton: true
         });
 
         me.items = [
