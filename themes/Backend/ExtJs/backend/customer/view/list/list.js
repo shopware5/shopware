@@ -97,6 +97,16 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
     },
 
     /**
+     * Make the grid statefull
+     */
+    stateful: true,
+
+    /**
+     * StateId (used in the cookiename later)
+     */
+    stateId: 'customer-grid',
+
+    /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
      * @return void

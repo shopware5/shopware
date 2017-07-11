@@ -31,6 +31,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * Make the grid statefull
      */
     stateful: true,
+
     /**
      * StateId (used in the cookiename later)
      */
@@ -126,8 +127,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     initComponent: function () {
         var me = this;
 
-        this.setupStateManager();
-
         me.columns = me.getColumns();
 
         me.tbar = me.getToolbar();
@@ -193,13 +192,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 window.setTimeout(function() { col.setVisible(false); }, 0);
             }
         });
-    },
-
-    setupStateManager: function () {
-        var me = this;
-        me.stateManager = new Ext.state.LocalStorageProvider({ });
-
-        Ext.state.Manager.setProvider(me.stateManager);
     },
 
     /**
