@@ -248,6 +248,10 @@ Ext.define('Shopware.ModuleManager', {
         config._isMainWindow = false;
         config.content = content;
 
+        // Delete id before passing the config object to the SimpleModule to avoid collision.
+        // ExtJS generates a unique id if the id is missing
+        delete config.id;
+
         // Create the window and set it as the main window of the sub application
         contentWindow = Ext.create('Shopware.window.SimpleModule', config);
         contentWindow.show();
