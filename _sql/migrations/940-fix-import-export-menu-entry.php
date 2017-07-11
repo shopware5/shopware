@@ -32,32 +32,31 @@ class Migrations_Migration940 extends Shopware\Components\Migrations\AbstractMig
     private function updateMenuEntry()
     {
         $sql = <<<SQL
-SET @old = (SELECT id FROM s_core_menu
-WHERE name = 'Import/Export' AND (controller = 'ImportExport' OR controller = 'PluginManager') AND active = 1 LIMIT 1);
+SELECT id FROM s_core_menu WHERE name = 'Import/Export Advanced'
+AND controller = 'SwagImportExport' LIMIT 1;
 SQL;
-        $this->addSql($sql);
 
-        $sql = <<<SQL
-SET @new = (SELECT id FROM s_core_menu
-WHERE name = 'Import/Export Advanced' AND controller = 'SwagImportExport' AND active = 1 LIMIT 1);
+        $pluginMenuExists = $this->connection->query($sql)->fetchColumn();
+
+        if ($pluginMenuExists) {
+            $sql = <<<SQL
+DELETE FROM s_core_menu WHERE name = 'Import/Export' AND
+(controller = 'ImportExport' OR controller = 'PluginManager') LIMIT 1;
 SQL;
-        $this->addSql($sql);
+            $this->addSql($sql);
 
-        $sql = <<<SQL
-DELETE FROM s_core_menu WHERE id = @new AND @old IS NOT NULL;
-SQL;
-        $this->addSql($sql);
-
-        $sql = <<<SQL
-UPDATE s_core_menu SET controller = 'SwagImportExport', class = 'sprite-arrow-circle-double-135 contents--import-export'
-WHERE id = @old AND @new IS NOT NULL;
-SQL;
-        $this->addSql($sql);
-
-        $sql = <<<SQL
+            $sql = <<<SQL
 UPDATE s_core_snippets SET value = 'Import/Export'
-WHERE name = 'SwagImportExport' AND value = 'Import/Export Advanced' AND @old IS NOT NULL AND @new IS NOT NULL;
+WHERE name = 'SwagImportExport' AND value = 'Import/Export Advanced';
 SQL;
-        $this->addSql($sql);
+            $this->addSql($sql);
+
+            $sql = <<<SQL
+UPDATE s_core_menu SET name = 'Import/Export',
+active = 1
+WHERE id = $pluginMenuExists;
+SQL;
+            $this->addSql($sql);
+        }
     }
 }
