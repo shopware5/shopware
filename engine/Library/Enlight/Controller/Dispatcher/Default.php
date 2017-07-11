@@ -445,7 +445,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             return true;
         }
         $path = $this->getControllerPath($request);
-        return Enlight_Loader::isReadable($path);
+        return class_exists($path) || Enlight_Loader::isReadable($path);
     }
 
     /**
@@ -491,6 +491,11 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         $class = $this->getControllerClass($request);
         $path = $this->getControllerPath($request);
+
+        if (class_exists($path)) {
+            $class = $path;
+            $path = null;
+        }
 
         try {
             Shopware()->Loader()->loadClass($class, $path);
