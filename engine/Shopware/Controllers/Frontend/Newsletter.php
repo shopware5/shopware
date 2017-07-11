@@ -148,7 +148,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         $content = [];
         while ($row = $result->fetch()) {
-            $row['link'] = $this->Front()->Router()->assemble(['action' => 'detail', 'sID' => $row['id'], 'sPage' => $page]);
+            $row['link'] = $this->Front()->Router()->assemble(['action' => 'detail', 'sID' => $row['id'], 'p' => $page]);
             $content[] = $row;
         }
 
@@ -160,7 +160,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
                 $pages['numbers'][$i]['markup'] = false;
             }
             $pages['numbers'][$i]['value'] = $i;
-            $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'listing', 'sPage' => $i]);
+            $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'listing', 'p' => $i]);
         }
 
         $this->View()->sPage = $page;
@@ -198,7 +198,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->View()->sContentItem = $content;
-        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing', 'sPage' => $this->Request()->getParam('sPage', 1)]);
+        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']) . '?p=' . $this->Request()->getParam('p', 1);
     }
 
     /**
