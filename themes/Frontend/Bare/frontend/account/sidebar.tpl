@@ -146,7 +146,7 @@
                                         {/block}
                                     </a>
                                 </li>
-                            {elseif $sUserLoggedIn}
+                            {elseif $sUserLoggedIn && !$sOneTimeAccount}
                                 <li class="navigation--entry">
                                     <a href="{url module='frontend' controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout" rel="nofollow">
                                         <i class="icon--logout"></i> {s name="AccountLinkLogout2"}{/s}
