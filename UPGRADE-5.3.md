@@ -2,6 +2,10 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.0 
+
+* Added new column `do_not_split` to table `s_search_fields`. Activate to store the values of this field as given into the search index. If not active, the default behaviour is used
+
 ## 5.3.0 - RC2
 
 View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopware/compare/v5.3.0-RC1...v5.3.0-RC2)
