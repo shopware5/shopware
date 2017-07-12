@@ -99,6 +99,10 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         return (this.get('code') !== null);
     },
 
+    code: function() {
+        return this.get('code');
+    },
+
     allowInstall: function() {
         return (
             !this.allowDummyUpdate()
