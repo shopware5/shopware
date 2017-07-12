@@ -409,6 +409,19 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 }
             }
         });
+		
+		items.push({
+            iconCls: 'sprite-store-open',
+            tooltip: '{s name="visit_store_page"}Visit Store{/s}',
+            handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+				window.open('https://store.shopware.com/search?sSearch=' + record.code(),'_swstore');
+            },
+            getClass: function(value, metaData, record) {
+                if (!record.hasStoreData()) {
+                    return Ext.baseCSSPrefix + 'hidden';
+                }
+            }
+        });
 
         return items;
     }
