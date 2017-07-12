@@ -393,14 +393,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             die(json_encode(['success' => false]));
         }
 
-        $fileInfo = pathinfo($file->getClientOriginalName());
-        $extension = $fileInfo['extension'];
-        if (in_array(strtolower($extension), static::$fileUploadBlacklist)) {
-            unlink($file->getPathname());
-            unlink($file);
-            die(json_encode(['success' => false, 'blacklist' => true, 'extension' => $extension]));
-        }
-
         //create a new model and set the properties
         $media = new Media();
 
@@ -425,12 +417,13 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media->setUserId(0);
         }
 
-        //set the upload file into the model. The model saves the file to the directory
-        $media->setFile($file);
-
         $this->Response()->setHeader('Content-Type', 'text/plain');
 
-        try { //persist the model into the model manager
+        try {
+            //set the upload file into the model. The model saves the file to the directory
+            $media->setFile($file);
+
+            //persist the model into the model manager
             Shopware()->Models()->persist($media);
             Shopware()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
@@ -446,7 +439,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             die(json_encode(['success' => true, 'data' => $data[0]]));
         } catch (\Exception $e) {
-            die(json_encode(['success' => false, 'message' => $e->getMessage()]));
+            unlink($file->getPathname());
+
+            die(json_encode(['success' => false, 'message' => $e->getMessage(), 'exception' => $this->parseExceptionForResponse($e)]));
         }
     }
 
@@ -616,20 +611,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
     public function singleReplaceAction()
     {
-        $file = $_FILES['file'];
-        $fileInfo = pathinfo($file['name']);
-        $fileExtension = strtolower($fileInfo['extension']);
-        $file['name'] = $fileInfo['filename'] . '.' . $fileExtension;
-        $_FILES['file']['name'] = $file['name'];
-
-        if (in_array($fileExtension, self::$fileUploadBlacklist)) {
-            unlink($file);
-
-            $this->View()->assign(['success' => false, 'message' => 'file type is in blacklist']);
-
-            return;
-        }
-
         $fileBag = new FileBag($_FILES);
         $file = $fileBag->get('file');
         $mediaId = $this->request->get('mediaId');
@@ -639,7 +620,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         try {
             $mediaReplaceService->replace($mediaId, $file);
         } catch (\Exception $exception) {
-            $this->View()->assign(['success' => false, 'message' => $exception->getMessage()]);
+            unlink($file->getPathname());
+            $this->View()->assign([
+                'success' => false,
+                'message' => $exception->getMessage(),
+                'exception' => $this->parseExceptionForResponse($exception),
+            ]);
 
             return;
         }
@@ -1149,5 +1135,18 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             ->setParameter('albumId', $albumId);
 
         return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Exception $exception
+     *
+     * @return array
+     */
+    private function parseExceptionForResponse(\Exception $exception)
+    {
+        return array_merge(
+            json_decode(json_encode($exception), true),
+            ['_class' => get_class($exception)]
+        );
     }
 }

@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
         if (me.rowIndex >= length) {
             Shopware.Notification.createGrowlMessage(
                 '',
-                '{s name="mediaManager/replaceWindiw/window/saved"}{/s}'
+                '{s name="mediaManager/replaceWindow/window/saved"}{/s}'
             );
             mediaManager.mediaStore.load({
                 callback: function() {

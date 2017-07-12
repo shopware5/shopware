@@ -27,12 +27,12 @@
   * This components provides an HTML5 file upload with
   * a preview image and a progress bar.
   */
- //{namespace name=backend/component/file_upload}
+ // {namespace name=backend/component/file_upload}
 Ext.define('Ext.util.FileUpload', {
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
     alternateClassName: [ 'Ext.FileUpload', 'Shopware.app.FileUpload' ],
-    alias:'widget.html5fileupload',
-    padding:20,
+    alias: 'widget.html5fileupload',
+    padding: 20,
 
     /**
      * Request URL where the AJAX
@@ -56,7 +56,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @boolean
      */
-    showInput:true,
+    showInput: true,
 
     /**
      * Checks the files amount
@@ -140,13 +140,13 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @object
      */
-    fileInputConfig:{
-        name:'images[]',
+    fileInputConfig: {
+        name: 'images[]',
         fieldLabel: '{s name=file_upload/choose_image}Choose image(s){/s}',
-        buttonText:'{s name=file_upload/select_image}Select image(s){/s}',
-        labelStyle:'font-weight: 700',
-        labelWidth:125,
-        allowBlank:true,
+        buttonText: '{s name=file_upload/select_image}Select image(s){/s}',
+        labelStyle: 'font-weight: 700',
+        labelWidth: 125,
+        allowBlank: true,
         width: 450,
         buttonConfig: {
 	        cls: 'secondary small',
@@ -161,7 +161,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @string
      */
-    dropZoneCls:'-dropzone',
+    dropZoneCls: '-dropzone',
 
     /**
      * Class name for the drop zone which will
@@ -170,7 +170,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @string
      */
-    dropZoneOverCls:'dropzone-over',
+    dropZoneOverCls: 'dropzone-over',
 
     /**
      * Class name for the drop zone which will
@@ -179,7 +179,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @string
      */
-    dropZoneDropCls:'dropzone-drop',
+    dropZoneDropCls: 'dropzone-drop',
 
     /**
      * Default text for the drop zone
@@ -214,8 +214,8 @@ Ext.define('Ext.util.FileUpload', {
      */
     dropItemTpl: [
         '{literal}<div class="{infoCls}">',
-            '<p><strong>Name:</strong> {name:ellipsis(30)}</p>',
-            '<p><strong>Gr&ouml;&szlig;e:</strong> {size}kB</p>',
+        '<p><strong>Name:</strong> {name:ellipsis(30)}</p>',
+        '<p><strong>Gr&ouml;&szlig;e:</strong> {size}kB</p>',
         '</div>{/literal}'
     ],
 
@@ -287,9 +287,11 @@ Ext.define('Ext.util.FileUpload', {
         messageTitle: '{s name=file_upload/upload_ready_title}Media manager{/s}',
         legacyMessage: '{s name=file_upload/legacy_message}Your browser doesn\'t support the necessary feature to support drag &drop uploads.{/s}',
         maxUploadSizeTitle: '{s name=file_upload/max_upload_size_title}The file exceeds the file size limit{/s}',
-        maxUploadSizeText: "{s name=file_upload/max_upload_size_text}The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.{/s}",
-        blackListTitle:'{s name=file_upload/black_list_title}Blacklist{/s}',
-        blackListMessage:"{s name=file_upload/black_list_message}File extension [0] isn't allowed{/s}"
+        maxUploadSizeText: '{s name=file_upload/max_upload_size_text}The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.{/s}',
+        extensionNotAllowedTitle: '{s name=file_upload/extension_not_allowed_title}File extension not allowed{/s}',
+        extensionNotAllowedText: '{s name=file_upload/extension_not_allowed_title}The selected file extension is not allowed. Please select another file to upload.{/s}',
+        blackListTitle: '{s name=file_upload/black_list_title}Blacklist{/s}',
+        blackListMessage: "{s name=file_upload/black_list_message}File extension [0] isn't allowed{/s}"
 
     },
     /**
@@ -298,7 +300,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.items || [];
@@ -316,10 +318,10 @@ Ext.define('Ext.util.FileUpload', {
         } else {
             // Force the browser to display the input field
             me.showInput = true;
-            //me.showLegacyBrowserNotice = true;
+            // me.showLegacyBrowserNotice = true;
             me.enablePreviewImage = false;
 
-            if(me.hideOnLegacy) {
+            if (me.hideOnLegacy) {
                 me.showInput = false;
                 me.showLegacyBrowserNotice = false;
                 me.hidden = true;
@@ -328,9 +330,9 @@ Ext.define('Ext.util.FileUpload', {
 
         // Create the file input field if necessary
         if (me.showInput) {
-        	if(me.showLegacyBrowserNotice) {
+        	if (me.showLegacyBrowserNotice) {
 	            me.fileInputConfig.supportText = me.snippets.legacyMessage;
-            }
+        }
 
             me.fileInput = me.createFileInputField();
             me.items.push(me.fileInput);
@@ -340,11 +342,11 @@ Ext.define('Ext.util.FileUpload', {
          * Add generic function to display an error if the
          * file excesses the configured file size limit.
          */
-        if(me.maxSizeErrorFunction == Ext.emptyFn) {
+        if (me.maxSizeErrorFunction == Ext.emptyFn) {
             me.maxSizeErrorFunction = me.maxSizeErrorCallback;
         }
 
-        //event will be fired when one file uploaded.
+        // event will be fired when one file uploaded.
         me.addEvents('fileUploaded', 'uploadReady');
         me.callParent(arguments);
     },
@@ -354,7 +356,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @return [object]
      */
-    createDropZone:function () {
+    createDropZone: function () {
         var me = this, dropZone, text;
 
         text = Ext.create('Ext.Component', {
@@ -391,10 +393,10 @@ Ext.define('Ext.util.FileUpload', {
         // Create the drop zone
         me.dropZone.removeAll();
 
-        //create default drop zone
+        // create default drop zone
         var text = Ext.create('Ext.Component', {
             renderTpl: me.createDropZoneTemplate(),
-            tpl : me.createDropZoneTemplate(),
+            tpl: me.createDropZoneTemplate(),
             renderData: {
                 text: me.dropZoneText
             }
@@ -416,7 +418,7 @@ Ext.define('Ext.util.FileUpload', {
             '{literal}<div class="inner-dropzone">',
                 '<span class="text">',
                     '<tpl if="actualQuantity">',
-                        "{actualQuantity} " + me.snippets.filesFrom + " {totalQuantity}&nbsp;",
+                        '{actualQuantity} ' + me.snippets.filesFrom + ' {totalQuantity}&nbsp;',
                     '</tpl>',
                     '{text}',
                 '</span>',
@@ -429,7 +431,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @return void
      */
-    createDropZoneEvents:function () {
+    createDropZoneEvents: function () {
         var me = this, el = me.dropZone.getEl().dom;
 
         el.addEventListener('dragenter', function (event) {
@@ -469,9 +471,7 @@ Ext.define('Ext.util.FileUpload', {
                 files = event.dataTransfer.files;
             }
             me.iterateFiles(files);
-
         }, false);
-
     },
 
     /**
@@ -479,7 +479,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @return [object] file
      */
-    createFileInputField:function () {
+    createFileInputField: function () {
         var me = this, file, el, ret;
 
         var config = Ext.apply(me.inputConfig, me.fileInputConfig);
@@ -491,13 +491,13 @@ Ext.define('Ext.util.FileUpload', {
         file.on('afterrender', function () {
             el = file.fileInputEl.dom;
 
-            if(!me.showLegacyBrowserNotice) {
+            if (!me.showLegacyBrowserNotice) {
                 el.setAttribute('multiple', 'multiple');
                 el.setAttribute('size', '5');
             }
         }, me);
 
-        if(Ext.isIE || Ext.isSafari) {
+        if (Ext.isIE || Ext.isSafari) {
 	        me.form = Ext.create('Ext.form.Panel', {
 		        unstyled: true,
 		        layout: 'anchor',
@@ -511,12 +511,12 @@ Ext.define('Ext.util.FileUpload', {
         file.on('change', function(field) {
             var fileField = field.getEl().down('input[type=file]').dom;
 
-            if(Ext.isIE || Ext.isSafari) {
+            if (Ext.isIE || Ext.isSafari) {
 	            me.form.getForm().submit({
 	            	method: 'POST',
-                    success: function() {
+                success: function() {
                     	me.fireEvent('uploadReady', null);
-                    }
+                }
 	            });
 	            return false;
             }
@@ -528,11 +528,9 @@ Ext.define('Ext.util.FileUpload', {
                     timeout = null;
                 }, 10);
             });
-
         }, me);
 
         return ret;
-
     },
 
     /**
@@ -540,18 +538,17 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @param [object] files
      */
-    iterateFiles:function (files) {
+    iterateFiles: function (files) {
         var me = this;
 
-        if (typeof(files) === 'undefined') {
+        if (typeof (files) === 'undefined') {
             return false;
         }
 
         // Check file amount
-        if(me.checkAmount) {
-            if(files.length > me.maxAmount) {
-
-                if(me.maxAmountErrorFunction) {
+        if (me.checkAmount) {
+            if (files.length > me.maxAmount) {
+                if (me.maxAmountErrorFunction) {
                     me.maxAmountErrorFunction.call();
                 }
 
@@ -579,7 +576,7 @@ Ext.define('Ext.util.FileUpload', {
         var me = this;
 
         // safari does not have a dropzone
-        if(me.dropZone !== Ext.undefined) {
+        if (me.dropZone !== Ext.undefined) {
             // Remove all other elements in the drop zone
             me.dropZone.removeAll();
 
@@ -606,7 +603,7 @@ Ext.define('Ext.util.FileUpload', {
                 items: [ progressBar ]
             });
 
-            //add components to the drop zone
+            // add components to the drop zone
             me.dropZone.add(text);
 
             me.dropZone.add(infoPnl);
@@ -619,7 +616,6 @@ Ext.define('Ext.util.FileUpload', {
                 timeout = null;
             }, 10);
         });
-
     },
 
     /**
@@ -643,19 +639,19 @@ Ext.define('Ext.util.FileUpload', {
      * @return void
      */
     createPreviewImage: function (file) {
-        var reader = new FileReader, img, me = this;
+        var reader = new FileReader(), img, me = this;
 
         reader.onload = (function() {
             return function(event) {
                 var format, progressBar, kbValue, info, infoPnl;
 
                 // Check file type and size
-                if(me.checkType) {
+                if (me.checkType) {
                     format = file.type;
                     format = format.replace(/(.*\/)/i, '');
 
-                    if(!me.in_array(format, me.validTypes)) {
-                        if(me.validTypeErrorFunction) {
+                    if (!me.in_array(format, me.validTypes)) {
+                        if (me.validTypeErrorFunction) {
                             me.validTypeErrorFunction.call();
                         }
                         return false;
@@ -663,15 +659,15 @@ Ext.define('Ext.util.FileUpload', {
                 }
 
                 // Check file size
-                if(me.checkSize && me.maxSize < file.size) {
-                    if(me.maxSizeErrorFunction) {
+                if (me.checkSize && me.maxSize < file.size) {
+                    if (me.maxSizeErrorFunction) {
                         me.maxSizeErrorFunction.call(me, file.size);
                     }
                     return false;
                 }
 
                 // Remove all other elements in the drop zone
-                if(me.initial) {
+                if (me.initial) {
                     me.dropZone.removeAll();
                     me.initial = false;
                 }
@@ -687,7 +683,7 @@ Ext.define('Ext.util.FileUpload', {
                 // Create information panel
                 info = Ext.create('Ext.Component', {
                     renderTpl: me.dropItemTpl,
-                    columnWidth: .7,
+                    columnWidth: 0.7,
                     renderData: {
                         infoCls: me.dropItemInfoCls,
                         name: file.name,
@@ -697,19 +693,17 @@ Ext.define('Ext.util.FileUpload', {
                 });
 
                 // Check if it's an image
-                if((/image/i).test(file.type)) {
-
+                if ((/image/i).test(file.type)) {
                     // Create the preview image
                     img = Ext.create('Ext.container.Container', {
                         cls: me.dropItemImageCls,
                         layout: 'column',
                         items: [{
                             xtype: 'image',
-                            columnWidth: .3,
+                            columnWidth: 0.3,
                             src: event.target.result
                         }, info ]
                     });
-
                 } else {
                     img = Ext.create('Ext.container.Container', {
                         cls: me.dropItemImageCls,
@@ -717,10 +711,9 @@ Ext.define('Ext.util.FileUpload', {
                         items: [{
                             xtype: 'container',
                             cls: 'ico-package',
-                            columnWidth: .3
+                            columnWidth: 0.3
                         }, info ]
                     });
-
                 }
                 // Create information holder panel
                 infoPnl = Ext.create('Ext.panel.Panel', {
@@ -733,7 +726,7 @@ Ext.define('Ext.util.FileUpload', {
                 // Create preview for the other supported file types
 
                 me.uploadFile(file, progressBar, infoPnl);
-            }
+            };
         }(img));
 
         reader.readAsDataURL(file);
@@ -753,7 +746,7 @@ Ext.define('Ext.util.FileUpload', {
 
         progressBar = progressBar || 0;
         infoText = infoText || null;
-        xhr.open("post", me.requestURL, false);
+        xhr.open('post', me.requestURL, false);
 
         // Upload complete
         xhr.addEventListener('load', function(e) {
@@ -765,62 +758,60 @@ Ext.define('Ext.util.FileUpload', {
             }
 
              // Check file size
-            if(me.checkSize && me.maxSize < file.size) {
-                if(me.maxSizeErrorFunction) {
+            if (me.checkSize && me.maxSize < file.size) {
+                if (me.maxSizeErrorFunction) {
                     me.maxSizeErrorFunction.call(me, file.size);
                 }
                 return false;
             }
 
-            //increase progress bar value
+            // increase progress bar value
             if (me.enablePreviewImage) {
                 progressBar.update({ percent: 100 });
             } else {
-
-                if(Ext.isNumeric(progressBar)) {
+                if (Ext.isNumeric(progressBar)) {
                     progressBar++;
                 } else {
                     progressBar.value++;
-                    progressBar.update( { percent: (progressBar.value / count) * 100 } );
+                    progressBar.update({ percent: (progressBar.value / count) * 100 });
                 }
 
-                if(infoText) {
+                if (infoText) {
                     infoText.tpl = me.createDropZoneTemplate();
                     infoText.renderTpl = me.createDropZoneTemplate();
 
                     try {
-                        //update info text panel
+                        // update info text panel
                         infoText.update({
                             actualQuantity: progressBar.value,
                             totalQuantity: count,
                             text: me.snippets.uploadReady
                         });
-                    } catch(e) {
-                        //todo@dr: throw exception
+                    } catch (e) {
+                        // todo@dr: throw exception
                     }
-
                 }
             }
 
             if (target.readyState === 4 && target.status === 200) {
                 try {
                     me.fireEvent('fileUploaded', target);
-                } catch(e) {
-                    //todo@dr: throw exception
+                } catch (e) {
+                    // todo@dr: throw exception
                 }
             }
 
-            //last item? remove progress bar, display initial drop zone area and create a growl message
+            // last item? remove progress bar, display initial drop zone area and create a growl message
             if (infoText && progressBar.value === count) {
                 // safari does not have a dropzone
-                if(me.dropZone !== Ext.undefined) {
+                if (me.dropZone !== Ext.undefined) {
                     // Create the drop zone
                     me.dropZone.removeAll();
 
-                    //create default drop zone
+                    // create default drop zone
                     var text = Ext.create('Ext.Component', {
                         renderTpl: me.createDropZoneTemplate(),
-                        tpl : me.createDropZoneTemplate(),
+                        tpl: me.createDropZoneTemplate(),
                         renderData: {
                             text: me.dropZoneText
                         }
@@ -829,29 +820,42 @@ Ext.define('Ext.util.FileUpload', {
                 }
                 me.fireEvent('uploadReady', target);
                 if (response.success) {
-                    //show info how much files uploaded
+                    // show info how much files uploaded
                     Shopware.Msg.createGrowlMessage(me.snippets.messageTitle, Ext.String.format(me.snippets.messageText, count), 'Media-Manager');
 
-                //check if error message send
+                // check if error message send
                 } else if (response.error) {
                     Shopware.Msg.createGrowlMessage(
                         me.snippets.messageTitle,
                         response.error
                     );
                 } else {
-					// Throw alert box
-					Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
-				}
+                    // Throw alert box
+                    if (response.exception && response.exception._class) {
+                        switch(response.exception._class) {
+                            case 'Shopware\\Bundle\\MediaBundle\\Exception\\MediaFileExtensionNotAllowedException':
+                            case 'Shopware\\Bundle\\MediaBundle\\Exception\\MediaFileExtensionIsBlacklistedException':
+                                Ext.Msg.alert(
+                                    me.snippets.extensionNotAllowedTitle,
+                                    Ext.String.format(me.snippets.extensionNotAllowedText, response.exception.extension)
+                                );
+                                break;
+                            default:
+                                Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
+                        }
+                    } else {
+                        Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
+                    }
+                }
             } else {
                 me.fireEvent('uploadReady', target);
             }
-
         }, false);
 
         // enable CSRF
         xhr.setRequestHeader('X-CSRF-Token', Ext.CSRFService.getToken());
 
-        //send xml http request
+        // send xml http request
         var formData = new FormData();
         formData.append(this.fileField, file);
         xhr.send(formData);
@@ -873,7 +877,7 @@ Ext.define('Ext.util.FileUpload', {
      */
     in_array: function(needle, haystack, argStrict) {
         var key = '',
-            strict = !! argStrict;
+            strict = !!argStrict;
 
         if (strict) {
             for (key in haystack) {

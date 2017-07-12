@@ -22,19 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle;
+namespace Shopware\Bundle\MediaBundle\Exception;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-interface MediaReplaceServiceInterface
+class MediaFileExtensionIsBlacklistedException extends \Exception
 {
     /**
-     * replace the media by the given mediaId with the given file content
-     *
-     * @param int          $mediaId
-     * @param UploadedFile $file
-     *
-     * @throws \Exception
+     * @var string
      */
-    public function replace($mediaId, UploadedFile $file);
+    public $extension;
+
+    public function __construct($extension)
+    {
+        $this->extension = $extension;
+        $message = sprintf('The file extension "%s" is blacklisted.', $extension);
+
+        parent::__construct($message);
+    }
 }

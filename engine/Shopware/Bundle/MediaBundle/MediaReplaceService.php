@@ -24,32 +24,47 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
+use Shopware\Bundle\MediaBundle\Exception\WrongMediaTypeForReplaceException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Media;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MediaReplaceService implements MediaReplaceServiceInterface
 {
-    /** @var MediaServiceInterface */
+    /**
+     * @var MediaServiceInterface
+     */
     private $mediaService;
 
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     private $modelManager;
 
-    /** @var Manager */
+    /**
+     * @var Manager
+     */
     private $thumbnailManager;
 
     /**
-     * @param MediaServiceInterface $mediaService
-     * @param Manager               $thumbnailManager
-     * @param ModelManager          $modelManager
+     * @var MediaExtensionMappingServiceInterface
      */
-    public function __construct(MediaServiceInterface $mediaService, Manager $thumbnailManager, ModelManager $modelManager)
+    private $mappingService;
+
+    /**
+     * @param MediaServiceInterface                 $mediaService
+     * @param Manager                               $thumbnailManager
+     * @param ModelManager                          $modelManager
+     * @param MediaExtensionMappingServiceInterface $mappingService
+     */
+    public function __construct(MediaServiceInterface $mediaService, Manager $thumbnailManager, ModelManager $modelManager, MediaExtensionMappingServiceInterface $mappingService)
     {
         $this->mediaService = $mediaService;
         $this->thumbnailManager = $thumbnailManager;
         $this->modelManager = $modelManager;
+        $this->mappingService = $mappingService;
     }
 
     /**
@@ -57,12 +72,17 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      *
      * @throws \Exception
      */
-    public function replace($mediaId, File $file)
+    public function replace($mediaId, UploadedFile $file)
     {
         $media = $this->modelManager->find(Media::class, $mediaId);
+        $uploadedFileExtension = $this->getExtension($file);
 
-        if (!$this->validateMediaType($media, $file)) {
-            throw new \RuntimeException(sprintf('To replace the media file, an %s file is required', $media->getType()));
+        if ($media->getType() !== $this->mappingService->getType($uploadedFileExtension)) {
+            throw new WrongMediaTypeForReplaceException($media->getType());
+        }
+
+        if (false === $this->mappingService->isAllowed($uploadedFileExtension)) {
+            throw new MediaFileExtensionNotAllowedException($uploadedFileExtension);
         }
 
         $fileContent = file_get_contents($file->getRealPath());
@@ -89,31 +109,31 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @param Media $media
-     * @param File  $file
+     * @param Media        $media
+     * @param UploadedFile $file
      *
      * @return bool
      */
-    private function validateMediaType(Media $media, File $file)
+    private function validateMediaType(Media $media, UploadedFile $file)
     {
-        $uploadedFileExtension = $file->guessExtension();
-        $types = $media->getTypeMapping();
+        $uploadedFileExtension = $this->getExtension($file);
 
-        if (!array_key_exists($uploadedFileExtension, $types)) {
-            $types[$uploadedFileExtension] = Media::TYPE_UNKNOWN;
-        }
-
-        return $media->getType() === $types[$uploadedFileExtension];
+        return $media->getType() === $this->mappingService->getType($uploadedFileExtension);
     }
 
     /**
-     * @param File $file
+     * @param UploadedFile $file
      *
      * @return string
      */
-    private function getExtension(File $file)
+    private function getExtension(UploadedFile $file)
     {
-        $extension = strtolower($file->guessExtension());
+        $extension = $file->getClientOriginalExtension();
+        if (!$extension) {
+            $extension = $file->guessExtension();
+        }
+
+        $extension = strtolower($extension);
 
         switch ($extension) {
             case 'jpeg':

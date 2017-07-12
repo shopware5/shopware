@@ -13,39 +13,39 @@ Ext.onReady(function() {
         Ext.Updater.defaults.indicatorText = '<div class="loading-indicator">Übertrage Daten ...</div>';
     }
 
-    Ext.define("Ext.locale.de.view.View", {
-        override: "Ext.view.View",
-        emptyText: ""
+    Ext.define('Ext.locale.de.view.View', {
+        override: 'Ext.view.View',
+        emptyText: ''
     });
 
-    Ext.define("Ext.locale.de.grid.Panel", {
-        override: "Ext.grid.Panel",
-        ddText: "{0} Zeile(n) ausgewählt"
+    Ext.define('Ext.locale.de.grid.Panel', {
+        override: 'Ext.grid.Panel',
+        ddText: '{0} Zeile(n) ausgewählt'
     });
 
-    Ext.define("Ext.locale.de.TabPanelItem", {
-        override: "Ext.TabPanelItem",
-        closeText: "Diesen Tab schließen"
+    Ext.define('Ext.locale.de.TabPanelItem', {
+        override: 'Ext.TabPanelItem',
+        closeText: 'Diesen Tab schließen'
     });
 
-    Ext.define("Ext.locale.de.form.Basic", {
-        override: "Ext.form.Basic",
-        waitTitle: "Bitte warten..."
+    Ext.define('Ext.locale.de.form.Basic', {
+        override: 'Ext.form.Basic',
+        waitTitle: 'Bitte warten...'
     });
 
-    Ext.define("Ext.locale.de.form.field.Base", {
-        override: "Ext.form.field.Base",
-        invalidText: "Der Wert des Feldes ist nicht korrekt"
+    Ext.define('Ext.locale.de.form.field.Base', {
+        override: 'Ext.form.field.Base',
+        invalidText: 'Der Wert des Feldes ist nicht korrekt'
     });
 
     // changing the msg text below will affect the LoadMask
-    Ext.define("Ext.locale.de.view.AbstractView", {
-        override: "Ext.view.AbstractView",
-        msg: "Übertrage Daten..."
+    Ext.define('Ext.locale.de.view.AbstractView', {
+        override: 'Ext.view.AbstractView',
+        msg: 'Übertrage Daten...'
     });
 
     if (Ext.Date) {
-        Ext.Date.monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+        Ext.Date.monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
         Ext.Date.getShortMonthName = function(month) {
             return Ext.Date.monthNames[month].substring(0, 3);
@@ -54,7 +54,7 @@ Ext.onReady(function() {
         Ext.Date.monthNumbers = {
             Jan: 0,
             Feb: 1,
-            "M\u00e4r": 2,
+            'M\u00e4r': 2,
             Apr: 3,
             Mai: 4,
             Jun: 5,
@@ -70,7 +70,7 @@ Ext.onReady(function() {
             return Ext.Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
         };
 
-        Ext.Date.dayNames = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+        Ext.Date.dayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 
         Ext.Date.getShortDayName = function(day) {
             return Ext.Date.dayNames[day].substring(0, 3);
@@ -78,10 +78,10 @@ Ext.onReady(function() {
     }
     if (Ext.MessageBox) {
         Ext.MessageBox.buttonText = {
-            ok: "OK",
-            cancel: "Abbrechen",
-            yes: "Ja",
-            no: "Nein"
+            ok: 'OK',
+            cancel: 'Abbrechen',
+            yes: 'Ja',
+            no: 'Nein'
         };
 
         // As of 4.0.4, setting the buttonText above does not take effect properly. This should be removable in 4.1.0
@@ -95,7 +95,7 @@ Ext.onReady(function() {
     if (exists('Ext.util.Format')) {
         Ext.util.Format.__number = Ext.util.Format.number;
         Ext.util.Format.number = function(v, format) {
-            return Ext.util.Format.__number(v, format || "0.000,00/i");
+            return Ext.util.Format.__number(v, format || '0.000,00/i');
         };
 
         Ext.apply(Ext.util.Format, {
@@ -107,76 +107,76 @@ Ext.onReady(function() {
         });
     }
 
-    Ext.define("Ext.locale.de.picker.Date", {
-        override: "Ext.picker.Date",
-        todayText: "Heute",
-        minText: "Dieses Datum liegt von dem erstmöglichen Datum",
-        maxText: "Dieses Datum liegt nach dem letztmöglichen Datum",
-        disabledDaysText: "",
-        disabledDatesText: "",
+    Ext.define('Ext.locale.de.picker.Date', {
+        override: 'Ext.picker.Date',
+        todayText: 'Heute',
+        minText: 'Dieses Datum liegt von dem erstmöglichen Datum',
+        maxText: 'Dieses Datum liegt nach dem letztmöglichen Datum',
+        disabledDaysText: '',
+        disabledDatesText: '',
         monthNames: Ext.Date.monthNames,
         dayNames: Ext.Date.dayNames,
-        nextText: "Nächster Monat (Strg/Control + Rechts)",
-        prevText: "Vorheriger Monat (Strg/Control + Links)",
-        monthYearText: "Monat auswählen (Strg/Control + Hoch/Runter, um ein Jahr auszuwählen)",
-        todayTip: "Heute ({0}) (Leertaste)",
-        format: "d.m.Y",
+        nextText: 'Nächster Monat (Strg/Control + Rechts)',
+        prevText: 'Vorheriger Monat (Strg/Control + Links)',
+        monthYearText: 'Monat auswählen (Strg/Control + Hoch/Runter, um ein Jahr auszuwählen)',
+        todayTip: 'Heute ({0}) (Leertaste)',
+        format: 'd.m.Y',
         startDay: 1
     });
 
-    Ext.define("Ext.locale.de.picker.Month", {
-        override: "Ext.picker.Month",
-        okText: "&#160;OK&#160;",
-        cancelText: "Abbrechen"
+    Ext.define('Ext.locale.de.picker.Month', {
+        override: 'Ext.picker.Month',
+        okText: '&#160;OK&#160;',
+        cancelText: 'Abbrechen'
     });
 
-    Ext.define("Ext.locale.de.toolbar.Paging", {
-        override: "Ext.PagingToolbar",
-        beforePageText: "Seite",
-        afterPageText: "von {0}",
-        firstText: "Erste Seite",
-        prevText: "vorherige Seite",
-        nextText: "nächste Seite",
-        lastText: "letzte Seite",
-        refreshText: "Aktualisieren",
-        displayMsg: "Anzeige Eintrag {0} - {1} von {2}",
-        emptyMsg: "Keine Daten vorhanden"
+    Ext.define('Ext.locale.de.toolbar.Paging', {
+        override: 'Ext.PagingToolbar',
+        beforePageText: 'Seite',
+        afterPageText: 'von {0}',
+        firstText: 'Erste Seite',
+        prevText: 'vorherige Seite',
+        nextText: 'nächste Seite',
+        lastText: 'letzte Seite',
+        refreshText: 'Aktualisieren',
+        displayMsg: 'Anzeige Eintrag {0} - {1} von {2}',
+        emptyMsg: 'Keine Daten vorhanden'
     });
 
-    Ext.define("Ext.locale.de.form.field.Text", {
-        override: "Ext.form.field.Text",
-        minLengthText: "Bitte geben Sie mindestens {0} Zeichen ein",
-        maxLengthText: "Bitte geben Sie maximal {0} Zeichen ein",
-        blankText: "Dieses Feld darf nicht leer sein",
-        regexText: "",
+    Ext.define('Ext.locale.de.form.field.Text', {
+        override: 'Ext.form.field.Text',
+        minLengthText: 'Bitte geben Sie mindestens {0} Zeichen ein',
+        maxLengthText: 'Bitte geben Sie maximal {0} Zeichen ein',
+        blankText: 'Dieses Feld darf nicht leer sein',
+        regexText: '',
         emptyText: null
     });
 
-    Ext.define("Ext.locale.de.form.field.Number", {
-        override: "Ext.form.field.Number",
-        minText: "Der Mindestwert für dieses Feld ist {0}",
-        maxText: "Der Maximalwert für dieses Feld ist {0}",
-        nanText: "{0} ist keine Zahl",
-        decimalSeparator: ","
+    Ext.define('Ext.locale.de.form.field.Number', {
+        override: 'Ext.form.field.Number',
+        minText: 'Der Mindestwert für dieses Feld ist {0}',
+        maxText: 'Der Maximalwert für dieses Feld ist {0}',
+        nanText: '{0} ist keine Zahl',
+        decimalSeparator: ','
     });
 
-    Ext.define("Ext.locale.de.form.field.Date", {
-        override: "Ext.form.field.Date",
-        disabledDaysText: "nicht erlaubt",
-        disabledDatesText: "nicht erlaubt",
-        minText: "Das Datum in diesem Feld muss nach dem {0} liegen",
-        maxText: "Das Datum in diesem Feld muss vor dem {0} liegen",
-        invalidText: "{0} ist kein gültiges Datum - es muss im Format {1} eingegeben werden",
-        format: "d.m.Y",
-        altFormats: "j.n.Y|j.n.y|j.n.|j.|j/n/Y|j/n/y|j-n-y|j-n-Y|j/n|j-n|dm|dmy|dmY|j|Y-n-j"
+    Ext.define('Ext.locale.de.form.field.Date', {
+        override: 'Ext.form.field.Date',
+        disabledDaysText: 'nicht erlaubt',
+        disabledDatesText: 'nicht erlaubt',
+        minText: 'Das Datum in diesem Feld muss nach dem {0} liegen',
+        maxText: 'Das Datum in diesem Feld muss vor dem {0} liegen',
+        invalidText: '{0} ist kein gültiges Datum - es muss im Format {1} eingegeben werden',
+        format: 'd.m.Y',
+        altFormats: 'j.n.Y|j.n.y|j.n.|j.|j/n/Y|j/n/y|j-n-y|j-n-Y|j/n|j-n|dm|dmy|dmY|j|Y-n-j'
     });
 
-    Ext.define("Ext.locale.de.form.field.ComboBox", {
-        override: "Ext.form.field.ComboBox",
+    Ext.define('Ext.locale.de.form.field.ComboBox', {
+        override: 'Ext.form.field.ComboBox',
         valueNotFoundText: undefined
     }, function() {
         Ext.apply(Ext.form.field.ComboBox.prototype.defaultListConfig, {
-            loadingText: "Lade Daten ..."
+            loadingText: 'Lade Daten ...'
         });
     });
 
@@ -189,8 +189,8 @@ Ext.onReady(function() {
         });
     }
 
-    Ext.define("Ext.locale.de.form.field.HtmlEditor", {
-        override: "Ext.form.field.HtmlEditor",
+    Ext.define('Ext.locale.de.form.field.HtmlEditor', {
+        override: 'Ext.form.field.HtmlEditor',
         createLinkText: 'Bitte geben Sie die URL für den Link ein:'
     }, function() {
         Ext.apply(Ext.form.field.HtmlEditor.prototype, {
@@ -269,61 +269,61 @@ Ext.onReady(function() {
         });
     });
 
-    Ext.define("Ext.locale.de.grid.header.Container", {
-        override: "Ext.grid.header.Container",
-        sortAscText: "Aufsteigend sortieren",
-        sortDescText: "Absteigend sortieren",
-        lockText: "Spalte sperren",
-        unlockText: "Spalte freigeben (entsperren)",
-        columnsText: "Spalten"
+    Ext.define('Ext.locale.de.grid.header.Container', {
+        override: 'Ext.grid.header.Container',
+        sortAscText: 'Aufsteigend sortieren',
+        sortDescText: 'Absteigend sortieren',
+        lockText: 'Spalte sperren',
+        unlockText: 'Spalte freigeben (entsperren)',
+        columnsText: 'Spalten'
     });
 
-    Ext.define("Ext.locale.de.grid.GroupingFeature", {
-        override: "Ext.grid.GroupingFeature",
+    Ext.define('Ext.locale.de.grid.GroupingFeature', {
+        override: 'Ext.grid.GroupingFeature',
         emptyGroupText: '(Keine)',
         groupByText: 'Dieses Feld gruppieren',
         showGroupsText: 'In Gruppen anzeigen'
     });
 
-    Ext.define("Ext.locale.de.grid.PropertyColumnModel", {
-        override: "Ext.grid.PropertyColumnModel",
-        nameText: "Name",
-        valueText: "Wert",
-        dateFormat: "d.m.Y"
+    Ext.define('Ext.locale.de.grid.PropertyColumnModel', {
+        override: 'Ext.grid.PropertyColumnModel',
+        nameText: 'Name',
+        valueText: 'Wert',
+        dateFormat: 'd.m.Y'
     });
 
-    Ext.define("Ext.locale.de.grid.BooleanColumn", {
-        override: "Ext.grid.BooleanColumn",
-        trueText: "aktiv",
-        falseText: "inaktiv"
+    Ext.define('Ext.locale.de.grid.BooleanColumn', {
+        override: 'Ext.grid.BooleanColumn',
+        trueText: 'aktiv',
+        falseText: 'inaktiv'
     });
 
-    Ext.define("Ext.locale.de.grid.NumberColumn", {
-        override: "Ext.grid.NumberColumn",
+    Ext.define('Ext.locale.de.grid.NumberColumn', {
+        override: 'Ext.grid.NumberColumn',
         format: '0.000,00/i'
     });
 
-    Ext.define("Ext.locale.de.grid.DateColumn", {
-        override: "Ext.grid.DateColumn",
+    Ext.define('Ext.locale.de.grid.DateColumn', {
+        override: 'Ext.grid.DateColumn',
         format: 'd.m.Y'
     });
 
-    Ext.define("Ext.locale.de.form.field.Time", {
-        override: "Ext.form.field.Time",
-        minText: "Die Zeit muss gleich oder nach {0} liegen",
-        maxText: "Die Zeit muss gleich oder vor {0} liegen",
-        invalidText: "{0} ist keine gültige Zeit",
-        format: "H:i"
+    Ext.define('Ext.locale.de.form.field.Time', {
+        override: 'Ext.form.field.Time',
+        minText: 'Die Zeit muss gleich oder nach {0} liegen',
+        maxText: 'Die Zeit muss gleich oder vor {0} liegen',
+        invalidText: '{0} ist keine gültige Zeit',
+        format: 'H:i'
     });
 
-    Ext.define("Ext.locale.de.form.CheckboxGroup", {
-        override: "Ext.form.CheckboxGroup",
-        blankText: "Du mußt mehr als einen Eintrag aus der Gruppe auswählen"
+    Ext.define('Ext.locale.de.form.CheckboxGroup', {
+        override: 'Ext.form.CheckboxGroup',
+        blankText: 'Du mußt mehr als einen Eintrag aus der Gruppe auswählen'
     });
 
-    Ext.define("Ext.locale.de.form.RadioGroup", {
-        override: "Ext.form.RadioGroup",
-        blankText: "Du mußt einen Eintrag aus der Gruppe auswählen"
+    Ext.define('Ext.locale.de.form.RadioGroup', {
+        override: 'Ext.form.RadioGroup',
+        blankText: 'Du mußt einen Eintrag aus der Gruppe auswählen'
     });
 
     /**
@@ -335,13 +335,13 @@ Ext.onReady(function() {
     Ext.define('Ext.app.de.Application', {
         override: 'Ext.app.Application',
 
-        loadingMessage: "[0] wird geladen ..."
+        loadingMessage: '[0] wird geladen ...'
     });
     Ext.define('Shopware.apps.Base.view.element.de.BooleanSelect', {
         override: 'Shopware.apps.Base.view.element.BooleanSelect',
 
         store: [
-            ["", 'Vererbt'],
+            ['', 'Vererbt'],
             [true, 'Ja'],
             [false, 'Nein']
         ]
@@ -402,13 +402,13 @@ Ext.onReady(function() {
     Ext.define('Shopware.form.field.de.TinyMCE', {
         override: 'Shopware.form.field.TinyMCE',
 
-        noSourceErrorText: "Die Quelldateien der TinyMCE-Editor sind nicht in das Projekt aufgenommen"
+        noSourceErrorText: 'Die Quelldateien der TinyMCE-Editor sind nicht in das Projekt aufgenommen'
     });
     Ext.define('Shopware.form.de.PluginPanel', {
         override: 'Shopware.form.PluginPanel',
 
         noFormIdConfiguredErrorText: 'Es wurde keine FormId an die Komponente übergeben',
-        formNotLoadedErrorText: "Das Formular konnte nicht erfolgreich geladen werden",
+        formNotLoadedErrorText: 'Das Formular konnte nicht erfolgreich geladen werden',
 
         snippets: {
             resetButton: 'Zurücksetzen',
@@ -463,13 +463,13 @@ Ext.onReady(function() {
     Ext.define('Shopware.window.plugin.de.Hud', {
         override: 'Shopware.window.plugin.Hud',
 
-        hudTitle: "Elemente-Bibliothek",
+        hudTitle: 'Elemente-Bibliothek',
         hudStoreErrorMessage: function(className) {
             return className + ' benötigt die Eigenschaft "HudStore" zum speichern des Hub-Panels.';
         }
     });
     Ext.apply(Ext.form.VTypes, {
-        passwordText: "Das Feld Passwort ist nicht gültig"
+        passwordText: 'Das Feld Passwort ist nicht gültig'
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
@@ -488,11 +488,13 @@ Ext.onReady(function() {
             filesFrom: 'von',
             messageText: '[0] Dateien hochgeladen',
             messageTitle: 'Medienverwaltung',
-            legacyMessage: "Ihr Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ",
+            legacyMessage: 'Ihr Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ',
             maxUploadSizeTitle: 'Die Datei ist zu groß',
-            maxUploadSizeText: "Die selektierte Datei überschreitet die maximal erlaubte Uploadgröße. Bitte wählen Sie eine andere Datei aus.",
+            maxUploadSizeText: 'Die selektierte Datei überschreitet die maximal erlaubte Uploadgröße. Bitte wählen Sie eine andere Datei aus.',
+            extensionNotAllowedTitle: 'Dateiendung wird nicht unterstützt',
+            extensionNotAllowedText: 'Die Dateiendung \"[0]\" wird nicht unterstützt. Bitte wählen Sie eine andere Datei aus.',
             blackListTitle: 'Blacklist',
-            blackListMessage: "Die Datei [0] ist nicht erlaubt!"
+            blackListMessage: 'Die Datei [0] ist nicht erlaubt!'
         }
     });
     Ext.define('Shopware.de.Notification', {
@@ -521,7 +523,7 @@ Ext.onReady(function() {
     Ext.define('Shopware.grid.de.Association', {
         override: 'Shopware.grid.Association',
         searchComboLabel: 'Suche nach'
-    })
+    });
     Ext.define('Shopware.grid.de.Controller', {
         override: 'Shopware.grid.Controller',
         deleteConfirmTitle: 'Einträge löschen',
@@ -545,7 +547,7 @@ Ext.onReady(function() {
     Ext.define('Shopware.grid.plugin.de.Translation', {
         override: 'Shopware.grid.plugin.Translation',
         snippets: {
-            tooltip: "Übersetzen"
+            tooltip: 'Übersetzen'
         }
     });
     Ext.define('Shopware.apps.Base.view.element.de.ProductBoxLayoutSelect', {
