@@ -5,6 +5,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ## 5.3.0 
 
 * Added new column `do_not_split` to table `s_search_fields`. Activate to store the values of this field as given into the search index. If not active, the default behaviour is used
+* Added new service `shopware_storefront.price_calculator` which calculates the product price. Was formerly a private method in `shopware_storefront.price_calculation_service`
 
 ## 5.3.0 - RC2
 
