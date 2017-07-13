@@ -21,12 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
-
 //{namespace name=backend/config/view/search}
-
 //{block name="backend/config/view/form/search"}
 Ext.define('Shopware.apps.Config.view.form.Search', {
     extend: 'Ext.tab.Panel',
@@ -36,7 +31,7 @@ Ext.define('Shopware.apps.Config.view.form.Search', {
     activeTab: 0,
     deferredRender: false,
 
-    initComponent:function () {
+    initComponent: function() {
         var me = this;
 
         Ext.applyIf(me, {
@@ -77,7 +72,7 @@ Ext.define('Shopware.apps.Config.view.form.Search', {
                 store: 'form.SearchField',
                 searchField: 'name',
                 columns: me.getColumns()
-            },{
+            }, {
                 xtype: 'config-base-detail',
                 items: me.getFormItems()
             }]
@@ -85,7 +80,6 @@ Ext.define('Shopware.apps.Config.view.form.Search', {
     },
 
     getColumns: function() {
-        var me = this;
         return [{
             dataIndex: 'name',
             text: '{s name=search/table/name_text}Name{/s}',
@@ -102,30 +96,36 @@ Ext.define('Shopware.apps.Config.view.form.Search', {
             dataIndex: 'table',
             text: '{s name=search/table/table_text}Table{/s}',
             flex: 1
-        }/*, me.getActionColumn()*/];
+        }];
     },
 
     getFormItems: function() {
-        var me = this;
+        var doNotSplitCheckBox = Ext.create('Ext.form.field.Checkbox', {
+            name: 'do_not_split',
+            fieldLabel: '{s name=search/detail/do_no_split_text}Do not split{/s}',
+            helpText: '{s name=search/detail/do_no_split_help_text}<b>Note:</b> Needs a rebuild of the search index if changed!<br><br>Activate this option to store the values of this table field in the search index as given. Otherwise all characters which are not a letter, number or underscore, will be replaced by a blank character.<br><br>Example: search keywords for order number 1234-5678-90:<br>active: \"1234-5678-90\"<br>inactive: \"1234\", \"5678\", \"90\"{/s}',
+            labelWidth: 120
+        });
+
         return [{
             name: 'name',
             fieldLabel: '{s name=search/detail/name_text}Name{/s}',
             allowBlank: false
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'relevance',
             fieldLabel: '{s name=search/detail/relevance_text}Relevance{/s}'
-        },{
+        }, {
             name: 'field',
             fieldLabel: '{s name=search/detail/field_text}Table field{/s}',
             allowBlank: false
-        },{
+        }, {
             xtype: 'config-element-select',
             name: 'tableId',
             store: 'base.SearchTable',
             fieldLabel: '{s name=search/detail/table_text}Table{/s}',
             allowBlank: false
-        }];
+        }, doNotSplitCheckBox];
     }
 });
 //{/block}

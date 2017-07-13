@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,27 +20,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Config
- * @subpackage Config
- * @version    $Id$
- * @author shopware AG
  */
 
-//{block name="backend/config/model/form/search_field"}
-Ext.define('Shopware.apps.Config.model.form.SearchField', {
-    extend: 'Ext.data.Model',
+use Shopware\Components\Migrations\AbstractMigration;
 
-    fields: [
-        //{block name="backend/config/model/form/search_field/fields"}{/block}
-        { name: 'id', type: 'int' },
-        { name: 'name', type: 'string' },
-        { name: 'field', type: 'string' },
-        { name: 'relevance', type: 'int' },
-        { name: 'table', type: 'string' },
-        { name: 'tableId', type: 'int' },
-        { name: 'do_not_split', type: 'boolean', defaultValue: false }
-    ]
-});
-//{/block}
+class Migrations_Migration943 extends AbstractMigration
+{
+    public function up($modus)
+    {
+        $sql = <<<'EOD'
+ALTER TABLE `s_search_fields` ADD `do_not_split` TINYINT(1) NOT NULL;
+EOD;
+        $this->addSql($sql);
+    }
+}
