@@ -215,11 +215,5 @@
 
         $.subscribe('plugin/swAddArticle/onAddArticle', cartRefresh);
         $.subscribe('plugin/swCollapseCart/onRemoveArticleFinished', cartRefresh);
-
-        $('.is--ctl-detail .reset--configuration').on('click', function () {
-            $.loadingIndicator.open({
-                closeOnClick: false
-            });
-        });
     });
 })(jQuery, window);
