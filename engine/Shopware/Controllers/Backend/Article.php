@@ -2885,7 +2885,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $article->fromArray($data);
 
         Shopware()->Models()->persist($article);
-        Shopware()->Models()->flush();
+        Shopware()->Models()->flush($article);
         if (empty($data['id']) && !empty($data['autoNumber'])) {
             $this->increaseAutoNumber($data['autoNumber'], $article->getMainDetail()->getNumber());
         }
