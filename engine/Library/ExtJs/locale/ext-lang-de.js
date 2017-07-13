@@ -531,7 +531,7 @@ Ext.onReady(function() {
     });
     Ext.define('Shopware.listing.de.FilterPanel', {
         override: 'Shopware.listing.FilterPanel',
-        infoTextSnippet: 'Aktivieren Sie der verschiedenen Felder über die davor angezeigte Checkbox. Aktivierte Felder werden mit einer UND Bedingung verknüpft.',
+        infoTextSnippet: 'Aktivieren Sie die verschiedenen Felder über die angezeigten Checkboxen. Aktivierte Felder werden mit einer UND Bedingung verknüpft.',
         filterButtonText: 'Filter anwenden',
         resetButtonText: 'Filter zurücksetzen'
     });
