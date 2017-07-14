@@ -2332,6 +2332,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 unset($coreTranslation['objectdata']['name']);
                 unset($coreTranslation['objectdata']['description']);
                 unset($coreTranslation['objectdata']['descriptionLong']);
+                unset($coreTranslation['objectdata']['shippingTime']);
                 unset($coreTranslation['objectdata']['keywords']);
                 $coreTranslation['objectkey'] = $variant->getId();
                 $coreTranslation['objecttype'] = 'variant';
@@ -3359,6 +3360,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             unset($articleTranslation['objectdata']['name']);
             unset($articleTranslation['objectdata']['description']);
             unset($articleTranslation['objectdata']['descriptionLong']);
+            unset($articleTranslation['objectdata']['shippingTime']);
             unset($articleTranslation['objectdata']['keywords']);
             $articleTranslation['objectkey'] = $template->getId();
             $articleTranslation['objecttype'] = 'configuratorTemplate';

@@ -49,6 +49,7 @@ class TranslationTest extends TestCase
         $this->assertEquals('Dummy Translation', $listProduct->getName());
         $this->assertEquals('Dummy Translation', $listProduct->getShortDescription());
         $this->assertEquals('Dummy Translation', $listProduct->getLongDescription());
+        $this->assertEquals('Dummy Translation', $listProduct->getShippingTime());
         $this->assertEquals('Dummy Translation', $listProduct->getAdditional());
         $this->assertEquals('Dummy Translation', $listProduct->getKeywords());
         $this->assertEquals('Dummy Translation', $listProduct->getMetaTitle());

@@ -807,6 +807,7 @@ class sRewriteTable
                 'name' => 'txtArtikel',
                 'description_long' => 'txtlangbeschreibung',
                 'description' => 'txtshortdescription',
+                'shippingtime' => 'txtshippingtime',
                 'keywords' => 'txtkeywords',
                 'metaTitle' => 'metaTitle',
             ]);

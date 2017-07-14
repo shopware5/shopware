@@ -209,6 +209,8 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             }, {
                 xtype: 'textfield',
                 name: 'mainDetail[shippingTime]',
+                translationName: 'shippingTime',
+                translatable: true,
                 fieldLabel: me.snippets.deliveryTime
             }, {
                 xtype: 'numberfield',
