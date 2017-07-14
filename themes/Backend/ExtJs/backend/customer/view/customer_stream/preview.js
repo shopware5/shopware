@@ -67,6 +67,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
      */
     defaults: { flex: 1 },
 
+    displayDeleteIcon: false,
+
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
@@ -288,13 +290,25 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
         /* {if {acl_is_allowed privilege=detail}} */
         , {
             xtype: 'actioncolumn',
-            width: 30,
+            width: 60,
             items: [
                 {
                     iconCls: 'sprite-pencil',
                     action: 'editCustomer',
                     handler: function (view, rowIndex, colIndex, item, opts, record) {
                         me.fireEvent('edit', record);
+                    }
+                }, {
+                    action: 'delete',
+                    iconCls: 'sprite-minus-circle-frame',
+                    getClass: function() {
+                        if (!me.displayDeleteIcon) {
+                            return 'x-hidden';
+                        }
+                        return '';
+                    },
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('delete', record);
                     }
                 }
             ]

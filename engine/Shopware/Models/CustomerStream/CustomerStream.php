@@ -34,9 +34,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CustomerStream extends ModelEntity
 {
-    const TYPE_DYNAMIC = 'dynamic';
-    const TYPE_STATIC = 'static';
-
     /**
      * INVERSE SIDE
      *
@@ -75,11 +72,10 @@ class CustomerStream extends ModelEntity
     private $conditions;
 
     /**
-     * @var string
-     * @Assert\NotBlank
-     * @ORM\Column(name="type", type="string", nullable=true)
+     * @var bool
+     * @ORM\Column(name="static", type="boolean", nullable=false)
      */
-    private $type = self::TYPE_DYNAMIC;
+    private $static = false;
 
     /**
      * @var \DateTime
@@ -145,19 +141,6 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getFreezeUp()
@@ -171,5 +154,15 @@ class CustomerStream extends ModelEntity
             $freezeUp = new \DateTime($freezeUp);
         }
         $this->freezeUp = $freezeUp;
+    }
+
+    public function isStatic()
+    {
+        return $this->static;
+    }
+
+    public function setStatic($static)
+    {
+        $this->static = $static;
     }
 }

@@ -198,17 +198,43 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.Preview', {
             store: me.listStore,
-            margin: 10,
-            border: true
+            border: true,
+            margin: '0 0 0 5',
+            flex: 1,
+            displayDeleteIcon: false
+        });
+
+        var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore("Shopware\\Models\\Customer\\Customer");
+        me.addCustomerToStreamSelection = Ext.create('Shopware.form.field.CustomerSingleSelection', {
+            store: customerStore,
+            labelWidth: 150,
+            margin: '0 0 0 5',
+            disabled: true,
+            width: '100%',
+            padding: 0,
+            listeners: {
+                'beforeselect': function(combo, record) {
+                    me.fireEvent('add-customer-to-stream', record);
+                    return false;
+                },
+                'collapse': function() {
+                    me.listStore.load();
+                }
+            }
+        });
+        me.addCustomerToStreamSelection.combo.emptyText = 'Kunden hinzufügen';
+
+        me.gridContainer = Ext.create('Ext.container.Container', {
+            layout: { type: 'vbox', align: 'stretch' },
+            items: [me.addCustomerToStreamSelection, me.gridPanel]
         });
 
         me.streamListing = Ext.create('Shopware.apps.Customer.view.customer_stream.Listing', {
             store: me.streamStore,
             subApp: me.subApp,
             hideHeaders: true,
-            border: true,
-            title: '{s name=stream_listing}{/s}',
-            height: 200,
+            border: false,
+            flex: 1,
             listeners: {
                 'selectionchange': Ext.bind(me.onSelectStream, me)
             }
@@ -254,19 +280,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             handler: Ext.bind(me.onRefreshView, me)
         });
 
-        me.saveButtonContainer = Ext.create('Ext.container.Container', {
-            padding: 5,
-            cls: 'stream-save-button-container',
-            layout: { type: 'vbox', align: 'stretch' },
-            items: [
-                me.saveStreamButton,
-                { xtype: 'container', height: 5 },
-                me.saveNewStreamButton
-            ]
-        });
-
         me.formPanel = Ext.create('Ext.form.Panel', {
-            flex: 4,
+            width: 400,
             bodyCls: 'stream-filter-panel-body',
             layout: { type: 'vbox', align: 'stretch' },
             dockedItems: [{
@@ -277,7 +292,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 border: true,
                 items: [ me.addConditionButton, '->', me.refreshViewButton ]
             }],
-            items: [ me.filterPanel, me.saveButtonContainer ]
+            items: [ me.filterPanel ]
         });
 
         me.metaChart = Ext.create('Shopware.apps.Customer.view.chart.MetaChart');
@@ -293,36 +308,77 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
-            margin: 10,
+            height: 250,
+            disabled: true,
+            border: false,
             autoScroll: true,
             name: 'detail-form',
-            dockedItems: [{
-                xtype: 'toolbar',
-                dock: 'bottom',
-                ui: 'shopware-ui',
-                cls: 'stream-detail-form-toolbar',
-                items: ['->', me.createSaveStreamDetailButton()]
-            }]
+            items: [
+                Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
+                    record: Ext.create('Shopware.apps.Customer.model.CustomerStream')
+                }),
+                {
+                    xtype: 'container',
+                    items: [{
+                        xtype: 'button',
+                        text: '{s name="save"}{/s}',
+                        cls: 'primary',
+                        anchor: '100%',
+                        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                            hidden: true,
+                        /*{/if}*/
+                        handler: Ext.bind(me.onSaveStream, me)
+                    }],
+                    layout: 'anchor',
+                    flex: 1
+                }
+            ]
         });
 
         me.cardContainer = Ext.create('Ext.container.Container', {
-            items: [ me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm ],
-            region: 'center',
-            layout: 'card'
+            items: [ me.gridContainer, me.metaChart, me.streamChartContainer ],
+            layout: 'card',
+            flex: 1
         });
 
-        me.leftContainer = Ext.create('Ext.container.Container', {
+        me.regionContainer = Ext.create('Ext.panel.Panel', {
+            region: 'center',
+            border: true,
+            bodyPadding: 5,
+            layout: { type: 'hbox', align: 'stretch' },
+            items: [
+                me.formPanel,
+                me.cardContainer
+            ],
+            margin: '10 10 10 10',
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                cls: 'stream-save-button-container',
+                padding: 5,
+                layout: { type: 'hbox', align: 'stretch' },
+                items: [
+                    '->',
+                    me.saveNewStreamButton,
+                    { xtype: 'container', height: 5 },
+                    me.saveStreamButton
+                ]
+            }]
+        });
+
+        me.leftContainer = Ext.create('Ext.panel.Panel', {
             region: 'west',
-            width: 400,
+            width: 390,
+            collapsible: true,
+            title: '{s name=stream_listing}{/s}',
             margin: '10 0 10 10',
             layout: { type: 'vbox', align: 'stretch' },
             items: [
-                me.formPanel,
-                { xtype: 'container', height: 10 },
-                me.streamListing
+                me.streamListing,
+                me.streamDetailForm
             ]
         });
-        return [ me.leftContainer, me.cardContainer ];
+        return [ me.leftContainer, me.regionContainer ];
     },
 
     resetFilterPanel: function() {
@@ -350,15 +406,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         return new Ext.menu.Menu({ items: items });
     },
 
-    createSaveStreamDetailButton: function() {
-        var me = this;
-
-        return Ext.create('Ext.button.Button', {
-            text: '{s name=save}{/s}',
-            cls: 'primary',
-            handler: Ext.bind(me.onSaveStreamDetails, me)
-        });
-    },
 
     onSelectInlineStream: function(event, element) {
         var me = this;
@@ -377,10 +424,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.fireEvent('switch-layout', item.layout);
     },
 
-    onSaveStreamDetails: function () {
-        this.fireEvent('save-stream-details');
-    },
-
     onSelectStream: function(selModel, selection){
         this.fireEvent('stream-selected', selection);
     },
@@ -394,7 +437,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
     },
 
     onSaveStream: function() {
-        this.fireEvent('save-edited-stream');
+        this.fireEvent('save-stream');
     },
 
     onSaveNewStream: function() {

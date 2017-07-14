@@ -37,7 +37,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         { ref: 'mainWindow', selector: 'customer-list-main-window' },
         { ref: 'mainToolbar', selector: 'customer-main-toolbar' },
         { ref: 'streamView', selector: 'stream-view' },
-        { ref: 'streamListing', selector: 'customer-stream-listing' }
+        { ref: 'streamListing', selector: 'customer-stream-listing' },
+        { ref: 'streamDetailForm', selector: 'stream-view form[name=detail-form]' },
     ],
 
     mixins: {
@@ -50,28 +51,98 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.control({
             'stream-view': {
                 'switch-layout': me.switchLayout,
-                'save-stream-details': me.saveStreamDetails,
                 'stream-selected': me.streamSelected,
                 'change-auto-index': me.changeAutoIndex,
                 'full-index': me.fullIndex,
-                'save-edited-stream': me.saveEditedStream,
+                'save-stream': me.saveEditedStream,
                 'save-as-new-stream': me.saveAsNewStream,
                 'refresh-stream-views': me.reloadView,
                 'tab-activated': me.onTabActivated,
                 'condition-added': me.updateSaveButtons,
-                'reset-progressbar': me.resetProgressbar
+                'reset-progressbar': me.resetProgressbar,
+                'add-customer-to-stream': me.addCustomerToStream
             },
             'customer-stream-condition-panel': {
                 'condition-removed': me.updateSaveButtons
             },
+            'customer-stream-detail': {
+                'static-changed': me.staticCheckboxChanged
+            },
+            'customer-list': {
+                'delete': me.deleteCustomerFromStream
+            },
             'customer-stream-listing': {
-                'customerstream-edit-item': me.editStream,
                 'index-stream': me.indexStream,
+                'add-stream': me.addStream,
                 'reset-progressbar': me.resetProgressbar
             }
         });
 
         me.callParent(arguments);
+    },
+
+    addCustomerToStream: function(record) {
+        var me = this;
+        var stream = me.getStreamDetailForm().getForm().getRecord();
+
+        if (!stream.get('id')) {
+            return false;
+        }
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=addCustomerToStream}',
+            params: {
+                streamId: stream.get('id'),
+                customerId: record.get('id')
+            },
+            callback: function(operation, success, response) {
+                success = Ext.JSON.decode(response.responseText);
+
+                if (success.success) {
+                    Shopware.Notification.createGrowlMessage('', 'Erfolgreich hinzufügt');
+                } else {
+                    Shopware.Notification.createGrowlMessage('', 'Befindet sich bereits im stream');
+                }
+            }
+        });
+
+        return false;
+    },
+
+    deleteCustomerFromStream: function(record) {
+        var me = this;
+        var stream = me.getStreamDetailForm().getForm().getRecord();
+
+        if (!stream.get('id')) {
+            return false;
+        }
+
+        me.getStreamView().gridPanel.getStore().remove(record);
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=removeCustomerFromStream}',
+            params: {
+                streamId: stream.get('id'),
+                customerId: record.get('id')
+            }
+        });
+    },
+
+    staticCheckboxChanged: function(value) {
+        var me = this;
+        var streamView = me.getStreamView();
+
+        if (value) {
+            streamView.formPanel.setDisabled(true);
+        } else {
+            streamView.formPanel.setDisabled(false);
+        }
+    },
+
+    addStream: function() {
+        this.loadStream(
+            Ext.create('Shopware.apps.Customer.model.CustomerStream')
+        )
     },
 
     fullIndex: function() {
@@ -324,33 +395,49 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         if (form.getForm().isValid()) {
             var stream = Ext.create('Shopware.apps.Customer.model.CustomerStream', form.getForm().getValues());
-            var type = stream.get('type');
             var freezeUp = stream.get('freezeUp');
 
-            stream.set('type', 'dynamic');
             stream.set('freezeUp', null);
 
             window.destroy();
 
             me.saveStream(stream, function() {
-                stream.set('type', type);
                 stream.set('freezeUp', freezeUp);
                 stream.save();
                 me.resetProgressbar();
                 me.getStreamView().resetFilterPanel();
                 me.getStreamView().streamListing.getStore().load();
+                me.loadStream(stream);
             });
         }
     },
 
     saveEditedStream: function() {
         var streamView = this.getStreamView();
-        this.saveStream(streamView.formPanel.getForm().getRecord());
+        var me = this;
+        var record = streamView.formPanel.getForm().getRecord();
+        var streamListing = streamView.streamListing;
+
+        this.saveStream(record, function() {
+            me.resetProgressbar();
+
+            me.preventStreamChanged = true;
+            streamListing.getStore().load({
+                callback: function() {
+                    me.preventStreamChanged = false;
+
+                    streamListing.getSelectionModel().select([
+                        streamListing.getStore().getById(record.get('id'))
+                    ]);
+                }
+            });
+        });
     },
 
     saveStream: function (record, callback) {
         var me = this;
         var streamView = this.getStreamView();
+        var streamDetailForm = me.getStreamDetailForm();
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
             return;
@@ -361,36 +448,59 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             return;
         }
 
+        if (!streamDetailForm.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage('', '{s name="not_valid_stream"}{/s}');
+            return;
+        }
+
+        var before = {
+            'freezeUp': record.get('freezeUp'),
+            'static': record.get('static')
+        };
+
+        streamDetailForm.getForm().updateRecord(record);
         streamView.formPanel.getForm().updateRecord(record);
+
+        if (!record.get('static') && !record.hasConditions()) {
+            Shopware.Notification.createGrowlMessage('', 'Sie müssen Filter definieren');
+            return;
+        }
+
+        var displayMessage = (record.get('static') && !before.static && record.hasConditions());
+        before.static = record.get('static');
+
+        if (displayMessage) {
+            Ext.MessageBox.confirm(
+                'Indexierung',
+                'Möchten Sie die aktuelle Filterung in den Statischen Stream übernehmen?',
+                function (response) {
+                    if (response !== 'yes') {
+                        me.sendSave(record, callback);
+                        return;
+                    }
+
+                    record.set({ freezeUp: null, static: false });
+
+                    me.sendSave(record, function() {
+                        record.set(before);
+                        record.save({ callback: callback });
+                    });
+                }
+            );
+        } else {
+            me.sendSave(record, callback);
+        }
+    },
+
+    sendSave: function(record, callback) {
+        var me = this;
 
         record.save({
             callback: function() {
+                Shopware.Notification.createGrowlMessage('', 'Stream gespeichert');
                 me.indexStream(record, callback);
             }
         });
-    },
-
-    editStream: function(grid, record) {
-        var streamView = this.getStreamView();
-
-        var detail = Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
-            record: record
-        });
-
-        var attributeForm = Ext.create('Shopware.attribute.Form', {
-            table: 's_customer_streams_attributes'
-        });
-
-        streamView.streamDetailForm.removeAll();
-        streamView.streamDetailForm.add(detail);
-
-        streamView.attributeForm = attributeForm;
-        streamView.streamDetailForm.add(attributeForm);
-
-        streamView.streamDetailForm.loadRecord(record);
-        streamView.attributeForm.loadAttribute(record.get('id'));
-
-        streamView.cardContainer.getLayout().setActiveItem(3);
     },
 
     streamSelected: function(selection) {
@@ -401,10 +511,13 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             return;
         }
 
+        streamView.addCustomerToStreamSelection.setDisabled(true);
         if (selection.length <= 0) {
             streamView.resetFilterPanel();
             streamView.listStore.getProxy().extraParams = { };
             streamView.listStore.load();
+            streamView.streamDetailForm.loadRecord({ });
+            streamView.streamDetailForm.setDisabled(true);
         } else {
             me.loadStream(selection[0]);
         }
@@ -418,27 +531,27 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         var streamView = this.getStreamView();
 
         streamView.streamListing.setLoading(true);
+        streamView.addCustomerToStreamSelection.setDisabled(true);
+
+        streamView.gridPanel.displayDeleteIcon = false;
 
         streamView.resetFilterPanel();
+        streamView.formPanel.loadRecord(record);
 
-        if (record.get('type') === 'static') {
+        if (record.get('static')) {
             streamView.formPanel.setDisabled(true);
-        } else {
-            streamView.formPanel.loadRecord(record);
+            streamView.addCustomerToStreamSelection.setDisabled(false);
+            streamView.gridPanel.displayDeleteIcon = true;
         }
 
         streamView.streamListing.setLoading(false);
         streamView.listStore.getProxy().extraParams = {
-            streamId: record.get('id'),
-            conditions: record.get('conditions')
+            streamId: record.get('id')
         };
 
         streamView.listStore.load();
-
-        var active = streamView.cardContainer.getLayout().getActiveItem();
-        if (active.name === 'detail-form') {
-            streamView.cardContainer.getLayout().setActiveItem(0);
-        }
+        streamView.streamDetailForm.loadRecord(record);
+        streamView.streamDetailForm.setDisabled(false);
     },
 
     loadChart: function() {
@@ -461,33 +574,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         metaChartStore.load();
     },
 
-    saveStreamDetails: function() {
-        var me = this;
-        var streamView = me.getStreamView();
-        var streamDetailForm = streamView.streamDetailForm;
-
-        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-            return;
-        /*{/if}*/
-
-        if (!streamDetailForm.getForm().isValid()) {
-            Shopware.Notification.createGrowlMessage('', '{s name="not_valid_stream"}{/s}');
-            return;
-        }
-        var record = streamDetailForm.getRecord();
-        streamDetailForm.getForm().updateRecord(record);
-
-        record.save({
-            callback: function() {
-                me.getStreamListing().getStore().load();
-
-                streamView.attributeForm.saveAttribute(record.get('id'), function() {
-                    me.switchLayout('table');
-                });
-            }
-        });
-    },
-
     indexStream: function(record, callback) {
         var me = this;
 
@@ -495,7 +581,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             return;
         /*{/if}*/
 
-        if (record.get('type') !== 'dynamic') {
+        if (record.get('static')) {
             Ext.callback(callback);
             return;
         }
@@ -505,7 +591,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         Ext.Ajax.request({
             url: '{url controller=CustomerStream action=loadStream}',
             params: {
-                streamId: record.get('id')
+                conditions: record.get('conditions')
             },
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
@@ -602,14 +688,11 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     },
 
     finish: function(requests, callback) {
-        var me = this,
-            streamView = me.getStreamView();
+        var me = this;
 
         if (Ext.isFunction(callback)) {
             callback();
         } else {
-            streamView.listStore.load();
-            streamView.streamListing.getStore().load();
             me.resetProgressbar();
         }
     },

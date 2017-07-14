@@ -203,7 +203,7 @@ class CustomerStream extends Resource
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if (array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -231,11 +231,11 @@ class CustomerStream extends Resource
             throw new ValidationException($violations);
         }
 
-        if ($stream->getType() === CustomerStreamEntity::TYPE_DYNAMIC && $index) {
+        if (!$stream->isStatic() && $index) {
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if (array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -293,10 +293,7 @@ class CustomerStream extends Resource
             $this->manager->flush($stream);
         }
 
-        if ($stream->getFreezeUp() !== null) {
-            return;
-        }
-        if ($stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if ($stream->getFreezeUp() !== null || $stream->isStatic()) {
             return;
         }
 
@@ -330,18 +327,16 @@ class CustomerStream extends Resource
         }
         $stream = $this->manager->find(CustomerStreamEntity::class, $streamId);
 
-        switch ($stream->getType()) {
-            case CustomerStreamEntity::TYPE_DYNAMIC:
+        switch (true) {
+            case $stream->isStatic() || $stream->getFreezeUp():
+                return [new AssignedToStreamCondition($streamId)];
+
+            default:
                 return $this->reflectionHelper->unserialize(
                     json_decode($stream->getConditions(), true),
                     'Serialization error in Customer Stream'
                 );
-
-            case CustomerStreamEntity::TYPE_STATIC:
-                return [new AssignedToStreamCondition($streamId)];
         }
-
-        return [];
     }
 
     /**
