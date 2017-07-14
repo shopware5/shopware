@@ -123,6 +123,11 @@ class DownloadService
         } else {
             throw new \RuntimeException('No Plugin found in archive.');
         }
+
+        // Reset the OPcache to make sure no outdated versions of the unzipped files are loaded from the cache
+        if (extension_loaded('Zend OPcache') && ini_get('opcache.enable')) {
+            opcache_reset();
+        }
     }
 
     /**
