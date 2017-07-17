@@ -513,8 +513,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         if ($this->Request()->has('productBoxLayout')) {
             $boxLayout = $this->Request()->get('productBoxLayout');
-        } elseif ($this->Request()->getParam('sSupplier', null)) {
-            $boxLayout = $this->get('config')->get('manufacturerProductBoxLayout');
         } else {
             $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
                 ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
