@@ -274,6 +274,7 @@ return [
     'pow',
     'prev',
     'printf',
+    'print_r',
     'rad2deg',
     'rand',
     'random_bytes',
@@ -356,6 +357,7 @@ return [
     'usort',
     'utf8_decode',
     'utf8_encode',
+    'var_dump',
     'version_compare',
     'wordwrap',
 ];
