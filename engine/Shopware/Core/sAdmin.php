@@ -1008,63 +1008,18 @@ class sAdmin
      */
     public function sGetCountryList()
     {
-        $countryList = $this->db->fetchAll(
-            'SELECT * FROM s_core_countries ORDER BY position, countryname ASC'
-        );
+        $shopContext = $this->contextService->getShopContext();
+        $locationService = Shopware()->Container()->get( "shopware_storefront.location_service" );
+        $countries = $locationService->getCountries( $shopContext );
+        $countries = Shopware()->Container()->get( "legacy_struct_converter" )->convertCountryStructList( $countries );
 
-        $countryTranslations = $this->sGetCountryTranslation();
-        $stateTranslations = $this->sGetCountryStateTranslation();
-
-        foreach ($countryList as $key => $country) {
-            if (isset($countryTranslations[$country['id']]['active'])) {
-                if (!$countryTranslations[$country['id']]['active']) {
-                    unset($countryList[$key]);
-                    continue;
-                }
-            } else {
-                // Use main config when nothing is set for subshop or if current is main shop (isocode 1)
-                if (!$country['active']) {
-                    unset($countryList[$key]);
-                    continue;
-                }
-            }
-
-            $countryList[$key]['states'] = [];
-            if (!empty($country['display_state_in_registration'])) {
-                // Get country states
-                $states = $this->db->fetchAssoc('
-                    SELECT * FROM s_core_countries_states
-                    WHERE countryID = ? AND active = 1
-                    ORDER BY position, name ASC
-                ', [$country['id']]);
-
-                foreach ($states as $stateId => $state) {
-                    if (isset($stateTranslations[$stateId])) {
-                        $states[$stateId] = array_merge($state, $stateTranslations[$stateId]);
-                    }
-                }
-                $countryList[$key]['states'] = $states;
-            }
-            if (!empty($countryTranslations[$country['id']]['countryname'])) {
-                $countryList[$key]['countryname'] = $countryTranslations[$country['id']]['countryname'];
-            }
-            if (!empty($countryTranslations[$country['id']]['notice'])) {
-                $countryList[$key]['notice'] = $countryTranslations[$country['id']]['notice'];
-            }
-
-            $countryList[$key]['flag'] =
-                ($countryList[$key]['id'] == $this->front->Request()->getPost('country')
-                    || $countryList[$key]['id'] == $this->front->Request()->getPost('countryID')
-                );
-        }
-
-        $countryList = $this->eventManager->filter(
+        $countries = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetCountries_FilterResult',
-            $countryList,
+            $countries,
             ['subject' => $this]
         );
 
-        return $countryList;
+        return $countries;
     }
 
     /**
