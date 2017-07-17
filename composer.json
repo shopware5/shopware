@@ -91,6 +91,9 @@
             "Zend": "engine/Library/",
             "JSMin": "engine/Library/minify/"
         },
+        "psr-4": {
+            "": "engine/Shopware/Bundles/"
+        },
         "classmap": [
             "engine/Shopware/Core/"
         ],

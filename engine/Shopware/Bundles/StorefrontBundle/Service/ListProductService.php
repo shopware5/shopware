@@ -21,18 +21,31 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+namespace StorefrontBundle\Service;
+
+use EventBundle\EventDispatcher;
+use ProductBundle\Gateway\Aggregator\ListingPriceAggregator;
+use ProductBundle\Gateway\Aggregator\VoteAverageAggregator;
 use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
+use StorefrontBundle\Event\ListProductsLoadedEvent;
+use ProductBundle\Struct\ListProduct;
+use ProductBundle\Struct\ProductCollection;
+use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use StorefrontBundle\Struct\ListProduct as StoreFrontListProduct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+class ListProductService
 {
-    public function indexAction(): void
+    /**
+     * @param array $numbers
+     * @param ShopContextInterface $context
+     *
+     * @event ListProductsLoadedEvent
+     *
+     * @return ProductCollection
+     */
+    public function read(array $numbers, ShopContextInterface $context): ProductCollection
     {
-
+        return new ProductCollection();
     }
 }

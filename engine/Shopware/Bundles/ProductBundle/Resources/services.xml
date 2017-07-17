@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="ProductBundle\ProductRepository" id="product.product_repository">
+            <argument id="product.gateway.product_reader" type="service"/>
+            <argument id="product.gateway.price_reader" type="service"/>
+        </service>
+
+        <service class="ProductBundle\Gateway\ListingPriceReader" id="product.gateway.listing_price_reader">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="storefront.common.field_helper" type="service"/>
+            <argument id="cart.tax.calculator" type="service" />
+        </service>
+
+        <service class="ProductBundle\StoreFront\Service\ListProductService" id="product.store_front_service.list_product_service">
+            <argument id="product.product_repository" type="service"/>
+            <argument id="product.gateway.listing_price_reader" type="service"/>
+        </service>
+
+
+
+        <service class="ProductBundle\Gateway\ProductReader" id="product.gateway.product_reader">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="storefront.common.field_helper" type="service"/>
+            <argument id="product.hydrator.product_hydrator" type="service"/>
+            <argument id="events" type="service"/>
+        </service>
+
+        <service class="ProductBundle\Gateway\PriceReader" id="product.gateway.price_reader">
+            <argument id="cart.tax.calculator" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <argument id="storefront.common.field_helper" type="service"/>
+        </service>
+
+
+        <service class="ProductBundle\Hydrator\ProductHydrator" id="product.hydrator.product_hydrator">
+            <argument id="product.hydrator.manufacturer_hydrator" type="service"/>
+            <argument id="product.hydrator.unit_hydrator" type="service"/>
+            <argument id="product.hydrator.tax_hydrator" type="service"/>
+        </service>
+
+        <service class="ProductBundle\Hydrator\TaxHydrator" id="product.hydrator.tax_hydrator"/>
+        <service class="ProductBundle\Hydrator\UnitHydrator" id="product.hydrator.unit_hydrator"/>
+        <service class="ProductBundle\Hydrator\ManufacturerHydrator" id="product.hydrator.manufacturer_hydrator"/>
+
+
+    </services>
+</container>

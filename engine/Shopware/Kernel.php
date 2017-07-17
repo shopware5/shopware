@@ -615,6 +615,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('CartBundle/Domain/services.xml');
         $loader->load('CartBundle/Infrastructure/services.xml');
 
+
         if ($this->isElasticSearchEnabled()) {
             $loader->load('SearchBundleES/services.xml');
         }
@@ -623,8 +624,17 @@ class Kernel implements HttpKernelInterface
             $loader->load($file);
         }
 
+
         $this->addShopwareConfig($container, 'shopware', $this->config);
         $this->addResources($container);
+
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundles/'));
+        $loader->load('ProductBundle/Resources/services.xml');
+        $loader->load('EventBundle/Resources/services.xml');
+        $loader->load('VoteBundle/Resources/services.xml');
+        $loader->load('CategoryBundle/Resources/services.xml');
+
+
 
         $container->addCompilerPass(new EventListenerCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new EventSubscriberCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);

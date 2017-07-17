@@ -21,18 +21,38 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+namespace ProductBundle\Event;
+
+use EventBundle\Event;
+use ProductBundle\Struct\TaxCollection;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+
+class TaxesLoadedEvent extends Event
 {
-    public function indexAction(): void
-    {
+    /**
+     * @var TaxCollection
+     */
+    protected $taxes;
 
+    /**
+     * @var TranslationContext
+     */
+    protected $context;
+
+    public function __construct(TaxCollection $taxes, TranslationContext $context)
+    {
+        $this->taxes = $taxes;
+        $this->context = $context;
+    }
+
+    public function getTaxes(): TaxCollection
+    {
+        return $this->taxes;
+    }
+
+    public function getContext(): TranslationContext
+    {
+        return $this->context;
     }
 }

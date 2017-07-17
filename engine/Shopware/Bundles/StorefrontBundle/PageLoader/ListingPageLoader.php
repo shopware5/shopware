@@ -21,18 +21,25 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
+
+namespace StorefrontBundle\PageLoader;
+
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use StorefrontBundle\Struct\ListingPage;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+class ListingPageLoader
 {
-    public function indexAction(): void
+    /**
+     * @param int $categoryId
+     * @param Criteria $criteria
+     * @param ShopContextInterface $context
+     *
+     * @event ListingPageLoadedEvent
+     *
+     * @return ListingPage
+     */
+    public function get(int $categoryId, Criteria $criteria, ShopContextInterface $context): ListingPage
     {
-
     }
 }

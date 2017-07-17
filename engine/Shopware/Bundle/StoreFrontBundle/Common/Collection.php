@@ -72,24 +72,29 @@ abstract class Collection extends Struct implements \IteratorAggregate
         return array_map($closure, $this->elements);
     }
 
+    public function sort(\Closure $closure)
+    {
+        uasort($this->elements, $closure);
+    }
+
     /**
      * @param string $class
      *
      * @return static
      */
-    public function filterInstance(string $class): Collection
+    public function filterInstance(string $class)
     {
         return $this->filter(function ($item) use ($class) {
             return $item instanceof $class;
         });
     }
 
-    public function filter(\Closure $closure): Collection
+    public function filter(\Closure $closure)
     {
         return new static(array_filter($this->elements, $closure));
     }
 
-    public function slice(int $offset, ?int $length = null): Collection
+    public function slice(int $offset, ?int $length = null)
     {
         return new static(array_slice($this->elements, $offset, $length, true));
     }
@@ -124,7 +129,7 @@ abstract class Collection extends Struct implements \IteratorAggregate
         unset($this->elements[$key]);
     }
 
-    protected function doMerge(Collection $collection): Collection
+    protected function doMerge(Collection $collection)
     {
         return new static(array_merge($this->elements, $collection->getIterator()->getArrayCopy()));
     }

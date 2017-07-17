@@ -21,18 +21,21 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+namespace StorefrontBundle\Controller;
+
+class ListingController extends \Enlight_Controller_Action
 {
-    public function indexAction(): void
+    public function indexAction()
     {
+        //get request id
 
+        //get shop context
+
+        //create criteria by request
+
+        //fetch data over "\StorefrontBundle\PageLoader\ListingPageLoader"
+
+        //use $this->serialize to assign data to view);
     }
 }
