@@ -262,6 +262,7 @@ class LegacyStructConverter
             'blog' => $category->isBlog(),
             'path' => $categoryPath,
             'external' => $category->getExternalLink(),
+            'externalTarget' => $category->getExternalTarget(),
             'hideFilter' => !$category->displayFacets(),
             'hideTop' => !$category->displayInNavigation(),
             'changed' => null,

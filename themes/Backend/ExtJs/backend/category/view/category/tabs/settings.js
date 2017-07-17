@@ -36,10 +36,10 @@
  */
 //{block name="backend/category/view/tabs/settings"}
 Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
-   /**
-    * Parent Element Ext.container.Container
-    * @string
-    */
+    /**
+     * Parent Element Ext.container.Container
+     * @string
+     */
     extend:'Ext.form.Panel',
     /**
      * Register the alias for this class.
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * @boolean
      */
     autoShow : true,
-        /**
+    /**
      * enable auto scroll
      * @boolean
      */
@@ -106,6 +106,9 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         defaultSettingsNameLabel : '{s name=view/settings_default_settings_name_label}Description{/s}',
         defaultSettingsLinkExternalPageLabel : '{s name=view/settings_default_settings_link_external_page_label}Link to an external site{/s}',
         defaultSettingsLinkExternalPageHelp : '{s name=view/settings_default_settings_link_external_page_help}The URL must begin with: http://{/s}',
+        defaultSettingsLinkExternalPageTarget : '{s name=view/settings_default_settings_link_external_page_target}Target for external site{/s}',
+        defaultSettingsLinkExternalPageTargetSelf : '{s name=view/settings_default_settings_link_external_page_target_self}Same window (default){/s}',
+        defaultSettingsLinkExternalPageTargetBlank : '{s name=view/settings_default_settings_link_external_page_target_blank}New window{/s}',
 
         defaultSettingsImageLabel : '{s name=view/settings_default_settings_image_label}Image{/s}',
         defaultSettingsImageButtonText : '{s name=view/settings_default_settings_image_button_text}Select an image{/s}',
@@ -222,18 +225,18 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     registerEvents: function() {
         var me = this;
         /**
-             * Event will be fired when a record is loaded into the settings form.
-             *
-             * This event can easily be captured in the controller
-             * eg.
-             * <code>
-             * this.control({ 'recordloaded' : function(){
+         * Event will be fired when a record is loaded into the settings form.
+         *
+         * This event can easily be captured in the controller
+         * eg.
+         * <code>
+         * this.control({ 'recordloaded' : function(){
              *     console.log('New recored has been loaded.');
              * }
              * </code>
              *
-             * @event recordloaded
-             */
+         * @event recordloaded
+         */
         me.addEvents('recordloaded');
     },
 
@@ -415,6 +418,22 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 name:'external'
             },
             {
+                fieldLabel: me.snippets.defaultSettingsLinkExternalPageTarget,
+                xtype: 'combo',
+                name: 'externalTarget',
+                valueField: 'externalTarget',
+                displayField: 'externalTarget',
+                anchor: '100%',
+                allowBlank: true,
+                store: new Ext.data.SimpleStore({
+                    fields: ['externalTarget'],
+                    data: [
+                        [me.snippets.defaultSettingsLinkExternalPageTargetSelf],
+                        [me.snippets.defaultSettingsLinkExternalPageTargetBlank]
+                    ]
+                })
+            },
+            {
                 xtype:'mediaselectionfield',
                 fieldLabel:me.snippets.defaultSettingsImageLabel,
                 buttonText:me.snippets.defaultSettingsImageButtonText,
@@ -504,18 +523,18 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             defaults : me.defaults,
             disabled : true,
             items : [{
-                    xtype : 'textfield',
-                    fieldLabel  : me.snippets.metaTitle,
-                    name : 'metaTitle'
-                },{
-                    xtype : 'textareafield',
-                    fieldLabel  : me.snippets.metaDescription,
-                    name : 'metaDescription'
-                }, {
-                    xtype : 'textfield',
-                    fieldLabel : me.snippets.metaKeywords,
-                    name : 'metaKeywords'
-                }
+                xtype : 'textfield',
+                fieldLabel  : me.snippets.metaTitle,
+                name : 'metaTitle'
+            },{
+                xtype : 'textareafield',
+                fieldLabel  : me.snippets.metaDescription,
+                name : 'metaDescription'
+            }, {
+                xtype : 'textfield',
+                fieldLabel : me.snippets.metaKeywords,
+                name : 'metaKeywords'
+            }
             ]
         });
     },
