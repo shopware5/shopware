@@ -267,7 +267,7 @@ class Category extends ModelEntity
     private $external;
 
     /**
-     * Where to open the external category page? "_blank" or "_parent"
+     * Controls the target attribute if there is an external link set
      *
      * @var string
      *
@@ -763,7 +763,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * Gets the flag if external source is opened in a new window
+     * Returns the target property for the external link
      *
      * @return string
      */
@@ -773,7 +773,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * Sets the flag if external source is opened in a new window
+     * Sets the target property for the external link
      *
      * @param string $externalTarget
      */
