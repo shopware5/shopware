@@ -145,7 +145,7 @@ class PropertyHydrator extends Hydrator
         $option->setPosition((int) $data['__propertyOption_position']);
 
         if ($data['__propertyOptionAttribute_id']) {
-            $this->attributeHydrator->addAttribute($option, $data, 'propertyOptionAttribute');
+            $this->attributeHydrator->addAttribute($option, $data, 'propertyOptionAttribute', 'core', 'propertyOption');
         }
 
         if (isset($data['__media_id']) && $data['__media_id']) {
