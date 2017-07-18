@@ -55,7 +55,7 @@ SQL;
 UPDATE s_core_menu SET name = 'Import/Export',
 class = 'sprite-arrow-circle-double-135 contents--import-export',
 position = 3,
-active = 1,
+active = 1
 WHERE id = $pluginMenuExists;
 SQL;
             $this->addSql($sql);
