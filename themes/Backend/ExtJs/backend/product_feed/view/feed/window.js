@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
             if(me.record.data.formatId == 0) me.record.data.formatId = 1;
 
             me.formPanel.loadRecord(me.record);
+            me.attributeForm.loadAttribute(me.record.get('id'));
         }
     },
 
