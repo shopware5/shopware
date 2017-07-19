@@ -231,10 +231,10 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
          * eg.
          * <code>
          * this.control({ 'recordloaded' : function(){
-             *     console.log('New recored has been loaded.');
-             * }
-             * </code>
-             *
+         *     console.log('New recored has been loaded.');
+         * }
+         * </code>
+         *
          * @event recordloaded
          */
         me.addEvents('recordloaded');
@@ -425,11 +425,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 displayField: 'externalTarget',
                 anchor: '100%',
                 allowBlank: true,
-                store: new Ext.data.SimpleStore({
-                    fields: ['externalTarget'],
+                editable: true,
+                store: new Ext.data.Store({
+                    fields: [
+                        { name: 'externalTarget' }
+                    ],
                     data: [
-                        [me.snippets.defaultSettingsLinkExternalPageTargetSelf],
-                        [me.snippets.defaultSettingsLinkExternalPageTargetBlank]
+                        { externalTarget: me.snippets.defaultSettingsLinkExternalPageTargetSelf },
+                        { externalTarget: me.snippets.defaultSettingsLinkExternalPageTargetBlank }
                     ]
                 })
             },

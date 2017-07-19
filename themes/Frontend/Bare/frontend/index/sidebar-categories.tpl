@@ -13,7 +13,7 @@
                        data-categoryId="{$category.id}"
                        data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$category.id}}"
                        title="{$category.description|escape}"
-                       {if $category.external}target="{$category.externalTarget}"{/if}>
+                       {if $category.external} target="{$category.externalTarget}"{/if}>
                         {$category.description}
 
                         {if $category.childrenCount}
