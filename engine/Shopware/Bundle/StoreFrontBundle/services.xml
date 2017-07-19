@@ -95,8 +95,10 @@
         </service>
 
         <service id="shopware_storefront.price_calculation_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculationService">
-            <argument type="service" id="shopware_storefront.price_group_discount_gateway"/>
+            <argument type="service" id="shopware_storefront.price_calculator"/>
         </service>
+
+        <service id="shopware_storefront.price_calculator" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculator"/>
 
         <service id="shopware_storefront.cheapest_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
             <argument type="service" id="shopware_storefront.cheapest_price_gateway"/>
