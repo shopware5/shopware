@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
     minimizable: false,
     resizable: false,
     modal: true,
-    width: 610,
+    width: 615,
     maxHeight: 500,
     baseHeight: 210,
     rowHeight: 136,
