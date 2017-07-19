@@ -178,6 +178,12 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Added smarty blocks `frontend_checkout_shipping_payment_core_button_top` and `frontend_checkout_shipping_payment_core_button_top` for shipping
 * Added new Interface for facet result template switch `Shopware\Bundle\SearchBundle\TemplateSwitchable`
 * Added new service `Shopware\Bundle\MediaBundle\CdnOptimizerService` for optimizing remote images on CDNs
+* Added option to control target attribute for external links in categories
+    * Added database column `s_category.external_target`
+    * Added property `externalTarget` in `Shopware\Bundle\StoreFrontBundle\Struct\Category`
+    * Added property `externalTarget` in `Shopware\Models\Category\Category`
+    * Added property `externalTarget` in `Shopware\themes\Backend\ExtJs\backend\category\model\detail`
+    * Added translations for field labels and combo box options
 
 ### Changes
 
@@ -228,6 +234,15 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Refactored backend customer module. Please take a look into the different template files to see what has changed.
 * Changed parameter order of `Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult::__construct()` and added `$suffix` and `$digits`.
 * Changed selection fields in the voucher module. `shopware-form-field-single-selection` is now used instead of the native `combobox` xtype and `shopware-form-field-product-grid` is used for article restriction.
+* Changed templates to support custom targets for category links
+    * `themes/Frontend/Bare/frontend/index/main-navigation.tpl`
+    * `themes/Frontend/Bare/frontend/index/sidebar-categories.tpl`
+    * `themes/Frontend/Bare/frontend/sitemap/index.tpl`
+    * `themes/Frontend/Bare/frontend/sitemap/recurse.tpl`
+    * `engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl`
+* Changed `engine\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator` to support the custom target property
+* Changed `engine\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper` to support the custom target property
+* Changed `engine\Shopware\Components\Compatibility\LegacyStructConverter` to support the custom target property
 
 ### Removals
 
