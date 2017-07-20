@@ -163,10 +163,10 @@ class Image extends ModelEntity
     private $mediaId = null;
 
     /**
-     * The parent category
+     * The parent image
      *
-     * @var Category
-     * @ORM\ManyToOne(targetEntity="Image", inversedBy="children")
+     * @var Image
+     * @ORM\ManyToOne(targetEntity="Image", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
