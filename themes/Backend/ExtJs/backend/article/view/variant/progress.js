@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
         });
 
         me.cancelButton = Ext.create('Ext.button.Button', {
-            text: 'Cancel',
+            text: '{s name=progress/cancel}{/s}',
             anchor: '50%',
             cls: 'secondary',
             margin: '0 10 0 0',
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
         });
 
         me.startButton = Ext.create('Ext.button.Button', {
-            text: 'Start',
+            text: '{s name=progress/start}{/s}',
             anchor: '50%',
             cls: 'primary',
             handler: function() {
