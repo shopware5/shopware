@@ -61,7 +61,7 @@
                         {* Link to the account profile page *}
                         {block name="frontend_account_menu_link_profile"}
                             <li class="navigation--entry">
-                                <a href="{url module='frontend' controller='account' action=profile}" title="{s name="AccountLinkProfile"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'profile'} is--active{/if} rel="nofollow"">
+                                <a href="{url module='frontend' controller='account' action=profile}" title="{s name="AccountLinkProfile"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'profile'} is--active{/if}" rel="nofollow">
                                     {s name="AccountLinkProfile"}{/s}
                                 </a>
                             </li>
