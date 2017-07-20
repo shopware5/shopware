@@ -51,6 +51,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             if (!$categoryId) {
                 throw new \InvalidArgumentException('Argument categoryId missing');
             }
+
+            if (!$this->Request()->has('sSort')) {
+                $default = $this->get('config')->get('defaultListingSorting');
+                $this->Request()->setParam('sSort', $default);
+            }
+
             /** @var $articleModule \sArticles */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($ordernumber, $categoryId, $this->Request());
