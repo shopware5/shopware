@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
     },
 
     /**
-     * @param model
+     * @param stores
      */
     setStores: function(stores) {
         var me = this;

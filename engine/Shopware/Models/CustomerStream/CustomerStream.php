@@ -66,7 +66,7 @@ class CustomerStream extends ModelEntity
     private $description;
 
     /**
-     * @var array
+     * @var string
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
@@ -125,7 +125,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getConditions()
     {
@@ -133,7 +133,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param array $conditions
+     * @param string $conditions
      */
     public function setConditions($conditions)
     {
@@ -148,6 +148,9 @@ class CustomerStream extends ModelEntity
         return $this->freezeUp;
     }
 
+    /**
+     * @param $freezeUp string|\DateTime
+     */
     public function setFreezeUp($freezeUp)
     {
         if (is_string($freezeUp)) {
@@ -156,11 +159,17 @@ class CustomerStream extends ModelEntity
         $this->freezeUp = $freezeUp;
     }
 
+    /**
+     * @return bool
+     */
     public function isStatic()
     {
         return $this->static;
     }
 
+    /**
+     * @param $static bool
+     */
     public function setStatic($static)
     {
         $this->static = $static;

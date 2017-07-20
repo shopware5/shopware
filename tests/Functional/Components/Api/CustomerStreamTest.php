@@ -67,13 +67,14 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
         $data = [
             'name' => 'static stream',
             'customers' => [1],
-            'type' => CustomerStreamEntity::TYPE_STATIC,
+            'static' => true,
         ];
 
         $stream = $this->resource->create($data);
 
         $this->assertInstanceOf(CustomerStreamEntity::class, $stream);
         $this->assertNotNull($stream->getId());
+        $this->assertTrue($stream->isStatic());
 
         $ids = $this->connection->fetchAll(
             'SELECT customer_id FROM s_customer_streams_mapping WHERE stream_id = :streamId',

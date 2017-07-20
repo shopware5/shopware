@@ -219,7 +219,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
                     /**
                      * Member function of the template which formats a date string
                      *
-                     * @param [string] value - Date string in the following format: Y-m-d H:i:s
+                     * @param value [string] value - Date string in the following format: Y-m-d H:i:s
                      * @return [string] - The passed value, formatted with Ext.util.Format.date
                      */
                 formatDate: function (value) {
@@ -230,12 +230,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
                 }
             },
             {
-                    /**
-                     * Member function of the template which format a currency string
-                     * @param [string] values - The currency value to be format
-                     * @param [string] sign - The currency symbol to be displayed
-                     * @return [string] - The passed value, formatted with Ext.util.Format.currency
-                     */
+                /**
+                 * Member function of the template which format a currency string
+                 * @param value [string] - The currency value to be format
+                 * @return [string] - The passed value, formatted with Ext.util.Format.currency
+                 */
                 formatCurrency: function (value) {
                     if (value === Ext.undefined) {
                         return value;

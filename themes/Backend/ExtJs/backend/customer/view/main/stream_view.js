@@ -75,7 +75,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
     },
 
     createDockedItems: function() {
-        return [this.toolbar = this.createToolbar()];
+        this.toolbar = this.createToolbar();
+        return [this.toolbar];
     },
 
     createToolbar: function() {
@@ -99,7 +100,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
     createLayoutButton: function() {
         var me = this;
 
-        return me.layoutButton = Ext.create('Ext.button.Cycle', {
+        me.layoutButton = Ext.create('Ext.button.Cycle', {
             text: '{s name="switch_layout"}{/s}',
             action: 'layout',
             listeners: {
@@ -125,7 +126,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 /*{/if}*/
                 ]
             }
-        })
+        });
+        return me.layoutButton;
     },
     
     createAutoIndexCheckbox: function() {
@@ -135,7 +137,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             value = true;
         }
 
-        return me.autoIndexCheckbox = Ext.create('Ext.form.field.Checkbox', {
+        me.autoIndexCheckbox = Ext.create('Ext.form.field.Checkbox', {
             boxLabel: '{s name="auto_index"}{/s}',
             name: 'autoIndex',
             inputValue: true,
@@ -154,12 +156,13 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 'change': Ext.bind(me.onOnChangeAutoIndex, me)
             }
         });
+        return me.autoIndexCheckbox;
     },
 
     createIndexButton: function() {
         var me = this;
 
-        return me.indexSearchButton = Ext.create('Ext.button.Button', {
+        me.indexSearchButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-blue-document-search-result',
             text: '{s name=analyse_customer}{/s}',
             action: 'index',
@@ -169,6 +172,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
             handler: Ext.bind(me.onIndexSearch, me)
         });
+        return me.indexSearchButton;
     },
 
     createProgressBar: function() {
@@ -191,7 +195,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.listStore = Ext.create('Shopware.apps.Customer.store.Preview');
         me.streamStore = Ext.create('Shopware.apps.Customer.store.CustomerStream', {
             sorters: [
-                { property: 'stream.name', direction: 'ASC'}
+                { property: 'stream.name', direction: 'ASC' }
             ],
             pageSize: 50000
         }).load();
@@ -204,7 +208,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             displayDeleteIcon: false
         });
 
-        var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore("Shopware\\Models\\Customer\\Customer");
+        var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore('Shopware\\Models\\Customer\\Customer');
         me.addCustomerToStreamSelection = Ext.create('Shopware.form.field.CustomerSingleSelection', {
             store: customerStore,
             labelWidth: 150,
@@ -219,14 +223,25 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 },
                 'collapse': function() {
                     me.listStore.load();
+                    me.fireEvent('refresh-stream-list');
+                },
+                'disable': function (elem) {
+                    if (elem.items) {
+                        elem.items.each(function(child) { child.disable(); });
+                    }
+                },
+                'enable': function (elem) {
+                    if (elem.items) {
+                        elem.items.each(function(child) { child.enable(); });
+                    }
                 }
             }
         });
-        me.addCustomerToStreamSelection.combo.emptyText = 'Kunden hinzufügen';
+        me.addCustomerToStreamSelection.combo.emptyText = '{s name="add_customer"}{/s}';
 
         me.gridContainer = Ext.create('Ext.container.Container', {
             layout: { type: 'vbox', align: 'stretch' },
-            items: [me.addCustomerToStreamSelection, me.gridPanel]
+            items: [ me.addCustomerToStreamSelection, me.gridPanel ]
         });
 
         me.streamListing = Ext.create('Shopware.apps.Customer.view.customer_stream.Listing', {
@@ -248,16 +263,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 hidden: true,
             /*{/if}*/
             handler: Ext.bind(me.onSaveStream, me)
-        });
-
-        me.saveNewStreamButton = Ext.create('Ext.button.Button', {
-            text: '{s name="save_new"}{/s}',
-            cls: 'secondary',
-            disabled: true,
-            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-                hidden: true,
-            /*{/if}*/
-            handler: Ext.bind(me.onSaveNewStream, me)
         });
 
         me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
@@ -308,7 +313,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
-            height: 250,
+            height: 255,
             disabled: true,
             border: false,
             autoScroll: true,
@@ -359,8 +364,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 layout: { type: 'hbox', align: 'stretch' },
                 items: [
                     '->',
-                    me.saveNewStreamButton,
-                    { xtype: 'container', height: 5 },
                     me.saveStreamButton
                 ]
             }]
@@ -387,7 +390,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.formPanel.loadRecord(null);
         this.formPanel.setDisabled(false);
         this.saveStreamButton.setDisabled(true);
-        this.saveNewStreamButton.setDisabled(true);
     },
 
     createConditionsMenu: function() {
@@ -406,7 +408,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         return new Ext.menu.Menu({ items: items });
     },
 
-
     onSelectInlineStream: function(event, element) {
         var me = this;
 
@@ -424,7 +425,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.fireEvent('switch-layout', item.layout);
     },
 
-    onSelectStream: function(selModel, selection){
+    onSelectStream: function(selModel, selection) {
         this.fireEvent('stream-selected', selection);
     },
 
@@ -440,16 +441,11 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.fireEvent('save-stream');
     },
 
-    onSaveNewStream: function() {
-        this.fireEvent('save-as-new-stream');
-    },
-
     onRefreshView: function() {
         this.fireEvent('refresh-stream-views');
     },
 
     addCondition: function(handler) {
-        this.saveNewStreamButton.setDisabled(false);
         this.filterPanel.createCondition(handler);
         this.fireEvent('condition-added');
     }

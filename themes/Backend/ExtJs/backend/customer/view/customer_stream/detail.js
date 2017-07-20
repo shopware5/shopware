@@ -47,12 +47,12 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
                 title: '',
                 fields: {
                     name: {
-                        fieldLabel: '{s name=stream_name}{/s}',
+                        fieldLabel: '{s name="stream_name"}{/s}',
                         allowBlank: false
                     },
                     description: {
                         xtype: 'textarea',
-                        fieldLabel: '{s name=stream_description}{/s}'
+                        fieldLabel: '{s name="stream_description"}{/s}'
                     },
                     static: me.createStaticCheckbox,
                     freezeUp: me.createFreezeUp
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
             inputValue: true,
             labelWidth: 130,
             anchor: '100%',
-            fieldLabel: 'Statisch',
+            fieldLabel: '{s name="static"}{/s}',
             listeners: {
                 'change': function(field, newValue) {
                     me.fireEvent('static-changed', newValue);
@@ -90,6 +90,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
             dateCfg: { submitFormat: 'Y-m-d' },
             name: 'freezeUp',
             labelWidth: 130,
+            disabled: true,
             anchor: '100%',
             fieldLabel: '{s name="freeze_up_label"}{/s}',
             helpText: '{s name="freeze_up_help"}{/s}'
