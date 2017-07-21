@@ -498,10 +498,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
+            $assign = $this->View()->getAssign();
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
+            $this->View()->assign($assign);
         } elseif (!empty($categoryContent['template'])) {
             if ($this->View()->templateExists('frontend/listing/' . $categoryContent['template'])) {
+                $assign = $this->View()->getAssign();
                 $this->View()->loadTemplate('frontend/listing/' . $categoryContent['template']);
+                $this->View()->assign($assign);
             } else {
                 $this->get('corelogger')->error(
                     'Missing category template detected. Please correct the template for category "' . $categoryContent['name'] . '".',
@@ -518,15 +522,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
         $facets = $facetFilter->filter($categoryArticles['facets'], $criteria);
         $categoryArticles['facets'] = $facets;
-
-        $this->View()->assign([
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryContent' => $categoryContent,
-            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
-            'params' => $this->Request()->getParams(),
-        ]);
 
         $this->View()->assign($categoryArticles);
         $this->View()->assign('sortings', $sortings);
@@ -550,6 +545,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
         Shopware()->System()->_GET['sCategory'] = $requestCategoryId;
+
+        $this->View()->assign([
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($requestCategoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($requestCategoryId),
+            'sCategoryContent' => $categoryContent,
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
+            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
+            'params' => $this->Request()->getParams(),
+        ]);
 
         return $categoryContent;
     }
