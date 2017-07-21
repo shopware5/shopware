@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Customer.store.QuickView', {
 
     sorters: [{
         property: 'number',
-        direction: 'ASC'
+        direction: 'DESC'
     }],
 
     configure: function() {
