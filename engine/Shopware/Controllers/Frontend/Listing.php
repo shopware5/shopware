@@ -494,6 +494,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
+        $viewData = $this->View()->getAssign();
 
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $this->Response()->setHeader('Content-Type', 'text/xml');
@@ -513,6 +514,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 );
             }
         }
+
+        $this->View()->assign($viewData);
 
         /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
