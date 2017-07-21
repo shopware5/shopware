@@ -519,6 +519,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $facets = $facetFilter->filter($categoryArticles['facets'], $criteria);
         $categoryArticles['facets'] = $facets;
 
+        $this->View()->assign([
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+            'sCategoryContent' => $categoryContent,
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
+            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
+            'params' => $this->Request()->getParams(),
+        ]);
+
         $this->View()->assign($categoryArticles);
         $this->View()->assign('sortings', $sortings);
     }
@@ -541,15 +550,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
         Shopware()->System()->_GET['sCategory'] = $requestCategoryId;
-
-        $this->View()->assign([
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($requestCategoryId),
-            'sBreadcrumb' => $this->getBreadcrumb($requestCategoryId),
-            'sCategoryContent' => $categoryContent,
-            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']],
-            'params' => $this->Request()->getParams(),
-        ]);
 
         return $categoryContent;
     }
