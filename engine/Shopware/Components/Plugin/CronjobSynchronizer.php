@@ -86,7 +86,8 @@ class CronjobSynchronizer
             $this->connection->update('s_crontab', $cronjob, ['id' => $id]);
         } else {
             $cronjob['next'] = new DateTime();
-            $this->connection->insert('s_crontab', $cronjob, ['next' => 'datetime']);
+            $cronjob['end'] = new DateTime();
+            $this->connection->insert('s_crontab', $cronjob, ['next' => 'datetime', 'end' => 'datetime']);
         }
     }
 
