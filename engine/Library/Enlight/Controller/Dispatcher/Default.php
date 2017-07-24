@@ -505,7 +505,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         if (!$this->isDispatchable($request)) {
             throw new Enlight_Controller_Exception(
-                'Controller "' . $request->getControllerName() . '" not found',
+                'Controller "' . $request->getControllerName() . '" not found for request url ' . $this->request->getScheme() . "://" . $this->request->getHttpHost() . $this->request->getRequestUri(),
                 Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
             );
         }
