@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                 },
                 {
                     action: 'delete',
-                    iconCls: 'sprite-minus-circle-frame',
+                    iconCls: 'sprite-cross',
                     getClass: function() {
                         if (!me.displayDeleteIcon) {
                             return 'x-hidden';
