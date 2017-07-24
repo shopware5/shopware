@@ -67,6 +67,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
      */
     defaults: { flex: 1 },
 
+    displayDeleteIcon: false,
+
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
@@ -255,7 +257,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                 return '' +
                     '{s name="invoice_amount_sum"}{/s}: <b>' + me.renderCurrency(record.get('invoice_amount_sum')) + '</b>' +
                     '<br>{s name="average_amount"}{/s}: <b>' + me.renderCurrency(record.get('invoice_amount_avg')) + '</b>' +
-                    '<br>{s name="average_product_amount"}{/s}: <b>' +  me.renderCurrency(record.get('product_avg')) + '</b>';
+                    '<br>{s name="average_product_amount"}{/s}: <b>' + me.renderCurrency(record.get('product_avg')) + '</b>';
             }
         }, {
             header: '{s name="order_header"}{/s}',
@@ -288,13 +290,26 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
         /* {if {acl_is_allowed privilege=detail}} */
         , {
             xtype: 'actioncolumn',
-            width: 30,
+            width: 60,
             items: [
                 {
                     iconCls: 'sprite-pencil',
                     action: 'editCustomer',
                     handler: function (view, rowIndex, colIndex, item, opts, record) {
                         me.fireEvent('edit', record);
+                    }
+                },
+                {
+                    action: 'delete',
+                    iconCls: 'sprite-minus-circle-frame',
+                    getClass: function() {
+                        if (!me.displayDeleteIcon) {
+                            return 'x-hidden';
+                        }
+                        return '';
+                    },
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('delete', record);
                     }
                 }
             ]
@@ -340,7 +355,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
     /**
      * Formats the date column
      *
-     * @param [string] - The order time value
+     * @param value [string] - The order time value
      * @return [string] - The passed value, formatted with Ext.util.Format.date()
      */
     dateColumn: function (value) {

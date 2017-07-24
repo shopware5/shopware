@@ -178,7 +178,10 @@ class CustomerStream extends Resource
                 $row = array_merge($row, $counts[$id]);
             }
 
-            $row['freezeUp'] = $this->updateFreezeUp($id, $row['freezeUp']);
+            if ($this->updateFrozenState($id, $row['freezeUp'], $row['conditions'])) {
+                $row['freezeUp'] = null;
+                $row['static'] = false;
+            }
         }
 
         return ['data' => $data, 'total' => $total];
@@ -203,7 +206,7 @@ class CustomerStream extends Resource
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if (array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -231,11 +234,11 @@ class CustomerStream extends Resource
             throw new ValidationException($violations);
         }
 
-        if ($stream->getType() === CustomerStreamEntity::TYPE_DYNAMIC && $index) {
+        if (!$stream->isStatic() && $index) {
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if (array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -287,16 +290,12 @@ class CustomerStream extends Resource
     {
         $this->checkPrivilege('save');
 
-        $now = new \DateTime();
-        if ($stream->getFreezeUp() < $now) {
+        if ($this->updateFrozenState($stream->getId(), $stream->getFreezeUp(), $stream->getConditions())) {
+            $stream->setStatic(false);
             $stream->setFreezeUp(null);
-            $this->manager->flush($stream);
         }
 
-        if ($stream->getFreezeUp() !== null) {
-            return;
-        }
-        if ($stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if ($stream->getFreezeUp() !== null || $stream->isStatic()) {
             return;
         }
 
@@ -330,18 +329,14 @@ class CustomerStream extends Resource
         }
         $stream = $this->manager->find(CustomerStreamEntity::class, $streamId);
 
-        switch ($stream->getType()) {
-            case CustomerStreamEntity::TYPE_DYNAMIC:
-                return $this->reflectionHelper->unserialize(
-                    json_decode($stream->getConditions(), true),
-                    'Serialization error in Customer Stream'
-                );
-
-            case CustomerStreamEntity::TYPE_STATIC:
-                return [new AssignedToStreamCondition($streamId)];
+        if ($stream->isStatic() || $stream->getFreezeUp()) {
+            return [new AssignedToStreamCondition($streamId)];
         }
 
-        return [];
+        return $this->reflectionHelper->unserialize(
+            json_decode($stream->getConditions(), true),
+            'Serialization error in Customer Stream'
+        );
     }
 
     /**
@@ -371,28 +366,33 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int         $id
-     * @param string|null $freezeUp
+     * Returns true if frozen state has changed
      *
-     * @return string|null
+     * @param $streamId
+     * @param \DateTime|null $freezeUp
+     * @param string         $conditions
+     *
+     * @return bool
      */
-    private function updateFreezeUp($id, $freezeUp)
+    private function updateFrozenState($streamId, \DateTime $freezeUp = null, $conditions)
     {
-        if (!$freezeUp) {
-            return $freezeUp;
-        }
-
         $now = new \DateTime();
-
-        if ($freezeUp >= $now) {
-            return $freezeUp;
+        if (!$freezeUp || $freezeUp >= $now) {
+            return false;
         }
-        $this->connection->executeUpdate(
-            'UPDATE s_customer_streams SET freeze_up = NULL WHERE id = :id',
-            [':id' => $id]
+
+        $params = [
+            'id' => $streamId,
+            'freeze_up' => null,
+            'static' => (int) strlen($conditions) > 2,
+        ];
+
+        $this->manager->getConnection()->executeUpdate(
+            'UPDATE s_customer_streams SET static = :static, freeze_up = :freeze_up WHERE id = :id',
+            $params
         );
 
-        return null;
+        return true;
     }
 }
 

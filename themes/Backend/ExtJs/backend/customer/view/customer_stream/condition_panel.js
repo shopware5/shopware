@@ -50,8 +50,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     bodyPadding: '10 0 0',
 
     initComponent: function() {
-        var me = this;
-        var handlers = me.registerHandlers();
+        var me = this,
+            handlers = me.registerHandlers();
 
         me.handlers = handlers.sort(function compare(a, b) {
             return a.getLabel().localeCompare(b.getLabel());
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             listeners: {
                 close: function() {
                     Ext.defer(function() {
-                        me.fireEvent('condition-removed', this)
+                        me.fireEvent('condition-removed', this);
                     }, 100);
                 }
             }
@@ -169,8 +169,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         var containers = [];
 
         for (var conditionClass in value) {
-            var items = value[conditionClass];
-            var handler = me.getHandler(conditionClass);
+            var items = value[conditionClass],
+                handler = me.getHandler(conditionClass);
 
             handler.load(conditionClass, items, function(configuration) {
                 if (!me.conditionExists(containers, configuration)) {

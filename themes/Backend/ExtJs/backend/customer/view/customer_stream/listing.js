@@ -39,18 +39,16 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
 
         return {
             pagingbar: false,
-            toolbar: false,
+            toolbar: true,
+            deleteButton: false,
+            searchField: false,
+            editColumn: false,
             displayProgressOnSingleDelete: false,
 
             /*{if !{acl_is_allowed resource=customerstream privilege=delete}}*/
                 deleteColumn: false,
             /*{/if}*/
 
-            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-                editColumn: false,
-            /*{/if}*/
-            
-            
             columns: {
                 name: {
                     flex: 2,
@@ -64,6 +62,20 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         };
     },
 
+    createAddButton: function() {
+        var me = this,
+            button = me.callParent(arguments);
+
+        Ext.apply(button, {
+            text: '{s name="add_stream"}{/s}',
+            margin: 5,
+            handler: function() {
+                me.fireEvent('add-stream');
+            }
+        });
+        return button;
+    },
+
     createSelectionModel: function() {
         var me = this;
 
@@ -74,35 +86,75 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         return me.selModel;
     },
 
+    createPlugins: function() {
+        return [{
+            ptype: 'grid-attributes',
+            table: 's_customer_streams_attributes'
+        }];
+    },
+
+    createColumns: function() {
+        var me = this,
+            columns = me.callParent(arguments);
+
+        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+            return columns;
+        /*{/if}*/
+
+        columns.push({
+            xtype: 'actioncolumn',
+            width: 0,
+            items: []
+        });
+
+        return columns;
+    },
+
     createActionColumnItems: function() {
         var me = this, items = me.callParent(arguments);
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
             return items;
         /*{/if}*/
-        
-        items = Ext.Array.insert(items, 0, [
-            {
-                iconCls: 'sprite-arrow-circle-315',
-                tooltip: '{s name="index_stream"}{/s}',
-                handler: function(view, rowIndex, colIndex, item, opts, record) {
-                    var node = me.getView().getNode(record);
-                    var el = Ext.get(node);
-                    el.addCls('rotate');
 
-                    me.fireEvent('index-stream', record, function() {
-                        el.removeCls('rotate');
-                        me.fireEvent('reset-progressbar');
-                        me.getStore().load();
-                    });
-                },
-                getClass: function(value, metadata, record) {
-                    if (record.get('freezeUp') || record.get('type') !== 'dynamic') {
-                        return 'x-hidden';
-                    }
+        items.push({
+            iconCls: 'sprite-duplicate-article',
+            action: 'duplicateStream',
+            handler: function (view, rowIndex, colIndex, item, ops, record) {
+                me.fireEvent('save-as-new-stream', record);
+            },
+            getClass: function (value, metadata, record) {
+                if (record.get('static')) {
+                    return 'x-hidden';
                 }
             }
-        ]);
+        });
+
+        items.push({
+            iconCls: 'sprite-arrow-circle-315',
+            tooltip: '{s name="index_stream"}{/s}',
+            handler: function (view, rowIndex, colIndex, item, opts, record) {
+                var node = me.getView().getNode(record),
+                    el = Ext.get(node);
+                el.addCls('rotate');
+
+                me.fireEvent('save-stream-selection');
+
+                me.fireEvent('index-stream', record, function () {
+                    el.removeCls('rotate');
+                    me.fireEvent('reset-progressbar');
+                    me.getStore().load(function () {
+                        me.fireEvent('restore-stream-selection');
+                    });
+                });
+            },
+            getClass: function (value, metadata, record) {
+                if (record.get('freezeUp') || record.get('static')) {
+                    return 'x-hidden';
+                }
+            }
+        });
+
         return items;
     },
 
@@ -112,11 +164,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         if (value) {
             freezeUp = Ext.util.Format.date(value);
         }
-        if (value || record.get('type') === 'static') {
+        if (value || record.get('static')) {
             lockIcon = 'sprite-lock';
         }
 
-        return '<span class="lock-icon '+ lockIcon +'">&nbsp;</span>' + freezeUp;
+        return '<span class="lock-icon ' + lockIcon + '">&nbsp;</span>' + freezeUp;
     },
 
     nameRenderer: function (value, meta, record) {
@@ -124,10 +176,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         qtip += ' - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}';
 
         if (record.get('freezeUp')) {
-            qtip += '<p>{s name="frozen"}{/s}: ' + Ext.util.Format.date(record.get('freezeUp')) + '</p>';
+            qtip += '<p>{s name="freeze_up_label"}{/s}: ' + Ext.util.Format.date(record.get('freezeUp')) + '</p>';
         }
 
-        qtip += '<br><p>' + record.get('description') +'</p>';
+        qtip += '<br><p>' + record.get('description') + '</p>';
 
         meta.tdAttr = 'data-qtip="' + qtip + '"';
 

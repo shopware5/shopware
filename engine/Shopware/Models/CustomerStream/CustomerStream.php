@@ -34,9 +34,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CustomerStream extends ModelEntity
 {
-    const TYPE_DYNAMIC = 'dynamic';
-    const TYPE_STATIC = 'static';
-
     /**
      * INVERSE SIDE
      *
@@ -69,17 +66,16 @@ class CustomerStream extends ModelEntity
     private $description;
 
     /**
-     * @var array
+     * @var string
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
 
     /**
-     * @var string
-     * @Assert\NotBlank
-     * @ORM\Column(name="type", type="string", nullable=true)
+     * @var bool
+     * @ORM\Column(name="static", type="boolean", nullable=false)
      */
-    private $type = self::TYPE_DYNAMIC;
+    private $static = false;
 
     /**
      * @var \DateTime
@@ -129,7 +125,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getConditions()
     {
@@ -137,24 +133,11 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param array $conditions
+     * @param string $conditions
      */
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 
     /**
@@ -165,11 +148,30 @@ class CustomerStream extends ModelEntity
         return $this->freezeUp;
     }
 
+    /**
+     * @param $freezeUp string|\DateTime
+     */
     public function setFreezeUp($freezeUp)
     {
         if (is_string($freezeUp)) {
             $freezeUp = new \DateTime($freezeUp);
         }
         $this->freezeUp = $freezeUp;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatic()
+    {
+        return $this->static;
+    }
+
+    /**
+     * @param $static bool
+     */
+    public function setStatic($static)
+    {
+        $this->static = $static;
     }
 }

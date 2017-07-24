@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,37 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Customer
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
-
-/**
- * Shopware Model - Customer list backend module.
- *
- * The order model represents a single data row of the s_order or the Shopware\Models\Order\Order
- * doctrine mode which contains the head data about a shop order.
- */
-// {block name="backend/customer/store/quick_view"}
-Ext.define('Shopware.apps.Customer.store.QuickView', {
-    extend: 'Shopware.store.Listing',
-
-    model: 'Shopware.apps.Customer.model.QuickView',
-
-    sorters: [{
-        property: 'number',
-        direction: 'DESC'
-    }],
-
-    configure: function() {
-        return {
-            controller: 'CustomerQuickView'
-        };
+class Migrations_Migration946 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $this->addSql("ALTER TABLE `s_customer_streams` ADD `static` int(1) NULL DEFAULT '0';");
+        $this->addSql("UPDATE s_customer_streams SET `static` = 1 WHERE `type` = 'static' OR freeze_up IS NOT NULL;");
+        $this->addSql('ALTER TABLE `s_customer_streams` DROP COLUMN `type`;');
     }
-});
-// {/block}
+}

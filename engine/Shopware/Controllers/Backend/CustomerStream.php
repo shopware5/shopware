@@ -198,12 +198,15 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $customerId = (int) $this->Request()->getParam('customerId');
         $connection = $this->container->get('dbal_connection');
 
-        $connection->executeUpdate(
-            'INSERT IGNORE INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)',
-            [':streamId' => $streamId, ':customerId' => $customerId]
-        );
-
-        $this->View()->assign('success', true);
+        try {
+            $connection->executeUpdate(
+                'INSERT INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)',
+                [':streamId' => $streamId, ':customerId' => $customerId]
+            );
+            $this->View()->assign('success', true);
+        } catch (Exception $e) {
+            $this->View()->assign('success', false);
+        }
     }
 
     public function removeCustomerFromStreamAction()
