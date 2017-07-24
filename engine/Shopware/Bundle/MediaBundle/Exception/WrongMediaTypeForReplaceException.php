@@ -22,19 +22,28 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle;
+namespace Shopware\Bundle\MediaBundle\Exception;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-interface MediaReplaceServiceInterface
+class WrongMediaTypeForReplaceException extends \Exception
 {
     /**
-     * replace the media by the given mediaId with the given file content
-     *
-     * @param int          $mediaId
-     * @param UploadedFile $file
-     *
-     * @throws \Exception
+     * @var string
      */
-    public function replace($mediaId, UploadedFile $file);
+    public $requiredType;
+
+    public function __construct($requiredType)
+    {
+        $this->requiredType = $requiredType;
+
+        $message = sprintf('To replace the media file, a "%s" file is required.', $requiredType);
+        parent::__construct($message);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequiredType()
+    {
+        return $this->requiredType;
+    }
 }

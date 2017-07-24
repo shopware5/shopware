@@ -128,6 +128,31 @@ class MediaTest extends TestCase
         $this->assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
     }
 
+    /**
+     * @expectedException \Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException
+     * @expectedExceptionMessage The media file extension "foo" is not allowed.
+     */
+    public function testUploadMediaWithNonWhitelistedExtension()
+    {
+        $source = __DIR__ . '/fixtures/test-bild.jpg';
+        $dest = __DIR__ . '/fixtures/test-bild-used.foo';
+
+        //copy image to execute test case multiple times.
+        @unlink($dest);
+        copy($source, $dest);
+
+        $data = $this->getSimpleTestData();
+        $data['file'] = $dest;
+
+        $path = Shopware()->DocPath('media_unknown') . 'test-bild-used.foo';
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($mediaService->has($path)) {
+            $mediaService->delete($path);
+        }
+
+        $this->resource->create($data);
+    }
+
     protected function getSimpleTestData()
     {
         return [

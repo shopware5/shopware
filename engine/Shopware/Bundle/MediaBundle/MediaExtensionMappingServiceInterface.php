@@ -24,17 +24,23 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-interface MediaReplaceServiceInterface
+interface MediaExtensionMappingServiceInterface
 {
     /**
-     * replace the media by the given mediaId with the given file content
+     * Checks if the given extension is allowed
      *
-     * @param int          $mediaId
-     * @param UploadedFile $file
+     * @param string $extension
      *
-     * @throws \Exception
+     * @return bool
      */
-    public function replace($mediaId, UploadedFile $file);
+    public function isAllowed($extension);
+
+    /**
+     * Return the type for the given extension
+     *
+     * @param string $extension
+     *
+     * @return string|null
+     */
+    public function getType($extension);
 }

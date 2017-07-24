@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
 
         Shopware.Notification.createGrowlMessage(
             '{s name="mediaManager/replaceWindow/window/errorTitle"}{/s}',
-            '{s name="mediaManager/replaceWindiw/dropZone/maximumFiles"}{/s}'
+            '{s name="mediaManager/replaceWindow/dropZone/maximumFiles"}{/s}'
         );
 
         me.onUploadError();
