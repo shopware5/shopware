@@ -123,7 +123,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     {
         if ('Action' === substr($name, -6)) {
             throw new Enlight_Controller_Exception(
-                'Action "' . $this->controller_name . '_' . $name . '" not found failure',
+                'Action "' . $this->controller_name . '_' . $name . '" not found failure for request url ' . $this->request->getScheme() . "://" . $this->request->getHttpHost() . $this->request->getRequestUri(),
                 Enlight_Controller_Exception::ActionNotFound
             );
         }
