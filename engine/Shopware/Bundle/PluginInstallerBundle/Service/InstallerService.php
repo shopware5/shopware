@@ -319,23 +319,6 @@ class InstallerService
 
         $this->pluginInstaller->refreshPluginList($refreshDate);
         $this->legacyPluginInstaller->refreshPluginList($refreshDate);
-
-        $this->cleanupPlugins($refreshDate);
-    }
-
-    /**
-     * @param \DateTimeInterface $refreshDate
-     */
-    private function cleanupPlugins(\DateTimeInterface $refreshDate)
-    {
-        $sql = 'SELECT id FROM s_core_plugins WHERE refresh_date < ?';
-        $pluginIds = $this->em->getConnection()->fetchAll($sql, [$refreshDate], ['datetime']);
-        $pluginIds = array_column($pluginIds, 'id');
-        foreach ($pluginIds as $pluginId) {
-            $plugin = $this->pluginRepository->find($pluginId);
-            $this->em->remove($plugin);
-        }
-        $this->em->flush();
     }
 
     /**

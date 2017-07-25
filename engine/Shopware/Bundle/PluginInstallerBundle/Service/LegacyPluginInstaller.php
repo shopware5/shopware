@@ -61,6 +61,8 @@ class LegacyPluginInstaller
      *
      * @param Plugin $plugin
      *
+     * @throws \RuntimeException
+     *
      * @return \Shopware_Components_Plugin_Bootstrap|null
      */
     public function getPluginBootstrap(Plugin $plugin)
@@ -69,7 +71,12 @@ class LegacyPluginInstaller
         if ($namespace === null) {
             return null;
         }
-        $plugin = $namespace->get($plugin->getName());
+
+        $pluginName = $plugin->getName();
+        $plugin = $namespace->get($pluginName);
+        if ($plugin === null) {
+            throw new \RuntimeException(sprintf('Plugin by name "%s" was not found.', $pluginName));
+        }
 
         return $plugin;
     }
@@ -181,6 +188,7 @@ class LegacyPluginInstaller
     public function activatePlugin(Plugin $plugin)
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
+
         $result = $bootstrap->enable();
         $result = is_bool($result) ? ['success' => $result] : $result;
 
@@ -198,6 +206,7 @@ class LegacyPluginInstaller
     public function deactivatePlugin(Plugin $plugin)
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
+
         $result = $bootstrap->disable();
         $result = is_bool($result) ? ['success' => $result] : $result;
 

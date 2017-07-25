@@ -171,9 +171,13 @@ class PluginLocalService
         $locale = substr($context->getLocale(), 0, 2);
 
         foreach ($plugins as &$row) {
-            $row['iconPath'] = $this->getIconOfPlugin(
-                $row['name']
-            );
+            try {
+                $row['iconPath'] = $this->getIconOfPlugin(
+                    $row['name']
+                );
+            } catch (\InvalidArgumentException $e) {
+                $row['iconPath'] = null;
+            }
 
             $translations = json_decode($row['translations'], true);
 
