@@ -68,7 +68,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @var string html,pdf,return
      */
-    public $_renderer = "html";
+    public $_renderer = 'html';
 
     /**
      * Are properties already assigned to smarty?
@@ -89,7 +89,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @var string
      */
-    public $_defaultPath = 'templates/_emotion';
+    public $_defaultPath = 'templates/Bare';
 
     /**
      * Generate preview only
@@ -214,8 +214,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             WHERE s.default = 1
             ");
 
-            $document->setTemplate($document->_defaultPath);
-            $document->_subshop['doc_template'] = $document->_defaultPath;
+            if (empty($document->_subshop['doc_template'])) {
+                $document->setTemplate($document->_defaultPath);
+                $document->_subshop['doc_template'] = $document->_defaultPath;
+            }
         }
 
         $document->setTranslationComponent();
@@ -501,17 +503,15 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     protected function initTemplateEngine()
     {
+        $frontendThemeDirectory = Shopware()->Container()->get('theme_path_resolver')->getFrontendThemeDirectory();
+
         $this->_template = clone Shopware()->Template();
         $this->_view = $this->_template->createData();
 
         $path = basename($this->_subshop['doc_template']);
 
-        $this->_template->setTemplateDir([
-                'custom' => $path,
-                'local' => '_emotion_local',
-                'emotion' => '_emotion',
-            ]);
-
+        $this->_template->security_policy->secure_dir[] = $frontendThemeDirectory . DIRECTORY_SEPARATOR . $path;
+        $this->_template->setTemplateDir(['custom' => $path]);
         $this->_template->setCompileId(str_replace('/', '_', $path) . '_' . $this->_subshop['id']);
     }
 
