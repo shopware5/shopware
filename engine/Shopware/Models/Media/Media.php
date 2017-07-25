@@ -1199,18 +1199,17 @@ class Media extends ModelEntity
             return;
         }
 
+        $extension = $this->file->guessExtension();
+        $name = $this->file->getBasename();
+
         if ($this->file instanceof UploadedFile) {
             //load file information
             $fileInfo = pathinfo($this->file->getClientOriginalName());
-            $extension = $fileInfo['extension'];
             $name = $fileInfo['filename'];
 
-            if (empty($extension)) {
-                $extension = $this->file->guessExtension();
+            if (!empty($fileInfo['extension'])) {
+                $extension = $fileInfo['extension'];
             }
-        } else {
-            $extension = $this->file->guessExtension();
-            $name = $this->file->getBasename();
         }
 
         $extension = strtolower($extension);
