@@ -130,11 +130,19 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
             case self::TYPE_STATIC_PRODUCT:
                 $articles = $element->getConfig()->get('selected_articles', []);
                 $productNumbers = array_filter(explode('|', $articles));
+                if (empty($productNumbers)) {
+                    $productNumbers = [];
+                }
+
                 $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
                 break;
             case self::TYPE_STATIC_VARIANT:
                 $articles = $element->getConfig()->get('selected_variants', []);
                 $productNumbers = array_filter(explode('|', $articles));
+                if (empty($productNumbers)) {
+                    $productNumbers = [];
+                }
+
                 $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
                 break;
         }
