@@ -130,28 +130,53 @@
                         {/block}
 
                         {* Logout action *}
-
                         {block name="frontend_account_menu_link_logout"}
                             {if {config name=useSltCookie} && $userInfo}
                                 <li class="navigation--entry">
-                                    <a href="{url controller='account' action='logout'}" title="{s name="AccountLogout"}{/s}"
-                                       class="navigation--link link--logout navigation--personalized">
-                                        {block name="frontend_account_menu_logout_personalized"}
-                                            <span class="navigation--logout-personalized blocked--link">
-                                                <i class="icon--logout blocked--link"></i>
-                                                {s name="AccountNot"}{/s}
-                                                {$userInfo['firstname']|truncate:15:"..."}?
-                                            </span>
-                                            <span class="navigation--logout blocked--link">{s name="AccountLogout"}{/s}</span>
-                                        {/block}
-                                    </a>
+                                    {block name="frontend_account_menu_logout_personalized_link"}
+                                        <a href="{url controller='account' action='logout'}" title="{s name="AccountLogout"}{/s}"
+                                           class="navigation--link link--logout navigation--personalized">
+                                            {block name="frontend_account_menu_logout_personalized"}
+
+                                                {block name="frontend_account_menu_logout_personalized_link_user_info"}
+                                                    <span class="navigation--logout-personalized blocked--link">
+                                                        {block name="frontend_account_menu_logout_personalized_link_icon"}
+                                                            <i class="icon--logout blocked--link"></i>
+                                                        {/block}
+
+                                                        {block name="frontend_account_menu_logout_personalized_link_not_user"}
+                                                            <span class="logout--not-user">{s name="AccountNot"}{/s}</span>
+                                                        {/block}
+
+                                                        {block name="frontend_account_menu_logout_personalized_link_user_name"}
+                                                            <span class="logout--user-name">{$userInfo['firstname']|truncate:15:"..."}?</span>
+                                                        {/block}
+                                                    </span>
+                                                {/block}
+
+                                                {block name="frontend_account_menu_logout_personalized_logout_text"}
+                                                    <span class="navigation--logout blocked--link">{s name="AccountLogout"}{/s}</span>
+                                                {/block}
+                                            {/block}
+                                        </a>
+                                    {/block}
                                 </li>
                             {elseif $sUserLoggedIn && !$sOneTimeAccount}
-                                <li class="navigation--entry">
-                                    <a href="{url module='frontend' controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout" rel="nofollow">
-                                        <i class="icon--logout"></i> {s name="AccountLinkLogout2"}{/s}
-                                    </a>
-                                </li>
+                                {block name="frontend_account_menu_link_logout_standard"}
+                                    <li class="navigation--entry">
+                                        {block name="frontend_account_menu_link_logout_standard_link"}
+                                            <a href="{url module='frontend' controller='account' action='logout'}" title="{s name="AccountLinkLogout2"}{/s}" class="navigation--link link--logout" rel="nofollow">
+                                                {block name="frontend_account_menu_link_logout_standard_link_icon"}
+                                                    <i class="icon--logout"></i>
+                                                {/block}
+
+                                                {block name="frontend_account_menu_link_logout_standard_link_text"}
+                                                    <span class="navigation--logout logout--label">{s name="AccountLinkLogout2"}{/s}</span>
+                                                {/block}
+                                            </a>
+                                        {/block}
+                                    </li>
+                                {/block}
                             {/if}
                         {/block}
                     {/block}
