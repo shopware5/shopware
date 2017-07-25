@@ -317,10 +317,20 @@ class InstallerService
     {
         $refreshDate = new \DateTimeImmutable();
 
+        // Start transaction so that concurrenct requests can't overwrite the refresh_date, which causes plugins
+        // to be deleted in cleanupPlugins
+        $this->em->beginTransaction();
+
+        // Ensure consistent state (@see https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html)
+        // Consistent read is only guaranteed after the first read
+        $this->em->getConnection()->fetchAll('SELECT id, refresh_date FROM s_core_plugins');
+
         $this->pluginInstaller->refreshPluginList($refreshDate);
         $this->legacyPluginInstaller->refreshPluginList($refreshDate);
 
         $this->cleanupPlugins($refreshDate);
+
+        $this->em->commit();
     }
 
     /**
