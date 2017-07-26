@@ -1065,6 +1065,7 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
         'pcd' => Media::TYPE_MODEL,
         'stl' => Media::TYPE_MODEL,
         'skp' => Media::TYPE_MODEL,
+        'ico' => Media::TYPE_UNKNOWN,
     ];
 
     /**
