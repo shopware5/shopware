@@ -24,6 +24,7 @@
 
 namespace Shopware;
 
+use Doctrine\DBAL\DriverManager;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
@@ -592,6 +593,14 @@ class Kernel implements HttpKernelInterface
      */
     protected function prepareContainer(ContainerBuilder $container)
     {
+        if ($this->connection !== null) {
+            $connection = DriverManager::getConnection([
+                'pdo' => $this->connection
+            ]);
+
+            $container->set('dbal_connection', $connection);
+        }
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
         $loader->load('theme.xml');
