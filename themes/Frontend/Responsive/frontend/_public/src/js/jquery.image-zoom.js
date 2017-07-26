@@ -448,6 +448,11 @@
         destroy: function () {
             var me = this;
 
+            $.unsubscribe('plugin/swImageSlider/onRightArrowClick');
+            $.unsubscribe('plugin/swImageSlider/onLeftArrowClick');
+            $.unsubscribe('plugin/swImageSlider/onClick');
+            $.unsubscribe('plugin/swImageSlider/onLightbox');
+
             me.$lens.remove();
             me.$flyout.remove();
             me.$container.removeClass(me.opts.containerCls);

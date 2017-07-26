@@ -598,6 +598,9 @@
                 plugin.destroy();
             }
 
+            $.unsubscribe('plugin/swImageSlider/onSlide');
+            $.unsubscribe('plugin/swImageSlider/onUpdateTransform');
+
             me.$template.remove();
             me.$template = null;
 

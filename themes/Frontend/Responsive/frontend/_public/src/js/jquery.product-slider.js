@@ -1081,6 +1081,13 @@
         destroy: function () {
             var me = this;
 
+            if (me.opts.initOnEvent !== null) {
+                $.unsubscribe(me.opts.initOnEvent);
+            }
+
+            $.unsubscribe('plugin/swTabMenu/onChangeTab');
+            $.unsubscribe('plugin/swCollapsePanel/onOpenPanel');
+
             if (me.$arrowPrev) me.$arrowPrev.remove();
             if (me.$arrowNext) me.$arrowNext.remove();
 

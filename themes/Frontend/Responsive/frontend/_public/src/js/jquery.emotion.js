@@ -801,6 +801,11 @@
         destroy: function() {
             var me = this;
 
+            if (me.opts.fullscreen) {
+                $.unsubscribe('plugin/swEmotionLoader/onShowEmotion');
+                $.unsubscribe('plugin/swEmotionLoader/onHideEmotion');
+            }
+
             me._destroy();
         }
     });

@@ -542,6 +542,9 @@
         destroy: function () {
             var me = this;
 
+            $.unsubscribe('plugin/swAddArticle/onAddArticle');
+            $.unsubscribe('plugin/swAddArticle/onBeforeAddArticle');
+
             me.off(me.eventSuffix);
 
             me._destroy();

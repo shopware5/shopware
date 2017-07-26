@@ -132,6 +132,14 @@
             $.publish('plugin/swLightbox/onGetOptimizedSize', [ me, size ]);
 
             return size;
-        }
+        },
+
+        destroy: function() {
+            var me = this;
+
+            $.unsubscribe('plugin/swModal/onClose');
+
+            me._destroy();
+        },
     };
 })(jQuery, window, Math);
