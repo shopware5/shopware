@@ -80,7 +80,7 @@ class CustomerStream extends ModelEntity
     /**
      * @var \DateTime
      * @Assert\DateTime
-     * @ORM\Column(name="freeze_up", type="date", nullable=true)
+     * @ORM\Column(name="freeze_up", type="datetime", nullable=true)
      */
     private $freezeUp;
 

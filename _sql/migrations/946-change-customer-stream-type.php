@@ -29,5 +29,6 @@ class Migrations_Migration946 extends Shopware\Components\Migrations\AbstractMig
         $this->addSql("ALTER TABLE `s_customer_streams` ADD `static` int(1) NULL DEFAULT '0';");
         $this->addSql("UPDATE s_customer_streams SET `static` = 1 WHERE `type` = 'static' OR freeze_up IS NOT NULL;");
         $this->addSql('ALTER TABLE `s_customer_streams` DROP COLUMN `type`;');
+        $this->addSql('ALTER TABLE `s_customer_streams` CHANGE COLUMN `freeze_up` `freeze_up` DATETIME NULL;');
     }
 }

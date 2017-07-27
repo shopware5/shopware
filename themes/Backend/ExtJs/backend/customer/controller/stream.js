@@ -57,13 +57,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'save-stream': me.saveEditedStream,
                 'refresh-stream-views': me.reloadView,
                 'tab-activated': me.onTabActivated,
-                'condition-added': me.updateSaveButtons,
                 'reset-progressbar': me.resetProgressbar,
                 'add-customer-to-stream': me.addCustomerToStream,
                 'refresh-stream-list': me.reloadStreamList
-            },
-            'customer-stream-condition-panel': {
-                'condition-removed': me.updateSaveButtons
             },
             'customer-stream-detail': {
                 'static-changed': me.staticCheckboxChanged
@@ -136,14 +132,13 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     staticCheckboxChanged: function(value) {
         var me = this,
-            streamView = me.getStreamView(),
-            streamDetailForm = me.getStreamDetailForm();
+            streamView = me.getStreamView();
 
         if (value) {
-            streamDetailForm.getForm().findField('freezeUp').setDisabled(false);
+            me.disableDateTimeInput(false);
             streamView.formPanel.setDisabled(true);
         } else {
-            streamDetailForm.getForm().findField('freezeUp').setDisabled(true);
+            me.disableDateTimeInput(true);
             streamView.formPanel.setDisabled(false);
         }
     },
@@ -458,8 +453,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             me.loadStream(selection[0]);
         }
 
-        Ext.defer(Ext.bind(me.updateSaveButtons, me), 100);
-
         me.loadChart();
     },
 
@@ -633,24 +626,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         }
     },
 
-    updateSaveButtons: function() {
-        var streamView = this.getStreamView(),
-            conditions = streamView.filterPanel.getSubmitData();
-
-        conditions = Object.keys(Ext.JSON.decode(conditions['conditions']));
-
-        var hasCondition = conditions.length > 0,
-            isNew = true;
-
-        if (streamView.formPanel.getForm().getRecord()) {
-            isNew = streamView.formPanel.getForm().getRecord().get('id') === null;
-        }
-
-        streamView.saveStreamButton.setDisabled(
-            !hasCondition || isNew
-        );
-    },
-
     reloadStreamList: function () {
         var me = this,
             streamView = this.getStreamView(),
@@ -689,6 +664,13 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         }
         var record = streamListing.getStore().findRecord('id', me.currentStreamSelection.data.id);
         streamListing.getSelectionModel().select([record]);
+    },
+
+    disableDateTimeInput: function (disabled) {
+        var me = this,
+            streamDetailForm = me.getStreamDetailForm();
+        streamDetailForm.getForm().findField('freezeUpTime').setDisabled(disabled);
+        streamDetailForm.getForm().findField('freezeUpDate').setDisabled(disabled);
     }
 });
 // {/block}
