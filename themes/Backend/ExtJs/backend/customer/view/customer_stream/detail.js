@@ -48,11 +48,19 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
                 fields: {
                     name: {
                         fieldLabel: '{s name="stream_name"}{/s}',
-                        allowBlank: false
+                        allowBlank: false,
+                        listeners: {
+                            scope: me,
+                            blur: me.onBlurStripTags
+                        }
                     },
                     description: {
                         xtype: 'textarea',
-                        fieldLabel: '{s name="stream_description"}{/s}'
+                        fieldLabel: '{s name="stream_description"}{/s}',
+                        listeners: {
+                            scope: me,
+                            blur: me.onBlurStripTags
+                        }
                     },
                     static: me.createStaticCheckbox,
                     freezeUp: me.createFreezeUp
@@ -117,6 +125,28 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
         );
 
         return me.freezeUpContainer;
+    },
+
+    createWarningMessageBox: function(newValue, oldValue) {
+        Ext.MessageBox.alert('{s name="stream_name_tags_stripped_notice"}{/s}', Ext.String.format('{s name="stream_name_tags_stripped"}{/s}', Ext.util.Format.htmlEncode(oldValue), newValue));
+    },
+
+    onBlurStripTags: function(comp) {
+        var me = this,
+            val = comp.getValue(),
+            html;
+
+        html = Ext.util.Format.stripTags(val);
+        html = html.replace(/"/g, '');
+
+        if (html === val) {
+            return;
+        }
+
+        comp.setRawValue(html);
+        comp.setValue(html);
+
+        me.createWarningMessageBox(html, val);
     }
 });
 // {/block}
