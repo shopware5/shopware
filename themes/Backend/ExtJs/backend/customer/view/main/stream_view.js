@@ -255,16 +255,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             }
         });
 
-        me.saveStreamButton = Ext.create('Ext.button.Button', {
-            text: '{s name="save"}{/s}',
-            cls: 'primary',
-            disabled: true,
-            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-                hidden: true,
-            /*{/if}*/
-            handler: Ext.bind(me.onSaveStream, me)
-        });
-
         me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             flex: 1,
             border: false
@@ -313,10 +303,10 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
-            height: 255,
+            overflowY: 'hidden',
+            height: 270,
             disabled: true,
             border: false,
-            autoScroll: true,
             name: 'detail-form',
             items: [
                 Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
@@ -355,18 +345,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 me.formPanel,
                 me.cardContainer
             ],
-            margin: '10 10 10 10',
-            dockedItems: [{
-                xtype: 'toolbar',
-                dock: 'bottom',
-                cls: 'stream-save-button-container',
-                padding: 5,
-                layout: { type: 'hbox', align: 'stretch' },
-                items: [
-                    '->',
-                    me.saveStreamButton
-                ]
-            }]
+            margin: '10 10 10 10'
         });
 
         me.leftContainer = Ext.create('Ext.panel.Panel', {
@@ -389,7 +368,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.filterPanel.loadRecord(null);
         this.formPanel.loadRecord(null);
         this.formPanel.setDisabled(false);
-        this.saveStreamButton.setDisabled(true);
     },
 
     createConditionsMenu: function() {
@@ -447,7 +425,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
     addCondition: function(handler) {
         this.filterPanel.createCondition(handler);
-        this.fireEvent('condition-added');
     }
 });
 // {/block}

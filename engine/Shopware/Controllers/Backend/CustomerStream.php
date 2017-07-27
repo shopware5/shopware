@@ -39,9 +39,18 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function save($data)
     {
-        $data = array_merge([
-            'freezeUp' => null,
-        ], $data);
+        $data['freezeUp'] = null;
+
+        if ($data['freezeUpDate'] && $data['static']) {
+            $date = new DateTime($data['freezeUpDate']);
+            $time = '';
+
+            if ($data['freezeUpTime']) {
+                $time = new DateTime($data['freezeUpTime']);
+                $time = $time->format(' H:i:s');
+            }
+            $data['freezeUp'] = new DateTime($date->format('Y-m-d') . $time);
+        }
 
         if ($data['id']) {
             $entity = $this->getApiResource()->update($data['id'], $data);

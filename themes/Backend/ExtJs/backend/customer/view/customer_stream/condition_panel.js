@@ -121,14 +121,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             title: configuration.title,
             conditionClass: configuration.conditionClass,
             conditionField: panel,
-            items: [panel],
-            listeners: {
-                close: function() {
-                    Ext.defer(function() {
-                        me.fireEvent('condition-removed', this);
-                    }, 100);
-                }
-            }
+            items: [panel]
         });
     },
 

@@ -85,18 +85,38 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
     createFreezeUp: function() {
         var me = this;
 
-        me.freezeUpField = Ext.create('Shopware.apps.Base.view.element.Date', {
-            submitFormat: 'Y-m-d',
-            dateCfg: { submitFormat: 'Y-m-d' },
-            name: 'freezeUp',
-            labelWidth: 130,
-            disabled: true,
-            anchor: '100%',
+        me.freezeUpDate = Ext.create('Ext.form.field.Date', {
             fieldLabel: '{s name="freeze_up_label"}{/s}',
-            helpText: '{s name="freeze_up_help"}{/s}'
+            submitFormat: 'Y-m-d',
+            name: 'freezeUpDate',
+            labelWidth: 130,
+            minValue: new Date(),
+            allowBlank: true
         });
 
-        return me.freezeUpField;
+        me.freezeUpTime = Ext.create('Ext.form.field.Time', {
+            submitFormat: 'H:i',
+            xtype: 'timefield',
+            name: 'freezeUpTime',
+            minDate: new Date(),
+            helpText: '{s name="freeze_up_help"}{/s}',
+            margin: '0 0 0 135'
+        });
+
+        me.freezeUpContainer = Ext.create('Ext.container.Container', {
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            anchor: '100%',
+            name: 'freezeUp',
+            items: [
+                me.freezeUpDate,
+                me.freezeUpTime
+            ]}
+        );
+
+        return me.freezeUpContainer;
     }
 });
 // {/block}
