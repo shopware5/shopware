@@ -2,6 +2,15 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.5
+
+[View all changes from v5.3.4...v5.3.5](https://github.com/shopware/shopware/compare/v5.3.4...v5.3.5)
+
+### Additions
+
+* Added new notify until event `Shopware_Plugins_HttpCache_ShouldNotInvalidateCache` to `engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php` to be notified when the cache for a model will be invalidated and be able to prevent it
+
+
 ## 5.3.4
 
 [View all changes from v5.3.3...v5.3.4](https://github.com/shopware/shopware/compare/v5.3.3...v5.3.4)
