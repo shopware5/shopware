@@ -137,6 +137,17 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         if (value) {
             me.disableDateTimeInput(false);
             streamView.formPanel.setDisabled(true);
+
+            streamView.formPanel.getForm().getFields().findBy(function(field) {
+                var isValid = field.isValid(),
+                    comp = field.getEl().up('.customer-stream-condition-field');
+
+                if (!comp || isValid) {
+                    return;
+                }
+
+                streamView.filterPanel.remove(Ext.getCmp(comp.id).ownerCt);
+            });
         } else {
             me.disableDateTimeInput(true);
             streamView.formPanel.setDisabled(false);
@@ -144,9 +155,18 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     },
 
     addStream: function() {
-        this.loadStream(
+        var me = this;
+        me.loadStream(
             Ext.create('Shopware.apps.Customer.model.CustomerStream')
         );
+
+        me.getStreamListing().getStore().add(Ext.create('Shopware.apps.Customer.model.CustomerStream'));
+
+        me.lastRecords = me.getStreamListing().getStore().getNewRecords();
+        me.lastRecord = me.lastRecords[me.lastRecords.length -1];
+        me.getStreamListing().getSelectionModel().select([me.lastRecord]);
+
+        me.refreshAddButton();
     },
 
     fullIndex: function() {
@@ -361,6 +381,10 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         this.saveStream(record, function() {
             me.resetProgressbar();
             me.reloadStreamList();
+
+            me.lastRecord = null;
+            me.lastRecords = [];
+            me.refreshAddButton();
         });
     },
 
@@ -671,6 +695,14 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             streamDetailForm = me.getStreamDetailForm();
         streamDetailForm.getForm().findField('freezeUpTime').setDisabled(disabled);
         streamDetailForm.getForm().findField('freezeUpDate').setDisabled(disabled);
+    },
+
+    refreshAddButton: function () {
+        var me = this,
+            streamListing = me.getStreamListing(),
+            addButton = streamListing.addButton;
+
+        addButton.setDisabled(me.lastRecords.length > 0);
     }
 });
 // {/block}

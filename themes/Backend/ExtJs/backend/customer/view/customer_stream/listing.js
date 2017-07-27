@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                 me.fireEvent('add-stream');
             }
         });
+        me.addButton = button;
         return button;
     },
 
@@ -124,7 +125,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                 me.fireEvent('save-as-new-stream', record);
             },
             getClass: function (value, metadata, record) {
-                if (record.get('static')) {
+                if (record.get('static') || record.phantom) {
                     return 'x-hidden';
                 }
             }
@@ -149,7 +150,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                 });
             },
             getClass: function (value, metadata, record) {
-                if (record.get('freezeUp') || record.get('static')) {
+                if (record.get('freezeUp') || record.get('static') || record.phantom) {
                     return 'x-hidden';
                 }
             }
@@ -182,6 +183,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         qtip += '<br><p>' + record.get('description') + '</p>';
 
         meta.tdAttr = 'data-qtip="' + qtip + '"';
+
+        if (!value || value.length <= 0) {
+            return '<span class="stream-name-column"><i style="color: #999;">(neuer Stream)</i></span>';
+        }
 
         return '<span class="stream-name-column"><b>' + value + '</b> - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}</span>';
     }

@@ -140,16 +140,13 @@
 
                                                     {block name="frontend_account_menu_logout_personalized_link_user_info"}
                                                         <span class="navigation--logout-personalized blocked--link">
-                                                        {block name="frontend_account_menu_logout_personalized_link_icon"}
-                                                            <i class="icon--logout blocked--link"></i>
-                                                        {/block}
 
                                                             {block name="frontend_account_menu_logout_personalized_link_not_user"}
                                                                 <span class="logout--not-user blocked--link">{s name="AccountNot"}{/s}</span>
                                                             {/block}
 
                                                             {block name="frontend_account_menu_logout_personalized_link_user_name"}
-                                                                <span class="logout--user-name blocked--link">{$userInfo['firstname']|truncate:15:"..."}?</span>
+                                                                <span class="logout--user-name blocked--link">{$userInfo['firstname']}?</span>
                                                             {/block}
                                                     </span>
                                                     {/block}

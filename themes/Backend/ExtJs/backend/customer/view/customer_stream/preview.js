@@ -77,9 +77,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
     initComponent: function () {
         var me = this;
 
-        /* {if {acl_is_allowed privilege=delete}} */
-        me.selModel = me.getGridSelModel();
-        /* {/if} */
         me.columns = me.getColumns();
 
         me.dockedItems = [ me.getPagingBar() ];
@@ -287,11 +284,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                 return names.join('<br>');
             }
         }
-        /* {if {acl_is_allowed privilege=detail}} */
         , {
             xtype: 'actioncolumn',
             width: 60,
             items: [
+                /* {if {acl_is_allowed privilege=detail}} */
                 {
                     iconCls: 'sprite-pencil',
                     action: 'editCustomer',
@@ -299,6 +296,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                         me.fireEvent('edit', record);
                     }
                 },
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=delete}} */
                 {
                     action: 'delete',
                     iconCls: 'sprite-cross',
@@ -312,9 +311,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                         me.fireEvent('delete', record);
                     }
                 }
+                /* {/if} */
             ]
         }
-        /* {/if} */
+
         ];
     },
 

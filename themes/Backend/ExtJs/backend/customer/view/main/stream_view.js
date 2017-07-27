@@ -278,7 +278,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             width: 400,
             bodyCls: 'stream-filter-panel-body',
-            layout: { type: 'vbox', align: 'stretch' },
+            layout: { type: 'vbox', align: 'stretch', pack: 'start' },
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
