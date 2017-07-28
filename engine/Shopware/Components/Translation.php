@@ -394,12 +394,14 @@ class Shopware_Components_Translation
                     'txtArtikel' => 'name',
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'descriptionLong',
+                    'txtshippingtime' => 'shippingTime',
                     'txtzusatztxt' => 'additionalText',
                     'txtkeywords' => 'keywords',
                     'txtpackunit' => 'packUnit',
                 ];
             case 'variant':
                 return [
+                    'txtshippingtime' => 'shippingTime',
                     'txtzusatztxt' => 'additionalText',
                     'txtpackunit' => 'packUnit',
                 ];
@@ -480,6 +482,7 @@ class Shopware_Components_Translation
             'keywords' => (isset($data['txtkeywords'])) ? (string) $data['txtkeywords'] : '',
             'description' => (isset($data['txtshortdescription'])) ? (string) $data['txtshortdescription'] : '',
             'description_long' => (isset($data['txtlangbeschreibung'])) ? (string) $data['txtlangbeschreibung'] : '',
+            'shippingtime' => (isset($data['txtshippingtime'])) ? (string) $data['txtshippingtime'] : '',
         ]);
 
         $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
