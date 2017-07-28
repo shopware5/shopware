@@ -97,36 +97,41 @@ class Enlight_Hook_HookManager extends Enlight_Class
     }
 
     /**
-     * Checks if the given class has registered hooks.
-     * If a method is given the examination is limited to the method.
-     *
-     * @param   $class
-     * @param   $method
-     * @return  bool
+     * @return Enlight_Event_EventManager
      */
-    public function hasHooks($class, $method)
+    public function getEventManager()
     {
-        $eventManager = $this->eventManager;
-
-        return $eventManager->hasListeners($this->getHookEvent($class, $method, 'replace'))
-            || $eventManager->hasListeners($this->getHookEvent($class, $method, 'before'))
-            || $eventManager->hasListeners($this->getHookEvent($class, $method, 'after'));
+        return $this->eventManager;
     }
 
     /**
-     * Returns all registered hooks of the given arguments.
+     * Checks if the given class has registered hooks.
+     * If a method is given the examination is limited to the method.
      *
-     * @param   $class
-     * @param   $method
-     * @param   $type
-     * @return  array
+     * @param string $class
+     * @param string $method
+     * @return boolean
+     */
+    public function hasHooks($class, $method)
+    {
+        return $this->eventManager->hasListeners($this->getHookEvent($class, $method, Enlight_Hook_HookHandler::TypeReplace))
+            || $this->eventManager->hasListeners($this->getHookEvent($class, $method, Enlight_Hook_HookHandler::TypeBefore))
+            || $this->eventManager->hasListeners($this->getHookEvent($class, $method, Enlight_Hook_HookHandler::TypeAfter));
+    }
+
+    /**
+     * @param string $class
+     * @param string $method
+     * @param string $type
+     * @return string
      */
     public function getHookEvent($class, $method, $type)
     {
-        $class = isset($this->aliases[$class]) ? $this->aliases[$class] : $class;
-        $event = $class . '::' . $method . '::' . $type;
-
-        return $event;
+        return Enlight_Hook_HookExecutionContext::createHookEventName(
+            (isset($this->aliases[$class])) ? $this->aliases[$class] : $class,
+            $method,
+            $type
+        );
     }
 
     /**
@@ -153,42 +158,25 @@ class Enlight_Hook_HookManager extends Enlight_Class
     }
 
     /**
-     * Executes all registered hooks for the given hook arguments.
-     * First, all hooks of the typeBefore type executed.
-     * Then the typeReplace hooks are executed.
-     * If no typeReplace hook exists, the function checks if the executeParent method on the subject exists.
-     * If this is the case, the executeParent function will be executed.
-     * At the end the typeAfter hooks are executed.
+     * Creates a new hook execution context using the given $class, $method and $args and executes it. Finally the
+     * execution result is returned.
      *
-     * @param   Enlight_Class|Enlight_Hook_Proxy $class
-     * @param   string $method
-     * @param   array $args
-     * @return  mixed
+     * @param Enlight_Hook_Proxy $class
+     * @param string $method
+     * @param array $args
+     * @return mixed
      */
-    public function executeHooks($class, $method, $args)
+    public function executeHooks(Enlight_Hook_Proxy $class, $method, array $args)
     {
-        $args = new Enlight_Hook_HookArgs(array_merge(array(
-            'class' => $class,
-            'method' => $method,
-        ), $args));
         $className = get_parent_class($class);
-        $eventManager = $this->eventManager;
+        $context = new Enlight_Hook_HookExecutionContext(
+            $this,
+            $class,
+            $method,
+            $args
+        );
 
-        $event = $this->getHookEvent($className, $method, 'before');
-        $eventManager->notify($event, $args);
-
-        $event = $this->getHookEvent($className, $method, 'replace');
-        if ($eventManager->hasListeners($event)) {
-            $eventManager->notify($event, $args);
-        } else {
-            $args->setReturn($args->getSubject()->executeParent(
-                $method,
-                $args->getArgs()
-            ));
-        }
-
-        $event = $this->getHookEvent($className, $method, 'after');
-        return $eventManager->filter($event, $args->getReturn(), $args);
+        return $context->execute();
     }
 
     /**
@@ -211,7 +199,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      */
     public function getAlias($name)
     {
-        return isset($this->_aliases[$name]) ? $this->_aliases[$name] : null;
+        return isset($this->aliases[$name]) ? $this->aliases[$name] : null;
     }
 
     /**
