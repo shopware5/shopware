@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\HttpCache;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\HttpCache\Store;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @category  Shopware
@@ -34,15 +34,39 @@ use Shopware\Components\HttpCache\Store;
  */
 class StoreTest extends TestCase
 {
+    public function setUp()
+    {
+        $this->httpCacheStore = new \Shopware\Components\HttpCache\Store(
+            'test',
+            [],
+            true,
+            [
+                'foo',
+                '_foo',
+                '__foo',
+            ]
+        );
+    }
+
     public function provideUrls()
     {
         return [
-            ['http://example.com', 'http://example.com'],
-            ['http://example.com?a=a', 'http://example.com?a=a'],
-            ['http://example.com?z=a&a=a', 'http://example.com?a=a&z=a'],
-            ['http://example.com?z=a&z=b', 'http://example.com?z=b'], // duplicate parameters
-            ['http://example.com?Z=a&z=a', 'http://example.com?Z=a&z=a'], // case sensitive
-            ['http://example.com/?colors[]=red&cars[]=Saab&cars[]=Audi&colors[]=red&colors[]=blue', 'http://example.com/?cars%5B0%5D=Saab&cars%5B1%5D=Audi&colors%5B0%5D=red&colors%5B1%5D=red&colors%5B2%5D=blue'],
+            ['http://example.com', 'http://example.com/'],
+            ['http://example.com?a=a', 'http://example.com/?a=a'],
+            ['http://example.com?z=a&a=a', 'http://example.com/?a=a&z=a'],
+            ['http://example.com?z=a&z=b', 'http://example.com/?z=b'], // duplicate parameters
+            ['http://example.com?Z=a&z=a', 'http://example.com/?Z=a&z=a'], // case sensitive
+            ['http://example.com/?colors[]=red&cars[]=Saab&cars[]=Audi&colors[]=red&colors[]=blue', 'http://example.com/?cars%5B0%5D=Audi&cars%5B1%5D=Saab&colors%5B0%5D=blue&colors%5B1%5D=red&colors%5B2%5D=red'],
+            ['http://example.com?foo', 'http://example.com/'],
+            ['http://example.com?foo=bar', 'http://example.com/'],
+            ['http://example.com?_foo=bar', 'http://example.com/'],
+            ['http://example.com?__foo=bar', 'http://example.com/'],
+            ['http://example.com?foo&z=a&a=a', 'http://example.com/?a=a&z=a'],
+            ['http://example.com?foo=bar&z=a&a=a', 'http://example.com/?a=a&z=a'],
+            ['http://example.com?_foo=bar&z=a&a=a', 'http://example.com/?a=a&z=a'],
+            ['http://example.com?__foo=bar&z=a&a=a', 'http://example.com/?a=a&z=a'],
+            ['http://example.com?z=a&foo=bar&a=a', 'http://example.com/?a=a&z=a'],
+            ['http://example.com?z=a&a=a&foo=bar', 'http://example.com/?a=a&z=a'],
         ];
     }
 
@@ -54,11 +78,15 @@ class StoreTest extends TestCase
      */
     public function testSortQueryParams($url, $expected)
     {
-        $object = $this->createPartialMock(Store::class, []);
-        $class = new \ReflectionClass($object);
-        $method = $class->getMethod('sortQueryStringParameters');
+        $request = Request::create($url);
+
+        $class = new \ReflectionClass($this->httpCacheStore);
+        $method = $class->getMethod('generateCacheKey');
         $method->setAccessible(true);
 
-        $this->assertSame($expected, $method->invokeArgs($object, [$url]));
+        $this->assertSame(
+            'md' . hash('sha256', $expected),
+            $method->invokeArgs($this->httpCacheStore, [$request])
+        );
     }
 }
