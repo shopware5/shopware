@@ -111,7 +111,7 @@ class CronJobSubscriber implements SubscriberInterface
     private function fetchStreams()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(['id', 'name', 'conditions', 'freeze_up']);
+        $query->select(['id', 'name', 'conditions', 'freeze_up', 'static']);
         $query->from('s_customer_streams', 'streams');
 
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
