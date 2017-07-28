@@ -90,7 +90,15 @@ class CronJobSubscriber implements SubscriberInterface
             if ($stream['freeze_up']) {
                 $stream['freeze_up'] = new \DateTime($stream['freeze_up']);
             }
-            $resource->updateFrozenState($stream['id'], $stream['freeze_up'], $stream['conditions']);
+            $result = $resource->updateFrozenState($stream['id'], $stream['freeze_up'], $stream['conditions']);
+            if ($result) {
+                $stream['static'] = $result['static'];
+            }
+
+            if ($stream['static']) {
+                continue;
+            }
+
             $this->streamIndexer->populate($stream['id'], $helper);
         }
 
