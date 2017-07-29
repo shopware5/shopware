@@ -216,6 +216,7 @@ return [
     'is_nan',
     'is_null',
     'is_numeric',
+    'is_object',
     'is_string',
     'iterator_apply',
     'iterator_count',
