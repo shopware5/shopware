@@ -2,60 +2,9 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
-## 5.3.0 
+## 5.3.0
 
-* Added new column `do_not_split` to table `s_search_fields`. Activate to store the values of this field as given into the search index. If not active, the default behaviour is used
-* Added new service `shopware_storefront.price_calculator` which calculates the product price. Was formerly a private method in `shopware_storefront.price_calculation_service`
-* Added service `shopware_media.extension_mapping` to provide a customizable whitelist for media file extensions and their type mapping
-* Removed cleanupPlugins from `Shopware\Bundle\PluginInstallerBundle\Service`
-
-## 5.3.0 - RC2
-
-View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopware/compare/v5.3.0-RC1...v5.3.0-RC2)
-
-### Additions
-
-* Added `selecttree` and `combotree` config elements for plugins
-* Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
-* Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
-* Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
-* Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
-* Added `type` parameter to `Shopware_Controllers_Widgets_Listing::productSliderAction` and `Shopware_Controllers_Widgets_Listing::productsAction` which allows to load product sliders or product boxes.
-* Added new search builder class `Shopware\Components\Model\SearchBuilder`
-* Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
-* Added new `FunctionNode` for IF-ELSE statements in ORM query builder
-* Added `/address` to robots.txt 
-* Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
-* Added `Shopware\Components\Template\Security` class for all requests.
-* Added whitelist for allowed php functions and php modifiers in smarty
-    * template_security.php_modifiers
-    * template_security.php_functions
-* Added new option `showPagingToolbar` to `Shopware.DragAndDropSelector.js`. Default is `false`.
-* Added proper expandability to the manual 'SEO URL generation' and the 'HttpCache Warmer' window in `themes/Backend/ExtJs/backend/performance/view/main/multi_request_tasks.js`
-* Added new filter event `Shopware_Controllers_Performance_filterCounts` to `engine/Shopware/Controllers/Backend/Performance.php` to add custom count of the HttpCache warmer URLs
-* Added new filter event `Shopware_Controllers_Seo_filterCounts` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php` to add a custom SEO URL count
-* Added new notify event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php` to be notified when the SEO URLs are generated via cronjob
-
-### Changes
-
-* Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
-* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
-* Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
-* Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
-* Changed snippet `DetailBuyActionAdd` in `snippets/frontend/detail/buy.ini`, it now contains <span> tags
-* Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
-* Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
-* Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
-* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
-
-### Removals
-
-* Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
-* Removed `eval` from block `frontend_forms_index_headline` in `index.tpl` of `themes\Frontend\Bare\frontend\forms` for `$sSupport.text`
-
-## 5.3.0 - RC1
-
-[View all changes from v5.2.23...v5.3.0-RC1](https://github.com/shopware/shopware/compare/v5.2.23...v5.3.0)
+[View all changes from v5.2.27...v5.3.0](https://github.com/shopware/shopware/compare/v5.2.27...v5.3.0)
 
 ### Additions
 
@@ -186,6 +135,29 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
     * Added property `externalTarget` in `Shopware\Models\Category\Category`
     * Added property `externalTarget` in `Shopware\themes\Backend\ExtJs\backend\category\model\detail`
     * Added translations for field labels and combo box options
+* Added `selecttree` and `combotree` config elements for plugins
+* Added backend configuration option for the newsletter to configure if a captcha is required to subscribe to the newsletter
+* Added two new Smarty blocks for menu and menu item overwrite possibility to the account sidebar
+* Added LiveReload mode for the default grunt which reloads your browser window automatically after the grunt compilation was successful
+* Added `nofollow` attribute to all links in the block `frontend_account_menu` since these links are now visible in the frontend if the account dropdown menu is activated
+* Added `type` parameter to `Shopware_Controllers_Widgets_Listing::productSliderAction` and `Shopware_Controllers_Widgets_Listing::productsAction` which allows to load product sliders or product boxes.
+* Added new search builder class `Shopware\Components\Model\SearchBuilder`
+* Added new search builder as __construct parameter in `Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher`
+* Added new `FunctionNode` for IF-ELSE statements in ORM query builder
+* Added `/address` to robots.txt 
+* Added snippet `DetailBuyActionAddName` in `snippets/frontend/detail/buy.ini`
+* Added `Shopware\Components\Template\Security` class for all requests.
+* Added whitelist for allowed php functions and php modifiers in smarty
+    * template_security.php_modifiers
+    * template_security.php_functions
+* Added new option `showPagingToolbar` to `Shopware.DragAndDropSelector.js`. Default is `false`.
+* Added proper expandability to the manual 'SEO URL generation' and the 'HttpCache Warmer' window in `themes/Backend/ExtJs/backend/performance/view/main/multi_request_tasks.js`
+* Added new filter event `Shopware_Controllers_Performance_filterCounts` to `engine/Shopware/Controllers/Backend/Performance.php` to add custom count of the HttpCache warmer URLs
+* Added new filter event `Shopware_Controllers_Seo_filterCounts` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php` to add a custom SEO URL count
+* Added new notify event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable` to `engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php` to be notified when the SEO URLs are generated via cronjob
+* Added new column `do_not_split` to table `s_search_fields`. Activate to store the values of this field as given into the search index. If not active, the default behaviour is used
+* Added new service `shopware_storefront.price_calculator` which calculates the product price. Was formerly a private method in `shopware_storefront.price_calculation_service`
+* Added service `shopware_media.extension_mapping` to provide a customizable whitelist for media file extensions and their type mapping
 
 ### Changes
 
@@ -245,6 +217,15 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Changed `engine\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator` to support the custom target property
 * Changed `engine\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper` to support the custom target property
 * Changed `engine\Shopware\Components\Compatibility\LegacyStructConverter` to support the custom target property
+* Changed return values so the array keys are now the respective country/state IDs in `\Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService::getCountries`
+* Moved the removal of the whole cache folder after the removal of the `.js` and `.css` files for better handling of huge caches in the `clear_cache.sh` script
+* Changed `Shopware_Controllers_Widgets_Listing::streamSliderAction` to `Shopware_Controllers_Widgets_Listing::streamAction`
+* Changed `Shopware_Controllers_Widgets_Listing::productSliderAction` to `Shopware_Controllers_Widgets_Listing::productsAction`
+* Changed snippet `DetailBuyActionAdd` in `snippets/frontend/detail/buy.ini`, it now contains <span> tags
+* Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
+* Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
+* Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
+* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 
 ### Removals
 
@@ -393,6 +374,9 @@ View all changes from v5.3.0-RC1...v5.3.0-RC2](https://github.com/shopware/shopw
 * Removed `modernizr` option `CSS Transforms`
 * Removed `modernizr` option `CSS Transforms 3D`
 * Removed `modernizr` option `CSS Transitions`
+* Removed event `Shopware_Plugins_HttpCache_ShouldNotCache`
+* Removed `eval` from block `frontend_forms_index_headline` in `index.tpl` of `themes\Frontend\Bare\frontend\forms` for `$sSupport.text`
+* Removed cleanupPlugins from `Shopware\Bundle\PluginInstallerBundle\Service`
 
 ### Deprecations
 
