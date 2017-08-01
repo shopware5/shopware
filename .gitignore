@@ -86,3 +86,4 @@ app/config/parameters.yml
 /dev-ops/docker/_volumes
 /docker-compose.override.yml
 /.psh.yaml
+/dev-ops/docker/containers/*/createuser.sh

@@ -3,7 +3,8 @@
 echo "COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}"
 
 cp dev-ops/docker/docker-compose.override.yml .
-dev-ops/docker/containers/scriptcreator.sh
+dev-ops/docker/containers/scriptcreator.sh __USER_ID__ __GROUP_ID__
+
 docker-compose build && docker-compose up -d
 wait
 

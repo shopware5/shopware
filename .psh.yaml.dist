@@ -18,6 +18,8 @@ templates:
     destination: "dev-ops/docker/containers/php7/Dockerfile"
   - source: "dev-ops/common/templates/parameters.yml.dist"
     destination: "app/config/parameters.yml"
+  - source: "dev-ops/docker/docker-compose.override.yml"
+    destination: "docker-compose.override.yml"
 
 const:
   DB_USER: "app"
@@ -32,6 +34,8 @@ dynamic:
   USERKEY: echo "$(id -u):$(id -g)"
   APP_ID: docker-compose ps -q app_server
   MYSQL_ID: docker-compose ps -q app_mysql
+  USER_ID: id -u
+  GROUP_ID: id -g
 
 environments:
   docker:
