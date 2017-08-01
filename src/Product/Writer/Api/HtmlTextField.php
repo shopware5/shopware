@@ -4,7 +4,7 @@ namespace Shopware\Product\Writer\Api;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
 
-class StringField extends Field
+class HtmlTextField extends Field
 {
     public function __construct(string $name, string $storageName, ConstraintBuilder $constraintBuilder)
     {
@@ -12,14 +12,8 @@ class StringField extends Field
             $name,
             $storageName,
             $constraintBuilder->isNotBlank()->isString()->getConstraints(),
-            $constraintBuilder->isString()->isShorterThen(255)->getConstraints()
+            $constraintBuilder->isString()->getConstraints()
         );
     }
 
-    public function getFilters()
-    {
-        return [
-            new HtmlFilter(),
-        ];
-    }
 }

@@ -2,8 +2,6 @@
 
 namespace Shopware\Product\Tests;
 
-
-
 use Doctrine\DBAL\Connection;
 use Shopware\Product\Writer\Generator;
 use Shopware\Product\Writer\SqlGateway;
@@ -56,10 +54,13 @@ class ApiTest extends KernelTestCase
     public function test_insert()
     {
         $this->writer->insert([
-            'uuid' => self::UUID
+            'uuid' => self::UUID,
+            'the_unknown_field' => 'do nothing?',
         ]);
 
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', [
+            'uuid' => self::UUID
+        ]);
 
         self::assertSame(self::UUID, $product['uuid']);
     }
@@ -73,6 +74,8 @@ class ApiTest extends KernelTestCase
         $this->writer->update(self::UUID, [
             'title' => '_THE_TITLE_',
             'the_unknown_field' => 'do nothing?',
+            'description' => '<p>no html</p>',
+            'descriptionLong' => '<p>html</p>',
             'availableFrom' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'availableTo' => new \DateTime('2011-01-01T15:03:01.012345Z'),
         ]);
@@ -83,6 +86,25 @@ class ApiTest extends KernelTestCase
         self::assertSame('_THE_TITLE_', $product['title']);
         self::assertSame('2011-01-01 15:03:01', $product['available_from']);
         self::assertSame('2011-01-01 15:03:01', $product['available_to']);
+        self::assertSame('no html', $product['description']);
+        self::assertSame('<p>html</p>', $product['description_long']);
+    }
+
+    public function test_update_invalid()
+    {
+        $this->writer->insert([
+            'uuid' => self::UUID
+        ]);
+
+        $tooLongValue = '';
+        for($i = 0; $i < 512; $i++) {
+            $tooLongValue .= '#';
+        }
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->writer->update(self::UUID, [
+            'title' => $tooLongValue,
+        ]);
     }
 
 }

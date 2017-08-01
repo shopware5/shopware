@@ -53,6 +53,10 @@ EOD;
      */
     private $container;
 
+    private $map = [
+        'description_long' => 'HtmlTextField',
+    ];
+
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -75,6 +79,8 @@ EOD;
             $cammelCaseName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $column->getName()))));
             $className = ucfirst($cammelCaseName) . 'Field';
 
+            echo $column->getName() . '::' . $column->getType() . "\n";
+
             $fieldClass = 'AbstractField';
             switch($column->getType()) {
                 case 'Integer':
@@ -87,14 +93,19 @@ EOD;
                     $fieldClass = 'DateField';
                     break;
                 case 'Text':
+                    $fieldClass = 'TextField';
+                    break;
                 case 'String':
                 case StringType::class:
                     $fieldClass = 'StringField';
                     break;
                 default:
                     echo "ERROR: {$column->getType()}\n";
+            }
 
-            };
+            if(array_key_exists($column->getName(), $this->map)) {
+                $fieldClass = $this->map[$column->getName()];
+            }
 
             file_put_contents(
                 $path . '/' . $className . '.php',

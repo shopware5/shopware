@@ -3,9 +3,9 @@
 namespace Shopware\Product\Writer\Field;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\StringField;
+use Shopware\Product\Writer\Api\HtmlTextField;
 
-class DescriptionLongField extends StringField
+class DescriptionLongField extends HtmlTextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {

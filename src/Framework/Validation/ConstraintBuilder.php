@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -55,6 +56,17 @@ class ConstraintBuilder
     public function isNumeric()
     {
         $this->addConstraint(new Type('numeric'));
+
+        return $this;
+    }
+
+    /**
+     * @param int $maxLength
+     * @return $this
+     */
+    public function isShorterThen(int $maxLength)
+    {
+        $this->addConstraint(new Length(['max' => $maxLength]));
 
         return $this;
     }

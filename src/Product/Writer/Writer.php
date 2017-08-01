@@ -4,6 +4,9 @@ namespace Shopware\Product\Writer;
 
 use Shopware\Product\Writer\Api\Field;
 use Shopware\Product\Writer\Api\FieldCollection;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Writer
 {
@@ -11,24 +14,33 @@ class Writer
      * @var SqlGateway
      */
     private $gateway;
+
     /**
-     * @var ProductFieldConfiguration
+     * @var FieldCollection
      */
     private $fieldCollection;
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
 
+    /**
+     * @param SqlGateway $gateway
+     * @param FieldCollection $fieldCollection
+     */
     public function __construct(
         SqlGateway $gateway,
-        FieldCollection $fieldCollection
+        FieldCollection $fieldCollection,
+        ValidatorInterface $validator
     ) {
         $this->gateway = $gateway;
         $this->fieldCollection = $fieldCollection;
+        $this->validator = $validator;
     }
 
     public function insert(array $rawData): void
     {
-        $fields = $this->fieldCollection->getFields();
-
-        $data = $this->filterInputKeys($rawData, $fields);
+        $data = $this->filterInputKeys($rawData);
 
         $this->gateway->insert($data);
 
@@ -52,21 +64,24 @@ class Writer
         foreach($fields as $field) {
             $name = $field->getName();
 
-            // 2.2 filter unknown columns field based
+            // 2.2 filter unknown columns field based -- OK
             if(!array_key_exists($name, $rawData)) {
                 continue;
             }
 
             $rawValue = $rawData[$name];
 
-            // 3. escaping / filtering - e.g. remove html input, map to password, etc pp
-            $filters = $field->getFilters();
-
+            // 3. escaping / filtering - e.g. remove html input, map to password, etc pp --- OK
+            $rawValue = $this->applyFilters($field->getFilters(), $rawValue);
 
             // 4. validation
-            $constraints = $field->getUpdateConstraints();
+            $violations = $this->applyValidation($field->getUpdateConstraints(), $field->getName(), $rawValue);
 
-            // 5. to database value
+            if(count($violations)) {
+                throw new \InvalidArgumentException(sprintf('The value for %s is invalid', $field->getName()));
+            }
+
+            // 5. to database value -- OK
             $data[$field->getStorageName()] = $field->getValueTransformer()->transform($rawValue);
         }
 
@@ -74,16 +89,58 @@ class Writer
         $this->gateway->update($uuid, $data);
     }
 
+    protected function applyValidation(array $constraints, string $fieldName, $value)
+    {
+        $violationList = new ConstraintViolationList();
+
+        foreach($constraints as $constraint) {
+            $violations = $this->validator
+                ->validate($value, $constraint);
+
+            /** @var ConstraintViolation $violation */
+            foreach ($violations as $violation) {
+                $violationList->add(
+                    new ConstraintViolation(
+                        $violation->getMessage(),
+                        $violation->getMessageTemplate(),
+                        $violation->getParameters(),
+                        $violation->getRoot(),
+                        $fieldName,
+                        $violation->getInvalidValue(),
+                        $violation->getPlural(),
+                        $violation->getCode(),
+                        $violation->getConstraint(),
+                        $violation->getCause()
+                    )
+                );
+            }
+        }
+
+        return $violationList;
+    }
+
+    /**
+     * @param array $filters
+     * @param $value
+     * @return mixed
+     */
+    protected function applyFilters(array $filters, $value)
+    {
+        foreach($filters as $filter) {
+            $value = $filter->filter($value);
+        }
+
+        return $value;
+    }
+
     /**
      * @param array $rawData
      * @param $fields
      * @return array
      */
-    protected function filterInputKeys(array $rawData, $fields): array
+    protected function filterInputKeys(array $rawData): array
     {
-        $fieldNames = array_map(function (Field $field) {
-            return $field->getName();
-        }, $fields);
+        $fieldNames = $this->fieldCollection->getFieldNames();
 
         $data = array_filter($rawData, function (string $key) use ($fieldNames) {
             return false !== in_array($key, $fieldNames, true);

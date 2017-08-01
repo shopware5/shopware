@@ -9,6 +9,9 @@ class FieldCollection
      */
     private $fields;
 
+    /**
+     * @param Field[] ...$fields
+     */
     public function __construct(Field ...$fields)
     {
         $this->fields = $fields;
@@ -20,6 +23,16 @@ class FieldCollection
     public function getFields(): array
     {
         return $this->fields;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFieldNames(): array
+    {
+        return array_map(function (Field $field) {
+            return $field->getName();
+        }, $this->fields);
     }
 
 }
