@@ -24,7 +24,7 @@
 
 namespace StorefrontBundle\PageLoader;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
 use StorefrontBundle\Struct\ListingPage;
 
@@ -32,7 +32,7 @@ class ListingPageLoader
 {
     /**
      * @param int $categoryId
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      * @param ShopContextInterface $context
      *
      * @event ListingPageLoadedEvent

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class DeliveryCollection extends Collection
 {

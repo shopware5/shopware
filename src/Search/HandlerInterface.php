@@ -1,17 +1,17 @@
 <?php
 
-namespace SearchBundle;
+namespace Shopware\Search;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
-interface AggregatorInterface
+interface HandlerInterface
 {
     public function supports(CriteriaPartInterface $criteriaPart): bool;
 
-    public function aggregate(
+    public function handle(
         CriteriaPartInterface $criteriaPart,
         QueryBuilder $builder,
         Criteria $criteria,

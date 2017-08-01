@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
@@ -113,7 +113,7 @@ class BatchProductNumberSearchTest extends TestCase
         $category = $this->helper->createCategory();
         $this->createProducts(['BATCH-A' => [], 'BATCH-B' => [], 'BATCH-C' => []], $context, $category);
 
-        $criteria = new Criteria();
+        $criteria = new \Shopware\Search\Criteria();
         $criteria->addCondition(new CategoryCondition([$category->getId()]));
         $criteria->limit(3);
 
@@ -148,7 +148,7 @@ class BatchProductNumberSearchTest extends TestCase
             $category
         );
 
-        $criteria = new Criteria();
+        $criteria = new \Shopware\Search\Criteria();
         $criteria->addCondition(new CategoryCondition([$category->getId()]));
         $criteria->addSorting(new ProductNameSorting());
         $criteria->limit(3);

@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Search\SortingInterface;
+use Shopware\Framework\Struct\Struct;
 
 class ListingSorting extends Struct
 {

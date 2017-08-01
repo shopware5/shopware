@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,17 +23,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Framework\Struct;
 
-/**
- * Interface CriteriaPartInterface
- */
-interface CriteriaPartInterface
+trait JsonSerializableTrait
 {
-    /**
-     * Defines the unique name for the facet for re identification.
-     *
-     * @return string
-     */
-    public function getName();
+    public function jsonSerialize(): array
+    {
+        $data = get_object_vars($this);
+        $data['_class'] = get_class($this);
+
+        return $data;
+    }
 }

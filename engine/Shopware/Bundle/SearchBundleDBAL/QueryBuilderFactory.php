@@ -26,9 +26,9 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\ConditionInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -186,7 +186,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param Criteria                                                       $criteria
+     * @param \Shopware\Search\Criteria                                                       $criteria
      * @param QueryBuilder                                                   $query
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
@@ -202,7 +202,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param SortingInterface $sorting
+     * @param \Shopware\Search\SortingInterface $sorting
      *
      * @throws \Exception
      *

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -40,7 +40,7 @@ interface QueryBuilderFactoryInterface
      *
      * Adds the sortings and conditions of the provided criteria.
      *
-     * @param Criteria             $criteria
+     * @param \Shopware\Search\Criteria             $criteria
      * @param ShopContextInterface $context
      *
      * @return QueryBuilder

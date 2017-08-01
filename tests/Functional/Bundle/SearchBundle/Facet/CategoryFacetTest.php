@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
@@ -187,7 +187,7 @@ class CategoryFacetTest extends TestCase
     }
 
     /**
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      * @param Category $category
      * @param $conditions
      * @param ShopContext $context

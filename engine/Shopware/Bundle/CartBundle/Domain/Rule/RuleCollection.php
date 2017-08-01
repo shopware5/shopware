@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Domain\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Rule\Container\Container;
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class RuleCollection extends Collection
 {

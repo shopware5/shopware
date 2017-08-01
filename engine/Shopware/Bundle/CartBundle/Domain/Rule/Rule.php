@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\CartBundle\Domain\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\Struct;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 abstract class Rule extends Struct
@@ -44,7 +44,7 @@ abstract class Rule extends Struct
      *
      * @param CalculatedCart       $calculatedCart
      * @param ShopContextInterface $context
-     * @param StructCollection     $collection
+     * @param \Shopware\Framework\Struct\StructCollection     $collection
      *
      * @return Match
      */

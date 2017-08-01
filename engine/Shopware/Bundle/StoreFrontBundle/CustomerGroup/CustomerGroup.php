@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\CustomerGroup;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware

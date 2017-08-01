@@ -22,9 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Search;
 
 use Assert\Assertion;
+use Shopware\Search\FacetInterface;
+use Shopware\Search\SortingInterface;
+use Shopware\Search\ConditionInterface;
 
 /**
  * The criteria object is used for the search gateway.
@@ -298,7 +301,7 @@ class Criteria implements \JsonSerializable
      *
      * Do not rely on the array key or the order of the returned conditions.
      *
-     * @return \Shopware\Bundle\SearchBundle\ConditionInterface[]
+     * @return \Shopware\Search\ConditionInterface[]
      */
     public function getConditions()
     {
@@ -309,7 +312,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @return \Shopware\Bundle\SearchBundle\FacetInterface[]
+     * @return \Shopware\Search\FacetInterface[]
      */
     public function getFacets()
     {
@@ -317,7 +320,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @return \Shopware\Bundle\SearchBundle\SortingInterface[]
+     * @return \Shopware\Search\SortingInterface[]
      */
     public function getSortings()
     {

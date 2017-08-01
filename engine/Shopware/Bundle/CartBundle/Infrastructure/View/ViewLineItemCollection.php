@@ -25,12 +25,12 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
-use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
+use Shopware\Framework\Struct\Collection;
+use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
 class ViewLineItemCollection extends Collection
 {
-    use SortArrayByKeysTrait;
+    use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
     /**
      * @var ViewLineItemInterface[]

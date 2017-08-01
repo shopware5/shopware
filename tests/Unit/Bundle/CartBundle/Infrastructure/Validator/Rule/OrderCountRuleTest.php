@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderCountRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderCountRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderCountRuleTest extends TestCase

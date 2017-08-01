@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,38 +22,38 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Search\Condition;
 
-class StructCollection extends Collection
+use Shopware\Search\ConditionInterface;
+
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class CustomerGroupCondition implements ConditionInterface
 {
     /**
-     * @var Struct[]
+     * @var int[]
      */
-    protected $elements = [];
+    private $customerGroupIds;
 
-    public function add(Struct $struct, $key = null): void
+    public function __construct(array $customerGroupIds)
     {
-        if ($key !== null) {
-            $this->elements[$key] = $struct;
-        } else {
-            $this->elements[] = $struct;
-        }
+        $this->customerGroupIds = array_map(function($id) {
+            return (int) $id;
+        }, $customerGroupIds);
+
+        sort($this->customerGroupIds, SORT_NUMERIC);
     }
 
-    public function fill(array $elements): void
+    public function getName()
     {
-        foreach ($elements as $key => $element) {
-            $this->add($element, $key);
-        }
+        return self::class;
     }
 
-    public function removeByKey($key): void
+    public function getCustomerGroupIds(): array
     {
-        $this->doRemoveByKey($key);
-    }
-
-    public function get($key): ? Struct
-    {
-        return $this->elements[$key];
+        return $this->customerGroupIds;
     }
 }

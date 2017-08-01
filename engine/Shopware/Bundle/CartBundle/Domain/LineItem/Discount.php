@@ -26,7 +26,7 @@ namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewLineItemInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 class Discount extends Struct implements CalculatedLineItemInterface, ViewLineItemInterface

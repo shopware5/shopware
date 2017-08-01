@@ -3,7 +3,7 @@
 namespace ProductBundle\Gateway\Searcher;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use SearchBundle\Search;
+use Shopware\Search\Search;
 
 class ProductSearcher extends Search
 {

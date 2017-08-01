@@ -30,8 +30,8 @@ use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\ExistsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
@@ -146,7 +146,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     /**
      * @param ProductAttributeFacet $criteriaPart
      * @param $data
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      *
      * @return null|RadioFacetResult|ValueListFacetResult
      */
@@ -206,7 +206,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     /**
      * @param ProductAttributeFacet $criteriaPart
      * @param $data
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      *
      * @return null|BooleanFacetResult
      */
@@ -237,7 +237,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     /**
      * @param ProductAttributeFacet $criteriaPart
      * @param $data
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      *
      * @return RangeFacetResult
      */

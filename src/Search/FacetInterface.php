@@ -22,21 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Search;
+
+use Shopware\Search\CriteriaPartInterface;
 
 /**
- * Defines a condition which can be added to the
- * \Shopware\SearchBundle\Criteria class.
- *
- * Each condition is handled by his own condition handler
- * which defined in the specify gateway engines.
- *
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface SortingInterface extends CriteriaPartInterface
+interface FacetInterface extends CriteriaPartInterface
 {
-    const SORT_ASC = 'ASC';
-    const SORT_DESC = 'DESC';
 }

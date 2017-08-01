@@ -1,8 +1,8 @@
 <?php
 
-namespace SearchBundle\Condition;
+namespace Shopware\Search\Condition;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 
 class ShopCondition implements ConditionInterface
 {
@@ -13,7 +13,9 @@ class ShopCondition implements ConditionInterface
 
     public function __construct(array $ids)
     {
-        $this->ids = $ids;
+        $this->ids = array_map(function($id) {
+            return (int) $id;
+        }, $ids);
     }
 
     public function getIds(): array

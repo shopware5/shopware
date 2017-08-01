@@ -24,20 +24,20 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\FacetInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface PartialFacetHandlerInterface
 {
     /**
      * @param FacetInterface       $facet
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
+     * @param \Shopware\Search\Criteria             $reverted
+     * @param \Shopware\Search\Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return FacetResultInterface
+     * @return \Shopware\Search\FacetResultInterface
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -49,7 +49,7 @@ interface PartialFacetHandlerInterface
     /**
      * Checks if the provided facet can be handled by this class.
      *
-     * @param FacetInterface $facet
+     * @param \Shopware\Search\FacetInterface $facet
      *
      * @return bool
      */

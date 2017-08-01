@@ -28,7 +28,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Added block `frontend_advanced_menu_outer` in `themes/Frontend/Bare/frontend/index/index.tpl` for advanced menu
 * Added `\Shopware\Controllers\Widgets\AdvancedMenu` controller
 * Added `\Shopware\Bundle\StoreFrontBundle\Common\KeyCollection` - used for associated arrays 
-* Added `\Shopware\Bundle\StoreFrontBundle\Common\Collection` - used for none associated arrays
+* Added `\Shopware\Framework\Struct\Collection` - used for none associated arrays
 * Added `\Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection` - Typed key collection for category structs
 
 ## Changes

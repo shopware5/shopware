@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 

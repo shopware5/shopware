@@ -32,7 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderCountRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderCountRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class OrderCountRuleCollector implements CollectorInterface

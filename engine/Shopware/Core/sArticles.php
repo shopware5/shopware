@@ -25,7 +25,7 @@
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
@@ -416,13 +416,13 @@ class sArticles
 
     /**
      * @param null                  $categoryId
-     * @param SearchBundle\Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      *
      * @throws Enlight_Exception
      *
      * @return array|bool|mixed
      */
-    public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
+    public function sGetArticlesByCategory($categoryId = null, \Shopware\Search\Criteria $criteria = null)
     {
         if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
             'subject' => $this,
@@ -2018,7 +2018,7 @@ class sArticles
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      * @param Enlight_Controller_Request_RequestHttp                         $request
      *
-     * @return SearchBundle\Criteria
+     * @return \Shopware\Search\Criteria
      */
     private function createProductNavigationCriteria(
         $categoryId,
@@ -2347,7 +2347,7 @@ class sArticles
      * @param $categoryId
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      * @param Enlight_Controller_Request_Request                             $request
-     * @param SearchBundle\Criteria                                          $criteria
+     * @param \Shopware\Search\Criteria                                          $criteria
      *
      * @return array
      */
@@ -2355,7 +2355,7 @@ class sArticles
         $categoryId,
         StoreFrontBundle\Context\ShopContextInterface $context,
         Enlight_Controller_Request_Request $request,
-        SearchBundle\Criteria $criteria
+        \Shopware\Search\Criteria $criteria
     ) {
         $searchResult = $this->searchService->search(
             $criteria,

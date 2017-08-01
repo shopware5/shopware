@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
+use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 /**
@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
  */
 class CountryGateway
 {
-    use SortArrayByKeysTrait;
+    use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
     /**
      * @var CountryHydrator

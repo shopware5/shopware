@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 use Ramsey\Uuid\Uuid;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class CartContainer extends Struct
 {

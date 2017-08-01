@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
@@ -86,12 +86,12 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface       $facet
+     * @param \Shopware\Search\FacetInterface       $facet
      * @param Criteria             $reverted
      * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return FacetResultInterface|null
+     * @return \Shopware\Search\FacetResultInterface|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -151,7 +151,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     /**
      * Checks if the passed facet can be handled by this class.
      *
-     * @param FacetInterface $facet
+     * @param \Shopware\Search\FacetInterface $facet
      *
      * @return bool
      */

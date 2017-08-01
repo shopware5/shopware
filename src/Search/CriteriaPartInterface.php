@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,38 +22,17 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Search;
 
 /**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Interface CriteriaPartInterface
  */
-interface ExtendableInterface
+interface CriteriaPartInterface
 {
     /**
-     * Adds a new attribute struct into the class storage.
-     * The passed name is used as unique identifier and has to be stored too.
+     * Defines the unique name for the facet for re identification.
      *
-     * @param string    $name
-     * @param Attribute $attribute
+     * @return string
      */
-    public function addAttribute(string $name, Attribute $attribute): void;
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function addAttributes(array $attributes): void;
-
-    public function getAttribute(string $name): Attribute;
-
-    public function hasAttribute(string $name): bool;
-
-    /**
-     * Returns all stored attribute structures of this class.
-     * The array has to be an associated array with name and attribute instance.
-     *
-     * @return Attribute[]
-     */
-    public function getAttributes(): array;
+    public function getName();
 }

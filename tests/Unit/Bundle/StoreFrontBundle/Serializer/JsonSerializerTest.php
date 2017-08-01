@@ -26,8 +26,8 @@ namespace Shopware\Tests\Unit\StoreFrontBundle\Serializer;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Collection;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
 use Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer;
 
@@ -129,12 +129,12 @@ class IdStruct extends Struct
 class StructWithStructArrayConstructor extends Struct
 {
     /**
-     * @var Struct[]
+     * @var \Shopware\Framework\Struct\Struct[]
      */
     protected $structs;
 
     /**
-     * @param Struct[] $structs
+     * @param \Shopware\Framework\Struct\Struct[] $structs
      */
     public function __construct(array $structs)
     {
@@ -150,12 +150,12 @@ class StructWithStructArrayConstructor extends Struct
 class StructWithStructConstructor extends Struct
 {
     /**
-     * @var Struct|null
+     * @var \Shopware\Framework\Struct\Struct|null
      */
     protected $struct;
 
     /**
-     * @param Struct|null $struct
+     * @param \Shopware\Framework\Struct\Struct|null $struct
      */
     public function __construct(?Struct $struct)
     {

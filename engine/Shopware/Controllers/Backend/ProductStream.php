@@ -24,7 +24,7 @@
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
 use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;

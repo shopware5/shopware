@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -37,7 +37,7 @@ interface SortingHandlerInterface
     /**
      * Checks if the passed sorting can be handled by this class
      *
-     * @param SortingInterface $sorting
+     * @param \Shopware\Search\SortingInterface $sorting
      *
      * @return bool
      */

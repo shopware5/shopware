@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,25 +24,24 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Framework\Struct;
 
-trait SortArrayByKeysTrait
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+abstract class Struct implements \JsonSerializable, ExtendableInterface
 {
-    /**
-     * @param int[]|string[] $sortedKeys
-     * @param array          $indexedArray - indexed with keys
-     *
-     * @return array
-     */
-    protected function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
-    {
-        $sorted = [];
-        foreach ($sortedKeys as $index) {
-            if (array_key_exists($index, $indexedArray)) {
-                $sorted[$index] = $indexedArray[$index];
-            }
-        }
+    //allows to clone full struct with all references
+    use CloneTrait;
 
-        return $sorted;
-    }
+    //allows json_encode and to decode object via \Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer
+    use JsonSerializableTrait;
+
+    //allows to assign array data to this object
+    use AssignArrayTrait;
+
+    //allows to add values to an internal attribute storage
+    use ExtendableTrait;
 }

@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
+use Shopware\Search\Criteria;
+
 /**
  * @category  Shopware
  *

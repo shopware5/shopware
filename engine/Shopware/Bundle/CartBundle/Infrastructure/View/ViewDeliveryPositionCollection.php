@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class ViewDeliveryPositionCollection extends Collection
 {

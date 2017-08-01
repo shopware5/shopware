@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface HandlerInterface
@@ -34,7 +34,7 @@ interface HandlerInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     * @param CriteriaPartInterface $criteriaPart
+     * @param \Shopware\Search\CriteriaPartInterface $criteriaPart
      *
      * @return bool
      */
@@ -43,7 +43,7 @@ interface HandlerInterface
     /**
      * Handles the criteria part and extends the provided search.
      *
-     * @param CriteriaPartInterface                                          $criteriaPart
+     * @param \Shopware\Search\CriteriaPartInterface                                          $criteriaPart
      * @param Criteria                                                       $criteria
      * @param Search                                                         $search
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context

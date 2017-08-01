@@ -30,9 +30,9 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
-class ConfiguredLineItem extends Struct implements DeliverableLineItemInterface
+class ConfiguredLineItem extends \Shopware\Framework\Struct\Struct implements DeliverableLineItemInterface
 {
     /**
      * @var string

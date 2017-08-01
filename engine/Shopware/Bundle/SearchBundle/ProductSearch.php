@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Search\Criteria;
 
 /**
  * @category  Shopware

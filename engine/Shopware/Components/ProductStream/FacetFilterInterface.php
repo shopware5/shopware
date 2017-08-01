@@ -24,8 +24,8 @@
 
 namespace Shopware\Components\ProductStream;
 
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\FacetResultInterface;
 
 /**
  * Class FacetFilter
@@ -33,19 +33,19 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 interface FacetFilterInterface
 {
     /**
-     * Adds \Shopware\Bundle\SearchBundle\FacetInterface to the provided criteria,
+     * Adds \Shopware\Search\FacetInterface to the provided criteria,
      * which not already filtered by the stream
      *
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     public function add(Criteria $criteria);
 
     /**
-     * Filters and merge the provided \Shopware\Bundle\SearchBundle\FacetResultInterface
+     * Filters and merge the provided \Shopware\Search\FacetResultInterface
      * with the already filtered stream conditions.
      *
-     * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
+     * @param \Shopware\Search\FacetResultInterface[] $facets
+     * @param \Shopware\Search\Criteria               $criteria
      *
      * @return FacetResultInterface[]
      */

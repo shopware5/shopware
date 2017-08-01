@@ -25,7 +25,7 @@
 namespace StorefrontBundle\Event;
 
 use EventBundle\Event;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
 use StorefrontBundle\Struct\ListingPage;
 
@@ -37,7 +37,7 @@ class ListingPageLoadedEvent extends Event
     protected $page;
 
     /**
-     * @var Criteria
+     * @var \Shopware\Search\Criteria
      */
     protected $criteria;
 

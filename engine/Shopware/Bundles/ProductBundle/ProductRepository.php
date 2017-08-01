@@ -31,9 +31,9 @@ use ProductBundle\Gateway\Searcher\ProductSearcher;
 use ProductBundle\Struct\DetailProduct;
 use ProductBundle\Struct\ListProduct;
 use ProductBundle\Struct\ProductCollection;
-use SearchBundle\AggregationResult;
-use SearchBundle\SearchResult;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\AggregationResult;
+use Shopware\Search\SearchResult;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class ProductRepository

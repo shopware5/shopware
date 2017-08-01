@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
@@ -72,7 +72,7 @@ class CombinedConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @param ConditionInterface $condition
+     * @param \Shopware\Search\ConditionInterface $condition
      *
      * @throws \Exception
      *

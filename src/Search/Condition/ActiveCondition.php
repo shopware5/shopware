@@ -1,8 +1,8 @@
 <?php
 
-namespace SearchBundle\Condition;
+namespace Shopware\Search\Condition;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 
 class ActiveCondition implements ConditionInterface
 {

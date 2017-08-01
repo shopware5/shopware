@@ -32,7 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Product\ProductFetchDefinition;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\ProductAttributeRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductAttributeRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;
 

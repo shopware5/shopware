@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Listing\ListingFacet;
@@ -97,7 +97,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if ($categoryContent['streamId']) {
             $criteria = $this->createCategoryStreamCriteria($categoryId, $categoryContent['streamId']);
         } else {
-            /** @var $criteria Criteria */
+            /** @var $criteria \Shopware\Search\Criteria */
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
                 ->createListingCriteria($this->Request(), $context);
         }
@@ -440,7 +440,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * @param int $categoryId
      * @param int $streamId
      *
-     * @return Criteria
+     * @return \Shopware\Search\Criteria
      */
     private function createCategoryStreamCriteria($categoryId, $streamId)
     {

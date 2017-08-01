@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\Rule\Data;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class RecentOrderRuleData extends Struct
 {

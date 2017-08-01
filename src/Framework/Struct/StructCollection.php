@@ -23,15 +23,41 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Framework\Struct;
 
-trait JsonSerializableTrait
+use Shopware\Framework\Struct\Collection;
+use Shopware\Framework\Struct\Struct;
+
+class StructCollection extends Collection
 {
-    public function jsonSerialize(): array
-    {
-        $data = get_object_vars($this);
-        $data['_class'] = get_class($this);
+    /**
+     * @var Struct[]
+     */
+    protected $elements = [];
 
-        return $data;
+    public function add(Struct $struct, $key = null): void
+    {
+        if ($key !== null) {
+            $this->elements[$key] = $struct;
+        } else {
+            $this->elements[] = $struct;
+        }
+    }
+
+    public function fill(array $elements): void
+    {
+        foreach ($elements as $key => $element) {
+            $this->add($element, $key);
+        }
+    }
+
+    public function removeByKey($key): void
+    {
+        $this->doRemoveByKey($key);
+    }
+
+    public function get($key): ? Struct
+    {
+        return $this->elements[$key];
     }
 }

@@ -29,7 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\Goods;
 use Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException;
 use Shopware\Bundle\CartBundle\Domain\Rule\Match;
 use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class GoodsCountRule extends Rule

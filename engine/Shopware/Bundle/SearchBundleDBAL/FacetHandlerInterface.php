@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\FacetInterface;
+use Shopware\Search\FacetResultInterface;
 
 /**
  * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface instead
@@ -41,7 +41,7 @@ interface FacetHandlerInterface
      * Generates the facet data for the passed query, criteria and context object.
      *
      * @param FacetInterface                                                 $facet
-     * @param Criteria                                                       $criteria
+     * @param \Shopware\Search\Criteria                                                       $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return null|FacetResultInterface|FacetResultInterface[]

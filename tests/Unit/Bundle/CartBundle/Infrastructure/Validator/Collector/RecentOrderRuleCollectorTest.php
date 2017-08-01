@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\RecentOrderRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\RecentOrderRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\RecentOrderRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;

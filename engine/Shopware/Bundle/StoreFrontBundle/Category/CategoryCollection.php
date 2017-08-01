@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class CategoryCollection extends Collection
 {

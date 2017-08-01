@@ -3,11 +3,11 @@
 namespace VoteBundle\Gateway\Handler;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 use SearchBundle\Condition\ProductNumberCondition;
-use SearchBundle\HandlerInterface;
+use Shopware\Search\HandlerInterface;
 
 class ProductNumberConditionHandler implements HandlerInterface
 {

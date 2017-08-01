@@ -23,9 +23,10 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Framework\Struct;
 
 use ArrayIterator;
+use Shopware\Framework\Struct\Struct;
 
 abstract class Collection extends Struct implements \IteratorAggregate
 {

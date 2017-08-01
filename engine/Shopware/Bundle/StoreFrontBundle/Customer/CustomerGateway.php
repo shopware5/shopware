@@ -27,12 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Customer;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
+use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class CustomerGateway
 {
-    use SortArrayByKeysTrait;
+    use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
     /**
      * @var FieldHelper
