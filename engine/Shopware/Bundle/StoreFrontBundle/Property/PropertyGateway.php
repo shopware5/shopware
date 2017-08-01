@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\TranslationContext;
 
 /**
@@ -77,7 +77,7 @@ class PropertyGateway
 
     /**
      * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper                 $fieldHelper
      * @param PropertyHydrator            $propertyHydrator
      * @param \Shopware_Components_Config $config
      */

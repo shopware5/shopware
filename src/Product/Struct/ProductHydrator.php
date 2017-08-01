@@ -22,15 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Product;
+namespace Shopware\Product\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Esd\EsdHydrator;
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerHydrator;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
-use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
-use Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator;
+use Shopware\Framework\Struct\Hydrator;
 
 /**
  * @category  Shopware
@@ -39,60 +33,51 @@ use Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator;
  */
 class ProductHydrator extends Hydrator
 {
-    /**
-     * @var ManufacturerHydrator
-     */
-    private $manufacturerHydrator;
+//    /**
+//     * @var ManufacturerHydrator
+//     */
+//    private $manufacturerHydrator;
+//
+//    /**
+//     * @var TaxHydrator
+//     */
+//    private $taxHydrator;
+//
+//    /**
+//     * @var \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator
+//     */
+//    private $unitHydrator;
+//
+//    /**
+//     * @var EsdHydrator
+//     */
+//    private $esdHydrator;
+//
+//    /**
+//     * @var \Shopware_Components_Config
+//     */
+//    private $config;
+//
+//    public function __construct(
+//        ManufacturerHydrator $manufacturerHydrator,
+//        TaxHydrator $taxHydrator,
+//        UnitHydrator $unitHydrator,
+//        EsdHydrator $esdHydrator,
+//        \Shopware_Components_Config $config
+//    ) {
+//        $this->manufacturerHydrator = $manufacturerHydrator;
+//        $this->taxHydrator = $taxHydrator;
+//        $this->unitHydrator = $unitHydrator;
+//        $this->esdHydrator = $esdHydrator;
+//        $this->config = $config;
+//    }
 
-    /**
-     * @var TaxHydrator
-     */
-    private $taxHydrator;
-
-    /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator
-     */
-    private $unitHydrator;
-
-    /**
-     * @var EsdHydrator
-     */
-    private $esdHydrator;
-
-    /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    public function __construct(
-        ManufacturerHydrator $manufacturerHydrator,
-        TaxHydrator $taxHydrator,
-        UnitHydrator $unitHydrator,
-        EsdHydrator $esdHydrator,
-        \Shopware_Components_Config $config
-    ) {
-        $this->manufacturerHydrator = $manufacturerHydrator;
-        $this->taxHydrator = $taxHydrator;
-        $this->unitHydrator = $unitHydrator;
-        $this->esdHydrator = $esdHydrator;
-        $this->config = $config;
-    }
-
-    /**
-     * Hydrates the passed data and converts the ORM
-     * array values into a Struct\ListProduct class.
-     *
-     * @param array $data
-     *
-     * @return ListProduct
-     */
-    public function hydrateListProduct(array $data)
+    public function hydrate(array $data): Product
     {
-        $product = new ListProduct(
-            (int) $data['__product_id'],
-            (int) $data['__variant_id'],
-            $data['__variant_ordernumber']
-        );
+        $product = new Product();
+        $product->setId((int) $data['__product_id']);
+        $product->setVariantId((int) $data['__variant_id']);
+        $product->setNumber($data['__variant_ordernumber']);
 
         return $this->assignData($product, $data);
     }
@@ -102,7 +87,7 @@ class ProductHydrator extends Hydrator
      *
      * @return array
      */
-    public function getProductTranslation(array $data)
+    public function getProductTranslation(array $data): array
     {
         $translation = $this->getTranslation($data, '__product', [], null, false);
         $variant = $this->getTranslation($data, '__variant', [], null, false);
@@ -125,87 +110,73 @@ class ProductHydrator extends Hydrator
         return $result;
     }
 
-    /**
-     * @param ListProduct $product
-     * @param array       $data
-     *
-     * @return ListProduct
-     */
-    private function assignData(ListProduct $product, array $data)
+    private function assignData(Product $product, array $data): Product
     {
         $translation = $this->getProductTranslation($data);
         $data = array_merge($data, $translation);
 
         $this->assignProductData($product, $data);
 
-        $product->setTax(
-            $this->taxHydrator->hydrate($data)
-        );
+//        $product->setTax(
+//            $this->taxHydrator->hydrate($data)
+//        );
 
-        $this->assignPriceGroupData($product, $data);
+//        $this->assignPriceGroupData($product, $data);
 
-        if ($data['__product_supplierID']) {
-            $product->setManufacturer(
-                $this->manufacturerHydrator->hydrate($data)
-            );
-        }
+//        if ($data['__product_supplierID']) {
+//            $product->setManufacturer(
+//                $this->manufacturerHydrator->hydrate($data)
+//            );
+//        }
+//
+//        if ($data['__esd_id']) {
+//            $product->setEsd(
+//                $this->esdHydrator->hydrate($data)
+//            );
+//        }
 
-        if ($data['__esd_id']) {
-            $product->setEsd(
-                $this->esdHydrator->hydrate($data)
-            );
-        }
+//        $product->setUnit(
+//            $this->unitHydrator->hydrate($data)
+//        );
 
-        $product->setUnit(
-            $this->unitHydrator->hydrate($data)
-        );
-
-        if (!empty($data['__productAttribute_id'])) {
-            $this->assignAttributeData($product, $data);
-        }
+//        if (!empty($data['__productAttribute_id'])) {
+//            $this->assignAttributeData($product, $data);
+//        }
 
         $today = new \DateTime();
-
         $diff = $today->diff($product->getCreatedAt());
-
-        $marker = (int) $this->config->get('markAsNew');
+//        $marker = (int) $this->config->get('markAsNew');
+        $marker = 10;
 
         $product->setIsNew(
-            ($diff->days <= $marker || $product->getCreatedAt() > $today)
+            $diff->days <= $marker || $product->getCreatedAt() > $today
         );
 
         $product->setComingSoon(
-            ($product->getReleaseDate() && $product->getReleaseDate() > $today)
+            $product->getReleaseDate() && $product->getReleaseDate() > $today
         );
 
-        $product->setIsTopSeller(
-            ($product->getSales() >= $this->config->get('markAsTopSeller'))
-        );
+//        $marker = $this->config->get('markAsTopSeller');
+        $marker = 10;
+        $product->setIsTopSeller($product->getSales() >= $marker);
 
         return $product;
     }
 
-    /**
-     * @param ListProduct $product
-     * @param array       $data
-     */
-    private function assignPriceGroupData(ListProduct $product, array $data)
-    {
-        if (!empty($data['__priceGroup_id'])) {
-            $product->setPriceGroup(new PriceGroup());
-            $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
-            $product->getPriceGroup()->setName($data['__priceGroup_description']);
-        }
-    }
+//    /**
+//     * @param ListProduct $product
+//     * @param array       $data
+//     */
+//    private function assignPriceGroupData(ListProduct $product, array $data)
+//    {
+//        if (!empty($data['__priceGroup_id'])) {
+//            $product->setPriceGroup(new PriceGroup());
+//            $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
+//            $product->getPriceGroup()->setName($data['__priceGroup_description']);
+//        }
+//    }
 
-    /**
-     * Helper function which assigns the shopware article
-     * data to the product. (data of s_articles)
-     *
-     * @param ListProduct $product
-     * @param $data
-     */
-    private function assignProductData(ListProduct $product, array $data)
+    private function assignProductData(Product $product, array $data): void
     {
         $product->setName($data['__product_name']);
         $product->setShortDescription($data['__product_description']);
@@ -256,27 +227,28 @@ class ProductHydrator extends Hydrator
         $product->setBlockedCustomerGroupIds($customerGroups);
         $product->setHasAvailableVariant($data['__product_has_available_variants'] > 0);
 
-        $product->setFallbackPriceCount($data['__product_fallback_price_count']);
-        if (array_key_exists('__product_custom_price_count', $data)) {
-            $product->setCustomerPriceCount($data['__product_custom_price_count']);
-        } else {
-            $product->setCustomerPriceCount($data['__product_fallback_price_count']);
-        }
+//        $product->setFallbackPriceCount($data['__product_fallback_price_count']);
+//        if (array_key_exists('__product_custom_price_count', $data)) {
+//            $product->setCustomerPriceCount($data['__product_custom_price_count']);
+//        } else {
+//            $product->setCustomerPriceCount($data['__product_fallback_price_count']);
+//        }
     }
 
-    /**
-     * Iterates the attribute data and assigns the attribute struct to the product.
-     *
-     * @param ListProduct $product
-     * @param $data
-     */
-    private function assignAttributeData(ListProduct $product, array $data)
-    {
-        $translation = $this->getProductTranslation($data);
-        $translation = $this->extractFields('__attribute_', $translation);
-        $attributeData = $this->extractFields('__productAttribute_', $data);
-        $attributeData = array_merge($attributeData, $translation);
-        $attribute = new Attribute($attributeData);
-        $product->addAttribute('core', $attribute);
-    }
+//    /**
+//     * Iterates the attribute data and assigns the attribute struct to the product.
+//     *
+//     * @param ListProduct $product
+//     * @param $data
+//     */
+//    private function assignAttributeData(ListProduct $product, array $data)
+//    {
+//        $translation = $this->getProductTranslation($data);
+//        $translation = $this->extractFields('__attribute_', $translation);
+//        $attributeData = $this->extractFields('__productAttribute_', $data);
+//        $attributeData = array_merge($attributeData, $translation);
+//        $attribute = new Attribute($attributeData);
+//        $product->addAttribute('core', $attribute);
+//    }
+
 }

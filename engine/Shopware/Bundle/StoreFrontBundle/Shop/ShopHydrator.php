@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryHydrator;
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Category\Struct\CategoryHydrator;
+use Shopware\Framework\Struct\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator;
 use Shopware\Bundle\StoreFrontBundle\Currency\CurrencyHydrator;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator;
@@ -40,7 +40,7 @@ class ShopHydrator extends Hydrator
     private $templateHydrator;
 
     /**
-     * @var CategoryHydrator
+     * @var \Shopware\Category\Struct\CategoryHydrator
      */
     private $categoryHydrator;
 

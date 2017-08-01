@@ -22,51 +22,51 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ProductBundle\Struct;
+namespace Shopware\Product\Struct;
 
 use Shopware\Framework\Struct\Collection;
 
 class ProductCollection extends Collection
 {
-//    /**
-//     * @var Product[]
-//     */
-//    protected $elements = [];
-//
-//    public function add(Product $product): void
-//    {
-//        $this->elements[$this->getKey($product)] = $product;
-//    }
-//
-//    public function remove(string $number): void
-//    {
-//        parent::doRemoveByKey($number);
-//    }
-//
-//    public function removeElement(Product $product): void
-//    {
-//        parent::doRemoveByKey($this->getKey($product));
-//    }
-//
-//    public function exists(Product $product): bool
-//    {
-//        return parent::has($this->getKey($product));
-//    }
-//
-//    public function get(string $number): ? Product
-//    {
-//        if ($this->has($number)) {
-//            return $this->elements[$number];
-//        }
-//
-//        return null;
-//    }
-//
-//    public function getIdentifiers(): array
-//    {
-//        return $this->getKeys();
-//    }
-//
+    /**
+     * @var Product[]
+     */
+    protected $elements = [];
+
+    public function add(Product $product): void
+    {
+        $this->elements[$this->getKey($product)] = $product;
+    }
+
+    public function remove(string $number): void
+    {
+        parent::doRemoveByKey($number);
+    }
+
+    public function removeElement(Product $product): void
+    {
+        parent::doRemoveByKey($this->getKey($product));
+    }
+
+    public function exists(Product $product): bool
+    {
+        return parent::has($this->getKey($product));
+    }
+
+    public function get(string $number): ? Product
+    {
+        if ($this->has($number)) {
+            return $this->elements[$number];
+        }
+
+        return null;
+    }
+
+    public function getIdentifiers(): array
+    {
+        return $this->getKeys();
+    }
+
 //    public function getUnits(): UnitCollection
 //    {
 //        $units = $this->map(function (Product $product) {
@@ -93,9 +93,9 @@ class ProductCollection extends Collection
 //
 //        return new TaxCollection(array_filter($taxes));
 //    }
-//
-//    protected function getKey(Product $element): string
-//    {
-//        return $element->getNumber();
-//    }
+
+    protected function getKey(Product $element): string
+    {
+        return $element->getNumber();
+    }
 }

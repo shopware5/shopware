@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Framework\Struct\Hydrator;
 use Shopware\Components\LogawareReflectionHelper;
 
 class ListingHydrator extends Hydrator

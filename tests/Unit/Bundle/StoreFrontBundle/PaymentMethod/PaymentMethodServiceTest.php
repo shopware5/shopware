@@ -38,7 +38,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodService;

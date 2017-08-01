@@ -2,12 +2,12 @@
 
 namespace StorefrontBundle\Struct;
 
-use ProductBundle\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductCollection;
 
 class ProductSearchResult
 {
     /**
-     * @var ProductCollection
+     * @var \Shopware\Product\Struct\ProductCollection
      */
     protected $products;
 
@@ -16,13 +16,13 @@ class ProductSearchResult
      */
     protected $total;
 
-    public function __construct(ProductCollection $products, $total)
+    public function __construct(\Shopware\Product\Struct\ProductCollection $products, $total)
     {
         $this->products = $products;
         $this->total = $total;
     }
 
-    public function getProducts(): ProductCollection
+    public function getProducts(): \Shopware\Product\Struct\ProductCollection
     {
         return $this->products;
     }

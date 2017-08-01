@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Framework\Struct\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator;
 
 /**

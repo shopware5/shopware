@@ -24,13 +24,13 @@
 
 namespace ProductBundle;
 
-use ProductBundle\Exception\NotSupportedFetchMode;
+use Shopware\Product\Exception\NotSupportedFetchMode;
 use ProductBundle\Gateway\PriceReader;
 use ProductBundle\Gateway\ProductReader;
 use ProductBundle\Gateway\Searcher\ProductSearcher;
 use ProductBundle\Struct\DetailProduct;
 use ProductBundle\Struct\ListProduct;
-use ProductBundle\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductCollection;
 use Shopware\Search\AggregationResult;
 use Shopware\Search\SearchResult;
 use Shopware\Search\Criteria;
@@ -70,7 +70,7 @@ class ProductRepository
     }
 
 
-    public function read(array $numbers, TranslationContext $context, $fetchMode = self::FETCH_MINIMAL): Struct\ProductCollection
+    public function read(array $numbers, TranslationContext $context, $fetchMode = self::FETCH_MINIMAL): \Shopware\Product\Struct\ProductCollection
     {
         switch ($fetchMode) {
             case self::FETCH_MINIMAL:
@@ -107,7 +107,7 @@ class ProductRepository
         return $this->productSearcher->aggregate($criteria, $context);
     }
 
-    private function readList(array $numbers, TranslationContext $context): Struct\ProductCollection
+    private function readList(array $numbers, TranslationContext $context): \Shopware\Product\Struct\ProductCollection
     {
         $products = $this->productReader->read($numbers, $context);
 
@@ -125,7 +125,7 @@ class ProductRepository
         return $collection;
     }
 
-    private function readDetails(array $numbers, TranslationContext $context): Struct\ProductCollection
+    private function readDetails(array $numbers, TranslationContext $context): \Shopware\Product\Struct\ProductCollection
     {
         $products = $this->readList($numbers, $context);
 

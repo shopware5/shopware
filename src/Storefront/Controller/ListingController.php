@@ -8,9 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ListingController extends Controller
 {
     /**
-     * @Route("/listing/{id}", name="listing")
+     * @Route("/listing/{id}", name="listing_page")
      */
     public function indexAction($id, Request $request)
     {
+        echo '<pre>';
+        print_r($id);
+        exit();
     }
 }

@@ -30,7 +30,7 @@ use ProductBundle\Gateway\Aggregator\VoteAverageAggregator;
 use ProductBundle\ProductRepository;
 use StorefrontBundle\Event\ListProductsLoadedEvent;
 use ProductBundle\Struct\ListProduct;
-use ProductBundle\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductCollection;
 use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
 use StorefrontBundle\Struct\ListProduct as StoreFrontListProduct;
 

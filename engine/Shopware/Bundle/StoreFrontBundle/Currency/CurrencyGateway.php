@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Currency;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 
 class CurrencyGateway
 {
     /**
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -46,7 +46,7 @@ class CurrencyGateway
 
     /**
      * @param CurrencyHydrator $hydrator
-     * @param FieldHelper      $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper      $fieldHelper
      * @param Connection       $connection
      */
     public function __construct(

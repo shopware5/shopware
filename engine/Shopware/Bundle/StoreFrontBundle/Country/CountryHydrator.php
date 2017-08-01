@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Framework\Struct\Hydrator;
 
 /**
  * @category  Shopware

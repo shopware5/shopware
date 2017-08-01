@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Shopware\Category\Gateway\CategoryReader" id="shopware.category.gateway.category_reader">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware.framework.struct.field_helper" type="service"/>
+            <argument id="shopware.category.struct.category_hydrator" type="service"/>
+        </service>
+
+        <service class="Shopware\Category\Struct\CategoryHydrator" id="shopware.category.struct.category_hydrator"/>
+
+        <service class="Shopware\Framework\Struct\FieldHelper" id="shopware.framework.struct.field_helper">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware.cache" type="service"/>
+        </service>
+
+        <service class="Shopware\Category\Gateway\CategorySearcher" id="shopware.category.gateway.category_searcher">
+            <argument id="dbal_connection" type="service"/>
+            <argument type="collection">
+                <argument type="service" id="shopware.category.gateway.handler.shop_condition_handler" />
+                <argument type="service" id="shopware.category.gateway.handler.active_condition_handler" />
+            </argument>
+        </service>
+
+        <service class="Shopware\Category\Gateway\CategoryRepository" id="shopware.category.gateway.category_repository">
+            <argument id="shopware.category.gateway.category_reader" type="service"/>
+            <argument id="shopware.category.gateway.category_searcher" type="service"/>
+        </service>
+
+        <service class="Shopware\Category\Routing\ListingPageSeoUrlGenerator" id="shopware.category.routing.listing_page_seo_url_generator">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware.category.gateway.category_repository" type="service"/>
+            <argument id="slugify" type="service"/>
+            <argument id="shopware.router" type="service"/>
+        </service>
+
+        <service class="Shopware\Category\Gateway\Handler\ShopConditionHandler" id="shopware.category.gateway.handler.shop_condition_handler"/>
+        <service class="Shopware\Category\Gateway\Handler\ActiveConditionHandler" id="shopware.category.gateway.handler.active_condition_handler"/>
+    </services>
+</container>

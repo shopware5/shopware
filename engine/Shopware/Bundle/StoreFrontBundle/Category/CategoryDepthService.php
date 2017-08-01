@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Category\Struct\Category;
 
 class CategoryDepthService implements CategoryDepthServiceInterface
 {

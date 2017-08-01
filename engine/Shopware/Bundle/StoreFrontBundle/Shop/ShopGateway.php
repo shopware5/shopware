@@ -25,13 +25,13 @@
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\TranslationContext;
 
 class ShopGateway
 {
     /**
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -47,7 +47,7 @@ class ShopGateway
 
     /**
      * @param ShopHydrator $hydrator
-     * @param FieldHelper  $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper  $fieldHelper
      * @param Connection   $connection
      */
     public function __construct(

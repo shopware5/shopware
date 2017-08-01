@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Category;
+namespace Shopware\Category\Struct;
 
 use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
@@ -142,6 +142,11 @@ class Category extends Struct
      */
     protected $children = [];
 
+    /**
+     * @var bool
+     */
+    protected $isShopCategory;
+
     public function __construct(int $id, ?int $parentId, array $path, string $name)
     {
         $this->id = $id;
@@ -153,7 +158,7 @@ class Category extends Struct
     /**
      * @param int $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
@@ -161,7 +166,7 @@ class Category extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -169,7 +174,7 @@ class Category extends Struct
     /**
      * @param array $path
      */
-    public function setPath($path)
+    public function setPath($path): void
     {
         $this->path = $path;
     }
@@ -177,7 +182,7 @@ class Category extends Struct
     /**
      * @return array
      */
-    public function getPath()
+    public function getPath(): array
     {
         return $this->path;
     }
@@ -185,7 +190,7 @@ class Category extends Struct
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -193,7 +198,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -201,7 +206,7 @@ class Category extends Struct
     /**
      * @param string $cmsHeadline
      */
-    public function setCmsHeadline($cmsHeadline)
+    public function setCmsHeadline($cmsHeadline): void
     {
         $this->cmsHeadline = $cmsHeadline;
     }
@@ -209,7 +214,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getCmsHeadline()
+    public function getCmsHeadline(): string
     {
         return $this->cmsHeadline;
     }
@@ -217,7 +222,7 @@ class Category extends Struct
     /**
      * @param string $cmsText
      */
-    public function setCmsText($cmsText)
+    public function setCmsText($cmsText): void
     {
         $this->cmsText = $cmsText;
     }
@@ -225,7 +230,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getCmsText()
+    public function getCmsText(): string
     {
         return $this->cmsText;
     }
@@ -233,7 +238,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): string
     {
         return $this->metaTitle;
     }
@@ -241,7 +246,7 @@ class Category extends Struct
     /**
      * @param string $metaTitle
      */
-    public function setMetaTitle($metaTitle)
+    public function setMetaTitle($metaTitle): void
     {
         $this->metaTitle = $metaTitle;
     }
@@ -249,7 +254,7 @@ class Category extends Struct
     /**
      * @param string $metaDescription
      */
-    public function setMetaDescription($metaDescription)
+    public function setMetaDescription($metaDescription): void
     {
         $this->metaDescription = $metaDescription;
     }
@@ -257,7 +262,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->metaDescription;
     }
@@ -265,7 +270,7 @@ class Category extends Struct
     /**
      * @param string $metaKeywords
      */
-    public function setMetaKeywords($metaKeywords)
+    public function setMetaKeywords($metaKeywords): void
     {
         $this->metaKeywords = $metaKeywords;
     }
@@ -273,7 +278,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
     }
@@ -281,7 +286,7 @@ class Category extends Struct
     /**
      * @param string $template
      */
-    public function setTemplate($template)
+    public function setTemplate($template): void
     {
         $this->template = $template;
     }
@@ -289,7 +294,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return $this->template;
     }
@@ -297,7 +302,7 @@ class Category extends Struct
     /**
      * @param string $externalLink
      */
-    public function setExternalLink($externalLink)
+    public function setExternalLink($externalLink): void
     {
         $this->externalLink = $externalLink;
     }
@@ -305,7 +310,7 @@ class Category extends Struct
     /**
      * @return string
      */
-    public function getExternalLink()
+    public function getExternalLink(): string
     {
         return $this->externalLink;
     }
@@ -313,7 +318,7 @@ class Category extends Struct
     /**
      * @param bool $displayFacets
      */
-    public function setDisplayFacets($displayFacets)
+    public function setDisplayFacets($displayFacets): void
     {
         $this->displayFacets = $displayFacets;
     }
@@ -321,7 +326,7 @@ class Category extends Struct
     /**
      * @param bool $displayInNavigation
      */
-    public function setDisplayInNavigation($displayInNavigation)
+    public function setDisplayInNavigation($displayInNavigation): void
     {
         $this->displayInNavigation = $displayInNavigation;
     }
@@ -329,23 +334,23 @@ class Category extends Struct
     /**
      * @param bool $blog
      */
-    public function setBlog($blog)
+    public function setBlog($blog): void
     {
         $this->blog = $blog;
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media $media
+     * @param Media $media
      */
-    public function setMedia($media)
+    public function setMedia($media): void
     {
         $this->media = $media;
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media
+     * @return Media
      */
-    public function getMedia()
+    public function getMedia(): Media
     {
         return $this->media;
     }
@@ -353,7 +358,7 @@ class Category extends Struct
     /**
      * @return bool
      */
-    public function isBlog()
+    public function isBlog(): bool
     {
         return $this->blog;
     }
@@ -361,7 +366,7 @@ class Category extends Struct
     /**
      * @return bool
      */
-    public function displayFacets()
+    public function displayFacets(): bool
     {
         return $this->displayFacets;
     }
@@ -369,7 +374,7 @@ class Category extends Struct
     /**
      * @return bool
      */
-    public function displayInNavigation()
+    public function displayInNavigation(): bool
     {
         return $this->displayInNavigation;
     }
@@ -377,7 +382,7 @@ class Category extends Struct
     /**
      * @return int[]
      */
-    public function getBlockedCustomerGroupIds()
+    public function getBlockedCustomerGroupIds(): array
     {
         return $this->blockedCustomerGroupIds;
     }
@@ -385,7 +390,7 @@ class Category extends Struct
     /**
      * @param int[] $blockedCustomerGroupIds
      */
-    public function setBlockedCustomerGroupIds(array $blockedCustomerGroupIds)
+    public function setBlockedCustomerGroupIds(array $blockedCustomerGroupIds): void
     {
         $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
     }
@@ -393,7 +398,7 @@ class Category extends Struct
     /**
      * @return int|null
      */
-    public function getParentId()
+    public function getParentId(): ?int
     {
         return $this->parentId;
     }
@@ -401,7 +406,7 @@ class Category extends Struct
     /**
      * @param int|null $parentId
      */
-    public function setParentId($parentId)
+    public function setParentId($parentId): void
     {
         $this->parentId = $parentId;
     }
@@ -409,7 +414,7 @@ class Category extends Struct
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -417,7 +422,7 @@ class Category extends Struct
     /**
      * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition($position): void
     {
         $this->position = $position;
     }
@@ -425,7 +430,7 @@ class Category extends Struct
     /**
      * @return null|string
      */
-    public function getProductBoxLayout()
+    public function getProductBoxLayout(): ?string
     {
         return $this->productBoxLayout;
     }
@@ -433,15 +438,15 @@ class Category extends Struct
     /**
      * @param null|string $productBoxLayout
      */
-    public function setProductBoxLayout($productBoxLayout)
+    public function setProductBoxLayout($productBoxLayout): void
     {
         $this->productBoxLayout = $productBoxLayout;
     }
 
     /**
-     * @return null|\Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream
+     * @return null|ProductStream
      */
-    public function getProductStream()
+    public function getProductStream(): ?ProductStream
     {
         return $this->productStream;
     }
@@ -449,7 +454,7 @@ class Category extends Struct
     /**
      * @param null|ProductStream $productStream
      */
-    public function setProductStream(ProductStream $productStream = null)
+    public function setProductStream(ProductStream $productStream = null): void
     {
         $this->productStream = $productStream;
     }
@@ -457,7 +462,7 @@ class Category extends Struct
     /**
      * @return bool
      */
-    public function hideSortings()
+    public function hideSortings(): bool
     {
         return $this->hideSortings;
     }
@@ -465,7 +470,7 @@ class Category extends Struct
     /**
      * @param bool $hideSortings
      */
-    public function setHideSortings($hideSortings)
+    public function setHideSortings($hideSortings): void
     {
         $this->hideSortings = $hideSortings;
     }
@@ -481,7 +486,7 @@ class Category extends Struct
     /**
      * @param Category[] $children
      */
-    public function setChildren(array $children)
+    public function setChildren(array $children): void
     {
         $this->children = $children;
     }
@@ -489,8 +494,18 @@ class Category extends Struct
     /**
      * @param Category $category
      */
-    public function addChildren(Category $category)
+    public function addChildren(Category $category): void
     {
         $this->children[] = $category;
+    }
+
+    public function isShopCategory(): bool
+    {
+        return $this->isShopCategory;
+    }
+
+    public function setIsShopCategory(bool $isShopCategory): void
+    {
+        $this->isShopCategory = $isShopCategory;
     }
 }

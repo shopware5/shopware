@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\TranslationContext;
 
 class ListingFacetGateway
@@ -37,7 +37,7 @@ class ListingFacetGateway
     private $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -48,7 +48,7 @@ class ListingFacetGateway
 
     /**
      * @param Connection                                           $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param ListingHydrator                                      $hydrator
      */
     public function __construct(

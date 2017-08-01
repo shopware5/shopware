@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\ProductDownload;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\TranslationContext;
 
 /**
@@ -51,7 +51,7 @@ class ProductDownloadGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -62,7 +62,7 @@ class ProductDownloadGateway
 
     /**
      * @param Connection                                           $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param ProductDownloadHydrator                              $downloadHydrator
      */
     public function __construct(

@@ -8,9 +8,10 @@ interface SeoUrlGeneratorInterface
 {
     /**
      * @param int $shopId
+     * @param TranslationContext $context
      * @param int $offset
      * @param int $limit
-     * @return SeoRoute[]
+     * @return array
      */
     public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): array;
 

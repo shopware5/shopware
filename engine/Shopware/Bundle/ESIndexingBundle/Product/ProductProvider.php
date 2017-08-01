@@ -27,7 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
 use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
@@ -99,7 +99,7 @@ class ProductProvider implements ProductProviderInterface
      * @param Connection                                                               $connection
      * @param IdentifierSelector                                                       $identifierSelector
      * @param \Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface $priceCalculationService
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper                     $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper                     $fieldHelper
      * @param PropertyHydrator                                                         $propertyHydrator
      */
     public function __construct(

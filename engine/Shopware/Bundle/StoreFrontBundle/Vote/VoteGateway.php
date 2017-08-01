@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\TranslationContext;
 
 /**
@@ -51,7 +51,7 @@ class VoteGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -67,7 +67,7 @@ class VoteGateway
 
     /**
      * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper                 $fieldHelper
      * @param VoteHydrator                $voteHydrator
      * @param \Shopware_Components_Config $config
      */

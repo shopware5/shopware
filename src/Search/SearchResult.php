@@ -2,7 +2,7 @@
 
 namespace Shopware\Search;
 
-class SearchResult
+class SearchResult implements \IteratorAggregate
 {
     /**
      * @var array[]
@@ -23,5 +23,10 @@ class SearchResult
     public function fetchColumn(string $column): array
     {
         return array_column($this->rows, $column);
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->rows);
     }
 }

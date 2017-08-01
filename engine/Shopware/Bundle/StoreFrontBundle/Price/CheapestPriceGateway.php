@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Category\Struct\Category;
 use Shopware\Framework\Struct\Struct;
 
 class Emotion extends Struct
@@ -170,7 +170,7 @@ class Emotion extends Struct
     protected $categoryIds = [];
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Category\Category[]
+     * @var \Shopware\Category\Struct\Category[]
      */
     protected $categories = [];
 
@@ -590,7 +590,7 @@ class Emotion extends Struct
     }
 
     /**
-     * @return Category[]
+     * @return \Shopware\Category\Struct\Category[]
      */
     public function getCategories()
     {
@@ -598,7 +598,7 @@ class Emotion extends Struct
     }
 
     /**
-     * @param Category[] $categories
+     * @param \Shopware\Category\Struct\Category[] $categories
      */
     public function setCategories(array $categories)
     {

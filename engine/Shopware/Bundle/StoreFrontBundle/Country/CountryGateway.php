@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\Context\TranslationContext;
 
@@ -54,7 +54,7 @@ class CountryGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -65,7 +65,7 @@ class CountryGateway
 
     /**
      * @param Connection      $connection
-     * @param FieldHelper     $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper     $fieldHelper
      * @param CountryHydrator $countryHydrator
      */
     public function __construct(

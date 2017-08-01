@@ -22,10 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Framework\Struct;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Psr\Cache\CacheItemPoolInterface;
 use Shopware\Context\TranslationContext;
 
 /**
@@ -49,15 +50,11 @@ class FieldHelper
     private $connection;
 
     /**
-     * @var CacheInterface
+     * @var CacheItemPoolInterface
      */
     private $cache;
 
-    /**
-     * @param Connection     $connection
-     * @param CacheInterface $cache
-     */
-    public function __construct(Connection $connection, CacheInterface $cache)
+    public function __construct(Connection $connection, CacheItemPoolInterface $cache)
     {
         $this->connection = $connection;
         $this->cache = $cache;
@@ -72,7 +69,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getTableFields($table, $alias)
+    public function getTableFields($table, $alias): array
     {
         $key = $table;
 
@@ -80,8 +77,9 @@ class FieldHelper
             return $this->attributeFields[$key];
         }
 
-        if ($columns = $this->cache->fetch($key)) {
-            return $columns;
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
         }
 
         $tableColumns = $this->connection->fetchAll('SHOW COLUMNS FROM ' . $table);
@@ -92,7 +90,8 @@ class FieldHelper
             $columns[] = $alias . '.' . $column . ' as __' . $alias . '_' . $column;
         }
 
-        $this->cache->save($key, $columns);
+        $item->set($columns);
+        $this->cache->save($item);
         $this->attributeFields[$key] = $columns;
 
         return $columns;
@@ -103,7 +102,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getArticleFields()
+    public function getArticleFields(): array
     {
         $fields = [
             'product.id as __product_id',
@@ -145,7 +144,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getTopSellerFields()
+    public function getTopSellerFields(): array
     {
         return [
             'topSeller.sales as __topSeller_sales',
@@ -157,7 +156,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getVariantFields()
+    public function getVariantFields(): array
     {
         return [
             'variant.id as __variant_id',
@@ -185,7 +184,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getEsdFields()
+    public function getEsdFields(): array
     {
         $fields = [
             'esd.id as __esd_id',
@@ -211,7 +210,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getTaxFields()
+    public function getTaxFields(): array
     {
         return [
             'tax.id as __tax_id',
@@ -225,7 +224,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getPriceGroupFields()
+    public function getPriceGroupFields(): array
     {
         return [
             'priceGroup.id as __priceGroup_id',
@@ -238,7 +237,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getManufacturerFields()
+    public function getManufacturerFields(): array
     {
         $fields = [
             'manufacturer.id as __manufacturer_id',
@@ -262,7 +261,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getCategoryFields()
+    public function getCategoryFields(): array
     {
         $fields = [
             'category.id as __category_id',
@@ -283,6 +282,7 @@ class FieldHelper
             'category.hidetop as __category_hidetop',
             'category.stream_id as __category_stream_id',
             'category.hide_sortings as __category_hide_sortings',
+            '(shop.id IS NOT NULL) as __category_is_shop_category'
         ];
 
         $fields = array_merge(
@@ -296,7 +296,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getPriceFields()
+    public function getPriceFields(): array
     {
         $fields = [
             'price.id as __price_id',
@@ -321,7 +321,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getUnitFields()
+    public function getUnitFields(): array
     {
         return [
             'unit.id as __unit_id',
@@ -339,7 +339,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getConfiguratorSetFields()
+    public function getConfiguratorSetFields(): array
     {
         return [
             'configuratorSet.id as __configuratorSet_id',
@@ -351,7 +351,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getConfiguratorGroupFields()
+    public function getConfiguratorGroupFields(): array
     {
         $fields = [
             'configuratorGroup.id as __configuratorGroup_id',
@@ -371,7 +371,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getConfiguratorOptionFields()
+    public function getConfiguratorOptionFields(): array
     {
         $fields = [
             'configuratorOption.id as __configuratorOption_id',
@@ -390,7 +390,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getAreaFields()
+    public function getAreaFields(): array
     {
         return [
             'countryArea.id as __countryArea_id',
@@ -402,7 +402,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getCountryFields()
+    public function getCountryFields(): array
     {
         $fields = [
             'country.id as __country_id',
@@ -433,7 +433,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getStateFields()
+    public function getStateFields(): array
     {
         $fields = [
             'countryState.id as __countryState_id',
@@ -455,7 +455,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getCustomerGroupFields()
+    public function getCustomerGroupFields(): array
     {
         $fields = [
             'customerGroup.id as __customerGroup_id',
@@ -480,7 +480,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getDownloadFields()
+    public function getDownloadFields(): array
     {
         $fields = [
             'download.id as __download_id',
@@ -501,7 +501,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getLinkFields()
+    public function getLinkFields(): array
     {
         $fields = [
             'link.id as __link_id',
@@ -522,7 +522,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getImageFields()
+    public function getImageFields(): array
     {
         $fields = [
             'image.id as __image_id',
@@ -552,7 +552,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getMediaFields()
+    public function getMediaFields(): array
     {
         $fields = [
             'media.id as __media_id',
@@ -585,7 +585,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getPriceGroupDiscountFields()
+    public function getPriceGroupDiscountFields(): array
     {
         return [
             'priceGroupDiscount.id as __priceGroupDiscount_id',
@@ -598,7 +598,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getPropertySetFields()
+    public function getPropertySetFields(): array
     {
         $fields = [
             'propertySet.id as __propertySet_id',
@@ -619,7 +619,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getPropertyGroupFields()
+    public function getPropertyGroupFields(): array
     {
         $fields = [
             'propertyGroup.id as __propertyGroup_id',
@@ -637,7 +637,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getPropertyOptionFields()
+    public function getPropertyOptionFields(): array
     {
         $fields = [
             'propertyOption.id as __propertyOption_id',
@@ -656,7 +656,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getTaxRuleFields()
+    public function getTaxRuleFields(): array
     {
         return [
             'taxRule.groupID as __taxRule_groupID',
@@ -668,7 +668,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getVoteFields()
+    public function getVoteFields(): array
     {
         return [
             'vote.id as __vote_id',
@@ -685,7 +685,7 @@ class FieldHelper
         ];
     }
 
-    public function getShopFields()
+    public function getShopFields(): array
     {
         return [
             'shop.id as __shop_id',
@@ -712,7 +712,7 @@ class FieldHelper
         ];
     }
 
-    public function getCurrencyFields()
+    public function getCurrencyFields(): array
     {
         return [
             'currency.id as __currency_id',
@@ -726,7 +726,7 @@ class FieldHelper
         ];
     }
 
-    public function getTemplateFields()
+    public function getTemplateFields(): array
     {
         return [
             'template.id as __template_id',
@@ -744,7 +744,7 @@ class FieldHelper
         ];
     }
 
-    public function getLocaleFields()
+    public function getLocaleFields(): array
     {
         return [
             'locale.id as __locale_id',
@@ -760,7 +760,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getRelatedProductStreamFields()
+    public function getRelatedProductStreamFields(): array
     {
         $fields = [
             'stream.id as __stream_id',
@@ -783,7 +783,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getShopPageFields()
+    public function getShopPageFields(): array
     {
         $fields = [
             'page.id as __page_id',
@@ -815,7 +815,7 @@ class FieldHelper
         return $fields;
     }
 
-    public function getCustomerFields()
+    public function getCustomerFields(): array
     {
         $fields = [
             'customer.id as __customer_id',
@@ -854,7 +854,7 @@ class FieldHelper
         return $fields;
     }
 
-    public function getShippingMethodFields()
+    public function getShippingMethodFields(): array
     {
         $fields = [
             'shippingMethod.id as __shippingMethod_id',
@@ -887,7 +887,7 @@ class FieldHelper
         return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'shippingMethodAttribute'));
     }
 
-    public function getPaymentMethodFields()
+    public function getPaymentMethodFields(): array
     {
         $fields = [
             'paymentMethod.id as __paymentMethod_id',
@@ -916,7 +916,7 @@ class FieldHelper
         return array_merge($fields, $this->getTableFields('s_core_paymentmeans_attributes', 'paymentMethodAttribute'));
     }
 
-    public function getAddressFields()
+    public function getAddressFields(): array
     {
         $fields = [
             'address.id as __address_id',
@@ -951,7 +951,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionFields()
+    public function getEmotionFields(): array
     {
         $fields = [
             'emotion.id AS __emotion_id',
@@ -996,7 +996,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionTemplateFields()
+    public function getEmotionTemplateFields(): array
     {
         $fields = [
             'emotionTemplate.id AS __emotionTemplate_id',
@@ -1013,7 +1013,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionElementFields()
+    public function getEmotionElementFields(): array
     {
         $fields = [
             'emotionElement.id AS __emotionElement_id',
@@ -1035,7 +1035,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionElementValueFields()
+    public function getEmotionElementValueFields(): array
     {
         $fields = [
             'emotionElementValue.id AS __emotionElementValue_id',
@@ -1055,7 +1055,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionElementLibraryFields()
+    public function getEmotionElementLibraryFields(): array
     {
         $fields = [
             'emotionLibraryComponent.id AS __emotionLibraryComponent_id',
@@ -1077,7 +1077,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionElementLibraryFieldFields()
+    public function getEmotionElementLibraryFieldFields(): array
     {
         $fields = [
             'emotionLibraryComponentField.id AS __emotionLibraryComponentField_id',
@@ -1107,7 +1107,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getEmotionElementViewportFields()
+    public function getEmotionElementViewportFields(): array
     {
         $fields = [
             'emotionElementViewport.id AS __emotionElementViewport_id',
@@ -1127,7 +1127,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getCustomFacetFields()
+    public function getCustomFacetFields(): array
     {
         return [
             'customFacet.id as __customFacet_id',
@@ -1142,7 +1142,7 @@ class FieldHelper
     /**
      * @return string[]
      */
-    public function getCustomSortingFields()
+    public function getCustomSortingFields(): array
     {
         return [
             'customSorting.id as __customSorting_id',
@@ -1160,7 +1160,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getBlogFields()
+    public function getBlogFields(): array
     {
         $fields = [
             'blog.id AS __blog_id',
@@ -1192,7 +1192,7 @@ class FieldHelper
      *
      * @return array
      */
-    public function getBlogCommentFields()
+    public function getBlogCommentFields(): array
     {
         $fields = [
             'blogComment.id AS __blogComment_id',
@@ -1226,7 +1226,7 @@ class FieldHelper
         TranslationContext $context,
         $joinCondition = null,
         $selectName = null
-    ) {
+    ): void {
         if ($context->isDefaultShop()) {
             return;
         }
@@ -1264,7 +1264,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addCountryTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addCountryTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('country', 'config_countries', $query, $context, 1);
         $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
@@ -1274,7 +1274,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addCountryStateTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addCountryStateTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
         $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
@@ -1284,7 +1284,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addMediaTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addMediaTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('mediaAttribute', 's_media_attributes', $query, $context, 'mediaAttribute.mediaID');
     }
@@ -1293,7 +1293,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addUnitTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addUnitTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('unit', 'config_units', $query, $context, 1);
     }
@@ -1302,7 +1302,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $queryBuilder
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addEsdTranslation(QueryBuilder $queryBuilder, TranslationContext $context)
+    public function addEsdTranslation(QueryBuilder $queryBuilder, TranslationContext $context): void
     {
         $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
     }
@@ -1311,7 +1311,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addConfiguratorGroupTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addConfiguratorGroupTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('configuratorGroup', 'configuratorgroup', $query, $context);
     }
@@ -1320,7 +1320,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addConfiguratorOptionTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addConfiguratorOptionTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('configuratorOption', 'configuratoroption', $query, $context);
     }
@@ -1329,7 +1329,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addDownloadTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addDownloadTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('downloadAttribute', 's_articles_downloads_attributes', $query, $context, 'download.id');
     }
@@ -1338,7 +1338,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addLinkTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addLinkTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('linkAttribute', 's_articles_information_attributes', $query, $context, 'link.id');
     }
@@ -1347,7 +1347,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addProductTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addProductTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('product', 'article', $query, $context);
     }
@@ -1356,7 +1356,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addVariantTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addVariantTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('variant', 'variant', $query, $context);
     }
@@ -1365,7 +1365,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addPriceTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addPriceTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('priceAttribute', 's_articles_prices_attributes', $query, $context, 'price.id');
     }
@@ -1374,7 +1374,7 @@ class FieldHelper
      * @param QueryBuilder       $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addManufacturerTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addManufacturerTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('manufacturer', 'supplier', $query, $context);
     }
@@ -1383,7 +1383,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addImageTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addImageTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('image', 'articleimage', $query, $context);
     }
@@ -1392,7 +1392,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addPropertySetTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addPropertySetTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('propertySet', 'propertygroup', $query, $context);
     }
@@ -1401,7 +1401,7 @@ class FieldHelper
      * @param QueryBuilder       $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addPropertyGroupTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addPropertyGroupTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('propertyGroup', 'propertyoption', $query, $context);
     }
@@ -1410,7 +1410,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addPropertyOptionTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addPropertyOptionTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('propertyOption', 'propertyvalue', $query, $context);
     }
@@ -1419,7 +1419,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addProductStreamTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addProductStreamTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('stream', 'productStream', $query, $context);
     }
@@ -1428,7 +1428,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addCustomerTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addCustomerTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('customerAttribute', 's_user_attributes', $query, $context, 'customerAttribute.id');
     }
@@ -1437,7 +1437,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addAddressTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addAddressTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('addressAttribute', 's_user_addresses_attributes', $query, $context, 'addressAttribute.id');
     }
@@ -1446,7 +1446,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addEmotionElementTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addEmotionElementTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
     }
@@ -1455,7 +1455,7 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addCustomSortingTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addCustomSortingTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
     }
@@ -1464,12 +1464,12 @@ class FieldHelper
      * @param QueryBuilder                                                 $query
      * @param \Shopware\Context\TranslationContext $context
      */
-    public function addCustomFacetTranslation($query, $context)
+    public function addCustomFacetTranslation($query, $context): void
     {
         $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
     }
 
-    public function addDeliveryTranslation(QueryBuilder $query, TranslationContext $context)
+    public function addDeliveryTranslation(QueryBuilder $query, TranslationContext $context): void
     {
         $this->addTranslation('shippingMethod', 'config_dispatch', $query, $context, 1);
         $this->addTranslation('shippingMethodAttribute', 's_premium_dispatch_attributes', $query, $context, 'shippingMethod.id');
@@ -1498,7 +1498,7 @@ class FieldHelper
         QueryBuilder $query,
         $shopId,
         $suffix = ''
-    ) {
+    ): void {
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $translationTable = uniqid('translation', false) . $suffix . $translationType;

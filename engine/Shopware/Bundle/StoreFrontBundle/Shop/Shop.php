@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Category\Struct\Category;
 use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
@@ -93,7 +93,7 @@ class Shop extends Struct
     protected $secure;
 
     /**
-     * @var Category
+     * @var \Shopware\Category\Struct\Category
      */
     protected $category;
 
@@ -276,7 +276,7 @@ class Shop extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Category\Category
+     * @return \Shopware\Category\Struct\Category
      */
     public function getCategory()
     {
@@ -284,7 +284,7 @@ class Shop extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
+     * @param \Shopware\Category\Struct\Category $category
      */
     public function setCategory($category)
     {

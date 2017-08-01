@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
 use Shopware\Framework\Struct\ExtendableInterface;
+use Shopware\Framework\Struct\Hydrator;
 
 /**
  * @category  Shopware

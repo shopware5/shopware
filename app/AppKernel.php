@@ -91,6 +91,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Shopware\Framework\Framework(),
+            new Shopware\Category\Category(),
+            new Shopware\Product\Product()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

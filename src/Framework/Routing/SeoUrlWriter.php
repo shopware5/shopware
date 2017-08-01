@@ -3,6 +3,7 @@
 namespace Shopware\Framework\Routing;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Context\TranslationContext;
 
 class SeoUrlWriter
 {
@@ -18,12 +19,18 @@ class SeoUrlWriter
      */
     private $connection;
 
-    public function write(int $shopId): void
+    public function __construct(Connection $connection, array $generators)
+    {
+        $this->generators = $generators;
+        $this->connection = $connection;
+    }
+
+    public function write(int $shopId, TranslationContext $context): void
     {
         foreach ($this->generators as $generator) {
 
             $this->connection->transactional(
-                function () use ($shopId, $generator) {
+                function () use ($shopId, $generator, $context) {
 
                     $this->connection->executeUpdate(
                         "DELETE FROM seo_route WHERE shop_id = :shopId AND name = :name",
@@ -32,7 +39,7 @@ class SeoUrlWriter
 
                     $offset = 0;
 
-                    while ($routes = $generator->fetch($shopId, $offset, self::LIMIT)) {
+                    while ($routes = $generator->fetch($shopId, $context, $offset, self::LIMIT)) {
                         $this->writeUrls($shopId, $generator->getName(), $routes);
                         $offset += self::LIMIT;
                     }

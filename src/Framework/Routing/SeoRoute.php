@@ -21,8 +21,8 @@ class SeoRoute
 
     public function __construct(string $name, string $url, string $seoUrl)
     {
-        $this->url = $url;
-        $this->seoUrl = $seoUrl;
+        $this->url = trim($url, '/');
+        $this->seoUrl = trim($seoUrl, '/');
         $this->name = $name;
     }
 

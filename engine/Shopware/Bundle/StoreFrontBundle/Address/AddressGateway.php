@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\Address;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\Context\TranslationContext;
 
@@ -50,7 +50,7 @@ class AddressGateway
     private $connection;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param AddressHydrator                                      $hydrator
      * @param Connection                                           $connection
      */

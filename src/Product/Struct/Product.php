@@ -22,21 +22,47 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Product;
+namespace Shopware\Product\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Esd\Esd;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
+use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SimpleProduct extends BaseProduct
+class Product extends Struct
 {
+    /**
+     * Unique identifier of the product (s_articles).
+     *
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * Unique identifier of the product variation (s_articles_details).
+     *
+     * @var int
+     */
+    protected $variantId;
+
+    /**
+     * Unique identifier field.
+     * Shopware order number for the product, which
+     * is used to load the product or add the product
+     * to the basket.
+     *
+     * @var string
+     */
+    protected $number;
+
     /**
      * Contains the product name.
      *
@@ -232,12 +258,44 @@ class SimpleProduct extends BaseProduct
     protected $template;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Unit\Unit
+     * Flag if the product has an available variant.
+     *
+     * @var bool
+     */
+    protected $hasAvailableVariant;
+
+    /**
+     * @var int
+     */
+    protected $mainVariantId;
+
+    /**
+     * @var bool
+     */
+    protected $isMainVariant;
+
+    /**
+     * @var bool
+     */
+    protected $isNew = false;
+
+    /**
+     * @var bool
+     */
+    protected $isTopSeller = false;
+
+    /**
+     * @var bool
+     */
+    protected $comingSoon = false;
+
+    /**
+     * @var Unit
      */
     protected $unit;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Tax\Tax
+     * @var Tax
      */
     protected $tax;
 
@@ -273,44 +331,13 @@ class SimpleProduct extends BaseProduct
      */
     protected $esd;
 
-    /**
-     * Flag if the product has an available variant.
-     *
-     * @var bool
-     */
-    protected $hasAvailableVariant;
-
-    /**
-     * @var int
-     */
-    protected $mainVariantId;
-
-    /**
-     * @var bool
-     */
-    protected $isMainVariant;
-
-    /**
-     * @var bool
-     */
-    protected $isNew = false;
-
-    /**
-     * @var bool
-     */
-    protected $isTopSeller = false;
-
-    /**
-     * @var bool
-     */
-    protected $comingSoon = false;
 
     /**
      * Adds a new product state.
      *
      * @param $state
      */
-    public function addState($state)
+    public function addState($state): void
     {
         $this->states[] = $state;
     }
@@ -318,7 +345,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return array
      */
-    public function getStates()
+    public function getStates(): array
     {
         return $this->states;
     }
@@ -326,7 +353,7 @@ class SimpleProduct extends BaseProduct
     /**
      * Resets the struct states.
      */
-    public function resetStates()
+    public function resetStates(): void
     {
         $this->states = [];
     }
@@ -338,7 +365,7 @@ class SimpleProduct extends BaseProduct
      *
      * @return bool
      */
-    public function hasState($state)
+    public function hasState($state): bool
     {
         return in_array($state, $this->states);
     }
@@ -346,7 +373,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function hasProperties()
+    public function hasProperties(): bool
     {
         return $this->hasProperties;
     }
@@ -354,7 +381,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function isShippingFree()
+    public function isShippingFree(): bool
     {
         return $this->shippingFree;
     }
@@ -362,7 +389,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function allowsNotification()
+    public function allowsNotification(): bool
     {
         return $this->allowsNotification;
     }
@@ -370,7 +397,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function highlight()
+    public function highlight(): bool
     {
         return $this->highlight;
     }
@@ -378,7 +405,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $highlight
      */
-    public function setHighlight($highlight)
+    public function setHighlight($highlight): void
     {
         $this->highlight = $highlight;
     }
@@ -386,7 +413,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $allowsNotification
      */
-    public function setAllowsNotification($allowsNotification)
+    public function setAllowsNotification($allowsNotification): void
     {
         $this->allowsNotification = $allowsNotification;
     }
@@ -394,73 +421,73 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $shippingFree
      */
-    public function setShippingFree($shippingFree)
+    public function setShippingFree($shippingFree): void
     {
         $this->shippingFree = $shippingFree;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Unit\Unit $unit
-     */
-    public function setUnit(Unit $unit)
-    {
-        $this->unit = $unit;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Unit\Unit
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\Tax $tax
-     */
-    public function setTax($tax)
-    {
-        $this->tax = $tax;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax
-     */
-    public function getTax()
-    {
-        return $this->tax;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
-     */
-    public function setManufacturer($manufacturer)
-    {
-        $this->manufacturer = $manufacturer;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
-     */
-    public function getManufacturer()
-    {
-        return $this->manufacturer;
-    }
-
-    public function setCover(?Media $cover)
-    {
-        $this->cover = $cover;
-    }
-
-    public function getCover(): ? Media
-    {
-        return $this->cover;
-    }
+//    /**
+//     * @param Unit $unit
+//     */
+//    public function setUnit(Unit $unit): void
+//    {
+//        $this->unit = $unit;
+//    }
+//
+//    /**
+//     * @return Unit
+//     */
+//    public function getUnit(): \Shopware\Bundle\StoreFrontBundle\Unit\Unit
+//    {
+//        return $this->unit;
+//    }
+//
+//    /**
+//     * @param Tax $tax
+//     */
+//    public function setTax($tax): void
+//    {
+//        $this->tax = $tax;
+//    }
+//
+//    /**
+//     * @return Tax
+//     */
+//    public function getTax(): \Shopware\Bundle\StoreFrontBundle\Tax\Tax
+//    {
+//        return $this->tax;
+//    }
+//
+//    /**
+//     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
+//     */
+//    public function setManufacturer($manufacturer): void
+//    {
+//        $this->manufacturer = $manufacturer;
+//    }
+//
+//    /**
+//     * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
+//     */
+//    public function getManufacturer(): \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
+//    {
+//        return $this->manufacturer;
+//    }
+//
+//    public function setCover(?Media $cover): void
+//    {
+//        $this->cover = $cover;
+//    }
+//
+//    public function getCover(): ? Media
+//    {
+//        return $this->cover;
+//    }
 
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -468,7 +495,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -476,7 +503,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $additional
      */
-    public function setAdditional($additional)
+    public function setAdditional($additional): void
     {
         $this->additional = $additional;
     }
@@ -484,7 +511,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getAdditional()
+    public function getAdditional(): string
     {
         return $this->additional;
     }
@@ -492,7 +519,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $closeouts
      */
-    public function setCloseouts($closeouts)
+    public function setCloseouts($closeouts): void
     {
         $this->closeouts = $closeouts;
     }
@@ -500,7 +527,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function isCloseouts()
+    public function isCloseouts(): bool
     {
         return $this->closeouts;
     }
@@ -508,7 +535,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $ean
      */
-    public function setEan($ean)
+    public function setEan($ean): void
     {
         $this->ean = $ean;
     }
@@ -516,7 +543,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getEan()
+    public function getEan(): string
     {
         return $this->ean;
     }
@@ -524,7 +551,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param float $height
      */
-    public function setHeight($height)
+    public function setHeight($height): void
     {
         $this->height = $height;
     }
@@ -532,7 +559,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return float
      */
-    public function getHeight()
+    public function getHeight(): float
     {
         return $this->height;
     }
@@ -540,7 +567,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param array $keywords
      */
-    public function setKeywords($keywords)
+    public function setKeywords($keywords): void
     {
         $this->keywords = $keywords;
     }
@@ -548,7 +575,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return array
      */
-    public function getKeywords()
+    public function getKeywords(): array
     {
         return $this->keywords;
     }
@@ -556,7 +583,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param float $length
      */
-    public function setLength($length)
+    public function setLength($length): void
     {
         $this->length = $length;
     }
@@ -564,7 +591,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return float
      */
-    public function getLength()
+    public function getLength(): float
     {
         return $this->length;
     }
@@ -572,7 +599,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $longDescription
      */
-    public function setLongDescription($longDescription)
+    public function setLongDescription($longDescription): void
     {
         $this->longDescription = $longDescription;
     }
@@ -580,7 +607,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription(): string
     {
         return $this->longDescription;
     }
@@ -588,7 +615,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param int $minStock
      */
-    public function setMinStock($minStock)
+    public function setMinStock($minStock): void
     {
         $this->minStock = $minStock;
     }
@@ -596,7 +623,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return int
      */
-    public function getMinStock()
+    public function getMinStock(): int
     {
         return $this->minStock;
     }
@@ -604,7 +631,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param \DateTime $releaseDate
      */
-    public function setReleaseDate($releaseDate)
+    public function setReleaseDate($releaseDate): void
     {
         $this->releaseDate = $releaseDate;
     }
@@ -612,7 +639,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return \DateTime
      */
-    public function getReleaseDate()
+    public function getReleaseDate(): \DateTime
     {
         return $this->releaseDate;
     }
@@ -620,7 +647,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param int $shippingTime
      */
-    public function setShippingTime($shippingTime)
+    public function setShippingTime($shippingTime): void
     {
         $this->shippingTime = $shippingTime;
     }
@@ -628,7 +655,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return int
      */
-    public function getShippingTime()
+    public function getShippingTime(): int
     {
         return $this->shippingTime;
     }
@@ -636,7 +663,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $shortDescription
      */
-    public function setShortDescription($shortDescription)
+    public function setShortDescription($shortDescription): void
     {
         $this->shortDescription = $shortDescription;
     }
@@ -644,7 +671,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getShortDescription()
+    public function getShortDescription(): string
     {
         return $this->shortDescription;
     }
@@ -652,7 +679,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param int $stock
      */
-    public function setStock($stock)
+    public function setStock($stock): void
     {
         $this->stock = $stock;
     }
@@ -660,27 +687,27 @@ class SimpleProduct extends BaseProduct
     /**
      * @return int
      */
-    public function getStock()
+    public function getStock(): int
     {
         return $this->stock;
     }
 
-    /**
-     * @return bool
-     */
-    public function isAvailable()
-    {
-        if (!$this->isCloseouts()) {
-            return true;
-        }
-
-        return $this->getStock() >= $this->getUnit()->getMinPurchase();
-    }
+//    /**
+//     * @return bool
+//     */
+//    public function isAvailable(): bool
+//    {
+//        if (!$this->isCloseouts()) {
+//            return true;
+//        }
+//
+//        return $this->getStock() >= $this->getUnit()->getMinPurchase();
+//    }
 
     /**
      * @param float $weight
      */
-    public function setWeight($weight)
+    public function setWeight($weight): void
     {
         $this->weight = $weight;
     }
@@ -688,7 +715,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return float
      */
-    public function getWeight()
+    public function getWeight(): float
     {
         return $this->weight;
     }
@@ -696,7 +723,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param float $width
      */
-    public function setWidth($width)
+    public function setWidth($width): void
     {
         $this->width = $width;
     }
@@ -704,7 +731,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return float
      */
-    public function getWidth()
+    public function getWidth(): float
     {
         return $this->width;
     }
@@ -712,7 +739,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $hasProperties
      */
-    public function setHasProperties($hasProperties)
+    public function setHasProperties($hasProperties): void
     {
         $this->hasProperties = $hasProperties;
     }
@@ -720,7 +747,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -728,31 +755,31 @@ class SimpleProduct extends BaseProduct
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
-     */
-    public function getPriceGroup()
-    {
-        return $this->priceGroup;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup $priceGroup
-     */
-    public function setPriceGroup(PriceGroup $priceGroup = null)
-    {
-        $this->priceGroup = $priceGroup;
-    }
+//    /**
+//     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+//     */
+//    public function getPriceGroup(): \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+//    {
+//        return $this->priceGroup;
+//    }
+//
+//    /**
+//     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup $priceGroup
+//     */
+//    public function setPriceGroup(PriceGroup $priceGroup = null): void
+//    {
+//        $this->priceGroup = $priceGroup;
+//    }
 
     /**
      * @return string
      */
-    public function getManufacturerNumber()
+    public function getManufacturerNumber(): string
     {
         return $this->manufacturerNumber;
     }
@@ -760,7 +787,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $manufacturerNumber
      */
-    public function setManufacturerNumber($manufacturerNumber)
+    public function setManufacturerNumber($manufacturerNumber): void
     {
         $this->manufacturerNumber = $manufacturerNumber;
     }
@@ -768,7 +795,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return $this->template;
     }
@@ -776,7 +803,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $template
      */
-    public function setTemplate($template)
+    public function setTemplate($template): void
     {
         $this->template = $template;
     }
@@ -784,7 +811,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): string
     {
         return $this->metaTitle;
     }
@@ -792,7 +819,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param string $metaTitle
      */
-    public function setMetaTitle($metaTitle)
+    public function setMetaTitle($metaTitle): void
     {
         $this->metaTitle = $metaTitle;
     }
@@ -800,7 +827,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function hasConfigurator()
+    public function hasConfigurator(): bool
     {
         return $this->hasConfigurator;
     }
@@ -808,7 +835,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $hasConfigurator
      */
-    public function setHasConfigurator($hasConfigurator)
+    public function setHasConfigurator($hasConfigurator): void
     {
         $this->hasConfigurator = $hasConfigurator;
     }
@@ -816,7 +843,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return int
      */
-    public function getSales()
+    public function getSales(): int
     {
         return $this->sales;
     }
@@ -824,7 +851,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param int $sales
      */
-    public function setSales($sales)
+    public function setSales($sales): void
     {
         $this->sales = $sales;
     }
@@ -832,7 +859,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function hasEsd()
+    public function hasEsd(): bool
     {
         return $this->hasEsd;
     }
@@ -840,31 +867,31 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $hasEsd
      */
-    public function setHasEsd($hasEsd)
+    public function setHasEsd($hasEsd): void
     {
         $this->hasEsd = $hasEsd;
     }
 
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Esd\Esd
-     */
-    public function getEsd()
-    {
-        return $this->esd;
-    }
-
-    /**
-     * @param Esd $esd
-     */
-    public function setEsd(Esd $esd = null)
-    {
-        $this->esd = $esd;
-    }
+//    /**
+//     * @return \Shopware\Bundle\StoreFrontBundle\Esd\Esd
+//     */
+//    public function getEsd(): \Shopware\Bundle\StoreFrontBundle\Esd\Esd
+//    {
+//        return $this->esd;
+//    }
+//
+//    /**
+//     * @param Esd $esd
+//     */
+//    public function setEsd(Esd $esd = null): void
+//    {
+//        $this->esd = $esd;
+//    }
 
     /**
      * @return bool
      */
-    public function isPriceGroupActive()
+    public function isPriceGroupActive(): bool
     {
         return $this->isPriceGroupActive && $this->priceGroup;
     }
@@ -872,7 +899,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $isPriceGroupActive
      */
-    public function setIsPriceGroupActive($isPriceGroupActive)
+    public function setIsPriceGroupActive($isPriceGroupActive): void
     {
         $this->isPriceGroupActive = $isPriceGroupActive;
     }
@@ -880,7 +907,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return array
      */
-    public function getBlockedCustomerGroupIds()
+    public function getBlockedCustomerGroupIds(): array
     {
         return $this->blockedCustomerGroupIds;
     }
@@ -888,7 +915,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param array $blockedCustomerGroupIds
      */
-    public function setBlockedCustomerGroupIds($blockedCustomerGroupIds)
+    public function setBlockedCustomerGroupIds($blockedCustomerGroupIds): void
     {
         $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
     }
@@ -896,7 +923,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function hasAvailableVariant()
+    public function hasAvailableVariant(): bool
     {
         return $this->hasAvailableVariant;
     }
@@ -904,7 +931,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param bool $hasAvailableVariant
      */
-    public function setHasAvailableVariant($hasAvailableVariant)
+    public function setHasAvailableVariant($hasAvailableVariant): void
     {
         $this->hasAvailableVariant = $hasAvailableVariant;
     }
@@ -912,7 +939,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return int
      */
-    public function getMainVariantId()
+    public function getMainVariantId(): int
     {
         return $this->mainVariantId;
     }
@@ -920,7 +947,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @param int $mainVariantId
      */
-    public function setMainVariantId($mainVariantId)
+    public function setMainVariantId($mainVariantId): void
     {
         $this->mainVariantId = $mainVariantId;
         $this->isMainVariant = ($this->variantId == $this->mainVariantId);
@@ -929,7 +956,7 @@ class SimpleProduct extends BaseProduct
     /**
      * @return bool
      */
-    public function isMainVariant()
+    public function isMainVariant(): bool
     {
         return $this->isMainVariant;
     }
@@ -962,5 +989,35 @@ class SimpleProduct extends BaseProduct
     public function comingSoon(): bool
     {
         return $this->comingSoon;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getVariantId(): int
+    {
+        return $this->variantId;
+    }
+
+    public function setVariantId(int $variantId): void
+    {
+        $this->variantId = $variantId;
+    }
+
+    public function getNumber(): string
+    {
+        return $this->number;
+    }
+
+    public function setNumber(string $number): void
+    {
+        $this->number = $number;
     }
 }

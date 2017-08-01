@@ -105,7 +105,11 @@ class Router implements RouterInterface, RequestMatcherInterface
 
         $url = $generator->generate($name, $parameters, $referenceType);
 
-        if (!$shop = $this->getContext()->getParameter('shop')) {
+        if (!$context = $this->getContext()) {
+            return $url;
+        }
+
+        if (!$shop = $context->getParameter('shop')) {
             return $url;
         }
 
@@ -150,7 +154,11 @@ class Router implements RouterInterface, RequestMatcherInterface
             $pathInfo = preg_replace('#^' . $shop['base_path'] . '#i', '', $url);
 
             //resolve seo urls to use symfony url matcher for route detection
-            $pathInfo = $this->seoUrlReader->fetchUrl($shop['id'], $pathInfo);
+            $seoUrl = $this->seoUrlReader->fetchUrl($shop['id'], trim($pathInfo, '/'));
+
+            if ($seoUrl) {
+                $pathInfo = $seoUrl;
+            }
 
             //rewrite base url for url generator
             $this->context->setBaseUrl(rtrim($shop['base_path'], '/'));

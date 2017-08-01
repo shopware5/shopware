@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\AdvancedMenu;
 
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection;
+use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryService;
@@ -63,7 +63,7 @@ class AdvancedMenuService implements AdvancedMenuServiceInterface
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      * @param int                                                            $depth
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection
+     * @return \Shopware\Category\Struct\CategoryCollection
      */
     public function get(ShopContextInterface $context, int $depth): CategoryCollection
     {

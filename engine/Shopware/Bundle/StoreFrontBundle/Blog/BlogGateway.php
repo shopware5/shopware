@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 
 /**
  * @category  Shopware
@@ -61,7 +61,7 @@ class BlogGateway
 
     /**
      * @param Connection   $connection
-     * @param FieldHelper  $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper  $fieldHelper
      * @param BlogHydrator $blogHydrator
      */
     public function __construct(

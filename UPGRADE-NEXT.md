@@ -23,13 +23,13 @@ This changelog references changes done in Shopware Next patch versions.
 * Added container tag `shopware_media.strategy` for strategy registration
 * Added abstract class `Shopware\Components\Filesystem\AbstractFilesystem`
 * Added service `shopware_media.filesystem` which is build on top of `shopware.filesystem.public`
-* Added `\Shopware\Bundle\StoreFrontBundle\Category\Category::__construct` which requires id, parentId, path and name
+* Added `\Shopware\Category\Struct\Category::__construct` which requires id, parentId, path and name
 * Added `\Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuService` to get advanced menu
 * Added block `frontend_advanced_menu_outer` in `themes/Frontend/Bare/frontend/index/index.tpl` for advanced menu
 * Added `\Shopware\Controllers\Widgets\AdvancedMenu` controller
 * Added `\Shopware\Bundle\StoreFrontBundle\Common\KeyCollection` - used for associated arrays 
 * Added `\Shopware\Framework\Struct\Collection` - used for none associated arrays
-* Added `\Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection` - Typed key collection for category structs
+* Added `\Shopware\Category\Struct\CategoryCollection` - Typed key collection for category structs
 
 ## Changes
 
@@ -324,7 +324,7 @@ The following example will store all `public` files on Google Cloud Platform.
 ],
 ```
 
-## `\Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection`
+## `\Shopware\Category\Struct\CategoryCollection`
 The category collection provides different helper function to work with categories:
 
 * `getIds` - returns all ids of contained categories

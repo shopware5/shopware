@@ -25,7 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Category\Struct\CategoryHydrator;
 use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
@@ -52,7 +53,7 @@ class CategoryGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -116,7 +117,7 @@ class CategoryGateway
      * @param int[]              $ids
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Category\Category[] Indexed by the category id
+     * @return \Shopware\Category\Struct\Category[] Indexed by the category id
      */
     public function getList(array $ids, TranslationContext $context)
     {
@@ -207,9 +208,9 @@ class CategoryGateway
 
     /**
      * @param int[]                                                 $mapping
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category[] $categories
+     * @param \Shopware\Category\Struct\Category[] $categories
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Category\Category[]
+     * @return \Shopware\Category\Struct\Category[]
      */
     private function getProductCategories(array $mapping, array $categories)
     {
