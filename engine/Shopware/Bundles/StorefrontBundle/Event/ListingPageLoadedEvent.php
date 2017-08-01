@@ -21,18 +21,50 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
+
+namespace StorefrontBundle\Event;
+
+use EventBundle\Event;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use StorefrontBundle\Struct\ListingPage;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+class ListingPageLoadedEvent extends Event
 {
-    public function indexAction(): void
-    {
+    /**
+     * @var ListingPage
+     */
+    protected $page;
 
+    /**
+     * @var Criteria
+     */
+    protected $criteria;
+
+    /**
+     * @var ShopContextInterface
+     */
+    protected $context;
+
+    public function __construct(ListingPage $page, Criteria $criteria, ShopContextInterface $context)
+    {
+        $this->page = $page;
+        $this->criteria = $criteria;
+        $this->context = $context;
+    }
+
+    public function getPage(): ListingPage
+    {
+        return $this->page;
+    }
+
+    public function getCriteria(): Criteria
+    {
+        return $this->criteria;
+    }
+
+    public function getContext(): ShopContextInterface
+    {
+        return $this->context;
     }
 }

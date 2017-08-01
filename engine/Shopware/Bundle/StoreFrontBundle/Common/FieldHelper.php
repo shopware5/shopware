@@ -1187,6 +1187,29 @@ class FieldHelper
     }
 
     /**
+     * Returns an array with all required blog fields.
+     * Requires that the s_blog table is included with table alias 'blog'
+     *
+     * @return array
+     */
+    public function getBlogCommentFields()
+    {
+        $fields = [
+            'blogComment.id AS __blogComment_id',
+            'blogComment.blog_id AS __blogComment_blog_id',
+            'blogComment.name AS __blogComment_name',
+            'blogComment.headline AS __blogComment_headline',
+            'blogComment.comment AS __blogComment_comment',
+            'blogComment.creation_date AS __blogComment_creation_date',
+            'blogComment.active AS __blogComment_active',
+            'blogComment.email AS __blogComment_email',
+            'blogComment.points AS __blogComment_points',
+        ];
+
+        return $fields;
+    }
+
+    /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
      * @param string                                                       $fromPart        Table which uses as from part

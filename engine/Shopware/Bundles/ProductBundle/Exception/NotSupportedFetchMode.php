@@ -21,18 +21,24 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+namespace ProductBundle\Exception;
+
+class NotSupportedFetchMode extends \Exception
 {
-    public function indexAction(): void
-    {
+    /**
+     * @var string
+     */
+    protected $fetchMode;
 
+    public function __construct($fetchMode, $message = '', $code = 0, \Throwable $previous = null)
+    {
+        $this->fetchMode = $fetchMode;
+        parent::__construct($message, $code, $previous);
+    }
+
+    public function getFetchMode(): string
+    {
+        return $this->fetchMode;
     }
 }

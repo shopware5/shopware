@@ -21,18 +21,38 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+namespace ProductBundle\Event;
+
+use EventBundle\Event;
+use ProductBundle\Struct\UnitCollection;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+
+class UnitsLoadedEvent extends Event
 {
-    public function indexAction(): void
-    {
+    /**
+     * @var UnitCollection
+     */
+    protected $units;
 
+    /**
+     * @var TranslationContext
+     */
+    protected $context;
+
+    public function __construct(UnitCollection $units, TranslationContext $context)
+    {
+        $this->units = $units;
+        $this->context = $context;
+    }
+
+    public function getUnits(): UnitCollection
+    {
+        return $this->units;
+    }
+
+    public function getContext(): TranslationContext
+    {
+        return $this->context;
     }
 }

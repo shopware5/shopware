@@ -21,18 +21,38 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
+
+namespace SearchBundle\Condition;
+
+use Assert\Assertion;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+class CustomerGroupCondition implements ConditionInterface
 {
-    public function indexAction(): void
-    {
+    /**
+     * @var int[]
+     */
+    private $customerGroupIds;
 
+    public function __construct(array $customerGroupIds)
+    {
+        Assertion::allIntegerish($customerGroupIds);
+        $this->customerGroupIds = array_map('intval', $customerGroupIds);
+        sort($this->customerGroupIds, SORT_NUMERIC);
+    }
+
+    public function getName()
+    {
+        return self::class;
+    }
+
+    public function getCustomerGroupIds(): array
+    {
+        return $this->customerGroupIds;
     }
 }
