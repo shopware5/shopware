@@ -18,7 +18,7 @@ class ProductFieldCollector implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $taggedServices = $this->findAndSortTaggedServices(
-            'shopware.product.writer_field',
+            'shopware.product.product.writer_field',
             $container
         );
 

@@ -1,0 +1,15 @@
+<?php declare(strict_types=1);
+
+namespace Shopware\Product\Writer\Field\ProductConfiguratorSetOptionRelation;
+
+use Shopware\Framework\Validation\ConstraintBuilder;
+use Shopware\Product\Writer\Api\IntField;
+
+class SetIdField extends IntField
+{
+    public function __construct(ConstraintBuilder $constraintBuilder)
+    {
+        parent::__construct('setId', 'set_id', $constraintBuilder);
+    }
+
+}

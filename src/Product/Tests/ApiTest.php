@@ -39,7 +39,7 @@ class ApiTest extends KernelTestCase
 
     public function test_gen()
     {
-        (new Generator(self::$kernel->getContainer()))->generate();
+        (new Generator(self::$kernel->getContainer()))->generateAll();
         $this->assertTrue(true);
     }
 
