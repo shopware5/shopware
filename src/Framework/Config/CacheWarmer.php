@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component\Config;
+namespace Shopware\Framework\Config;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -23,7 +24,7 @@ class CacheWarmer implements CacheWarmerInterface
         $this->configService = $configService;
     }
 
-    public function isOptional()
+    public function isOptional(): bool
     {
         return false;
     }
@@ -31,7 +32,7 @@ class CacheWarmer implements CacheWarmerInterface
     /**
      * @param string $cacheDir The cache directory
      */
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir): void
     {
         $shops = $this->getShops();
 
@@ -40,7 +41,7 @@ class CacheWarmer implements CacheWarmerInterface
         }
     }
 
-    private function getShops()
+    private function getShops(): array
     {
         $builder = $this->connection->createQueryBuilder();
 

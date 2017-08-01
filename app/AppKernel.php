@@ -1,7 +1,7 @@
 <?php
 
-use Shopware\Framework\Component\Plugin;
-use Shopware\Framework\Component\Theme;
+use Shopware\Framework\Plugin\Plugin;
+use Shopware\Storefront\Theme\Theme;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;

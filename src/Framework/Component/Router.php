@@ -2,7 +2,6 @@
 
 namespace Shopware\Framework\Component;
 
-use Shopware\Framework\Component\Plugin\Registry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;

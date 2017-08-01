@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Shopware\Framework\Translator;
 
@@ -35,7 +36,7 @@ class DatabaseLoader implements LoaderInterface
      * @throws NotFoundResourceException when the resource cannot be found
      * @throws InvalidResourceException  when the resource cannot be loaded
      */
-    public function load($resource, $locale, $domain = 'messages')
+    public function load($resource, $locale, $domain = 'messages'): MessageCatalogue
     {
         $builder = $this->connection->createQueryBuilder();
 

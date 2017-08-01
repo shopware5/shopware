@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component\Config;
+namespace Shopware\Framework\Config;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class Config extends ParameterBag implements \Shopware_Components_Config, \ArrayAccess
+class Config extends ParameterBag implements \ArrayAccess
 {
     public function __isset($name)
     {

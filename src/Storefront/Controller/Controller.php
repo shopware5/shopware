@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends SymfonyController
 {
-    protected function render($view, array $parameters = array(), Response $response = null)
+    protected function render($view, array $parameters = array(), Response $response = null): \Symfony\Component\HttpFoundation\Response
     {
         //remove static template inheritance prefix
         if (strpos($view, '@') === 0) {

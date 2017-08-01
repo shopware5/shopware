@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Storefront\Component;
+namespace Shopware\Storefront\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -111,7 +111,7 @@ class Theme extends Bundle
      *
      * @return null|string
      */
-    public function getExtend()
+    public function getExtend(): ?string
     {
         return $this->extend;
     }
@@ -150,7 +150,7 @@ class Theme extends Bundle
      *
      * @return bool
      */
-    public function useInheritanceConfig()
+    public function useInheritanceConfig(): bool
     {
         return $this->inheritanceConfig;
     }
@@ -160,7 +160,7 @@ class Theme extends Bundle
      *
      * @return array
      */
-    public function getJavascript()
+    public function getJavascript(): array
     {
         return $this->javascript;
     }
@@ -170,7 +170,7 @@ class Theme extends Bundle
      *
      * @return array
      */
-    public function getCss()
+    public function getCss(): array
     {
         return $this->css;
     }
@@ -224,7 +224,7 @@ class Theme extends Bundle
     /**
      * @return bool
      */
-    public function injectBeforePlugins()
+    public function injectBeforePlugins(): bool
     {
         return $this->injectBeforePlugins;
     }
@@ -237,7 +237,7 @@ class Theme extends Bundle
      *
      * @return Form\Container\TabContainer
      */
-    protected function createTabPanel($name, array $options = [])
+    protected function createTabPanel($name, array $options = []): Form\Container\TabContainer
     {
         $element = new Form\Container\TabContainer($name);
         $element->fromArray($options);
@@ -254,7 +254,7 @@ class Theme extends Bundle
      *
      * @return Form\Container\FieldSet
      */
-    protected function createFieldSet($name, $title, array $options = [])
+    protected function createFieldSet($name, $title, array $options = []): Form\Container\FieldSet
     {
         $element = new Form\Container\FieldSet($name, $title);
         $element->fromArray($options);
@@ -272,7 +272,7 @@ class Theme extends Bundle
      *
      * @return Form\Container\Tab
      */
-    protected function createTab($name, $title, array $options = [])
+    protected function createTab($name, $title, array $options = []): Form\Container\Tab
     {
         $element = new Form\Container\Tab($name, $title);
         $element->fromArray($options);
@@ -290,7 +290,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Text
      */
-    protected function createTextField($name, $label, $defaultValue, array $options = [])
+    protected function createTextField($name, $label, $defaultValue, array $options = []): Form\Field\Text
     {
         $element = new Form\Field\Text($name);
         $element->fromArray($options);
@@ -310,7 +310,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Number
      */
-    protected function createNumberField($name, $label, $defaultValue, array $options = [])
+    protected function createNumberField($name, $label, $defaultValue, array $options = []): Form\Field\Number
     {
         $element = new Form\Field\Number($name);
         $element->fromArray($options);
@@ -330,7 +330,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Boolean
      */
-    protected function createCheckboxField($name, $label, $defaultValue, array $options = [])
+    protected function createCheckboxField($name, $label, $defaultValue, array $options = []): Form\Field\Boolean
     {
         $element = new Form\Field\Boolean($name);
         $element->fromArray($options);
@@ -350,7 +350,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Color
      */
-    protected function createColorPickerField($name, $label, $defaultValue, array $options = [])
+    protected function createColorPickerField($name, $label, $defaultValue, array $options = []): Form\Field\Color
     {
         $element = new Form\Field\Color($name);
         $element->fromArray($options);
@@ -370,7 +370,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Date
      */
-    protected function createDateField($name, $label, $defaultValue, array $options = [])
+    protected function createDateField($name, $label, $defaultValue, array $options = []): Form\Field\Date
     {
         $element = new Form\Field\Date($name);
         $element->fromArray($options);
@@ -390,7 +390,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Em
      */
-    protected function createEmField($name, $label, $defaultValue, array $options = [])
+    protected function createEmField($name, $label, $defaultValue, array $options = []): Form\Field\Em
     {
         $element = new Form\Field\Em($name);
         $element->fromArray($options);
@@ -410,7 +410,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Media
      */
-    protected function createMediaField($name, $label, $defaultValue, array $options = [])
+    protected function createMediaField($name, $label, $defaultValue, array $options = []): Form\Field\Media
     {
         $element = new Form\Field\Media($name);
         $element->fromArray($options);
@@ -430,7 +430,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Percent
      */
-    protected function createPercentField($name, $label, $defaultValue, array $options = [])
+    protected function createPercentField($name, $label, $defaultValue, array $options = []): Form\Field\Percent
     {
         $element = new Form\Field\Percent($name);
         $element->fromArray($options);
@@ -450,7 +450,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Pixel
      */
-    protected function createPixelField($name, $label, $defaultValue, array $options = [])
+    protected function createPixelField($name, $label, $defaultValue, array $options = []): Form\Field\Pixel
     {
         $element = new Form\Field\Pixel($name);
         $element->fromArray($options);
@@ -471,7 +471,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\Selection
      */
-    protected function createSelectField($name, $label, $defaultValue, array $store, array $options = [])
+    protected function createSelectField($name, $label, $defaultValue, array $store, array $options = []): Form\Field\Selection
     {
         $element = new Form\Field\Selection($name, $store);
         $element->fromArray($options);
@@ -491,7 +491,7 @@ class Theme extends Bundle
      *
      * @return Form\Field\TextArea
      */
-    protected function createTextAreaField($name, $label, $defaultValue, array $options = [])
+    protected function createTextAreaField($name, $label, $defaultValue, array $options = []): Form\Field\TextArea
     {
         $element = new Form\Field\TextArea($name);
         $element->fromArray($options);

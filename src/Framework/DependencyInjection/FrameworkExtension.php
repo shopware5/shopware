@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Shopware\Framework\DependencyInjection;
 
@@ -10,34 +11,18 @@ class FrameworkExtension extends Extension
     /**
      * @inheritDoc
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'shopware';
     }
 
-    /**
-     * Loads a specific configuration.
-     *
-     * @param array $configs              An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
         $this->addShopwareConfig($container, 'shopware', $config);
     }
 
-    /**
-     * Adds all shopware configuration as di container parameter.
-     * Each shopware configuration has the alias "shopware."
-     *
-     * @param ContainerBuilder $container
-     * @param string $alias
-     * @param array $options
-     */
-    private function addShopwareConfig(ContainerBuilder $container, string $alias, array $options)
+    private function addShopwareConfig(ContainerBuilder $container, string $alias, array $options): void
     {
         foreach ($options as $key => $option) {
             $container->setParameter($alias . '.' . $key, $option);

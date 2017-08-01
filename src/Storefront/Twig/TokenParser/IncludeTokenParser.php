@@ -60,7 +60,7 @@ final class IncludeTokenParser extends \Twig_TokenParser
         ]);
     }
 
-    public function getTag()
+    public function getTag(): string
     {
         return 'sw_include';
     }

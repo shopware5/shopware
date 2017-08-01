@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component\Config;
+namespace Shopware\Framework\Config;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Framework;
@@ -22,7 +23,7 @@ class ConfigService implements ConfigServiceInterface
         $builder = $this->connection->createQueryBuilder();
 
         $builder->select([
-                'LOWER(REPLACE(e.name, "_", "")) as name',
+                'e.name',
                 'COALESCE(currentShop.value, parentShop.value, fallbackShop.value, e.value) as value',
             ])
             ->from('s_core_config_elements', 'e')

@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Storefront\Component\Theme;
+namespace Shopware\Storefront\Theme;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\AssetManager;
@@ -31,7 +31,7 @@ class ThemeCacheWarmer implements CacheWarmerInterface
         $this->basePath = $basePath;
     }
 
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir): void
     {
         foreach ($this->am->getNames() as $name) {
             $this->dumpAsset($name);
@@ -48,7 +48,7 @@ class ThemeCacheWarmer implements CacheWarmerInterface
      *
      * @return bool true if the warmer is optional, false otherwise
      */
-    public function isOptional()
+    public function isOptional(): bool
     {
         return true;
     }
