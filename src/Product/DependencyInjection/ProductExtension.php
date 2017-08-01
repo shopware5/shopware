@@ -24,6 +24,9 @@ class ProductExtension extends Extension
         $this->processConfiguration(new Configuration(), $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__));
+
         $loader->load('services.xml');
+        $loader->load('../Writer/product-fields.xml');
+
     }
 }

@@ -92,5 +92,8 @@
                 <argument type="service" id="shopware.product.routing.detail_page_seo_url_generator" />
             </argument>
         </service>
+
+        <!-- Validator -->
+        <service id="shopware.validation.constraint_builder" class="Shopware\Framework\Validation\ConstraintBuilder"/>
     </services>
 </container>

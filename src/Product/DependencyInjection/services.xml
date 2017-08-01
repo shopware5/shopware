@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+
         <service class="Shopware\Product\Struct\ProductHydrator" id="shopware.product.struct.product_hydrator"/>
         <service class="Shopware\Product\Gateway\Handler\CategoryConditionHandler" id="shopware.product.gateway.handler.category_condition_handler"/>
         <service class="Shopware\Product\Gateway\Handler\ActiveConditionHandler" id="shopware.product.gateway.handler.active_condition_handler"/>
@@ -45,12 +46,11 @@
 
         <service id="shopware.product.writer" class="Shopware\Product\Writer\Writer">
             <argument type="service" id="shopware.product.sql_gateway"/>
-            <argument type="service" id="shopware.product.field_configuration"/>
+            <argument type="service" id="shopware.product.field_collection"/>
         </service>
         <service id="shopware.product.sql_gateway" class="Shopware\Product\Writer\SqlGateway">
             <argument type="service" id="doctrine.dbal.default_connection"/>
         </service>
-        <service id="shopware.product.field_configuration" class="Shopware\Product\Writer\ProductFieldConfiguration" />
-
+        <service id="shopware.product.field_collection" class="Shopware\Product\Writer\Api\FieldCollection" />
     </services>
 </container>
