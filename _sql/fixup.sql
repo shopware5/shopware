@@ -287,3 +287,39 @@ ALTER TABLE s_articles_vote RENAME TO product_vote;
 ALTER TABLE product_vote ADD uuid VARCHAR(42) NULL;
 CREATE UNIQUE INDEX product_vote_uuid_uindex ON product_vote (uuid);
 ALTER TABLE product_vote CHANGE articleID product_id INT(11) NOT NULL;
+
+ALTER TABLE `product`
+    ALTER `name` DROP DEFAULT;
+ALTER TABLE `product`
+    CHANGE COLUMN `name` `title` VARCHAR(100) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `supplierID`;
+
+## supplier uuid updates
+UPDATE product_supplier ps SET ps.uuid = CONCAT('SWAG-PRODUCT-SUPPLIER-UUID-', ps.id);
+ALTER TABLE `product_supplier`
+    ALTER `uuid` DROP DEFAULT;
+ALTER TABLE `product_supplier`
+    CHANGE COLUMN `uuid` `uuid` VARCHAR(42) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `id`;
+
+## product uuid updates
+ALTER TABLE `product`
+    CHANGE COLUMN `supplierID` `supplier_id` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `uuid`,
+    CHANGE COLUMN `taxID` `tax_id` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `active`,
+    CHANGE COLUMN `pricegroupID` `pricegroup_id` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `changetime`,
+    CHANGE COLUMN `filtergroupID` `filtergroup_id` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `pricegroupActive`;
+ALTER TABLE `product`
+    ALTER `pricegroupActive` DROP DEFAULT;
+ALTER TABLE `product`
+    CHANGE COLUMN `pricegroupActive` `pricegroup_active` INT(1) UNSIGNED NOT NULL AFTER `pricegroup_id`;
+UPDATE product p SET p.uuid = CONCAT('SWAG-PRODUCT-UUID-', p.id);
+ALTER TABLE `product`
+    ALTER `uuid` DROP DEFAULT;
+ALTER TABLE `product`
+    CHANGE COLUMN `uuid` `uuid` VARCHAR(42) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `id`;;
+ALTER TABLE `product`
+    ADD COLUMN `supplier_uuid` VARCHAR(42) NULL DEFAULT NULL AFTER `supplier_id`;
+UPDATE product p SET p.supplier_uuid = CONCAT('SWAG-PRODUCT-SUPPLIER-UUID-', p.supplier_id);
+ALTER TABLE `product`
+    DROP INDEX `supplierID`,
+    DROP COLUMN `supplier_id`,
+    ADD CONSTRAINT `fk_product_supplier_uuid_product_supplier_uuid` FOREIGN KEY (`supplier_uuid`) REFERENCES `product_supplier` (`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE,
+    ADD INDEX `product_supplier_uuid` (`supplier_uuid`);

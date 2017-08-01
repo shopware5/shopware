@@ -7,4 +7,6 @@ mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/install
 
 __DOC_ROOT__/_sql/ApplyDeltas.php --migrationpath="__DOC_ROOT__/_sql/migrations/" --shoppath="__DOC_ROOT__" --mode=update --dbname=__DB_NAME__ --host=__DB_HOST__ --password=__DB_PASSWORD__ --username=__DB_USER__
 
+mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/demo/latest.sql
+
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/fixup.sql
