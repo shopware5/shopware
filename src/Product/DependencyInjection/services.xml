@@ -36,5 +36,21 @@
             <argument id="slugify" type="service"/>
             <argument id="shopware.router" type="service"/>
         </service>
+
+
+
+
+
+
+
+        <service id="shopware.product.writer" class="Shopware\Product\Writer\Writer">
+            <argument type="service" id="shopware.product.sql_gateway"/>
+            <argument type="service" id="shopware.product.field_configuration"/>
+        </service>
+        <service id="shopware.product.sql_gateway" class="Shopware\Product\Writer\SqlGateway">
+            <argument type="service" id="doctrine.dbal.default_connection"/>
+        </service>
+        <service id="shopware.product.field_configuration" class="Shopware\Product\Writer\ProductFieldConfiguration" />
+
     </services>
 </container>
