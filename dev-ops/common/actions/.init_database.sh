@@ -3,8 +3,8 @@
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ -e "DROP DATABASE IF EXISTS __DB_NAME__"
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ -e "CREATE DATABASE __DB_NAME__ DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci"
 
-mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ shopware < _sql/install/latest.sql
+mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/install/latest.sql
 
 __DOC_ROOT__/_sql/ApplyDeltas.php --migrationpath="__DOC_ROOT__/_sql/migrations/" --shoppath="__DOC_ROOT__" --mode=update
 
-mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ shopware < _sql/fixup.sql
+mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/fixup.sql

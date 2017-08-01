@@ -20,6 +20,8 @@ templates:
     destination: "app/config/parameters.yml"
   - source: "dev-ops/docker/docker-compose.override.yml"
     destination: "docker-compose.override.yml"
+  - source: "dev-ops/common/templates/config.php.tpl"
+    destination: "config.php"
 
 const:
   DB_USER: "app"
@@ -41,3 +43,14 @@ environments:
   docker:
     paths:
       - "dev-ops/docker/actions"
+  mac:
+    paths:
+      - "dev-ops/common/actions"
+    const:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_HOST: "localhost"
+      DB_NAME: "next"
+      SW_HOST: "shopware.next"
+      PHP_VERSION: "7.1"
+      DOC_ROOT: "/Users/jb/web/next"

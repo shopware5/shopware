@@ -81,9 +81,10 @@ Thumbs.db
 
 # User configurations
 app/config/parameters.yml
+config.php
 
 # tooling
 /dev-ops/docker/_volumes
 /docker-compose.override.yml
-/.psh.yaml
+/.psh.yml
 /dev-ops/docker/containers/*/createuser.sh

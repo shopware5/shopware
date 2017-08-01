@@ -26,7 +26,14 @@ class Migrations_Migration2009 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
-        $this->addSql("UPDATE s_core_config_elements SET value = 's:24:\"Zuschlag für Zahlungsart\";'");
-        $this->addSql("UPDATE s_core_config_elements SET value = 's:372:\"ab,die,der,und,in,zu,den,das,nicht,von,sie,ist,des,sich,mit,dem,dass,er,es,ein,ich,auf,so,eine,auch,als,an,nach,wie,im,für,einen,um,werden,mehr,zum,aus,ihrem,style,oder,neue,spieler,können,wird,sind,ihre,einem,of,du,sind,einer,über,alle,neuen,bei,durch,kann,hat,nur,noch,zur,gegen,bis,aber,haben,vor,seine,ihren,jetzt,ihr,dir,etc,bzw,nach,deine,the,warum,machen,0,sowie,am\";'");
+        $this->addSql(sprintf(
+            "UPDATE s_core_config_elements SET value = '%s'",
+            serialize('Zuschlag für Zahlungsart')
+        ));
+
+        $this->addSql(sprintf(
+            "UPDATE s_core_config_elements SET value = '%s'",
+            serialize('ab,die,der,und,in,zu,den,das,nicht,von,sie,ist,des,sich,mit,dem,dass,er,es,ein,ich,auf,so,eine,auch,als,an,nach,wie,im,für,einen,um,werden,mehr,zum,aus,ihrem,style,oder,neue,spieler,können,wird,sind,ihre,einem,of,du,sind,einer,über,alle,neuen,bei,durch,kann,hat,nur,noch,zur,gegen,bis,aber,haben,vor,seine,ihren,jetzt,ihr,dir,etc,bzw,nach,deine,the,warum,machen,0,sowie,am')
+        ));
     }
 }
