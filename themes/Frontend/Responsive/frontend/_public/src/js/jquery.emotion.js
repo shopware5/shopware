@@ -657,8 +657,8 @@
             window.StateManager.on('resize', $.proxy(me.onResize, me));
 
             if (me.opts.fullscreen) {
-                $.subscribe('plugin/swEmotionLoader/onShowEmotion', $.proxy(me.onShow, me));
-                $.subscribe('plugin/swEmotionLoader/onHideEmotion', $.proxy(me.onHide, me));
+                $.subscribe(me.getEventName('plugin/swEmotionLoader/onShowEmotion'), $.proxy(me.onShow, me));
+                $.subscribe(me.getEventName('plugin/swEmotionLoader/onHideEmotion'), $.proxy(me.onHide, me));
             }
 
             $.publish('plugin/swEmotion/onRegisterEvents', [ me ]);
@@ -802,8 +802,8 @@
             var me = this;
 
             if (me.opts.fullscreen) {
-                $.unsubscribe('plugin/swEmotionLoader/onShowEmotion');
-                $.unsubscribe('plugin/swEmotionLoader/onHideEmotion');
+                $.unsubscribe(me.getEventName('plugin/swEmotionLoader/onShowEmotion'));
+                $.unsubscribe(me.getEventName('plugin/swEmotionLoader/onHideEmotion'));
             }
 
             me._destroy();

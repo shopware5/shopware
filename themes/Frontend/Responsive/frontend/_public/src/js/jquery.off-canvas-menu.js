@@ -229,7 +229,7 @@
             // Allow the user to close the off canvas menu
             me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
 
-            $.subscribe('plugin/swOffcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+            $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'), $.proxy(me.onBeforeOpenMenu, me));
 
             $.publish('plugin/swOffcanvasMenu/onRegisterEvents', [ me ]);
         },
@@ -391,7 +391,7 @@
 
             me.$el.off(me.getEventName('click'), opts.closeButtonSelector);
 
-            $.unsubscribe('plugin/swOffcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+            $.unsubscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'));
 
             me._destroy();
         }

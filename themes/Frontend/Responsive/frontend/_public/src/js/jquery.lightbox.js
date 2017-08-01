@@ -48,7 +48,7 @@
                     me.setSize(me.image.width, me.image.height);
                 });
 
-                $.subscribe('plugin/swModal/onClose', function() {
+                $.subscribe(me.getEventName('plugin/swModal/onClose'), function() {
                     $(window).off('resize.lightbox');
                 });
             };
@@ -137,7 +137,7 @@
         destroy: function() {
             var me = this;
 
-            $.unsubscribe('plugin/swModal/onClose');
+            $.unsubscribe(me.getEventName('plugin/swModal/onClose'));
 
             me._destroy();
         },

@@ -163,8 +163,8 @@
             if (me.isDisplayMode('offcanvas')) {
                 me._on(me._$triggerEl, 'click touchstart', $.proxy(me.onMouseEnter, me));
 
-                $.subscribe('plugin/swAddArticle/onAddArticle', $.proxy(me.onArticleAdded, me));
-                $.subscribe('plugin/swAddArticle/onBeforeAddArticle', $.proxy(me.onBeforeAddArticle, me));
+                $.subscribe(me.getEventName('plugin/swAddArticle/onAddArticle'), $.proxy(me.onArticleAdded, me));
+                $.subscribe(me.getEventName('plugin/swAddArticle/onBeforeAddArticle'), $.proxy(me.onBeforeAddArticle, me));
             } else {
                 me._on('.container--ajax-cart,' + me.opts.triggerElSelector, 'mousemove', $.proxy(me.onMouseHover, me));
                 me._on(me._$triggerEl, 'mouseenter touchstart', $.proxy(me.onMouseEnter, me));
@@ -542,8 +542,8 @@
         destroy: function () {
             var me = this;
 
-            $.unsubscribe('plugin/swAddArticle/onAddArticle');
-            $.unsubscribe('plugin/swAddArticle/onBeforeAddArticle');
+            $.unsubscribe(me.getEventName('plugin/swAddArticle/onAddArticle'));
+            $.unsubscribe(me.getEventName('plugin/swAddArticle/onBeforeAddArticle'));
 
             me.off(me.eventSuffix);
 

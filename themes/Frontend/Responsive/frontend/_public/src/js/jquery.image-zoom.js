@@ -78,10 +78,10 @@
             me._on(me.$container, 'mouseout', $.proxy(me.stopZoom, me));
             me._on(me.$lens, 'click', $.proxy(me.onLensClick, me));
 
-            $.subscribe('plugin/swImageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/swImageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/swImageSlider/onClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/swImageSlider/onLightbox', $.proxy(me.stopZoom, me));
+            $.subscribe(me.getEventName('plugin/swImageSlider/onRightArrowClick'), $.proxy(me.stopZoom, me));
+            $.subscribe(me.getEventName('plugin/swImageSlider/onLeftArrowClick'), $.proxy(me.stopZoom, me));
+            $.subscribe(me.getEventName('plugin/swImageSlider/onClick'), $.proxy(me.stopZoom, me));
+            $.subscribe(me.getEventName('plugin/swImageSlider/onLightbox'), $.proxy(me.stopZoom, me));
 
             $.publish('plugin/swImageZoom/onRegisterEvents', [ me ]);
         },
@@ -448,10 +448,10 @@
         destroy: function () {
             var me = this;
 
-            $.unsubscribe('plugin/swImageSlider/onRightArrowClick');
-            $.unsubscribe('plugin/swImageSlider/onLeftArrowClick');
-            $.unsubscribe('plugin/swImageSlider/onClick');
-            $.unsubscribe('plugin/swImageSlider/onLightbox');
+            $.unsubscribe(me.getEventName('plugin/swImageSlider/onRightArrowClick'));
+            $.unsubscribe(me.getEventName('plugin/swImageSlider/onLeftArrowClick'));
+            $.unsubscribe(me.getEventName('plugin/swImageSlider/onClick'));
+            $.unsubscribe(me.getEventName('plugin/swImageSlider/onLightbox'));
 
             me.$lens.remove();
             me.$flyout.remove();
