@@ -43,8 +43,7 @@ class ConfigService implements ConfigServiceInterface
 
     public function hydrate(array $config): array
     {
-        // TODO fix unserialize php notice
-        $config = @array_map('unserialize', $config);
+        $config = array_map('unserialize', $config);
         $config['version'] = Framework::VERSION;
         $config['revision'] = Framework::REVISION;
         $config['versiontext'] = Framework::VERSION_TEXT;

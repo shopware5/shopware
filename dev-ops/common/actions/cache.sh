@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-I: SHOPWARE_ENV=dev bin/console sw:cache:clear
-I: SHOPWARE_ENV=test bin/console sw:cache:clear
+bin/console cache:clear --no-warmup --no-optional-warmers
+bin/console cache:warmup
