@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceRule;
@@ -242,7 +242,7 @@ class ProductProvider implements ProductProviderInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
-     * @param TranslationContext                                      $context
+     * @param \Shopware\Context\TranslationContext                                      $context
      *
      * @return \array[]
      */

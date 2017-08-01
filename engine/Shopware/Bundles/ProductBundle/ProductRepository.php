@@ -34,7 +34,7 @@ use ProductBundle\Struct\ProductCollection;
 use Shopware\Search\AggregationResult;
 use Shopware\Search\SearchResult;
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 class ProductRepository
 {

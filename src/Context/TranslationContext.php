@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Context;
+namespace Shopware\Context;
 
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 

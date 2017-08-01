@@ -2,7 +2,7 @@
 
 namespace Shopware\Framework\Routing;
 
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 interface SeoUrlGeneratorInterface
 {

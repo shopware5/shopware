@@ -5,7 +5,7 @@ namespace Shopware\Search;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 interface AggregatorInterface
 {

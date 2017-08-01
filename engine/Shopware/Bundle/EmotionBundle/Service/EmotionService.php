@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\Service;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 
 class EmotionService implements EmotionServiceInterface
@@ -131,7 +131,7 @@ class EmotionService implements EmotionServiceInterface
 
     /**
      * @param Emotion[]                                                    $emotions
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      */
     private function resolveShops(array $emotions, TranslationContext $context)
     {

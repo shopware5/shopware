@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\ProductLink;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -77,7 +77,7 @@ class ProductLinkGateway
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param TranslationContext                                      $context
+     * @param \Shopware\Context\TranslationContext                                      $context
      *
      * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\ProductLink\Link array
      */

@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Category;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -78,7 +78,7 @@ class CategoryGateway
 
     /**
      * @param BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return array Indexed by product number, contains all categories of a product
      */
@@ -113,11 +113,6 @@ class CategoryGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
-     *
      * @param int[]              $ids
      * @param TranslationContext $context
      *

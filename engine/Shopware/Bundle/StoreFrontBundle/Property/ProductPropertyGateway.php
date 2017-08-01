@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**

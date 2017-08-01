@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware

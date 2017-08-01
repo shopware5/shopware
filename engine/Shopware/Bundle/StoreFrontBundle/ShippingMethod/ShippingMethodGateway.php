@@ -29,7 +29,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 class ShippingMethodGateway
 {
@@ -62,7 +62,7 @@ class ShippingMethodGateway
 
     /**
      * @param int[]                                                        $ids
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return ShippingMethod[]
      */
@@ -86,7 +86,7 @@ class ShippingMethodGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return ShippingMethod[]
      */

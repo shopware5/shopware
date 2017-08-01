@@ -5,7 +5,7 @@ namespace Shopware\Framework\Routing\SeoUrlGenerator;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Category\Category;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Framework\Routing\Router;
 use Shopware\Framework\Routing\SeoRoute;
 use Shopware\Framework\Routing\SeoUrlGeneratorInterface;

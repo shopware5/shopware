@@ -26,7 +26,7 @@ namespace ProductBundle\Event;
 
 use EventBundle\Event;
 use ProductBundle\Struct\ManufacturerCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 class ManufacturersLoadedEvent extends Event
 {
@@ -36,7 +36,7 @@ class ManufacturersLoadedEvent extends Event
     protected $products;
 
     /**
-     * @var TranslationContext
+     * @var \Shopware\Context\TranslationContext
      */
     protected $context;
 

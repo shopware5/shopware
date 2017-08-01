@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -111,7 +111,7 @@ class PropertyGateway
      *  - In all other cases the values are sorted by their alphanumeric value
      *
      * @param int[]              $valueIds
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet[] Each array element (set, group, option) is indexed by his id
      */

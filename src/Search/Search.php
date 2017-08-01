@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Search\SearchResult;
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Search\AggregationResult;
 use Shopware\Search\AggregatorInterface;
 use Shopware\Search\HandlerInterface;

@@ -25,7 +25,7 @@
 namespace ProductBundle\Event;
 
 use ProductBundle\Struct\ProductCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 class DetailProductsLoadedEvent
 {
