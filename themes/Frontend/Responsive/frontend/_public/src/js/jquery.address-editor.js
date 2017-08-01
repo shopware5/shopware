@@ -169,7 +169,7 @@
                             addressId: addressId
                         });
 
-                        $.unsubscribe(me.getEventName(me.getEventName('plugin/swModal/onOpen')));
+                        $.unsubscribe(me.getEventName('plugin/swModal/onOpen'));
                     });
 
                     $.publish('plugin/swAddressEditor/onAddressFetchSuccess', [ me, data ]);
