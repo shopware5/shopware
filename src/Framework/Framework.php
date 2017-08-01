@@ -1,22 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Shopware\Framework;
 
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\StringAsset;
-use Shopware\Framework\Component\Theme\AsseticAssetsCompilerPass;
-use Shopware\Framework\Component\Theme\JavascriptCompilerPass;
-use Shopware\Framework\Component\Theme\LessVariablesCompilerPass;
-use Shopware\Framework\Component\Theme\SourceMapCompilerPass;
 use Shopware\Framework\DependencyInjection\FrameworkExtension;
 use Shopware\Framework\Doctrine\BridgeDatabaseCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class Framework extends Bundle
@@ -30,7 +22,7 @@ class Framework extends Bundle
     /**
      * @inheritDoc
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): Extension
     {
         return new FrameworkExtension();
     }
@@ -38,7 +30,7 @@ class Framework extends Bundle
     /**
      * @inheritDoc
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 

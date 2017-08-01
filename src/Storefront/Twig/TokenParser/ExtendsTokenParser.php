@@ -41,7 +41,7 @@ final class ExtendsTokenParser extends \Twig_TokenParser
         ]);
     }
 
-    public function getTag()
+    public function getTag(): string
     {
         return 'sw_extends';
     }

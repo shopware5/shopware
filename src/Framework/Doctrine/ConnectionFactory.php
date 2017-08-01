@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Shopware\Framework\Doctrine;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection;
 
 class ConnectionFactory extends \Doctrine\Bundle\DoctrineBundle\ConnectionFactory
 {
@@ -27,7 +29,8 @@ class ConnectionFactory extends \Doctrine\Bundle\DoctrineBundle\ConnectionFactor
         Configuration $config = null,
         EventManager $eventManager = null,
         array $mappingTypes = []
-    ) {
+    ): Connection
+    {
         $params['pdo'] = $this->connection;
 
         return parent::createConnection(

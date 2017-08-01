@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Storefront\Component\Theme;
+namespace Shopware\Storefront\Theme;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

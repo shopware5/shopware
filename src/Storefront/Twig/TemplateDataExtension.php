@@ -3,8 +3,8 @@
 namespace Shopware\Storefront\Twig;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Framework\Component\Config\ConfigServiceInterface;
-use Shopware\Storefront\Component\Theme\ThemeConfigReader;
+use Shopware\Framework\Config\ConfigServiceInterface;
+use Shopware\Storefront\Theme\ThemeConfigReader;
 use Shopware\Storefront\Component\SitePageMenu;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -83,10 +83,10 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         $themeConfig = array_merge(
             $themeConfig,
             [
-                'desktoplogo' => 'bundles/storefront/src/img/logos/logo--tablet.png',
-                'tabletlandscapelogo' => 'bundles/storefront/src/img/logos/logo--tablet.png',
-                'tabletlogo' => 'bundles/storefront/src/img/logos/logo--tablet.png',
-                'mobilelogo' => 'bundles/storefront/src/img/logos/logo--mobile.png',
+                'desktopLogo' => 'bundles/storefront/src/img/logos/logo--tablet.png',
+                'tabletLandscapeLogo' => 'bundles/storefront/src/img/logos/logo--tablet.png',
+                'tabletLogo' => 'bundles/storefront/src/img/logos/logo--tablet.png',
+                'mobileLogo' => 'bundles/storefront/src/img/logos/logo--mobile.png',
                 'favicon' => 'bundles/storefront/src/img/favicon.ico',
             ]
         );

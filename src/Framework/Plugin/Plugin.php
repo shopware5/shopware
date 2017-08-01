@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component;
+namespace Shopware\Framework\Plugin;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;

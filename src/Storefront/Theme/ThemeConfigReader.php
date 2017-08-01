@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Storefront\Component\Theme;
+namespace Shopware\Storefront\Theme;
 
 use Doctrine\DBAL\Connection;
 

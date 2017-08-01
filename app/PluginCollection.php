@@ -3,19 +3,19 @@
 class PluginCollection
 {
     /**
-     * @var \Shopware\Framework\Component\Plugin[]
+     * @var \Shopware\Framework\Plugin\Plugin[]
      */
     private $plugins;
 
     /**
-     * @param \Shopware\Framework\Component\Plugin[] $plugins
+     * @param \Shopware\Framework\Plugin\Plugin[] $plugins
      */
     public function __construct(array $plugins = [])
     {
         $this->plugins = $plugins;
     }
 
-    public function add(\Shopware\Framework\Component\Plugin $plugin)
+    public function add(\Shopware\Framework\Plugin\Plugin $plugin)
     {
         $class = get_class($plugin);
 
@@ -27,7 +27,7 @@ class PluginCollection
     }
 
     /**
-     * @param \Shopware\Framework\Component\Plugin[] $plugins
+     * @param \Shopware\Framework\Plugin\Plugin[] $plugins
      */
     public function addList(array $plugins)
     {
@@ -40,7 +40,7 @@ class PluginCollection
     }
 
     /**
-     * @return \Shopware\Framework\Component\Plugin[]
+     * @return \Shopware\Framework\Plugin\Plugin[]
      */
     public function getPlugins(): array
     {

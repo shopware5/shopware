@@ -1,9 +1,9 @@
 <?php
 
-namespace Shopware\Storefront\Component\Theme;
+namespace Shopware\Storefront\Theme;
 
 use Assetic\Asset\AssetInterface;
-use Shopware\Framework\Component\Plugin;
+use Shopware\Framework\Plugin\Plugin;
 
 class LessphpFilter extends \Assetic\Filter\LessphpFilter
 {

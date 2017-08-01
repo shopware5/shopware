@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component\Config;
+namespace Shopware\Framework\Config;
 
 interface ConfigServiceInterface
 {

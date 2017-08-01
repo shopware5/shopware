@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component\Session;
+namespace Shopware\Storefront\Session;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;

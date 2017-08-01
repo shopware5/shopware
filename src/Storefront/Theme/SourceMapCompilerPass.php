@@ -1,13 +1,13 @@
 <?php
 
-namespace Shopware\Storefront\Component\Theme;
+namespace Shopware\Storefront\Theme;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SourceMapCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $options = [
             'sourceMap' => true,

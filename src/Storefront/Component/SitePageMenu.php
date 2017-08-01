@@ -57,7 +57,7 @@ class SitePageMenu
      *
      * @return array
      */
-    public function getTree(int $shopId, ?int $activeId = null)
+    public function getTree(int $shopId, ?int $activeId = null): array
     {
         $query = $this->getQuery($shopId);
 
@@ -113,7 +113,7 @@ class SitePageMenu
      *
      * @return bool
      */
-    public function overrideExisting($menu, $key, $site)
+    public function overrideExisting($menu, $key, $site): bool
     {
         return !empty($site['mapping']) && empty($menu[$key][0]['mapping']);
     }
@@ -125,7 +125,7 @@ class SitePageMenu
      *
      * @return array
      */
-    private function buildSiteTree($parentId, $sites, $activeId)
+    private function buildSiteTree($parentId, $sites, $activeId): array
     {
         $result = [];
         foreach ($sites as $index => $site) {
@@ -160,7 +160,7 @@ class SitePageMenu
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery($shopId)
+    private function getQuery($shopId): \Doctrine\DBAL\Query\QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -221,7 +221,7 @@ class SitePageMenu
      *
      * @return array
      */
-    private function assignSeoUrls($menu, $seoUrls)
+    private function assignSeoUrls($menu, $seoUrls): array
     {
         foreach ($menu as &$group) {
             foreach ($group as &$site) {

@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Shopware\Framework\Component\Session;
+namespace Shopware\Storefront\Session;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -29,10 +30,12 @@ class ShopSubscriber implements EventSubscriberInterface
         $request->getSession()->set('sessionId', $request->getSession()->getId());
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => [['onKernelRequest', 15]],
+            KernelEvents::REQUEST => [
+                ['onKernelRequest', 15]
+            ],
         ];
     }
 }

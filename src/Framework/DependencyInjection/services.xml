@@ -30,23 +30,6 @@
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
-        <!-- Session -->
-        <service id="shopware.session" alias="session" />
-
-        <service id="shopware.session.save_handler_factory" class="Shopware\Framework\Component\Session\SaveHandlerFactory">
-            <argument type="service" id="dbal_connection" />
-            <argument>s_core_sessions</argument>
-        </service>
-
-        <service id="shopware.session.save_handler" class="SessionHandlerInterface">
-            <factory service="shopware.session.save_handler_factory" method="createSaveHandler" />
-            <argument>%shopware.session%</argument>
-        </service>
-
-        <service id="shopware.session.shop_subscriber" class="Shopware\Framework\Component\Session\ShopSubscriber">
-            <tag name="kernel.event_subscriber" />
-        </service>
-
         <!-- Translation / Snippet -->
         <service id="shopware.translator.database_loader" class="Shopware\Framework\Translator\DatabaseLoader">
             <tag name="translation.loader" alias="database" />
@@ -55,24 +38,24 @@
         </service>
 
         <!-- Config -->
-        <service id="shopware.config.cache_warmer" class="Shopware\Framework\Component\Config\CacheWarmer">
+        <service id="shopware.config.cache_warmer" class="Shopware\Framework\Config\CacheWarmer">
             <tag name="kernel.cache_warmer" />
 
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.config.config_service" />
         </service>
 
-        <service id="shopware.config.config_service" class="Shopware\Framework\Component\Config\ConfigService">
+        <service id="shopware.config.config_service" class="Shopware\Framework\Config\ConfigService">
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware.config.cached_config_service" class="Shopware\Framework\Component\Config\CachedConfigService" decorates="shopware.config.config_service">
+        <service id="shopware.config.cached_config_service" class="Shopware\Framework\Config\CachedConfigService" decorates="shopware.config.config_service">
             <argument type="service" id="shopware.config.cached_config_service.inner" />
             <argument type="service" id="shopware.cache" />
         </service>
 
         <service id="shopware.config" alias="shopware.config.config" />
-        <service synthetic="true" id="shopware.config.config" class="Shopware\Framework\Component\Config\Config" />
+        <service synthetic="true" id="shopware.config.config" class="Shopware\Framework\Config\Config" />
 
     </services>
 </container>

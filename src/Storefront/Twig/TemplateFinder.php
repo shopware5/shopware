@@ -3,7 +3,7 @@
 namespace Shopware\Storefront\Twig;
 
 use AppKernel;
-use Shopware\Storefront\Component\Theme;
+use Shopware\Storefront\Theme\Theme;
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
