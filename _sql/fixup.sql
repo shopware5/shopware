@@ -300,6 +300,13 @@ ALTER TABLE `product_supplier`
 ALTER TABLE `product_supplier`
     CHANGE COLUMN `uuid` `uuid` VARCHAR(42) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `id`;
 
+## product_detail
+UPDATE product_detail pd SET pd.uuid = pd.ordernumber;
+ALTER TABLE `product_detail`
+    ALTER `uuid` DROP DEFAULT;
+ALTER TABLE `product_detail`
+    CHANGE COLUMN `uuid` `uuid` VARCHAR(42) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `id`;
+
 ## product uuid updates
 ALTER TABLE `product`
     CHANGE COLUMN `supplierID` `supplier_id` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `uuid`,
@@ -323,3 +330,15 @@ ALTER TABLE `product`
     DROP COLUMN `supplier_id`,
     ADD CONSTRAINT `fk_product_supplier_uuid_product_supplier_uuid` FOREIGN KEY (`supplier_uuid`) REFERENCES `product_supplier` (`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE,
     ADD INDEX `product_supplier_uuid` (`supplier_uuid`);
+ALTER TABLE `product`
+    CHANGE COLUMN `datum` `created_at` DATE NULL DEFAULT NULL AFTER `shippingtime`;
+ALTER TABLE `product`
+    ADD COLUMN `main_detail_uuid` VARCHAR(42) NULL DEFAULT NULL AFTER `main_detail_id`;
+UPDATE product p INNER JOIN product_detail pd ON pd.id = p.main_detail_id SET p.main_detail_uuid = pd.uuid;
+ALTER TABLE `product`
+    DROP COLUMN `main_detail_id`,
+    DROP INDEX `main_detailID`,
+    ADD INDEX `product_main_detail_uuid` (`main_detail_uuid`);
+ALTER TABLE `product`
+    ADD CONSTRAINT `fk_product_main_detail_uuid_product_detail_uuid` FOREIGN KEY (`main_detail_uuid`) REFERENCES `product_detail` (`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE;
+

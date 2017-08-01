@@ -4,17 +4,12 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="shopware.product.writer_field_id" class="Shopware\Product\Writer\Field\IdField">
+        <service id="shopware.product.writer_field_uuid" class="Shopware\Product\Writer\Field\UuidField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_uuid" class="Shopware\Product\Writer\Field\UuidField">
-    <argument type="service" id="shopware.validation.constraint_builder"/>   
-    
-    <tag name="shopware.product.writer_field"/> 
-</service>        
-<service id="shopware.product.writer_field_supplierid" class="Shopware\Product\Writer\Field\SupplierIDField">
+<service id="shopware.product.writer_field_supplier_uuid" class="Shopware\Product\Writer\Field\SupplierUuidField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
@@ -39,7 +34,7 @@
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_datum" class="Shopware\Product\Writer\Field\DatumField">
+<service id="shopware.product.writer_field_created_at" class="Shopware\Product\Writer\Field\CreatedAtField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
@@ -49,7 +44,7 @@
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_taxid" class="Shopware\Product\Writer\Field\TaxIDField">
+<service id="shopware.product.writer_field_tax_id" class="Shopware\Product\Writer\Field\TaxIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
@@ -79,17 +74,17 @@
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_pricegroupid" class="Shopware\Product\Writer\Field\PricegroupIDField">
+<service id="shopware.product.writer_field_pricegroup_id" class="Shopware\Product\Writer\Field\PricegroupIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_pricegroupactive" class="Shopware\Product\Writer\Field\PricegroupActiveField">
+<service id="shopware.product.writer_field_pricegroup_active" class="Shopware\Product\Writer\Field\PricegroupActiveField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_filtergroupid" class="Shopware\Product\Writer\Field\FiltergroupIDField">
+<service id="shopware.product.writer_field_filtergroup_id" class="Shopware\Product\Writer\Field\FiltergroupIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 
@@ -119,7 +114,7 @@
     
     <tag name="shopware.product.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_main_detail_id" class="Shopware\Product\Writer\Field\MainDetailIdField">
+<service id="shopware.product.writer_field_main_detail_uuid" class="Shopware\Product\Writer\Field\MainDetailUuidField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.writer_field"/> 

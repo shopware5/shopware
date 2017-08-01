@@ -3,13 +3,13 @@
 namespace Shopware\Product\Writer\Field;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\IntField;
+use Shopware\Product\Writer\Api\ReferenceField;
 
-class IdField extends IntField
+class SupplierUuidField extends ReferenceField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('id', 'id', $constraintBuilder);
+        parent::__construct('supplierUuid', 'supplier_uuid', $constraintBuilder);
     }
 
 }

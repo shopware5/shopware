@@ -3,13 +3,13 @@
 namespace Shopware\Product\Writer\Field;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\IntField;
+use Shopware\Product\Writer\Api\ReferenceField;
 
-class TaxIDField extends IntField
+class MainDetailUuidField extends ReferenceField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('taxID', 'taxID', $constraintBuilder);
+        parent::__construct('mainDetailUuid', 'main_detail_uuid', $constraintBuilder);
     }
 
 }

@@ -76,6 +76,10 @@ EOD;
 
         /** @var Column $column */
         foreach($columns as $column) {
+            if('id' === $column->getName()) {
+                continue;
+            }
+
             $cammelCaseName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $column->getName()))));
             $className = ucfirst($cammelCaseName) . 'Field';
 
@@ -101,6 +105,10 @@ EOD;
                     break;
                 default:
                     echo "ERROR: {$column->getType()}\n";
+            }
+
+            if(false !== strpos($column->getName(), '_uuid')) {
+                $fieldClass = 'ReferenceField';
             }
 
             if(array_key_exists($column->getName(), $this->map)) {

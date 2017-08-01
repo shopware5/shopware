@@ -3,13 +3,13 @@
 namespace Shopware\Product\Writer\Field;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\DateField;
+use Shopware\Product\Writer\Api\IntField;
 
-class DatumField extends DateField
+class TaxIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('datum', 'datum', $constraintBuilder);
+        parent::__construct('taxId', 'tax_id', $constraintBuilder);
     }
 
 }
