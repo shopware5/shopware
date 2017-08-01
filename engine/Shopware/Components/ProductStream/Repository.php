@@ -26,9 +26,9 @@ namespace Shopware\Components\ProductStream;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\ConditionInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\SortingInterface;
 use Shopware\Components\LogawareReflectionHelper;
 
 class Repository implements RepositoryInterface
@@ -54,7 +54,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      * @param int      $productStreamId
      */
     public function prepareCriteria(Criteria $criteria, $productStreamId)
@@ -86,7 +86,7 @@ class Repository implements RepositoryInterface
 
     /**
      * @param array    $productStream
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function prepareConditionStream(array $productStream, Criteria $criteria)
     {
@@ -100,7 +100,7 @@ class Repository implements RepositoryInterface
 
     /**
      * @param array    $productStream
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function prepareSelectionStream(array $productStream, Criteria $criteria)
     {
@@ -160,7 +160,7 @@ SQL;
 
     /**
      * @param array    $productStream
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function assignSortings(array $productStream, Criteria $criteria)
     {
@@ -180,7 +180,7 @@ SQL;
 
     /**
      * @param array    $productStream
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function assignConditions(array $productStream, Criteria $criteria)
     {

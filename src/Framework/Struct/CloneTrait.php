@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,24 +23,36 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Framework\Struct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-abstract class Struct implements \JsonSerializable, ExtendableInterface
+trait CloneTrait
 {
-    //allows to clone full struct with all references
-    use CloneTrait;
+    public function __clone()
+    {
+        $variables = get_object_vars($this);
+        foreach ($variables as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $this->$key;
+            } elseif (is_array($value)) {
+                $this->$key = $this->cloneArray($value);
+            }
+        }
+    }
 
-    //allows json_encode and to decode object via \Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer
-    use JsonSerializableTrait;
+    private function cloneArray(array $array): array
+    {
+        $newValue = [];
 
-    //allows to assign array data to this object
-    use AssignArrayTrait;
+        foreach ($array as $index => $value) {
+            if (is_object($value)) {
+                $newValue[$index] = clone $value;
+            } elseif (is_array($value)) {
+                $newValue[$index] = $this->cloneArray($value);
+            } else {
+                $newValue[$index] = $value;
+            }
+        }
 
-    //allows to add values to an internal attribute storage
-    use ExtendableTrait;
+        return $newValue;
+    }
 }

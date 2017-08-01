@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 /**

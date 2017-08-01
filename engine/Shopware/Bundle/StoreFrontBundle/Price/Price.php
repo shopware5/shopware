@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 /**

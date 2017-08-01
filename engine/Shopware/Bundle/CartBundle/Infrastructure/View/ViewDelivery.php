@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class ViewDelivery extends Struct
 {

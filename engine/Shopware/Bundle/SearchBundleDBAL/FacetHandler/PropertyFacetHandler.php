@@ -25,14 +25,14 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
@@ -89,9 +89,9 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface|Facet\PropertyFacet                             $facet
+     * @param \Shopware\Search\FacetInterface|Facet\PropertyFacet                             $facet
      * @param Criteria                                                       $reverted
-     * @param Criteria                                                       $criteria
+     * @param \Shopware\Search\Criteria                                                       $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return FacetResultInterface|null
@@ -114,7 +114,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
-     * @param Criteria                                                       $queryCriteria
+     * @param \Shopware\Search\Criteria                                                       $queryCriteria
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet[]
      */

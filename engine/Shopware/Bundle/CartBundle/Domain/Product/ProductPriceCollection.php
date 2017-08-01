@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Product;
 
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class ProductPriceCollection extends Collection
 {

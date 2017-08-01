@@ -25,15 +25,15 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
@@ -69,11 +69,11 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|ProductAttributeFacet $facet
-     * @param Criteria                             $reverted
-     * @param Criteria                             $criteria
+     * @param \Shopware\Search\Criteria                             $reverted
+     * @param \Shopware\Search\Criteria                             $criteria
      * @param ShopContextInterface                 $context
      *
-     * @return FacetResultInterface|null
+     * @return \Shopware\Search\FacetResultInterface|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -118,7 +118,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     /**
      * @param QueryBuilder                                                   $query
      * @param ProductAttributeFacet                                          $facet
-     * @param Criteria                                                       $criteria
+     * @param \Shopware\Search\Criteria                                                       $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return null|RadioFacetResult|ValueListFacetResult
@@ -232,7 +232,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     /**
      * @param QueryBuilder          $query
      * @param ProductAttributeFacet $facet
-     * @param Criteria              $criteria
+     * @param \Shopware\Search\Criteria              $criteria
      *
      * @return null|BooleanFacetResult
      */

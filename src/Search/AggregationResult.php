@@ -1,9 +1,9 @@
 <?php
 
-namespace SearchBundle;
+namespace Shopware\Search;
 
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Search\FacetResultInterface;
+use Shopware\Framework\Struct\Struct;
 
 class AggregationResult extends Struct
 {

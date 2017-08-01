@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
 class Delivery extends Struct

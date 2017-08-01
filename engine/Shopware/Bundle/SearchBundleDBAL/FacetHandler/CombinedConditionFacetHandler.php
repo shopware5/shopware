@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CombinedConditionFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;

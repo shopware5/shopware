@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,36 +22,21 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Search;
 
-trait CloneTrait
+use Shopware\Search\CriteriaPartInterface;
+
+/**
+ * Defines a condition which can be added to the
+ * \Shopware\Search\Criteria class.
+ *
+ * Each condition is handled by his own condition handler
+ * which defined in the specify gateway engines.
+ *
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+interface ConditionInterface extends CriteriaPartInterface
 {
-    public function __clone()
-    {
-        $variables = get_object_vars($this);
-        foreach ($variables as $key => $value) {
-            if (is_object($value)) {
-                $this->$key = clone $this->$key;
-            } elseif (is_array($value)) {
-                $this->$key = $this->cloneArray($value);
-            }
-        }
-    }
-
-    private function cloneArray(array $array): array
-    {
-        $newValue = [];
-
-        foreach ($array as $index => $value) {
-            if (is_object($value)) {
-                $newValue[$index] = clone $value;
-            } elseif (is_array($value)) {
-                $newValue[$index] = $this->cloneArray($value);
-            } else {
-                $newValue[$index] = $value;
-            }
-        }
-
-        return $newValue;
-    }
 }

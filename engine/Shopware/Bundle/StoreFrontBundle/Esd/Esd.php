@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Esd;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware

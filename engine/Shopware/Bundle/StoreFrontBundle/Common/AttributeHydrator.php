@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
+use Shopware\Framework\Struct\ExtendableInterface;
+
 /**
  * @category  Shopware
  *

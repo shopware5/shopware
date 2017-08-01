@@ -26,9 +26,9 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
 use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
-class ValidatableDefinition extends Struct implements Validatable
+class ValidatableDefinition extends \Shopware\Framework\Struct\Struct implements Validatable
 {
     /**
      * @var Rule|null

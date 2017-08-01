@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Product;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CollectorInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductCollector implements CollectorInterface

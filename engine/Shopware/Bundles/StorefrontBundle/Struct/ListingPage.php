@@ -4,8 +4,8 @@ namespace StorefrontBundle\Struct;
 
 use CategoryBundle\Struct\Category;
 use ProductBundle\Struct\ProductCollection;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Search\FacetResultInterface;
+use Shopware\Framework\Struct\Struct;
 
 class ListingPage extends Struct
 {
@@ -25,7 +25,7 @@ class ListingPage extends Struct
     protected $products;
 
     /**
-     * @var FacetResultInterface[]
+     * @var \Shopware\Search\FacetResultInterface[]
      */
     protected $aggregations;
 

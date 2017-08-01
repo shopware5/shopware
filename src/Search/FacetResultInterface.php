@@ -22,37 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
-namespace SearchBundle\Condition;
-
-use Assert\Assertion;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+namespace Shopware\Search;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CustomerGroupCondition implements ConditionInterface
+interface FacetResultInterface
 {
     /**
-     * @var int[]
+     * @return string
      */
-    private $customerGroupIds;
+    public function getFacetName();
 
-    public function __construct(array $customerGroupIds)
-    {
-        Assertion::allIntegerish($customerGroupIds);
-        $this->customerGroupIds = array_map('intval', $customerGroupIds);
-        sort($this->customerGroupIds, SORT_NUMERIC);
-    }
+    /**
+     * @return bool
+     */
+    public function isActive();
 
-    public function getName()
-    {
-        return self::class;
-    }
+    /**
+     * @return string
+     */
+    public function getLabel();
 
-    public function getCustomerGroupIds(): array
-    {
-        return $this->customerGroupIds;
-    }
+    /**
+     * Returns the full path of the frontend template file beginning with frontend/...
+     * If the function returns null, the facet result isn't rendered automatically
+     *
+     * @return string|null
+     */
+    public function getTemplate();
 }

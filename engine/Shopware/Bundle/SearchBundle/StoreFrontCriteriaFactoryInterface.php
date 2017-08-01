@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Search\Criteria;
 
 /**
  * @category  Shopware
@@ -87,7 +88,7 @@ interface StoreFrontCriteriaFactoryInterface
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      * @param int                                                            $categoryId
      *
-     * @return \Shopware\Bundle\SearchBundle\Criteria
+     * @return \Shopware\Search\Criteria
      */
     public function createProductNavigationCriteria(Request $request, ShopContextInterface $context, $categoryId);
 }

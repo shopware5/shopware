@@ -22,20 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Search;
 
-trait AssignArrayTrait
+use Shopware\Search\CriteriaPartInterface;
+
+/**
+ * Defines a condition which can be added to the
+ * \Shopware\SearchBundle\Criteria class.
+ *
+ * Each condition is handled by his own condition handler
+ * which defined in the specify gateway engines.
+ *
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+interface SortingInterface extends CriteriaPartInterface
 {
-    public function assign(array $options): void
-    {
-        foreach ($options as $key => $value) {
-            $setter = 'set' . ucfirst($key);
-            try {
-                $this->$setter($value);
-            } catch (\TypeError $error) {
-                throw $error;
-            } catch (\Error | \Exception $error) {
-            }
-        }
-    }
+    const SORT_ASC = 'ASC';
+    const SORT_DESC = 'DESC';
 }

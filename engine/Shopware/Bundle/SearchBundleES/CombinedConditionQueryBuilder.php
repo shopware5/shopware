@@ -26,8 +26,8 @@ namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -48,7 +48,7 @@ class CombinedConditionQueryBuilder
 
     /**
      * @param array                                                          $conditions
-     * @param Criteria                                                       $criteria
+     * @param \Shopware\Search\Criteria                                                       $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return BoolQuery
@@ -83,7 +83,7 @@ class CombinedConditionQueryBuilder
     }
 
     /**
-     * @param CriteriaPartInterface $condition
+     * @param \Shopware\Search\CriteriaPartInterface $condition
      *
      * @return PartialConditionHandlerInterface|HandlerInterface
      */

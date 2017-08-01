@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Serializer;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class ObjectDeserializer
 {
@@ -117,7 +117,7 @@ class ObjectDeserializer
 
         $instance = $reflectionClass->newInstanceArgs($params);
 
-        /* @var Struct $instance */
+        /* @var \Shopware\Framework\Struct\Struct $instance */
         $instance->assign($arguments);
 
         return $instance;

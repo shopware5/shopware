@@ -30,6 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Search\Criteria;
 
 /**
  * @category  Shopware
@@ -213,7 +214,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
      * @param ShopContextInterface $context
      * @param int                  $categoryId
      *
-     * @return \Shopware\Bundle\SearchBundle\Criteria
+     * @return \Shopware\Search\Criteria
      */
     public function createProductNavigationCriteria(
         Request $request,

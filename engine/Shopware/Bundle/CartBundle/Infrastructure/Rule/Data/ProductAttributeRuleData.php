@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\Rule\Data;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class ProductAttributeRuleData extends Struct
 {

@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\SearchBundle\Facet;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\ConditionInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Components\ReflectionHelper;
 
 class CombinedConditionFacet implements FacetInterface
 {
     /**
-     * @var ConditionInterface[]
+     * @var \Shopware\Search\ConditionInterface[]
      */
     private $conditions;
 
@@ -70,7 +70,7 @@ class CombinedConditionFacet implements FacetInterface
     }
 
     /**
-     * @return \Shopware\Bundle\SearchBundle\ConditionInterface[]
+     * @return \Shopware\Search\ConditionInterface[]
      */
     public function getConditions()
     {
@@ -96,7 +96,7 @@ class CombinedConditionFacet implements FacetInterface
     /**
      * @param array $serialized
      *
-     * @return ConditionInterface[]
+     * @return \Shopware\Search\ConditionInterface[]
      */
     private function unserialize($serialized)
     {

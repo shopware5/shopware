@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;

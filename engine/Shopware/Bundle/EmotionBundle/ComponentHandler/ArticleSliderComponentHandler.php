@@ -30,7 +30,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
@@ -210,7 +210,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
      * @param Element              $element
      * @param ShopContextInterface $context
      *
-     * @return \Shopware\Bundle\SearchBundle\Criteria
+     * @return \Shopware\Search\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)
     {

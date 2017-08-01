@@ -31,7 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\OrderClearedStateRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\OrderClearedStateRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderClearedStateRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;

@@ -25,19 +25,19 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class CriteriaTest extends TestCase
 {
     public function testUniqueCondition()
     {
-        $criteria = new Criteria();
+        $criteria = new \Shopware\Search\Criteria();
 
         $criteria->addCondition(new CategoryCondition([1]));
         $criteria->addCondition(new CategoryCondition([3]));
@@ -54,7 +54,7 @@ class CriteriaTest extends TestCase
 
     public function testUniqueSorting()
     {
-        $criteria = new Criteria();
+        $criteria = new \Shopware\Search\Criteria();
         $criteria->addSorting(new PriceSorting());
         $criteria->addSorting(new PriceSorting());
         $this->assertCount(1, $criteria->getSortings());
@@ -82,7 +82,7 @@ class CriteriaTest extends TestCase
 
     public function testConditionOverwrite()
     {
-        $criteria = new Criteria();
+        $criteria = new \Shopware\Search\Criteria();
 
         $criteria->addCondition(new CategoryCondition([1]));
 

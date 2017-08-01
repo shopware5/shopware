@@ -1,6 +1,6 @@
 <?php
 
-namespace SearchBundle;
+namespace Shopware\Search;
 
 class SearchResult
 {

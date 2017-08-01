@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware
@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 class FacetResultGroup extends Struct implements FacetResultInterface
 {
     /**
-     * @var FacetResultInterface[]
+     * @var \Shopware\Search\FacetResultInterface[]
      */
     protected $facetResults;
 
@@ -56,7 +56,7 @@ class FacetResultGroup extends Struct implements FacetResultInterface
     protected $template;
 
     /**
-     * @param FacetResultInterface[] $facetResults
+     * @param \Shopware\Search\FacetResultInterface[] $facetResults
      * @param string|null            $headline
      * @param string                 $facetName
      * @param Attribute[]            $attributes
@@ -101,7 +101,7 @@ class FacetResultGroup extends Struct implements FacetResultInterface
     }
 
     /**
-     * @return FacetResultInterface[]
+     * @return \Shopware\Search\FacetResultInterface[]
      */
     public function getFacetResults()
     {
@@ -117,7 +117,7 @@ class FacetResultGroup extends Struct implements FacetResultInterface
     }
 
     /**
-     * @param \Shopware\Bundle\SearchBundle\FacetResultInterface[] $facetResults
+     * @param \Shopware\Search\FacetResultInterface[] $facetResults
      */
     public function setFacetResults(array $facetResults)
     {

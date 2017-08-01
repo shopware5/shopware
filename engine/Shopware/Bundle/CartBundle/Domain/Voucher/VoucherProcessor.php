@@ -34,7 +34,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class VoucherProcessor implements CartProcessorInterface

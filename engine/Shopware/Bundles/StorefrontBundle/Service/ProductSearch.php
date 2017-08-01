@@ -2,7 +2,7 @@
 
 namespace StorefrontBundle\Service;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use StorefrontBundle\Struct\ProductSearchResult;
 

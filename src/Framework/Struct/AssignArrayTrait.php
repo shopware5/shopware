@@ -22,35 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Framework\Struct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface FacetResultInterface
+trait AssignArrayTrait
 {
-    /**
-     * @return string
-     */
-    public function getFacetName();
-
-    /**
-     * @return bool
-     */
-    public function isActive();
-
-    /**
-     * @return string
-     */
-    public function getLabel();
-
-    /**
-     * Returns the full path of the frontend template file beginning with frontend/...
-     * If the function returns null, the facet result isn't rendered automatically
-     *
-     * @return string|null
-     */
-    public function getTemplate();
+    public function assign(array $options): void
+    {
+        foreach ($options as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            try {
+                $this->$setter($value);
+            } catch (\TypeError $error) {
+                throw $error;
+            } catch (\Error | \Exception $error) {
+            }
+        }
+    }
 }

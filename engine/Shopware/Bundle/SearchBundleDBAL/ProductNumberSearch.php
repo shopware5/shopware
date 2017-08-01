@@ -81,12 +81,12 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * The search gateway has to implement an event which plugin can be listened to,
      * to add their own handler classes.
      *
-     * @param SearchBundle\Criteria                                          $criteria
+     * @param \Shopware\Search\Criteria                                          $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return SearchBundle\ProductNumberSearchResult
      */
-    public function search(SearchBundle\Criteria $criteria, ShopContextInterface $context)
+    public function search(\Shopware\Search\Criteria $criteria, ShopContextInterface $context)
     {
         $query = $this->queryBuilderFactory->createProductQuery($criteria, $context);
 
@@ -143,14 +143,14 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     }
 
     /**
-     * @param SearchBundle\Criteria                                          $criteria
+     * @param \Shopware\Search\Criteria                                          $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @throws \Exception
      *
-     * @return SearchBundle\FacetResultInterface[]
+     * @return \Shopware\Search\FacetResultInterface[]
      */
-    private function createFacets(SearchBundle\Criteria $criteria, ShopContextInterface $context)
+    private function createFacets(\Shopware\Search\Criteria $criteria, ShopContextInterface $context)
     {
         if (count($criteria->getFacets()) === 0) {
             return [];
@@ -216,13 +216,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     }
 
     /**
-     * @param SearchBundle\FacetInterface $facet
+     * @param \Shopware\Search\FacetInterface $facet
      *
      * @throws \Exception
      *
      * @return FacetHandlerInterface
      */
-    private function getFacetHandler(SearchBundle\FacetInterface $facet)
+    private function getFacetHandler(\Shopware\Search\FacetInterface $facet)
     {
         foreach ($this->facetHandlers as $handler) {
             if ($handler->supportsFacet($facet)) {

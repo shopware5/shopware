@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 class Blog extends Struct

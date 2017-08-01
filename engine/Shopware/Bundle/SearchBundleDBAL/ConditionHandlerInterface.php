@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**

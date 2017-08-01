@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Currency;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 use Shopware\Models\Shop\Currency as CurrencyEntity;
 
 /**

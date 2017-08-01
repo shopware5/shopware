@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Exception\CircularCartCalculationException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class CartCalculator

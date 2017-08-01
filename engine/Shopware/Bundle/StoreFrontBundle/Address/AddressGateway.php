@@ -27,12 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Address;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
+use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class AddressGateway
 {
-    use SortArrayByKeysTrait;
+    use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
     /**
      * @var FieldHelper

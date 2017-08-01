@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
+use Shopware\Search\FacetResultInterface;
 
 /**
  * Defines the search result of the search gateway.

@@ -3,10 +3,10 @@
 namespace VoteBundle\Gateway\Handler;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use SearchBundle\Condition\ActiveCondition;
-use SearchBundle\HandlerInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Condition\ActiveCondition;
+use Shopware\Search\HandlerInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class ActiveConditionHandler implements HandlerInterface

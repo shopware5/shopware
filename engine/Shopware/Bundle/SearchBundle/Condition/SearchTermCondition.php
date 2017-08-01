@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 
 /**
  * @category  Shopware

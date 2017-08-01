@@ -24,17 +24,17 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 
 class CombinedCondition implements ConditionInterface
 {
     /**
-     * @var ConditionInterface[]
+     * @var \Shopware\Search\ConditionInterface[]
      */
     private $conditions;
 
     /**
-     * @param ConditionInterface[] $conditions
+     * @param \Shopware\Search\ConditionInterface[] $conditions
      */
     public function __construct(array $conditions)
     {
@@ -50,7 +50,7 @@ class CombinedCondition implements ConditionInterface
     }
 
     /**
-     * @return ConditionInterface[]
+     * @return \Shopware\Search\ConditionInterface[]
      */
     public function getConditions()
     {

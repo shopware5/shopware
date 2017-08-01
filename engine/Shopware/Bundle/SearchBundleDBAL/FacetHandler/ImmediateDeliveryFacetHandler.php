@@ -24,11 +24,11 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
@@ -77,8 +77,8 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface                                                 $facet
-     * @param Criteria                                                       $reverted
-     * @param Criteria                                                       $criteria
+     * @param \Shopware\Search\Criteria                                                       $reverted
+     * @param \Shopware\Search\Criteria                                                       $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return FacetResultInterface

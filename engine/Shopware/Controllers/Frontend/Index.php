@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 use ProductBundle\ProductRepository;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 
 /**
  * @category  Shopware

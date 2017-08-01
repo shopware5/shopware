@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Search\FacetResultInterface;
+use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware

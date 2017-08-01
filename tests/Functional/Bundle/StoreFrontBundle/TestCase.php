@@ -25,11 +25,11 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\ConditionInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Models\Article\Article;
@@ -96,9 +96,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param array                $products
      * @param array                $expectedNumbers
      * @param Category             $category
-     * @param ConditionInterface[] $conditions
-     * @param FacetInterface[]     $facets
-     * @param SortingInterface[]   $sortings
+     * @param \Shopware\Search\ConditionInterface[] $conditions
+     * @param \Shopware\Search\FacetInterface[]     $facets
+     * @param \Shopware\Search\SortingInterface[]   $sortings
      * @param null                 $context
      * @param array                $configs
      *
@@ -159,7 +159,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      * @param Category $category
      * @param $conditions
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
@@ -178,8 +178,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param ConditionInterface[] $conditions
+     * @param \Shopware\Search\Criteria             $criteria
+     * @param \Shopware\Search\ConditionInterface[] $conditions
      */
     protected function addConditions(Criteria $criteria, $conditions)
     {
@@ -189,8 +189,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria         $criteria
-     * @param FacetInterface[] $facets
+     * @param \Shopware\Search\Criteria         $criteria
+     * @param \Shopware\Search\FacetInterface[] $facets
      */
     protected function addFacets(Criteria $criteria, $facets)
     {
@@ -201,7 +201,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param Criteria           $criteria
-     * @param SortingInterface[] $sortings
+     * @param \Shopware\Search\SortingInterface[] $sortings
      */
     protected function addSortings(Criteria $criteria, $sortings)
     {

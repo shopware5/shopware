@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\ProductStream;
 
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 
 interface RepositoryInterface
 {

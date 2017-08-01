@@ -3,7 +3,7 @@
 namespace VoteBundle\Gateway;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use SearchBundle\Search;
+use Shopware\Search\Search;
 
 class VoteSearcher extends Search
 {

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Facet;
 
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 
 /**
  * @category  Shopware

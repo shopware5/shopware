@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
@@ -110,7 +110,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
     }
 
     /**
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      * @param array    $buckets
      *
      * @return RadioFacetResult

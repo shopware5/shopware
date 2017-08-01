@@ -28,8 +28,8 @@ use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
@@ -117,7 +117,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
     }
 
     /**
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      *
      * @return BooleanFacetResult
      */

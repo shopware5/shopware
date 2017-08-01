@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Search\FacetInterface;
+use Shopware\Framework\Struct\Struct;
 
 class ListingFacet extends Struct
 {

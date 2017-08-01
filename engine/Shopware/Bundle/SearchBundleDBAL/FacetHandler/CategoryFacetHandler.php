@@ -25,11 +25,11 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
@@ -92,10 +92,10 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     /**
      * @param FacetInterface|CategoryFacet $facet
      * @param Criteria                     $reverted
-     * @param Criteria                     $criteria
+     * @param \Shopware\Search\Criteria                     $criteria
      * @param ShopContextInterface         $context
      *
-     * @return FacetResultInterface
+     * @return \Shopware\Search\FacetResultInterface
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -154,7 +154,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria             $reverted
+     * @param \Shopware\Search\Criteria             $reverted
      * @param ShopContextInterface $context
      *
      * @return int[]

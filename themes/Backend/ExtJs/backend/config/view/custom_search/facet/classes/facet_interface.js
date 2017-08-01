@@ -28,7 +28,7 @@
 Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.FacetInterface', {
 
     /**
-     * @api Defines the facet class which created for the \Shopware\Bundle\SearchBundle\Criteria
+     * @api Defines the facet class which created for the \Shopware\Search\Criteria
      * @returns { string }
      */
     getClass: function() {

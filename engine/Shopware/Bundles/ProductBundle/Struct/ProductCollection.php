@@ -24,7 +24,7 @@
 
 namespace ProductBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class ProductCollection extends Collection
 {

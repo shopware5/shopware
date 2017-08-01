@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class ShippingMethod extends Struct
 {

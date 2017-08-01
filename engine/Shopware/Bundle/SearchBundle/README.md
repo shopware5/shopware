@@ -11,7 +11,7 @@ The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\
 //load or create a context object to define which user context is set
 $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
-$criteria = new \Shopware\Bundle\SearchBundle\Criteria();
+$criteria = new \Shopware\Search\Criteria();
 
 //defines to search only products which are assigned to the category with the id 3.
 $criteria->addCondition(new \Shopware\Bundle\SearchBundle\Condition\CategoryCondition(array(3));
@@ -42,7 +42,7 @@ $productResult = Shopware()->Container()->get('shopware_search.product_search')-
 ```
 
 ## How it works
-The Shopware\Bundle\SearchBundle provides a ProductNumberSearchInterface which expects a Shopware\Bundle\SearchBundle\Criteria and a Shopware\Bundle\StoreFrontBundle\ShopContextInterface object.
+The Shopware\Bundle\SearchBundle provides a ProductNumberSearchInterface which expects a Shopware\Search\Criteria and a Shopware\Bundle\StoreFrontBundle\ShopContextInterface object.
 
 The Criteria class contains the definition which conditions, sortings and facets (terms) the search has to consider.
 
@@ -91,13 +91,13 @@ The following sorting handler adds an inner join condition to the existing query
 
 class PluginSortingHandler implements \Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface
 {
-    public function supportsSorting(\Shopware\Bundle\SearchBundle\SortingInterface $sorting)
+    public function supportsSorting(\Shopware\Search\SortingInterface $sorting)
     {
         return ($sorting instanceof ...);
     }
 
     public function generateSorting(
-        \Shopware\Bundle\SearchBundle\SortingInterface   $sorting,
+        \Shopware\Search\SortingInterface   $sorting,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
         \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
@@ -127,13 +127,13 @@ The following condition handler joins the top seller data of the products and se
 
 class PluginConditionHandler implements \Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface
 {
-    public function supportsCondition(\Shopware\Bundle\SearchBundle\ConditionInterface $condition)
+    public function supportsCondition(\Shopware\Search\ConditionInterface $condition)
     {
         return ($condition instanceof ...);
     }
 
     public function generateCondition(
-        \Shopware\Bundle\SearchBundle\ConditionInterface $condition,
+        \Shopware\Search\ConditionInterface $condition,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
         \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
@@ -172,15 +172,15 @@ class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandl
         $this->queryBuilderFactory = $queryBuilderFactory;
     }
 
-    public function supportsFacet(\Shopware\Bundle\SearchBundle\FacetInterface $facet)
+    public function supportsFacet(\Shopware\Search\FacetInterface $facet)
     {
         return ($facet instanceof ...);
     }
 
     public function generateFacet(
-        \Shopware\Bundle\SearchBundle\FacetInterface     $facet,
+        \Shopware\Search\FacetInterface     $facet,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\SearchBundle\Criteria           $criteria,
+        \Shopware\Search\Criteria           $criteria,
         \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($criteria, $context);
@@ -214,9 +214,9 @@ The term classes (sortings, facets and conditions) are defined with no dependenc
 
 The Shopware\Bundle\SearchBundle provides interfaces for this classes:
 
-- Shopware\Bundle\SearchBundle\ConditionInterface
-- Shopware\Bundle\SearchBundle\SortingInterface
-- Shopware\Bundle\SearchBundle\FacetInterface
+- Shopware\Search\ConditionInterface
+- Shopware\Search\SortingInterface
+- Shopware\Search\FacetInterface
 
 ### Sorting term
 In most cases the sorting term contains a sorting direction for ascending or descending sorting.
@@ -230,7 +230,7 @@ The following sorting term defines that the product result has to be sorted by t
 
 namespace SwagSearchBundle\SearchBundle;
 
-use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Search\SortingInterface;
 
 class PluginSorting implements SortingInterface
 {
@@ -263,7 +263,7 @@ The following condition defines that only products with a provided min sales sho
 
 namespace SwagSearchBundle\SearchBundle;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Search\ConditionInterface;
 
 class PluginCondition implements ConditionInterface
 {
@@ -299,7 +299,7 @@ The following facet selects the total count of products which sold more than X t
 
 namespace SwagSearchBundle\SearchBundle;
 
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 
 class PluginFacet implements FacetInterface
 {

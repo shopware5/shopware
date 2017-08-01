@@ -33,7 +33,7 @@ use Shopware\Bundle\CartBundle\Domain\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductOfCategoriesRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductOfCategoriesRuleCollector implements CollectorInterface

@@ -31,7 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderAmountRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderAmountRuleTest extends TestCase

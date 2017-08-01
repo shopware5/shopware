@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class PaymentMethod extends Struct implements Validatable
 {

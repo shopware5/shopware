@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,13 +23,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Framework\Struct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface FacetInterface extends CriteriaPartInterface
+trait SortArrayByKeysTrait
 {
+    /**
+     * @param int[]|string[] $sortedKeys
+     * @param array          $indexedArray - indexed with keys
+     *
+     * @return array
+     */
+    protected function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
+    {
+        $sorted = [];
+        foreach ($sortedKeys as $index) {
+            if (array_key_exists($index, $indexedArray)) {
+                $sorted[$index] = $indexedArray[$index];
+            }
+        }
+
+        return $sorted;
+    }
 }

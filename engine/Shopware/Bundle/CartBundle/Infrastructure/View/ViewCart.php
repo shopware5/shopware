@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class ViewCart extends Struct
 {

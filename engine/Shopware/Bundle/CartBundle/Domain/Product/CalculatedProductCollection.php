@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Error\Error;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Framework\Struct\Collection;
 
 class CalculatedProductCollection extends Collection
 {

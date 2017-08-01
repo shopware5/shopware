@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Struct\Collection;
 
 use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class ResolvedDataCollection extends Struct
 {

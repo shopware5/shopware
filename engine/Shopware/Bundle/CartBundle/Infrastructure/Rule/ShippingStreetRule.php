@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Rule;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Rule\Match;
 use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ShippingStreetRule extends Rule

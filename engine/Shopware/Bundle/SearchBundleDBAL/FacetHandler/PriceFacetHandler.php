@@ -25,11 +25,11 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
@@ -105,9 +105,9 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface       $facet
+     * @param \Shopware\Search\FacetInterface       $facet
      * @param Criteria             $reverted
-     * @param Criteria             $criteria
+     * @param \Shopware\Search\Criteria             $criteria
      * @param ShopContextInterface $context
      *
      * @return FacetResultInterface

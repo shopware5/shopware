@@ -26,7 +26,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
 use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 abstract class VoucherData extends Struct implements Validatable
 {

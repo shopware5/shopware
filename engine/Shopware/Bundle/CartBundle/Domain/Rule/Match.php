@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Rule;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class Match extends Struct
 {

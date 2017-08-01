@@ -32,7 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Rule\Validatable;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductAttributeRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductAttributeRule;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductAttributeRuleCollector implements CollectorInterface

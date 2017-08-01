@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Category\Category;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
+use Shopware\Framework\Struct\Struct;
 
 class Emotion extends Struct
 {

@@ -26,11 +26,11 @@ namespace Shopware\Components\ProductStream;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Search\FacetResultInterface;
 
 /**
  * Class FacetFilter
@@ -75,7 +75,7 @@ class FacetFilter implements FacetFilterInterface
     }
 
     /**
-     * @param FacetResultInterface[] $facets
+     * @param \Shopware\Search\FacetResultInterface[] $facets
      * @param Criteria               $criteria
      *
      * @return FacetResultInterface[]
@@ -96,7 +96,7 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param string   $class
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      *
      * @return FacetResultInterface[]
      */
@@ -131,7 +131,7 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
+     * @param \Shopware\Search\Criteria               $criteria
      */
     private function switchActivePriceFilter(array $facets, Criteria $criteria)
     {
@@ -155,7 +155,7 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
+     * @param \Shopware\Search\Criteria               $criteria
      */
     private function switchPriceFilterValues(array $facets, Criteria $criteria)
     {
@@ -174,8 +174,8 @@ class FacetFilter implements FacetFilterInterface
     }
 
     /**
-     * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
+     * @param \Shopware\Search\FacetResultInterface[] $facets
+     * @param \Shopware\Search\Criteria               $criteria
      */
     private function removeStreamPropertyConditions(array $facets, Criteria $criteria)
     {

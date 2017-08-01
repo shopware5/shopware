@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface PartialConditionHandlerInterface

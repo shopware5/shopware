@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface ValidatorInterface

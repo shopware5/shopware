@@ -34,7 +34,7 @@ use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
@@ -145,7 +145,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Request  $request
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function addImmediateDeliveryCondition(Request $request, Criteria $criteria)
     {
@@ -190,7 +190,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Request  $request
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function addSearchCondition(Request $request, Criteria $criteria)
     {
@@ -216,7 +216,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Request  $request
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function addOffset(Request $request, Criteria $criteria)
     {
@@ -231,7 +231,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Request  $request
-     * @param Criteria $criteria
+     * @param \Shopware\Search\Criteria $criteria
      */
     private function addLimit(Request $request, Criteria $criteria)
     {

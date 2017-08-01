@@ -30,7 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\Error\Error;
 use Shopware\Bundle\CartBundle\Domain\Error\ProductNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\Error\ValidationError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\StructCollection;
+use Shopware\Framework\Struct\StructCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductValidator implements ValidatorInterface
