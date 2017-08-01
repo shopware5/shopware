@@ -120,7 +120,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             if (item.hasOwnProperty('title')) {
                 series.push(me.createLineSeries(item.name, item.title, item.currency));
             } else {
-                series.push(me.createLineSeries(item.name, item.name, item.currency));
+                series.push(me.createLineSeries('stream_' + item.id, item.name, item.currency));
             }
         });
 
