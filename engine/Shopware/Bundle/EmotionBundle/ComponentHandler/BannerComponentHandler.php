@@ -115,7 +115,9 @@ class BannerComponentHandler implements ComponentHandlerInterface
             $mappingKey = $this->getMappingKey($mapping);
             $mappingKey = 'emotion-banner--' . $element->getId() . '-' . $mappingKey;
 
-            if (strpos($mapping['link'], '/') === 0) {
+            $isLink = strpos($mapping['link'], '/') === 0;
+
+            if ($isLink) {
                 $mapping['link'] = $context->getShop()->getUrl() . $mapping['link'];
             } else {
                 // link is actually a product number
@@ -149,7 +151,9 @@ class BannerComponentHandler implements ComponentHandlerInterface
                 continue;
             }
 
-            if (!strpos($mapping['link'], '/')) {
+            $isLink = strpos($mapping['link'], '/') === 0;
+
+            if (!$isLink) {
                 $mappingKey = $this->getMappingKey($mapping);
                 $mappingKey = 'emotion-banner--' . $element->getId() . '-' . $mappingKey;
 
