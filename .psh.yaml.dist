@@ -1,0 +1,39 @@
+header: |
+  SHOPWARE Developer Version
+
+         _
+        | |
+     ___| |__   ___  _ ____      ____ _ _ __ ___
+    / __| '_ \ / _ \| '_ \ \ /\ / / _` | '__/ _ \
+    \__ \ | | | (_) | |_) \ V  V / (_| | | |  __/
+    |___/_| |_|\___/| .__/ \_/\_/ \__,_|_|  \___|
+                    | |
+                    |_|
+
+paths:
+  - dev-ops/common/actions
+
+templates:
+  - source: "dev-ops/docker/templates/php-dockerfile.tpl"
+    destination: "dev-ops/docker/containers/php7/Dockerfile"
+  - source: "dev-ops/common/templates/parameters.yml.dist"
+    destination: "app/config/parameters.yml"
+
+const:
+  DB_USER: "app"
+  DB_PASSWORD: "app"
+  DB_HOST: "mysql"
+  DB_NAME: "shopware"
+  SW_HOST: "10.101.101.56"
+  PHP_VERSION: "7.1"
+  DOC_ROOT: "/var/www/shopware"
+
+dynamic:
+  USERKEY: echo "$(id -u):$(id -g)"
+  APP_ID: docker-compose ps -q app_server
+  MYSQL_ID: docker-compose ps -q app_mysql
+
+environments:
+  docker:
+    paths:
+      - "dev-ops/docker/actions"
