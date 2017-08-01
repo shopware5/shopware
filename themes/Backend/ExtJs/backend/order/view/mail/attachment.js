@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
         var isSelected = false;
 
         Ext.Array.each(selectedRecords, function(selectedRecord) {
-            if (selectedRecord.get('id') == id) {
+            if (selectedRecord.get('id') === id) {
                 isSelected = true;
                 return false;
             }
@@ -377,9 +377,8 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
             record = me.store.getDocumentById(id);
             if (record) {
                 record.set('active', true);
+                me.selectDocument(record);
             }
-
-            me.selectDocument(record);
         });
     },
 
