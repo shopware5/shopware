@@ -7,4 +7,6 @@ mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ shopware < _sql/install/la
 
 __DOC_ROOT__/_sql/ApplyDeltas.php --migrationpath="__DOC_ROOT__/_sql/migrations/" --shoppath="__DOC_ROOT__" --mode=update
 
+mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ shopware < _sql/fixup.sql
+
 
