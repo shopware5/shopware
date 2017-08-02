@@ -5,7 +5,6 @@ namespace Shopware\Product\Tests;
 use Doctrine\DBAL\Connection;
 use Shopware\Product\Writer\Api\Field;
 use Shopware\Product\Writer\Generator;
-use Shopware\Product\Writer\SqlGateway;
 use Shopware\Product\Writer\Writer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -80,6 +79,8 @@ class ApiTest extends KernelTestCase
             'descriptionLong' => '<p>html</p>',
             'availableFrom' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'availableTo' => new \DateTime('2011-01-01T15:03:01.012345Z'),
+            'updatedAt' => new \DateTime('2011-01-01T15:03:01.012345Z'),
+            'createdAt' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'supplier' => [
                 'uuid' => 'SWAG-PRODUCT-SUPPLIER-UUID-1',
             ],
@@ -96,6 +97,34 @@ class ApiTest extends KernelTestCase
         self::assertSame('<p>html</p>', $product['description_long']);
         self::assertSame('SWAG-PRODUCT-SUPPLIER-UUID-1', $product['supplier_uuid']);
         self::assertSame('SW10003', $product['main_detail_uuid']);
+        self::assertEquals('2011-01-01 15:03:01', $product['updated_at']);
+        self::assertEquals('2011-01-01 15:03:01', $product['created_at']);
+    }
+
+    public function test_update_writes_default_columns_if_ommitted()
+    {
+        $this->getWriter()->insert([
+            'uuid' => self::UUID
+        ]);
+
+        $newProduct = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
+
+        $this->getWriter()->update(self::UUID, [
+            'title' => '_THE_TITLE_',
+        ]);
+
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
+
+        self::assertSame(self::UUID, $product['uuid']);
+        self::assertSame('_THE_TITLE_', $product['title']);
+
+        self::assertNotEquals('0000-00-00 00:00:00', $product['updated_at']);
+        self::assertNotEquals('2011-01-01 15:03:01', $product['updated_at']);
+
+        self::assertNotEquals('0000-00-00 00:00:00', $product['created_at']);
+        self::assertNotEquals('2011-01-01 15:03:01', $product['created_at']);
+        self::assertNotEquals('0000-00-00 00:00:00', $newProduct['created_at']);
+        self::assertNotEquals('2011-01-01 15:03:01', $newProduct['created_at']);
     }
 
     public function test_update_invalid()

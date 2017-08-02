@@ -3,9 +3,9 @@
 namespace Shopware\Product\Writer\Field\Product;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\DateField;
+use Shopware\Product\Writer\Api\DateDefaultCreateField;
 
-class CreatedAtField extends DateField
+class CreatedAtField extends DateDefaultCreateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {

@@ -4,10 +4,6 @@ namespace Shopware\Product\Writer;
 
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Types\DateType;
-use Doctrine\DBAL\Types\IntegerType;
-use Doctrine\DBAL\Types\StringType;
-use Symfony\Bridge\Doctrine\Tests\PropertyInfo\Fixtures\DoctrineFooType;
 use Symfony\Component\DependencyInjection\Container;
 
 class Generator
@@ -115,6 +111,8 @@ EOD;
 
     private $map = [
         'description_long' => 'HtmlTextField',
+        'updated_at' => 'DateDefaultUpdateField',
+        'created_at' => 'DateDefaultCreateField',
     ];
 
     public function __construct(Container $container)

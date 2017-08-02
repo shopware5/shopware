@@ -2,6 +2,8 @@
 
 namespace Shopware\Product\Writer;
 
+use Shopware\Product\Writer\Api\DefaultCreateField;
+use Shopware\Product\Writer\Api\DefaultUpdateField;
 use Shopware\Product\Writer\Api\Field;
 use Shopware\Product\Writer\Api\FieldCollection;
 use Shopware\Product\Writer\Api\VirtualField;
@@ -59,10 +61,11 @@ class Writer
     {
         $writableFields = $this->fieldCollection->getFields(WritableField::class);
         $virtualFields = $this->fieldCollection->getFields(VirtualField::class);
+        $defaultFields = $this->fieldCollection->getFields(DefaultUpdateField::class);
 
         // 2. Normalize Collection
-        // 2.1 Extract ids from subresources in collection
 
+        // 2.1 Extract ids from subresources in collection - worky but dirty
         /** @var VirtualField $virtualField */
         foreach($virtualFields as $virtualField) {
             if(!array_key_exists($virtualField->getName(), $rawData)) {
@@ -101,7 +104,14 @@ class Writer
         }
 
         // 5.1 Add default columns - eg. updated_at
+        /** @var DefaultUpdateField $defaultField */
+        foreach($defaultFields as $defaultField) {
+            if(array_key_exists($defaultField->getStorageName(), $data)) {
+                continue;
+            }
 
+            $data[$defaultField->getStorageName()] = $defaultField->getValue();
+        }
 
         // 6. write
         $this->gateway->update($uuid, $data);
