@@ -4,6 +4,8 @@ namespace Shopware\Product\Writer;
 
 use Shopware\Product\Writer\Api\Field;
 use Shopware\Product\Writer\Api\FieldCollection;
+use Shopware\Product\Writer\Api\VirtualField;
+use Shopware\Product\Writer\Api\WritableField;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -55,13 +57,26 @@ class Writer
      */
     public function update(string $uuid, array $rawData): void
     {
-        $fields = $this->fieldCollection->getFields();
+        $writableFields = $this->fieldCollection->getFields(WritableField::class);
+        $virtualFields = $this->fieldCollection->getFields(VirtualField::class);
 
         // 2. Normalize Collection
         // 2.1 Extract ids from subresources in collection
 
+        /** @var VirtualField $virtualField */
+        foreach($virtualFields as $virtualField) {
+            if(!array_key_exists($virtualField->getName(), $rawData)) {
+                continue;
+            }
+
+            $field = $this->fieldCollection
+                ->getField($virtualField->getReferencedFieldClass());
+
+            $rawData[$field->getName()] = $rawData[$virtualField->getName()]['uuid'];
+        }
+
         $data = [];
-        foreach($fields as $field) {
+        foreach($writableFields as $field) {
             $name = $field->getName();
 
             // 2.2 filter unknown columns field based -- OK
@@ -84,6 +99,9 @@ class Writer
             // 5. to database value -- OK
             $data[$field->getStorageName()] = $field->getValueTransformer()->transform($rawValue);
         }
+
+        // 5.1 Add default columns - eg. updated_at
+
 
         // 6. write
         $this->gateway->update($uuid, $data);
@@ -135,12 +153,11 @@ class Writer
 
     /**
      * @param array $rawData
-     * @param $fields
      * @return array
      */
     protected function filterInputKeys(array $rawData): array
     {
-        $fieldNames = $this->fieldCollection->getFieldNames();
+        $fieldNames = $this->fieldCollection->getFieldNames(WritableField::class);
 
         $data = array_filter($rawData, function (string $key) use ($fieldNames) {
             return false !== in_array($key, $fieldNames, true);

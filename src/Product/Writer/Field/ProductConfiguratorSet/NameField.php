@@ -9,7 +9,6 @@ class NameField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('name', 'name', $constraintBuilder);
+        parent::__construct('name', 'name', 'product_configurator_set', $constraintBuilder);
     }
-
 }

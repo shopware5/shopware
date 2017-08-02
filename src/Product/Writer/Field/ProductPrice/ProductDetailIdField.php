@@ -9,7 +9,6 @@ class ProductDetailIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('productDetailId', 'product_detail_id', $constraintBuilder);
+        parent::__construct('productDetailId', 'product_detail_id', 'product_price', $constraintBuilder);
     }
-
 }

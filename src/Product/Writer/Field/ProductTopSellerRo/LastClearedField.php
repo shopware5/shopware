@@ -9,7 +9,6 @@ class LastClearedField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('lastCleared', 'last_cleared', $constraintBuilder);
+        parent::__construct('lastCleared', 'last_cleared', 'product_top_seller_ro', $constraintBuilder);
     }
-
 }

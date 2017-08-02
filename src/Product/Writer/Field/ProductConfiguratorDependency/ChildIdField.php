@@ -9,7 +9,6 @@ class ChildIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('childId', 'child_id', $constraintBuilder);
+        parent::__construct('childId', 'child_id', 'product_configurator_dependency', $constraintBuilder);
     }
-
 }

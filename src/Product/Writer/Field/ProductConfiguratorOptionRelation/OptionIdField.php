@@ -9,7 +9,6 @@ class OptionIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('optionId', 'option_id', $constraintBuilder);
+        parent::__construct('optionId', 'option_id', 'product_configurator_option_relation', $constraintBuilder);
     }
-
 }

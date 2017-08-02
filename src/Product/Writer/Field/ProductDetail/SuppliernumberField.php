@@ -9,7 +9,6 @@ class SuppliernumberField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('suppliernumber', 'suppliernumber', $constraintBuilder);
+        parent::__construct('suppliernumber', 'suppliernumber', 'product_detail', $constraintBuilder);
     }
-
 }

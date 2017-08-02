@@ -9,7 +9,6 @@ class ShopIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('shopId', 'shop_id', $constraintBuilder);
+        parent::__construct('shopId', 'shop_id', 'product_vote', $constraintBuilder);
     }
-
 }

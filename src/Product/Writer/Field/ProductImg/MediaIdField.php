@@ -9,7 +9,6 @@ class MediaIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('mediaId', 'media_id', $constraintBuilder);
+        parent::__construct('mediaId', 'media_id', 'product_img', $constraintBuilder);
     }
-
 }

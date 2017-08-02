@@ -9,7 +9,6 @@ class ExtensionField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('extension', 'extension', $constraintBuilder);
+        parent::__construct('extension', 'extension', 'product_img', $constraintBuilder);
     }
-
 }

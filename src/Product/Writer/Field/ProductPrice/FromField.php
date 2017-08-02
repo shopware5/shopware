@@ -9,7 +9,6 @@ class FromField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('from', 'from', $constraintBuilder);
+        parent::__construct('from', 'from', 'product_price', $constraintBuilder);
     }
-
 }

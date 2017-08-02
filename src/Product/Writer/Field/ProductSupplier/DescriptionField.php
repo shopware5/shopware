@@ -9,7 +9,6 @@ class DescriptionField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('description', 'description', $constraintBuilder);
+        parent::__construct('description', 'description', 'product_supplier', $constraintBuilder);
     }
-
 }

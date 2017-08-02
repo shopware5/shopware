@@ -9,7 +9,6 @@ class KindField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('kind', 'kind', $constraintBuilder);
+        parent::__construct('kind', 'kind', 'product_detail', $constraintBuilder);
     }
-
 }

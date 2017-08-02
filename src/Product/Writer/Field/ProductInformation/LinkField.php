@@ -9,7 +9,6 @@ class LinkField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('link', 'link', $constraintBuilder);
+        parent::__construct('link', 'link', 'product_information', $constraintBuilder);
     }
-
 }

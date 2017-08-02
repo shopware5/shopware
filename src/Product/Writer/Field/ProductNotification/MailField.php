@@ -9,7 +9,6 @@ class MailField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('mail', 'mail', $constraintBuilder);
+        parent::__construct('mail', 'mail', 'product_notification', $constraintBuilder);
     }
-
 }

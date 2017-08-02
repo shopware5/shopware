@@ -9,7 +9,6 @@ class EanField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('ean', 'ean', $constraintBuilder);
+        parent::__construct('ean', 'ean', 'product_configurator_template', $constraintBuilder);
     }
-
 }

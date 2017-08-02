@@ -9,7 +9,6 @@ class ShippingfreeField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('shippingfree', 'shippingfree', $constraintBuilder);
+        parent::__construct('shippingfree', 'shippingfree', 'product_configurator_template', $constraintBuilder);
     }
-
 }

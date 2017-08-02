@@ -9,7 +9,6 @@ class WidthField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('width', 'width', $constraintBuilder);
+        parent::__construct('width', 'width', 'product_img', $constraintBuilder);
     }
-
 }

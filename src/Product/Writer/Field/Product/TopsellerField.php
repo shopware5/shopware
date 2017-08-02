@@ -9,7 +9,6 @@ class TopsellerField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('topseller', 'topseller', $constraintBuilder);
+        parent::__construct('topseller', 'topseller', 'product', $constraintBuilder);
     }
-
 }

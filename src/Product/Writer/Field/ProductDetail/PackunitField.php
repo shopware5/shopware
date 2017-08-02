@@ -9,7 +9,6 @@ class PackunitField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('packunit', 'packunit', $constraintBuilder);
+        parent::__construct('packunit', 'packunit', 'product_detail', $constraintBuilder);
     }
-
 }

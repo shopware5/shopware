@@ -9,7 +9,6 @@ class RelatedProductField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('relatedProduct', 'related_product', $constraintBuilder);
+        parent::__construct('relatedProduct', 'related_product', 'product_relationship', $constraintBuilder);
     }
-
 }

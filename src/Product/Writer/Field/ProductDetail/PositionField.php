@@ -9,7 +9,6 @@ class PositionField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('position', 'position', $constraintBuilder);
+        parent::__construct('position', 'position', 'product_detail', $constraintBuilder);
     }
-
 }

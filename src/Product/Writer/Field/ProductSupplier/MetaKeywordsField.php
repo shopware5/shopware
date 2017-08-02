@@ -9,7 +9,6 @@ class MetaKeywordsField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('metaKeywords', 'meta_keywords', $constraintBuilder);
+        parent::__construct('metaKeywords', 'meta_keywords', 'product_supplier', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class PricegroupField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('pricegroup', 'pricegroup', $constraintBuilder);
+        parent::__construct('pricegroup', 'pricegroup', 'product_price', $constraintBuilder);
     }
-
 }

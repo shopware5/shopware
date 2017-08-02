@@ -9,7 +9,6 @@ class DownloadIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('downloadId', 'download_id', $constraintBuilder);
+        parent::__construct('downloadId', 'download_id', 'product_download_attribute', $constraintBuilder);
     }
-
 }

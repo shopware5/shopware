@@ -4,13 +4,14 @@ namespace Shopware\Product\Writer\Api;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
 
-class DateField extends Field
+class DateField extends WritableField
 {
-    public function __construct(string $name, string $storageName, ConstraintBuilder $constraintBuilder)
+    public function __construct(string $name, string $storageName, string $tableName, ConstraintBuilder $constraintBuilder)
     {
         parent::__construct(
             $name,
             $storageName,
+            $tableName,
             $constraintBuilder->isNotBlank()->isDate()->getConstraints(),
             $constraintBuilder->isDate()->getConstraints()
         );

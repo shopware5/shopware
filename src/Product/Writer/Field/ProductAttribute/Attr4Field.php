@@ -9,7 +9,6 @@ class Attr4Field extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr4', 'attr4', $constraintBuilder);
+        parent::__construct('attr4', 'attr4', 'product_attribute', $constraintBuilder);
     }
-
 }

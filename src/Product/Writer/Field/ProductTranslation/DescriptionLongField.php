@@ -9,7 +9,6 @@ class DescriptionLongField extends HtmlTextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('descriptionLong', 'description_long', $constraintBuilder);
+        parent::__construct('descriptionLong', 'description_long', 'product_translation', $constraintBuilder);
     }
-
 }

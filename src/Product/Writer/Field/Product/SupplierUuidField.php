@@ -9,7 +9,6 @@ class SupplierUuidField extends ReferenceField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('supplierUuid', 'supplier_uuid', $constraintBuilder);
+        parent::__construct('supplierUuid', 'supplier_uuid', 'product', $constraintBuilder);
     }
-
 }

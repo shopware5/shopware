@@ -9,7 +9,6 @@ class FiltergroupIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('filtergroupId', 'filtergroup_id', $constraintBuilder);
+        parent::__construct('filtergroupId', 'filtergroup_id', 'product', $constraintBuilder);
     }
-
 }

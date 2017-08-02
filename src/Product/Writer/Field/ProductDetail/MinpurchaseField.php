@@ -9,7 +9,6 @@ class MinpurchaseField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('minpurchase', 'minpurchase', $constraintBuilder);
+        parent::__construct('minpurchase', 'minpurchase', 'product_detail', $constraintBuilder);
     }
-
 }

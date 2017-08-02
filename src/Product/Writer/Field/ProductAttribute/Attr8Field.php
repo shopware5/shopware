@@ -9,7 +9,6 @@ class Attr8Field extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr8', 'attr8', $constraintBuilder);
+        parent::__construct('attr8', 'attr8', 'product_attribute', $constraintBuilder);
     }
-
 }

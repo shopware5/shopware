@@ -9,7 +9,6 @@ class TypeField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('type', 'type', $constraintBuilder);
+        parent::__construct('type', 'type', 'product_configurator_set', $constraintBuilder);
     }
-
 }

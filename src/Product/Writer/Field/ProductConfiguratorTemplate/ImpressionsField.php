@@ -9,7 +9,6 @@ class ImpressionsField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('impressions', 'impressions', $constraintBuilder);
+        parent::__construct('impressions', 'impressions', 'product_configurator_template', $constraintBuilder);
     }
-
 }

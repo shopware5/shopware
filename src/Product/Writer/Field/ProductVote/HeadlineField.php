@@ -9,7 +9,6 @@ class HeadlineField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('headline', 'headline', $constraintBuilder);
+        parent::__construct('headline', 'headline', 'product_vote', $constraintBuilder);
     }
-
 }

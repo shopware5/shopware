@@ -9,7 +9,6 @@ class LanguageIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('languageId', 'language_id', $constraintBuilder);
+        parent::__construct('languageId', 'language_id', 'product_translation', $constraintBuilder);
     }
-
 }

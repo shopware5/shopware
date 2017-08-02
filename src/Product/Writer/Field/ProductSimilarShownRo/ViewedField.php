@@ -9,7 +9,6 @@ class ViewedField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('viewed', 'viewed', $constraintBuilder);
+        parent::__construct('viewed', 'viewed', 'product_similar_shown_ro', $constraintBuilder);
     }
-
 }

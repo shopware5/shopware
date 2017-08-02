@@ -9,7 +9,6 @@ class SerialsField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('serials', 'serials', $constraintBuilder);
+        parent::__construct('serials', 'serials', 'product_esd', $constraintBuilder);
     }
-
 }

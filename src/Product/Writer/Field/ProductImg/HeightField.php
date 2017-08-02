@@ -9,7 +9,6 @@ class HeightField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('height', 'height', $constraintBuilder);
+        parent::__construct('height', 'height', 'product_img', $constraintBuilder);
     }
-
 }

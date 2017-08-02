@@ -61,6 +61,16 @@ class ConstraintBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function isFloat()
+    {
+        $this->addConstraint(new Type('float'));
+
+        return $this;
+    }
+
+    /**
      * @param int $maxLength
      * @return $this
      */

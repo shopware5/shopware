@@ -9,7 +9,6 @@ class OptionsField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('options', 'options', $constraintBuilder);
+        parent::__construct('options', 'options', 'product_configurator_price_variation', $constraintBuilder);
     }
-
 }

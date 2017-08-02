@@ -9,7 +9,6 @@ class Attr18Field extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr18', 'attr18', $constraintBuilder);
+        parent::__construct('attr18', 'attr18', 'product_attribute', $constraintBuilder);
     }
-
 }

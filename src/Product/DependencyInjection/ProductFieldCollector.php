@@ -22,10 +22,12 @@ class ProductFieldCollector implements CompilerPassInterface
             $container
         );
 
+        $collectionRef = $container
+            ->findDefinition('shopware.product.field_collection');
+
         foreach($taggedServices as $service) {
-            $container
-                ->findDefinition('shopware.product.field_collection')
-                ->addArgument($service);
+                $collectionRef
+                    ->addArgument($service);
         }
     }
 }

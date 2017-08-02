@@ -9,7 +9,6 @@ class ShippingtimeField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('shippingtime', 'shippingtime', $constraintBuilder);
+        parent::__construct('shippingtime', 'shippingtime', 'product_detail', $constraintBuilder);
     }
-
 }

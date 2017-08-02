@@ -4,12 +4,12 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="shopware.product.writer_field_uuid" class="Shopware\Product\Writer\Field\ProductImgMapping\UuidField">
+        <service id="shopware.product.product_img_mapping.writer_field_uuid" class="Shopware\Product\Writer\Field\ProductImgMapping\UuidField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_img_mapping.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_imageId" class="Shopware\Product\Writer\Field\ProductImgMapping\ImageIdField">
+<service id="shopware.product.product_img_mapping.writer_field_imageId" class="Shopware\Product\Writer\Field\ProductImgMapping\ImageIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_img_mapping.writer_field"/> 

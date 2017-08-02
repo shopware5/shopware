@@ -9,7 +9,6 @@ class TemplateField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('template', 'template', $constraintBuilder);
+        parent::__construct('template', 'template', 'product', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class AnswerDateField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('answerDate', 'answer_date', $constraintBuilder);
+        parent::__construct('answerDate', 'answer_date', 'product_vote', $constraintBuilder);
     }
-
 }

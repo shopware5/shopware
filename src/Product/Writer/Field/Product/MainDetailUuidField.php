@@ -9,7 +9,6 @@ class MainDetailUuidField extends ReferenceField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('mainDetailUuid', 'main_detail_uuid', $constraintBuilder);
+        parent::__construct('mainDetailUuid', 'main_detail_uuid', 'product', $constraintBuilder);
     }
-
 }

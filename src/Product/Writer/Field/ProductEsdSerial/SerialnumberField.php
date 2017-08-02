@@ -9,7 +9,6 @@ class SerialnumberField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('serialnumber', 'serialnumber', $constraintBuilder);
+        parent::__construct('serialnumber', 'serialnumber', 'product_esd_serial', $constraintBuilder);
     }
-
 }

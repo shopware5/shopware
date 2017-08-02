@@ -9,7 +9,6 @@ class Attr17Field extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr17', 'attr17', $constraintBuilder);
+        parent::__construct('attr17', 'attr17', 'product_configurator_template_attribute', $constraintBuilder);
     }
-
 }

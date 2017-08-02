@@ -9,7 +9,6 @@ class InstockField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('instock', 'instock', $constraintBuilder);
+        parent::__construct('instock', 'instock', 'product_configurator_template', $constraintBuilder);
     }
-
 }

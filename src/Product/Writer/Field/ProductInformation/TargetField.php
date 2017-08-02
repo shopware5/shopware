@@ -9,7 +9,6 @@ class TargetField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('target', 'target', $constraintBuilder);
+        parent::__construct('target', 'target', 'product_information', $constraintBuilder);
     }
-
 }

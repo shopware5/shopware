@@ -9,7 +9,6 @@ class Attr16Field extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr16', 'attr16', $constraintBuilder);
+        parent::__construct('attr16', 'attr16', 'product_attribute', $constraintBuilder);
     }
-
 }

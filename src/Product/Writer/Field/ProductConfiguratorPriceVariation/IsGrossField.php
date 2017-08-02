@@ -9,7 +9,6 @@ class IsGrossField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('isGross', 'is_gross', $constraintBuilder);
+        parent::__construct('isGross', 'is_gross', 'product_configurator_price_variation', $constraintBuilder);
     }
-
 }

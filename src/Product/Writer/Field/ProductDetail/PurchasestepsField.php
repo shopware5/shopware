@@ -9,7 +9,6 @@ class PurchasestepsField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('purchasesteps', 'purchasesteps', $constraintBuilder);
+        parent::__construct('purchasesteps', 'purchasesteps', 'product_detail', $constraintBuilder);
     }
-
 }

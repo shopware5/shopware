@@ -3,13 +3,12 @@
 namespace Shopware\Product\Writer\Field\ProductDetail;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\AbstractField;
+use Shopware\Product\Writer\Api\FloatField;
 
-class WeightField extends AbstractField
+class WeightField extends FloatField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('weight', 'weight', $constraintBuilder);
+        parent::__construct('weight', 'weight', 'product_detail', $constraintBuilder);
     }
-
 }

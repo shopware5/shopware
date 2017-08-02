@@ -9,7 +9,6 @@ class ImgField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('img', 'img', $constraintBuilder);
+        parent::__construct('img', 'img', 'product_supplier', $constraintBuilder);
     }
-
 }

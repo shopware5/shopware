@@ -9,7 +9,6 @@ class MaxdownloadsField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('maxdownloads', 'maxdownloads', $constraintBuilder);
+        parent::__construct('maxdownloads', 'maxdownloads', 'product_esd', $constraintBuilder);
     }
-
 }

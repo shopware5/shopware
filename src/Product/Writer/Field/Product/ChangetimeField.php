@@ -9,7 +9,6 @@ class ChangetimeField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('changetime', 'changetime', $constraintBuilder);
+        parent::__construct('changetime', 'changetime', 'product', $constraintBuilder);
     }
-
 }

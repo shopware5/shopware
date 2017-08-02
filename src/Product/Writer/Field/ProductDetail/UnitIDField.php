@@ -9,7 +9,6 @@ class UnitIDField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('unitID', 'unitID', $constraintBuilder);
+        parent::__construct('unitID', 'unitID', 'product_detail', $constraintBuilder);
     }
-
 }

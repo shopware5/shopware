@@ -9,7 +9,6 @@ class NotificationField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('notification', 'notification', $constraintBuilder);
+        parent::__construct('notification', 'notification', 'product', $constraintBuilder);
     }
-
 }

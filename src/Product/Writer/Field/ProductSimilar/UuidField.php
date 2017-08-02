@@ -9,7 +9,6 @@ class UuidField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('uuid', 'uuid', $constraintBuilder);
+        parent::__construct('uuid', 'uuid', 'product_similar', $constraintBuilder);
     }
-
 }

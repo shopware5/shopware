@@ -9,7 +9,6 @@ class DatumField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('datum', 'datum', $constraintBuilder);
+        parent::__construct('datum', 'datum', 'product_esd', $constraintBuilder);
     }
-
 }

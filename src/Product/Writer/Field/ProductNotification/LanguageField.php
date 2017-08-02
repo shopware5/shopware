@@ -9,7 +9,6 @@ class LanguageField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('language', 'language', $constraintBuilder);
+        parent::__construct('language', 'language', 'product_notification', $constraintBuilder);
     }
-
 }

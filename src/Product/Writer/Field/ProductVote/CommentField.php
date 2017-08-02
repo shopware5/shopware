@@ -9,7 +9,6 @@ class CommentField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('comment', 'comment', $constraintBuilder);
+        parent::__construct('comment', 'comment', 'product_vote', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class MappingIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('mappingId', 'mapping_id', $constraintBuilder);
+        parent::__construct('mappingId', 'mapping_id', 'product_img_mapping_rule', $constraintBuilder);
     }
-
 }

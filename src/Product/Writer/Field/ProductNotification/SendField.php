@@ -9,7 +9,6 @@ class SendField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('send', 'send', $constraintBuilder);
+        parent::__construct('send', 'send', 'product_notification', $constraintBuilder);
     }
-
 }

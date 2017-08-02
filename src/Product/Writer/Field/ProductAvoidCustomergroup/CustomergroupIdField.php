@@ -9,7 +9,6 @@ class CustomergroupIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('customergroupId', 'customergroup_id', $constraintBuilder);
+        parent::__construct('customergroupId', 'customergroup_id', 'product_avoid_customergroup', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class ReleasedateField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('releasedate', 'releasedate', $constraintBuilder);
+        parent::__construct('releasedate', 'releasedate', 'product_detail', $constraintBuilder);
     }
-
 }

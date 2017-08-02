@@ -9,7 +9,6 @@ class FileField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('file', 'file', $constraintBuilder);
+        parent::__construct('file', 'file', 'product_esd', $constraintBuilder);
     }
-
 }

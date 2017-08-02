@@ -9,7 +9,6 @@ class ImageIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('imageId', 'image_id', $constraintBuilder);
+        parent::__construct('imageId', 'image_id', 'product_img_mapping', $constraintBuilder);
     }
-
 }

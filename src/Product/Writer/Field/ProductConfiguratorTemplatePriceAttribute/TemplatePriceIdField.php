@@ -9,7 +9,6 @@ class TemplatePriceIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('templatePriceId', 'template_price_id', $constraintBuilder);
+        parent::__construct('templatePriceId', 'template_price_id', 'product_configurator_template_price_attribute', $constraintBuilder);
     }
-
 }

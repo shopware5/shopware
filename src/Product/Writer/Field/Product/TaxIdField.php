@@ -9,7 +9,6 @@ class TaxIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('taxId', 'tax_id', $constraintBuilder);
+        parent::__construct('taxId', 'tax_id', 'product', $constraintBuilder);
     }
-
 }

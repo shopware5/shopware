@@ -9,7 +9,6 @@ class CreatedAtField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('createdAt', 'created_at', $constraintBuilder);
+        parent::__construct('createdAt', 'created_at', 'product', $constraintBuilder);
     }
-
 }

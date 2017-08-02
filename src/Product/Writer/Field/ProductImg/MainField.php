@@ -9,7 +9,6 @@ class MainField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('main', 'main', $constraintBuilder);
+        parent::__construct('main', 'main', 'product_img', $constraintBuilder);
     }
-
 }

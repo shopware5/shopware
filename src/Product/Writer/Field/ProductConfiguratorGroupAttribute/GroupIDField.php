@@ -9,7 +9,6 @@ class GroupIDField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('groupID', 'groupID', $constraintBuilder);
+        parent::__construct('groupID', 'groupID', 'product_configurator_group_attribute', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class CustomerGroupKeyField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('customerGroupKey', 'customer_group_key', $constraintBuilder);
+        parent::__construct('customerGroupKey', 'customer_group_key', 'product_configurator_template_price', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class MetaDescriptionField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('metaDescription', 'meta_description', $constraintBuilder);
+        parent::__construct('metaDescription', 'meta_description', 'product_supplier', $constraintBuilder);
     }
-
 }

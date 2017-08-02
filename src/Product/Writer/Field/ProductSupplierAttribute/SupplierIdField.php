@@ -9,7 +9,6 @@ class SupplierIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('supplierId', 'supplier_id', $constraintBuilder);
+        parent::__construct('supplierId', 'supplier_id', 'product_supplier_attribute', $constraintBuilder);
     }
-
 }

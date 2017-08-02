@@ -9,7 +9,6 @@ class AdditionaltextField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('additionaltext', 'additionaltext', $constraintBuilder);
+        parent::__construct('additionaltext', 'additionaltext', 'product_detail', $constraintBuilder);
     }
-
 }

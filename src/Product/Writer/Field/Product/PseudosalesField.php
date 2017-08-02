@@ -9,7 +9,6 @@ class PseudosalesField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('pseudosales', 'pseudosales', $constraintBuilder);
+        parent::__construct('pseudosales', 'pseudosales', 'product', $constraintBuilder);
     }
-
 }

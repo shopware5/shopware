@@ -9,7 +9,6 @@ class InitDateField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('initDate', 'init_date', $constraintBuilder);
+        parent::__construct('initDate', 'init_date', 'product_similar_shown_ro', $constraintBuilder);
     }
-
 }

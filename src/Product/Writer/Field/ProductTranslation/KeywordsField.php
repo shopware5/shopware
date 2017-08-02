@@ -9,7 +9,6 @@ class KeywordsField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('keywords', 'keywords', $constraintBuilder);
+        parent::__construct('keywords', 'keywords', 'product_translation', $constraintBuilder);
     }
-
 }

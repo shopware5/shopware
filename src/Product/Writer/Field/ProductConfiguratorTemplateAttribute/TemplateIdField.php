@@ -9,7 +9,6 @@ class TemplateIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('templateId', 'template_id', $constraintBuilder);
+        parent::__construct('templateId', 'template_id', 'product_configurator_template_attribute', $constraintBuilder);
     }
-
 }

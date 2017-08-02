@@ -9,7 +9,6 @@ class Attr9Field extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr9', 'attr9', $constraintBuilder);
+        parent::__construct('attr9', 'attr9', 'product_attribute', $constraintBuilder);
     }
-
 }

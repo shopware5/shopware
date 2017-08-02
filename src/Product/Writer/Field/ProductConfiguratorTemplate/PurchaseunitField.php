@@ -3,13 +3,12 @@
 namespace Shopware\Product\Writer\Field\ProductConfiguratorTemplate;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\AbstractField;
+use Shopware\Product\Writer\Api\FloatField;
 
-class PurchaseunitField extends AbstractField
+class PurchaseunitField extends FloatField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('purchaseunit', 'purchaseunit', $constraintBuilder);
+        parent::__construct('purchaseunit', 'purchaseunit', 'product_configurator_template', $constraintBuilder);
     }
-
 }

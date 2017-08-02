@@ -9,7 +9,6 @@ class AvailableFromField extends DateField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('availableFrom', 'available_from', $constraintBuilder);
+        parent::__construct('availableFrom', 'available_from', 'product', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class OrderNumberField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('orderNumber', 'order_number', $constraintBuilder);
+        parent::__construct('orderNumber', 'order_number', 'product_configurator_template', $constraintBuilder);
     }
-
 }

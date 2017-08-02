@@ -9,7 +9,6 @@ class EsdIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('esdId', 'esd_id', $constraintBuilder);
+        parent::__construct('esdId', 'esd_id', 'product_esd_serial', $constraintBuilder);
     }
-
 }

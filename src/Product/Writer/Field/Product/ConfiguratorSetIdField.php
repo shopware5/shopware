@@ -9,7 +9,6 @@ class ConfiguratorSetIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('configuratorSetId', 'configurator_set_id', $constraintBuilder);
+        parent::__construct('configuratorSetId', 'configurator_set_id', 'product', $constraintBuilder);
     }
-
 }

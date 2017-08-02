@@ -9,7 +9,6 @@ class PricegroupIdField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('pricegroupId', 'pricegroup_id', $constraintBuilder);
+        parent::__construct('pricegroupId', 'pricegroup_id', 'product', $constraintBuilder);
     }
-
 }

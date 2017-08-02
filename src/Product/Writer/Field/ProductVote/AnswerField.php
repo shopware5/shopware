@@ -9,7 +9,6 @@ class AnswerField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('answer', 'answer', $constraintBuilder);
+        parent::__construct('answer', 'answer', 'product_vote', $constraintBuilder);
     }
-
 }

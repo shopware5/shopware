@@ -9,7 +9,6 @@ class StockminField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('stockmin', 'stockmin', $constraintBuilder);
+        parent::__construct('stockmin', 'stockmin', 'product_configurator_template', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class CrossbundlelookField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('crossbundlelook', 'crossbundlelook', $constraintBuilder);
+        parent::__construct('crossbundlelook', 'crossbundlelook', 'product', $constraintBuilder);
     }
-
 }

@@ -9,7 +9,6 @@ class SalesField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('sales', 'sales', $constraintBuilder);
+        parent::__construct('sales', 'sales', 'product_detail', $constraintBuilder);
     }
-
 }

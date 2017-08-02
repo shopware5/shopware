@@ -9,7 +9,6 @@ class Attr2Field extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('attr2', 'attr2', $constraintBuilder);
+        parent::__construct('attr2', 'attr2', 'product_configurator_template_attribute', $constraintBuilder);
     }
-
 }

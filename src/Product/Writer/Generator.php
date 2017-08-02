@@ -7,6 +7,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Types\DateType;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\DBAL\Types\StringType;
+use Symfony\Bridge\Doctrine\Tests\PropertyInfo\Fixtures\DoctrineFooType;
 use Symfony\Component\DependencyInjection\Container;
 
 class Generator
@@ -68,16 +69,27 @@ use Shopware\Product\Writer\Api\%s;
 
 class %s extends %s
 {
-    public function __construct(ConstraintBuilder $constraintBuilder)
-    {
-        parent::__construct('%s', '%s', $constraintBuilder);
-    }%s
-
+%s
 }
 EOD;
 
+    private $writableConstructTemplate = <<<'EOD'
+    public function __construct(ConstraintBuilder $constraintBuilder)
+    {
+        parent::__construct('%s', '%s', '%s', $constraintBuilder);
+    }
+EOD;
+
+    private $virtualConstructTemplate = <<<'EOD'
+    public function __construct()
+    {
+        parent::__construct('%s', \Shopware\Product\Writer\Field\%s\%s::class);
+    }
+EOD;
+
+
     private $serviceDefinitionTemplate = <<<'EOD'
-<service id="shopware.product.writer_field_%s" class="Shopware\Product\Writer\Field\%s\%s">
+<service id="shopware.product.%s.writer_field_%s" class="Shopware\Product\Writer\Field\%s\%s">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.%s.writer_field"/> 
@@ -121,10 +133,8 @@ EOD;
 
     public function generate(string $table, string $path)
     {
-
         $path .=  '/' . ucfirst($this->toCammelCase($table));
         $connection = $this->container->get('dbal_connection');
-
 
         $schemaManager = $connection->getSchemaManager();
         $columns = $schemaManager->listTableColumns($table);
@@ -148,57 +158,17 @@ EOD;
 
         /** @var Column $column */
         foreach($columns as $column) {
-            if('id' === $column->getName()) {
+            $service = $this->makeColumn($column->getName(), (string) $column->getType(), $table, $path);
+
+            if($service) {
+                $services[] = $service;
+            }
+
+            if(false === strpos($column->getName(), '_uuid')) {
                 continue;
             }
 
-            $cammelCaseName = $this->toCammelCase($column->getName());
-            $className = ucfirst($cammelCaseName) . 'Field';
-
-            echo $path . '::' . $column->getName() . '::' . $column->getType() . "\n";
-
-            $fieldClass = 'AbstractField';
-            switch($column->getType()) {
-                case 'Integer':
-                case IntegerType::class:
-                    $fieldClass = 'IntField';
-                    break;
-                case 'DateTime':
-                case 'Date':
-                case DateType::class:
-                    $fieldClass = 'DateField';
-                    break;
-                case 'Text':
-                    $fieldClass = 'TextField';
-                    break;
-                case 'String':
-                case StringType::class:
-                    $fieldClass = 'StringField';
-                    break;
-                default:
-                    echo "ERROR: {$column->getType()}\n";
-            }
-
-            $addIn = '';
-            if(false !== strpos($column->getName(), '_uuid')) {
-                $fieldClass = 'ReferenceField';
-            }
-
-            if(array_key_exists($column->getName(), $this->map)) {
-                $fieldClass = $this->map[$column->getName()];
-            }
-
-            file_put_contents(
-                $path . '/' . $className . '.php',
-                sprintf($this->classTemplate, ucfirst($this->toCammelCase($table)), $fieldClass, $className, $fieldClass, $cammelCaseName, $column->getName(), $addIn)
-            );
-
-            $services[] = sprintf($this->serviceDefinitionTemplate,
-                $this->toCammelCase($column->getName()),
-                ucfirst($this->toCammelCase($table)),
-                $className,
-                $table
-            );
+            $services[] = $this->makeColumn(substr($column->getName(), 0, -5), 'Virtual', $table, $path);
         }
 
         file_put_contents(
@@ -206,7 +176,93 @@ EOD;
             sprintf($this->serviceFileTemplate, implode('        ' . PHP_EOL, $services))
         );
 
-        echo '$loader->load(\'../Writer/Field/' . $this->toMinusCase($table) . '-fields.xml\');' . "\n";
+//        echo '$loader->load(\'../Writer/Field/' . $this->toMinusCase($table) . '-fields.xml\');' . "\n";
+    }
+
+    private function makeColumn(string $columnName, string $columnType, string $table, string $path)
+    {
+        if('id' === $columnName) {
+            return;
+        }
+
+        $cammelCaseName = $this->toCammelCase($columnName);
+        $className = ucfirst($cammelCaseName) . 'Field';
+
+//            echo $path . '::' . $column->getName() . '::' . $column->getType() . "\n";
+
+        switch($columnType) {
+            case 'Integer':
+                $fieldClass = 'IntField';
+                break;
+            case 'DateTime':
+            case 'Date':
+                $fieldClass = 'DateField';
+                break;
+            case 'Text':
+                $fieldClass = 'TextField';
+                break;
+            case 'String':
+                $fieldClass = 'StringField';
+                break;
+            case 'Float':
+            case 'Decimal':
+                $fieldClass = 'FloatField';
+                break;
+            case 'Boolean':
+                $fieldClass = 'BoolField';
+                break;
+            case 'Virtual':
+                $fieldClass = 'VirtualField';
+                break;
+            default:
+                echo "ERROR: {$columnType}\n";
+                return;
+        }
+
+        if(false !== strpos($columnName, '_uuid')) {
+            $fieldClass = 'ReferenceField';
+        }
+
+        if(array_key_exists($columnName, $this->map)) {
+            $fieldClass = $this->map[$columnName];
+        }
+
+        if($columnType === 'Virtual') {
+            $constructor = sprintf(
+                $this->virtualConstructTemplate,
+                $cammelCaseName,
+                ucfirst($this->toCammelCase($table)),
+                ucfirst($this->toCammelCase($cammelCaseName)) . 'UuidField'
+            );
+        } else {
+            $constructor = sprintf(
+                $this->writableConstructTemplate,
+                $cammelCaseName,
+                $columnName,
+                $table
+            );
+        }
+
+        file_put_contents(
+            $path . '/' . $className . '.php',
+            sprintf(
+                $this->classTemplate,
+                ucfirst($this->toCammelCase($table)),
+                $fieldClass,
+                $className,
+                $fieldClass,
+                $constructor
+            )
+        );
+
+        return sprintf(
+            $this->serviceDefinitionTemplate,
+            $table,
+            $this->toCammelCase($columnName),
+            ucfirst($this->toCammelCase($table)),
+            $className,
+            $table
+        );
     }
 
     private function toCammelCase($value)

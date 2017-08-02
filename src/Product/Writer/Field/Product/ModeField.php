@@ -9,7 +9,6 @@ class ModeField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('mode', 'mode', $constraintBuilder);
+        parent::__construct('mode', 'mode', 'product', $constraintBuilder);
     }
-
 }

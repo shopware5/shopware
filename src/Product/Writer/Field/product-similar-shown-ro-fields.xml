@@ -4,27 +4,27 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="shopware.product.writer_field_uuid" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\UuidField">
+        <service id="shopware.product.product_similar_shown_ro.writer_field_uuid" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\UuidField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_similar_shown_ro.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_productId" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\ProductIdField">
+<service id="shopware.product.product_similar_shown_ro.writer_field_productId" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\ProductIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_similar_shown_ro.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_relatedProductId" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\RelatedProductIdField">
+<service id="shopware.product.product_similar_shown_ro.writer_field_relatedProductId" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\RelatedProductIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_similar_shown_ro.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_viewed" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\ViewedField">
+<service id="shopware.product.product_similar_shown_ro.writer_field_viewed" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\ViewedField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_similar_shown_ro.writer_field"/> 
 </service>        
-<service id="shopware.product.writer_field_initDate" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\InitDateField">
+<service id="shopware.product.product_similar_shown_ro.writer_field_initDate" class="Shopware\Product\Writer\Field\ProductSimilarShownRo\InitDateField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_similar_shown_ro.writer_field"/> 

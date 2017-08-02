@@ -9,7 +9,6 @@ class RelationsField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('relations', 'relations', $constraintBuilder);
+        parent::__construct('relations', 'relations', 'product_img', $constraintBuilder);
     }
-
 }

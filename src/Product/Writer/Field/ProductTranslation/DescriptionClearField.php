@@ -9,7 +9,6 @@ class DescriptionClearField extends TextField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('descriptionClear', 'description_clear', $constraintBuilder);
+        parent::__construct('descriptionClear', 'description_clear', 'product_translation', $constraintBuilder);
     }
-
 }

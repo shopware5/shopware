@@ -3,18 +3,16 @@
 namespace Shopware\Product\Tests;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Product\Writer\Api\Field;
 use Shopware\Product\Writer\Generator;
 use Shopware\Product\Writer\SqlGateway;
+use Shopware\Product\Writer\Writer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ApiTest extends KernelTestCase
 {
     const UUID = 'AA-BB-CC';
 
-    /**
-     * @var SqlGateway
-     */
-    private $writer;
 
     /**
      * @var Connection
@@ -25,10 +23,14 @@ class ApiTest extends KernelTestCase
     {
         self::bootKernel();
         $container = self::$kernel->getContainer();
-        $this->writer = $container->get('shopware.product.writer');
         $this->connection = $container->get('dbal_connection');
 
         $this->connection->beginTransaction();
+    }
+
+    private function getWriter(): Writer
+    {
+        return self::$kernel->getContainer()->get('shopware.product.writer');
     }
 
     public function tearDown()
@@ -47,13 +49,13 @@ class ApiTest extends KernelTestCase
     {
         self::assertGreaterThan(
             0,
-            count(self::$kernel->getContainer()->get('shopware.product.field_collection')->getFields())
+            count(self::$kernel->getContainer()->get('shopware.product.field_collection')->getFields(Field::class))
         );
     }
 
     public function test_insert()
     {
-        $this->writer->insert([
+        $this->getWriter()->insert([
             'uuid' => self::UUID,
             'the_unknown_field' => 'do nothing?',
         ]);
@@ -67,17 +69,21 @@ class ApiTest extends KernelTestCase
 
     public function test_update()
     {
-        $this->writer->insert([
+        $this->getWriter()->insert([
             'uuid' => self::UUID
         ]);
 
-        $this->writer->update(self::UUID, [
+        $this->getWriter()->update(self::UUID, [
             'title' => '_THE_TITLE_',
             'the_unknown_field' => 'do nothing?',
             'description' => '<p>no html</p>',
             'descriptionLong' => '<p>html</p>',
             'availableFrom' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'availableTo' => new \DateTime('2011-01-01T15:03:01.012345Z'),
+            'supplier' => [
+                'uuid' => 'SWAG-PRODUCT-SUPPLIER-UUID-1',
+            ],
+            'mainDetailUuid' => 'SW10003',
         ]);
 
         $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
@@ -88,11 +94,13 @@ class ApiTest extends KernelTestCase
         self::assertSame('2011-01-01 15:03:01', $product['available_to']);
         self::assertSame('no html', $product['description']);
         self::assertSame('<p>html</p>', $product['description_long']);
+        self::assertSame('SWAG-PRODUCT-SUPPLIER-UUID-1', $product['supplier_uuid']);
+        self::assertSame('SW10003', $product['main_detail_uuid']);
     }
 
     public function test_update_invalid()
     {
-        $this->writer->insert([
+        $this->getWriter()->insert([
             'uuid' => self::UUID
         ]);
 
@@ -102,7 +110,7 @@ class ApiTest extends KernelTestCase
         }
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->writer->update(self::UUID, [
+        $this->getWriter()->update(self::UUID, [
             'title' => $tooLongValue,
         ]);
     }

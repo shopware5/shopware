@@ -9,7 +9,6 @@ class ActiveField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('active', 'active', $constraintBuilder);
+        parent::__construct('active', 'active', 'product_vote', $constraintBuilder);
     }
-
 }

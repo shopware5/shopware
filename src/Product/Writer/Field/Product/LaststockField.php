@@ -9,7 +9,6 @@ class LaststockField extends IntField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('laststock', 'laststock', $constraintBuilder);
+        parent::__construct('laststock', 'laststock', 'product', $constraintBuilder);
     }
-
 }
