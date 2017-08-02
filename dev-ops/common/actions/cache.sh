@@ -2,4 +2,3 @@
 
 bin/console cache:clear --no-warmup --no-optional-warmers
 bin/console cache:warmup
-chmod -R 777 ./var
