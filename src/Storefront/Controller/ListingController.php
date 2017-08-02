@@ -12,8 +12,5 @@ class ListingController extends Controller
      */
     public function indexAction($id, Request $request)
     {
-        echo '<pre>';
-        print_r($id);
-        exit();
     }
 }

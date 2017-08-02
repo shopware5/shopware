@@ -74,6 +74,7 @@
 
             <argument id="shopware.framework.routing.cached_seo_url_reader.inner" type="service"/>
             <argument id="shopware.cache" type="service"/>
+            <argument id="dbal_connection" type="service"/>
         </service>
 
         <service class="Shopware\Framework\Routing\ShopFinder" id="shopware.framework.routing.shop_finder">

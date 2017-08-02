@@ -5,6 +5,7 @@ namespace Shopware\Storefront\Controller;
 use Shopware\Context\TranslationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class IndexController extends Controller
 {

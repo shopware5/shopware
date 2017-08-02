@@ -69,7 +69,15 @@ class ProductReader
             ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd')
             ->addSelect('(' . $customerGroupQuery->getSQL() . ') as __product_blocked_customer_groups')
             ->addSelect('(' . $availableVariantQuery->getSQL() . ') as __product_has_available_variants')
+//            ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
         ;
+        //todo@next move this to store front list product
+//        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
+//        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+//            $customerPriceQuery = $this->getPriceCountQuery(':current');
+//            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
+//            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
+//        }
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')

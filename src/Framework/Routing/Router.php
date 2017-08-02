@@ -113,9 +113,8 @@ class Router implements RouterInterface, RequestMatcherInterface
             return $url;
         }
 
-        $base = $generator->generate('homepage', [], $referenceType);
-
-        $pathInfo = str_replace($base, '', $url);
+        $pathInfo = $generator->generate($name, $parameters, UrlGenerator::ABSOLUTE_PATH);
+        $pathInfo = '/' . trim($pathInfo, '/');
 
         $seoUrl = $this->seoUrlReader->fetchSeoUrl($shop['id'], $pathInfo);
 
@@ -123,9 +122,7 @@ class Router implements RouterInterface, RequestMatcherInterface
             $url = str_replace($pathInfo, $seoUrl, $url);
         }
 
-        $result = rtrim($url, '/');
-
-        return $result;
+        return rtrim($url, '/') . '/';
     }
 
     public function match($pathinfo)
@@ -152,9 +149,10 @@ class Router implements RouterInterface, RequestMatcherInterface
 
             //generate new path info for detected shop
             $pathInfo = preg_replace('#^' . $shop['base_path'] . '#i', '', $url);
+            $pathInfo = '/' . trim($pathInfo, '/');
 
             //resolve seo urls to use symfony url matcher for route detection
-            $seoUrl = $this->seoUrlReader->fetchUrl($shop['id'], trim($pathInfo, '/'));
+            $seoUrl = $this->seoUrlReader->fetchUrl($shop['id'], $pathInfo);
 
             if ($seoUrl) {
                 $pathInfo = $seoUrl;

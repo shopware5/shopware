@@ -43,15 +43,4 @@ class SeoUrlReader implements SeoUrlReaderInterface
         $seoUrl = $query->execute()->fetch(\PDO::FETCH_COLUMN);
         return $seoUrl ?: null;
     }
-
-    public function fetchAll(int $shopId): array
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['url', 'seo_url']);
-        $query->from('seo_route');
-        $query->andWhere('shop_id = :shopId');
-        $query->setParameter(':shopId', $shopId);
-
-        return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
-    }
 }

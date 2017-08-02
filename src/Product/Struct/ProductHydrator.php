@@ -117,6 +117,7 @@ class ProductHydrator extends Hydrator
 
         $this->assignProductData($product, $data);
 
+        //todo@next reimplement after tax implementation
 //        $product->setTax(
 //            $this->taxHydrator->hydrate($data)
 //        );

@@ -12,8 +12,5 @@ class DetailController extends Controller
      */
     public function indexAction(string $number, Request $request)
     {
-        echo '<pre>';
-        print_r($number);
-        exit();
     }
 }

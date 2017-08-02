@@ -82,7 +82,6 @@ class DetailPageSeoUrlGenerator implements SeoUrlGeneratorInterface
             $routes[] = new SeoRoute(self::ROUTE_NAME, $url, $seoUrl);
         }
 
-        error_log(print_r($routes, true) . "\n", 3, '/var/log/test.log');
         return $routes;
     }
 
