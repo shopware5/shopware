@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStreamHydrator;
 
 /**

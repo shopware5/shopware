@@ -25,7 +25,7 @@
 namespace StorefrontBundle\Event;
 
 use EventBundle\Event;
-use ProductBundle\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductCollection;
 use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
 
 class ListProductsLoadedEvent extends Event

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Category\Struct\Category;
 
 /**
  * Shopware Class that handles categories
@@ -159,7 +159,7 @@ class sCategories
     }
 
     /**
-     * @param Category $category
+     * @param \Shopware\Category\Struct\Category $category
      * @param $childrenCounts
      *
      * @return array

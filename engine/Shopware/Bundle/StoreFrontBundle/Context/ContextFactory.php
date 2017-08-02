@@ -41,6 +41,7 @@ use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Tax\TaxGateway;
+use Shopware\Context\TranslationContext;
 
 class ContextFactory implements ContextFactoryInterface
 {

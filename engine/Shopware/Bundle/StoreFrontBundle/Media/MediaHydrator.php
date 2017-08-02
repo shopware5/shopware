@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Framework\Struct\Hydrator;
 use Shopware\Components\Thumbnail\Manager;
 
 /**

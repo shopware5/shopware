@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -176,7 +176,7 @@ class VariantMediaGateway
     }
 
     /**
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

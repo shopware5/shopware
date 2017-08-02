@@ -4,7 +4,7 @@ namespace ProductBundle\Gateway\Aggregator;
 
 use Doctrine\DBAL\Connection;
 use ProductBundle\Struct\VoteAverageCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Vote\VoteHydrator;
 
 class VoteAverageAggregator

@@ -27,9 +27,9 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\StoreFrontBundle\Product\SimpleProduct;
+use Shopware\Product\Struct\Product;
 
-class ViewProduct extends SimpleProduct implements ViewLineItemInterface
+class ViewProduct extends Product implements ViewLineItemInterface
 {
     /**
      * @var CalculatedProduct
@@ -64,7 +64,7 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
     }
 
     public static function createFromProducts(
-        SimpleProduct $simpleProduct,
+        Product $simpleProduct,
         CalculatedProduct $calculatedProduct
     ): ViewProduct {
         $product = new self(

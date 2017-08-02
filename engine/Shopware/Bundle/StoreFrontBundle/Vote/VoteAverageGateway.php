@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -73,7 +73,7 @@ class VoteAverageGateway
      * - Only activated votes
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param TranslationContext                                      $context
+     * @param \Shopware\Context\TranslationContext                                      $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Vote\VoteAverage[]
      */

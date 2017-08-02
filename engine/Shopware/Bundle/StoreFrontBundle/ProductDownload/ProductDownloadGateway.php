@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\ProductDownload;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -51,7 +51,7 @@ class ProductDownloadGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -62,7 +62,7 @@ class ProductDownloadGateway
 
     /**
      * @param Connection                                           $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param ProductDownloadHydrator                              $downloadHydrator
      */
     public function __construct(
@@ -82,7 +82,7 @@ class ProductDownloadGateway
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface::get()
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param TranslationContext                                      $context
+     * @param \Shopware\Context\TranslationContext                                      $context
      *
      * @return array indexed by the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload array
      */

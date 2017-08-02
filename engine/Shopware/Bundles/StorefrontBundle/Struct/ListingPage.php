@@ -3,7 +3,7 @@
 namespace StorefrontBundle\Struct;
 
 use CategoryBundle\Struct\Category;
-use ProductBundle\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductCollection;
 use Shopware\Search\FacetResultInterface;
 use Shopware\Framework\Struct\Struct;
 

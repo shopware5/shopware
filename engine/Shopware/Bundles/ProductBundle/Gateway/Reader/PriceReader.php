@@ -31,8 +31,8 @@ use ProductBundle\Struct\ProductPriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 class PriceReader
 {

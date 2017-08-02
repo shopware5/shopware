@@ -1,7 +1,9 @@
 {% block frontend_index_navigation_categories %}
+
     <div class="navigation--list-wrapper">
         {% block frontend_index_navigation_categories_navigation_list %}
             <ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+
                 {% block frontend_index_navigation_categories_top_home %}
                     <li class="navigation--entry{% if sCategoryCurrent == sCategoryStart and Controller == 'index' or true %} is--active{% endif %} is--home" role="menuitem">
                         {% block frontend_index_navigation_categories_top_link_home %}
@@ -18,8 +20,11 @@
                     {% block frontend_index_navigation_categories_top_entry %}
                         {% if not category.hideTop %}
                             <li class="navigation--entry{% if category.flag %} is--active{% endif %}" role="menuitem">
+
                                 {% block frontend_index_navigation_categories_top_link %}
-                                    <a class="navigation--link{% if category.flag %} is--active{% endif %}" href="{{ category.link }}" title="{{ category.description }}" itemprop="url">
+                                    <a class="navigation--link{% if category.flag %} is--active{% endif %}"
+                                       href="{{ url('listing_page', { 'id': category.id }) }}"
+                                       title="{{ category.description }}" itemprop="url">
                                         <span itemprop="name">{{ category.description }}</span>
                                     </a>
                                 {% endblock %}

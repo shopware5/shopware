@@ -37,7 +37,7 @@ class EmotionGateway
     private $hydrator;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
     /**
@@ -47,10 +47,10 @@ class EmotionGateway
 
     /**
      * @param EmotionHydrator                                      $hydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param Connection                                           $connection
      */
-    public function __construct(EmotionHydrator $hydrator, \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper, Connection $connection)
+    public function __construct(EmotionHydrator $hydrator, \Shopware\Framework\Struct\FieldHelper $fieldHelper, Connection $connection)
     {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;

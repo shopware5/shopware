@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
+use Shopware\Product\Gateway\Handler\CategoryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNameSortingHandler;

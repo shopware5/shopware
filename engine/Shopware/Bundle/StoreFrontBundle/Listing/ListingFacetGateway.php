@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 class ListingFacetGateway
 {
@@ -37,7 +37,7 @@ class ListingFacetGateway
     private $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -48,7 +48,7 @@ class ListingFacetGateway
 
     /**
      * @param Connection                                           $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param ListingHydrator                                      $hydrator
      */
     public function __construct(
@@ -63,7 +63,7 @@ class ListingFacetGateway
 
     /**
      * @param int[]                                                        $ids
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return ListingFacet[] indexed by id
      */
@@ -83,7 +83,7 @@ class ListingFacetGateway
 
     /**
      * @param int[]                                                        $categoryIds
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return array indexed by category id, each element contains a list of ListingFacet
      */
@@ -107,7 +107,7 @@ class ListingFacetGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return ListingFacet[]
      */
@@ -141,7 +141,7 @@ class ListingFacetGateway
     /**
      * Returns the base query to select the custom facet data.
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return QueryBuilder
      */

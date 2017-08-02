@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -52,7 +52,7 @@ class ProductGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     protected $fieldHelper;
 
@@ -95,7 +95,7 @@ class ProductGateway
         $products = [];
         foreach ($data as $product) {
             $key = $product['__variant_ordernumber'];
-            $products[$key] = $this->hydrator->hydrateListProduct($product);
+            $products[$key] = $this->hydrator->hydrate($product);
         }
 
         return $products;

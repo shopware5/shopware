@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Framework\Struct\Hydrator;
 
 class TemplateHydrator extends Hydrator
 {

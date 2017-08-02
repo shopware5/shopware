@@ -13,7 +13,7 @@ use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 class ManufacturerHandler implements HandlerInterface, AggregatorInterface
 {

@@ -22,42 +22,37 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
+namespace Shopware\Product\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Search\ConditionInterface;
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\TranslationContext;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
+use Shopware\Search\HandlerInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CategoryConditionHandler implements ConditionHandlerInterface
+class CategoryConditionHandler implements HandlerInterface
 {
     /**
      * @var int
      */
     private $counter = 0;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsCondition(ConditionInterface $condition)
+    public function supports(CriteriaPartInterface $criteriaPart): bool
     {
-        return $condition instanceof CategoryCondition;
+        return $criteriaPart instanceof CategoryCondition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generateCondition(
-        ConditionInterface $condition,
-        QueryBuilder $query,
-        ShopContextInterface $context
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        \Doctrine\DBAL\Query\QueryBuilder $builder,
+        Criteria $criteria,
+        TranslationContext $context
     ) {
         if ($this->counter++ === 0) {
             $suffix = '';
@@ -65,7 +60,7 @@ class CategoryConditionHandler implements ConditionHandlerInterface
             $suffix = $this->counter;
         }
 
-        $query->innerJoin(
+        $builder->innerJoin(
             'product',
             's_articles_categories_ro',
             "productCategory{$suffix}",
@@ -74,7 +69,7 @@ class CategoryConditionHandler implements ConditionHandlerInterface
         );
 
         /* @var CategoryCondition $condition */
-        $query->setParameter(
+        $builder->setParameter(
             ":category{$suffix}",
             $condition->getCategoryIds(),
             Connection::PARAM_INT_ARRAY

@@ -34,7 +34,7 @@ use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;

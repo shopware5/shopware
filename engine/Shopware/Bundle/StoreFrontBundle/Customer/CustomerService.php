@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Customer;
 
 use Shopware\Bundle\StoreFrontBundle\Address\AddressGateway;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 

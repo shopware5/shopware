@@ -7,7 +7,7 @@ use Shopware\Search\Condition\ActiveCondition;
 use Shopware\Search\HandlerInterface;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 
 class ActiveConditionHandler implements HandlerInterface
 {

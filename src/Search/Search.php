@@ -4,12 +4,7 @@ namespace Shopware\Search;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Search\SearchResult;
-use Shopware\Search\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\AggregatorInterface;
-use Shopware\Search\HandlerInterface;
+use Shopware\Context\TranslationContext;
 
 abstract class Search
 {
@@ -23,7 +18,7 @@ abstract class Search
      */
     protected $connection;
 
-    public function __construct(array $handlers, Connection $connection)
+    public function __construct(Connection $connection, array $handlers)
     {
         $this->handlers = $handlers;
         $this->connection = $connection;
@@ -44,6 +39,13 @@ abstract class Search
         $this->addCriteriaPartToQuery($query, $criteria, $criteria->getConditions(), $context);
         $this->addCriteriaPartToQuery($query, $criteria, $criteria->getSortings(), $context);
 
+        if ($criteria->getOffset()) {
+            $query->setFirstResult($criteria->getOffset());
+        }
+        if ($criteria->getLimit()) {
+            $query->setMaxResults($criteria->getLimit());
+        }
+
         $rows = $query->execute()->fetchAll();
 
         if ($criteria->fetchCount()) {
@@ -52,7 +54,7 @@ abstract class Search
             $total = count($rows);
         }
 
-        return new SearchResult($rows, $total);
+        return $this->createResult($rows, $total);
     }
 
     public function aggregate(Criteria $criteria, TranslationContext $context): AggregationResult
@@ -77,26 +79,16 @@ abstract class Search
         }
     }
 
-    /**
-     * @param $condition
-     * @return HandlerInterface|AggregatorInterface
-     * @throws \RuntimeException
-     */
-    protected  function getHandler($condition)
+    protected  function getHandler(CriteriaPartInterface $criteriaPart)
     {
         foreach ($this->handlers as $handler) {
-            if ($handler->supports($condition)) {
+            if ($handler->supports($criteriaPart)) {
                 return $handler;
             }
         }
-        throw new \RuntimeException('Handler not found');
+        throw new \RuntimeException(sprintf('No handler supports class %s', get_class($criteriaPart)));
     }
 
-    /**
-     * @param Criteria $criteria
-     * @param TranslationContext $context
-     * @return QueryBuilder
-     */
     protected function buildFacetQuery(Criteria $criteria, TranslationContext $context): QueryBuilder
     {
         $query = $this->createQuery();
@@ -108,5 +100,10 @@ abstract class Search
         }
 
         return $query;
+    }
+
+    protected function createResult(array $rows, int $total): SearchResult
+    {
+        return new SearchResult($rows, $total);
     }
 }

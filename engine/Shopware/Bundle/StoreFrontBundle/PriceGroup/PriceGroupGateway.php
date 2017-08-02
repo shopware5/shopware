@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\PriceGroup;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceHydrator;
 
@@ -63,7 +63,7 @@ class PriceGroupGateway
 
     /**
      * @param Connection    $connection
-     * @param FieldHelper   $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper   $fieldHelper
      * @param PriceHydrator $priceHydrator
      */
     public function __construct(

@@ -23,7 +23,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Category;
+namespace Shopware\Category\Struct;
 
 use Shopware\Framework\Struct\Collection;
 
@@ -74,9 +74,6 @@ class CategoryCollection extends Collection
         });
     }
 
-    /**
-     * @return string[]
-     */
     public function getPaths(): array
     {
         return $this->map(function (Category $category) {
@@ -84,14 +81,14 @@ class CategoryCollection extends Collection
         });
     }
 
-    /**
-     * @return int[]
-     */
     public function getIdsIncludingPaths(): array
     {
         $ids = [];
         foreach ($this->elements as $category) {
-            $ids = array_merge($ids, [$category->getId()], $category->getPath());
+            $ids[] = $category->getId();
+            foreach ($category->getPath() as $id) {
+                $ids[] = $id;
+            }
         }
 
         return array_keys(array_flip($ids));
@@ -123,7 +120,7 @@ class CategoryCollection extends Collection
      *
      * @return int
      */
-    protected function getKey(Category $element)
+    protected function getKey(Category $element): int
     {
         return $element->getId();
     }

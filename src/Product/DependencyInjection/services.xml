@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Shopware\Product\Struct\ProductHydrator" id="shopware.product.struct.product_hydrator"/>
+        <service class="Shopware\Product\Gateway\Handler\CategoryConditionHandler" id="shopware.product.gateway.handler.category_condition_handler"/>
+        <service class="Shopware\Product\Gateway\Handler\ActiveConditionHandler" id="shopware.product.gateway.handler.active_condition_handler"/>
+        <service class="Shopware\Product\Gateway\Handler\ShopConditionHandler" id="shopware.product.gateway.handler.shop_condition_handler"/>
+
+        <service class="Shopware\Product\Gateway\ProductReader" id="shopware.product.gateway.product_reader">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware.framework.struct.field_helper" type="service"/>
+            <argument id="shopware.product.struct.product_hydrator" type="service"/>
+        </service>
+
+        <service class="Shopware\Product\Gateway\ProductSearcher" id="shopware.product.gateway.product_searcher">
+            <argument id="dbal_connection" type="service"/>
+            <argument type="collection">
+                <argument type="service" id="shopware.product.gateway.handler.active_condition_handler" />
+                <argument type="service" id="shopware.product.gateway.handler.category_condition_handler" />
+                <argument type="service" id="shopware.product.gateway.handler.shop_condition_handler" />
+            </argument>
+        </service>
+
+        <service class="Shopware\Product\Gateway\ProductRepository" id="shopware.product.gateway.product_repository">
+            <argument id="shopware.product.gateway.product_reader" type="service"/>
+            <argument id="shopware.product.gateway.product_searcher" type="service"/>
+        </service>
+
+        <service class="Shopware\Product\Routing\DetailPageSeoUrlGenerator" id="shopware.product.routing.detail_page_seo_url_generator">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware.product.gateway.product_repository" type="service"/>
+            <argument id="slugify" type="service"/>
+            <argument id="shopware.router" type="service"/>
+        </service>
+    </services>
+</container>

@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaGateway;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
@@ -54,7 +54,7 @@ class ConfiguratorGateway
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -70,7 +70,7 @@ class ConfiguratorGateway
 
     /**
      * @param Connection           $connection
-     * @param FieldHelper          $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper          $fieldHelper
      * @param ConfiguratorHydrator $configuratorHydrator
      * @param MediaGateway         $mediaGateway
      */
@@ -104,7 +104,7 @@ class ConfiguratorGateway
      * - Option name
      *
      * @param BaseProduct        $product
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet
      */
@@ -137,7 +137,7 @@ class ConfiguratorGateway
      * Returns for each configurator option the first possible image
      *
      * @param BaseProduct        $product
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[] indexed by the configurator option id
      */

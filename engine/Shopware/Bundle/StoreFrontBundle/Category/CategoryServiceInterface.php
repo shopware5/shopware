@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Category;
 
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Category\Struct\Category;
 
 /**
  * @category  Shopware

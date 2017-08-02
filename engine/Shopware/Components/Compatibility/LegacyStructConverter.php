@@ -206,13 +206,13 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
+     * @param \Shopware\Category\Struct\Category $category
      *
      * @throws \Exception
      *
      * @return array
      */
-    public function convertCategoryStruct(StoreFrontBundle\Category\Category $category)
+    public function convertCategoryStruct(\Shopware\Category\Struct\Category $category)
     {
         $media = null;
         if ($category->getMedia()) {
@@ -1054,11 +1054,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
+     * @param \Shopware\Category\Struct\Category $category
      *
      * @return string
      */
-    private function getCategoryLink(StoreFrontBundle\Category\Category $category)
+    private function getCategoryLink(\Shopware\Category\Struct\Category $category)
     {
         $viewport = $category->isBlog() ? 'blog' : 'cat';
         $params = http_build_query(
@@ -1245,11 +1245,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category|null $category
+     * @param \Shopware\Category\Struct\Category|null $category
      *
      * @return string
      */
-    private function getProductBoxLayout(StoreFrontBundle\Category\Category $category = null)
+    private function getProductBoxLayout(\Shopware\Category\Struct\Category $category = null)
     {
         if (!$category) {
             return 'basic';
@@ -1267,11 +1267,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
+     * @param \Shopware\Category\Struct\Category $category
      *
      * @return string
      */
-    private function getCategoryCanonicalParams(StoreFrontBundle\Category\Category $category)
+    private function getCategoryCanonicalParams(\Shopware\Category\Struct\Category $category)
     {
         $page = $this->container->get('front')->Request()->getQuery('sPage');
 

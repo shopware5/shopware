@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -41,7 +41,7 @@ class MediaGateway
     private $connection;
 
     /**
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -52,7 +52,7 @@ class MediaGateway
 
     /**
      * @param Connection    $connection
-     * @param FieldHelper   $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper   $fieldHelper
      * @param MediaHydrator $hydrator
      */
     public function __construct(

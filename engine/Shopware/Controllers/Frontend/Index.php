@@ -33,6 +33,5 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 {
     public function indexAction(): void
     {
-
     }
 }

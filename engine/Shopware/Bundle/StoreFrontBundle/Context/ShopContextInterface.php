@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Context;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Context\TranslationContext;
 use Shopware\Framework\Struct\ExtendableInterface;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;

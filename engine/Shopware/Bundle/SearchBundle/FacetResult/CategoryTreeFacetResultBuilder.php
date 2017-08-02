@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection;
+use Shopware\Category\Struct\Category;
+use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Components\QueryAliasMapper;
 
 class CategoryTreeFacetResultBuilder
@@ -54,7 +54,7 @@ class CategoryTreeFacetResultBuilder
     }
 
     /**
-     * @param Category[]    $categories
+     * @param \Shopware\Category\Struct\Category[]    $categories
      * @param int[]         $activeIds
      * @param int           $systemCategoryId
      * @param CategoryFacet $facet

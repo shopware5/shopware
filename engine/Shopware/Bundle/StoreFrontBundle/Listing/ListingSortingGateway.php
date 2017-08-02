@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 class ListingSortingGateway
 {
@@ -37,7 +37,7 @@ class ListingSortingGateway
     private $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -53,7 +53,7 @@ class ListingSortingGateway
 
     /**
      * @param Connection                                           $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
      * @param ListingHydrator                                      $hydrator
      * @param \Shopware_Components_Config                          $config
      */
@@ -147,7 +147,7 @@ class ListingSortingGateway
     /**
      * Returns the base query to select the custom sorting data.
      *
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      *
      * @return QueryBuilder
      */

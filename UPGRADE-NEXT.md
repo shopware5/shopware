@@ -23,13 +23,13 @@ This changelog references changes done in Shopware Next patch versions.
 * Added container tag `shopware_media.strategy` for strategy registration
 * Added abstract class `Shopware\Components\Filesystem\AbstractFilesystem`
 * Added service `shopware_media.filesystem` which is build on top of `shopware.filesystem.public`
-* Added `\Shopware\Bundle\StoreFrontBundle\Category\Category::__construct` which requires id, parentId, path and name
+* Added `\Shopware\Category\Struct\Category::__construct` which requires id, parentId, path and name
 * Added `\Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuService` to get advanced menu
 * Added block `frontend_advanced_menu_outer` in `themes/Frontend/Bare/frontend/index/index.tpl` for advanced menu
 * Added `\Shopware\Controllers\Widgets\AdvancedMenu` controller
 * Added `\Shopware\Bundle\StoreFrontBundle\Common\KeyCollection` - used for associated arrays 
 * Added `\Shopware\Framework\Struct\Collection` - used for none associated arrays
-* Added `\Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection` - Typed key collection for category structs
+* Added `\Shopware\Category\Struct\CategoryCollection` - Typed key collection for category structs
 
 ## Changes
 
@@ -56,7 +56,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed 3rd constructor parameter in `shopware_media.garbage_collector_factory` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
-* Changed context requirement to new `\Shopware\Bundle\StoreFrontBundle\Context\TranslationContext` in all `Shopware\Bundle\StoreFrontBundle` gateways
+* Changed context requirement to new `\Shopware\Context\TranslationContext` in all `Shopware\Bundle\StoreFrontBundle` gateways
 * Changed `Shopware\Bundle\StoreFrontBundle\Tax\TaxGateway::getRules` parameters. Removed area, country, state and use new `ShippingLocation` 
 * Changed service structure in StoreFrontBundle. Services, structs and gateways are now stored in domain namespaces. 
     * Example: `Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService` moved to `Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerService`
@@ -324,7 +324,7 @@ The following example will store all `public` files on Google Cloud Platform.
 ],
 ```
 
-## `\Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection`
+## `\Shopware\Category\Struct\CategoryCollection`
 The category collection provides different helper function to work with categories:
 
 * `getIds` - returns all ids of contained categories

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Category\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;

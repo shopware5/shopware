@@ -24,18 +24,18 @@
 
 namespace ProductBundle\Event;
 
-use ProductBundle\Struct\ProductCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Product\Struct\ProductCollection;
+use Shopware\Context\TranslationContext;
 
 class ListProductsLoadedEvent
 {
     /**
-     * @var ProductCollection
+     * @var \Shopware\Product\Struct\ProductCollection
      */
     protected $listProducts;
 
     /**
-     * @var TranslationContext
+     * @var \Shopware\Context\TranslationContext
      */
     protected $context;
 

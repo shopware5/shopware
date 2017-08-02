@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 

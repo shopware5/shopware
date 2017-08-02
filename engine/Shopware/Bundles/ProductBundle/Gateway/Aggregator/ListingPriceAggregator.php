@@ -31,8 +31,8 @@ use ProductBundle\Struct\Price;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -52,7 +52,7 @@ class ListingPriceAggregator
      * select in a second step the different required
      * attribute tables for a parent table.
      *
-     * @var FieldHelper
+     * @var \Shopware\Framework\Struct\FieldHelper
      */
     private $fieldHelper;
 
@@ -85,7 +85,7 @@ class ListingPriceAggregator
 
     /**
      * @param string[] $numbers
-     * @param TranslationContext $context
+     * @param \Shopware\Context\TranslationContext $context
      * @param int $customerGroupId
      * @return ListingPriceCollection
      */

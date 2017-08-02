@@ -25,21 +25,21 @@
 namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Category;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection;
+use Shopware\Category\Struct\Category;
+use Shopware\Category\Struct\CategoryCollection;
 
 class CategoryCollectionTest extends TestCase
 {
     public function testGetTreeWithEmptyCategories()
     {
-        $collection = new CategoryCollection([]);
+        $collection = new \Shopware\Category\Struct\CategoryCollection([]);
 
         $this->assertSame([], $collection->getTree(null));
     }
 
     public function testGetTreeWithOneLevel()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [1], 'First level 01'),
             self::create(2, null, [1], 'First level 02'),
             self::create(3, null, [1], 'First level 03'),
@@ -56,7 +56,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetTreeWithNoneExistingParentId()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [1], 'First level 01'),
             self::create(2, null, [1], 'First level 02'),
             self::create(3, null, [1], 'First level 03'),
@@ -92,7 +92,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetTreeRemovesElementsWithoutParent()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
             self::create(3, 2, [2, 1], 'Third level 01'),
@@ -115,7 +115,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetNestedTreeWithSubParent()
     {
-        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
             self::create(3, 2, [2, 1], 'Third level 01'),
@@ -139,7 +139,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetIds()
     {
-        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
             self::create(3, 2, [2, 1], 'Third level 01'),
@@ -156,7 +156,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetPaths()
     {
-        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
             self::create(3, 2, [2, 1], 'Third level 01'),
@@ -178,7 +178,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetIdsWithPath()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
             self::create(3, 2, [2, 1], 'Third level 01'),
@@ -194,7 +194,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetByKey()
     {
-        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
         ]);
@@ -207,7 +207,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetWithNoneExistingKey()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
         ]);
@@ -220,7 +220,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetById()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
         ]);
@@ -233,7 +233,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetByIdWithNoneExisting()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
             self::create(2, 1, [1], 'Second level 01'),
         ]);
@@ -246,14 +246,14 @@ class CategoryCollectionTest extends TestCase
 
     public function testAddCategory()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Category\Struct\CategoryCollection([
             self::create(1, null, [], 'First level 01'),
         ]);
 
         $collection->add(self::create(2, 1, [1], 'Second level 01'));
 
         $this->assertEquals(
-            new CategoryCollection([
+            new \Shopware\Category\Struct\CategoryCollection([
                 self::create(1, null, [], 'First level 01'),
                 self::create(2, 1, [1], 'Second level 01'),
             ]),
@@ -263,7 +263,7 @@ class CategoryCollectionTest extends TestCase
 
     private static function create(int $id, ?int $parentId, array $path, string $name, array $options = [])
     {
-        $category = new Category($id, $parentId, $path, $name);
+        $category = new \Shopware\Category\Struct\Category($id, $parentId, $path, $name);
         $category->assign($options);
 
         return $category;

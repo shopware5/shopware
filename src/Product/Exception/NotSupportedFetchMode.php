@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ProductBundle\Exception;
+namespace Shopware\Product\Exception;
 
 class NotSupportedFetchMode extends \Exception
 {

@@ -27,13 +27,13 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
 use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceRule;
@@ -99,7 +99,7 @@ class ProductProvider implements ProductProviderInterface
      * @param Connection                                                               $connection
      * @param IdentifierSelector                                                       $identifierSelector
      * @param \Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface $priceCalculationService
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper                     $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper                     $fieldHelper
      * @param PropertyHydrator                                                         $propertyHydrator
      */
     public function __construct(
@@ -242,7 +242,7 @@ class ProductProvider implements ProductProviderInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
-     * @param TranslationContext                                      $context
+     * @param \Shopware\Context\TranslationContext                                      $context
      *
      * @return \array[]
      */

@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Context\TranslationContext;
 
 /**
  * @category  Shopware
@@ -62,7 +62,7 @@ class ProductConfigurationGateway
 
     /**
      * @param Connection           $connection
-     * @param FieldHelper          $fieldHelper
+     * @param \Shopware\Framework\Struct\FieldHelper          $fieldHelper
      * @param ConfiguratorHydrator $configuratorHydrator
      */
     public function __construct(

@@ -6,6 +6,11 @@
 
     <parameters>
         <parameter key="doctrine.dbal.connection_factory.class">Shopware\Framework\Doctrine\ConnectionFactory</parameter>
+
+        <parameter key="shopware.slug.config" type="collection">
+            <parameter key="regexp">/([^A-Za-z0-9\.]|-)+/</parameter>
+            <parameter key="lowercase">false</parameter>
+        </parameter>
     </parameters>
 
     <services>
@@ -22,12 +27,14 @@
         <!-- Routing -->
         <service id="router" alias="shopware.router" />
 
-        <service id="shopware.router" class="Shopware\Framework\Component\Router">
+        <service id="shopware.router" class="Shopware\Framework\Routing\Router">
             <argument>%router.resource%</argument>
             <argument type="service" id="kernel" />
-            <argument type="service" id="service_container" />
             <argument type="service" id="router.request_context" on-invalid="ignore" />
             <argument type="service" id="logger" on-invalid="ignore" />
+            <argument type="service" id="shopware.framework.routing.seo_url_reader" />
+            <argument type="service" id="shopware.framework.routing.shop_finder" />
+            <argument type="service" id="routing.loader" />
         </service>
 
         <!-- Translation / Snippet -->
@@ -57,5 +64,33 @@
         <service id="shopware.config" alias="shopware.config.config" />
         <service synthetic="true" id="shopware.config.config" class="Shopware\Framework\Config\Config" />
 
+        <service id="shopware.framework.routing.seo_url_reader" class="Shopware\Framework\Routing\SeoUrlReader" >
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="shopware.framework.routing.cached_seo_url_reader"
+                 class="Shopware\Framework\Routing\CachedSeoUrlReader"
+                 decorates="shopware.framework.routing.seo_url_reader">
+
+            <argument id="shopware.framework.routing.cached_seo_url_reader.inner" type="service"/>
+            <argument id="shopware.cache" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service class="Shopware\Framework\Routing\ShopFinder" id="shopware.framework.routing.shop_finder">
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="slugify" class="Cocur\Slugify\Slugify" public="false">
+            <argument>%shopware.slug.config%</argument>
+        </service>
+
+        <service class="Shopware\Framework\Routing\SeoUrlWriter" id="shopware.framework.routing.seo_url_writer">
+            <argument id="dbal_connection" type="service"/>
+            <argument type="collection">
+                <argument type="service" id="shopware.category.routing.listing_page_seo_url_generator" />
+                <argument type="service" id="shopware.product.routing.detail_page_seo_url_generator" />
+            </argument>
+        </service>
     </services>
 </container>

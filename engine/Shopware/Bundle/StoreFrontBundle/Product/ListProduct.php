@@ -24,17 +24,18 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Category\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Price\Price;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Vote\VoteAverage;
+use Shopware\Product\Struct\Product;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ListProduct extends SimpleProduct
+class ListProduct extends Product
 {
     /**
      * State for a calculated product price.
@@ -260,7 +261,7 @@ class ListProduct extends SimpleProduct
     }
 
     /**
-     * @return Category[]
+     * @return \Shopware\Category\Struct\Category[]
      */
     public function getCategories()
     {

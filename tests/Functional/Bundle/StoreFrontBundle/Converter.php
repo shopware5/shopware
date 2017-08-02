@@ -24,7 +24,7 @@
 
 namespace Shopware\tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Category\Struct\Category;
 use Shopware\Framework\Struct\Struct;
 use Shopware\Models;
 
