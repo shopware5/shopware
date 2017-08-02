@@ -146,7 +146,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 
         $pathinfo = $this->context->getPathInfo();
 
-        if (!$shop['id']) {
+        if (!$shop) {
             return $this->match($pathinfo);
         }
 
@@ -158,26 +158,30 @@ class Router implements RouterInterface, RequestMatcherInterface
         //set shop locale
         $request->setLocale($shop['locale']);
 
-        $url = implode('', [$request->getBaseUrl(), $request->getPathInfo()]);
-
         //generate new path info for detected shop
-        $pathinfo = preg_replace('#^' . $shop['base_path'] . '#i', '', $url);
+        $stripBaseUrl = $shop['base_url'] ?? $shop['base_path'];
+        $stripBaseUrl = rtrim($stripBaseUrl, '/') . '/';
+
+        //rewrite base url for url generator
+        $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
+
+        // strip base url from path info
+        $pathinfo = $request->getBaseUrl() . $request->getPathInfo();
+        $pathinfo = preg_replace('#^' . $stripBaseUrl . '#i', '', $pathinfo);
         $pathinfo = '/' . trim($pathinfo, '/');
 
         //resolve seo urls to use symfony url matcher for route detection
         $seoUrl = $this->urlResolver->getPathInfo($shop['id'], $pathinfo);
 
-        //rewrite base url for url generator
-        $this->context->setBaseUrl(rtrim($shop['base_path'], '/'));
-
         if (!$seoUrl) {
+
             return $this->match($pathinfo);
         }
 
         $pathinfo = $seoUrl->getPathInfo();
         if (!$seoUrl->isCanonical()) {
             $redirectUrl = $this->urlResolver->getUrl($shop['id'], $seoUrl->getPathInfo());
-        
+
             $request->attributes->set(self::SEO_REDIRECT_URL, $redirectUrl->getUrl());
         }
 

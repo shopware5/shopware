@@ -27,21 +27,39 @@ class ShopFinder
 
         $shops = $query->execute()->fetchAll();
 
-        array_walk($shops, function (&$shop) {
+        $paths = [];
+
+        foreach ($shops as &$shop) {
+            $base = $shop['base_url'] ?? $shop['base_path'];
+
+            $shop['base_url'] = rtrim($shop['base_url'], '/') . '/';
             $shop['base_path'] = rtrim($shop['base_path'], '/') . '/';
-        });
+
+            $base = rtrim($base, '/') . '/';
+            $paths[$base] = $shop;
+        }
 
         $url = rtrim($requestContext->getPathInfo(), '/') . '/';
 
-        $matching = array_filter($shops, function($shop) use ($url) {
-            return strpos($url, $shop['base_path']) === 0;
-        });
+        // direct hit
+        if (array_key_exists($url, $paths)) {
+            return $paths[$url];
+        }
 
-        $bestMatch = ['id' => null, 'base_path' => null];
-        foreach ($matching as $match) {
-            if (strlen($match['base_path']) > strlen($bestMatch['base_path'])) {
-                $bestMatch = $match;
+        // reduce shops to which base url is the beginning of the request
+        $paths = array_filter($paths, function($baseUrl) use ($url) {
+            return strpos($url, $baseUrl) === 0;
+        }, ARRAY_FILTER_USE_KEY);
+
+        // determine most matching shop base url
+        $lastBaseUrl = '';
+        $bestMatch = current($shops);
+        foreach ($paths as $baseUrl => $shop) {
+            if (strlen($baseUrl) > strlen($lastBaseUrl)) {
+                $bestMatch = $shop;
             }
+            
+            $lastBaseUrl = $baseUrl; 
         }
 
         return $bestMatch;
