@@ -28,6 +28,7 @@ return [
     'acosh',
     'addcslashes',
     'addslashes',
+    'array',
     'array_change_key_case',
     'array_chunk',
     'array_column',
