@@ -85,11 +85,6 @@ class DetailPageSeoUrlGenerator implements SeoUrlGeneratorInterface
         return $routes;
     }
 
-    public function fetchCount(int $shopId): int
-    {
-        return 1;
-    }
-
     public function getName(): string
     {
         return self::ROUTE_NAME;
