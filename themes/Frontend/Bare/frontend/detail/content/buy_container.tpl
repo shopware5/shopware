@@ -137,7 +137,7 @@
                         {if $sArticle.attr1}
                             <li class="base-info--entry entry-attribute">
                                 <strong class="entry--label">
-                                    {s name="DetailAttributeField1Label" namepace="frontend/detail/index"}{/s}:
+                                    {s name="DetailAttributeField1Label" namespace="frontend/detail/index"}{/s}:
                                 </strong>
 
                                 <span class="entry--content">
@@ -152,7 +152,7 @@
                         {if $sArticle.attr2}
                             <li class="base-info--entry entry-attribute">
                                 <strong class="entry--label">
-                                    {s name="DetailAttributeField2Label" namepace="frontend/detail/index"}{/s}:
+                                    {s name="DetailAttributeField2Label" namespace="frontend/detail/index"}{/s}:
                                 </strong>
 
                                 <span class="entry--content">
