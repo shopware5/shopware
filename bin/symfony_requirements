@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ .'/../var/SymfonyRequirements.php';
+require_once dirname(__FILE__).'/../var/SymfonyRequirements.php';
 
 $lineSize = 70;
 $symfonyRequirements = new SymfonyRequirements();
@@ -135,7 +135,7 @@ function has_color_support()
     static $support;
 
     if (null === $support) {
-        if (DIRECTORY_SEPARATOR === '\\') {
+        if (DIRECTORY_SEPARATOR == '\\') {
             $support = false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
         } else {
             $support = function_exists('posix_isatty') && @posix_isatty(STDOUT);
