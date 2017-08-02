@@ -17,7 +17,7 @@ class PreCommitChecks
     /**
      * @return int
      */
-    public function run()
+    public function run(): ?int
     {
         $fileList = $this->getCommittedFileList();
         if ($this->isRebase()) {
@@ -27,9 +27,9 @@ class PreCommitChecks
         $beforeRef = $this->getRef();
         $this->stashTree();
         $afterRef = $this->getRef();
-        if ($beforeRef == $afterRef) {
+        if ($beforeRef === $afterRef) {
             echo 'No Changes' . PHP_EOL;
-            return (int)0;
+            return (int) 0;
         }
         echo 'Running PHP lint' . PHP_EOL;
         if (!$this->phpLint($fileList)) {
@@ -41,7 +41,7 @@ class PreCommitChecks
                 echo "ERROR: Your commit does not comply with Shopware's coding standards." . PHP_EOL;
             }
         } else {
-            echo "ERROR: ./vendor/bin/php-cs-fixer is NOT installed. Please install composer with dev dependencies" . PHP_EOL;
+            echo 'ERROR: ./vendor/bin/php-cs-fixer is NOT installed. Please install composer with dev dependencies' . PHP_EOL;
             $this->error = true;
         }
 
@@ -55,15 +55,15 @@ class PreCommitChecks
             echo 'NOTICE: ./themes/node_modules/eslint/bin/eslint.js not found. Skipping javascript code style check ' . PHP_EOL;
         }
 
-        echo "Checking for duplicate migration numbers." . PHP_EOL;
+        echo 'Checking for duplicate migration numbers.' . PHP_EOL;
         if (($duplicateMigrationId = $this->hasDuplicateMigrations()) !== false) {
-            echo "ERROR: You are using the migration number " . $duplicateMigrationId . " multiple times." . PHP_EOL;
+            echo 'ERROR: You are using the migration number ' . $duplicateMigrationId . ' multiple times.' . PHP_EOL;
             $this->error = true;
         }
         if ($this->error) {
             echo "If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation" . PHP_EOL;
         }
-        $this->unstashTree();
+        $this->unStashTree();
 
         exit((int)$this->error);
     }
@@ -71,7 +71,7 @@ class PreCommitChecks
     /**
      * @return bool
      */
-    public function isPHPCSFixerAvailable()
+    public function isPHPCSFixerAvailable(): bool
     {
         $output = [];
         $return = 0;
@@ -82,7 +82,7 @@ class PreCommitChecks
     /**
      * @return bool
      */
-    public function isESLintAvailable()
+    public function isESLintAvailable(): bool
     {
         $output = [];
         $return = 0;
@@ -93,13 +93,13 @@ class PreCommitChecks
     /**
      * @return string[]
      */
-    private function getCommittedFileList()
+    private function getCommittedFileList(): array
     {
         $output = [];
         $return = 0;
         exec('git rev-parse --verify HEAD 2> /dev/null', $output, $return);
         // diff against HEAD or an empty tree object
-        $against = $return == 0 ? 'HEAD' : '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+        $against = $return === 0 ? 'HEAD' : '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
         $fileList = [];
         exec("git diff --cached --name-only --diff-filter=ACM {$against} | grep -e '\.php$'", $fileList);
         return $fileList;
@@ -109,23 +109,23 @@ class PreCommitChecks
      * @param string[] $files
      * @return bool
      */
-    private function checkCodeStyle(array $files)
+    private function checkCodeStyle(array $files): bool
     {
         $succeed = true;
         $misses = [];
         foreach ($files as $file) {
             $output = [];
             $return = null;
-            exec("./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run " . escapeshellarg($file) . ' 2>&1', $output, $return);
-            if ($return != 0) {
-                $misses[$file] = "./vendor/bin/php-cs-fixer fix -v " . escapeshellarg($file);
+            exec('./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run ' . escapeshellarg($file) . ' 2>&1', $output, $return);
+            if ($return !== 0) {
+                $misses[$file] = './vendor/bin/php-cs-fixer fix -v ' . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }
         }
         if ($succeed === false) {
-            echo "Code style error in following files:" . PHP_EOL . implode(PHP_EOL, array_keys($misses)) . PHP_EOL . PHP_EOL;
-            echo "To fix, run: " . PHP_EOL . implode(PHP_EOL, $misses) . PHP_EOL;
+            echo 'Code style error in following files:' . PHP_EOL . implode(PHP_EOL, array_keys($misses)) . PHP_EOL . PHP_EOL;
+            echo 'To fix, run: ' . PHP_EOL . implode(PHP_EOL, $misses) . PHP_EOL;
             echo PHP_EOL;
         }
         return $succeed;
@@ -135,15 +135,15 @@ class PreCommitChecks
      * @param string[] $files
      * @return bool
      */
-    private function phpLint(array $files)
+    private function phpLint(array $files): bool
     {
         $succeed = true;
         foreach ($files as $file) {
             $output = [];
             $return = 0;
-            exec("php -l " . escapeshellarg($file), $output, $return);
-            if ($return != 0) {
-                echo "PHP syntax error at " . $file . ":" . PHP_EOL;
+            exec('php -l ' . escapeshellarg($file), $output, $return);
+            if ($return !== 0) {
+                echo 'PHP syntax error at ' . $file . ':' . PHP_EOL;
                 echo implode(PHP_EOL, $output) . PHP_EOL;
                 $this->error = true;
                 $succeed = false;
@@ -155,12 +155,13 @@ class PreCommitChecks
     /**
      * @return bool
      */
-    private function checkESLint()
+    private function checkESLint(): bool
     {
         $output = [];
         $return = 0;
-        exec("./themes/node_modules/eslint/bin/eslint.js " .
-            "--ignore-path themes/.eslintignore themes/Frontend/Responsive/frontend/_public/src/js",
+        exec(
+            './themes/node_modules/eslint/bin/eslint.js ' .
+            '--ignore-path themes/.eslintignore themes/Frontend/Responsive/frontend/_public/src/js',
             $output,
             $return
         );
@@ -176,10 +177,10 @@ class PreCommitChecks
     /**
      * @return string
      */
-    private function getRef()
+    private function getRef(): string
     {
         $output = [];
-        exec("git rev-parse --verify -q refs/stash", $output);
+        exec('git rev-parse --verify -q refs/stash', $output);
         $output = implode(PHP_EOL, $output) . PHP_EOL;
         return trim($output);
     }
@@ -187,27 +188,27 @@ class PreCommitChecks
     /**
      * @return bool
      */
-    private function isRebase()
+    private function isRebase(): bool
     {
         $output = [];
-        exec("git symbolic-ref --short -q HEAD", $output);
-        return (empty($output));
+        exec('git symbolic-ref --short -q HEAD', $output);
+        return empty($output);
     }
 
     /**
      * Stash any changes to the working tree that are not going to be committed
      */
-    private function stashTree()
+    private function stashTree(): void
     {
-        exec("git stash save --keep-index --include-untracked -q");
+        exec('git stash save --keep-index --include-untracked -q');
     }
 
     /**
      * Unstash changes to the working tree that we had stashed
      */
-    private function unstashTree()
+    private function unStashTree(): void
     {
-        exec("git stash pop -q --index");
+        exec('git stash pop -q --index');
     }
 
     /**
