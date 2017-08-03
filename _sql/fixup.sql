@@ -436,13 +436,13 @@ ALTER TABLE s_articles_prices_attributes
     RENAME TO product_price_attribute,
     ADD uuid VARCHAR(42) NOT NULL AFTER id,
     CHANGE priceID price_id INT(11) unsigned,
-    ADD price_uuid VARCHAR(42) NOT NULL AFTER price_id
+    ADD product_price_uuid VARCHAR(42) NOT NULL AFTER price_id
 ;
 
 -- migration
 UPDATE product_price_attribute p SET
     p.uuid       = CONCAT('SWAG-PRODUCT-PRICE-ATTRIBUTE-UUID-', p.id),
-    p.price_uuid = CONCAT('SWAG-PRODUCT-PRICE-UUID-', p.price_id)
+    p.product_price_uuid = CONCAT('SWAG-PRODUCT-PRICE-UUID-', p.price_id)
 ;
 
 ALTER TABLE s_articles_relationships
@@ -458,7 +458,7 @@ ALTER TABLE s_articles_relationships
 UPDATE product_relationship p SET
     p.uuid                 = CONCAT('SWAG-PRODUCT-RELATIONSHIP-UUID-', p.id),
     p.product_uuid         = CONCAT('SWAG-PRODUCT-UUID-', p.product_id),
-    p.related_product_uuid = CONCAT('SWAG-PRODUCT-UUID-', p.related_product_uuid)
+    p.related_product_uuid = CONCAT('SWAG-PRODUCT-UUID-', p.related_product)
 ;
 
 ALTER TABLE s_articles_similar
@@ -473,7 +473,7 @@ ALTER TABLE s_articles_similar
 UPDATE product_similar p SET
     p.uuid                 = CONCAT('SWAG-PRODUCT-RELATIONSHIP-UUID-', p.id),
     p.product_uuid         = CONCAT('SWAG-PRODUCT-UUID-', p.product_id),
-    p.related_product_uuid = CONCAT('SWAG-PRODUCT-UUID-', p.related_product_uuid)
+    p.related_product_uuid = CONCAT('SWAG-PRODUCT-UUID-', p.related_product)
 ;
 
 ALTER TABLE s_articles_similar_shown_ro
@@ -655,6 +655,7 @@ CREATE UNIQUE INDEX `ui_product_image.uuid` ON product_image (uuid);
 CREATE UNIQUE INDEX `ui_product_image_mapping.uuid` ON product_image_mapping (uuid);
 CREATE UNIQUE INDEX `ui_product_information.uuid` ON product_information (uuid);
 CREATE UNIQUE INDEX `ui_product_manufacture.uuid` ON product_manufacture (uuid);
+CREATE UNIQUE INDEX `ui_product_price.uuid` ON product_price (uuid);
 CREATE UNIQUE INDEX `ui_s_core_customergroups.uuid` ON s_core_customergroups (uuid);
 CREATE UNIQUE INDEX `ui_s_core_shops.uuid` ON s_core_shops (uuid);
 
@@ -773,4 +774,47 @@ ALTER TABLE product_information_attribute
 ALTER TABLE product_manufacture_attribute
     ADD CONSTRAINT `fk_product_manufacture_attribute.product_uuid`
     FOREIGN KEY (product_manufacture_uuid) REFERENCES product_manufacture (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE product_price
+    ADD CONSTRAINT `fk_product_price.product_uuid`
+    FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    ADD CONSTRAINT `fk_product_price.product_detail_uuid`
+    FOREIGN KEY (product_detail_uuid) REFERENCES product_detail (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE product_price_attribute
+    ADD CONSTRAINT `fk_product_price_attribute.product_uuid`
+    FOREIGN KEY (product_price_uuid) REFERENCES product_price (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE product_relationship
+    ADD CONSTRAINT `fk_product_relationship.product_uuid`
+    FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    ADD CONSTRAINT `fk_product_relationship.related_product_uuid`
+    FOREIGN KEY (related_product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+
+ALTER TABLE product_similar
+    ADD CONSTRAINT `fk_product_similar.product_uuid`
+    FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    ADD CONSTRAINT `fk_product_similar.related_product_uuid`
+    FOREIGN KEY (related_product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE product_similar_shown_ro
+    ADD CONSTRAINT `fk_product_similar_shown_ro.product_uuid`
+    FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    ADD CONSTRAINT `fk_product_similar_shown_ro.related_product_uuid`
+    FOREIGN KEY (related_product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE product_top_seller_ro
+    ADD CONSTRAINT `fk_product_top_seller_ro.product_uuid`
+    FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 ;
