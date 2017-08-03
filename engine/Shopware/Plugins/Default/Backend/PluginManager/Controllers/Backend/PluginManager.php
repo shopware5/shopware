@@ -430,7 +430,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
         $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
         $secret = $subscriptionService->getShopSecret();
-        $domain = empty($secret) ? null : $this->getDomain();
 
         /** @var PluginLocalService $localService */
         $localService = $this->get('shopware_plugininstaller.plugin_service_local');
@@ -439,7 +438,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $context = new UpdateListingRequest(
             $this->getLocale(),
             $this->getVersion(),
-            $domain,
+            $this->getDomain(),
             $plugins
         );
 
