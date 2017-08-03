@@ -251,7 +251,8 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             border: false,
             flex: 1,
             listeners: {
-                'selectionchange': Ext.bind(me.onSelectStream, me)
+                'selectionchange': Ext.bind(me.onSelectionChange, me),
+                'deselect': Ext.bind(me.onDeselectStream, me)
             }
         });
 
@@ -301,6 +302,16 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             layout: 'border'
         });
 
+        me.saveStreamButton = Ext.create('Ext.button.Button', {
+            text: '{s name="save"}{/s}',
+            cls: 'primary',
+            anchor: '100%',
+            /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
+                hidden: true,
+            /*{/if}*/
+            handler: Ext.bind(me.onSaveStream, me),
+        });
+
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
             overflowY: 'hidden',
@@ -314,16 +325,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 }),
                 {
                     xtype: 'container',
-                    items: [{
-                        xtype: 'button',
-                        text: '{s name="save"}{/s}',
-                        cls: 'primary',
-                        anchor: '100%',
-                        /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-                            hidden: true,
-                        /*{/if}*/
-                        handler: Ext.bind(me.onSaveStream, me)
-                    }],
+                    items: [me.saveStreamButton],
                     layout: 'anchor',
                     flex: 1
                 }
@@ -403,8 +405,12 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         this.fireEvent('switch-layout', item.layout);
     },
 
-    onSelectStream: function(selModel, selection) {
-        this.fireEvent('stream-selected', selection);
+    onSelectionChange: function(selModel, selection) {
+        this.fireEvent('stream-selection-changed', selection);
+    },
+
+    onDeselectStream: function(selModel, record, index) {
+        this.fireEvent('stream-deselected', record, index);
     },
 
     onOnChangeAutoIndex: function(checkbox, newValue) {

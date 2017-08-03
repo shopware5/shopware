@@ -38,7 +38,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         { ref: 'mainToolbar', selector: 'customer-main-toolbar' },
         { ref: 'streamView', selector: 'stream-view' },
         { ref: 'streamListing', selector: 'customer-stream-listing' },
-        { ref: 'streamDetailForm', selector: 'stream-view form[name=detail-form]' }
+        { ref: 'streamDetailForm', selector: 'stream-view form[name=detail-form]' },
+        { ref: 'conditionPanel', selector: 'customer-stream-condition-panel' }
     ],
 
     mixins: {
@@ -51,7 +52,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.control({
             'stream-view': {
                 'switch-layout': me.switchLayout,
-                'stream-selected': me.streamSelected,
+                'stream-selection-changed': me.streamSelectionChanged,
                 'change-auto-index': me.changeAutoIndex,
                 'full-index': me.fullIndex,
                 'save-stream': me.saveEditedStream,
@@ -73,7 +74,11 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'reset-progressbar': me.resetProgressbar,
                 'save-as-new-stream': me.duplicateStream,
                 'save-stream-selection': me.saveStreamSelection,
-                'restore-stream-selection': me.restoreStreamSelection
+                'restore-stream-selection': me.restoreStreamSelection,
+                'customerstream-delete-item': me.deleteStreamItem
+            },
+            'customer-stream-condition-panel': {
+                'condition-panel-change': me.conditionPanelChange
             }
         });
 
@@ -132,11 +137,15 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     staticCheckboxChanged: function(value) {
         var me = this,
-            streamView = me.getStreamView();
+            streamView = me.getStreamView(),
+            conditionPanel = me.getConditionPanel();
+
+        me.refreshEmptyMessage();
 
         if (value) {
             me.disableDateTimeInput(false);
             streamView.formPanel.setDisabled(true);
+            me.disableSaveButton(false);
 
             streamView.formPanel.getForm().getFields().findBy(function(field) {
                 var isValid = field.isValid(),
@@ -151,20 +160,28 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         } else {
             me.disableDateTimeInput(true);
             streamView.formPanel.setDisabled(false);
+            me.disableSaveButton(!conditionPanel.hasConditions);
         }
     },
 
     addStream: function() {
-        var me = this;
+        var me = this,
+            conditionPanel = me.getConditionPanel();
+
         me.loadStream(
             Ext.create('Shopware.apps.Customer.model.CustomerStream')
         );
 
-        me.getStreamListing().getStore().add(Ext.create('Shopware.apps.Customer.model.CustomerStream'));
+        me.getStreamListing().getStore().add(Ext.create('Shopware.apps.Customer.model.CustomerStream', {
+            id: null,
+            name: '{s name="stream/new_stream"}{/s}'
+        }));
 
         me.lastRecords = me.getStreamListing().getStore().getNewRecords();
         me.lastRecord = me.lastRecords[me.lastRecords.length -1];
         me.getStreamListing().getSelectionModel().select([me.lastRecord]);
+
+        me.disableDateTimeInput(true);
 
         me.refreshAddButton();
     },
@@ -458,9 +475,12 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         });
     },
 
-    streamSelected: function(selection) {
+    streamSelectionChanged: function(selection) {
         var me = this,
-            streamView = me.getStreamView();
+            streamView = me.getStreamView(),
+            conditionPanel = me.getConditionPanel();
+
+        me.refreshEmptyMessage();
 
         if (me.preventStreamChanged) {
             return;
@@ -697,12 +717,61 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         streamDetailForm.getForm().findField('freezeUpDate').setDisabled(disabled);
     },
 
+    disableSaveButton: function(disabled) {
+        var me = this,
+            streamView = me.getStreamView();
+
+        streamView.saveStreamButton.setDisabled(disabled);
+    },
+
     refreshAddButton: function () {
         var me = this,
             streamListing = me.getStreamListing(),
             addButton = streamListing.addButton;
 
         addButton.setDisabled(me.lastRecords.length > 0);
+    },
+
+    conditionPanelChange: function(count) {
+        var me = this,
+            streamDetailForm = me.getStreamDetailForm(),
+            conditionPanel = me.getConditionPanel();
+
+        me.refreshEmptyMessage();
+
+        var isStatic = streamDetailForm.getForm().findField('static').value;
+
+        if (isStatic) {
+            return;
+        }
+
+        me.disableSaveButton(!conditionPanel.hasConditions);
+
+    },
+
+    deleteStreamItem: function() {
+        var me = this;
+
+        me.lastRecords = [];
+        me.refreshAddButton();
+    },
+
+    refreshEmptyMessage: function() {
+        var me = this,
+            selection = me.getStreamListing().getSelectionModel().getSelection(),
+            isStatic = me.getStreamDetailForm().getForm().findField('static').value,
+            conditions = me.getConditionPanel().hasConditions;
+
+        console.log(selection, isStatic, conditions);
+
+        if (selection !== [] && !isStatic && !conditions) {
+            me.getConditionPanel().add(me.getConditionPanel().createEmptyMessage());
+        } else {
+            if (!conditions) {
+                me.getConditionPanel().removeAll();
+            }
+        }
     }
+
 });
 // {/block}

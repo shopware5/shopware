@@ -184,8 +184,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
 
         meta.tdAttr = 'data-qtip="' + qtip + '"';
 
-        if (!value || value.length <= 0) {
-            return '<span class="stream-name-column"><i style="color: #999;">(neuer Stream)</i></span>';
+        if(record.get('id') === null) {
+            return record.get('name') + ' <span class="stream-name-column"><i style="color: #999;">({s name="stream/not_saved"}{/s})</i></span>';
         }
 
         return '<span class="stream-name-column"><b>' + value + '</b> - ' + record.get('customer_count') + ' {s name="customer_count_suffix"}{/s}</span>';

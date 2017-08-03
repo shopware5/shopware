@@ -47,6 +47,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         align: 'stretch'
     },
 
+    hasConditions: false,
+
     bodyPadding: '10 0 0',
 
     initComponent: function() {
@@ -137,6 +139,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
         if (!me.conditionExists(me.items.items, configuration)) {
             me.add(container);
+            me.hasConditions = true;
+            me.fireEvent('condition-panel-change', 1);
         }
     },
 
@@ -159,14 +163,13 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         var me = this;
 
         me.removeAll();
-        if (!value) {
-            me.add(me.createEmptyMessage());
-            return;
-        }
 
         value = Ext.JSON.decode(value);
 
         var containers = [];
+
+        me.hasConditions = true;
+        console.log('has conditions');
 
         for (var conditionClass in value) {
             var items = value[conditionClass],
@@ -179,6 +182,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
                 }
             });
         }
+
         me.add(containers);
         me.getForm().setValues(value);
     },
@@ -217,7 +221,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
     createEmptyMessage: function() {
         var me = this;
-
         me.emptyMessageContainer = Ext.create('Ext.panel.Panel', {
             padding: 15,
             cls: 'customer-stream-empty-message',
@@ -232,20 +235,25 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         return me.emptyMessageContainer;
     },
 
-    onRemoveChildComponent: function() {
+    onRemoveChildComponent: function(panel, comp) {
         var me = this;
 
-        Ext.defer(function() {
-            if (me.isDisabled()) {
-                return;
-            }
+        if (me.isDisabled()) {
+            return;
+        }
 
-            if (me.items.length > 0) {
-                return;
-            }
+        if (me.items.length > 0) {
+            return;
+        }
 
-            me.add(me.createEmptyMessage());
-        }, 10);
+        if (comp.cls === 'customer-stream-empty-message') {
+            return;
+        }
+
+        console.log('has no conditions');
+
+        me.hasConditions = false;
+        me.fireEvent('condition-panel-change', 0);
     }
 });
 // {/block}
