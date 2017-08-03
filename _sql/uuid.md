@@ -1,5 +1,6 @@
 category                                SWAG-CATEGORY-UUID-
 category_attribute                      SWAG-CATEGORY-ATTRIBUTE-UUID-
+category_avoid_customer_group           SWAG-CATEGORY-AVOID-CUSTOMER-GROUP-UUID-
 product                                 SWAG-PRODUCT-UUID-
 product_attribute                       SWAG-PRODUCT-ATTRIBUTE-UUID-
 product_category                        SWAG-PRODUCT-CATEGORY-UUID-
