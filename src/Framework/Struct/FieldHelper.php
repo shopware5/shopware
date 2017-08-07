@@ -1517,4 +1517,20 @@ class FieldHelper
         $query->setParameter(':' . $translationTable, $translationType);
         $query->addSelect($translationTable . '.objectdata as ' . $selectName);
     }
+
+    public function getSeoUrlFields(): array
+    {
+        return [
+            'seoUrl.id as __seoUrl_id',
+            'seoUrl.foreign_key as __seoUrl_foreign_key',
+            'seoUrl.name as __seoUrl_name',
+            'seoUrl.shop_id as __seoUrl_shop_id',
+            'seoUrl.path_info as __seoUrl_path_info',
+            'seoUrl.url as __seoUrl_url',
+            'seoUrl.created_at as __seoUrl_created_at',
+            'seoUrl.is_canonical as __seoUrl_is_canonical',
+            'seoUrl.url_hash as __seoUrl_url_hash'
+//            'canonical.url as __canonical_url'
+        ];
+    }
 }
