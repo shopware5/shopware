@@ -4,3 +4,8 @@ ALTER TABLE product
     DROP `main_detail_id`,
     DROP `filter_group_id`
 ;
+
+ALTER TABLE product_attribute
+    DROP COLUMN articleID
+;
+

@@ -29,7 +29,7 @@ CREATE INDEX product_by_category_sort_release ON product (created_at, id);
 UPDATE product p
 SET p.uuid = CONCAT('SWAG-PRODUCT-UUID-', p.id),
     p.product_manufacturer_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURER-UUID-', p.manufacturer_id),
-    p.tax_uuid = CONCAT('SWAG-CONFIG-TAX-UUID-', p.tax_uuid),
+    p.tax_uuid = CONCAT('SWAG-CONFIG-TAX-UUID-', p.tax_id),
     p.main_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', p.main_detail_id)
 ;
 
@@ -122,25 +122,22 @@ UPDATE product_also_bought_ro pabr SET
     pabr.related_product_uuid = CONCAT('SWAG-PRODUCT-UUID-',pabr.related_product_id)
 ;
 
+-- clean up task
+DELETE a.* FROM s_articles_attributes a WHERE
+    a.articleID IS NULL
+    OR a.articledetailsID IS NULL
+;
+
 ALTER TABLE s_articles_attributes
     RENAME TO product_attribute,
     ADD uuid VARCHAR(42) NOT NULL AFTER id,
     CHANGE articledetailsID product_details_id INT(11) unsigned,
-    CHANGE articleID product_id INT(11) unsigned,
-    ADD product_detail_uuid VARCHAR(42) NOT NULL AFTER product_details_id,
-    ADD product_uuid VARCHAR(42) NOT NULL AFTER product_id
-;
-
--- clean up task
-DELETE p.* FROM product_attribute p WHERE
-    p.product_id IS NULL
-    OR p.product_details_id IS NULL
+    ADD product_detail_uuid VARCHAR(42) NOT NULL AFTER product_details_id
 ;
 
 -- migration
 UPDATE product_attribute pa SET
     pa.uuid                = CONCAT('SWAG-PRODUCT-ATTRIBUTE-UUID-', pa.id),
-    pa.product_uuid        = CONCAT('SWAG-PRODUCT-UUID-', pa.product_id),
     pa.product_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', pa.product_details_id)
 ;
 
@@ -586,6 +583,15 @@ UPDATE s_core_shops s SET
     s.uuid = CONCAT('SWAG-CONFIG-SHOP-UUID-', s.id)
 ;
 
+ALTER TABlE s_core_tax
+    ADD COLUMN uuid VARCHAR(42) NOT NULL AFTER id
+;
+
+-- migration
+UPDATE s_core_tax s SET
+    s.uuid = CONCAT('SWAG-CONFIG-TAX-UUID-', s.id)
+;
+
 ALTER TABLE s_categories
     RENAME TO category,
     ADD uuid VARCHAR(42) NOT NULL AFTER id,
@@ -635,6 +641,114 @@ UPDATE category_avoid_customer_group c SET
     c.category_uuid = CONCAT('SWAG-CATEGORY-UUID-', c.category_id)
 ;
 
+
+ALTER TABLE s_filter
+    RENAME filter,
+    ADD COLUMN uuid VARCHAR(42) NOT NULL after id
+;
+
+-- migration
+UPDATE filter f SET
+    f.uuid = CONCAT('SWAG-FILTER-UUID-', f.id)
+;
+
+ALTER TABLE s_filter_attributes
+    RENAME filter_attribute,
+    ADD COLUMN uuid VARCHAR(42) NOT NULL AFTER id,
+    CHANGE filterID filter_id INT(11),
+    ADD COLUMN filter_uuid VARCHAR(42) NOT NULL AFTER filter_id
+;
+
+-- migration
+UPDATE filter_attribute f SET
+    f.uuid = CONCAT('SWAG-FILTER-ATTRIBUTE-UUID-', f.id),
+    f.filter_uuid = CONCAT('SWAG-FILTER-UUID-', f.filter_id)
+;
+
+
+
+ALTER TABLE s_filter_values
+    RENAME filter_value,
+    ADD uuid VARCHAR(42) NOT NULL after id,
+    CHANGE optionID option_id INT(11) NOT NULL,
+    ADD option_uuid VARCHAR(42) NOT NULL AFTER option_id,
+    ADD media_uuid VARCHAR(42) AFTER media_id
+;
+
+-- migration
+UPDATE filter_value f SET
+    f.uuid = CONCAT('SWAG-FILTER-VALUES-UUID-', f.id),
+    f.option_uuid = CONCAT('SWAG-FILTER-OPTION-UUID-', f.id),
+    f.media_uuid = CONCAT('SWAG-MEDIA-UUID-', f.media_id)
+;
+
+ALTER TABLE s_filter_values_attributes
+    RENAME filter_value_attribute,
+    ADD COLUMN uuid VARCHAR(42) NOT NULL AFTER id,
+    CHANGE valueID value_id INT(11),
+    ADD COLUMN filter_value_uuid VARCHAR(42) NOT NULL AFTER value_id
+;
+
+-- migration
+UPDATE filter_value_attribute f SET
+    f.uuid = CONCAT('SWAG-FILTER-VALUE-ATTRIBUTE-UUID-', f.id),
+    f.filter_value_uuid = CONCAT('SWAG-FILTER-VALUE-UUID-', f.value_id)
+;
+
+ALTER TABLE s_filter_options
+    RENAME filter_option,
+    ADD uuid VARCHAR(42) NOT NULL after id
+;
+
+-- migration
+UPDATE filter_option f SET
+    f.uuid = CONCAT('SWAG-FILTER-OPTION-UUID-', f.id)
+;
+
+ALTER TABLE s_filter_options_attributes
+    RENAME filter_option_attribute,
+    ADD COLUMN uuid VARCHAR(42) NOT NULL AFTER id,
+    CHANGE optionID option_id INT(11),
+    ADD COLUMN filter_option_uuid VARCHAR(42) NOT NULL AFTER option_id
+;
+
+-- migration
+UPDATE filter_option_attribute f SET
+    f.uuid = CONCAT('SWAG-FILTER-OPTION-ATTRIBUTE-UUID-', f.id),
+    f.filter_option_uuid = CONCAT('SWAG-FILTER-OPTION-UUID-', f.option_id)
+;
+
+ALTER TABLE s_filter_articles
+    RENAME filter_product,
+    CHANGE articleID product_id INT(10) unsigned NOT NULL,
+    CHANGE valueID value_id INT(10) unsigned NOT NULL,
+    ADD product_uuid VARCHAR(42) NOT NULL AFTER product_id,
+    ADD filter_value_uuid VARCHAR(42) NOT NULL AFTER value_id
+;
+
+-- migration
+UPDATE filter_product f SET
+    f.product_uuid = CONCAT('SWAG-PRODUCT-UUID-', f.product_id),
+    f.filter_value_uuid = CONCAT('SWAG-FILTER-VALUE-UUID-', f.value_id)
+;
+
+ALTER TABLE s_filter_relations
+    RENAME filter_relation,
+    CHANGE groupID group_id INT(11) NOT NULL,
+    CHANGE optionID option_id INT(11) NOT NULL,
+    ADD uuid VARCHAR(42) NOT NULL AFTER id,
+    ADD filter_group_uuid VARCHAR(42) NOT NULL AFTER group_id,
+    ADD filter_option_uuid VARCHAR(42) NOT NULL AFTER option_id
+;
+
+-- migration
+UPDATE filter_relation f SET
+    f.uuid = CONCAT('SWAG-FILTER-RELATION-UUID-', f.id),
+    f.filter_group_uuid = CONCAT('SWAG-FILTER-GROUP-UUID-', f.group_id),
+    f.filter_option_uuid = CONCAT('SWAG-FILTER-OPTION-UUID-', f.option_id)
+;
+
+
 -- --------------------------------------
 -- --------------------------------------
 -- --------------------------------------
@@ -648,6 +762,9 @@ ALTER TABLE product_attribute
 ;
 
 CREATE UNIQUE INDEX `ui_category.uuid` ON category (uuid);
+CREATE UNIQUE INDEX `ui_filter.uuid` ON filter (uuid);
+CREATE UNIQUE INDEX `ui_filter_value.uuid` ON filter_value (uuid);
+CREATE UNIQUE INDEX `ui_filter_option.uuid` ON filter_option (uuid);
 CREATE UNIQUE INDEX `ui_product.uuid` ON product (uuid);
 CREATE UNIQUE INDEX `ui_product_detail.uuid` ON product_detail (uuid);
 CREATE UNIQUE INDEX `ui_product_download.uuid` ON product_download (uuid);
@@ -659,11 +776,10 @@ CREATE UNIQUE INDEX `ui_product_manufacturer.uuid` ON product_manufacturer (uuid
 CREATE UNIQUE INDEX `ui_product_price.uuid` ON product_price (uuid);
 CREATE UNIQUE INDEX `ui_s_core_customergroups.uuid` ON s_core_customergroups (uuid);
 CREATE UNIQUE INDEX `ui_s_core_shops.uuid` ON s_core_shops (uuid);
+CREATE UNIQUE INDEX `ui_s_core_tax.uuid` ON s_core_tax (uuid);
 
 
 ALTER TABLE product_attribute
-    ADD CONSTRAINT `fk_product_attribute.product_uuid`
-    FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT `fk_product_attribute.product_detail_uuid`
     FOREIGN KEY (product_detail_uuid) REFERENCES product_detail (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 ;
@@ -819,3 +935,20 @@ ALTER TABLE product_top_seller_ro
     ADD CONSTRAINT `fk_product_top_seller_ro.product_uuid`
     FOREIGN KEY (product_uuid) REFERENCES product (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 ;
+
+ALTER TABLE filter_attribute
+    ADD CONSTRAINT `fk_filter_attribute.filter_uuid`
+    FOREIGN KEY (filter_uuid) REFERENCES filter (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE filter_value_attribute
+    ADD CONSTRAINT `fk_filter_value_attribute.filter_value_uuid`
+    FOREIGN KEY (filter_value_uuid) REFERENCES filter_value (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE filter_option_attribute
+    ADD CONSTRAINT `fk_filter_option_attribute.filter_value_uuid`
+    FOREIGN KEY (filter_option_uuid) REFERENCES filter_option (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+

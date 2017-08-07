@@ -1,6 +1,15 @@
 category                                SWAG-CATEGORY-UUID-
 category_attribute                      SWAG-CATEGORY-ATTRIBUTE-UUID-
 category_avoid_customer_group           SWAG-CATEGORY-AVOID-CUSTOMER-GROUP-UUID-
+filter                                  SWAG-FILTER-UUID-
+filter_attribute                        SWAG-FILTER-ATTRIBUTE-UUID-
+filter_value                            SWAG-FILTER-VALUE-UUID-
+filter_value_attribute                  SWAG-FILTER-VALUE-ATTRIBUTE-UUID-
+filter_product                          SWAG-FILTER-PRODUCT-UUID-
+filter_relation                         SWAG-FILTER-RELATION-UUID-
+filter_option                           SWAG-FILTER-OPTION-UUID-
+filter_option_attribute                 SWAG-FILTER-OPTION-ATTRIBUTE-UUID-
+media                                   SWAG-MEDIA-UUID-
 product                                 SWAG-PRODUCT-UUID-
 product_attribute                       SWAG-PRODUCT-ATTRIBUTE-UUID-
 product_category                        SWAG-PRODUCT-CATEGORY-UUID-
@@ -31,3 +40,4 @@ s_core_tax                              SWAG-CONFIG-TAX-UUID-
 s_core_customergroups                   SWAG-CONFIG-CUSTOMER-GROUP-UUID-
 s_core_shops                            SWAG-CONFIG-SHOP-UUID-
 s_core_locales                          SWAG-CONFIG-LOCALES-UUID-
+
