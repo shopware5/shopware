@@ -63,4 +63,13 @@ class SeoUrlWriter
             }
         }
     }
+
+    public function delete(array $ids)
+    {
+        $this->connection->executeUpdate(
+            "DELETE FROM seo_url WHERE id IN (:ids)",
+            [':ids' => $ids],
+            [':ids' => Connection::PARAM_INT_ARRAY]
+        );
+    }
 }

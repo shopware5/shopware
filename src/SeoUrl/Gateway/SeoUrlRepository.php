@@ -66,4 +66,9 @@ class SeoUrlRepository
     {
         $this->writer->create($urls);
     }
+
+    public function delete(array $ids): void
+    {
+        $this->writer->delete($ids);
+    }
 }

@@ -42,4 +42,11 @@ class SeoUrlSearchResult extends SeoUrlCollection implements SearchResultInterfa
         parent::__construct($elements);
         $this->total = $total;
     }
+
+    public function getIds()
+    {
+        return $this->map(function(SeoUrl $seoUrl) {
+            return $seoUrl->getId();
+        });
+    }
 }

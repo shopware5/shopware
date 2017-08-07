@@ -46,7 +46,7 @@ class UrlHandler implements HandlerInterface
         TranslationContext $context
     ): void {
         /* @var UrlCondition $criteriaPart */
-        $builder->andWhere('seoUrl.url IN (:urls)');
-        $builder->setParameter(':urls', $criteriaPart->getUrls(), Connection::PARAM_STR_ARRAY);
+        $builder->andWhere('seoUrl.url_hash IN (:hashes)');
+        $builder->setParameter(':hashes', $criteriaPart->getHashes(), Connection::PARAM_STR_ARRAY);
     }
 }

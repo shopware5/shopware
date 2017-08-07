@@ -1530,7 +1530,6 @@ class FieldHelper
             'seoUrl.created_at as __seoUrl_created_at',
             'seoUrl.is_canonical as __seoUrl_is_canonical',
             'seoUrl.url_hash as __seoUrl_url_hash'
-//            'canonical.url as __canonical_url'
         ];
     }
 }

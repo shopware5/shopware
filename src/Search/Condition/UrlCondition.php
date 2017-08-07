@@ -25,6 +25,7 @@
 namespace Shopware\Search\Condition;
 
 use Shopware\Search\ConditionInterface;
+use Shopware\SeoUrl\Struct\SeoUrl;
 
 class UrlCondition implements ConditionInterface
 {
@@ -33,8 +34,17 @@ class UrlCondition implements ConditionInterface
      */
     protected $urls;
 
+    /**
+     * @var array
+     */
+    protected $hashes;
+
     public function __construct(array $urls)
     {
+        $this->hashes = array_map(function($url) {
+            return SeoUrl::createUrlHash($url);
+        }, $urls);
+
         $this->urls = $urls;
     }
 
@@ -46,5 +56,10 @@ class UrlCondition implements ConditionInterface
     public function getName(): string
     {
         return self::class;
+    }
+
+    public function getHashes(): array
+    {
+        return $this->hashes;
     }
 }
