@@ -22,29 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration2009 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\SeoUrl;
+
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+class SeoUrl extends Bundle
 {
-    public function up($modus)
+    protected $name = 'SeoUrl';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
     {
-        $sql = <<<SQL
-CREATE TABLE `seo_url` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url_hash` char(40) COLLATE utf8_unicode_ci NOT NULL,
-  `shop_id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `foreign_key` int(11) NOT NULL,
-  `path_info` text COLLATE utf8_unicode_ci NOT NULL,
-  `url` text COLLATE utf8_unicode_ci NOT NULL,
-  `is_canonical` int(1) NOT NULL,
-  `created_at` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `shop_id_url` (`shop_id`,`url`(1000)),
-  KEY `shop_id_path_info` (`shop_id`, `path_info`(1000)),
-  KEY `shop_canonical` (`shop_id`, `path_info`(1000), `is_canonical`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        parent::build($container);
 
-SQL;
-
-        $this->addSql($sql);
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection/'));
+        $loader->load('services.xml');
     }
 }
