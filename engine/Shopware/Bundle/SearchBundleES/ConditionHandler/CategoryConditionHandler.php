@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
@@ -51,7 +51,7 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var CategoryCondition $criteriaPart */
+        /* @var \Shopware\Search\Condition\CategoryCondition $criteriaPart */
         $search->addFilter(
             new TermsQuery('categoryIds', $criteriaPart->getCategoryIds())
         );

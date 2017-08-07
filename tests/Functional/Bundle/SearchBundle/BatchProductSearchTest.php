@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;

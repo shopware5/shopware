@@ -7,7 +7,7 @@ use Shopware\Search\Search;
 
 class VoteSearcher extends Search
 {
-    protected function createQuery(): QueryBuilder
+    protected function createQuery(TranslationContext $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['*']);

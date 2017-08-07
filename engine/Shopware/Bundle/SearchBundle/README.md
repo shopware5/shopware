@@ -14,7 +14,7 @@ $context = Shopware()->Container()->get('storefront.context.service')->getShopCo
 $criteria = new \Shopware\Search\Criteria();
 
 //defines to search only products which are assigned to the category with the id 3.
-$criteria->addCondition(new \Shopware\Bundle\SearchBundle\Condition\CategoryCondition(array(3));
+$criteria->addCondition(new \Shopware\Search\Condition\CategoryCondition(array(3));
 
 //defines to generate a price facet, which displays the price range of the search result.
 $criteria->addFacet(new \Shopware\Bundle\SearchBundle\Facet\PriceFacet());

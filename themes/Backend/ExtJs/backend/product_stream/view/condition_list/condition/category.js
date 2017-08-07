@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Category',
     extend: 'ProductStream.filter.AbstractCondition',
 
     getName: function() {
-        return 'Shopware\\Bundle\\SearchBundle\\Condition\\CategoryCondition';
+        return 'Shopware\\Search\\Condition\\CategoryCondition';
     },
 
     getLabel: function() {
