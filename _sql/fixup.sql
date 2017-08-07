@@ -19,7 +19,8 @@ ALTER TABLE s_articles
     DROP pricegroupActive,
     ADD COLUMN main_detail_uuid VARCHAR(42) NOT NULL AFTER tax_id,
     ADD COLUMN tax_uuid VARCHAR(42) NOT NULL AFTER tax_id,
-    ADD product_manufacturer_uuid VARCHAR(42) NOT NULL AFTER manufacturer_id
+    ADD product_manufacturer_uuid VARCHAR(42) NOT NULL AFTER manufacturer_id,
+    ADD filter_group_uuid VARCHAR(42) AFTER filter_group_id
 ;
 
 CREATE INDEX product_by_category_sort_name ON product (name, id);
@@ -30,7 +31,8 @@ UPDATE product p
 SET p.uuid = CONCAT('SWAG-PRODUCT-UUID-', p.id),
     p.product_manufacturer_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURER-UUID-', p.manufacturer_id),
     p.tax_uuid = CONCAT('SWAG-CONFIG-TAX-UUID-', p.tax_id),
-    p.main_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', p.main_detail_id)
+    p.main_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', p.main_detail_id),
+    p.filter_group_uuid = CONCAT('SWAG-FILTER-GROUP-UUID-', p.filter_group_id)
 ;
 
 ALTER TABLE s_article_configurator_dependencies
@@ -792,7 +794,7 @@ ALTER TABLE product_also_bought_ro
 ;
 
 ALTER TABLE `product`
-    CHANGE COLUMN `name` `title` VARCHAR(100) NOT NULL AFTER `product_manufacturer_uuid`
+    CHANGE COLUMN `name` `name` VARCHAR(255) NOT NULL AFTER `product_manufacturer_uuid`
 ;
 
 ALTER TABLE product_avoid_customer_group
