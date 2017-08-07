@@ -85,4 +85,11 @@ class SeoUrlCollection extends Collection
         parent::clear();
         $this->mapping = [];
     }
+
+    public function getForeignKeys(): array
+    {
+        return $this->map(function(SeoUrl $url) {
+            return $url->getForeignKey();
+        });
+    }
 }

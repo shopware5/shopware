@@ -25,6 +25,7 @@
 namespace Shopware\SeoUrl\Generator;
 
 use Shopware\Context\TranslationContext;
+use Shopware\SeoUrl\Struct\SeoUrlCollection;
 
 interface SeoUrlGeneratorInterface
 {
@@ -34,9 +35,9 @@ interface SeoUrlGeneratorInterface
      * @param int                $offset
      * @param int                $limit
      *
-     * @return array
+     * @return SeoUrlCollection
      */
-    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): array;
+    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): SeoUrlCollection;
 
     public function getName(): string;
 }

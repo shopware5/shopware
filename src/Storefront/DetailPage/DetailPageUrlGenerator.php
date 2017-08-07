@@ -17,6 +17,7 @@ use Shopware\Product\Gateway\ProductRepository;
 use Shopware\Search\Condition\ActiveCondition;
 use Shopware\Search\Condition\ShopCondition;
 use Shopware\Search\Criteria;
+use Shopware\SeoUrl\Struct\SeoUrlCollection;
 
 class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
 {
@@ -54,7 +55,7 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
         $this->seoUrlRepository = $seoUrlRepository;
     }
 
-    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): array
+    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): SeoUrlCollection
     {
         $criteria = new Criteria();
         $criteria->offset($offset);
@@ -75,7 +76,7 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
         $criteria->addCondition(new ShopCondition([$shopId]));
         $existingCanonicals = $this->seoUrlRepository->search($criteria, $context);
 
-        $routes = [];
+        $routes = new SeoUrlCollection();
         /** @var ProductIdentity $identity */
         foreach ($result as $identity) {
             if (!$product = $products->get($identity->getNumber())) {
@@ -89,15 +90,17 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
                 continue;
             }
 
-            $routes[] = new SeoUrl(
-                null,
-                $shopId,
-                self::ROUTE_NAME,
-                $identity->getUuid(),
-                $pathInfo,
-                $url,
-                new \DateTime(),
-                !$existingCanonicals->hasPathInfo($pathInfo)
+            $routes->add(
+                new SeoUrl(
+                    null,
+                    $shopId,
+                    self::ROUTE_NAME,
+                    $identity->getUuid(),
+                    $pathInfo,
+                    $url,
+                    new \DateTime(),
+                    !$existingCanonicals->hasPathInfo($pathInfo)
+                )
             );
         }
 

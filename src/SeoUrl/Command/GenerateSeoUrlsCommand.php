@@ -35,6 +35,7 @@ class GenerateSeoUrlsCommand extends ContainerAwareCommand
     {
         $this
             ->setName('seo:url:generate')
+            ->addOption('force', 'f')
             ->setDescription('Generates all seo urls')
         ;
     }
@@ -54,7 +55,11 @@ class GenerateSeoUrlsCommand extends ContainerAwareCommand
                 $shop['fallback_id'] ? (int) $shop['fallback_id'] : null
             );
 
-            $generatorRegistry->generate((int) $shop['id'], $context);
+            $generatorRegistry->generate(
+                (int) $shop['id'],
+                $context,
+                (bool) $input->getOption('force')
+            );
         }
     }
 }

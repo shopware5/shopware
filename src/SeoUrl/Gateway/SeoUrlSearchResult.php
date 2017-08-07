@@ -34,9 +34,10 @@ class SeoUrlSearchResult extends SeoUrlCollection implements SearchResultInterfa
     use SearchResultTrait;
 
     /**
-     * @param $elements SeoUrl[]
-     * @param $total int
+     * @var SeoUrl[]
      */
+    protected $elements = [];
+
     public function __construct(array $elements, int $total)
     {
         parent::__construct($elements);
@@ -48,5 +49,15 @@ class SeoUrlSearchResult extends SeoUrlCollection implements SearchResultInterfa
         return $this->map(function(SeoUrl $seoUrl) {
             return $seoUrl->getId();
         });
+    }
+
+    public function hasForeignKey(string $name, $foreignKey)
+    {
+        foreach ($this->elements as $element) {
+            if ($element->getForeignKey() === $foreignKey && $element->getName() === $name) {
+                return true;
+            }
+        }
+        return false;
     }
 }

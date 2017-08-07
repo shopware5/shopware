@@ -18,6 +18,7 @@ use Shopware\SeoUrl\Struct\SeoUrl;
 use Shopware\Search\Condition\ActiveCondition;
 use Shopware\Search\Condition\ShopCondition;
 use Shopware\Search\Criteria;
+use Shopware\SeoUrl\Struct\SeoUrlCollection;
 
 class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
 {
@@ -62,7 +63,7 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         $this->seoUrlRepository = $seoUrlRepository;
     }
 
-    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): array
+    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): SeoUrlCollection
     {
         $criteria = new Criteria();
         $criteria->offset($offset);
@@ -80,7 +81,7 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         $criteria->addCondition(new ShopCondition([$shopId]));
         $existingCanonicals = $this->seoUrlRepository->search($criteria, $context);
 
-        $routes = [];
+        $routes = new SeoUrlCollection();
         /** @var CategoryIdentity $identity */
         foreach ($result as $identity) {
             $pathInfo = $this->generator->generate(self::ROUTE_NAME, ['id' => $identity->getId()]);
@@ -93,15 +94,17 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
 
             $url = $url . '/' . $identity->getId();
 
-            $routes[] = new SeoUrl(
-                null,
-                $shopId,
-                self::ROUTE_NAME,
-                $identity->getId(),
-                $pathInfo,
-                $url,
-                new \DateTime(),
-                !$existingCanonicals->hasPathInfo($pathInfo)
+            $routes->add(
+                new SeoUrl(
+                    null,
+                    $shopId,
+                    self::ROUTE_NAME,
+                    $identity->getId(),
+                    $pathInfo,
+                    $url,
+                    new \DateTime(),
+                    !$existingCanonicals->hasPathInfo($pathInfo)
+                )
             );
         }
 
