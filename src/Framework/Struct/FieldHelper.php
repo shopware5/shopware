@@ -107,7 +107,7 @@ class FieldHelper
         $fields = [
             'product.uuid as __product_uuid',
             'product.product_manufacturer_uuid as __product_product_manufacturer_uuid',
-//            'product.name as __product_name',
+            'product.name as __product_name',
             'product.description as __product_description',
             'product.description_long as __product_description_long',
             'product.shipping_time as __product_shipping_time',
@@ -120,7 +120,7 @@ class FieldHelper
             'product.keywords as __product_keywords',
             'product.updated_at as __product_updated_at',
             'product.price_group_id as __product_price_group_id',
-            'product.filtergroupID as __product_filtergroupID',
+            'product.filter_group_uuid as __product_filter_group_uuid',
             'product.last_stock as __product_last_stock',
             'product.crossbundlelook as __product_crossbundlelook',
             'product.notification as __product_notification',
@@ -158,14 +158,14 @@ class FieldHelper
     public function getVariantFields(): array
     {
         return [
-            'variant.id as __variant_id',
+            'variant.uuid as __variant_uuid',
             'variant.order_number as __variant_order_number',
             'variant.supplier_number as __variant_supplier_number',
             'variant.kind as __variant_kind',
             'variant.additional_text as __variant_additional_text',
             'variant.sales as __variant_sales',
             'variant.active as __variant_active',
-            'variant.stock as __variant_instock',
+            'variant.stock as __variant_stock',
             'variant.stockmin as __variant_stockmin',
             'variant.weight as __variant_weight',
             'variant.position as __variant_position',

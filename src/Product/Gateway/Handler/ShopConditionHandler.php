@@ -61,7 +61,7 @@ class ShopConditionHandler implements HandlerInterface
             'productCategory',
             's_core_shops',
             'shop',
-            'shop.category_uuid = productCategory.category_uuid AND shop.id IN (:shopUuids)'
+            'shop.category_id = productCategory.category_id AND shop.id IN (:shopUuids)'
         );
 
         /* @var ShopCondition $criteriaPart */

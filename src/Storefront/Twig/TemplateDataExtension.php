@@ -141,7 +141,7 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
     {
         $query = $this->connection->createQueryBuilder();
         $path = $query->select(['category.path'])
-            ->from('s_categories', 'category')
+            ->from('category', 'category')
             ->where('category.id = :id')
             ->setParameter(':id', $id)
             ->execute()
@@ -163,7 +163,7 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         $query = $this->connection->createQueryBuilder();
 
         return $query->select(['category.description', 'category.parent'])
-            ->from('s_categories', 'category')
+            ->from('category', 'category')
             ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
             ->andWhere('category.active = 1')
             ->orderBy('category.position', 'ASC')

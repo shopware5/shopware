@@ -184,7 +184,7 @@ class ProductHydrator extends Hydrator
         $product->setLongDescription($data['__product_description_long']);
         $product->setCloseouts((bool) ($data['__product_last_stock']));
         $product->setMetaTitle($data['__product_meta_title']);
-        $product->setHasProperties($data['__product_filtergroupID'] > 0);
+        $product->setHasProperties($data['__product_filter_group_uuid'] > 0);
         $product->setHighlight((bool) ($data['__product_topseller']));
         $product->setAllowsNotification((bool) ($data['__product_notification']));
         $product->setKeywords($data['__product_keywords']);
