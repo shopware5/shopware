@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,46 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
+namespace Shopware\Search;
 
-use Assert\Assertion;
-use Shopware\Search\ConditionInterface;
-
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class CategoryCondition implements ConditionInterface
+trait SearchResultTrait
 {
     /**
-     * @var int[]
+     * @var int
      */
-    private $categoryIds;
+    protected $total;
 
     /**
-     * @param int[] $categoryIds
+     * @var array
      */
-    public function __construct(array $categoryIds)
+    protected $elements = [];
+
+    public function getElements(): array
     {
-        Assertion::allIntegerish($categoryIds);
-        $this->categoryIds = array_map('intval', $categoryIds);
-        sort($this->categoryIds, SORT_NUMERIC);
+        return $this->elements;
     }
 
-    /**
-     * @return int[]
-     */
-    public function getCategoryIds()
+    public function getTotal(): int
     {
-        return $this->categoryIds;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'category';
+        return $this->total;
     }
 }

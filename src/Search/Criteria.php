@@ -24,11 +24,6 @@
 
 namespace Shopware\Search;
 
-use Assert\Assertion;
-use Shopware\Search\FacetInterface;
-use Shopware\Search\SortingInterface;
-use Shopware\Search\ConditionInterface;
-
 /**
  * The criteria object is used for the search gateway.
  *
@@ -86,14 +81,14 @@ class Criteria implements \JsonSerializable
     /**
      * @var bool
      */
-    private $fetchCount = true;
+    private $fetchCount = false;
 
     /**
      * @param int $offset
      *
      * @return $this
      */
-    public function offset($offset)
+    public function offset($offset): Criteria
     {
         $this->offset = $offset;
 
@@ -105,7 +100,7 @@ class Criteria implements \JsonSerializable
      *
      * @return $this
      */
-    public function limit($limit)
+    public function limit($limit): Criteria
     {
         if ($limit === null) {
             $this->limit = null;
@@ -118,28 +113,17 @@ class Criteria implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getOffset()
+    public function getOffset(): ?int
     {
         return $this->offset;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimit()
+    public function getLimit(): ?int
     {
         return $this->limit;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasCondition($name)
+    public function hasCondition(string $name): bool
     {
         if (array_key_exists($name, $this->baseConditions)) {
             return true;
@@ -148,87 +132,47 @@ class Criteria implements \JsonSerializable
         return array_key_exists($name, $this->conditions);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasBaseCondition($name)
+    public function hasBaseCondition(string $name): bool
     {
         return array_key_exists($name, $this->baseConditions);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasUserCondition($name)
+    public function hasUserCondition(string $name): bool
     {
         return array_key_exists($name, $this->conditions);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasSorting($name)
+    public function hasSorting(string $name): bool
     {
         return array_key_exists($name, $this->sortings);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasFacet($name)
+    public function hasFacet(string $name): bool
     {
         return array_key_exists($name, $this->facets);
     }
 
-    /**
-     * @param FacetInterface $facet
-     *
-     * @return $this
-     */
-    public function addFacet(FacetInterface $facet)
+    public function addFacet(FacetInterface $facet): Criteria
     {
         $this->facets[$facet->getName()] = $facet;
 
         return $this;
     }
 
-    /**
-     * @param ConditionInterface $condition
-     *
-     * @return $this
-     */
-    public function addCondition(ConditionInterface $condition)
+    public function addCondition(ConditionInterface $condition): Criteria
     {
         $this->conditions[$condition->getName()] = $condition;
 
         return $this;
     }
 
-    /**
-     * @param ConditionInterface $condition
-     *
-     * @return $this
-     */
-    public function addBaseCondition(ConditionInterface $condition)
+    public function addBaseCondition(ConditionInterface $condition): Criteria
     {
         $this->baseConditions[$condition->getName()] = $condition;
 
         return $this;
     }
 
-    /**
-     * @param SortingInterface $sorting
-     *
-     * @return $this
-     */
     public function addSorting(SortingInterface $sorting)
     {
         $this->sortings[$sorting->getName()] = $sorting;
@@ -236,12 +180,7 @@ class Criteria implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @param $name
-     *
-     * @return null|ConditionInterface
-     */
-    public function getCondition($name)
+    public function getCondition(string $name): ?ConditionInterface
     {
         if (array_key_exists($name, $this->baseConditions)) {
             return $this->baseConditions[$name];
@@ -254,32 +193,17 @@ class Criteria implements \JsonSerializable
         return null;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ConditionInterface
-     */
-    public function getBaseCondition($name)
+    public function getBaseCondition(string $name): ConditionInterface
     {
         return $this->baseConditions[$name];
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ConditionInterface
-     */
-    public function getUserCondition($name)
+    public function getUserCondition(string $name): ConditionInterface
     {
         return $this->conditions[$name];
     }
 
-    /**
-     * @param string $name
-     *
-     * @return null|FacetInterface
-     */
-    public function getFacet($name)
+    public function getFacet(string $name): ?FacetInterface
     {
         return $this->facets[$name];
     }
@@ -289,7 +213,7 @@ class Criteria implements \JsonSerializable
      *
      * @return null|SortingInterface
      */
-    public function getSorting($name)
+    public function getSorting(string $name): ?SortingInterface
     {
         return $this->sortings[$name];
     }
@@ -301,7 +225,7 @@ class Criteria implements \JsonSerializable
      *
      * @return \Shopware\Search\ConditionInterface[]
      */
-    public function getConditions()
+    public function getConditions(): array
     {
         return array_merge(
             array_values($this->baseConditions),
@@ -310,111 +234,71 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @return \Shopware\Search\FacetInterface[]
+     * @return FacetInterface[]
      */
-    public function getFacets()
+    public function getFacets(): array
     {
         return $this->facets;
     }
 
     /**
-     * @return \Shopware\Search\SortingInterface[]
+     * @return SortingInterface[]
      */
-    public function getSortings()
+    public function getSortings(): array
     {
         return $this->sortings;
     }
 
-    /**
-     * Allows to reset the internal sorting collection.
-     *
-     * @return $this
-     */
-    public function resetSorting()
+    public function resetSorting(): Criteria
     {
         $this->sortings = [];
 
         return $this;
     }
 
-    /**
-     * Allows to reset the internal base condition collection.
-     *
-     * @return $this
-     */
-    public function resetBaseConditions()
+    public function resetBaseConditions(): Criteria
     {
         $this->baseConditions = [];
 
         return $this;
     }
 
-    /**
-     * Allows to reset the internal condition collection.
-     *
-     * @return $this
-     */
-    public function resetConditions()
+    public function resetConditions(): Criteria
     {
         $this->conditions = [];
 
         return $this;
     }
 
-    /**
-     * Allows to reset the internal facet collection.
-     *
-     * @return $this
-     */
-    public function resetFacets()
+    public function resetFacets(): Criteria
     {
         $this->facets = [];
 
         return $this;
     }
 
-    /**
-     * Removes a condition of the current criteria object.
-     *
-     * @param $name
-     */
-    public function removeCondition($name)
+    public function removeCondition($name): void
     {
         if (array_key_exists($name, $this->conditions)) {
             unset($this->conditions[$name]);
         }
     }
 
-    /**
-     * Removes a base condition of the current criteria object.
-     *
-     * @param $name
-     */
-    public function removeBaseCondition($name)
+    public function removeBaseCondition($name): void
     {
         if (array_key_exists($name, $this->baseConditions)) {
             unset($this->baseConditions[$name]);
         }
     }
 
-    /**
-     * Removes a facet of the current criteria object.
-     *
-     * @param $name
-     */
-    public function removeFacet($name)
+    public function removeFacet($name): void
     {
         if (array_key_exists($name, $this->facets)) {
             unset($this->facets[$name]);
         }
     }
 
-    /**
-     * Removes a sorting of the current criteria object.
-     *
-     * @param $name
-     */
-    public function removeSorting($name)
+    public function removeSorting($name): void
     {
         if (array_key_exists($name, $this->sortings)) {
             unset($this->sortings[$name]);
@@ -454,23 +338,17 @@ class Criteria implements \JsonSerializable
     /**
      * @return ConditionInterface[]
      */
-    public function getBaseConditions()
+    public function getBaseConditions(): array
     {
         return $this->baseConditions;
     }
 
-    /**
-     * @return bool
-     */
-    public function generatePartialFacets()
+    public function generatePartialFacets(): bool
     {
         return $this->generatePartialFacets;
     }
 
-    /**
-     * @param bool $generatePartialFacets
-     */
-    public function setGeneratePartialFacets($generatePartialFacets)
+    public function setGeneratePartialFacets($generatePartialFacets): void
     {
         $this->generatePartialFacets = $generatePartialFacets;
     }
@@ -478,25 +356,17 @@ class Criteria implements \JsonSerializable
     /**
      * @return ConditionInterface[]
      */
-    public function getUserConditions()
+    public function getUserConditions(): array
     {
         return $this->conditions;
     }
 
-    /**
-     * @return bool
-     */
-    public function fetchCount()
+    public function fetchCount(): bool
     {
         return $this->fetchCount;
     }
 
-    /**
-     * @param bool $fetchCount
-     *
-     * @return $this
-     */
-    public function setFetchCount($fetchCount)
+    public function setFetchCount(bool $fetchCount)
     {
         $this->fetchCount = $fetchCount;
 

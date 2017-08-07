@@ -24,11 +24,9 @@
 
 namespace Shopware\Search;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface FacetInterface extends CriteriaPartInterface
+interface SearchResultInterface extends \IteratorAggregate
 {
+    public function getElements(): array;
+
+    public function getTotal(): int;
 }

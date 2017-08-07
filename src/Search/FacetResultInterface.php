@@ -31,26 +31,11 @@ namespace Shopware\Search;
  */
 interface FacetResultInterface
 {
-    /**
-     * @return string
-     */
-    public function getFacetName();
+    public function getFacetName(): string;
 
-    /**
-     * @return bool
-     */
-    public function isActive();
+    public function isActive(): bool;
 
-    /**
-     * @return string
-     */
-    public function getLabel();
+    public function getLabel(): string;
 
-    /**
-     * Returns the full path of the frontend template file beginning with frontend/...
-     * If the function returns null, the facet result isn't rendered automatically
-     *
-     * @return string|null
-     */
-    public function getTemplate();
+    public function getTemplate(): ?string;
 }

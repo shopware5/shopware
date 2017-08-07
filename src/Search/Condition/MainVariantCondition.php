@@ -22,13 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Search;
+namespace Shopware\Search\Condition;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface FacetInterface extends CriteriaPartInterface
+use Shopware\Search\ConditionInterface;
+
+class MainVariantCondition implements ConditionInterface
 {
+    const TYPE_ONLY_MAIN_VARIANT = 1;
+
+    const TYPE_ONLY_SUB_VARIANTS = 2;
+
+    /**
+     * @var int
+     */
+    private $type;
+
+    public function __construct(int $type = self::TYPE_ONLY_MAIN_VARIANT)
+    {
+        $this->type = $type;
+    }
+
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    public function getName(): string
+    {
+        return self::class;
+    }
 }

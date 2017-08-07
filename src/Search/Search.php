@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Search;
 
@@ -24,11 +46,9 @@ abstract class Search
         $this->connection = $connection;
     }
 
-    abstract protected function createQuery(): QueryBuilder;
-
-    public function search(Criteria $criteria, TranslationContext $context): SearchResult
+    public function search(Criteria $criteria, TranslationContext $context): SearchResultInterface
     {
-        $query = $this->createQuery();
+        $query = $this->createQuery($criteria, $context);
 
         if ($criteria->fetchCount()) {
             $selects = $query->getQueryPart('select');
@@ -46,7 +66,7 @@ abstract class Search
             $query->setMaxResults($criteria->getLimit());
         }
 
-        $rows = $query->execute()->fetchAll();
+        $rows = $this->fetchRows($query);
 
         if ($criteria->fetchCount()) {
             $total = $this->connection->fetchColumn('SELECT FOUND_ROWS()');
@@ -71,6 +91,26 @@ abstract class Search
         return new AggregationResult($facetResults);
     }
 
+    /**
+     * Creates the base query with all fields which should be selected
+     *
+     * @param Criteria           $criteria
+     * @param TranslationContext $context
+     *
+     * @return QueryBuilder
+     */
+    abstract protected function createQuery(Criteria $criteria, TranslationContext $context): QueryBuilder;
+
+    /**
+     * Hydrate the fetch rows and create a typed hint search result
+     *
+     * @param array $rows
+     * @param int   $total
+     *
+     * @return SearchResultInterface
+     */
+    abstract protected function createResult(array $rows, int $total): SearchResultInterface;
+
     protected function addCriteriaPartToQuery(QueryBuilder $query, Criteria $criteria, array $parts, TranslationContext $context): void
     {
         foreach ($parts as $part) {
@@ -79,7 +119,7 @@ abstract class Search
         }
     }
 
-    protected  function getHandler(CriteriaPartInterface $criteriaPart)
+    protected function getHandler(CriteriaPartInterface $criteriaPart)
     {
         foreach ($this->handlers as $handler) {
             if ($handler->supports($criteriaPart)) {
@@ -91,7 +131,7 @@ abstract class Search
 
     protected function buildFacetQuery(Criteria $criteria, TranslationContext $context): QueryBuilder
     {
-        $query = $this->createQuery();
+        $query = $this->createQuery($criteria, $context);
 
         if ($criteria->generatePartialFacets()) {
             $this->addCriteriaPartToQuery($query, $criteria, $criteria->getConditions(), $context);
@@ -102,8 +142,12 @@ abstract class Search
         return $query;
     }
 
-    protected function createResult(array $rows, int $total): SearchResult
+    /**
+     * @param $query
+     * @return array
+     */
+    protected function fetchRows(QueryBuilder $query): array
     {
-        return new SearchResult($rows, $total);
+        return $query->execute()->fetchAll();
     }
 }

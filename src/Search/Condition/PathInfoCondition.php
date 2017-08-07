@@ -22,13 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Search;
+namespace Shopware\Search\Condition;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface FacetInterface extends CriteriaPartInterface
+use Shopware\Search\ConditionInterface;
+
+class PathInfoCondition implements ConditionInterface
 {
+    /**
+     * @var string[]
+     */
+    protected $pathInfos;
+
+    public function __construct(array $pathInfos)
+    {
+        $this->pathInfos = $pathInfos;
+    }
+
+    public function getPathInfos(): array
+    {
+        return $this->pathInfos;
+    }
+
+    public function getName(): string
+    {
+        return self::class;
+    }
 }

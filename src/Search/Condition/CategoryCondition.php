@@ -22,13 +22,44 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Search;
+namespace Shopware\Search\Condition;
+
+use Shopware\Search\ConditionInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface FacetInterface extends CriteriaPartInterface
+class CategoryCondition implements ConditionInterface
 {
+    /**
+     * @var int[]
+     */
+    private $categoryIds;
+
+    /**
+     * @param int[] $categoryIds
+     */
+    public function __construct(array $categoryIds)
+    {
+        $this->categoryIds = array_map(function ($id) {
+            return (int) $id;
+        }, $categoryIds);
+
+        sort($this->categoryIds, SORT_NUMERIC);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getCategoryIds(): array
+    {
+        return $this->categoryIds;
+    }
+
+    public function getName(): string
+    {
+        return self::class;
+    }
 }

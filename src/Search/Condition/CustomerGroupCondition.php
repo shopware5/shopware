@@ -40,14 +40,14 @@ class CustomerGroupCondition implements ConditionInterface
 
     public function __construct(array $customerGroupIds)
     {
-        $this->customerGroupIds = array_map(function($id) {
+        $this->customerGroupIds = array_map(function ($id) {
             return (int) $id;
         }, $customerGroupIds);
 
         sort($this->customerGroupIds, SORT_NUMERIC);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self::class;
     }
