@@ -12,5 +12,6 @@ class ListingController extends Controller
      */
     public function indexAction($id, Request $request)
     {
+        return $this->render('frontend/home/index.html.twig', []);
     }
 }
