@@ -9,6 +9,6 @@ class ShopLinkField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('shopLink', 'shopLink', 'product_notification', $constraintBuilder);
+        parent::__construct('shopLink', 'shop_link', 'product_notification', $constraintBuilder);
     }
 }

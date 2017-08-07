@@ -6,30 +6,31 @@ DROP INDEX articles_by_category_sort_name ON s_articles;
 ALTER TABLE s_articles
     RENAME TO product,
     ADD uuid VARCHAR(42) NOT NULL AFTER id,
-    CHANGE COLUMN supplierID manufacture_id INT(11) unsigned,
+    CHANGE COLUMN supplierID manufacturer_id INT(11) unsigned,
     CHANGE COLUMN shippingtime shipping_time VARCHAR(11),
     CHANGE COLUMN datum created_at DATETIME,
     CHANGE COLUMN taxID tax_id INT(11) unsigned,
     CHANGE COLUMN pseudosales pseudo_sales INT(11) NOT NULL DEFAULT '0',
     CHANGE COLUMN metaTitle meta_title VARCHAR(255),
-    CHANGE COLUMN changetime change_at DATETIME NOT NULL,
+    CHANGE COLUMN changetime updated_at DATETIME NOT NULL,
     CHANGE COLUMN pricegroupID price_group_id INT(11) unsigned,
     CHANGE COLUMN filtergroupID filter_group_id INT(11) unsigned,
     CHANGE COLUMN laststock last_stock INT(1) NOT NULL,
     DROP pricegroupActive,
+    ADD COLUMN main_detail_uuid VARCHAR(42) NOT NULL AFTER tax_id,
     ADD COLUMN tax_uuid VARCHAR(42) NOT NULL AFTER tax_id,
-    ADD product_manufacture_uuid VARCHAR(42) NOT NULL AFTER manufacture_id
+    ADD product_manufacturer_uuid VARCHAR(42) NOT NULL AFTER manufacturer_id
 ;
 
 CREATE INDEX product_by_category_sort_name ON product (name, id);
 CREATE INDEX product_by_category_sort_release ON product (created_at, id);
 
-
 -- migration
 UPDATE product p
 SET p.uuid = CONCAT('SWAG-PRODUCT-UUID-', p.id),
-    p.product_manufacture_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURE-UUID-', p.manufacture_id),
-    p.tax_uuid = CONCAT('SWAG-CONFIG-TAX-UUID-', p.tax_uuid)
+    p.product_manufacturer_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURER-UUID-', p.manufacturer_id),
+    p.tax_uuid = CONCAT('SWAG-CONFIG-TAX-UUID-', p.tax_uuid),
+    p.main_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', p.main_detail_id)
 ;
 
 ALTER TABLE s_article_configurator_dependencies
@@ -407,7 +408,7 @@ ALTER TABLE s_articles_notification
     RENAME TO product_notification,
     ADD COLUMN uuid VARCHAR(42) NOT NULL AFTER id,
     CHANGE COLUMN ordernumber order_number VARCHAR(255) NOT NULL,
-    CHANGE COLUMN `date` created_At DATETIME NOT NULL,
+    CHANGE COLUMN `date` created_at DATETIME NOT NULL,
     CHANGE COLUMN shopLink shop_link VARCHAR(255) NOT NULL
 ;
 
@@ -493,27 +494,27 @@ UPDATE product_similar_shown_ro p SET
 ;
 
 ALTER TABLE s_articles_supplier
-    RENAME TO product_manufacture,
+    RENAME TO product_manufacturer,
     ADD uuid VARCHAR(42) NOT NULL AFTER id,
     CHANGE `changed` updated_at DATETIME NOT NULL
 ;
 
 -- migration
-UPDATE product_manufacture p SET
-    p.uuid = CONCAT('SWAG-PRODUCT-MANUFACTURE-UUID-', p.id)
+UPDATE product_manufacturer p SET
+    p.uuid = CONCAT('SWAG-PRODUCT-MANUFACTURER-UUID-', p.id)
 ;
 
 ALTER TABLE s_articles_supplier_attributes
-    RENAME TO product_manufacture_attribute,
+    RENAME TO product_manufacturer_attribute,
     ADD uuid VARCHAR(42) NOT NULL AFTER id,
-    CHANGE supplierID manufacture_id INT(11) AFTER uuid,
-    ADD product_manufacture_uuid VARCHAR(42) NOT NULL AFTER manufacture_id
+    CHANGE supplierID manufacturer_id INT(11) AFTER uuid,
+    ADD product_manufacturer_uuid VARCHAR(42) NOT NULL AFTER manufacturer_id
 ;
 
 -- migration
-UPDATE product_manufacture_attribute p SET
-    p.uuid             = CONCAT('SWAG-PRODUCT-MANUFACTURE-ATTRIBUTE-UUID-', p.id),
-    p.product_manufacture_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURE-UUID-', p.manufacture_id)
+UPDATE product_manufacturer_attribute p SET
+    p.uuid             = CONCAT('SWAG-PRODUCT-MANUFACTURER-ATTRIBUTE-UUID-', p.id),
+    p.product_manufacturer_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURER-UUID-', p.manufacturer_id)
 ;
 
 ALTER TABLE s_articles_top_seller_ro
@@ -654,7 +655,7 @@ CREATE UNIQUE INDEX `ui_product_esd.uuid` ON product_esd (uuid);
 CREATE UNIQUE INDEX `ui_product_image.uuid` ON product_image (uuid);
 CREATE UNIQUE INDEX `ui_product_image_mapping.uuid` ON product_image_mapping (uuid);
 CREATE UNIQUE INDEX `ui_product_information.uuid` ON product_information (uuid);
-CREATE UNIQUE INDEX `ui_product_manufacture.uuid` ON product_manufacture (uuid);
+CREATE UNIQUE INDEX `ui_product_manufacturer.uuid` ON product_manufacturer (uuid);
 CREATE UNIQUE INDEX `ui_product_price.uuid` ON product_price (uuid);
 CREATE UNIQUE INDEX `ui_s_core_customergroups.uuid` ON s_core_customergroups (uuid);
 CREATE UNIQUE INDEX `ui_s_core_shops.uuid` ON s_core_shops (uuid);
@@ -675,7 +676,7 @@ ALTER TABLE product_also_bought_ro
 ;
 
 ALTER TABLE `product`
-    CHANGE COLUMN `name` `title` VARCHAR(100) NOT NULL AFTER `product_manufacture_uuid`
+    CHANGE COLUMN `name` `title` VARCHAR(100) NOT NULL AFTER `product_manufacturer_uuid`
 ;
 
 ALTER TABLE product_avoid_customer_group
@@ -771,9 +772,9 @@ ALTER TABLE product_information_attribute
     FOREIGN KEY (product_information_uuid) REFERENCES product_information (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
-ALTER TABLE product_manufacture_attribute
-    ADD CONSTRAINT `fk_product_manufacture_attribute.product_uuid`
-    FOREIGN KEY (product_manufacture_uuid) REFERENCES product_manufacture (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+ALTER TABLE product_manufacturer_attribute
+    ADD CONSTRAINT `fk_product_manufacturer_attribute.product_uuid`
+    FOREIGN KEY (product_manufacturer_uuid) REFERENCES product_manufacturer (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 ALTER TABLE product_price

@@ -10,3 +10,4 @@ __DOC_ROOT__/_sql/ApplyDeltas.php --migrationpath="__DOC_ROOT__/_sql/migrations/
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/demo/latest.sql
 
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/fixup.sql
+mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/destructive.sql

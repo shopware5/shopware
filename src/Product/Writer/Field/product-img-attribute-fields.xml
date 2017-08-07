@@ -4,30 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="shopware.product.product_img_attribute.writer_field_uuid" class="Shopware\Product\Writer\Field\ProductImgAttribute\UuidField">
-    <argument type="service" id="shopware.validation.constraint_builder"/>   
-    
-    <tag name="shopware.product.product_img_attribute.writer_field"/> 
-</service>        
-<service id="shopware.product.product_img_attribute.writer_field_imageId" class="Shopware\Product\Writer\Field\ProductImgAttribute\ImageIdField">
-    <argument type="service" id="shopware.validation.constraint_builder"/>   
-    
-    <tag name="shopware.product.product_img_attribute.writer_field"/> 
-</service>        
-<service id="shopware.product.product_img_attribute.writer_field_attribute1" class="Shopware\Product\Writer\Field\ProductImgAttribute\Attribute1Field">
-    <argument type="service" id="shopware.validation.constraint_builder"/>   
-    
-    <tag name="shopware.product.product_img_attribute.writer_field"/> 
-</service>        
-<service id="shopware.product.product_img_attribute.writer_field_attribute2" class="Shopware\Product\Writer\Field\ProductImgAttribute\Attribute2Field">
-    <argument type="service" id="shopware.validation.constraint_builder"/>   
-    
-    <tag name="shopware.product.product_img_attribute.writer_field"/> 
-</service>        
-<service id="shopware.product.product_img_attribute.writer_field_attribute3" class="Shopware\Product\Writer\Field\ProductImgAttribute\Attribute3Field">
-    <argument type="service" id="shopware.validation.constraint_builder"/>   
-    
-    <tag name="shopware.product.product_img_attribute.writer_field"/> 
-</service>
+        
     </services>
 </container>

@@ -29,7 +29,7 @@
     
     <tag name="shopware.product.product_vote.writer_field"/> 
 </service>        
-<service id="shopware.product.product_vote.writer_field_datum" class="Shopware\Product\Writer\Field\ProductVote\DatumField">
+<service id="shopware.product.product_vote.writer_field_createdAt" class="Shopware\Product\Writer\Field\ProductVote\CreatedAtField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_vote.writer_field"/> 
@@ -49,7 +49,7 @@
     
     <tag name="shopware.product.product_vote.writer_field"/> 
 </service>        
-<service id="shopware.product.product_vote.writer_field_answerDate" class="Shopware\Product\Writer\Field\ProductVote\AnswerDateField">
+<service id="shopware.product.product_vote.writer_field_answerAt" class="Shopware\Product\Writer\Field\ProductVote\AnswerAtField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_vote.writer_field"/> 
@@ -60,6 +60,26 @@
     <tag name="shopware.product.product_vote.writer_field"/> 
 </service>        
 <service id="shopware.product.product_vote.writer_field_uuid" class="Shopware\Product\Writer\Field\ProductVote\UuidField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_vote.writer_field"/> 
+</service>        
+<service id="shopware.product.product_vote.writer_field_productUuid" class="Shopware\Product\Writer\Field\ProductVote\ProductUuidField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_vote.writer_field"/> 
+</service>        
+<service id="shopware.product.product_vote.writer_field_product" class="Shopware\Product\Writer\Field\ProductVote\ProductField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_vote.writer_field"/> 
+</service>        
+<service id="shopware.product.product_vote.writer_field_shopUuid" class="Shopware\Product\Writer\Field\ProductVote\ShopUuidField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_vote.writer_field"/> 
+</service>        
+<service id="shopware.product.product_vote.writer_field_shop" class="Shopware\Product\Writer\Field\ProductVote\ShopField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_vote.writer_field"/> 

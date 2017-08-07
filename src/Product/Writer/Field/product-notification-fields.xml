@@ -9,12 +9,12 @@
     
     <tag name="shopware.product.product_notification.writer_field"/> 
 </service>        
-<service id="shopware.product.product_notification.writer_field_ordernumber" class="Shopware\Product\Writer\Field\ProductNotification\OrdernumberField">
+<service id="shopware.product.product_notification.writer_field_orderNumber" class="Shopware\Product\Writer\Field\ProductNotification\OrderNumberField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_notification.writer_field"/> 
 </service>        
-<service id="shopware.product.product_notification.writer_field_date" class="Shopware\Product\Writer\Field\ProductNotification\DateField">
+<service id="shopware.product.product_notification.writer_field_createdAt" class="Shopware\Product\Writer\Field\ProductNotification\CreatedAtField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_notification.writer_field"/> 

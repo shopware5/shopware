@@ -81,8 +81,8 @@ class ApiTest extends KernelTestCase
             'availableTo' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'updatedAt' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'createdAt' => new \DateTime('2011-01-01T15:03:01.012345Z'),
-            'supplier' => [
-                'uuid' => 'SWAG-PRODUCT-SUPPLIER-UUID-1',
+            'productManufacturer' => [
+                'uuid' => 'SWAG-MANUFACTURER-UUID-1',
             ],
             'mainDetailUuid' => 'SW10003',
         ]);
@@ -95,7 +95,7 @@ class ApiTest extends KernelTestCase
         self::assertSame('2011-01-01 15:03:01', $product['available_to']);
         self::assertSame('no html', $product['description']);
         self::assertSame('<p>html</p>', $product['description_long']);
-        self::assertSame('SWAG-PRODUCT-SUPPLIER-UUID-1', $product['supplier_uuid']);
+        self::assertSame('SWAG-MANUFACTURER-UUID-1', $product['product_manufacturer_uuid']);
         self::assertSame('SW10003', $product['main_detail_uuid']);
         self::assertEquals('2011-01-01 15:03:01', $product['updated_at']);
         self::assertEquals('2011-01-01 15:03:01', $product['created_at']);

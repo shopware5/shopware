@@ -3,12 +3,12 @@
 namespace Shopware\Product\Writer\Field\ProductRelationship;
 
 use Shopware\Framework\Validation\ConstraintBuilder;
-use Shopware\Product\Writer\Api\StringField;
+use Shopware\Product\Writer\Api\VirtualField;
 
-class RelatedProductField extends StringField
+class RelatedProductField extends VirtualField
 {
-    public function __construct(ConstraintBuilder $constraintBuilder)
+    public function __construct()
     {
-        parent::__construct('relatedProduct', 'related_product', 'product_relationship', $constraintBuilder);
+        parent::__construct('relatedProduct', \Shopware\Product\Writer\Field\ProductRelationship\RelatedProductUuidField::class);
     }
 }

@@ -9,12 +9,22 @@
     
     <tag name="shopware.product.product_esd_serial.writer_field"/> 
 </service>        
-<service id="shopware.product.product_esd_serial.writer_field_serialnumber" class="Shopware\Product\Writer\Field\ProductEsdSerial\SerialnumberField">
+<service id="shopware.product.product_esd_serial.writer_field_esdId" class="Shopware\Product\Writer\Field\ProductEsdSerial\EsdIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_esd_serial.writer_field"/> 
 </service>        
-<service id="shopware.product.product_esd_serial.writer_field_esdId" class="Shopware\Product\Writer\Field\ProductEsdSerial\EsdIdField">
+<service id="shopware.product.product_esd_serial.writer_field_productEsdUuid" class="Shopware\Product\Writer\Field\ProductEsdSerial\ProductEsdUuidField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_esd_serial.writer_field"/> 
+</service>        
+<service id="shopware.product.product_esd_serial.writer_field_productEsd" class="Shopware\Product\Writer\Field\ProductEsdSerial\ProductEsdField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_esd_serial.writer_field"/> 
+</service>        
+<service id="shopware.product.product_esd_serial.writer_field_serialNumber" class="Shopware\Product\Writer\Field\ProductEsdSerial\SerialNumberField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_esd_serial.writer_field"/> 

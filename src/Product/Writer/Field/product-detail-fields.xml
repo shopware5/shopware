@@ -14,12 +14,22 @@
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_ordernumber" class="Shopware\Product\Writer\Field\ProductDetail\OrdernumberField">
+<service id="shopware.product.product_detail.writer_field_productUuid" class="Shopware\Product\Writer\Field\ProductDetail\ProductUuidField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_suppliernumber" class="Shopware\Product\Writer\Field\ProductDetail\SuppliernumberField">
+<service id="shopware.product.product_detail.writer_field_product" class="Shopware\Product\Writer\Field\ProductDetail\ProductField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_detail.writer_field"/> 
+</service>        
+<service id="shopware.product.product_detail.writer_field_orderNumber" class="Shopware\Product\Writer\Field\ProductDetail\OrderNumberField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_detail.writer_field"/> 
+</service>        
+<service id="shopware.product.product_detail.writer_field_supplierNumber" class="Shopware\Product\Writer\Field\ProductDetail\SupplierNumberField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
@@ -29,7 +39,7 @@
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_additionaltext" class="Shopware\Product\Writer\Field\ProductDetail\AdditionaltextField">
+<service id="shopware.product.product_detail.writer_field_additionalText" class="Shopware\Product\Writer\Field\ProductDetail\AdditionalTextField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
@@ -44,7 +54,7 @@
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_instock" class="Shopware\Product\Writer\Field\ProductDetail\InstockField">
+<service id="shopware.product.product_detail.writer_field_stock" class="Shopware\Product\Writer\Field\ProductDetail\StockField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
@@ -84,57 +94,57 @@
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_unitID" class="Shopware\Product\Writer\Field\ProductDetail\UnitIDField">
+<service id="shopware.product.product_detail.writer_field_unitId" class="Shopware\Product\Writer\Field\ProductDetail\UnitIdField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_purchasesteps" class="Shopware\Product\Writer\Field\ProductDetail\PurchasestepsField">
+<service id="shopware.product.product_detail.writer_field_purchaseSteps" class="Shopware\Product\Writer\Field\ProductDetail\PurchaseStepsField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_maxpurchase" class="Shopware\Product\Writer\Field\ProductDetail\MaxpurchaseField">
+<service id="shopware.product.product_detail.writer_field_maxPurchase" class="Shopware\Product\Writer\Field\ProductDetail\MaxPurchaseField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_minpurchase" class="Shopware\Product\Writer\Field\ProductDetail\MinpurchaseField">
+<service id="shopware.product.product_detail.writer_field_minPurchase" class="Shopware\Product\Writer\Field\ProductDetail\MinPurchaseField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_purchaseunit" class="Shopware\Product\Writer\Field\ProductDetail\PurchaseunitField">
+<service id="shopware.product.product_detail.writer_field_purchaseUnit" class="Shopware\Product\Writer\Field\ProductDetail\PurchaseUnitField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_referenceunit" class="Shopware\Product\Writer\Field\ProductDetail\ReferenceunitField">
+<service id="shopware.product.product_detail.writer_field_referenceUnit" class="Shopware\Product\Writer\Field\ProductDetail\ReferenceUnitField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_packunit" class="Shopware\Product\Writer\Field\ProductDetail\PackunitField">
+<service id="shopware.product.product_detail.writer_field_packUnit" class="Shopware\Product\Writer\Field\ProductDetail\PackUnitField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_releasedate" class="Shopware\Product\Writer\Field\ProductDetail\ReleasedateField">
+<service id="shopware.product.product_detail.writer_field_releaseDate" class="Shopware\Product\Writer\Field\ProductDetail\ReleaseDateField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_shippingfree" class="Shopware\Product\Writer\Field\ProductDetail\ShippingfreeField">
+<service id="shopware.product.product_detail.writer_field_shippingFree" class="Shopware\Product\Writer\Field\ProductDetail\ShippingFreeField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_shippingtime" class="Shopware\Product\Writer\Field\ProductDetail\ShippingtimeField">
+<service id="shopware.product.product_detail.writer_field_shippingTime" class="Shopware\Product\Writer\Field\ProductDetail\ShippingTimeField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 
 </service>        
-<service id="shopware.product.product_detail.writer_field_purchaseprice" class="Shopware\Product\Writer\Field\ProductDetail\PurchasepriceField">
+<service id="shopware.product.product_detail.writer_field_purchasePrice" class="Shopware\Product\Writer\Field\ProductDetail\PurchasePriceField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_detail.writer_field"/> 

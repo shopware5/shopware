@@ -29,7 +29,27 @@
     
     <tag name="shopware.product.product_price.writer_field"/> 
 </service>        
+<service id="shopware.product.product_price.writer_field_productUuid" class="Shopware\Product\Writer\Field\ProductPrice\ProductUuidField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_price.writer_field"/> 
+</service>        
+<service id="shopware.product.product_price.writer_field_product" class="Shopware\Product\Writer\Field\ProductPrice\ProductField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_price.writer_field"/> 
+</service>        
 <service id="shopware.product.product_price.writer_field_productDetailId" class="Shopware\Product\Writer\Field\ProductPrice\ProductDetailIdField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_price.writer_field"/> 
+</service>        
+<service id="shopware.product.product_price.writer_field_productDetailUuid" class="Shopware\Product\Writer\Field\ProductPrice\ProductDetailUuidField">
+    <argument type="service" id="shopware.validation.constraint_builder"/>   
+    
+    <tag name="shopware.product.product_price.writer_field"/> 
+</service>        
+<service id="shopware.product.product_price.writer_field_productDetail" class="Shopware\Product\Writer\Field\ProductPrice\ProductDetailField">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
     
     <tag name="shopware.product.product_price.writer_field"/> 

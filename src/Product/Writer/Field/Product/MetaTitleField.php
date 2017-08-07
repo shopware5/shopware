@@ -9,6 +9,6 @@ class MetaTitleField extends StringField
 {
     public function __construct(ConstraintBuilder $constraintBuilder)
     {
-        parent::__construct('metaTitle', 'metaTitle', 'product', $constraintBuilder);
+        parent::__construct('metaTitle', 'meta_title', 'product', $constraintBuilder);
     }
 }
