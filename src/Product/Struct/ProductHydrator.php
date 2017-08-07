@@ -33,44 +33,44 @@ use Shopware\Framework\Struct\Hydrator;
  */
 class ProductHydrator extends Hydrator
 {
-//    /**
-//     * @var ManufacturerHydrator
-//     */
-//    private $manufacturerHydrator;
-//
-//    /**
-//     * @var TaxHydrator
-//     */
-//    private $taxHydrator;
-//
-//    /**
-//     * @var \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator
-//     */
-//    private $unitHydrator;
-//
-//    /**
-//     * @var EsdHydrator
-//     */
-//    private $esdHydrator;
-//
-//    /**
-//     * @var \Shopware_Components_Config
-//     */
-//    private $config;
-//
-//    public function __construct(
-//        ManufacturerHydrator $manufacturerHydrator,
-//        TaxHydrator $taxHydrator,
-//        UnitHydrator $unitHydrator,
-//        EsdHydrator $esdHydrator,
-//        \Shopware_Components_Config $config
-//    ) {
-//        $this->manufacturerHydrator = $manufacturerHydrator;
-//        $this->taxHydrator = $taxHydrator;
-//        $this->unitHydrator = $unitHydrator;
-//        $this->esdHydrator = $esdHydrator;
-//        $this->config = $config;
-//    }
+    //    /**
+    //     * @var ManufacturerHydrator
+    //     */
+    //    private $manufacturerHydrator;
+    //
+    //    /**
+    //     * @var TaxHydrator
+    //     */
+    //    private $taxHydrator;
+    //
+    //    /**
+    //     * @var \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator
+    //     */
+    //    private $unitHydrator;
+    //
+    //    /**
+    //     * @var EsdHydrator
+    //     */
+    //    private $esdHydrator;
+    //
+    //    /**
+    //     * @var \Shopware_Components_Config
+    //     */
+    //    private $config;
+    //
+    //    public function __construct(
+    //        ManufacturerHydrator $manufacturerHydrator,
+    //        TaxHydrator $taxHydrator,
+    //        UnitHydrator $unitHydrator,
+    //        EsdHydrator $esdHydrator,
+    //        \Shopware_Components_Config $config
+    //    ) {
+    //        $this->manufacturerHydrator = $manufacturerHydrator;
+    //        $this->taxHydrator = $taxHydrator;
+    //        $this->unitHydrator = $unitHydrator;
+    //        $this->esdHydrator = $esdHydrator;
+    //        $this->config = $config;
+    //    }
 
     public function hydrate(array $data): Product
     {
@@ -118,35 +118,35 @@ class ProductHydrator extends Hydrator
         $this->assignProductData($product, $data);
 
         //todo@next reimplement after tax implementation
-//        $product->setTax(
-//            $this->taxHydrator->hydrate($data)
-//        );
+        //        $product->setTax(
+        //            $this->taxHydrator->hydrate($data)
+        //        );
 
-//        $this->assignPriceGroupData($product, $data);
+        //        $this->assignPriceGroupData($product, $data);
 
-//        if ($data['__product_supplierID']) {
-//            $product->setManufacturer(
-//                $this->manufacturerHydrator->hydrate($data)
-//            );
-//        }
-//
-//        if ($data['__esd_id']) {
-//            $product->setEsd(
-//                $this->esdHydrator->hydrate($data)
-//            );
-//        }
+        //        if ($data['__product_supplierID']) {
+        //            $product->setManufacturer(
+        //                $this->manufacturerHydrator->hydrate($data)
+        //            );
+        //        }
+        //
+        //        if ($data['__esd_id']) {
+        //            $product->setEsd(
+        //                $this->esdHydrator->hydrate($data)
+        //            );
+        //        }
 
-//        $product->setUnit(
-//            $this->unitHydrator->hydrate($data)
-//        );
+        //        $product->setUnit(
+        //            $this->unitHydrator->hydrate($data)
+        //        );
 
-//        if (!empty($data['__productAttribute_id'])) {
-//            $this->assignAttributeData($product, $data);
-//        }
+        //        if (!empty($data['__productAttribute_id'])) {
+        //            $this->assignAttributeData($product, $data);
+        //        }
 
         $today = new \DateTime();
         $diff = $today->diff($product->getCreatedAt());
-//        $marker = (int) $this->config->get('markAsNew');
+        //        $marker = (int) $this->config->get('markAsNew');
         $marker = 10;
 
         $product->setIsNew(
@@ -157,25 +157,25 @@ class ProductHydrator extends Hydrator
             $product->getReleaseDate() && $product->getReleaseDate() > $today
         );
 
-//        $marker = $this->config->get('markAsTopSeller');
+        //        $marker = $this->config->get('markAsTopSeller');
         $marker = 10;
         $product->setIsTopSeller($product->getSales() >= $marker);
 
         return $product;
     }
 
-//    /**
-//     * @param ListProduct $product
-//     * @param array       $data
-//     */
-//    private function assignPriceGroupData(ListProduct $product, array $data)
-//    {
-//        if (!empty($data['__priceGroup_id'])) {
-//            $product->setPriceGroup(new PriceGroup());
-//            $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
-//            $product->getPriceGroup()->setName($data['__priceGroup_description']);
-//        }
-//    }
+    //    /**
+    //     * @param ListProduct $product
+    //     * @param array       $data
+    //     */
+    //    private function assignPriceGroupData(ListProduct $product, array $data)
+    //    {
+    //        if (!empty($data['__priceGroup_id'])) {
+    //            $product->setPriceGroup(new PriceGroup());
+    //            $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
+    //            $product->getPriceGroup()->setName($data['__priceGroup_description']);
+    //        }
+    //    }
 
     private function assignProductData(Product $product, array $data): void
     {
@@ -191,7 +191,7 @@ class ProductHydrator extends Hydrator
         $product->setTemplate($data['__product_template']);
         $product->setHasConfigurator(($data['__product_configurator_set_id'] > 0));
         $product->setHasEsd((bool) $data['__product_has_esd']);
-        $product->setIsPriceGroupActive((bool) $data['__product_pricegroupActive']);
+        //        $product->setIsPriceGroupActive((bool) $data['__product_pricegroupActive']);
         $product->setSales((int) $data['__topSeller_sales']);
         $product->setShippingFree((bool) ($data['__variant_shippingfree']));
         $product->setStock((int) $data['__variant_instock']);
@@ -228,7 +228,7 @@ class ProductHydrator extends Hydrator
         $product->setBlockedCustomerGroupIds($customerGroups);
         $product->setHasAvailableVariant($data['__product_has_available_variants'] > 0);
 
-//        $product->setFallbackPriceCount($data['__product_fallback_price_count']);
+        //        $product->setFallbackPriceCount($data['__product_fallback_price_count']);
 //        if (array_key_exists('__product_custom_price_count', $data)) {
 //            $product->setCustomerPriceCount($data['__product_custom_price_count']);
 //        } else {
@@ -236,7 +236,7 @@ class ProductHydrator extends Hydrator
 //        }
     }
 
-//    /**
+    //    /**
 //     * Iterates the attribute data and assigns the attribute struct to the product.
 //     *
 //     * @param ListProduct $product
@@ -251,5 +251,4 @@ class ProductHydrator extends Hydrator
 //        $attribute = new Attribute($attributeData);
 //        $product->addAttribute('core', $attribute);
 //    }
-
 }

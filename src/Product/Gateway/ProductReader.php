@@ -1,13 +1,35 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Product\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Product\Struct\ProductHydrator;
 use Shopware\Context\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Product\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductHydrator;
 
 class ProductReader
 {
@@ -72,12 +94,12 @@ class ProductReader
 //            ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
         ;
         //todo@next move this to store front list product
-//        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
-//        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
-//            $customerPriceQuery = $this->getPriceCountQuery(':current');
-//            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
-//            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
-//        }
+        //        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
+        //        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+        //            $customerPriceQuery = $this->getPriceCountQuery(':current');
+        //            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
+        //            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
+        //        }
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')

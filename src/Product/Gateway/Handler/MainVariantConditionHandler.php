@@ -24,24 +24,18 @@
 
 namespace Shopware\Product\Gateway\Handler;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Context\TranslationContext;
-use Shopware\Search\Condition\ShopCondition;
+use Shopware\Search\Condition\MainVariantCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Search\HandlerInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class ShopConditionHandler implements HandlerInterface
+class MainVariantConditionHandler implements HandlerInterface
 {
     public function supports(CriteriaPartInterface $criteriaPart): bool
     {
-        return $criteriaPart instanceof ShopCondition;
+        return $criteriaPart instanceof MainVariantCondition;
     }
 
     public function handle(
@@ -50,25 +44,17 @@ class ShopConditionHandler implements HandlerInterface
         Criteria $criteria,
         TranslationContext $context
     ): void {
-        $builder->innerJoin(
-            'product',
-            's_articles_categories_ro',
-            'productCategory',
-            'productCategory.articleID = product.id'
-        );
+        /** @var MainVariantCondition $criteriaPart */
+        switch ($criteriaPart->getType()) {
+            case MainVariantCondition::TYPE_ONLY_MAIN_VARIANT:
+                $builder->andWhere('variant.kind = 1');
 
-        $builder->innerJoin(
-            'productCategory',
-            's_core_shops',
-            'shop',
-            'shop.category_id = productCategory.categoryID AND shop.id IN (:shopIds)'
-        );
+                return;
 
-        /* @var ShopCondition $criteriaPart */
-        $builder->setParameter(
-            ':shopIds',
-            $criteriaPart->getIds(),
-            Connection::PARAM_INT_ARRAY
-        );
+            case MainVariantCondition::TYPE_ONLY_SUB_VARIANTS:
+                $builder->andWhere('variant.kind = 2');
+
+                return;
+        }
     }
 }

@@ -25,8 +25,9 @@
 namespace Shopware\Product\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Context\TranslationContext;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Search\HandlerInterface;
@@ -50,10 +51,12 @@ class CategoryConditionHandler implements HandlerInterface
 
     public function handle(
         CriteriaPartInterface $criteriaPart,
-        \Doctrine\DBAL\Query\QueryBuilder $builder,
+        QueryBuilder $builder,
         Criteria $criteria,
         TranslationContext $context
-    ) {
+    ): void {
+
+        /* @var CategoryCondition $criteriaPart */
         if ($this->counter++ === 0) {
             $suffix = '';
         } else {
@@ -68,10 +71,9 @@ class CategoryConditionHandler implements HandlerInterface
             AND productCategory{$suffix}.categoryID IN (:category{$suffix})"
         );
 
-        /* @var CategoryCondition $condition */
         $builder->setParameter(
             ":category{$suffix}",
-            $condition->getCategoryIds(),
+            $criteriaPart->getCategoryIds(),
             Connection::PARAM_INT_ARRAY
         );
     }
