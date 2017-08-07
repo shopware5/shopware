@@ -950,7 +950,7 @@ class LegacyStructConverter
     ) {
         $settings = [
             'instock' => $product->isCloseouts(),
-            'articleID' => $product->getId(),
+            'articleID' => $product->getUuid(),
             'type' => $set->getType(),
         ];
 
@@ -1151,8 +1151,8 @@ class LegacyStructConverter
         }
 
         $data = [
-            'articleID' => $product->getId(),
-            'articleDetailsID' => $product->getVariantId(),
+            'articleID' => $product->getUuid(),
+            'articleDetailsID' => $product->getVariantUuid(),
             'ordernumber' => $product->getNumber(),
             'highlight' => $product->highlight(),
             'description' => $product->getShortDescription(),

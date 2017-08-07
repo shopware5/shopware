@@ -37,18 +37,18 @@ use Shopware\Framework\Struct\Struct;
 class Product extends Struct
 {
     /**
-     * Unique identifier of the product (s_articles).
+     * Unique identifier of the product.
      *
-     * @var int
+     * @var string
      */
-    protected $id;
+    protected $uuid;
 
     /**
      * Unique identifier of the product variation (s_articles_details).
      *
      * @var int
      */
-    protected $variantId;
+    protected $variantUuid;
 
     /**
      * Unique identifier field.
@@ -235,11 +235,6 @@ class Product extends Struct
     protected $hasEsd;
 
     /**
-     * @var bool
-     */
-    protected $isPriceGroupActive;
-
-    /**
      * @var array
      */
     protected $blockedCustomerGroupIds = [];
@@ -262,14 +257,9 @@ class Product extends Struct
     protected $hasAvailableVariant;
 
     /**
-     * @var int
+     * @var string
      */
-    protected $mainVariantId;
-
-    /**
-     * @var bool
-     */
-    protected $isMainVariant;
+    protected $mainVariantUuid;
 
     /**
      * @var bool
@@ -300,6 +290,11 @@ class Product extends Struct
      * @var Manufacturer
      */
     protected $manufacturer;
+
+    /**
+     * @var bool
+     */
+    protected $isMainVariant;
 
     //    /**
     //     * Contains the product cover which displayed
@@ -862,53 +857,35 @@ class Product extends Struct
     //        $this->isPriceGroupActive = $isPriceGroupActive;
     //    }
 
-    /**
-     * @return array
-     */
-    public function getBlockedCustomerGroupIds(): array
+    public function getBlockedCustomerGroupUuids(): array
     {
         return $this->blockedCustomerGroupIds;
     }
 
-    /**
-     * @param array $blockedCustomerGroupIds
-     */
-    public function setBlockedCustomerGroupIds($blockedCustomerGroupIds): void
+    public function setBlockedCustomerGroupIds($blockedCustomerGroupUuids): void
     {
-        $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
+        $this->blockedCustomerGroupIds = $blockedCustomerGroupUuids;
     }
 
-    /**
-     * @return bool
-     */
     public function hasAvailableVariant(): bool
     {
         return $this->hasAvailableVariant;
     }
 
-    /**
-     * @param bool $hasAvailableVariant
-     */
-    public function setHasAvailableVariant($hasAvailableVariant): void
+    public function setHasAvailableVariant(bool $hasAvailableVariant): void
     {
         $this->hasAvailableVariant = $hasAvailableVariant;
     }
 
-    /**
-     * @return int
-     */
-    public function getMainVariantId(): int
+    public function getMainVariantUuid(): string
     {
-        return $this->mainVariantId;
+        return $this->mainVariantUuid;
     }
 
-    /**
-     * @param int $mainVariantId
-     */
-    public function setMainVariantId($mainVariantId): void
+    public function setMainVariantUuid(string $mainVariantUuid): void
     {
-        $this->mainVariantId = $mainVariantId;
-        $this->isMainVariant = ($this->variantId == $this->mainVariantId);
+        $this->mainVariantUuid = $mainVariantUuid;
+        $this->isMainVariant = ($this->variantUuid === $this->mainVariantUuid);
     }
 
     /**
@@ -949,24 +926,24 @@ class Product extends Struct
         return $this->comingSoon;
     }
 
-    public function getId(): int
+    public function getUuid(): string
     {
-        return $this->id;
+        return $this->uuid;
     }
 
-    public function setId(int $id): void
+    public function setUuid(string $uuid): void
     {
-        $this->id = $id;
+        $this->uuid = $uuid;
     }
 
-    public function getVariantId(): int
+    public function getVariantUuid(): string
     {
-        return $this->variantId;
+        return $this->variantUuid;
     }
 
-    public function setVariantId(int $variantId): void
+    public function setVariantUuid(string $variantUuid): void
     {
-        $this->variantId = $variantId;
+        $this->variantUuid = $variantUuid;
     }
 
     public function getNumber(): string

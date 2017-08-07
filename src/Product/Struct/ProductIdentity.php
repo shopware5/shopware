@@ -29,18 +29,18 @@ use Shopware\Framework\Struct\Struct;
 class ProductIdentity extends Struct
 {
     /**
-     * Unique identifier of the product (s_articles).
+     * Unique identifier of the product.
      *
-     * @var int
+     * @var string
      */
-    protected $id;
+    protected $uuid;
 
     /**
-     * Unique identifier of the product variation (s_articles_details).
+     * Unique identifier of the product variation.
      *
-     * @var int
+     * @var string
      */
-    protected $variantId;
+    protected $variantUuid;
 
     /**
      * Unique identifier field.
@@ -55,7 +55,7 @@ class ProductIdentity extends Struct
     /**
      * @var int
      */
-    protected $mainVariantId;
+    protected $mainVariantUuid;
 
     /**
      * @var bool
@@ -72,25 +72,25 @@ class ProductIdentity extends Struct
      */
     protected $variantActive;
 
-    public function __construct(int $id, int $variantId, string $number, int $mainVariantId, bool $productActive, bool $variantActive)
+    public function __construct(string $uuid, string $variantUuid, string $number, string $mainVariantUuid, bool $productActive, bool $variantActive)
     {
-        $this->id = $id;
-        $this->variantId = $variantId;
+        $this->uuid = $uuid;
+        $this->variantUuid = $variantUuid;
         $this->number = $number;
-        $this->mainVariantId = $mainVariantId;
-        $this->isMainVariant = $this->variantId === $this->mainVariantId;
+        $this->mainVariantUuid = $mainVariantUuid;
+        $this->isMainVariant = $this->variantUuid === $this->mainVariantUuid;
         $this->productActive = $productActive;
         $this->variantActive = $variantActive;
     }
 
-    public function getId(): int
+    public function getUuid(): int
     {
-        return $this->id;
+        return $this->uuid;
     }
 
-    public function getVariantId(): int
+    public function getVariantUuid(): int
     {
-        return $this->variantId;
+        return $this->variantUuid;
     }
 
     public function getNumber(): string
@@ -98,9 +98,9 @@ class ProductIdentity extends Struct
         return $this->number;
     }
 
-    public function getMainVariantId(): int
+    public function getMainVariantUuid(): int
     {
-        return $this->mainVariantId;
+        return $this->mainVariantUuid;
     }
 
     public function isMainVariant(): bool

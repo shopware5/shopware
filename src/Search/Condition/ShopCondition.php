@@ -29,20 +29,20 @@ use Shopware\Search\ConditionInterface;
 class ShopCondition implements ConditionInterface
 {
     /**
-     * @var int[]
+     * @var string[]
      */
-    protected $ids;
+    protected $uuids;
 
-    public function __construct(array $ids)
+    public function __construct(array $uuids)
     {
-        $this->ids = array_map(function ($id) {
-            return (int) $id;
-        }, $ids);
+        $this->uuids = array_map(function ($id) {
+            return $id;
+        }, $uuids);
     }
 
-    public function getIds(): array
+    public function getUuids(): array
     {
-        return $this->ids;
+        return $this->uuids;
     }
 
     public function getName(): string

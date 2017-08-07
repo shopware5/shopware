@@ -68,8 +68,8 @@ class ViewProduct extends Product implements ViewLineItemInterface
         CalculatedProduct $calculatedProduct
     ): ViewProduct {
         $product = new self(
-            $simpleProduct->getId(),
-            $simpleProduct->getVariantId(),
+            $simpleProduct->getUuid(),
+            $simpleProduct->getVariantUuid(),
             $simpleProduct->getNumber(),
             $calculatedProduct
         );

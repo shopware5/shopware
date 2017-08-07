@@ -34,28 +34,28 @@ use Shopware\Search\ConditionInterface;
 class CategoryCondition implements ConditionInterface
 {
     /**
-     * @var int[]
+     * @var string[]
      */
-    private $categoryIds;
+    private $categoryUuids;
 
     /**
-     * @param int[] $categoryIds
+     * @param string[] $categoryUuids
      */
-    public function __construct(array $categoryIds)
+    public function __construct(array $categoryUuids)
     {
-        $this->categoryIds = array_map(function ($id) {
-            return (int) $id;
-        }, $categoryIds);
+        $this->categoryUuids = array_map(function ($id) {
+            return $id;
+        }, $categoryUuids);
 
-        sort($this->categoryIds, SORT_NUMERIC);
+        sort($this->categoryUuids, SORT_STRING);
     }
 
     /**
-     * @return int[]
+     * @return string[]
      */
-    public function getCategoryIds(): array
+    public function getCategoryUuids(): array
     {
-        return $this->categoryIds;
+        return $this->categoryUuids;
     }
 
     public function getName(): string

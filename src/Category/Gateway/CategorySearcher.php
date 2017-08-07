@@ -45,7 +45,7 @@ class CategorySearcher extends Search
             'category.position',
         ]);
 
-        $query->from('s_categories', 'category');
+        $query->from('category', 'category');
 
         return $query;
     }

@@ -216,7 +216,7 @@ class ConfiguratorTest extends TestCase
     private function createSelection(ListProduct $listProduct, array $optionNames)
     {
         $options = $this->helper->getProductOptionsByName(
-            $listProduct->getId(),
+            $listProduct->getUuid(),
             $optionNames
         );
 

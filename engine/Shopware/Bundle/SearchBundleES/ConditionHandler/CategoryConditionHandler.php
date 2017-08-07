@@ -53,7 +53,7 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
     ) {
         /* @var \Shopware\Search\Condition\CategoryCondition $criteriaPart */
         $search->addFilter(
-            new TermsQuery('categoryIds', $criteriaPart->getCategoryIds())
+            new TermsQuery('categoryIds', $criteriaPart->getCategoryUuids())
         );
     }
 
@@ -68,7 +68,7 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
     ) {
         /* @var CategoryCondition $criteriaPart */
         $search->addPostFilter(
-            new TermsQuery('categoryIds', $criteriaPart->getCategoryIds())
+            new TermsQuery('categoryIds', $criteriaPart->getCategoryUuids())
         );
     }
 }

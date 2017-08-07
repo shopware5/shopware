@@ -65,16 +65,16 @@ class CategoryConditionHandler implements HandlerInterface
 
         $builder->innerJoin(
             'product',
-            's_articles_categories_ro',
+            'product_category_ro',
             "productCategory{$suffix}",
-            "productCategory{$suffix}.articleID = product.id
-            AND productCategory{$suffix}.categoryID IN (:category{$suffix})"
+            "productCategory{$suffix}.product_uuid = product.uuid
+            AND productCategory{$suffix}.category_uuid IN (:category{$suffix})"
         );
 
         $builder->setParameter(
             ":category{$suffix}",
-            $criteriaPart->getCategoryIds(),
-            Connection::PARAM_INT_ARRAY
+            $criteriaPart->getCategoryUuids(),
+            Connection::PARAM_STR_ARRAY
         );
     }
 }

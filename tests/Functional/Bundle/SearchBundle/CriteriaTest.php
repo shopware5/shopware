@@ -95,6 +95,6 @@ class CriteriaTest extends TestCase
         $this->assertInstanceOf('Shopware\Search\Condition\CategoryCondition', $condition);
 
         /* @var \Shopware\Search\Condition\CategoryCondition $condition */
-        $this->assertEquals([3], $condition->getCategoryIds());
+        $this->assertEquals([3], $condition->getCategoryUuids());
     }
 }

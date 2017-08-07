@@ -76,7 +76,7 @@ class ProductSearchResult extends Collection implements SearchResultInterface
     public function getVariantIds(): array
     {
         return $this->map(function (ProductIdentity $identity) {
-            return $identity->getVariantId();
+            return $identity->getVariantUuid();
         });
     }
 

@@ -47,6 +47,6 @@ class ShopHandler implements HandlerInterface
     ): void {
         /* @var ShopCondition $criteriaPart */
         $builder->andWhere('seoUrl.shop_id IN (:shopIds)');
-        $builder->setParameter(':shopIds', $criteriaPart->getIds(), Connection::PARAM_INT_ARRAY);
+        $builder->setParameter(':shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
     }
 }

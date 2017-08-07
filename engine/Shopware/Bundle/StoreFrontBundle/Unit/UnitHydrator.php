@@ -71,28 +71,28 @@ class UnitHydrator extends Hydrator
             $unit->setUnit($data['__unit_unit']);
         }
 
-        if (isset($data['__unit_packunit'])) {
-            $unit->setPackUnit($data['__unit_packunit']);
+        if (isset($data['__unit_pack_unit'])) {
+            $unit->setPackUnit($data['__unit_pack_unit']);
         }
 
-        if (isset($data['__unit_purchaseunit'])) {
-            $unit->setPurchaseUnit((float) $data['__unit_purchaseunit']);
+        if (isset($data['__unit_purchase_unit'])) {
+            $unit->setPurchaseUnit((float) $data['__unit_purchase_unit']);
         }
 
-        if (isset($data['__unit_referenceunit'])) {
-            $unit->setReferenceUnit((float) $data['__unit_referenceunit']);
+        if (isset($data['__unit_reference_unit'])) {
+            $unit->setReferenceUnit((float) $data['__unit_reference_unit']);
         }
 
-        if (isset($data['__unit_purchasesteps'])) {
-            $unit->setPurchaseStep((int) $data['__unit_purchasesteps']);
+        if (isset($data['__unit_purchase_steps'])) {
+            $unit->setPurchaseStep((int) $data['__unit_purchase_steps']);
         }
 
-        if (isset($data['__unit_minpurchase'])) {
-            $unit->setMinPurchase((int) $data['__unit_minpurchase']);
+        if (isset($data['__unit_min_purchase'])) {
+            $unit->setMinPurchase((int) $data['__unit_min_purchase']);
         }
 
-        if (isset($data['__unit_maxpurchase'])) {
-            $unit->setMaxPurchase((int) $data['__unit_maxpurchase']);
+        if (isset($data['__unit_max_purchase'])) {
+            $unit->setMaxPurchase((int) $data['__unit_max_purchase']);
         }
     }
 }

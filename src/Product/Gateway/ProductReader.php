@@ -101,18 +101,18 @@ class ProductReader
         //            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
         //        }
 
-        $query->from('s_articles_details', 'variant')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
-            ->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID')
-            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
-            ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
-            ->leftJoin('variant', 's_articles_attributes', 'productAttribute', 'productAttribute.articledetailsID = variant.id')
-            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.supplierID = product.supplierID')
-            ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
-            ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
-            ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
-            ->where('variant.ordernumber IN (:numbers)')
+        $query->from('product_detail', 'variant')
+            ->innerJoin('variant', 'product', 'product', 'product.uuid = variant.product_uuid')
+            ->innerJoin('product', 's_core_tax', 'tax', 'tax.uuid = product.tax_uuid')
+            ->leftJoin('variant', 's_core_units', 'unit', 'unit.uuid = variant.unit_uuid')
+            ->leftJoin('product', 'product_manufacturer', 'manufacturer', 'manufacturer.uuid = product.product_manufacturer_uuid')
+            ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.uuid = product.price_group_uuid')
+            ->leftJoin('variant', 'product_attribute', 'productAttribute', 'productAttribute.product_details_uuid = variant.uuid')
+            ->leftJoin('product', 'product_manufacturer_attribute', 'manufacturerAttribute', 'manufacturerAttribute.manufacturer_uuid = manufacturer.uuid')
+            ->leftJoin('product', 'product_top_seller_ro', 'topSeller', 'topSeller.product_uuid = product.uuid')
+            ->leftJoin('variant', 'product_esd', 'esd', 'esd.product_detail_uuid = variant.uuid')
+            ->leftJoin('esd', 'product_esd_attribute', 'esdAttribute', 'esdAttribute.esd_uuid = esd.uuid')
+            ->where('variant.order_number IN (:numbers)')
             ->andWhere('variant.active = 1')
             ->andWhere('product.active = 1')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
@@ -134,8 +134,8 @@ class ProductReader
         $query = $this->connection->createQueryBuilder();
 
         $query->select('1')
-            ->from('s_articles_esd', 'variantEsd')
-            ->where('variantEsd.articleID = product.id')
+            ->from('product_esd', 'variantEsd')
+            ->where('variantEsd.product_uuid = product.uuid')
             ->setMaxResults(1);
 
         return $query;
@@ -148,9 +148,9 @@ class ProductReader
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select("GROUP_CONCAT(customerGroups.customergroupId SEPARATOR '|')")
-            ->from('s_articles_avoid_customergroups', 'customerGroups')
-            ->where('customerGroups.articleID = product.id');
+        $query->select("GROUP_CONCAT(customerGroups.customer_group_uuid SEPARATOR '|')")
+            ->from('product_avoid_customer_group', 'customerGroups')
+            ->where('customerGroups.product_uuid = product.uuid');
 
         return $query;
     }
@@ -162,11 +162,11 @@ class ProductReader
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select('COUNT(availableVariant.id)')
-            ->from('s_articles_details', 'availableVariant')
-            ->where('availableVariant.articleID = product.id')
+        $query->select('COUNT(availableVariant.uuid)')
+            ->from('product_detail', 'availableVariant')
+            ->where('availableVariant.product_uuid = product.uuid')
             ->andWhere('availableVariant.active = 1')
-            ->andWhere('availableVariant.instock >= availableVariant.minpurchase');
+            ->andWhere('availableVariant.stock >= availableVariant.min_purchase');
 
         return $query;
     }

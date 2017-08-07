@@ -52,22 +52,22 @@ class ShopConditionHandler implements HandlerInterface
     ): void {
         $builder->innerJoin(
             'product',
-            's_articles_categories_ro',
+            'product_category_ro',
             'productCategory',
-            'productCategory.articleID = product.id'
+            'productCategory.product_uuid = product.uuid'
         );
 
         $builder->innerJoin(
             'productCategory',
             's_core_shops',
             'shop',
-            'shop.category_id = productCategory.categoryID AND shop.id IN (:shopIds)'
+            'shop.category_uuid = productCategory.category_uuid AND shop.id IN (:shopUuids)'
         );
 
         /* @var ShopCondition $criteriaPart */
         $builder->setParameter(
-            ':shopIds',
-            $criteriaPart->getIds(),
+            ':shopUuids',
+            $criteriaPart->getUuids(),
             Connection::PARAM_INT_ARRAY
         );
     }

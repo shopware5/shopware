@@ -65,8 +65,8 @@ class Product extends ListProduct
     public static function createFromListProduct(ListProduct $listProduct)
     {
         $product = new self(
-            $listProduct->getId(),
-            $listProduct->getVariantId(),
+            $listProduct->getUuid(),
+            $listProduct->getVariantUuid(),
             $listProduct->getNumber()
         );
         foreach ($listProduct as $key => $value) {

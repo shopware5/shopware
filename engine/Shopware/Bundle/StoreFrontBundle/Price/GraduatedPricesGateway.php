@@ -87,7 +87,7 @@ class GraduatedPricesGateway
     {
         $ids = [];
         foreach ($products as $product) {
-            $ids[] = $product->getVariantId();
+            $ids[] = $product->getVariantUuid();
         }
         $ids = array_unique($ids);
 

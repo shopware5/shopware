@@ -54,7 +54,7 @@ class ProductSearcher extends Search
                     (int) $row['product_id'],
                     (int) $row['variant_id'],
                     $row['variant_number'],
-                    (int) $row['main_detail_id'],
+                    $row['main_detail_uuid'],
                     (bool) $row['product_active'],
                     (bool) $row['variant_active']
                 );
@@ -71,14 +71,14 @@ class ProductSearcher extends Search
         $query->addSelect([
             'product.id as product_id',
             'variant.id as variant_id',
-            'variant.ordernumber as variant_number',
-            'product.main_detail_id as main_detail_id',
+            'variant.order_number as variant_number',
+            'product.main_detail_uuid as main_detail_uuid',
             'product.active as product_active',
             'variant.active as variant_active',
         ]);
 
-        $query->from('s_articles', 'product');
-        $query->innerJoin('product', 's_articles_details', 'variant', 'variant.articleID = product.id');
+        $query->from('product', 'product');
+        $query->innerJoin('product', 'product_detail', 'variant', 'variant.product_id = product.id');
         $query->groupBy('variant.id');
 
         return $query;

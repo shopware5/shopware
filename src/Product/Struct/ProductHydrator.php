@@ -75,9 +75,9 @@ class ProductHydrator extends Hydrator
     public function hydrate(array $data): Product
     {
         $product = new Product();
-        $product->setId((int) $data['__product_id']);
-        $product->setVariantId((int) $data['__variant_id']);
-        $product->setNumber($data['__variant_ordernumber']);
+        $product->setUuid((int) $data['__product_uuid']);
+        $product->setVariantUuid((int) $data['__variant_uuid']);
+        $product->setNumber($data['__variant_order_number']);
 
         return $this->assignData($product, $data);
     }
@@ -98,7 +98,7 @@ class ProductHydrator extends Hydrator
         }
 
         $result = $this->convertArrayKeys($translation, [
-            'metaTitle' => '__product_metaTitle',
+            'metaTitle' => '__product_meta_title',
             'txtArtikel' => '__product_name',
             'txtshortdescription' => '__product_description',
             'txtlangbeschreibung' => '__product_description_long',
@@ -124,7 +124,7 @@ class ProductHydrator extends Hydrator
 
         //        $this->assignPriceGroupData($product, $data);
 
-        //        if ($data['__product_supplierID']) {
+        //        if ($data['__product_product_manufacturer_uuid']) {
         //            $product->setManufacturer(
         //                $this->manufacturerHydrator->hydrate($data)
         //            );
@@ -170,9 +170,9 @@ class ProductHydrator extends Hydrator
     //     */
     //    private function assignPriceGroupData(ListProduct $product, array $data)
     //    {
-    //        if (!empty($data['__priceGroup_id'])) {
+    //        if (!empty($data['__product_price_group_id'])) {
     //            $product->setPriceGroup(new PriceGroup());
-    //            $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
+    //            $product->getPriceGroup()->setId((int) $data['__product_price_group_id']);
     //            $product->getPriceGroup()->setName($data['__priceGroup_description']);
     //        }
     //    }
@@ -182,8 +182,8 @@ class ProductHydrator extends Hydrator
         $product->setName($data['__product_name']);
         $product->setShortDescription($data['__product_description']);
         $product->setLongDescription($data['__product_description_long']);
-        $product->setCloseouts((bool) ($data['__product_laststock']));
-        $product->setMetaTitle($data['__product_metaTitle']);
+        $product->setCloseouts((bool) ($data['__product_last_stock']));
+        $product->setMetaTitle($data['__product_meta_title']);
         $product->setHasProperties($data['__product_filtergroupID'] > 0);
         $product->setHighlight((bool) ($data['__product_topseller']));
         $product->setAllowsNotification((bool) ($data['__product_notification']));
@@ -191,31 +191,30 @@ class ProductHydrator extends Hydrator
         $product->setTemplate($data['__product_template']);
         $product->setHasConfigurator(($data['__product_configurator_set_id'] > 0));
         $product->setHasEsd((bool) $data['__product_has_esd']);
-        //        $product->setIsPriceGroupActive((bool) $data['__product_pricegroupActive']);
         $product->setSales((int) $data['__topSeller_sales']);
-        $product->setShippingFree((bool) ($data['__variant_shippingfree']));
-        $product->setStock((int) $data['__variant_instock']);
-        $product->setManufacturerNumber($data['__variant_suppliernumber']);
-        $product->setMainVariantId((int) $data['__product_main_detail_id']);
+        $product->setShippingFree((bool) ($data['__variant_shipping_free']));
+        $product->setStock((int) $data['__variant_stock']);
+        $product->setManufacturerNumber($data['__variant_supplier_number']);
+        $product->setMainVariantUuid((int) $data['__product_main_detail_uuid']);
 
-        if ($data['__variant_shippingtime']) {
-            $product->setShippingTime($data['__variant_shippingtime']);
-        } elseif ($data['__product_shippingtime']) {
-            $product->setShippingTime($data['__product_shippingtime']);
+        if ($data['__variant_shipping_time']) {
+            $product->setShippingTime($data['__variant_shipping_time']);
+        } elseif ($data['__product_shipping_time']) {
+            $product->setShippingTime($data['__product_shipping_time']);
         }
 
-        if ($data['__variant_releasedate']) {
+        if ($data['__variant_release_date']) {
             $product->setReleaseDate(
-                new \DateTime($data['__variant_releasedate'])
+                new \DateTime($data['__variant_release_date'])
             );
         }
-        if ($data['__product_datum']) {
+        if ($data['__product_created_at']) {
             $product->setCreatedAt(
-                new \DateTime($data['__product_datum'])
+                new \DateTime($data['__product_created_at'])
             );
         }
 
-        $product->setAdditional($data['__variant_additionaltext']);
+        $product->setAdditional($data['__variant_additional_text']);
         $product->setEan($data['__variant_ean']);
         $product->setHeight((float) $data['__variant_height']);
         $product->setLength((float) $data['__variant_length']);

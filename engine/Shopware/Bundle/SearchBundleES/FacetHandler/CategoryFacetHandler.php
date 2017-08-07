@@ -173,7 +173,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         $active = [];
         foreach ($criteria->getUserConditions() as $condition) {
             if ($condition instanceof CategoryCondition) {
-                $active = array_merge($active, $condition->getCategoryIds());
+                $active = array_merge($active, $condition->getCategoryUuids());
             }
         }
 

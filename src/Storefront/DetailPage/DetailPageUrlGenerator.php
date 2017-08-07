@@ -70,7 +70,7 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
 
         $criteria = new Criteria();
         $criteria->addCondition(new CanonicalCondition(true));
-        $criteria->addCondition(new ForeignKeyCondition($products->getProductIds()));
+        $criteria->addCondition(new ForeignKeyCondition($products->getProductUuids()));
         $criteria->addCondition(new NameCondition([self::ROUTE_NAME]));
         $criteria->addCondition(new ShopCondition([$shopId]));
         $existingCanonicals = $this->seoUrlRepository->search($criteria, $context);
@@ -93,7 +93,7 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
                 null,
                 $shopId,
                 self::ROUTE_NAME,
-                $identity->getId(),
+                $identity->getUuid(),
                 $pathInfo,
                 $url,
                 new \DateTime(),
