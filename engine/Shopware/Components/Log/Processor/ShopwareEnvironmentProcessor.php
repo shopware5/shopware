@@ -50,7 +50,7 @@ class ShopwareEnvironmentProcessor
                 'query' => $this->filterRequestUserData($request->getQuery()),
                 'post' => $this->filterRequestUserData($request->getPost()),
             ];
-        } elseif ($_SERVER['REQUEST_URI']) {
+        } elseif (!empty($_SERVER['REQUEST_URI'])) {
             $record['extra']['request'] = [
                 'uri' => $_SERVER['REQUEST_URI'],
                 'method' => $_SERVER['REQUEST_METHOD'],
@@ -73,7 +73,7 @@ class ShopwareEnvironmentProcessor
             $record['extra']['shop'] = 'No shop data available';
         }
 
-        if (is_object($_SESSION['Shopware']['Auth'])) {
+        if (!empty($_SESSION) && is_object($_SESSION['Shopware']['Auth'])) {
             $record['extra']['session'] = [
                 'userId' => $_SESSION['Shopware']['Auth']->id,
                 'roleId' => $_SESSION['Shopware']['Auth']->roleID,
