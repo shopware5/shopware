@@ -22,39 +22,68 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Category\Gateway;
+namespace Shopware\Category\Struct;
 
-use Shopware\Category\Struct\CategoryCollection;
-use Shopware\Context\TranslationContext;
-use Shopware\Search\Criteria;
+use Shopware\Framework\Struct\Struct;
 
-class CategoryRepository
+class CategoryIdentity extends Struct
 {
-    const FETCH_LIST = 'list';
+    /**
+     * @var int
+     */
+    protected $id;
 
     /**
-     * @var CategoryReader
+     * @var int|null
      */
-    private $reader;
+    protected $parentId;
 
     /**
-     * @var CategorySearcher
+     * @var int
      */
-    private $searcher;
+    protected $position;
 
-    public function __construct(CategoryReader $reader, CategorySearcher $searcher)
+    /**
+     * @var int[]
+     */
+    protected $path = [];
+
+    /**
+     * @var bool
+     */
+    protected $active;
+
+    public function __construct(int $id, ?int $parentId, int $position, array $path, bool $active)
     {
-        $this->reader = $reader;
-        $this->searcher = $searcher;
+        $this->id = $id;
+        $this->parentId = $parentId;
+        $this->position = $position;
+        $this->path = $path;
+        $this->active = $active;
     }
 
-    public function search(Criteria $criteria, TranslationContext $context): CategorySearchResult
+    public function getId(): int
     {
-        return $this->searcher->search($criteria, $context);
+        return $this->id;
     }
 
-    public function read(array $ids, TranslationContext $context, string $fetchMode): CategoryCollection
+    public function getParentId(): ?int
     {
-        return $this->reader->read($ids, $context);
+        return $this->parentId;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function getPath(): array
+    {
+        return $this->path;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 }
