@@ -145,8 +145,8 @@ Ext.onReady(function() {
 
     Ext.define('Ext.locale.de.form.field.Text', {
         override: 'Ext.form.field.Text',
-        minLengthText: 'Bitte geben Sie mindestens {0} Zeichen ein',
-        maxLengthText: 'Bitte geben Sie maximal {0} Zeichen ein',
+        minLengthText: 'Bitte gib mindestens {0} Zeichen ein',
+        maxLengthText: 'Bitte gib maximal {0} Zeichen ein',
         blankText: 'Dieses Feld darf nicht leer sein',
         regexText: '',
         emptyText: null
@@ -191,7 +191,7 @@ Ext.onReady(function() {
 
     Ext.define('Ext.locale.de.form.field.HtmlEditor', {
         override: 'Ext.form.field.HtmlEditor',
-        createLinkText: 'Bitte geben Sie die URL für den Link ein:'
+        createLinkText: 'Bitte gib die URL für den Link ein:'
     }, function() {
         Ext.apply(Ext.form.field.HtmlEditor.prototype, {
             buttonTips: {
@@ -356,7 +356,7 @@ Ext.onReady(function() {
 
         snippets: {
             title: 'Desktop erstellen',
-            message: 'Bitte wählen Sie einen Titel für den neuen Desktop'
+            message: 'Bitte wähle einen Titel für den neuen Desktop'
         }
     });
     Ext.define('Shopware.DataView.de.GooglePreview', {
@@ -479,7 +479,7 @@ Ext.onReady(function() {
         saveBtnText: 'Aktualisieren',
         cancelBtnText: 'Abbrechen',
         errorsText: 'Fehler',
-        dirtyText: 'Sie müssen die Änderungen übernehmen oder abbrechen'
+        dirtyText: 'Du musst die Änderungen übernehmen oder abbrechen'
     });
     Ext.define('Ext.util.de.FileUpload', {
         override: 'Ext.util.FileUpload',
@@ -488,11 +488,11 @@ Ext.onReady(function() {
             filesFrom: 'von',
             messageText: '[0] Dateien hochgeladen',
             messageTitle: 'Medienverwaltung',
-            legacyMessage: 'Ihr Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ',
+            legacyMessage: 'Dein Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ',
             maxUploadSizeTitle: 'Die Datei ist zu groß',
-            maxUploadSizeText: 'Die selektierte Datei überschreitet die maximal erlaubte Uploadgröße. Bitte wählen Sie eine andere Datei aus.',
+            maxUploadSizeText: 'Die selektierte Datei überschreitet die maximal erlaubte Uploadgröße. Bitte wähle eine andere Datei aus.',
             extensionNotAllowedTitle: 'Dateiendung wird nicht unterstützt',
-            extensionNotAllowedText: 'Die Dateiendung \"[0]\" wird nicht unterstützt. Bitte wählen Sie eine andere Datei aus.',
+            extensionNotAllowedText: 'Die Dateiendung \"[0]\" wird nicht unterstützt. Bitte wähle eine andere Datei aus.',
             blackListTitle: 'Blacklist',
             blackListMessage: 'Die Datei [0] ist nicht erlaubt!'
         }
@@ -513,7 +513,7 @@ Ext.onReady(function() {
         saveSuccessMessage: 'Eintrag wurde erfolgreich gespeichert',
         violationErrorTitle: 'Validierung Fehler',
         invalidFormTitle: 'Formularvalidierungs Fehler',
-        invalidFormMessage: 'Das Formular beinhaltet invalide Daten, bitte prüfen Sie Ihre Eingabe.'
+        invalidFormMessage: 'Das Formular beinhaltet invalide Daten, bitte prüfe deine Eingabe.'
     });
     Ext.define('Shopware.form.field.de.Media', {
         override: 'Shopware.form.field.Media',
@@ -527,13 +527,13 @@ Ext.onReady(function() {
     Ext.define('Shopware.grid.de.Controller', {
         override: 'Shopware.grid.Controller',
         deleteConfirmTitle: 'Einträge löschen',
-        deleteConfirmText: 'Sind Sie sicher, dass Sie die markierten Einträge löschen möchen?',
-        deleteInfoText: '<b>Die Einträge werden gelöscht.</b> <br>Um den Prozess abzubrechen, können Sie den <b><i>`Cancel process`</i></b> Button verwenden. Abhänging von der Datenmenge kann dieser Prozess einige Minuten in Anspruch nehmen.',
+        deleteConfirmText: 'Bist du sicher, dass du die markierten Einträge löschen möchtest?',
+        deleteInfoText: '<b>Die Einträge werden gelöscht.</b> <br>Um den Prozess abzubrechen, kannst du den <b><i>`Cancel process`</i></b> Button verwenden. Abhänging von der Datenmenge kann dieser Prozess einige Minuten in Anspruch nehmen.',
         deleteProgressBarText: 'Eintrag [0] von [1]'
     });
     Ext.define('Shopware.listing.de.FilterPanel', {
         override: 'Shopware.listing.FilterPanel',
-        infoTextSnippet: 'Aktivieren Sie die verschiedenen Felder über die angezeigten Checkboxen. Aktivierte Felder werden mit einer UND Bedingung verknüpft.',
+        infoTextSnippet: 'Aktiviere die verschiedenen Felder über die angezeigten Checkboxen. Aktivierte Felder werden mit einer "Und" Bedingung verknüpft.',
         filterButtonText: 'Filter anwenden',
         resetButtonText: 'Filter zurücksetzen'
     });
@@ -554,7 +554,7 @@ Ext.onReady(function() {
         override: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
 
         fieldLabel: 'Produkt Layout',
-        helpText: 'Mit Hilfe des Produkt Layouts können Sie entscheiden, wie Ihre Produkte auf der Kategorie-Seite dargestellt werden sollen. Wählen Sie eines der drei unterschiedlichen Layouts um die Ansicht perfekt auf Ihr Produktsortiment abzustimmen. Sie können für jede Kategorie ein eigenes Layout wählen oder über die Vererbungsfunktion automatisch die Einstellungen der Eltern-Kategorie übernehmen.'
+        helpText: 'Mit Hilfe des Produkt Layouts kannst du entscheiden, wie deine Produkte auf der Kategorie-Seite dargestellt werden sollen. Wähle eines der drei unterschiedlichen Layouts um die Ansicht perfekt auf dein Produktsortiment abzustimmen. Du kannst für jede Kategorie ein eigenes Layout wählen oder über die Vererbungsfunktion automatisch die Einstellungen der Eltern-Kategorie übernehmen.'
     });
     Ext.define('Shopware.apps.Base.store.de.ProductBoxLayout', {
         override: 'Shopware.apps.Base.store.ProductBoxLayout',
@@ -593,13 +593,13 @@ Ext.onReady(function() {
             expired_soon_subscription_days_warning: ' Tage',
             invalid_licence: 'Lizenz von [0] Plugin(s) sind ungültig. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Ungültige Lizenzen:</b><br />[1]',
             shop_license_upgrade: 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
-            no_license: 'Möglicherweise sind Sie Opfer einer Produktfälschung geworden. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Für die folgenden Plugins liegt keine gültige Lizenz vor:</b><br />[1]',
+            no_license: 'Möglicherweise bist du Opfer einer Produktfälschung geworden. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Für die folgenden Plugins liegt keine gültige Lizenz vor:</b><br />[1]',
             expiring_license: 'Ablaufende Lizenz(en)',
             expired_license: 'Abgelaufene Lizenz(en)',
             expiring_license_warning: 'Es laufen [0]x Plugin Lizenz(en) aus.<br /><br /><b>Bald abgelaufene Lizenz(en):</b><br />[1]',
             expired_license_warning: 'Es sind [0] Plugin Lizenz(en) abgelaufen.<br /><br /><b>Abgelaufene Lizenz(en):</b><br/>[1]',
             unknown_license: 'Nicht lizensierte Plugins',
-            confirm_open_pluginmanager: 'Sie haben nicht lizensierte Plugins installiert. Bitte erwerben Sie eine gültige Lizenz oder deinstallieren und entfernen Sie die Plugins über den Plugin Manager.'
+            confirm_open_pluginmanager: 'Du hast nicht lizensierte Plugins installiert. Bitte erwirb eine gültige Lizenz oder deinstalliere und entferne die Plugins über den Plugin Manager.'
         }
     });
 });
