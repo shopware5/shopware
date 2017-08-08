@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 
 /**
- * Class CustomerService
+ * Class CustomerRepository
  */
 class CustomerService implements CustomerServiceInterface
 {

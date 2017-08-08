@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Routing;
 
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -153,6 +154,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         //save detected shop to context for further processes
         $this->context->setParameter('shop', $shop);
         $request->attributes->set('_shop_id', $shop['id']);
+        $request->attributes->set('_currency_id', $shop['currency_id']);
         $request->attributes->set('_shop', $shop);
 
         //set shop locale

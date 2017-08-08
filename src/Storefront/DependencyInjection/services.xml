@@ -86,5 +86,26 @@
             <argument id="shopware.seo_url.gateway.seo_url_repository" type="service" />
         </service>
 
+        <service class="Shopware\Storefront\Context\ShopContextValueResolver" id="shopware.storefront.context.shop_context_value_resolver">
+            <tag name="controller.argument_value_resolver"/>
+        </service>
+
+        <service class="Shopware\Storefront\Context\StorefrontContextService" id="shopware.storefront.context.storefront_context_service">
+            <argument id="request_stack" type="service"/>
+            <argument id="shopware.context.service.context_factory" type="service"/>
+            <argument id="shopware.cache" type="service"/>
+            <argument id="shopware.serializer.serializer_registry" type="service"/>
+        </service>
+
+        <service class="Shopware\Storefront\Context\ContextSubscriber" id="shopware.storefront.context.context_subscriber">
+            <argument id="shopware.storefront.context.storefront_context_service" type="service"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Storefront\Context\StorefrontContextSwitcher" id="shopware.storefront.context.storefront_context_switcher">
+            <argument id="session" type="service"/>
+            <argument id="shopware.storefront.context.storefront_context_service" type="service"/>
+        </service>
+
     </services>
 </container>

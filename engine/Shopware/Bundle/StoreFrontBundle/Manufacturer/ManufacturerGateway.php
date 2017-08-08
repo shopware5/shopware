@@ -27,6 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\ProductManufacturer\Struct\ProductManufacturerHydrator;
 
 /**
  * @category  Shopware
@@ -36,7 +37,7 @@ use Shopware\Context\Struct\TranslationContext;
 class ManufacturerGateway
 {
     /**
-     * @var ManufacturerHydrator
+     * @var ProductManufacturerHydrator
      */
     private $manufacturerHydrator;
 
@@ -63,12 +64,12 @@ class ManufacturerGateway
     /**
      * @param Connection           $connection
      * @param \Shopware\Framework\Struct\FieldHelper          $fieldHelper
-     * @param ManufacturerHydrator $manufacturerHydrator
+     * @param ProductManufacturerHydrator $manufacturerHydrator
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        ManufacturerHydrator $manufacturerHydrator
+        ProductManufacturerHydrator $manufacturerHydrator
     ) {
         $this->connection = $connection;
         $this->manufacturerHydrator = $manufacturerHydrator;

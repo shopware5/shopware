@@ -36,11 +36,11 @@ use Shopware\Cart\Price\CartPrice;
 use Shopware\Cart\Rule\ValidatableFilter;
 use Shopware\Cart\Tax\CalculatedTaxCollection;
 use Shopware\Cart\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
-use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator;
+use Shopware\PaymentMethod\Gateway\PaymentMethodReader;
+use Shopware\PaymentMethod\Struct\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodService;
 use Shopware\Serializer\JsonSerializer;
 use Shopware\Serializer\ObjectDeserializer;
@@ -67,7 +67,7 @@ class PaymentMethodServiceTest extends TestCase
             $this->createMock(CacheInterface::class)
         );
 
-        $hydrator = new PaymentMethodHydrator(
+        $hydrator = new \Shopware\PaymentMethod\Struct\PaymentMethodHydrator(
             new AttributeHydrator($fieldHelper),
             new JsonSerializer(new ObjectDeserializer())
         );
@@ -78,7 +78,7 @@ class PaymentMethodServiceTest extends TestCase
             ->will($this->returnCallback([$this, 'riskFilter']));
 
         $service = new PaymentMethodService(
-            new PaymentMethodGateway(
+            new PaymentMethodReader(
                 $fieldHelper,
                 $hydrator,
                 $this->createDatabaseMock($database)
@@ -97,7 +97,7 @@ class PaymentMethodServiceTest extends TestCase
 
     public function dataSets()
     {
-        $hydrator = new PaymentMethodHydrator(
+        $hydrator = new \Shopware\PaymentMethod\Struct\PaymentMethodHydrator(
             new AttributeHydrator($this->createMock(FieldHelper::class)),
             new JsonSerializer(new ObjectDeserializer())
         );

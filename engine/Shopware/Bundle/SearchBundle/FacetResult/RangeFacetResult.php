@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Search\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Framework\Struct\Attribute;
 use Shopware\Framework\Struct\Struct;
 
 /**

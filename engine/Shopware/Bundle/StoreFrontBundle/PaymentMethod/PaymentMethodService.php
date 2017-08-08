@@ -28,12 +28,13 @@ namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Rule\ValidatableFilter;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\PaymentMethod\Gateway\PaymentMethodReader;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
 
 class PaymentMethodService
 {
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway
+     * @var \Shopware\PaymentMethod\Gateway\PaymentMethodReader
      */
     private $gateway;
 
@@ -42,7 +43,7 @@ class PaymentMethodService
      */
     private $ruleFilter;
 
-    public function __construct(PaymentMethodGateway $gateway)
+    public function __construct(PaymentMethodReader $gateway)
     {
         $this->gateway = $gateway;
     }

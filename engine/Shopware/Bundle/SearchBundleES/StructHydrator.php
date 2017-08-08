@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Framework\Struct\Attribute;
 use Shopware\Media\Struct\Media;
 use Shopware\MediaThumbnail\Struct\MediaThumbnail;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
@@ -126,7 +126,7 @@ class StructHydrator
     /**
      * @param array $data
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Common\Attribute[]
+     * @return \Shopware\Framework\Struct\Attribute[]
      */
     public function createAttributes($data)
     {

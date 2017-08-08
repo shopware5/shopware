@@ -36,7 +36,7 @@ use Shopware\Cart\Tax\TaxRuleCollection;
 use Shopware\CartBridge\Product\ProductPriceGateway;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
-use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
+use Shopware\Tax\Struct\TaxHydrator;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class ProductPriceGatewayTest extends TestCase

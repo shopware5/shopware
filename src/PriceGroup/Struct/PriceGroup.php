@@ -24,8 +24,8 @@
 
 namespace Shopware\PriceGroup\Struct;
 
-use Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount;
 use Shopware\Framework\Struct\Struct;
+use Shopware\PriceGroupDiscount\Struct\PriceGroupDiscountCollection;
 
 /**
  * @category  Shopware
@@ -45,7 +45,7 @@ class PriceGroup extends Struct
     protected $name;
 
     /**
-     * @var \Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount[]
+     * @var PriceGroupDiscountCollection
      */
     protected $discounts = [];
 
@@ -76,23 +76,17 @@ class PriceGroup extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return \Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount[]
-     */
-    public function getDiscounts()
+    public function getDiscounts(): PriceGroupDiscountCollection
     {
         return $this->discounts;
     }
 
-    /**
-     * @param \Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount[] $discounts
-     */
-    public function setDiscounts($discounts)
+    public function setDiscounts(PriceGroupDiscountCollection $discounts)
     {
         $this->discounts = $discounts;
     }

@@ -25,22 +25,23 @@
 namespace Shopware\Context\Struct;
 
 use Shopware\Cart\Delivery\ShippingLocation;
-use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Struct\Struct;
 use Shopware\Currency\Struct\Currency;
 use Shopware\Customer\Struct\Customer;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
+use Shopware\PriceGroup\Struct\PriceGroupCollection;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
 use Shopware\Shop\Struct\Shop;
 use Shopware\Tax\Struct\Tax;
+use Shopware\Tax\Struct\TaxCollection;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Struct implements ShopContext
+class ShopContext extends Struct
 {
     /**
      * @var CustomerGroup
@@ -63,12 +64,12 @@ class ShopContext extends Struct implements ShopContext
     protected $shop;
 
     /**
-     * @var \Shopware\Tax\Struct\Tax[]
+     * @var TaxCollection
      */
     protected $taxRules;
 
     /**
-     * @var \Shopware\PriceGroup\Struct\PriceGroup[]
+     * @var PriceGroupCollection
      */
     protected $priceGroups;
 
@@ -97,25 +98,13 @@ class ShopContext extends Struct implements ShopContext
      */
     protected $shippingLocation;
 
-    /**
-     * @param Shop                                                          $shop
-     * @param Currency                                                      $currency
-     * @param CustomerGroup                                                 $currentCustomerGroup
-     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $fallbackCustomerGroup
-     * @param \Shopware\Tax\Struct\Tax[]                   $taxRules
-     * @param \Shopware\PriceGroup\Struct\PriceGroup[]     $priceGroups
-     * @param \Shopware\PaymentMethod\Struct\PaymentMethod                                                 $paymentMethod
-     * @param ShippingMethod                                                $shippingMethod
-     * @param ShippingLocation                                              $shippingLocation
-     * @param \Shopware\Customer\Struct\Customer                                                      $customer
-     */
     public function __construct(
         Shop $shop,
         Currency $currency,
         CustomerGroup $currentCustomerGroup,
         CustomerGroup $fallbackCustomerGroup,
-        array $taxRules,
-        array $priceGroups,
+        TaxCollection $taxRules,
+        PriceGroupCollection $priceGroups,
         PaymentMethod $paymentMethod,
         ShippingMethod $shippingMethod,
         ShippingLocation $shippingLocation,
@@ -154,12 +143,7 @@ class ShopContext extends Struct implements ShopContext
         return $this->fallbackCustomerGroup;
     }
 
-    public function getTaxRules(): array
-    {
-        return $this->taxRules;
-    }
-
-    public function getPriceGroups(): array
+    public function getPriceGroups(): PriceGroupCollection
     {
         return $this->priceGroups;
     }
@@ -169,9 +153,7 @@ class ShopContext extends Struct implements ShopContext
      */
     public function getTaxRule(int $taxId): Tax
     {
-        $key = 'tax_' . $taxId;
-
-        return $this->taxRules[$key];
+        return $this->taxRules->get($taxId);
     }
 
     public function getCustomer(): ? Customer

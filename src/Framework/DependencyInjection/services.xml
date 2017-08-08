@@ -82,5 +82,8 @@
 
         <!-- Validator -->
         <service id="shopware.validation.constraint_builder" class="Shopware\Framework\Validation\ConstraintBuilder"/>
+
+        <service class="Shopware\Framework\Struct\AttributeHydrator" id="shopware.framework.struct.attribute_hydrator"/>
+
     </services>
 </container>

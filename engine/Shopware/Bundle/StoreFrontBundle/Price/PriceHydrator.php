@@ -24,12 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount;
-use Shopware\PriceGroup\Struct\PriceGroup;
-use Shopware\Bundle\StoreFrontBundle\Product\ProductHydrator;
-use Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator;
+use Shopware\Unit\Struct\UnitHydrator;
+use Shopware\Product\Struct\ProductHydrator;
 
 /**
  * @category  Shopware
@@ -39,12 +37,12 @@ use Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator;
 class PriceHydrator extends Hydrator
 {
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator
+     * @var \Shopware\Unit\Struct\UnitHydrator
      */
     private $unitHydrator;
 
     /**
-     * @var AttributeHydrator
+     * @var \Shopware\Framework\Struct\AttributeHydrator
      */
     private $attributeHydrator;
 
@@ -55,9 +53,9 @@ class PriceHydrator extends Hydrator
 
     /**
      * @param CustomerGroupHydrator $customerGroupHydrator
-     * @param UnitHydrator          $unitHydrator
+     * @param \Shopware\Unit\Struct\UnitHydrator          $unitHydrator
      * @param ProductHydrator       $productHydrator
-     * @param AttributeHydrator     $attributeHydrator
+     * @param \Shopware\Framework\Struct\AttributeHydrator     $attributeHydrator
      */
     public function __construct(
         UnitHydrator $unitHydrator,
@@ -115,44 +113,5 @@ class PriceHydrator extends Hydrator
         $price->setUnit($unit);
 
         return $price;
-    }
-
-    /**
-     * @param $data
-     *
-     * @return PriceGroup
-     */
-    public function hydratePriceGroup($data)
-    {
-        $group = new PriceGroup();
-
-        $first = $data[0];
-
-        $group->setId((int) $first['__priceGroup_id']);
-        $group->setName($first['__priceGroup_description']);
-
-        $discounts = [];
-        foreach ($data as $row) {
-            $discounts[] = $this->hydratePriceDiscount($row);
-        }
-
-        $group->setDiscounts($discounts);
-
-        return $group;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return PriceGroupDiscount
-     */
-    public function hydratePriceDiscount(array $data)
-    {
-        $discount = new PriceGroupDiscount();
-        $discount->setId((int) $data['__priceGroupDiscount_id']);
-        $discount->setPercent((float) $data['__priceGroupDiscount_discount']);
-        $discount->setQuantity((int) $data['__priceGroupDiscount_discountstart']);
-
-        return $discount;
     }
 }

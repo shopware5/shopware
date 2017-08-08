@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Search\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Framework\Struct\Attribute;
 use Shopware\Framework\Struct\Struct;
 
 /**
@@ -72,7 +72,7 @@ class MediaListFacetResult extends Struct implements FacetResultInterface
      * @param MediaListItem[] $values
      * @param string          $fieldName
      * @param string|null     $template
-     * @param Attribute[]     $attributes
+     * @param \Shopware\Framework\Struct\Attribute[]     $attributes
      */
     public function __construct(
         $facetName,

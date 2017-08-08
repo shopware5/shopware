@@ -24,15 +24,14 @@
 
 namespace Shopware\Storefront\Context;
 
-use Enlight_Components_Session_Namespace as Session;
-use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Shopware\Context\Struct\CheckoutScope;
 use Shopware\Context\Service\ContextFactoryInterface;
 use Shopware\Context\Struct\CustomerScope;
 use Shopware\Context\Struct\ShopScope;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Models;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Shopware\Serializer\SerializerRegistry;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @category  Shopware
@@ -46,11 +45,6 @@ class StorefrontContextService implements StorefrontContextServiceInterface
     const CACHE_LIFETIME = 3600;
 
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
      * @var ContextFactoryInterface
      */
     private $factory;
@@ -60,11 +54,26 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private $cache;
 
-    public function __construct(ContainerInterface $container, ContextFactoryInterface $factory, CacheInterface $cache)
-    {
-        $this->container = $container;
+    /**
+     * @var SerializerRegistry
+     */
+    private $serializerRegistry;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    public function __construct(
+        RequestStack $requestStack,
+        ContextFactoryInterface $factory,
+        CacheItemPoolInterface $cache,
+        SerializerRegistry $serializerRegistry
+    ) {
+        $this->requestStack = $requestStack;
         $this->factory = $factory;
         $this->cache = $cache;
+        $this->serializerRegistry = $serializerRegistry;
     }
 
     public function getShopContext(): ShopContext
@@ -98,22 +107,30 @@ class StorefrontContextService implements StorefrontContextServiceInterface
             $this->getStoreFrontStateId()
         );
 
-        $key = $this->getCacheKey($shopScope, $customerScope, $checkoutScope);
+        $inputKey = $this->getCacheKey($shopScope, $customerScope, $checkoutScope);
 
-        if ($useCache && $context = $this->cache->fetch($key)) {
-            return unserialize($context);
+        $cacheItem = $this->cache->getItem($inputKey);
+        if ($useCache && $context = $cacheItem->get()) {
+            return $this->serializerRegistry->deserialize($context, SerializerRegistry::FORMAT_JSON);
         }
 
         $context = $this->factory->create($shopScope, $customerScope, $checkoutScope);
 
-        $resolvedKey = $this->getCacheKey(
+        $outputKey = $this->getCacheKey(
             ShopScope::createFromContext($context),
             CustomerScope::createFromContext($context),
             CheckoutScope::createFromContext($context)
         );
 
-        $this->cache->save($key, serialize($context), self::CACHE_LIFETIME);
-        $this->cache->save($resolvedKey, serialize($context), self::CACHE_LIFETIME);
+        $data = $this->serializerRegistry->serialize($context, SerializerRegistry::FORMAT_JSON);
+
+        $outputCacheItem = $this->cache->getItem($outputKey);
+
+        $cacheItem->set($data);
+        $outputCacheItem->set($data);
+
+        $this->cache->save($cacheItem);
+        $this->cache->save($outputCacheItem);
 
         return $context;
     }
@@ -135,10 +152,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private function getStoreFrontShopId(): int
     {
-        /** @var $shop Models\Shop\Shop */
-        $shop = $this->container->get('shop');
-
-        return (int) $shop->getId();
+        return $this->requestStack->getCurrentRequest()->attributes->getInt('_shop_id');
     }
 
     /**
@@ -146,10 +160,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private function getStoreFrontCurrencyId(): int
     {
-        /** @var $shop Models\Shop\Shop */
-        $shop = $this->container->get('shop');
-
-        return (int) $shop->getCurrency()->getId();
+        return $this->requestStack->getCurrentRequest()->attributes->getInt('_currency_id');
     }
 
     /**
@@ -157,9 +168,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private function getStoreFrontCountryId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($countryId = $session->offsetGet('sCountry')) {
+        if ($countryId = $this->getSessionValueOrNull('sCountry')) {
             return (int) $countryId;
         }
 
@@ -171,9 +180,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private function getStoreFrontStateId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($stateId = $session->offsetGet('sState')) {
+        if ($stateId = $this->getSessionValueOrNull('sState')) {
             return (int) $stateId;
         }
 
@@ -182,9 +189,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
     private function getStoreCustomerId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($customerId = $session->offsetGet('sUserId')) {
+        if ($customerId = $this->getSessionValueOrNull('sUserId')) {
             return (int) $customerId;
         }
 
@@ -193,9 +198,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
     private function getStoreFrontBillingAddressId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($addressId = $session->offsetGet('checkoutBillingAddressId')) {
+        if ($addressId = $this->getSessionValueOrNull('checkoutBillingAddressId')) {
             return (int) $addressId;
         }
 
@@ -204,9 +207,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
     private function getStoreFrontShippingAddressId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($addressId = $session->offsetGet('checkoutShippingAddressId')) {
+        if ($addressId = $this->getSessionValueOrNull('checkoutShippingAddressId')) {
             return (int) $addressId;
         }
 
@@ -215,9 +216,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
     private function getStoreFrontPaymentId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($paymentId = $session->offsetGet('paymentMethodId')) {
+        if ($paymentId = $this->getSessionValueOrNull('paymentMethodId')) {
             return (int) $paymentId;
         }
 
@@ -226,12 +225,26 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
     private function getStoreFrontDispatchId(): ?int
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($dispatchId = $session->offsetGet('shippingMethodId')) {
+        if ($dispatchId = $this->getSessionValueOrNull('shippingMethodId')) {
             return (int) $dispatchId;
         }
 
         return null;
     }
+
+
+    private function getSessionValueOrNull(string $key)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$session = $request->getSession()) {
+            return null;
+        }
+
+        if (!$session->has($key)) {
+            return null;
+        }
+
+        return $session->get($key);
+    }
+
 }

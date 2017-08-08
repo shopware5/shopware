@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Framework\Struct\Attribute;
 use Shopware\Framework\Struct\Struct;
 
 /**
@@ -59,7 +59,7 @@ class TreeItem extends Struct
      * @param string      $label
      * @param bool        $active
      * @param TreeItem[]  $values
-     * @param Attribute[] $attributes
+     * @param \Shopware\Framework\Struct\Attribute[] $attributes
      */
     public function __construct($id, $label, $active, $values, $attributes = [])
     {

@@ -26,13 +26,14 @@ namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Gateway\CountryReader;
 use Shopware\Country\Struct\Country;
 use Shopware\CountryState\Struct\CountryState;
 
 class CountryService implements CountryServiceInterface
 {
     /**
-     * @var CountryGateway
+     * @var CountryReader
      */
     private $gateway;
 
@@ -44,10 +45,10 @@ class CountryService implements CountryServiceInterface
     /**
      * CountryService constructor.
      *
-     * @param CountryGateway $gateway
+     * @param CountryReader $gateway
      * @param Connection     $connection
      */
-    public function __construct(CountryGateway $gateway, Connection $connection)
+    public function __construct(CountryReader $gateway, Connection $connection)
     {
         $this->gateway = $gateway;
         $this->connection = $connection;
@@ -63,7 +64,7 @@ class CountryService implements CountryServiceInterface
     public function getAvailable(ShopContext $context)
     {
         $ids = $this->getCountryIds();
-        $countries = $this->gateway->getCountries($ids, $context->getTranslationContext());
+        $countries = $this->gateway->read($ids, $context->getTranslationContext());
         $states = $this->gateway->getCountryStates($ids, $context->getTranslationContext());
 
         $result = [];

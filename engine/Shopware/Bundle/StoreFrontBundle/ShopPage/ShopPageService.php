@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Shop\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
+use Shopware\Shop\Gateway\ShopReader;
 
 /**
  * @category  Shopware
@@ -42,15 +42,15 @@ class ShopPageService implements ShopPageServiceInterface
     private $shopPageGateway;
 
     /**
-     * @var ShopGateway
+     * @var \Shopware\Shop\Gateway\ShopReader
      */
     private $shopGateway;
 
     /**
      * @param ShopPageGateway $shopPageGateway
-     * @param ShopGateway     $shopGateway
+     * @param ShopReader     $shopGateway
      */
-    public function __construct(ShopPageGateway $shopPageGateway, ShopGateway $shopGateway)
+    public function __construct(ShopPageGateway $shopPageGateway, ShopReader $shopGateway)
     {
         $this->shopPageGateway = $shopPageGateway;
         $this->shopGateway = $shopGateway;
@@ -80,7 +80,7 @@ class ShopPageService implements ShopPageServiceInterface
             $shopIds += (array) $page->getShopIds();
         }
 
-        $shops = $this->shopGateway->getList(array_keys(array_flip($shopIds)), $context);
+        $shops = $this->shopGateway->read(array_keys(array_flip($shopIds)), $context);
 
         foreach ($shopPages as $page) {
             $pageShops = array_filter($shops, function (Shop $shop) use ($page) {

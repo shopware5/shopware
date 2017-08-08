@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 
 /**
@@ -40,7 +40,7 @@ class ShopPageHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * @param AttributeHydrator $attributeHydrator
+     * @param \Shopware\Framework\Struct\AttributeHydrator $attributeHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator)
     {

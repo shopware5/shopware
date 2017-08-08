@@ -34,7 +34,7 @@ use Shopware\Framework\Struct\Hydrator;
 class ProductHydrator extends Hydrator
 {
     //    /**
-    //     * @var ManufacturerHydrator
+    //     * @var ProductManufacturerHydrator
     //     */
     //    private $manufacturerHydrator;
     //
@@ -44,12 +44,12 @@ class ProductHydrator extends Hydrator
     //    private $taxHydrator;
     //
     //    /**
-    //     * @var \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator
+    //     * @var \Shopware\Unit\Struct\UnitHydrator
     //     */
     //    private $unitHydrator;
     //
     //    /**
-    //     * @var EsdHydrator
+    //     * @var ProductEsdHydrator
     //     */
     //    private $esdHydrator;
     //
@@ -59,10 +59,10 @@ class ProductHydrator extends Hydrator
     //    private $config;
     //
     //    public function __construct(
-    //        ManufacturerHydrator $manufacturerHydrator,
+    //        ProductManufacturerHydrator $manufacturerHydrator,
     //        TaxHydrator $taxHydrator,
     //        UnitHydrator $unitHydrator,
-    //        EsdHydrator $esdHydrator,
+    //        ProductEsdHydrator $esdHydrator,
     //        \Shopware_Components_Config $config
     //    ) {
     //        $this->manufacturerHydrator = $manufacturerHydrator;

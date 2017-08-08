@@ -368,7 +368,7 @@ class Shop extends Struct
     /**
      * @return CustomerGroup
      */
-    public function getCustomerGroup()
+    public function getCustomerGroup(): CustomerGroup
     {
         return $this->customerGroup;
     }

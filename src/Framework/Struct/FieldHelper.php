@@ -391,7 +391,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getAreaFields(): array
+    public function getCountryAreaFields(): array
     {
         return [
             'countryArea.id as __countryArea_id',
@@ -434,7 +434,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getStateFields(): array
+    public function getCountryStateFields(): array
     {
         $fields = [
             'countryState.id as __countryState_id',

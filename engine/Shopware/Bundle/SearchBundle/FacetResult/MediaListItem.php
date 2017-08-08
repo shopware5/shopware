@@ -43,7 +43,7 @@ class MediaListItem extends ValueListItem
      * @param string                                               $label
      * @param bool                                                 $active
      * @param \Shopware\Media\Struct\Media        $media
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
+     * @param \Shopware\Framework\Struct\Attribute[] $attributes
      */
     public function __construct($id, $label, $active, Media $media = null, $attributes = [])
     {

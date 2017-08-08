@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle;
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Framework\Struct\Attribute;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Components\DependencyInjection\Container;

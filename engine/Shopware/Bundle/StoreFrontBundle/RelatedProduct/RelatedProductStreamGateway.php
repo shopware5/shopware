@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStreamHydrator;
+use Shopware\ProductStream\Struct\ProductStreamHydrator;
 
 /**
  * @category  Shopware
@@ -54,7 +54,7 @@ class RelatedProductStreamGateway
     /**
      * @param Connection            $connection
      * @param FieldHelper           $fieldHelper
-     * @param ProductStreamHydrator $hydrator
+     * @param \Shopware\ProductStream\Struct\ProductStreamHydrator $hydrator
      */
     public function __construct(
         Connection $connection,

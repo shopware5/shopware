@@ -24,8 +24,8 @@
 
 namespace Shopware\Storefront\Context;
 
-use Enlight_Components_Session_Namespace as Session;
 use Shopware\Context\Struct\ShopContext;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class StorefrontContextSwitcher
 {
@@ -48,10 +48,10 @@ class StorefrontContextSwitcher
     public function switchContext(?int $shippingMethodId, ?int $paymentMethodId): ShopContext
     {
         if ($shippingMethodId !== null) {
-            $this->session->offsetSet('shippingMethodId', $shippingMethodId);
+            $this->session->set('shippingMethodId', $shippingMethodId);
         }
         if ($paymentMethodId !== null) {
-            $this->session->offsetSet('paymentMethodId', $paymentMethodId);
+            $this->session->set('paymentMethodId', $paymentMethodId);
         }
 
         $this->contextService->refresh();

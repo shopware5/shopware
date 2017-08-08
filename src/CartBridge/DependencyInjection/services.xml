@@ -43,7 +43,7 @@
         <service id="shopware.cart.storefront_service" class="Shopware\CartBridge\Service\StoreFrontCartService">
             <argument type="service" id="cart.calculator" />
             <argument type="service" id="shopware.cart.persister" />
-            <argument type="service" id="storefront.context.service" />
+            <argument type="service" id="shopware.storefront.context.storefront_context_service" />
             <argument type="service" id="session" />
             <argument type="service" id="shopware.cart.view.cart_transformer" />
             <argument type="service" id="corelogger" />
@@ -56,7 +56,7 @@
 
         <service id="shopware.cart.persister" class="Shopware\CartBridge\Cart\CartPersister">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="storefront.serializer.json" />
+            <argument type="service" id="shopware.serializer.json_serializer" />
         </service>
 
         <service id="shopware.cart.view.product_transformer" class="Shopware\CartBridge\View\ViewProductTransformer">

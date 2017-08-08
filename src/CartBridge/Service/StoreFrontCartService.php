@@ -36,6 +36,7 @@ use Shopware\Cart\Order\OrderPersisterInterface;
 use Shopware\CartBridge\View\ViewCart;
 use Shopware\CartBridge\View\ViewCartTransformer;
 use Shopware\Storefront\Context\StorefrontContextServiceInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class StoreFrontCartService
 {
@@ -82,9 +83,8 @@ class StoreFrontCartService
         CartCalculator $calculation,
         CartPersisterInterface $persister,
         StorefrontContextServiceInterface $contextService,
-        \Enlight_Components_Session_Namespace $session,
+        Session $session,
         ViewCartTransformer $viewCartTransformer,
-        /* @noinspection PhpUndefinedClassInspection */
         LoggerInterface $logger,
         OrderPersisterInterface $orderPersister
     ) {
@@ -183,21 +183,21 @@ class StoreFrontCartService
     private function save(CartContainer $cartContainer): void
     {
         $this->persister->save($cartContainer);
-        $this->session->offsetSet(self::CART_TOKEN_KEY, $cartContainer->getToken());
+        $this->session->set(self::CART_TOKEN_KEY, $cartContainer->getToken());
     }
 
     private function createNewCart(): CartContainer
     {
         $cartContainer = CartContainer::createNew(self::CART_NAME);
-        $this->session->offsetSet(self::CART_TOKEN_KEY, $cartContainer->getToken());
+        $this->session->set(self::CART_TOKEN_KEY, $cartContainer->getToken());
 
         return $cartContainer;
     }
 
     private function getCartToken(): ? string
     {
-        if ($this->session->offsetExists(self::CART_TOKEN_KEY)) {
-            return $this->session->offsetGet(self::CART_TOKEN_KEY);
+        if ($this->session->has(self::CART_TOKEN_KEY)) {
+            return $this->session->get(self::CART_TOKEN_KEY);
         }
 
         return null;

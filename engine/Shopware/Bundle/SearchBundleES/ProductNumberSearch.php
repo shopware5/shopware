@@ -34,7 +34,7 @@ use Shopware\Search\CriteriaPartInterface;
 use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Framework\Struct\Attribute;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 

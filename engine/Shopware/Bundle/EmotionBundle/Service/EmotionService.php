@@ -28,7 +28,7 @@ use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
+use Shopware\Shop\Gateway\ShopReader;
 
 class EmotionService implements EmotionServiceInterface
 {
@@ -43,7 +43,7 @@ class EmotionService implements EmotionServiceInterface
     private $elementService;
 
     /**
-     * @var ShopGateway
+     * @var \Shopware\Shop\Gateway\ShopReader
      */
     private $shopGateway;
 
@@ -55,13 +55,13 @@ class EmotionService implements EmotionServiceInterface
     /**
      * @param EmotionGateway                                                      $gateway
      * @param EmotionElementServiceInterface                                      $elementService
-     * @param ShopGateway                                                         $shopGateway
+     * @param ShopReader                                                         $shopGateway
      * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
      */
     public function __construct(
         EmotionGateway $gateway,
         EmotionElementServiceInterface $elementService,
-        ShopGateway $shopGateway,
+        ShopReader $shopGateway,
         \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
     ) {
         $this->gateway = $gateway;
@@ -146,7 +146,7 @@ class EmotionService implements EmotionServiceInterface
             return;
         }
 
-        $shops = $this->shopGateway->getList($shopIds, $context);
+        $shops = $this->shopGateway->read($shopIds, $context);
 
         /** @var Emotion $emotion */
         foreach ($emotions as $emotion) {

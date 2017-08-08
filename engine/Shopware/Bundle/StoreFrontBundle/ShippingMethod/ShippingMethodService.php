@@ -26,19 +26,20 @@ namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\ShippingMethod\Gateway\ShippingMethodReader;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
 
 class ShippingMethodService
 {
     /**
-     * @var ShippingMethodGateway
+     * @var ShippingMethodReader
      */
     private $gateway;
 
     /**
-     * @param ShippingMethodGateway $gateway
+     * @param ShippingMethodReader $gateway
      */
-    public function __construct(ShippingMethodGateway $gateway)
+    public function __construct(ShippingMethodReader $gateway)
     {
         $this->gateway = $gateway;
     }
