@@ -86,7 +86,7 @@ class BatchProductNumberSearch
      * @param BaseProduct[] $baseProducts
      * @param int           $numberOfProducts
      *
-     * @return array
+     * @return BaseProduct[]
      */
     private function getBaseProductsRange($key, array $baseProducts, $numberOfProducts = 0)
     {
@@ -131,7 +131,12 @@ class BatchProductNumberSearch
 
             $this->pointer[$key] = 0;
             foreach ($criteriaMeta['requests'] as $request) {
-                $products[$request['key']] = $this->getBaseProductsRange($key, $baseProducts, $request['criteria']->getLimit());
+                $products[$request['key']] = [];
+                $productRange = $this->getBaseProductsRange($key, $baseProducts, $request['criteria']->getLimit());
+
+                foreach ($productRange as $product) {
+                    $products[$request['key']][$product->getNumber()] = $product;
+                }
             }
         }
 
