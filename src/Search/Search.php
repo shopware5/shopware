@@ -143,6 +143,7 @@ abstract class Search
     }
 
     /**
+     * todo@next remove this function, only for simple debugging
      * @param $query
      * @return array
      */

@@ -31,8 +31,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class Category extends Bundle
 {
-    protected $name = 'Category';
-
     /**
      * {@inheritdoc}
      */

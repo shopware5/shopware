@@ -22,28 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Serializer\Exception;
+namespace Shopware\ProductStream;
 
-class SerializerNotFoundException extends \Exception
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+class ProductStream extends Bundle
 {
     /**
-     * @var string
+     * {@inheritdoc}
      */
-    private $format;
-
-    /**
-     * @param string $format
-     */
-    public function __construct($format)
+    public function build(ContainerBuilder $container)
     {
-        $this->format = $format;
-        parent::__construct(
-            sprintf('SerializerRegistry for format %s not found', $format)
-        );
-    }
+        parent::build($container);
 
-    public function getFormat(): string
-    {
-        return $this->format;
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection/'));
+        $loader->load('services.xml');
     }
 }

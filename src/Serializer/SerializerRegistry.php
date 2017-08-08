@@ -24,21 +24,45 @@
 
 namespace Shopware\Serializer;
 
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Shopware\Serializer\Exception\SerializerNotFoundException;
 
-class Serializer extends Bundle
+class SerializerRegistry
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        parent::build($container);
+    const FORMAT_JSON = 'json';
+    const FORMAT_XML = 'xml';
+    const FORMAT_ARRAY = 'array';
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection/'));
-        $loader->load('services.xml');
+    private $serializers = [];
+
+    /**
+     * @param SerializerInterface[] $serializers
+     */
+    public function __construct(array $serializers)
+    {
+        $this->serializers = $serializers;
+    }
+
+    public function serialize($data, string $format)
+    {
+        $serializer = $this->getSerializer($format);
+
+        return $serializer->serialize($data);
+    }
+
+    public function deserialize($data, string $format)
+    {
+        $serializer = $this->getSerializer($format);
+
+        return $serializer->deserialize($data);
+    }
+
+    private function getSerializer(string $format)
+    {
+        foreach ($this->serializers as $serializer) {
+            if ($serializer->supportsFormat($format)) {
+                return $serializer;
+            }
+        }
+        throw new SerializerNotFoundException($format);
     }
 }

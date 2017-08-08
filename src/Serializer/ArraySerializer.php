@@ -51,3 +51,4 @@ class ArraySerializer implements SerializerInterface
         return $this->deserializer->deserialize($data);
     }
 }
+
