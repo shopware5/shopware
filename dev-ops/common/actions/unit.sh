@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#DESCRIPTION: initialization of your environment
+#DESCRIPTION: execute unit tests
 
 INCLUDE: ./.init_database.sh
 INCLUDE: ./.init_composer.sh
