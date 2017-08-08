@@ -113,13 +113,15 @@ class ShopReader
             ->addSelect($this->fieldHelper->getLocaleFields())
             ->addSelect($this->fieldHelper->getCustomerGroupFields())
             ->addSelect($this->fieldHelper->getCategoryFields())
-            ->addSelect($this->fieldHelper->getMediaFields());
+            ->addSelect($this->fieldHelper->getMediaFields())
+            ->addSelect('GROUP_CONCAT(customerGroups.customer_group_id) as __category_customer_groups')
+        ;
 
         $query->from('s_core_shops', 'shop')
             ->innerJoin('shop', 's_core_currencies', 'currency', 'currency.id = shop.currency_id')
             ->innerJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->innerJoin('shop', 's_core_customergroups', 'customerGroup', 'customerGroup.id = shop.customer_group_id')
-            ->innerJoin('shop', 's_categories', 'category', 'category.id = shop.category_id')
+            ->innerJoin('shop', 'category', 'category', 'category.id = shop.category_id')
             ->innerJoin('shop', 's_core_countries', 'country', 'country.id = shop.country_id')
             ->innerJoin('shop', 's_core_paymentmeans', 'paymentMethod', 'paymentMethod.id = shop.payment_id')
             ->innerJoin('shop', 's_premium_dispatch', 'shippingMethod', 'shippingMethod.id = shop.dispatch_id')
@@ -130,12 +132,13 @@ class ShopReader
             ->leftJoin('paymentMethod', 's_core_paymentmeans_attributes', 'paymentMethodAttribute', 'paymentMethodAttribute.paymentmeanID = paymentMethod.id')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
             ->leftJoin('customerGroup', 's_core_customergroups_attributes', 'customerGroupAttribute', 'customerGroupAttribute.customerGroupID = customerGroup.id')
-            ->leftJoin('category', 's_categories_attributes', 'categoryAttribute', 'categoryAttribute.categoryID = category.id')
-            ->leftJoin('category', 's_categories_avoid_customergroups', 'customerGroups', 'customerGroups.categoryID = category.id')
-            ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
+            ->leftJoin('category', 'category_attribute', 'categoryAttribute', 'categoryAttribute.category_id = category.id')
+            ->leftJoin('category', 'category_avoid_customer_group', 'customerGroups', 'customerGroups.category_id = category.id')
+            ->leftJoin('category', 's_media', 'media', 'media.id = category.media_id')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
-            ->where('shop.id IN (:ids)')
+            ->groupBy('shop.id')
+            ->andWhere('shop.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addCountryTranslation($query, $context);
