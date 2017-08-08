@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingZipCodeRule;
-use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\CartBridge\Rule\ShippingZipCodeRule;
+use Shopware\Address\Struct\Address;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Country\State;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
 
 class ShippingZipCodeRuleTest extends TestCase
 {
@@ -117,7 +117,7 @@ class ShippingZipCodeRuleTest extends TestCase
 
     private function createAddress(string $code): Address
     {
-        $state = new State();
+        $state = new CountryState();
         $state->setCountry(new Country());
 
         $address = new Address();

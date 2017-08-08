@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
 use Shopware\Framework\Struct\Hydrator;
+use Shopware\Locale\Struct\Locale;
 
 class LocaleHydrator extends Hydrator
 {

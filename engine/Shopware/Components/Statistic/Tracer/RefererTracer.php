@@ -26,7 +26,7 @@ namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Statistic\StatisticTracerInterface;
 
@@ -52,7 +52,7 @@ class RefererTracer implements StatisticTracerInterface
         $this->connection = $connection;
     }
 
-    public function traceRequest(Request $request, ShopContextInterface $context): void
+    public function traceRequest(Request $request, ShopContext $context): void
     {
         $referer = $request->getParam('referer');
         $partner = $request->getParam('partner', $request->getParam('sPartner'));

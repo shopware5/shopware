@@ -24,7 +24,7 @@
 
 namespace Shopware\SeoUrl\Command;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

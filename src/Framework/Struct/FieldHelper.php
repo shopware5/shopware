@@ -27,7 +27,7 @@ namespace Shopware\Framework\Struct;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Psr\Cache\CacheItemPoolInterface;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -1218,7 +1218,7 @@ class FieldHelper
      * @param string                                                       $translationType Type of the translation
      * @param string                                                       $selectName      Name of the additional selection
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addTranslation(
         $fromPart,
@@ -1263,7 +1263,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCountryTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1273,7 +1273,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCountryStateTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1283,7 +1283,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addMediaTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1292,7 +1292,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addUnitTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1301,7 +1301,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $queryBuilder
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addEsdTranslation(QueryBuilder $queryBuilder, TranslationContext $context): void
     {
@@ -1310,7 +1310,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addConfiguratorGroupTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1319,7 +1319,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addConfiguratorOptionTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1328,7 +1328,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addDownloadTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1337,7 +1337,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addLinkTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1346,7 +1346,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addProductTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1355,7 +1355,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addVariantTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1364,7 +1364,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPriceTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1373,7 +1373,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder       $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addManufacturerTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1382,7 +1382,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addImageTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1391,7 +1391,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPropertySetTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1400,7 +1400,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder       $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPropertyGroupTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1409,7 +1409,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPropertyOptionTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1418,7 +1418,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addProductStreamTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1427,7 +1427,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCustomerTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1436,7 +1436,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addAddressTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1445,7 +1445,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addEmotionElementTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1454,7 +1454,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCustomSortingTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1463,7 +1463,7 @@ class FieldHelper
 
     /**
      * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCustomFacetTranslation($query, $context): void
     {

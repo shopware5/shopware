@@ -99,7 +99,7 @@ class sBasket
     private $moduleManager;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -118,7 +118,7 @@ class sBasket
         Shopware_Components_Modules             $moduleManager = null,
         sSystem                                 $systemModule = null,
 
-        StoreFrontBundle\Context\ContextServiceInterface $contextService = null,
+        \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalText\AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
@@ -2085,7 +2085,7 @@ class sBasket
         $listProduct = $container->get('storefront.product.list_product_service');
         /** @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyServiceInterface $propertyService */
         $propertyService = $container->get('storefront.property.service');
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $context */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $context */
         $context = $container->get('storefront.context.service');
         /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
         $legacyStructConverter = $container->get('legacy_struct_converter');

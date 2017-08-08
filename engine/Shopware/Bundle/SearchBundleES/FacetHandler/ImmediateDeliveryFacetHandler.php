@@ -35,7 +35,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\QueryAliasMapper;
 
 class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorInterface
@@ -77,7 +77,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $aggregation = new ValueCountAggregation('has_available_variant_count');
         $aggregation->setField('hasAvailableVariant');
@@ -96,7 +96,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations'])) {
             return;

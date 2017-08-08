@@ -24,8 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Media;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Media\Struct\Media;
 
 /**
  * @category  Shopware
@@ -36,39 +37,39 @@ interface MediaServiceInterface
 {
     /**
      * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return Media[] Indexed by the media id
      */
-    public function getList($ids, ShopContextInterface $context);
+    public function getList($ids, ShopContext $context);
 
     /**
      * Selects first the media structs which have a configurator configuration for the provided product variant.
      * The normal product media structs which has no configuration, are appended to the configurator media structs.
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param ShopContextInterface                                    $context
+     * @param ShopContext                                    $context
      *
      * @return array indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Media array
      */
-    public function getProductsMedia($products, ShopContextInterface $context);
+    public function getProductsMedia($products, ShopContext $context);
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param ShopContextInterface                                    $context
+     * @param ShopContext                                    $context
      *
      * @return Media[] Indexed by product number
      */
-    public function getCovers($products, ShopContextInterface $context);
+    public function getCovers($products, ShopContext $context);
 
     /**
      * Returns a list of variant specified covers.
      * The list is indexed by the product number.
      *
      * @param BaseProduct[]                                                  $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Media[] indexed by product number
      */
-    public function getVariantCovers($products, ShopContextInterface $context);
+    public function getVariantCovers($products, ShopContext $context);
 }

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Category;
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Category\Struct\CategoryHydrator;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -79,7 +79,7 @@ class CategoryGateway
 
     /**
      * @param BaseProduct[]      $products
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return array Indexed by product number, contains all categories of a product
      */
@@ -115,7 +115,7 @@ class CategoryGateway
 
     /**
      * @param int[]              $ids
-     * @param TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return \Shopware\Category\Struct\Category[] Indexed by the category id
      */

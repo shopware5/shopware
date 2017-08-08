@@ -26,7 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Shop\Struct\Shop;
 
 class ShopGateway
 {
@@ -62,7 +63,7 @@ class ShopGateway
 
     /**
      * @param int[]                                                        $ids
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return Shop[] indexed by id
      */
@@ -100,7 +101,7 @@ class ShopGateway
 
     /**
      * @param int[]                                                        $ids
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return array[]
      */

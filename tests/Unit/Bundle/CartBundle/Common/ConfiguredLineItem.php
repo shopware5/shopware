@@ -24,12 +24,12 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\LineItem\DeliverableLineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Cart\Delivery\Delivery;
+use Shopware\Cart\Delivery\DeliveryDate;
+use Shopware\Cart\Delivery\DeliveryInformation;
+use Shopware\Cart\LineItem\DeliverableLineItemInterface;
+use Shopware\Cart\LineItem\LineItemInterface;
+use Shopware\Cart\Price\Price;
 use Shopware\Framework\Struct\Struct;
 
 class ConfiguredLineItem extends \Shopware\Framework\Struct\Struct implements DeliverableLineItemInterface

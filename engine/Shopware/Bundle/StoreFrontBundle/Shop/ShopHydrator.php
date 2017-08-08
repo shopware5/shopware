@@ -31,6 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Currency\CurrencyHydrator;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethodHydrator;
+use Shopware\Shop\Struct\Shop;
 
 class ShopHydrator extends Hydrator
 {

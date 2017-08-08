@@ -25,11 +25,11 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductOfCategoriesRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\CartBridge\Rule\Data\ProductOfCategoriesRuleData;
+use Shopware\CartBridge\Rule\ProductOfCategoriesRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 
 class ProductOfCategoriesRuleTest extends TestCase
 {

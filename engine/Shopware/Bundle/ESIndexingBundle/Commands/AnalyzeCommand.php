@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;

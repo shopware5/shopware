@@ -35,7 +35,7 @@ use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 class ProductNumberSearch implements ProductNumberSearchInterface
@@ -73,7 +73,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * {@inheritdoc}
      */
-    public function search(Criteria $criteria, ShopContextInterface $context)
+    public function search(Criteria $criteria, ShopContext $context)
     {
         $search = $this->buildSearch($criteria, $context);
         $index = $this->indexFactory->createShopIndex($context->getShop());
@@ -115,11 +115,11 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
     /**
      * @param \Shopware\Search\Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Search
      */
-    private function buildSearch(Criteria $criteria, ShopContextInterface $context)
+    private function buildSearch(Criteria $criteria, ShopContext $context)
     {
         $search = new Search();
 
@@ -140,13 +140,13 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
     /**
      * @param Criteria                $criteria
-     * @param ShopContextInterface    $context
+     * @param \Shopware\Context\Struct\ShopContext    $context
      * @param Search                  $search
      * @param CriteriaPartInterface[] $criteriaParts
      */
     private function addCriteriaParts(
         Criteria $criteria,
-        ShopContextInterface $context,
+        ShopContext $context,
         Search $search,
         array $criteriaParts
     ) {
@@ -207,14 +207,14 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
     /**
      * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      * @param Search               $search
      *
      * @throws \Exception
      */
     private function addConditions(
         Criteria $criteria,
-        ShopContextInterface $context,
+        ShopContext $context,
         Search $search
     ) {
         foreach ($criteria->getBaseConditions() as $condition) {

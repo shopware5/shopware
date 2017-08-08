@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ListingSortingService implements ListingSortingServiceInterface
 {
@@ -44,7 +44,7 @@ class ListingSortingService implements ListingSortingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContext $context)
     {
         return $this->gateway->getList($ids, $context->getTranslationContext());
     }
@@ -52,7 +52,7 @@ class ListingSortingService implements ListingSortingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
+    public function getSortingsOfCategories(array $categoryIds, ShopContext $context)
     {
         return $this->gateway->getSortingsOfCategories($categoryIds, $context->getTranslationContext());
     }
@@ -60,7 +60,7 @@ class ListingSortingService implements ListingSortingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllCategorySortings(ShopContextInterface $context)
+    public function getAllCategorySortings(ShopContext $context)
     {
         return $this->gateway->getAllCategorySortings($context->getTranslationContext());
     }

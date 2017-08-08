@@ -760,7 +760,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * the php __clone function of the model.
      *
      * Success case:
-     *  array('success' => true, 'data' => New Template data)
+     *  array('success' => true, 'data' => New ShopTemplate data)
      *
      * Failure case:
      *  array('success' => false, 'error' => An error message)
@@ -800,7 +800,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * The return value is every time an array.
      *
      * Success case:
-     *  array('success' => true, 'data' => New Template data)
+     *  array('success' => true, 'data' => New ShopTemplate data)
      *
      * Failure case:
      *  array('success' => false, 'error' => An error message)

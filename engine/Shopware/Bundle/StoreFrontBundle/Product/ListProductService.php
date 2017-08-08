@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Shopware\Category\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\GraduatedPricesServiceInterface;
@@ -103,7 +103,7 @@ class ListProductService implements ListProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $numbers, ShopContextInterface $context)
+    public function getList(array $numbers, ShopContext $context)
     {
         // faster replacement for array_unique()
         // see http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
@@ -171,11 +171,11 @@ class ListProductService implements ListProductServiceInterface
      * the provided context.
      *
      * @param ListProduct          $product
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return bool
      */
-    private function isProductValid(ListProduct $product, ShopContextInterface $context)
+    private function isProductValid(ListProduct $product, ShopContext $context)
     {
         if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupUuids())) {
             return false;

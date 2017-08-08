@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Delivery\DeliveryCollection;
+use Shopware\Cart\LineItem\CalculatedLineItemCollection;
+use Shopware\Cart\Price\CartPrice;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredGoodsItem;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredLineItem;
 
@@ -39,7 +39,7 @@ class CalculatedCartTest extends TestCase
 {
     public function testEmptyCartHasNoGoods(): void
     {
-        $cart = new CalculatedCart(
+        $cart = new \Shopware\Cart\Cart\CalculatedCart(
             CartContainer::createNew('test'),
             new CalculatedLineItemCollection(),
             new CartPrice(0, 0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
@@ -51,7 +51,7 @@ class CalculatedCartTest extends TestCase
 
     public function testCartWithLineItemsHasGoods(): void
     {
-        $cart = new CalculatedCart(
+        $cart = new \Shopware\Cart\Cart\CalculatedCart(
             CartContainer::createNew('test'),
             new CalculatedLineItemCollection([
                 new ConfiguredGoodsItem('A', 1),
@@ -66,7 +66,7 @@ class CalculatedCartTest extends TestCase
 
     public function testCartHasNoGoodsIfNoLineItemDefinedAsGoods(): void
     {
-        $cart = new CalculatedCart(
+        $cart = new \Shopware\Cart\Cart\CalculatedCart(
             CartContainer::createNew('test'),
             new CalculatedLineItemCollection([
                 new ConfiguredLineItem('A', 1),

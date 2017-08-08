@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\Service\Gateway;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionElementHydrator;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class EmotionElementGateway
 {
@@ -60,7 +60,7 @@ class EmotionElementGateway
 
     /**
      * @param int[]                                                        $emotionIds
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return array
      */
@@ -128,7 +128,7 @@ class EmotionElementGateway
 
     /**
      * @param int[]              $elementIds
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

@@ -95,7 +95,7 @@ class sCategories
     private $categoryService;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 

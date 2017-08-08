@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -85,7 +85,7 @@ class VoteGateway
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param \Shopware\Context\TranslationContext                                      $context
+     * @param \Shopware\Context\Struct\TranslationContext                                      $context
      *
      * @return array Indexed by the product number. Each elements contains a Struct\Product\Vote array.
      */

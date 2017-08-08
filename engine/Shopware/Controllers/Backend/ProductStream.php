@@ -25,11 +25,11 @@
 use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Storefront\Context\StorefrontContextService;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Components\ProductStream\RepositoryInterface;
 
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
@@ -220,7 +220,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
      * @param int $currencyId
      * @param int $customerGroupKey
      *
-     * @return ShopContextInterface
+     * @return ShopContext
      */
     private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
@@ -235,7 +235,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         }
 
         if (!$customerGroupKey) {
-            $customerGroupKey = ContextService::FALLBACK_CUSTOMER_GROUP;
+            $customerGroupKey = StorefrontContextService::FALLBACK_CUSTOMER_GROUP;
         }
 
         return $this->get('storefront.context.factory')->create(

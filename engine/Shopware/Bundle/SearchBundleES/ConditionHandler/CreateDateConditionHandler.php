@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\CreateDateCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CreateDateConditionHandler implements PartialConditionHandlerInterface
 {
@@ -49,7 +49,7 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addFilter(
             $this->createQuery($criteriaPart)
@@ -63,7 +63,7 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addPostFilter(
             $this->createQuery($criteriaPart)

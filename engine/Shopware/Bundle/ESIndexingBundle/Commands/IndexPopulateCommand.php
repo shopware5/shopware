@@ -26,7 +26,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -70,7 +70,7 @@ class IndexPopulateCommand extends ShopwareCommand
 
         $helper = new ConsoleProgressHelper($output);
 
-        /** @var Shop $shop */
+        /** @var \Shopware\Shop\Struct\Shop $shop */
         foreach ($shops as $shop) {
             $output->writeln("\n## Indexing shop " . $shop->getName() . ' ##');
             $indexer->index($shop, $helper);

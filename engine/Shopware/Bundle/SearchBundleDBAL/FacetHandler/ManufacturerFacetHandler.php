@@ -33,8 +33,8 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\ProductManufacturer\Struct\ProductManufacturer;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -90,7 +90,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
      * @param FacetInterface       $facet
      * @param \Shopware\Search\Criteria             $reverted
      * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return FacetResultInterface|null
      */
@@ -98,7 +98,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('groupBy');
@@ -134,7 +134,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param Facet\ManufacturerFacet                                       $facet
-     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer[] $manufacturers
+     * @param \Shopware\ProductManufacturer\Struct\ProductManufacturer[] $manufacturers
      * @param int[]                                                         $activeIds
      *
      * @return ValueListFacetResult
@@ -143,7 +143,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     {
         $listItems = [];
 
-        /** @var Manufacturer $manufacturer */
+        /** @var \Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $listItem = new ValueListItem(
                 $manufacturer->getId(),
@@ -162,7 +162,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
         if (!empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
-            $label = $this->snippetNamespace->get('manufacturer', 'Manufacturer');
+            $label = $this->snippetNamespace->get('manufacturer', 'ProductManufacturer');
         }
 
         return new ValueListFacetResult(

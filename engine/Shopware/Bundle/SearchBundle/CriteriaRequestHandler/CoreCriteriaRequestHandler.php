@@ -37,7 +37,7 @@ use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
@@ -69,9 +69,9 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     /**
      * @param Request                                                        $request
      * @param Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
+    public function handleRequest(Request $request, Criteria $criteria, ShopContext $context)
     {
         $this->addLimit($request, $criteria);
         $this->addOffset($request, $criteria);
@@ -204,9 +204,9 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    private function addCustomerGroupCondition(Criteria $criteria, ShopContextInterface $context)
+    private function addCustomerGroupCondition(Criteria $criteria, ShopContext $context)
     {
         $condition = new CustomerGroupCondition(
             [$context->getCurrentCustomerGroup()->getId()]

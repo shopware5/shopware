@@ -57,7 +57,7 @@ class sArticlesComparisons
     private $config;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 

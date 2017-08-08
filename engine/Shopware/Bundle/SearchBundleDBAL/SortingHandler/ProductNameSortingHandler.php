@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Search\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -51,7 +51,7 @@ class ProductNameSortingHandler implements SortingHandlerInterface
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /* @var ProductNameSorting $sorting */
         $query->addOrderBy('product.name', $sorting->getDirection());

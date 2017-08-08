@@ -26,8 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Category\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Media\Media;
-use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream;
+use Shopware\Media\Struct\Media;
+use Shopware\ProductStream\Struct\ProductStream;
 use Shopware\Framework\Struct\Struct;
 
 /**
@@ -113,7 +113,7 @@ class Category extends Struct
     protected $externalLink;
 
     /**
-     * @var Media
+     * @var \Shopware\Media\Struct\Media
      */
     protected $media;
 
@@ -128,7 +128,7 @@ class Category extends Struct
     protected $productBoxLayout;
 
     /**
-     * @var null|ProductStream
+     * @var null|\Shopware\ProductStream\Struct\ProductStream
      */
     protected $productStream;
 
@@ -340,7 +340,7 @@ class Category extends Struct
     }
 
     /**
-     * @param Media $media
+     * @param \Shopware\Media\Struct\Media $media
      */
     public function setMedia($media): void
     {
@@ -348,7 +348,7 @@ class Category extends Struct
     }
 
     /**
-     * @return Media
+     * @return \Shopware\Media\Struct\Media
      */
     public function getMedia(): Media
     {
@@ -444,7 +444,7 @@ class Category extends Struct
     }
 
     /**
-     * @return null|ProductStream
+     * @return null|\Shopware\ProductStream\Struct\ProductStream
      */
     public function getProductStream(): ?ProductStream
     {
@@ -452,7 +452,7 @@ class Category extends Struct
     }
 
     /**
-     * @param null|ProductStream $productStream
+     * @param null|\Shopware\ProductStream\Struct\ProductStream $productStream
      */
     public function setProductStream(ProductStream $productStream = null): void
     {

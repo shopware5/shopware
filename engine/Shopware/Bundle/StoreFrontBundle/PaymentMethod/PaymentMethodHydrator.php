@@ -27,7 +27,8 @@ namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
+use Shopware\Serializer\JsonSerializer;
+use Shopware\PaymentMethod\Struct\PaymentMethod;
 
 class PaymentMethodHydrator extends Hydrator
 {

@@ -56,11 +56,11 @@ class BatchProductSearch
      * get the product result for the passed criteria object.
      *
      * @param BatchProductNumberSearchRequest                                $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return BatchProductSearchResult
      */
-    public function search(BatchProductNumberSearchRequest $request, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context)
+    public function search(BatchProductNumberSearchRequest $request, \Shopware\Context\Struct\ShopContext $context)
     {
         $searchResult = $this->productNumberSearch->search($request, $context);
         $listProducts = $this->listProductService->getList($searchResult->getProductNumbers(), $context);

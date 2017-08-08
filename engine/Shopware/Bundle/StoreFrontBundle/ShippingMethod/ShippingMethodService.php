@@ -24,8 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\ShippingMethod\Struct\ShippingMethod;
 
 class ShippingMethodService
 {
@@ -44,11 +45,11 @@ class ShippingMethodService
 
     /**
      * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ShippingMethod[]
      */
-    public function getAvailable(CalculatedCart $calculatedCart, ShopContextInterface $context): array
+    public function getAvailable(CalculatedCart $calculatedCart, ShopContext $context): array
     {
         $deliveries = $this->gateway->getAll($context->getTranslationContext());
 

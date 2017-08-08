@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 class ListProductTest extends TestCase
@@ -56,14 +56,14 @@ class ListProductTest extends TestCase
         $this->assertNotEmpty($product->getUnit());
 
         $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Product\ListProduct', $product);
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Unit\Unit', $product->getUnit());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer', $product->getManufacturer());
+        $this->assertInstanceOf('Shopware\Unit\Struct\Unit', $product->getUnit());
+        $this->assertInstanceOf('Shopware\ProductManufacturer\Struct\ProductManufacturer', $product->getManufacturer());
 
         $this->assertNotEmpty($product->getPrices());
         $this->assertNotEmpty($product->getPriceRules());
         foreach ($product->getPrices() as $price) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Price\Price', $price);
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Unit\Unit', $price->getUnit());
+            $this->assertInstanceOf('Shopware\Unit\Struct\Unit', $price->getUnit());
             $this->assertGreaterThanOrEqual(1, $price->getUnit()->getMinPurchase());
         }
 
@@ -73,7 +73,7 @@ class ListProductTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Price\Price', $product->getCheapestPrice());
         $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Price\PriceRule', $product->getCheapestPriceRule());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Unit\Unit', $product->getCheapestPrice()->getUnit());
+        $this->assertInstanceOf('Shopware\Unit\Struct\Unit', $product->getCheapestPrice()->getUnit());
         $this->assertGreaterThanOrEqual(1, $product->getCheapestPrice()->getUnit()->getMinPurchase());
 
         $this->assertNotEmpty($product->getCheapestPriceRule()->getPrice());
@@ -87,7 +87,7 @@ class ListProductTest extends TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ListProduct
      */

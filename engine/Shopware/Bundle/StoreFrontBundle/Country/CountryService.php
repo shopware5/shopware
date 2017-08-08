@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
 
 class CountryService implements CountryServiceInterface
 {
@@ -54,11 +56,11 @@ class CountryService implements CountryServiceInterface
     /**
      * Returns all available countries for the provided shop context
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Country[] indexed by id
      */
-    public function getAvailable(ShopContextInterface $context)
+    public function getAvailable(ShopContext $context)
     {
         $ids = $this->getCountryIds();
         $countries = $this->gateway->getCountries($ids, $context->getTranslationContext());
@@ -95,14 +97,14 @@ class CountryService implements CountryServiceInterface
     }
 
     /**
-     * @param State[] $countryStates
+     * @param CountryState[] $countryStates
      *
-     * @return State[]
+     * @return CountryState[]
      */
     private function sortStates($countryStates)
     {
         usort($countryStates, function (
-            State $a, State $b) {
+            CountryState $a, CountryState $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getName(), $b->getName());
             }

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Media;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -74,7 +74,7 @@ class MediaService implements MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($ids, ShopContextInterface $context)
+    public function getList($ids, ShopContext $context)
     {
         return $this->mediaGateway->getList($ids, $context->getTranslationContext());
     }
@@ -82,7 +82,7 @@ class MediaService implements MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getCovers($products, ShopContextInterface $context)
+    public function getCovers($products, ShopContext $context)
     {
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
             return $this->productMediaGateway->getCovers(
@@ -97,7 +97,7 @@ class MediaService implements MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getVariantCovers($products, ShopContextInterface $context)
+    public function getVariantCovers($products, ShopContext $context)
     {
         $covers = $this->variantMediaGateway->getCovers(
             $products,
@@ -123,7 +123,7 @@ class MediaService implements MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductsMedia($products, ShopContextInterface $context)
+    public function getProductsMedia($products, ShopContext $context)
     {
         $specifyMedia = $this->variantMediaGateway->getList($products, $context->getTranslationContext());
 

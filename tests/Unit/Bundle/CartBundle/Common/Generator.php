@@ -25,23 +25,23 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
-use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
-use Shopware\Bundle\StoreFrontBundle\Address\Address;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Country\State;
-use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
-use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
-use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
-use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
-use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Price\PriceDefinition;
+use Shopware\Cart\Tax\TaxDetector;
+use Shopware\CartBridge\Product\ProductPriceGateway;
+use Shopware\Address\Struct\Address;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
+use Shopware\Currency\Struct\Currency;
+use Shopware\Customer\Struct\Customer;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\PaymentMethod\Struct\PaymentMethod;
+use Shopware\PriceGroup\Struct\PriceGroup;
+use Shopware\ShippingMethod\Struct\ShippingMethod;
+use Shopware\Shop\Struct\Shop;
+use Shopware\Tax\Struct\Tax;
 
 class Generator extends TestCase
 {
@@ -79,14 +79,14 @@ class Generator extends TestCase
         $priceGroups = $priceGroups ?: [new PriceGroup()];
         $taxes = $taxes ?: [new Tax(1, 'test', 19.0)];
 
-        $area = $area ?: new Area();
+        $area = $area ?: new CountryArea();
 
         if (!$country) {
             $country = new Country();
             $country->setArea($area);
         }
         if (!$state) {
-            $state = new State();
+            $state = new CountryState();
             $state->setCountry($country);
         }
 

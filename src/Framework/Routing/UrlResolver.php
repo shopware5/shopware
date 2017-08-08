@@ -2,7 +2,7 @@
 
 namespace Shopware\Framework\Routing;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\CanonicalCondition;
 use Shopware\Search\Condition\PathInfoCondition;
 use Shopware\Search\Condition\ShopCondition;

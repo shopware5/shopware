@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -82,11 +82,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * to add their own handler classes.
      *
      * @param \Shopware\Search\Criteria                                          $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return SearchBundle\ProductNumberSearchResult
      */
-    public function search(\Shopware\Search\Criteria $criteria, ShopContextInterface $context)
+    public function search(\Shopware\Search\Criteria $criteria, ShopContext $context)
     {
         $query = $this->queryBuilderFactory->createProductQuery($criteria, $context);
 
@@ -144,13 +144,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
     /**
      * @param \Shopware\Search\Criteria                                          $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @throws \Exception
      *
      * @return \Shopware\Search\FacetResultInterface[]
      */
-    private function createFacets(\Shopware\Search\Criteria $criteria, ShopContextInterface $context)
+    private function createFacets(\Shopware\Search\Criteria $criteria, ShopContext $context)
     {
         if (count($criteria->getFacets()) === 0) {
             return [];

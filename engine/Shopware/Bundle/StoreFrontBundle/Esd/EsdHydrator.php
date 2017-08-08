@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Esd;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
+use Shopware\ProductEsd\Struct\ProductEsd;
 
 /**
  * @category  Shopware
@@ -50,11 +51,11 @@ class EsdHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Esd
+     * @return ProductEsd
      */
     public function hydrate(array $data)
     {
-        $esd = new Esd();
+        $esd = new ProductEsd();
 
         if (isset($data['__esd_id'])) {
             $esd->setId((int) $data['__esd_id']);

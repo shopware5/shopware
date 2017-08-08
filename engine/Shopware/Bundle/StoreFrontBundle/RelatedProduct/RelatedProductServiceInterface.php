@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -42,9 +42,9 @@ interface RelatedProductServiceInterface
      * the whole product data for the relations.
      *
      * @param BaseProduct[]                                                  $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array indexed with the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct array
      */
-    public function getList($products, ShopContextInterface $context);
+    public function getList($products, ShopContext $context);
 }

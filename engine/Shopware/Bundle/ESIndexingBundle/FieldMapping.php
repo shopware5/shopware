@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * Class FieldMapping
@@ -55,11 +55,11 @@ class FieldMapping implements FieldMappingInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return string
      */
-    public function getPriceField(ShopContextInterface $context)
+    public function getPriceField(ShopContext $context)
     {
         $key = $context->getCurrentCustomerGroup()->getKey();
         $currency = $context->getCurrency()->getId();
@@ -68,7 +68,7 @@ class FieldMapping implements FieldMappingInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      *
      * @return array
      */

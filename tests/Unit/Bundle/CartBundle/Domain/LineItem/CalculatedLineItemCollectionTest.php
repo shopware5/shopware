@@ -25,16 +25,16 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\LineItem;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
-use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
+use Shopware\Cart\LineItem\CalculatedLineItemCollection;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\PriceCollection;
+use Shopware\Cart\Product\ProductProcessor;
+use Shopware\Cart\Rule\Container\AndRule;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Cart\Voucher\CalculatedVoucher;
+use Shopware\Cart\Voucher\VoucherProcessor;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredGoodsItem;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredLineItem;
 

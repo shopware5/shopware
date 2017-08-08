@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Country;
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -82,7 +82,7 @@ class CountryGateway
      * @param int[]              $ids
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Country\Area[]
+     * @return \Shopware\CountryArea\Struct\CountryArea[]
      */
     public function getAreas(array $ids, TranslationContext $context)
     {
@@ -112,7 +112,7 @@ class CountryGateway
      * @param int[]              $ids
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Country\Country[]
+     * @return \Shopware\Country\Struct\Country[]
      */
     public function getCountries(array $ids, TranslationContext $context)
     {
@@ -145,7 +145,7 @@ class CountryGateway
      * @param int[]              $ids
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Country\State[]
+     * @return \Shopware\CountryState\Struct\CountryState[]
      */
     public function getStates(array $ids, TranslationContext $context)
     {
@@ -172,7 +172,7 @@ class CountryGateway
      * @param int[]              $countryIds
      * @param TranslationContext $context
      *
-     * @return array indexed by country id contains an array of Struct\Country\State
+     * @return array indexed by country id contains an array of Struct\Country\CountryState
      */
     public function getCountryStates($countryIds, TranslationContext $context)
     {
@@ -194,7 +194,7 @@ class CountryGateway
     }
 
     /**
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

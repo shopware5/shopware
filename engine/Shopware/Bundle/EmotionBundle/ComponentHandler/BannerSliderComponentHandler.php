@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class BannerSliderComponentHandler implements ComponentHandlerInterface
 {
@@ -48,9 +48,9 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
     /**
      * @param PrepareDataCollection                                          $collection
      * @param Element                                                        $element
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         /** @var array $sliderList */
         $sliderList = $element->getConfig()->get('banner_slider', []);
@@ -73,9 +73,9 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
     /**
      * @param ResolvedDataCollection $collection
      * @param Element                $element
-     * @param ShopContextInterface   $context
+     * @param ShopContext   $context
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         /** @var array $sliderList */
         $sliderList = $element->getConfig()->get('banner_slider', []);

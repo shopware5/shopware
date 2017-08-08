@@ -25,23 +25,23 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
-use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
-use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxAmountCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Cart\Price\AmountCalculator;
+use Shopware\Cart\Price\CartPrice;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\PriceCollection;
+use Shopware\Cart\Price\PriceRounding;
+use Shopware\Cart\Tax\CalculatedTax;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\PercentageTaxRuleBuilder;
+use Shopware\Cart\Tax\PercentageTaxRuleCalculator;
+use Shopware\Cart\Tax\TaxAmountCalculator;
+use Shopware\Cart\Tax\TaxCalculator;
+use Shopware\Cart\Tax\TaxDetector;
+use Shopware\Cart\Tax\TaxRule;
+use Shopware\Cart\Tax\TaxRuleCalculator;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * Class PriceCalculatorTest

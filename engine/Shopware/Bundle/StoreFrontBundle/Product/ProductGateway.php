@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -80,11 +80,11 @@ class ProductGateway
 
     /**
      * @param string[]             $numbers
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return ListProduct[] Indexed by the product order number
      */
-    public function getList(array $numbers, ShopContextInterface $context)
+    public function getList(array $numbers, ShopContext $context)
     {
         $query = $this->getQuery($numbers, $context);
 
@@ -101,7 +101,7 @@ class ProductGateway
         return $products;
     }
 
-    private function getQuery(array $numbers, ShopContextInterface $context): QueryBuilder
+    private function getQuery(array $numbers, ShopContext $context): QueryBuilder
     {
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();

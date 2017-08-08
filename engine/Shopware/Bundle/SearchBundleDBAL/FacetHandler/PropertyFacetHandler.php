@@ -36,7 +36,7 @@ use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyGateway;
 use Shopware\Components\QueryAliasMapper;
 
@@ -92,7 +92,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
      * @param \Shopware\Search\FacetInterface|Facet\PropertyFacet                             $facet
      * @param Criteria                                                       $reverted
      * @param \Shopware\Search\Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return FacetResultInterface|null
      */
@@ -100,7 +100,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $properties = $this->getProperties($context, $reverted);
 
@@ -113,12 +113,12 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param \Shopware\Search\Criteria                                                       $queryCriteria
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet[]
      */
-    protected function getProperties(\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context, Criteria $queryCriteria)
+    protected function getProperties(\Shopware\Context\Struct\ShopContext $context, Criteria $queryCriteria)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($query);

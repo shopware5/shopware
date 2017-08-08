@@ -229,7 +229,7 @@ class FormSynchronizer
      * 'label' => 'Display recently viewed items'
      * ),
      * 'thumb' => array(
-     * 'label' => 'Thumbnail size',
+     * 'label' => 'MediaThumbnail size',
      * 'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
      * )
      * )

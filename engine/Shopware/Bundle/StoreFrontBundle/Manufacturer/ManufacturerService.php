@@ -24,8 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\Routing\RouterInterface;
+use Shopware\ProductManufacturer\Struct\ProductManufacturer;
 
 /**
  * @category  Shopware
@@ -59,7 +60,7 @@ class ManufacturerService implements ManufacturerServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContext $context)
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context->getTranslationContext());
 
@@ -76,7 +77,7 @@ class ManufacturerService implements ManufacturerServiceInterface
     }
 
     /**
-     * @param Manufacturer[] $manufacturers
+     * @param ProductManufacturer[] $manufacturers
      *
      * @return array[]
      */

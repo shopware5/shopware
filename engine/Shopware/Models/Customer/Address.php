@@ -37,7 +37,7 @@ use Shopware\Models\Country\State;
  * <code>
  *   - Customer =>  Shopware\Models\Customer\Customer [1:n] [s_user]
  *   - Country =>  Shopware\Models\Customer\Country [1:n] [s_countries]
- *   - State =>  Shopware\Models\Country\State [1:n] [s_countries_states]
+ *   - CountryState =>  Shopware\Models\Country\CountryState [1:n] [s_countries_states]
  * </code>
  * The s_user_addresses table has the follows indices:
  * <code>

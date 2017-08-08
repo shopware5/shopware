@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Search\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware_Components_Config as ShopwareConfig;
 
@@ -90,7 +90,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         $type = $element->getConfig()->get('article_type');
         $key = 'emotion-element--' . $element->getId();
@@ -114,7 +114,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $key = 'emotion-element--' . $element->getId();
         $type = $element->getConfig()->get('article_type');
@@ -147,11 +147,11 @@ class ArticleComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element              $element
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return \Shopware\Search\Criteria
      */
-    private function generateCriteria(Element $element, ShopContextInterface $context)
+    private function generateCriteria(Element $element, ShopContext $context)
     {
         $categoryId = (int) $element->getConfig()->get('article_category');
         $type = $element->getConfig()->get('article_type');

@@ -59,7 +59,7 @@ class sMarketing
     public $customerGroupId;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -77,7 +77,7 @@ class sMarketing
      * Class constructor.
      */
     public function __construct(
-        StoreFrontBundle\Context\ContextServiceInterface $contextService = null,
+        \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalText\AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->category = Shopware()->Shop()->getCategory();
@@ -542,10 +542,10 @@ class sMarketing
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media[] $media
+     * @param \Shopware\Media\Struct\Media[] $media
      * @param string                                          $path
      *
-     * @return null|\Shopware\Bundle\StoreFrontBundle\Media\Media
+     * @return null|\Shopware\Media\Struct\Media
      */
     private function getMediaByPath($media, $path)
     {
@@ -627,7 +627,7 @@ class sMarketing
      */
     private function sGetMailCampaignsArticles($articles)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService */
         $contextService = Shopware()->Container()->get('storefront.context.service');
         $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
 

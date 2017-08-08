@@ -25,7 +25,7 @@
 namespace Shopware\SeoUrl\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\SeoUrl\Struct\SeoUrlCollection;
 use Shopware\SeoUrl\Struct\SeoUrlHydrator;

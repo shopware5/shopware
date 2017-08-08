@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 interface ShopIndexerInterface
 {
     /**
-     * @param Shop                    $shop
+     * @param \Shopware\Shop\Struct\Shop                    $shop
      * @param ProgressHelperInterface $helper
      */
     public function index(Shop $shop, ProgressHelperInterface $helper);

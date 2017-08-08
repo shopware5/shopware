@@ -25,15 +25,15 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface SearchTermQueryBuilderInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param $term
      *
      * @return BoolQuery
      */
-    public function buildQuery(ShopContextInterface $context, $term);
+    public function buildQuery(ShopContext $context, $term);
 }

@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
+use Shopware\ProductManufacturer\Struct\ProductManufacturer;
 
 class ManufacturerTest extends TestCase
 {
@@ -35,7 +35,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer([
             'name' => 'testManufacturerList-1',
-            'image' => 'Manufacturer-Cover-1',
+            'image' => 'ProductManufacturer-Cover-1',
             'link' => 'www.google.de?manufacturer=1',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',
@@ -45,7 +45,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer([
             'name' => 'testManufacturerList-2',
-            'image' => 'Manufacturer-Cover-2.jpg',
+            'image' => 'ProductManufacturer-Cover-2.jpg',
             'link' => 'www.google.de?manufacturer=2',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',
@@ -55,7 +55,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer([
             'name' => 'testManufacturerList-2',
-            'image' => 'Manufacturer-Cover-2.jpg',
+            'image' => 'ProductManufacturer-Cover-2.jpg',
             'link' => 'www.google.de?manufacturer=2',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',
@@ -66,7 +66,7 @@ class ManufacturerTest extends TestCase
         $manufacturers = Shopware()->Container()->get('storefront.manufacturer.service')
             ->getList($ids, $context);
 
-        /** @var $manufacturer \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer */
+        /** @var $manufacturer \Shopware\ProductManufacturer\Struct\ProductManufacturer */
         foreach ($manufacturers as $key => $manufacturer) {
             $this->assertEquals($key, $manufacturer->getId());
 

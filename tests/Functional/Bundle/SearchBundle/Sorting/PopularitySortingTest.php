@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Search\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 

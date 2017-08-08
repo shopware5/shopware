@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
 use Shopware\Framework\Struct\Struct;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * @category  Shopware
@@ -120,7 +120,7 @@ class ShopPage extends Struct
     protected $shopIds;
 
     /**
-     * @var Shop[]
+     * @var \Shopware\Shop\Struct\Shop[]
      */
     protected $shops;
 
@@ -401,7 +401,7 @@ class ShopPage extends Struct
     }
 
     /**
-     * @return Shop[]
+     * @return \Shopware\Shop\Struct\Shop[]
      */
     public function getShops()
     {
@@ -409,7 +409,7 @@ class ShopPage extends Struct
     }
 
     /**
-     * @param Shop[] $shops
+     * @param \Shopware\Shop\Struct\Shop[] $shops
      */
     public function setShops(array $shops)
     {

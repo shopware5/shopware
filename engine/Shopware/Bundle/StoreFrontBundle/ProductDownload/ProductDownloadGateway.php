@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\ProductDownload;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -82,7 +82,7 @@ class ProductDownloadGateway
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface::get()
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param \Shopware\Context\TranslationContext                                      $context
+     * @param \Shopware\Context\Struct\TranslationContext                                      $context
      *
      * @return array indexed by the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload array
      */

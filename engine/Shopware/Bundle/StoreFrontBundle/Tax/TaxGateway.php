@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Tax;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Cart\Delivery\ShippingLocation;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Country\State;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -80,21 +80,21 @@ class TaxGateway
     }
 
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Tax\Tax requires the following data:
+     * The \Shopware\Tax\Struct\Tax requires the following data:
      * - Tax rule data
      *
      * Required conditions for the selection:
      * - The tax rule is selected according to the following criteria
      *  - Customer group
-     *  - Area
+     *  - CountryArea
      *  - Country
-     *  - State
+     *  - CountryState
      * - The above rules are prioritized, from first to last.
      *
      * @param CustomerGroup    $customerGroup
      * @param ShippingLocation $location
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax[] Indexed by 'tax_' + id
+     * @return \Shopware\Tax\Struct\Tax[] Indexed by 'tax_' + id
      */
     public function getRules(
         CustomerGroup $customerGroup,
@@ -140,18 +140,18 @@ class TaxGateway
     }
 
     /**
-     * @param CustomerGroup $customerGroup
-     * @param Area          $area
-     * @param Country       $country
-     * @param State         $state
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $customerGroup
+     * @param CountryArea          $area
+     * @param \Shopware\Country\Struct\Country       $country
+     * @param \Shopware\CountryState\Struct\CountryState         $state
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getAreaQuery(
         CustomerGroup $customerGroup = null,
-        Area $area = null,
+        CountryArea $area = null,
         Country $country = null,
-        State $state = null
+        CountryState $state = null
     ) {
         $areaId = ($area) ? $area->getId() : null;
         $countryId = ($country) ? $country->getId() : null;

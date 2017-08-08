@@ -4,7 +4,7 @@ namespace StorefrontBundle\Service;
 
 use ProductBundle\Gateway\Aggregator\ListingPriceAggregator;
 use ProductBundle\Struct\ListingPriceCollection;
-use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ListingPriceService
 {
@@ -18,7 +18,7 @@ class ListingPriceService
         $this->aggregator = $aggregator;
     }
 
-    public function read($numbers, ShopContextInterface $context): ListingPriceCollection
+    public function read($numbers, ShopContext $context): ListingPriceCollection
     {
         //fetch prices for current customer group
 

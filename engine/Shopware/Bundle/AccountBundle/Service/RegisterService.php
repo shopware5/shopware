@@ -26,8 +26,8 @@ namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Storefront\Context\StorefrontContextService;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Password\Manager;
@@ -102,7 +102,7 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      * @param Customer                                    $customer
      * @param Address                                     $billing
      * @param Address|null                                $shipping
@@ -156,12 +156,12 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      * @param Customer                                    $customer
      */
     private function saveCustomer(Shop $shop, Customer $customer)
     {
-        if ($customer->getValidation() !== ContextService::FALLBACK_CUSTOMER_GROUP) {
+        if ($customer->getValidation() !== StorefrontContextService::FALLBACK_CUSTOMER_GROUP) {
             $customer->setCustomerType(Customer::CUSTOMER_TYPE_BUSINESS);
         }
 

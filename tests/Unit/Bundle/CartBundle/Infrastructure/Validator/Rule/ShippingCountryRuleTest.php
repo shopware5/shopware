@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingCountryRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Rule\Exception\UnsupportedOperatorException;
+use Shopware\CartBridge\Rule\ShippingCountryRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
 
 class ShippingCountryRuleTest extends TestCase
 {
@@ -118,7 +118,7 @@ class ShippingCountryRuleTest extends TestCase
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Cart\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */

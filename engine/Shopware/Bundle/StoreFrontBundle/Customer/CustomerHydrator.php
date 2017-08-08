@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\Customer;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Customer\Struct\Customer;
 use Shopware\Framework\Struct\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator;
 

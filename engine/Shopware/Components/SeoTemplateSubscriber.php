@@ -25,7 +25,7 @@
 namespace Shopware\Components;
 
 use Shopware\Components\Plugin\SubscriberInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 
 class SeoTemplateSubscriber implements SubscriberInterface
 {
@@ -40,14 +40,14 @@ class SeoTemplateSubscriber implements SubscriberInterface
     private $queryAliasMapper;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
     public function __construct(
         \Shopware_Components_Config $config,
         QueryAliasMapper $queryAliasMapper,
-        ContextServiceInterface $contextService
+        StorefrontContextServiceInterface $contextService
     ) {
         $this->config = $config;
         $this->queryAliasMapper = $queryAliasMapper;

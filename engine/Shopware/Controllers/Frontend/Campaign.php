@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\Emotion\DeviceConfiguration;
 
 class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action

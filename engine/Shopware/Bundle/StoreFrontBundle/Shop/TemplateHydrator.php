@@ -25,12 +25,13 @@
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
 use Shopware\Framework\Struct\Hydrator;
+use Shopware\ShopTemplate\Struct\ShopTemplate;
 
 class TemplateHydrator extends Hydrator
 {
     public function hydrate($data)
     {
-        $template = new Template();
+        $template = new ShopTemplate();
         $template->setId((int) $data['__template_id']);
         $template->setTemplate($data['__template_template']);
         $template->setName($data['__template_name']);

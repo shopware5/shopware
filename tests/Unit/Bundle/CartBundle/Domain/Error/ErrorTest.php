@@ -44,7 +44,7 @@ class ErrorTest extends TestCase
     }
 }
 
-class SimpleError extends \Shopware\Bundle\CartBundle\Domain\Error\Error
+class SimpleError extends \Shopware\Cart\Error\Error
 {
     public function getMessageKey(): string
     {

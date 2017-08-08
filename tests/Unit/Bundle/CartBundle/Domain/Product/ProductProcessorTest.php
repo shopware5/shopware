@@ -25,35 +25,35 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
-use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductCalculator;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductData;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
-use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
+use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Cart\ProcessorCart;
+use Shopware\Cart\Delivery\DeliveryCollection;
+use Shopware\Cart\Delivery\DeliveryDate;
+use Shopware\Cart\Delivery\DeliveryInformation;
+use Shopware\Cart\LineItem\CalculatedLineItemCollection;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\LineItem\LineItemCollection;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\PriceCalculator;
+use Shopware\Cart\Price\PriceDefinition;
+use Shopware\Cart\Price\PriceDefinitionCollection;
+use Shopware\Cart\Price\PriceRounding;
+use Shopware\Cart\Product\CalculatedProduct;
+use Shopware\Cart\Product\ProductCalculator;
+use Shopware\Cart\Product\ProductData;
+use Shopware\Cart\Product\ProductProcessor;
+use Shopware\Cart\Rule\Container\AndRule;
+use Shopware\Cart\Tax\CalculatedTax;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxCalculator;
+use Shopware\Cart\Tax\TaxDetector;
+use Shopware\Cart\Tax\TaxRule;
+use Shopware\Cart\Tax\TaxRuleCalculator;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\CartBridge\Product\ProductPriceGateway;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class ProductProcessorTest extends TestCase
@@ -256,7 +256,7 @@ class ProductProcessorTest extends TestCase
             ),
         ]);
 
-        /** @var ShopContextInterface $context */
+        /** @var \Shopware\Context\Struct\ShopContext $context */
         $products = $calculator->calculate($lineItems, $context, $data);
 
         $this->assertSame(1, $products->count());

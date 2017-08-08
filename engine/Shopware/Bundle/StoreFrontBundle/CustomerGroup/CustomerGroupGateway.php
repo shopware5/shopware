@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\CustomerGroup;
 
 use Doctrine\DBAL\Connection;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\Framework\Struct\FieldHelper;
 
 /**

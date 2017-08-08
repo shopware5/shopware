@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\ProductStream;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
+use Shopware\ProductStream\Struct\ProductStream;
 
 /**
  * @category  Shopware

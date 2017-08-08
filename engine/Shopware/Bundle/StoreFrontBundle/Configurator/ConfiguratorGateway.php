@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaGateway;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
@@ -104,7 +104,7 @@ class ConfiguratorGateway
      * - Option name
      *
      * @param BaseProduct        $product
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet
      */
@@ -137,9 +137,9 @@ class ConfiguratorGateway
      * Returns for each configurator option the first possible image
      *
      * @param BaseProduct        $product
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[] indexed by the configurator option id
+     * @return \Shopware\Media\Struct\Media[] indexed by the configurator option id
      */
     public function getConfiguratorMedia(BaseProduct $product, TranslationContext $context)
     {

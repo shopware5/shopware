@@ -25,8 +25,8 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\CalculatedTax;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
 
 class CalculatedTaxCollectionTest extends TestCase
 {

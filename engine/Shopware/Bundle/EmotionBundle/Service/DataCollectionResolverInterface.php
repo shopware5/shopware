@@ -26,15 +26,15 @@ namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface DataCollectionResolverInterface
 {
     /**
      * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
+     * @param \Shopware\Context\Struct\ShopContext  $context
      *
      * @return ResolvedDataCollection
      */
-    public function resolve(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context);
+    public function resolve(PrepareDataCollection $prepareDataCollection, ShopContext $context);
 }

@@ -27,7 +27,7 @@ namespace Shopware\Category\Gateway;
 use Doctrine\DBAL\Connection;
 use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Category\Struct\CategoryHydrator;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 
 class CategoryReader

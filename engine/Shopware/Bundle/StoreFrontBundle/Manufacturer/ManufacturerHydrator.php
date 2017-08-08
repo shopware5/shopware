@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
+use Shopware\ProductManufacturer\Struct\ProductManufacturer;
 
 /**
  * @category  Shopware
@@ -59,21 +60,21 @@ class ManufacturerHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Manufacturer
+     * @return ProductManufacturer
      */
     public function hydrate(array $data)
     {
-        $manufacturer = new Manufacturer();
+        $manufacturer = new ProductManufacturer();
         $this->assignData($manufacturer, $data);
 
         return $manufacturer;
     }
 
     /**
-     * @param Manufacturer $manufacturer
+     * @param ProductManufacturer $manufacturer
      * @param array        $data
      */
-    private function assignData(Manufacturer $manufacturer, array $data)
+    private function assignData(ProductManufacturer $manufacturer, array $data)
     {
         $translation = $this->getTranslation($data, '__manufacturer', $this->mapping);
         $data = array_merge($data, $translation);

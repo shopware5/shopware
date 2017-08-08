@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 interface PropertyProviderInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      * @param int[]                                       $groupIds
      *
      * @return PropertyGroup[]

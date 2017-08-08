@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductLink;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -49,7 +49,7 @@ class ProductLinkService implements ProductLinkServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         return $this->gateway->getList($products, $context->getTranslationContext());
     }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Currency;
 
+use Shopware\Currency\Struct\Currency;
 use Shopware\Framework\Struct\Hydrator;
 
 class CurrencyHydrator extends Hydrator

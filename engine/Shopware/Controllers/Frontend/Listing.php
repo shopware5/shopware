@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Listing\ListingFacet;
 use Shopware\Bundle\StoreFrontBundle\Listing\ListingFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Listing\ListingSorting;
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
+use Shopware\ProductManufacturer\Struct\ProductManufacturer;
 
 /**
  * Listing controller
@@ -144,7 +144,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
-        /** @var $context \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface */
+        /** @var $context \Shopware\Context\Struct\ShopContext */
         $context = $this->get('storefront.context.service')->getShopContext();
 
         if (!$this->Request()->getParam('sCategory')) {
@@ -166,7 +166,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria
         );
 
-        /** @var $manufacturer \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer */
+        /** @var $manufacturer \Shopware\ProductManufacturer\Struct\ProductManufacturer */
         $manufacturer = $this->get('storefront.manufacturer.service')->get(
             $manufacturerId,
             $this->get('storefront.context.service')->getShopContext()
@@ -260,7 +260,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
             $location = ['controller' => 'index'];
         } elseif ($this->get('config')->get('categoryDetailLink') && $checkRedirect) {
-            /** @var $context \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface */
+            /** @var $context \Shopware\Context\Struct\ShopContext */
             $context = $this->get('storefront.context.service')->getShopContext();
 
             /** @var $factory StoreFrontCriteriaFactoryInterface */
@@ -292,11 +292,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * Result can be merged with "sCategoryContent" to override relevant seo category data with
      * manufacturer data.
      *
-     * @param Manufacturer $manufacturer
+     * @param \Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer
      *
      * @return array
      */
-    private function getSeoDataOfManufacturer(Manufacturer $manufacturer)
+    private function getSeoDataOfManufacturer(ProductManufacturer $manufacturer)
     {
         $content = [];
 
@@ -444,7 +444,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function createCategoryStreamCriteria($categoryId, $streamId)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService */
         $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class ListingFacetGateway
 {
@@ -63,7 +63,7 @@ class ListingFacetGateway
 
     /**
      * @param int[]                                                        $ids
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return ListingFacet[] indexed by id
      */
@@ -83,7 +83,7 @@ class ListingFacetGateway
 
     /**
      * @param int[]                                                        $categoryIds
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return array indexed by category id, each element contains a list of ListingFacet
      */
@@ -107,7 +107,7 @@ class ListingFacetGateway
     }
 
     /**
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return ListingFacet[]
      */
@@ -141,7 +141,7 @@ class ListingFacetGateway
     /**
      * Returns the base query to select the custom facet data.
      *
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return QueryBuilder
      */

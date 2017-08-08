@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 class ShopAnalyzer implements ShopAnalyzerInterface
 {

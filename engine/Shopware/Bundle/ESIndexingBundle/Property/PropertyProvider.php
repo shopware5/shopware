@@ -26,10 +26,10 @@ namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyHydrator;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * Class PropertyProvider
@@ -107,7 +107,7 @@ class PropertyProvider implements PropertyProviderInterface
     }
 
     /**
-     * @param TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

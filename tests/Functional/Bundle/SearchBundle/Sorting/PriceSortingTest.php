@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -154,7 +154,7 @@ class PriceSortingTest extends TestCase
 
     /**
      * @param $number
-     * @param ShopContext                        $context
+     * @param \Shopware\Context\Struct\ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
      * @param array                              $prices
      *

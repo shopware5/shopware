@@ -3,7 +3,7 @@
 namespace Shopware\Storefront\DetailPage;
 
 use Cocur\Slugify\SlugifyInterface;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Routing\Router;
 use Shopware\Product\Struct\ProductIdentity;
 use Shopware\Search\Condition\CanonicalCondition;

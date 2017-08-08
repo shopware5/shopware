@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Price;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
+use Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount;
+use Shopware\PriceGroup\Struct\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Product\ProductHydrator;
 use Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator;
 
@@ -144,11 +144,11 @@ class PriceHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return PriceDiscount
+     * @return PriceGroupDiscount
      */
     public function hydratePriceDiscount(array $data)
     {
-        $discount = new PriceDiscount();
+        $discount = new PriceGroupDiscount();
         $discount->setId((int) $data['__priceGroupDiscount_id']);
         $discount->setPercent((float) $data['__priceGroupDiscount_discount']);
         $discount->setQuantity((int) $data['__priceGroupDiscount_discountstart']);

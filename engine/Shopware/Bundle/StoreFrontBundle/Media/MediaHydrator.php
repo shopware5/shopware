@@ -29,6 +29,8 @@ use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Media\Struct\Media;
+use Shopware\MediaThumbnail\Struct\MediaThumbnail;
 
 /**
  * @category  Shopware
@@ -217,7 +219,7 @@ class MediaHydrator extends Hydrator
                 $retina = $this->mediaService->getUrl($retina);
             }
 
-            $thumbnails[] = new Thumbnail(
+            $thumbnails[] = new MediaThumbnail(
                 $this->mediaService->getUrl($row['source']),
                 $retina,
                 $row['maxWidth'],

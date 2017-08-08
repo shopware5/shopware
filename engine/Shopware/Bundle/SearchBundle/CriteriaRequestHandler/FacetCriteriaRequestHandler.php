@@ -32,7 +32,7 @@ use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet\CombinedConditionFacet;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Listing\ListingFacetServiceInterface;
 
 class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
@@ -73,7 +73,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     public function handleRequest(
         Request $request,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if ($this->isSearchPage($request)) {
             $ids = $this->config->get('searchFacets', '');

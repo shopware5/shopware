@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\SimilarProduct;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 /**
  * @category  Shopware
@@ -44,9 +44,9 @@ interface SimilarProductServiceInterface
      * over the same category.
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]        $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
      *
      * @return array indexed with the product number, the values are a list of ListProduct structs
      */
-    public function getList($products, ShopContextInterface $context);
+    public function getList($products, ShopContext $context);
 }

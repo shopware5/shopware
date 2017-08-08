@@ -25,7 +25,7 @@
 namespace Shopware\Product\Gateway\Handler;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\MainVariantCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;

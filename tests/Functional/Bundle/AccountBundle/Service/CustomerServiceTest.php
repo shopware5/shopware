@@ -50,7 +50,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
     protected static $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     protected static $contextService;
 

@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingStreetRule;
-use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\CartBridge\Rule\ShippingStreetRule;
+use Shopware\Address\Struct\Address;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Country\State;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
 
 class ShippingStreetRuleTest extends TestCase
 {
@@ -123,7 +123,7 @@ class ShippingStreetRuleTest extends TestCase
     private function createAddress(string $street): Address
     {
         $address = new Address();
-        $state = new State();
+        $state = new CountryState();
         $country = new Country();
         $state->setCountry($country);
 

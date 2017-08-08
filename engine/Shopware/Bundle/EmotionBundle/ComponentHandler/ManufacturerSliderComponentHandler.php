@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 
 class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
@@ -71,14 +71,14 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $type = $element->getConfig()->get('manufacturer_type');
 
@@ -107,11 +107,11 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param int                  $categoryId
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return int[]
      */
-    private function getManufacturerIdsByCategoryId($categoryId, ShopContextInterface $context)
+    private function getManufacturerIdsByCategoryId($categoryId, ShopContext $context)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select('manufacturer.id')

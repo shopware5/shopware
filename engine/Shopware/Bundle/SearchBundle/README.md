@@ -42,17 +42,17 @@ $productResult = Shopware()->Container()->get('shopware_search.product_search')-
 ```
 
 ## How it works
-The Shopware\Bundle\SearchBundle provides a ProductNumberSearchInterface which expects a Shopware\Search\Criteria and a Shopware\Bundle\StoreFrontBundle\ShopContextInterface object.
+The Shopware\Bundle\SearchBundle provides a ProductNumberSearchInterface which expects a Shopware\Search\Criteria and a Shopware\Bundle\StoreFrontBundle\ShopContext object.
 
 The Criteria class contains the definition which conditions, sortings and facets (terms) the search has to consider.
 
-The ShopContextInterface class contains the current user/shop context like which customer group is active or which language is selected.
+The ShopContext class contains the current user/shop context like which customer group is active or which language is selected.
 
 This both classes are required for a search request.
 
 The ProductNumberSearchInterface is only the definition of the search API. The ProductNumberSearch is implemented for a specify database platform like Mysql or Elasticsearch.
 
-The implementation of the ProductNumberSearch has to interpret the provided ShopContextInterface and Criteria object to the specify database language.
+The implementation of the ProductNumberSearch has to interpret the provided ShopContext and Criteria object to the specify database language.
 
 
 ## Default ProductNumberSearch
@@ -99,7 +99,7 @@ class PluginSortingHandler implements \Shopware\Bundle\SearchBundleDBAL\SortingH
     public function generateSorting(
         \Shopware\Search\SortingInterface   $sorting,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+        \Shopware\Context\Struct\ShopContext $context
     ) {
         $query->innerJoin(
             'product',
@@ -135,7 +135,7 @@ class PluginConditionHandler implements \Shopware\Bundle\SearchBundle\DBAL\Condi
     public function generateCondition(
         \Shopware\Search\ConditionInterface $condition,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+        \Shopware\Context\Struct\ShopContext $context
     ) {
         $query->innerJoin(
             'product',
@@ -181,7 +181,7 @@ class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandl
         \Shopware\Search\FacetInterface     $facet,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
         \Shopware\Search\Criteria           $criteria,
-        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+        \Shopware\Context\Struct\ShopContext $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($criteria, $context);
 

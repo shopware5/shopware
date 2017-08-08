@@ -30,7 +30,7 @@ use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 

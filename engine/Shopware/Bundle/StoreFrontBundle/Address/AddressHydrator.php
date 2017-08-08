@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Address;
 
+use Shopware\Address\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator;

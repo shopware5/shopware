@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingAreaRule;
-use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\CartBridge\Rule\BillingAreaRule;
+use Shopware\Address\Struct\Address;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\Country;
+use Shopware\Customer\Struct\Customer;
 
 class BillingAreaRuleTest extends TestCase
 {
@@ -46,7 +46,7 @@ class BillingAreaRuleTest extends TestCase
 
         $country = new Country();
 
-        $area = new Area();
+        $area = new CountryArea();
         $area->setId(1);
         $country->setArea($area);
 
@@ -75,7 +75,7 @@ class BillingAreaRuleTest extends TestCase
 
         $country = new Country();
 
-        $area = new Area();
+        $area = new CountryArea();
         $area->setId(1);
         $country->setArea($area);
 
@@ -104,7 +104,7 @@ class BillingAreaRuleTest extends TestCase
 
         $country = new Country();
 
-        $area = new Area();
+        $area = new CountryArea();
         $area->setId(3);
         $country->setArea($area);
 

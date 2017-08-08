@@ -24,7 +24,7 @@
 
 namespace Shopware\SeoUrl\Generator;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\SeoUrl\Struct\SeoUrlCollection;
 
 interface SeoUrlGeneratorInterface

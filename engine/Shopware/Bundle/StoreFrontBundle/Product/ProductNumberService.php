@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * @category  Shopware
@@ -84,7 +84,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAvailableNumber($number, ShopContextInterface $context, $selection = [])
+    public function getAvailableNumber($number, ShopContext $context, $selection = [])
     {
         $productId = $this->getProductIdByNumber($number);
         if (!$productId) {
@@ -298,7 +298,7 @@ class ProductNumberService implements ProductNumberServiceInterface
      * Validates if the product is available in the current shop
      *
      * @param int  $productId
-     * @param Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      *
      * @return int|false
      */

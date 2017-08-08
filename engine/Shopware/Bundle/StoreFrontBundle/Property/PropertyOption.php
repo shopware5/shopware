@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Shopware\Framework\Struct\Struct;
-use Shopware\Bundle\StoreFrontBundle\Media\Media;
+use Shopware\Media\Struct\Media;
 
 /**
  * @category  Shopware
@@ -95,7 +95,7 @@ class PropertyOption extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media
+     * @return \Shopware\Media\Struct\Media
      */
     public function getMedia()
     {
@@ -103,7 +103,7 @@ class PropertyOption extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media $media
+     * @param \Shopware\Media\Struct\Media $media
      */
     public function setMedia($media)
     {

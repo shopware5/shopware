@@ -25,6 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\CountryState\Struct\CountryState;
 use Shopware\Framework\Struct\Hydrator;
 
 /**
@@ -50,11 +53,11 @@ class CountryHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Area
+     * @return CountryArea
      */
     public function hydrateArea(array $data)
     {
-        $area = new Area();
+        $area = new CountryArea();
         $area->setId((int) $data['__countryArea_id']);
         $area->setName($data['__countryArea_name']);
 
@@ -134,11 +137,11 @@ class CountryHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return State
+     * @return CountryState
      */
     public function hydrateState(array $data)
     {
-        $state = new State();
+        $state = new CountryState();
 
         $id = (int) $data['__countryState_id'];
 

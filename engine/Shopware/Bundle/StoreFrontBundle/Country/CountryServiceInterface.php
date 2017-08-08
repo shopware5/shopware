@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
 
 interface CountryServiceInterface
 {
@@ -32,9 +33,9 @@ interface CountryServiceInterface
      * Returns a list of all available countries and their states for the provided shop context.
      * Countries are sorted first at the position field and as fallback by the name property
      *
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Country[] indexed by country id
      */
-    public function getAvailable(ShopContextInterface $context);
+    public function getAvailable(ShopContext $context);
 }

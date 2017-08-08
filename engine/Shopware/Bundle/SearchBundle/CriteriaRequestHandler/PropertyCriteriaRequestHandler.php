@@ -29,7 +29,7 @@ use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
@@ -52,9 +52,9 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     /**
      * @param Request              $request
      * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
+    public function handleRequest(Request $request, Criteria $criteria, ShopContext $context)
     {
         $this->addPropertyCondition($request, $criteria);
     }

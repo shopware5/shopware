@@ -25,7 +25,7 @@
 namespace Shopware\Components\Statistic;
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware_Components_Config as Config;
 
 class StatisticRegistry implements StatisticRegistryInterface
@@ -55,7 +55,7 @@ class StatisticRegistry implements StatisticRegistryInterface
         $this->botDetector = $botDetector;
     }
 
-    public function traceRequest(Request $request, ShopContextInterface $context): void
+    public function traceRequest(Request $request, ShopContext $context): void
     {
         if (!$this->shouldTrace($request)) {
             return;

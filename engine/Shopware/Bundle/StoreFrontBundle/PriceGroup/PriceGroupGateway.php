@@ -26,8 +26,9 @@ namespace Shopware\Bundle\StoreFrontBundle\PriceGroup;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceHydrator;
+use Shopware\PriceGroup\Struct\PriceGroup;
 
 /**
  * @category  Shopware
@@ -77,7 +78,7 @@ class PriceGroupGateway
     }
 
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup requires the following data:
+     * The \Shopware\PriceGroup\Struct\PriceGroup requires the following data:
      * - Price group base data
      * - Price group discounts for the provided customer group
      *

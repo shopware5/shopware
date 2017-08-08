@@ -25,7 +25,7 @@
 namespace ProductBundle\Event;
 
 use Shopware\Product\Struct\ProductCollection;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class ListProductsLoadedEvent
 {
@@ -35,7 +35,7 @@ class ListProductsLoadedEvent
     protected $listProducts;
 
     /**
-     * @var \Shopware\Context\TranslationContext
+     * @var \Shopware\Context\Struct\TranslationContext
      */
     protected $context;
 

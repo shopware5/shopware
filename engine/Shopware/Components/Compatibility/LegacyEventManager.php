@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Compatibility;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 
 /**
  * @category  Shopware
@@ -44,19 +44,19 @@ class LegacyEventManager
     private $config;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
      * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface     $contextService
+     * @param \Shopware\Context\Service\\Shopware\Storefront\Context\StorefrontContextServiceInterface     $contextService
      */
     public function __construct(
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Config $config,
-        ContextServiceInterface $contextService
+        StorefrontContextServiceInterface $contextService
     ) {
         $this->eventManager = $eventManager;
         $this->config = $config;

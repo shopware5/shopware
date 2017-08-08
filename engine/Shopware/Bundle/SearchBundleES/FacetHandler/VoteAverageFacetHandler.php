@@ -35,7 +35,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\QueryAliasMapper;
 
 class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterface
@@ -77,7 +77,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addAggregation(
             new TermsAggregation('vote_average', 'voteAverage.average')
@@ -91,7 +91,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations'])) {
             return;

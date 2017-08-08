@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShippingAreaRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Rule\Rule;
+use Shopware\CartBridge\Rule\ShippingAreaRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\Country;
 
 class ShippingAreaRuleTest extends TestCase
 {
@@ -107,7 +107,7 @@ class ShippingAreaRuleTest extends TestCase
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Cart\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
@@ -129,7 +129,7 @@ class ShippingAreaRuleTest extends TestCase
             [false],
             [''],
             [Rule::OPERATOR_GTE],
-            [Rule::OPERATOR_LTE],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_LTE],
         ];
     }
 
@@ -137,7 +137,7 @@ class ShippingAreaRuleTest extends TestCase
     {
         $country = new Country();
         $country->setId(1);
-        $area = new Area();
+        $area = new CountryArea();
         $area->setId($areaId);
         $country->setArea($area);
 

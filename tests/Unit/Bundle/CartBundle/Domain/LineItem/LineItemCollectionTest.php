@@ -25,8 +25,8 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\LineItem;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\LineItem\LineItemCollection;
 
 class LineItemCollectionTest extends TestCase
 {

@@ -28,8 +28,8 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
 use Shopware\Framework\Struct\Collection;
 use Shopware\Framework\Struct\Struct;
-use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
-use Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer;
+use Shopware\Serializer\JsonSerializer;
+use Shopware\Serializer\ObjectDeserializer;
 
 class JsonSerializerTest extends TestCase
 {

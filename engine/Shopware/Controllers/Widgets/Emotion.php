@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Search\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -44,7 +44,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /** @var ShopContext $shopContext */
+        /** @var \Shopware\Context\Struct\ShopContext $shopContext */
         $shopContext = $this->container->get('storefront.context.service')->getShopContext();
         $emotionService = $this->container->get('shopware_emotion.emotion_service');
 

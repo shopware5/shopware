@@ -29,7 +29,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\PaymentMethod\Struct\PaymentMethod;
 
 class PaymentMethodGateway
 {
@@ -67,7 +68,7 @@ class PaymentMethodGateway
 
     /**
      * @param int[]                                                        $ids
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return PaymentMethod[]
      */
@@ -91,7 +92,7 @@ class PaymentMethodGateway
     }
 
     /**
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return PaymentMethod[]
      */

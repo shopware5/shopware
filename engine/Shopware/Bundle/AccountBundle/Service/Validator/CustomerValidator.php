@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Service\Validator;
 
 use Shopware\Bundle\AccountBundle\Constraint\CustomerEmail;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraint;
@@ -45,7 +45,7 @@ class CustomerValidator implements CustomerValidatorInterface
     private $validator;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $context;
 
@@ -63,12 +63,12 @@ class CustomerValidator implements CustomerValidatorInterface
      * CustomerValidator constructor.
      *
      * @param ValidatorInterface                                                $validator
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $context
+     * @param \Shopware\Storefront\Context\StorefrontContextServiceInterface $context
      * @param \Shopware_Components_Config                                       $config
      */
     public function __construct(
         ValidatorInterface $validator,
-        ContextServiceInterface $context,
+        StorefrontContextServiceInterface $context,
         \Shopware_Components_Config $config
     ) {
         $this->validator = $validator;

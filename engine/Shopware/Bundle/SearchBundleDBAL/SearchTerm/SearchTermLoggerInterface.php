@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * @category  Shopware
@@ -40,7 +40,7 @@ interface SearchTermLoggerInterface
      *
      * @param \Shopware\Search\Criteria                  $criteria
      * @param ProductNumberSearchResult $result
-     * @param Shop                      $shop
+     * @param \Shopware\Shop\Struct\Shop                      $shop
      */
     public function logResult(Criteria $criteria, ProductNumberSearchResult $result, Shop $shop);
 }

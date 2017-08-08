@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\Price;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Components\DependencyInjection\Container;
@@ -48,7 +48,7 @@ class LegacyStructConverter
     private $config;
 
     /**
-     * @var ContextServiceInterface
+     * @var StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -84,7 +84,7 @@ class LegacyStructConverter
 
     /**
      * @param \Shopware_Components_Config                                         $config
-     * @param ContextServiceInterface                                             $contextService
+     * @param StorefrontContextServiceInterface                                             $contextService
      * @param \Enlight_Event_EventManager                                         $eventManager
      * @param MediaServiceInterface                                               $mediaService
      * @param Connection                                                          $connection
@@ -94,7 +94,7 @@ class LegacyStructConverter
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        ContextServiceInterface $contextService,
+        StorefrontContextServiceInterface $contextService,
         \Enlight_Event_EventManager $eventManager,
         MediaServiceInterface $mediaService,
         Connection $connection,
@@ -113,7 +113,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\Country[] $countries
+     * @param \Shopware\Country\Struct\Country[] $countries
      *
      * @return array
      */
@@ -123,11 +123,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\Country $country
+     * @param \Shopware\Country\Struct\Country $country
      *
      * @return array
      */
-    public function convertCountryStruct(StoreFrontBundle\Country\Country $country)
+    public function convertCountryStruct(\Shopware\Country\Struct\Country $country)
     {
         $data = json_decode(json_encode($country), true);
         $data = array_merge($data, [
@@ -157,7 +157,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\State[] $states
+     * @param \Shopware\CountryState\Struct\CountryState[] $states
      *
      * @return array
      */
@@ -167,11 +167,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\State $state
+     * @param \Shopware\CountryState\Struct\CountryState $state
      *
      * @return array
      */
-    public function convertStateStruct(StoreFrontBundle\Country\State $state)
+    public function convertStateStruct(\Shopware\CountryState\Struct\CountryState $state)
     {
         $data = json_decode(json_encode($state), true);
         $data += ['shortcode' => $state->getCode(), 'attributes' => $state->getAttributes()];
@@ -403,13 +403,13 @@ class LegacyStructConverter
     /**
      * Converts the passed ProductStream struct to an array structure.
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream $productStream
+     * @param \Shopware\ProductStream\Struct\ProductStream $productStream
      *
      * @return array
      */
-    public function convertRelatedProductStreamStruct(StoreFrontBundle\ProductStream\ProductStream $productStream)
+    public function convertRelatedProductStreamStruct(\Shopware\ProductStream\Struct\ProductStream $productStream)
     {
-        if (!$productStream instanceof StoreFrontBundle\ProductStream\ProductStream) {
+        if (!$productStream instanceof \Shopware\ProductStream\Struct\ProductStream) {
             return [];
         }
 
@@ -628,13 +628,13 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media $media
+     * @param \Shopware\Media\Struct\Media $media
      *
      * @return array
      */
-    public function convertMediaStruct(StoreFrontBundle\Media\Media $media = null)
+    public function convertMediaStruct(\Shopware\Media\Struct\Media $media = null)
     {
-        if (!$media instanceof StoreFrontBundle\Media\Media) {
+        if (!$media instanceof \Shopware\Media\Struct\Media) {
             return [];
         }
 
@@ -680,11 +680,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Unit\Unit $unit
+     * @param \Shopware\Unit\Struct\Unit $unit
      *
      * @return array
      */
-    public function convertUnitStruct(StoreFrontBundle\Unit\Unit $unit)
+    public function convertUnitStruct(\Shopware\Unit\Struct\Unit $unit)
     {
         $data = [
             'minpurchase' => $unit->getMinPurchase(),
@@ -707,11 +707,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
+     * @param \Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer
      *
      * @return string
      */
-    public function getSupplierListingLink(StoreFrontBundle\Manufacturer\Manufacturer $manufacturer)
+    public function getSupplierListingLink(\Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer)
     {
         return 'controller=listing&action=manufacturer&sSupplier=' . (int) $manufacturer->getId();
     }
@@ -834,11 +834,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
+     * @param \Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer
      *
      * @return array
      */
-    public function convertManufacturerStruct(StoreFrontBundle\Manufacturer\Manufacturer $manufacturer)
+    public function convertManufacturerStruct(\Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer)
     {
         $data = [
             'id' => $manufacturer->getId(),
@@ -1071,7 +1071,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Thumbnail $thumbnail
+     * @param \Shopware\MediaThumbnail\Struct\MediaThumbnail $thumbnail
      *
      * @return string
      */

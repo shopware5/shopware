@@ -26,10 +26,11 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\Customer;
 
 use Shopware\Bundle\StoreFrontBundle\Address\AddressGateway;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
+use Shopware\Customer\Struct\Customer;
 
 class CustomerService
 {
@@ -73,9 +74,9 @@ class CustomerService
 
     /**
      * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Customer\Customer[]
+     * @return \Shopware\Customer\Struct\Customer[]
      */
     public function getList($ids, TranslationContext $context): array
     {
@@ -133,7 +134,7 @@ class CustomerService
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Customer\Customer[] $customers
+     * @param \Shopware\Customer\Struct\Customer[] $customers
      *
      * @return int[]
      */
@@ -165,7 +166,7 @@ class CustomerService
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Customer\Customer[] $customers
+     * @param \Shopware\Customer\Struct\Customer[] $customers
      *
      * @return int[]
      */

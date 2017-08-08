@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Price;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -86,7 +86,7 @@ class CheapestPriceGateway
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param TranslationContext                                      $context
+     * @param \Shopware\Context\Struct\TranslationContext                                      $context
      * @param CustomerGroup                                           $customerGroup
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Price\PriceRule[] Indexed by the product id

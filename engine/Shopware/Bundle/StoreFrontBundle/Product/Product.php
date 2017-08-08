@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Media\Media;
-use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream;
+use Shopware\Media\Struct\Media;
+use Shopware\ProductStream\Struct\ProductStream;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertySet;
 
 /**
@@ -41,7 +41,7 @@ class Product extends ListProduct
     protected $relatedProducts = [];
 
     /**
-     * @var ProductStream[]
+     * @var \Shopware\ProductStream\Struct\ProductStream[]
      */
     protected $relatedProductStreams = [];
 
@@ -100,7 +100,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media[] $media
+     * @param \Shopware\Media\Struct\Media[] $media
      */
     public function setMedia($media)
     {
@@ -108,7 +108,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[]
+     * @return \Shopware\Media\Struct\Media[]
      */
     public function getMedia()
     {
@@ -118,7 +118,7 @@ class Product extends ListProduct
     /**
      * @param int $index
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Thumbnail[]
+     * @return \Shopware\MediaThumbnail\Struct\MediaThumbnail[]
      */
     public function getThumbnailsBySize($index)
     {
@@ -181,7 +181,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream[]
+     * @return \Shopware\ProductStream\Struct\ProductStream[]
      */
     public function getRelatedProductStreams()
     {
@@ -189,7 +189,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream[] $relatedProductStreams
+     * @param \Shopware\ProductStream\Struct\ProductStream[] $relatedProductStreams
      */
     public function setRelatedProductStreams($relatedProductStreams)
     {

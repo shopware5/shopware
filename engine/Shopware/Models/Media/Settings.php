@@ -104,7 +104,7 @@ class Settings extends ModelEntity
     private $thumbnailHighDpi;
 
     /**
-     * Thumbnail quality
+     * MediaThumbnail quality
      *
      * @var int
      * @ORM\Column(name="thumbnail_quality", type="integer", nullable=false)

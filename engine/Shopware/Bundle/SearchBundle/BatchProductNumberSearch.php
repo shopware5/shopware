@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProductFactoryServiceInterface;
 use Shopware\Search\ConditionInterface;
@@ -60,11 +60,11 @@ class BatchProductNumberSearch
 
     /**
      * @param BatchProductNumberSearchRequest                                $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return BatchProductNumberSearchResult
      */
-    public function search(BatchProductNumberSearchRequest $request, ShopContextInterface $context)
+    public function search(BatchProductNumberSearchRequest $request, ShopContext $context)
     {
         // resolve product numbers of criteria objects and add them to the request
         $criteriaListWithBaseProducts = $this->getBaseProductsByCriteriaList($request->getCriteriaList(), $context);
@@ -118,11 +118,11 @@ class BatchProductNumberSearch
 
     /**
      * @param array                $criteriaList
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return array
      */
-    private function getBaseProductsByCriteriaList(array $criteriaList, ShopContextInterface $context)
+    private function getBaseProductsByCriteriaList(array $criteriaList, ShopContext $context)
     {
         $products = [];
         $optimizedCriteriaList = $this->getOptimizedCriteriaList($criteriaList);

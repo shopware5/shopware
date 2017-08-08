@@ -35,7 +35,7 @@ use ProductBundle\Event\UnitsLoadedEvent;
 use ProductBundle\Hydrator\ProductHydrator;
 use Shopware\Product\Struct\ProductCollection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class ProductReader
 {

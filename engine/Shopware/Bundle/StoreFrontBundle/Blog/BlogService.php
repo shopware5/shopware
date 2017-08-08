@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
 
 /**
@@ -57,7 +57,7 @@ class BlogService implements BlogServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContext $context)
     {
         $blogs = $this->blogGateway->getList($ids);
 
@@ -68,9 +68,9 @@ class BlogService implements BlogServiceInterface
 
     /**
      * @param Blog[]               $blogs
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      */
-    private function resolveMedias(array $blogs, ShopContextInterface $context)
+    private function resolveMedias(array $blogs, ShopContext $context)
     {
         $mediaIds = [];
         foreach ($blogs as $blog) {

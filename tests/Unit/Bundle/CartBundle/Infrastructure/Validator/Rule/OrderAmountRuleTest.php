@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
-use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\OrderAmountRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Price\CartPrice;
+use Shopware\Cart\Rule\Rule;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\CartBridge\Rule\OrderAmountRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 
 class OrderAmountRuleTest extends TestCase
 {
@@ -147,7 +147,7 @@ class OrderAmountRuleTest extends TestCase
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Cart\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
@@ -175,8 +175,8 @@ class OrderAmountRuleTest extends TestCase
             [true],
             [false],
             [''],
-            [Rule::OPERATOR_EQ],
-            [Rule::OPERATOR_NEQ],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_EQ],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_NEQ],
         ];
     }
 }

@@ -26,9 +26,9 @@ declare(strict_types=1);
 namespace Shopware\Components\Statistic;
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface StatisticRegistryInterface
 {
-    public function traceRequest(Request $request, ShopContextInterface $context): void;
+    public function traceRequest(Request $request, ShopContext $context): void;
 }

@@ -26,9 +26,10 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\Address;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Address\Struct\Address;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class AddressGateway
 {
@@ -66,7 +67,7 @@ class AddressGateway
 
     /**
      * @param int[]              $ids
-     * @param TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return Address[] indexed by id
      */

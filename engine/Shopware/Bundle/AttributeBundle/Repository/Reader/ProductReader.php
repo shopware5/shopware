@@ -25,11 +25,11 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Service\ContextFactoryInterface;
+use Shopware\Storefront\Context\StorefrontContextService;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail;
@@ -49,7 +49,7 @@ class ProductReader extends GenericReader
     private $additionalTextService;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface
+     * @var \Shopware\Context\Service\ContextFactoryInterface
      */
     private $contextFactory;
 
@@ -58,7 +58,7 @@ class ProductReader extends GenericReader
      *
      * @param string                                                            $entity
      * @param ModelManager                                                      $entityManager
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface $contextFactory
+     * @param \Shopware\Context\Service\ContextFactoryInterface $contextFactory
      * @param AdditionalTextServiceInterface                                    $additionalTextService
      */
     public function __construct(
@@ -130,7 +130,7 @@ class ProductReader extends GenericReader
 
         $context = $this->contextFactory->create(
             new ShopScope($shop->getId(), $shop->getCurrency()->getId()),
-            new CustomerScope(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CustomerScope(null, StorefrontContextService::FALLBACK_CUSTOMER_GROUP),
             new CheckoutScope()
         );
 

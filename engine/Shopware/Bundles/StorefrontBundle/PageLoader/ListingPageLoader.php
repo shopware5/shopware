@@ -25,7 +25,7 @@
 namespace StorefrontBundle\PageLoader;
 
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use StorefrontBundle\Struct\ListingPage;
 
 class ListingPageLoader
@@ -33,13 +33,13 @@ class ListingPageLoader
     /**
      * @param int $categoryId
      * @param \Shopware\Search\Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @event ListingPageLoadedEvent
      *
      * @return ListingPage
      */
-    public function get(int $categoryId, Criteria $criteria, ShopContextInterface $context): ListingPage
+    public function get(int $categoryId, Criteria $criteria, ShopContext $context): ListingPage
     {
     }
 }

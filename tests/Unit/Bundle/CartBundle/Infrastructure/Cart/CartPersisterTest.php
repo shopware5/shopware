@@ -26,13 +26,13 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Cart;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
-use Shopware\Bundle\CartBundle\Domain\Exception\CartTokenNotFoundException;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartPersister;
-use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
-use Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer;
+use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Error\ErrorCollection;
+use Shopware\Cart\Exception\CartTokenNotFoundException;
+use Shopware\Cart\LineItem\LineItemCollection;
+use Shopware\CartBridge\Cart\CartPersister;
+use Shopware\Serializer\JsonSerializer;
+use Shopware\Serializer\ObjectDeserializer;
 
 class CartPersisterTest extends TestCase
 {

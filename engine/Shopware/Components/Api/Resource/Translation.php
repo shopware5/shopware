@@ -647,7 +647,7 @@ class Translation extends Resource implements BatchInterface
 
         if (!$entity) {
             throw new ApiException\NotFoundException(
-                sprintf('Manufacturer by name %s not found', $number)
+                sprintf('ProductManufacturer by name %s not found', $number)
             );
         }
 

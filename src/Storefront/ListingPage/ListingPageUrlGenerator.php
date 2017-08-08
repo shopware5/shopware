@@ -7,7 +7,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Category\Gateway\CategoryRepository;
 use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Category\Struct\CategoryIdentity;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Routing\Router;
 use Shopware\Search\Condition\CanonicalCondition;
 use Shopware\Search\Condition\ForeignKeyCondition;

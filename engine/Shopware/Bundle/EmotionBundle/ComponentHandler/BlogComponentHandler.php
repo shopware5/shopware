@@ -29,7 +29,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\StoreFrontBundle\Blog\BlogServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class BlogComponentHandler implements ComponentHandlerInterface
 {
@@ -68,18 +68,18 @@ class BlogComponentHandler implements ComponentHandlerInterface
     /**
      * @param PrepareDataCollection                                                                                                $collection
      * @param Element                                                                                                              $element
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext|\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext|\Shopware\Context\Struct\ShopContext $context
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
     }
 
     /**
      * @param ResolvedDataCollection                                         $collection
      * @param Element                                                        $element
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $numberOfEntries = $element->getConfig()->get('entry_amount');
         $categoryId = $element->getConfig()->get('blog_entry_selection');
@@ -92,11 +92,11 @@ class BlogComponentHandler implements ComponentHandlerInterface
     /**
      * @param int                  $numberOfEntries
      * @param int                  $categoryId
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Blog\Blog[]
      */
-    private function getRandomBlogEntries($numberOfEntries, $categoryId, ShopContextInterface $context)
+    private function getRandomBlogEntries($numberOfEntries, $categoryId, ShopContext $context)
     {
         $blogIds = $this->findBlogIds($numberOfEntries, $categoryId);
 

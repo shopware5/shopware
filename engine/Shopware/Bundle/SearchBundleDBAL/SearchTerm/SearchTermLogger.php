@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * @category  Shopware
@@ -55,7 +55,7 @@ class SearchTermLogger implements SearchTermLoggerInterface
      *
      * @param Criteria                  $criteria
      * @param ProductNumberSearchResult $result
-     * @param Shop                      $shop
+     * @param \Shopware\Shop\Struct\Shop                      $shop
      */
     public function logResult(
         Criteria $criteria,

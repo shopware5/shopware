@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer;
 
@@ -198,7 +198,7 @@ class sOrder
     private $session;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -221,12 +221,12 @@ class sOrder
      * Class constructor.
      * Injects all dependencies which are required for this class.
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService
+     * @param \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService
      *
      * @throws Exception
      */
     public function __construct(
-        ContextServiceInterface $contextService = null
+        StorefrontContextServiceInterface $contextService = null
     ) {
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();

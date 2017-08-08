@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AccountBundle\Form\Account;
 use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
 use Shopware\Bundle\AccountBundle\Constraint\Password;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
@@ -66,19 +66,19 @@ class PersonalFormType extends AbstractType
     private $config;
 
     /**
-     * @var ContextServiceInterface
+     * @var StorefrontContextServiceInterface
      */
     private $context;
 
     /**
      * @param Shopware_Components_Snippet_Manager                               $snippetManager
      * @param \Shopware_Components_Config                                       $config
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $context
+     * @param \Shopware\Storefront\Context\StorefrontContextServiceInterface $context
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
         \Shopware_Components_Config $config,
-        ContextServiceInterface $context
+        StorefrontContextServiceInterface $context
     ) {
         $this->snippetManager = $snippetManager;
         $this->config = $config;

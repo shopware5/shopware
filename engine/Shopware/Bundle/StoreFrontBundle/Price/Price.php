@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
 use Shopware\Framework\Struct\Struct;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -141,7 +141,7 @@ class Price extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Unit\Unit
+     * @return \Shopware\Unit\Struct\Unit
      */
     public function getUnit()
     {
@@ -149,7 +149,7 @@ class Price extends Struct
     }
 
     /**
-     * @return CustomerGroup
+     * @return \Shopware\CustomerGroup\Struct\CustomerGroup
      */
     public function getCustomerGroup()
     {

@@ -54,7 +54,7 @@ class sSystem
      *
      * @var Enlight_Template_Manager
      *
-     * @deprecated Use Shopware()->Template()
+     * @deprecated Use Shopware()->ShopTemplate()
      */
     public $sSMARTY;
 

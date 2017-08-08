@@ -25,7 +25,7 @@
 namespace Shopware\Category\Gateway;
 
 use Shopware\Category\Struct\CategoryCollection;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Criteria;
 
 class CategoryRepository

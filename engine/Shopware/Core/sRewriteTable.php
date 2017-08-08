@@ -23,11 +23,11 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Service\ContextFactoryInterface;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Bundle\StoreFrontBundle\ShopPage\ShopPageServiceInterface;
 use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
@@ -131,7 +131,7 @@ class sRewriteTable
      * @param ContextFactoryInterface                 $contextFactory
      * @param ShopPageServiceInterface                $shopPageService
      *
-     * @internal param ContextServiceInterface $contextService
+     * @internal param StorefrontContextServiceInterface $contextService
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -542,23 +542,23 @@ class sRewriteTable
      *
      * @param null                 $offset
      * @param null                 $limit
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function sCreateRewriteTableSuppliers($offset = null, $limit = null, ShopContextInterface $context = null)
+    public function sCreateRewriteTableSuppliers($offset = null, $limit = null, ShopContext $context = null)
     {
         $context = $this->createFallbackContext($context);
         $this->createManufacturerUrls($context, $offset, $limit);
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param null                                                           $offset
      * @param null                                                           $limit
      *
      * @throws Exception
      * @throws SmartyException
      */
-    public function createManufacturerUrls(ShopContextInterface $context, $offset = null, $limit = null)
+    public function createManufacturerUrls(ShopContext $context, $offset = null, $limit = null)
     {
         $seoSupplier = $this->config->get('sSEOSUPPLIER');
         if (empty($seoSupplier)) {
@@ -655,9 +655,9 @@ class sRewriteTable
      *
      * @param int                  $offset
      * @param int                  $limit
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function sCreateRewriteTableContent($offset = null, $limit = null, ShopContextInterface $context = null)
+    public function sCreateRewriteTableContent($offset = null, $limit = null, ShopContext $context = null)
     {
         //form urls
         $this->insertFormUrls($offset, $limit);
@@ -909,12 +909,12 @@ class sRewriteTable
      *
      * @param $offset
      * @param $limit
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @throws Exception
      * @throws SmartyException
      */
-    private function insertStaticPageUrls($offset, $limit, ShopContextInterface $context = null)
+    private function insertStaticPageUrls($offset, $limit, ShopContext $context = null)
     {
         $context = $this->createFallbackContext($context);
 
@@ -1015,11 +1015,11 @@ class sRewriteTable
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
+     * @return \Shopware\Context\Struct\ShopContext
      */
-    private function createFallbackContext(ShopContextInterface $context = null)
+    private function createFallbackContext(ShopContext $context = null)
     {
         if ($context) {
             return $context;

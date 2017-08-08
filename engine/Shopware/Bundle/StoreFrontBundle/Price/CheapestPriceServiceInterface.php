@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
@@ -41,9 +41,9 @@ interface CheapestPriceServiceInterface
      * the cheapest product price for the fallback customer group.
      *
      * @param ListProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return PriceRule[] Indexed by product number
      */
-    public function getList($products, ShopContextInterface $context);
+    public function getList($products, ShopContext $context);
 }

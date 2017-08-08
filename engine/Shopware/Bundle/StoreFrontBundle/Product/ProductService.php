@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownloadServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\ProductLink\ProductLinkServiceInterface;
@@ -119,7 +119,7 @@ class ProductService implements ProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $numbers, ShopContextInterface $context)
+    public function getList(array $numbers, ShopContext $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
         $products = $this->createFromListProducts($listProducts, $context);
@@ -129,11 +129,11 @@ class ProductService implements ProductServiceInterface
 
     /**
      * @param ListProduct[]                                                  $listProducts
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Product[] indexed by order number
      */
-    private function createFromListProducts(array $listProducts, ShopContextInterface $context)
+    private function createFromListProducts(array $listProducts, ShopContext $context)
     {
         $votes = $this->voteService->getList($listProducts, $context);
 

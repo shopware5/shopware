@@ -26,7 +26,7 @@ namespace Shopware\Components\ProductStream;
 
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -37,9 +37,9 @@ interface CriteriaFactoryInterface
 {
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return \Shopware\Search\Criteria
      */
-    public function createCriteria(Request $request, ShopContextInterface $context);
+    public function createCriteria(Request $request, ShopContext $context);
 }

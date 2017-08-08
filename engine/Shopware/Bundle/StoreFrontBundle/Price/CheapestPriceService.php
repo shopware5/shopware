@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
@@ -61,7 +61,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         $group = $context->getCurrentCustomerGroup();
 
@@ -102,7 +102,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
     /**
      * @param ListProduct[]        $products
      * @param PriceRule[]          $prices
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return PriceRule[]
      */
@@ -140,7 +140,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      *
      * @param BaseProduct[] $products
      * @param PriceRule[]   $priceRules
-     * @param CustomerGroup $group
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $group
      *
      * @return array
      */
@@ -174,12 +174,12 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      * current customer group, the function returns null.
      *
      * @param ListProduct          $product
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param $quantity
      *
-     * @return null|\Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount
+     * @return null|\Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount
      */
-    private function getHighestQuantityDiscount(ListProduct $product, ShopContextInterface $context, $quantity)
+    private function getHighestQuantityDiscount(ListProduct $product, ShopContext $context, $quantity)
     {
         $priceGroups = $context->getPriceGroups();
         if (empty($priceGroups)) {
@@ -193,7 +193,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var $highest \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount */
+        /** @var $highest \Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

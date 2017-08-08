@@ -36,7 +36,7 @@ use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
@@ -95,7 +95,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $aggregation = new TermsAggregation('category');
         $aggregation->setField('categoryIds');
@@ -110,7 +110,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations']) || !isset($elasticResult['aggregations']['category'])) {
             return;
@@ -147,11 +147,11 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * @param array                                                          $ids
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array
      */
-    private function filterSystemCategories(array $ids, ShopContextInterface $context)
+    private function filterSystemCategories(array $ids, ShopContext $context)
     {
         $system = array_merge(
             [$context->getShop()->getCategory()->getId()],

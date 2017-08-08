@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\Tax;
 
 use Shopware\Framework\Struct\Hydrator;
+use Shopware\Tax\Struct\Tax;
 
 /**
  * @category  Shopware

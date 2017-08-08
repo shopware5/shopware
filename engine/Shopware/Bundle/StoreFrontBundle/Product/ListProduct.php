@@ -38,7 +38,7 @@ use Shopware\Product\Struct\Product;
 class ListProduct extends Product
 {
     /**
-     * State for a calculated product price.
+     * CountryState for a calculated product price.
      */
     const STATE_PRICE_CALCULATED = 'price_calculated';
 

@@ -35,7 +35,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\QueryAliasMapper;
 
 class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
@@ -85,7 +85,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $aggregation = new StatsAggregation('price');
         $field = $this->fieldMapping->getPriceField($context);
@@ -100,7 +100,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations'])) {
             return;

@@ -25,11 +25,11 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Tax\TaxDetector;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 
 class TaxDetectorTest extends TestCase
 {
