@@ -64,7 +64,7 @@ class PriceGroupDiscount extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -80,7 +80,7 @@ class PriceGroupDiscount extends Struct
     /**
      * @return \Shopware\CustomerGroup\Struct\CustomerGroup
      */
-    public function getCustomerGroup()
+    public function getCustomerGroup(): \Shopware\CustomerGroup\Struct\CustomerGroup
     {
         return $this->customerGroup;
     }
@@ -96,7 +96,7 @@ class PriceGroupDiscount extends Struct
     /**
      * @return int
      */
-    public function getQuantity()
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
@@ -112,7 +112,7 @@ class PriceGroupDiscount extends Struct
     /**
      * @return float
      */
-    public function getPercent()
+    public function getPercent(): float
     {
         return $this->percent;
     }

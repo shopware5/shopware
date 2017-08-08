@@ -81,7 +81,7 @@ class MediaThumbnail extends Struct
     /**
      * @return string
      */
-    public function getSource()
+    public function getSource(): string
     {
         return $this->source;
     }
@@ -89,7 +89,7 @@ class MediaThumbnail extends Struct
     /**
      * @return bool
      */
-    public function hasRetinaSource()
+    public function hasRetinaSource(): bool
     {
         return $this->retinaSource != null;
     }
@@ -97,7 +97,7 @@ class MediaThumbnail extends Struct
     /**
      * @return null|string
      */
-    public function getRetinaSource()
+    public function getRetinaSource(): ?string
     {
         return $this->retinaSource;
     }
@@ -105,7 +105,7 @@ class MediaThumbnail extends Struct
     /**
      * @return string
      */
-    public function getSourceSet()
+    public function getSourceSet(): string
     {
         return $this->sourceSet;
     }
@@ -113,7 +113,7 @@ class MediaThumbnail extends Struct
     /**
      * @return int
      */
-    public function getMaxWidth()
+    public function getMaxWidth(): int
     {
         return $this->maxWidth;
     }
@@ -121,7 +121,7 @@ class MediaThumbnail extends Struct
     /**
      * @return int
      */
-    public function getMaxHeight()
+    public function getMaxHeight(): int
     {
         return $this->maxHeight;
     }

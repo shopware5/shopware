@@ -118,7 +118,7 @@ class CustomerGroup extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -134,7 +134,7 @@ class CustomerGroup extends Struct
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -150,7 +150,7 @@ class CustomerGroup extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -166,7 +166,7 @@ class CustomerGroup extends Struct
     /**
      * @return float
      */
-    public function getPercentageDiscount()
+    public function getPercentageDiscount(): float
     {
         return $this->percentageDiscount;
     }
@@ -182,7 +182,7 @@ class CustomerGroup extends Struct
     /**
      * @return float
      */
-    public function getSurcharge()
+    public function getSurcharge(): float
     {
         return $this->surcharge;
     }
@@ -198,7 +198,7 @@ class CustomerGroup extends Struct
     /**
      * @return bool
      */
-    public function useDiscount()
+    public function useDiscount(): bool
     {
         return $this->useDiscount;
     }
@@ -214,7 +214,7 @@ class CustomerGroup extends Struct
     /**
      * @return bool
      */
-    public function displayGrossPrices()
+    public function displayGrossPrices(): bool
     {
         return $this->displayGrossPrices;
     }
@@ -222,7 +222,7 @@ class CustomerGroup extends Struct
     /**
      * @return bool
      */
-    public function insertedGrossPrices()
+    public function insertedGrossPrices(): bool
     {
         return $this->insertedGrossPrices;
     }
@@ -238,7 +238,7 @@ class CustomerGroup extends Struct
     /**
      * @return float
      */
-    public function getMinimumOrderValue()
+    public function getMinimumOrderValue(): float
     {
         return $this->minimumOrderValue;
     }

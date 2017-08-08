@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CleanupSeoUrlsCommand extends ContainerAwareCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('seo:url:cleanup')

@@ -107,7 +107,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -127,7 +127,7 @@ class ProductManufacturer extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -147,7 +147,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->metaDescription;
     }
@@ -167,7 +167,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
     }
@@ -187,7 +187,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): string
     {
         return $this->metaTitle;
     }
@@ -207,7 +207,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -215,7 +215,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link;
     }
@@ -231,7 +231,7 @@ class ProductManufacturer extends Struct
     /**
      * @return string
      */
-    public function getCoverFile()
+    public function getCoverFile(): string
     {
         return $this->coverFile;
     }

@@ -56,7 +56,7 @@ class Locale extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -72,7 +72,7 @@ class Locale extends Struct
     /**
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -88,7 +88,7 @@ class Locale extends Struct
     /**
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
@@ -104,7 +104,7 @@ class Locale extends Struct
     /**
      * @return string
      */
-    public function getTerritory()
+    public function getTerritory(): string
     {
         return $this->territory;
     }

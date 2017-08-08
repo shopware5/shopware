@@ -168,7 +168,7 @@ class Shop extends Struct
     /**
      * @return bool
      */
-    public function isDefault()
+    public function isDefault(): bool
     {
         return (bool) $this->isDefault;
     }
@@ -184,7 +184,7 @@ class Shop extends Struct
     /**
      * @return int
      */
-    public function getParentId()
+    public function getParentId(): int
     {
         return $this->parentId;
     }
@@ -192,7 +192,7 @@ class Shop extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -208,7 +208,7 @@ class Shop extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -224,7 +224,7 @@ class Shop extends Struct
     /**
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -240,7 +240,7 @@ class Shop extends Struct
     /**
      * @return bool
      */
-    public function getSecure()
+    public function getSecure(): bool
     {
         return $this->secure;
     }
@@ -256,7 +256,7 @@ class Shop extends Struct
     /**
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -272,7 +272,7 @@ class Shop extends Struct
     /**
      * @return string
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -280,7 +280,7 @@ class Shop extends Struct
     /**
      * @return Category
      */
-    public function getCategory()
+    public function getCategory(): \Shopware\Category\Struct\Category
     {
         return $this->category;
     }
@@ -296,7 +296,7 @@ class Shop extends Struct
     /**
      * @return bool
      */
-    public function isMain()
+    public function isMain(): bool
     {
         return $this->getId() == $this->getParentId();
     }
@@ -312,7 +312,7 @@ class Shop extends Struct
     /**
      * @return int
      */
-    public function getFallbackId()
+    public function getFallbackId(): int
     {
         return $this->fallbackId;
     }
@@ -320,7 +320,7 @@ class Shop extends Struct
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -336,7 +336,7 @@ class Shop extends Struct
     /**
      * @return \string[]
      */
-    public function getHosts()
+    public function getHosts(): array
     {
         return $this->hosts;
     }
@@ -352,7 +352,7 @@ class Shop extends Struct
     /**
      * @return Currency
      */
-    public function getCurrency()
+    public function getCurrency(): \Shopware\Currency\Struct\Currency
     {
         return $this->currency;
     }
@@ -384,7 +384,7 @@ class Shop extends Struct
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): \Shopware\Locale\Struct\Locale
     {
         return $this->locale;
     }
@@ -400,7 +400,7 @@ class Shop extends Struct
     /**
      * @return ShopTemplate
      */
-    public function getTemplate()
+    public function getTemplate(): \Shopware\ShopTemplate\Struct\ShopTemplate
     {
         return $this->template;
     }
@@ -416,7 +416,7 @@ class Shop extends Struct
     /**
      * @return bool
      */
-    public function hasCustomerScope()
+    public function hasCustomerScope(): bool
     {
         return $this->customerScope;
     }

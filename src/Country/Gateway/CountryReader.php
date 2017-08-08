@@ -115,7 +115,7 @@ class CountryReader
         );
     }
 
-    public function getCountryStates($countryIds, TranslationContext $context)
+    public function getCountryStates($countryIds, TranslationContext $context): void
     {
         //        $query = $this->connection->createQueryBuilder();
 //        $query->select($this->fieldHelper->getCountryStateFields());

@@ -81,7 +81,7 @@ class ShopTemplate extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -97,7 +97,7 @@ class ShopTemplate extends Struct
     /**
      * @return string
      */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return $this->template;
     }
@@ -113,7 +113,7 @@ class ShopTemplate extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -129,7 +129,7 @@ class ShopTemplate extends Struct
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -145,7 +145,7 @@ class ShopTemplate extends Struct
     /**
      * @return string
      */
-    public function getAuthor()
+    public function getAuthor(): string
     {
         return $this->author;
     }
@@ -161,7 +161,7 @@ class ShopTemplate extends Struct
     /**
      * @return string
      */
-    public function getLicense()
+    public function getLicense(): string
     {
         return $this->license;
     }
@@ -177,7 +177,7 @@ class ShopTemplate extends Struct
     /**
      * @return int
      */
-    public function getVersion()
+    public function getVersion(): int
     {
         return $this->version;
     }
@@ -193,7 +193,7 @@ class ShopTemplate extends Struct
     /**
      * @return int
      */
-    public function getPluginId()
+    public function getPluginId(): int
     {
         return $this->pluginId;
     }
@@ -209,7 +209,7 @@ class ShopTemplate extends Struct
     /**
      * @return int
      */
-    public function getParentId()
+    public function getParentId(): int
     {
         return $this->parentId;
     }

@@ -128,7 +128,7 @@ class Unit extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -144,7 +144,7 @@ class Unit extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -160,7 +160,7 @@ class Unit extends Struct
     /**
      * @return string
      */
-    public function getUnit()
+    public function getUnit(): string
     {
         return $this->unit;
     }
@@ -168,7 +168,7 @@ class Unit extends Struct
     /**
      * @return string
      */
-    public function getPackUnit()
+    public function getPackUnit(): string
     {
         return $this->packUnit;
     }
@@ -184,7 +184,7 @@ class Unit extends Struct
     /**
      * @return float
      */
-    public function getPurchaseUnit()
+    public function getPurchaseUnit(): float
     {
         return $this->purchaseUnit;
     }
@@ -200,7 +200,7 @@ class Unit extends Struct
     /**
      * @return float
      */
-    public function getReferenceUnit()
+    public function getReferenceUnit(): float
     {
         return $this->referenceUnit;
     }
@@ -224,7 +224,7 @@ class Unit extends Struct
     /**
      * @return float
      */
-    public function getMaxPurchase()
+    public function getMaxPurchase(): float
     {
         return $this->maxPurchase;
     }
@@ -240,7 +240,7 @@ class Unit extends Struct
     /**
      * @return float
      */
-    public function getMinPurchase()
+    public function getMinPurchase(): float
     {
         return empty($this->minPurchase) ? 1 : $this->minPurchase;
     }
@@ -256,7 +256,7 @@ class Unit extends Struct
     /**
      * @return float
      */
-    public function getPurchaseStep()
+    public function getPurchaseStep(): float
     {
         return $this->purchaseStep;
     }

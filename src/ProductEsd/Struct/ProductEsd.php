@@ -64,7 +64,7 @@ class ProductEsd extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -80,7 +80,7 @@ class ProductEsd extends Struct
     /**
      * @return bool
      */
-    public function hasSerials()
+    public function hasSerials(): bool
     {
         return $this->hasSerials;
     }
@@ -96,7 +96,7 @@ class ProductEsd extends Struct
     /**
      * @return string
      */
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
@@ -112,7 +112,7 @@ class ProductEsd extends Struct
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }

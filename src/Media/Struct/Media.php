@@ -108,7 +108,7 @@ class Media extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -124,7 +124,7 @@ class Media extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -140,7 +140,7 @@ class Media extends Struct
     /**
      * @return bool
      */
-    public function isPreview()
+    public function isPreview(): bool
     {
         return $this->preview;
     }
@@ -156,7 +156,7 @@ class Media extends Struct
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -172,7 +172,7 @@ class Media extends Struct
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -188,7 +188,7 @@ class Media extends Struct
     /**
      * @return string
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
@@ -204,7 +204,7 @@ class Media extends Struct
     /**
      * @return string
      */
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
@@ -212,7 +212,7 @@ class Media extends Struct
     /**
      * @return \Shopware\MediaThumbnail\Struct\MediaThumbnail[]
      */
-    public function getThumbnails()
+    public function getThumbnails(): array
     {
         return $this->thumbnails;
     }
@@ -222,7 +222,7 @@ class Media extends Struct
      *
      * @return MediaThumbnail
      */
-    public function getThumbnail($index)
+    public function getThumbnail($index): \Shopware\MediaThumbnail\Struct\MediaThumbnail
     {
         return $this->thumbnails[$index];
     }
@@ -242,7 +242,7 @@ class Media extends Struct
     /**
      * @return int
      */
-    public function getWidth()
+    public function getWidth(): int
     {
         return $this->width;
     }
@@ -258,7 +258,7 @@ class Media extends Struct
     /**
      * @return int
      */
-    public function getHeight()
+    public function getHeight(): int
     {
         return $this->height;
     }
@@ -274,7 +274,7 @@ class Media extends Struct
     /**
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }

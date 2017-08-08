@@ -125,7 +125,7 @@ class Country extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -141,7 +141,7 @@ class Country extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -149,7 +149,7 @@ class Country extends Struct
     /**
      * @return string
      */
-    public function getIso()
+    public function getIso(): string
     {
         return $this->iso;
     }
@@ -165,7 +165,7 @@ class Country extends Struct
     /**
      * @return string
      */
-    public function getEn()
+    public function getEn(): string
     {
         return $this->en;
     }
@@ -181,7 +181,7 @@ class Country extends Struct
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -197,7 +197,7 @@ class Country extends Struct
     /**
      * @return string
      */
-    public function getIso3()
+    public function getIso3(): string
     {
         return $this->iso3;
     }
@@ -261,7 +261,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function isShippingFree()
+    public function isShippingFree(): bool
     {
         return $this->shippingFree;
     }
@@ -269,7 +269,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function isTaxFree()
+    public function isTaxFree(): bool
     {
         return $this->taxFree;
     }
@@ -277,7 +277,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function isTaxFreeForVatId()
+    public function isTaxFreeForVatId(): bool
     {
         return $this->taxFreeForVatId;
     }
@@ -285,7 +285,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function checkVatId()
+    public function checkVatId(): bool
     {
         return $this->vatIdCheck;
     }
@@ -293,7 +293,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function displayStateSelection()
+    public function displayStateSelection(): bool
     {
         return $this->displayStateSelection;
     }
@@ -301,7 +301,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function requiresStateSelection()
+    public function requiresStateSelection(): bool
     {
         return $this->requiresStateSelection;
     }
@@ -309,7 +309,7 @@ class Country extends Struct
     /**
      * @return \Shopware\CountryState\Struct\CountryState[]
      */
-    public function getStates()
+    public function getStates(): array
     {
         return $this->states;
     }
@@ -325,7 +325,7 @@ class Country extends Struct
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -341,7 +341,7 @@ class Country extends Struct
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }

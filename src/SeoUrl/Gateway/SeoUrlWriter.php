@@ -64,7 +64,7 @@ class SeoUrlWriter
         }
     }
 
-    public function delete(array $ids)
+    public function delete(array $ids): void
     {
         $this->connection->executeUpdate(
             'DELETE FROM seo_url WHERE id IN (:ids)',

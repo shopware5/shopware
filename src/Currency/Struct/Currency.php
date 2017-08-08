@@ -74,7 +74,7 @@ class Currency extends Struct
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -90,7 +90,7 @@ class Currency extends Struct
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -106,7 +106,7 @@ class Currency extends Struct
     /**
      * @return string
      */
-    public function getSymbol()
+    public function getSymbol(): string
     {
         return $this->symbol;
     }
@@ -122,7 +122,7 @@ class Currency extends Struct
     /**
      * @return string
      */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
@@ -138,7 +138,7 @@ class Currency extends Struct
     /**
      * @return float
      */
-    public function getFactor()
+    public function getFactor(): float
     {
         return empty($this->factor) ? 1 : $this->factor;
     }
@@ -146,7 +146,7 @@ class Currency extends Struct
     /**
      * @return string
      */
-    public function getSymbolPosition()
+    public function getSymbolPosition(): string
     {
         return $this->symbolPosition;
     }

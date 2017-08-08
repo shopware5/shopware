@@ -155,7 +155,7 @@ class TaxReader
         CountryArea $area = null,
         Country $country = null,
         CountryState $state = null
-    ) {
+    ): \Doctrine\DBAL\Query\QueryBuilder {
         $areaId = $area ? $area->getId() : null;
         $countryId = $country ? $country->getId() : null;
         $stateId = $state ? $state->getId() : null;

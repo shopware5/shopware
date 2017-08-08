@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateSeoUrlsCommand extends ContainerAwareCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('seo:url:generate')
