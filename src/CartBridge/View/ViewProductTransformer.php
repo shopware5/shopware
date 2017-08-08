@@ -25,11 +25,11 @@ declare(strict_types=1);
 
 namespace Shopware\CartBridge\View;
 
+use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\ProductGateway;
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Product\CalculatedProduct;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Product\ProductGateway;
 
 class ViewProductTransformer implements ViewLineItemTransformerInterface
 {

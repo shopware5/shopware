@@ -25,10 +25,9 @@
 namespace Shopware\Cart\Rule;
 
 use Shopware\Cart\Cart\CalculatedCart;
-use Shopware\Cart\Rule\Match;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Struct\Struct;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Context\Struct\ShopContext;
 
 abstract class Rule extends Struct
 {
@@ -43,9 +42,9 @@ abstract class Rule extends Struct
     /**
      * Validate the current rule and returns a reason object which contains defines if the rule match and if not why not
      *
-     * @param \Shopware\Cart\Cart\CalculatedCart       $calculatedCart
-     * @param ShopContext $context
-     * @param \Shopware\Framework\Struct\StructCollection     $collection
+     * @param \Shopware\Cart\Cart\CalculatedCart          $calculatedCart
+     * @param ShopContext                                 $context
+     * @param \Shopware\Framework\Struct\StructCollection $collection
      *
      * @return Match
      */
@@ -55,6 +54,3 @@ abstract class Rule extends Struct
         StructCollection $collection
     ): Match;
 }
-
-
-

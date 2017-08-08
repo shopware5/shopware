@@ -25,12 +25,12 @@
 namespace Shopware\CountryArea\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\CountryArea\Struct\CountryArea;
 use Shopware\CountryArea\Struct\CountryAreaCollection;
 use Shopware\CountryArea\Struct\CountryAreaHydrator;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -67,9 +67,9 @@ class CountryAreaReader
     private $connection;
 
     /**
-     * @param Connection      $connection
-     * @param \Shopware\Framework\Struct\FieldHelper     $fieldHelper
-     * @param CountryAreaHydrator $countryAreaHydrator
+     * @param Connection                             $connection
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
+     * @param CountryAreaHydrator                    $countryAreaHydrator
      */
     public function __construct(
         Connection $connection,

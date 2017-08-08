@@ -32,7 +32,7 @@ use Shopware\Context\Struct\ShopContext;
 interface ProductDeliveryGatewayInterface
 {
     /**
-     * @param LineItemCollection   $collection
+     * @param LineItemCollection                   $collection
      * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return DeliveryInformationCollection

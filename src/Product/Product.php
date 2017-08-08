@@ -24,11 +24,11 @@
 
 namespace Shopware\Product;
 
+use Shopware\Product\DependencyInjection\ProductFieldCollector;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Shopware\Product\DependencyInjection\ProductFieldCollector;
 
 class Product extends Bundle
 {

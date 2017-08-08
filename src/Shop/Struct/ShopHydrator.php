@@ -24,15 +24,15 @@
 
 namespace Shopware\Shop\Struct;
 
-use Shopware\ShopTemplate\Struct\ShopTemplateHydrator;
 use Shopware\Category\Struct\CategoryHydrator;
-use Shopware\Framework\Struct\Hydrator;
 use Shopware\Country\Struct\CountryHydrator;
 use Shopware\Currency\Struct\CurrencyHydrator;
 use Shopware\CustomerGroup\Struct\CustomerGroupHydrator;
+use Shopware\Framework\Struct\Hydrator;
+use Shopware\Locale\Struct\LocaleHydrator;
 use Shopware\PaymentMethod\Struct\PaymentMethodHydrator;
 use Shopware\ShippingMethod\Struct\ShippingMethodHydrator;
-use Shopware\Locale\Struct\LocaleHydrator;
+use Shopware\ShopTemplate\Struct\ShopTemplateHydrator;
 
 class ShopHydrator extends Hydrator
 {

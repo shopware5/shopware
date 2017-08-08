@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Framework\Struct;
 
 use ArrayIterator;
-use Shopware\Framework\Struct\Struct;
 
 abstract class Collection extends Struct implements \IteratorAggregate, \Countable
 {

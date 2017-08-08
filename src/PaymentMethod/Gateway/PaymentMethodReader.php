@@ -27,12 +27,12 @@ namespace Shopware\PaymentMethod\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\PaymentMethod\Struct\PaymentMethodHydrator;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\Struct\TranslationContext;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
 use Shopware\PaymentMethod\Struct\PaymentMethodCollection;
+use Shopware\PaymentMethod\Struct\PaymentMethodHydrator;
 
 class PaymentMethodReader
 {
@@ -54,9 +54,9 @@ class PaymentMethodReader
     private $connection;
 
     /**
-     * @param FieldHelper                                                           $fieldHelper
+     * @param FieldHelper                                          $fieldHelper
      * @param \Shopware\PaymentMethod\Struct\PaymentMethodHydrator $hydrator
-     * @param Connection                                                            $connection
+     * @param Connection                                           $connection
      */
     public function __construct(
         FieldHelper $fieldHelper,

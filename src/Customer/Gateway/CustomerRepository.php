@@ -27,9 +27,9 @@ namespace Shopware\Customer\Gateway;
 
 use Shopware\Address\Gateway\AddressRepository;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Customer\Struct\Customer;
 use Shopware\Customer\Struct\CustomerCollection;
 use Shopware\PaymentMethod\Gateway\PaymentMethodRepository;
-use Shopware\Customer\Struct\Customer;
 use Shopware\Shop\Gateway\ShopRepository;
 
 class CustomerRepository

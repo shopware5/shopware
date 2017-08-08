@@ -26,10 +26,10 @@ declare(strict_types=1);
 namespace Shopware\Customer\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Customer\Struct\CustomerHydrator;
-use Shopware\Customer\Struct\CustomerCollection;
-use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Customer\Struct\CustomerCollection;
+use Shopware\Customer\Struct\CustomerHydrator;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
 class CustomerReader

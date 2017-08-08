@@ -41,7 +41,7 @@ class UrlCondition implements ConditionInterface
 
     public function __construct(array $urls)
     {
-        $this->hashes = array_map(function($url) {
+        $this->hashes = array_map(function ($url) {
             return SeoUrl::createUrlHash($url);
         }, $urls);
 

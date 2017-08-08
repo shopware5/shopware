@@ -25,11 +25,11 @@
 namespace Shopware\Storefront\Context;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Shopware\Context\Struct\CheckoutScope;
 use Shopware\Context\Service\ContextFactoryInterface;
+use Shopware\Context\Struct\CheckoutScope;
 use Shopware\Context\Struct\CustomerScope;
-use Shopware\Context\Struct\ShopScope;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Serializer\SerializerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -232,7 +232,6 @@ class StorefrontContextService implements StorefrontContextServiceInterface
         return null;
     }
 
-
     private function getSessionValueOrNull(string $key)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -246,5 +245,4 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
         return $session->get($key);
     }
-
 }

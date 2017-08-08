@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace Shopware\Customer\Struct;
 
 use Shopware\Address\Struct\Address;
-use Shopware\Framework\Struct\Struct;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\Framework\Struct\Struct;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
 use Shopware\Shop\Struct\Shop;
 

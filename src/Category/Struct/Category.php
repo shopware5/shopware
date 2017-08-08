@@ -26,9 +26,9 @@ declare(strict_types=1);
 
 namespace Shopware\Category\Struct;
 
+use Shopware\Framework\Struct\Struct;
 use Shopware\Media\Struct\Media;
 use Shopware\ProductStream\Struct\ProductStream;
-use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware

@@ -26,9 +26,8 @@ namespace Shopware\CartBridge\Rule;
 
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Rule\Match;
-use Shopware\Cart\Rule\Rule;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class CustomerGroupRule extends \Shopware\Cart\Rule\Rule
 {

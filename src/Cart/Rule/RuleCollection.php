@@ -25,7 +25,6 @@
 namespace Shopware\Cart\Rule;
 
 use Shopware\Cart\Rule\Container\Container;
-use Shopware\Cart\Rule\Rule;
 use Shopware\Framework\Struct\Collection;
 
 class RuleCollection extends Collection

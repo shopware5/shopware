@@ -24,8 +24,8 @@
 
 namespace Shopware\Media\Struct;
 
-use Shopware\MediaThumbnail\Struct\MediaThumbnail;
 use Shopware\Framework\Struct\Struct;
+use Shopware\MediaThumbnail\Struct\MediaThumbnail;
 
 /**
  * @category  Shopware

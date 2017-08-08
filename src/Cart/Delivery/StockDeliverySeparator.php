@@ -33,7 +33,6 @@ use Shopware\Cart\Price\PriceDefinition;
 use Shopware\Cart\Tax\CalculatedTaxCollection;
 use Shopware\Cart\Tax\TaxRuleCollection;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Cart\Delivery\ShippingLocation;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
 
 class StockDeliverySeparator

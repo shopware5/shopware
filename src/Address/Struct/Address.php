@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Address\Struct;
 
-use Shopware\Framework\Struct\Struct;
 use Shopware\Country\Struct\Country;
 use Shopware\CountryState\Struct\CountryState;
+use Shopware\Framework\Struct\Struct;
 
 class Address extends Struct
 {

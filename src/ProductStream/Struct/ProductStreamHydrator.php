@@ -26,7 +26,6 @@ namespace Shopware\ProductStream\Struct;
 
 use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\ProductStream\Struct\ProductStream;
 
 /**
  * @category  Shopware

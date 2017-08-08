@@ -27,12 +27,12 @@ namespace Shopware\ShippingMethod\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\ShippingMethod\Struct\ShippingMethodHydrator;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\Struct\TranslationContext;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
 use Shopware\ShippingMethod\Struct\ShippingMethodCollection;
+use Shopware\ShippingMethod\Struct\ShippingMethodHydrator;
 
 class ShippingMethodReader
 {

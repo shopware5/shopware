@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Address\Struct;
 
+use Shopware\Country\Struct\CountryHydrator;
 use Shopware\CountryState\Struct\CountryStateHydrator;
 use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\Country\Struct\CountryHydrator;
 
 class AddressHydrator extends Hydrator
 {

@@ -26,10 +26,10 @@ declare(strict_types=1);
 namespace Shopware\Cart\Delivery;
 
 use Shopware\Address\Struct\Address;
-use Shopware\Framework\Struct\Struct;
-use Shopware\CountryArea\Struct\CountryArea;
 use Shopware\Country\Struct\Country;
+use Shopware\CountryArea\Struct\CountryArea;
 use Shopware\CountryState\Struct\CountryState;
+use Shopware\Framework\Struct\Struct;
 
 class ShippingLocation extends Struct
 {
@@ -49,9 +49,9 @@ class ShippingLocation extends Struct
     protected $address;
 
     /**
-     * @param \Shopware\Country\Struct\Country                                              $country
+     * @param \Shopware\Country\Struct\Country                $country
      * @param null|\Shopware\CountryState\Struct\CountryState $state
-     * @param null|\Shopware\Address\Struct\Address                                         $address
+     * @param null|\Shopware\Address\Struct\Address           $address
      */
     public function __construct(Country $country, ?CountryState $state, ?Address $address)
     {

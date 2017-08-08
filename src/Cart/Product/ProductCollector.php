@@ -27,8 +27,8 @@ namespace Shopware\Cart\Product;
 
 use Shopware\Cart\Cart\CartContainer;
 use Shopware\Cart\Cart\CollectorInterface;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class ProductCollector implements CollectorInterface
 {

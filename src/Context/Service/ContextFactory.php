@@ -31,12 +31,13 @@ use Shopware\Context\Struct\CheckoutScope;
 use Shopware\Context\Struct\CustomerScope;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Context\Struct\ShopScope;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Country\Gateway\CountryRepository;
 use Shopware\CountryState\Gateway\CountryStateRepository;
 use Shopware\Currency\Gateway\CurrencyRepository;
 use Shopware\Currency\Struct\Currency;
-use Shopware\Customer\Struct\Customer;
 use Shopware\Customer\Gateway\CustomerRepository;
+use Shopware\Customer\Struct\Customer;
 use Shopware\CustomerGroup\Gateway\CustomerGroupRepository;
 use Shopware\PaymentMethod\Gateway\PaymentMethodRepository;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
@@ -45,7 +46,6 @@ use Shopware\ShippingMethod\Gateway\ShippingMethodRepository;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
 use Shopware\Shop\Gateway\ShopRepository;
 use Shopware\Shop\Struct\Shop;
-use Shopware\Context\Struct\TranslationContext;
 use Shopware\Storefront\Context\StorefrontContextService;
 use Shopware\Tax\Gateway\TaxRepository;
 
@@ -299,7 +299,6 @@ class ContextFactory implements ContextFactoryInterface
         TranslationContext $translationContext,
         CheckoutScope $checkoutScope
     ): ShippingLocation {
-
         //allows to preview cart calculation for a specify state for not logged in customers
         if ($checkoutScope->getStateId()) {
             $states = $this->countryStateRepository->read(

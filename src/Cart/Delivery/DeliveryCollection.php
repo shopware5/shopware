@@ -27,7 +27,6 @@ namespace Shopware\Cart\Delivery;
 
 use Shopware\Cart\LineItem\DeliverableLineItemInterface;
 use Shopware\Cart\Price\PriceCollection;
-use Shopware\Cart\Delivery\ShippingLocation;
 use Shopware\Framework\Struct\Collection;
 
 class DeliveryCollection extends Collection

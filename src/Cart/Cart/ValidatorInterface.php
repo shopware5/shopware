@@ -24,9 +24,8 @@
 
 namespace Shopware\Cart\Cart;
 
-use Shopware\Cart\Cart\CalculatedCart;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 interface ValidatorInterface
 {
@@ -40,9 +39,9 @@ interface ValidatorInterface
      * 2. Return `false` and remove/change items from the `CartContainer` which stored inside the `CalculatedCart`
      * By returning `false` the cart will be recalculated
      *
-     * @param CalculatedCart       $cart
+     * @param CalculatedCart                       $cart
      * @param \Shopware\Context\Struct\ShopContext $context
-     * @param StructCollection     $dataCollection
+     * @param StructCollection                     $dataCollection
      *
      * @return bool
      */

@@ -32,8 +32,8 @@ use Shopware\Cart\Rule\ProductOfManufacturerRule;
 use Shopware\Cart\Rule\RuleCollection;
 use Shopware\Cart\Rule\Validatable;
 use Shopware\CartBridge\Rule\Data\ProductOfManufacturerRuleData;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class ProductOfManufacturersRuleCollector implements CollectorInterface
 {

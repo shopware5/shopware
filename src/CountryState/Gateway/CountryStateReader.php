@@ -26,12 +26,12 @@ declare(strict_types=1);
 namespace Shopware\CountryState\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\CountryState\Struct\CountryState;
 use Shopware\CountryState\Struct\CountryStateCollection;
 use Shopware\CountryState\Struct\CountryStateHydrator;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\Struct\TranslationContext;
 
 class CountryStateReader
 {
@@ -53,9 +53,9 @@ class CountryStateReader
     private $connection;
 
     /**
-     * @param FieldHelper $fieldHelper
+     * @param FieldHelper          $fieldHelper
      * @param CountryStateHydrator $hydrator
-     * @param Connection $connection
+     * @param Connection           $connection
      */
     public function __construct(
         FieldHelper $fieldHelper,

@@ -66,15 +66,10 @@ class AddressCollection extends Collection
         return null;
     }
 
-    protected function getKey(Address $element): int
-    {
-        return $element->getId();
-    }
-
     public function getCountries(): CountryCollection
     {
         return new CountryCollection(
-            $this->map(function(Address $address) {
+            $this->map(function (Address $address) {
                 return $address->getCountry();
             })
         );
@@ -82,9 +77,15 @@ class AddressCollection extends Collection
 
     public function getStates(): CountryStateCollection
     {
-        $states = $this->map(function(Address $address) {
+        $states = $this->map(function (Address $address) {
             return $address->getState();
         });
+
         return new CountryStateCollection(array_filter($states));
+    }
+
+    protected function getKey(Address $element): int
+    {
+        return $element->getId();
     }
 }

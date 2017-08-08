@@ -27,7 +27,6 @@ namespace Shopware\Cart\Cart;
 
 use Shopware\Cart\Price\AmountCalculator;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Cart\Cart\CalculatedCart;
 
 class CalculatedCartGenerator
 {

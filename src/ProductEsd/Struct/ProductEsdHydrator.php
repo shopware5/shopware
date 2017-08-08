@@ -26,7 +26,6 @@ namespace Shopware\ProductEsd\Struct;
 
 use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\ProductEsd\Struct\ProductEsd;
 
 /**
  * @category  Shopware

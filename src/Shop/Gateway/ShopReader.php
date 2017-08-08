@@ -25,12 +25,12 @@
 namespace Shopware\Shop\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Shop\Struct\ShopHydrator;
-use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\Shop\Struct\Shop;
 use Shopware\Shop\Struct\ShopCollection;
+use Shopware\Shop\Struct\ShopHydrator;
 
 class ShopReader
 {
@@ -94,7 +94,7 @@ class ShopReader
     }
 
     /**
-     * @param int[] $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return array[]

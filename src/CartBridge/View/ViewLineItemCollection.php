@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\CartBridge\View;
 
 use Shopware\Framework\Struct\Collection;
-use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
 class ViewLineItemCollection extends Collection
 {

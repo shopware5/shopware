@@ -25,15 +25,14 @@
 namespace Shopware\Tax\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Tax\Struct\TaxHydrator;
 use Shopware\Cart\Delivery\ShippingLocation;
-use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Struct\FieldHelper;
-use Shopware\CountryArea\Struct\CountryArea;
 use Shopware\Country\Struct\Country;
+use Shopware\CountryArea\Struct\CountryArea;
 use Shopware\CountryState\Struct\CountryState;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Tax\Struct\TaxCollection;
+use Shopware\Tax\Struct\TaxHydrator;
 
 /**
  * @category  Shopware
@@ -68,8 +67,8 @@ class TaxReader
     private $connection;
 
     /**
-     * @param Connection  $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection                       $connection
+     * @param FieldHelper                      $fieldHelper
      * @param \Shopware\Tax\Struct\TaxHydrator $taxHydrator
      */
     public function __construct(
@@ -145,9 +144,9 @@ class TaxReader
 
     /**
      * @param \Shopware\CustomerGroup\Struct\CustomerGroup $customerGroup
-     * @param CountryArea          $area
-     * @param \Shopware\Country\Struct\Country       $country
-     * @param \Shopware\CountryState\Struct\CountryState         $state
+     * @param CountryArea                                  $area
+     * @param \Shopware\Country\Struct\Country             $country
+     * @param \Shopware\CountryState\Struct\CountryState   $state
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

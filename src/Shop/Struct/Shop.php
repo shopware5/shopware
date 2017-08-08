@@ -24,15 +24,15 @@
 
 namespace Shopware\Shop\Struct;
 
-use Shopware\Locale\Struct\Locale;
-use Shopware\ShopTemplate\Struct\ShopTemplate;
 use Shopware\Category\Struct\Category;
-use Shopware\Framework\Struct\Struct;
 use Shopware\Country\Struct\Country;
 use Shopware\Currency\Struct\Currency;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\Framework\Struct\Struct;
+use Shopware\Locale\Struct\Locale;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
+use Shopware\ShopTemplate\Struct\ShopTemplate;
 
 /**
  * @category  Shopware

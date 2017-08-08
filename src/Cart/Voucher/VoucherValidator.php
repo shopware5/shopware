@@ -28,8 +28,8 @@ use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Cart\ValidatorInterface;
 use Shopware\Cart\Error\Error;
 use Shopware\Cart\Error\ValidationError;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class VoucherValidator implements ValidatorInterface
 {

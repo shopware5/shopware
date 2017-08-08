@@ -25,10 +25,10 @@
 namespace Shopware\CustomerGroup\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\CustomerGroup\Struct\CustomerGroupHydrator;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\CustomerGroup\Struct\CustomerGroupCollection;
+use Shopware\CustomerGroup\Struct\CustomerGroupHydrator;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
@@ -67,8 +67,8 @@ class CustomerGroupReader
     private $connection;
 
     /**
-     * @param Connection            $connection
-     * @param FieldHelper           $fieldHelper
+     * @param Connection                                           $connection
+     * @param FieldHelper                                          $fieldHelper
      * @param \Shopware\CustomerGroup\Struct\CustomerGroupHydrator $customerGroupHydrator
      */
     public function __construct(

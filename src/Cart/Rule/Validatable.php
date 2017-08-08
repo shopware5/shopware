@@ -24,8 +24,6 @@
 
 namespace Shopware\Cart\Rule;
 
-use Shopware\Cart\Rule\Rule;
-
 interface Validatable
 {
     public function getRule(): ? Rule;

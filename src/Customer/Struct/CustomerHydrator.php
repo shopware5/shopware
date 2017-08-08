@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Customer\Struct;
 
+use Shopware\CustomerGroup\Struct\CustomerGroupHydrator;
 use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\CustomerGroup\Struct\CustomerGroupHydrator;
 
 class CustomerHydrator extends Hydrator
 {

@@ -25,7 +25,6 @@
 namespace Shopware\Country\Struct;
 
 use Shopware\CountryArea\Struct\CountryArea;
-use Shopware\CountryState\Struct\CountryState;
 use Shopware\Framework\Struct\Struct;
 
 /**

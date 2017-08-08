@@ -28,7 +28,6 @@ namespace Shopware\PaymentMethod\Struct;
 use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 use Shopware\Serializer\JsonSerializer;
-use Shopware\PaymentMethod\Struct\PaymentMethod;
 
 class PaymentMethodHydrator extends Hydrator
 {

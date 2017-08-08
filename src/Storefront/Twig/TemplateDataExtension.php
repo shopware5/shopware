@@ -1,11 +1,33 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Storefront\Twig;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Config\ConfigServiceInterface;
-use Shopware\Storefront\Theme\ThemeConfigReader;
 use Shopware\Storefront\Component\SitePageMenu;
+use Shopware\Storefront\Theme\ThemeConfigReader;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -60,7 +82,7 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('snippet', function ($snippet, $namespace = null) { return $this->translator->trans($snippet, [], $namespace); })
+            new \Twig_Function('snippet', function ($snippet, $namespace = null) { return $this->translator->trans($snippet, [], $namespace); }),
         ];
     }
 
@@ -96,8 +118,8 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
                 'config' => $this->configService->getByShop($shop),
                 'theme' => $themeConfig,
                 'menu' => $this->sitePageMenu->getTree($shop['id']),
-                'mainCategories' => $this->getCategories(3)
-            ]
+                'mainCategories' => $this->getCategories(3),
+            ],
         ];
     }
 
@@ -112,7 +134,7 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         foreach ($grouped as $name => $cat) {
             $cats[] = [
                 'id' => 1,
-                'description' => $name
+                'description' => $name,
             ];
         }
 

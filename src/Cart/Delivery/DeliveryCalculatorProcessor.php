@@ -28,8 +28,8 @@ namespace Shopware\Cart\Delivery;
 use Shopware\Cart\Cart\CartContainer;
 use Shopware\Cart\Cart\CartProcessorInterface;
 use Shopware\Cart\Cart\ProcessorCart;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class DeliveryCalculatorProcessor implements CartProcessorInterface
 {

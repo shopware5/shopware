@@ -64,13 +64,14 @@ class CustomerGroupCollection extends Collection
         return null;
     }
 
-    public function getByKey(string $key):? CustomerGroup
+    public function getByKey(string $key): ? CustomerGroup
     {
         foreach ($this->elements as $element) {
             if ($element->getKey() === $key) {
                 return $element;
             }
         }
+
         return null;
     }
 

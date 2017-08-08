@@ -64,11 +64,6 @@ class CustomerCollection extends Collection
         return null;
     }
 
-    protected function getKey(Customer $element): int
-    {
-        return $element->getId();
-    }
-
     public function getPaymentIds(): array
     {
         $ids = [];
@@ -87,6 +82,7 @@ class CustomerCollection extends Collection
             $ids[] = $customer->getAssignedShopId();
             $ids[] = $customer->getAssignedLanguageShopId();
         }
+
         return $ids;
     }
 
@@ -101,4 +97,8 @@ class CustomerCollection extends Collection
         return $ids;
     }
 
+    protected function getKey(Customer $element): int
+    {
+        return $element->getId();
+    }
 }

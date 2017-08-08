@@ -34,8 +34,8 @@ use Shopware\Cart\Price\PercentagePriceCalculator;
 use Shopware\Cart\Price\PriceCalculator;
 use Shopware\Cart\Price\PriceDefinition;
 use Shopware\Cart\Tax\PercentageTaxRuleBuilder;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class VoucherProcessor implements CartProcessorInterface
 {

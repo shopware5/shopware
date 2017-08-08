@@ -25,9 +25,6 @@ declare(strict_types=1);
 
 namespace Shopware\Framework\Struct;
 
-use Shopware\Framework\Struct\Collection;
-use Shopware\Framework\Struct\Struct;
-
 class StructCollection extends Collection
 {
     /**

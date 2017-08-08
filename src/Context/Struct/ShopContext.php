@@ -25,10 +25,10 @@
 namespace Shopware\Context\Struct;
 
 use Shopware\Cart\Delivery\ShippingLocation;
-use Shopware\Framework\Struct\Struct;
 use Shopware\Currency\Struct\Currency;
 use Shopware\Customer\Struct\Customer;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\Framework\Struct\Struct;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
 use Shopware\PriceGroup\Struct\PriceGroupCollection;
 use Shopware\ShippingMethod\Struct\ShippingMethod;

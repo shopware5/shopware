@@ -59,6 +59,7 @@ class SeoUrlSearcher extends Search
             $this->fieldHelper->getSeoUrlFields()
         );
         $query->from('seo_url', 'seoUrl');
+
         return $query;
     }
 

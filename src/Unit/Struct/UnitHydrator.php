@@ -25,7 +25,6 @@
 namespace Shopware\Unit\Struct;
 
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\Unit\Struct\Unit;
 
 /**
  * @category  Shopware

@@ -51,6 +51,7 @@ class SeoUrlCollection extends Collection
                 return $element;
             }
         }
+
         return null;
     }
 
@@ -61,18 +62,20 @@ class SeoUrlCollection extends Collection
                 return $element;
             }
         }
+
         return null;
     }
 
     public function hasPathInfo(string $pathInfo): bool
     {
-        return (array_key_exists($pathInfo, $this->mapping));
+        return array_key_exists($pathInfo, $this->mapping);
     }
 
     public function hasUrl(string $url): bool
     {
         $mapping = array_flip($this->mapping);
-        return (array_key_exists($url, $mapping));
+
+        return array_key_exists($url, $mapping);
     }
 
     public function getMapping(): array
@@ -88,7 +91,7 @@ class SeoUrlCollection extends Collection
 
     public function getForeignKeys(): array
     {
-        return $this->map(function(SeoUrl $url) {
+        return $this->map(function (SeoUrl $url) {
             return $url->getForeignKey();
         });
     }

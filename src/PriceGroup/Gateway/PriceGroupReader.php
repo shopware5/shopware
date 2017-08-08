@@ -26,9 +26,8 @@ namespace Shopware\PriceGroup\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Struct\FieldHelper;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
-use Shopware\Bundle\StoreFrontBundle\Price\PriceHydrator;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 use Shopware\PriceGroup\Struct\PriceGroup;
 use Shopware\PriceGroup\Struct\PriceGroupCollection;

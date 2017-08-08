@@ -28,8 +28,8 @@ namespace Shopware\Cart\Payment;
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Cart\ValidatorInterface;
 use Shopware\Cart\Error\PaymentBlockedError;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class PaymentValidatorProcessor implements ValidatorInterface
 {

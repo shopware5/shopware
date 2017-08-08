@@ -26,9 +26,9 @@ namespace Shopware\Currency\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Currency\Struct\Currency;
 use Shopware\Currency\Struct\CurrencyCollection;
 use Shopware\Currency\Struct\CurrencyHydrator;
-use Shopware\Currency\Struct\Currency;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
 

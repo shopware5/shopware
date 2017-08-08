@@ -1,8 +1,29 @@
 <?php declare(strict_types=1);
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Product\Writer;
 
-use Shopware\Product\Writer\Api\DefaultCreateField;
 use Shopware\Product\Writer\Api\DefaultUpdateField;
 use Shopware\Product\Writer\Api\Field;
 use Shopware\Product\Writer\Api\FieldCollection;
@@ -29,7 +50,7 @@ class Writer
     private $validator;
 
     /**
-     * @param SqlGateway $gateway
+     * @param SqlGateway      $gateway
      * @param FieldCollection $fieldCollection
      */
     public function __construct(
@@ -47,7 +68,6 @@ class Writer
         $data = $this->filterInputKeys($rawData);
 
         $this->gateway->insert($data);
-
     }
 
     /**
@@ -55,7 +75,7 @@ class Writer
      * 1. deserialize - HTTP Responsibility
      *
      * @param string $uuid
-     * @param array $rawData
+     * @param array  $rawData
      */
     public function update(string $uuid, array $rawData): void
     {
@@ -67,8 +87,8 @@ class Writer
 
         // 2.1 Extract ids from subresources in collection - worky but dirty
         /** @var VirtualField $virtualField */
-        foreach($virtualFields as $virtualField) {
-            if(!array_key_exists($virtualField->getName(), $rawData)) {
+        foreach ($virtualFields as $virtualField) {
+            if (!array_key_exists($virtualField->getName(), $rawData)) {
                 continue;
             }
 
@@ -79,11 +99,11 @@ class Writer
         }
 
         $data = [];
-        foreach($writableFields as $field) {
+        foreach ($writableFields as $field) {
             $name = $field->getName();
 
             // 2.2 filter unknown columns field based -- OK
-            if(!array_key_exists($name, $rawData)) {
+            if (!array_key_exists($name, $rawData)) {
                 continue;
             }
 
@@ -95,7 +115,7 @@ class Writer
             // 4. validation
             $violations = $this->applyValidation($field->getUpdateConstraints(), $field->getName(), $rawValue);
 
-            if(count($violations)) {
+            if (count($violations)) {
                 throw new \InvalidArgumentException(sprintf('The value for %s is invalid', $field->getName()));
             }
 
@@ -105,8 +125,8 @@ class Writer
 
         // 5.1 Add default columns - eg. updated_at
         /** @var DefaultUpdateField $defaultField */
-        foreach($defaultFields as $defaultField) {
-            if(array_key_exists($defaultField->getStorageName(), $data)) {
+        foreach ($defaultFields as $defaultField) {
+            if (array_key_exists($defaultField->getStorageName(), $data)) {
                 continue;
             }
 
@@ -121,7 +141,7 @@ class Writer
     {
         $violationList = new ConstraintViolationList();
 
-        foreach($constraints as $constraint) {
+        foreach ($constraints as $constraint) {
             $violations = $this->validator
                 ->validate($value, $constraint);
 
@@ -150,11 +170,12 @@ class Writer
     /**
      * @param array $filters
      * @param $value
+     *
      * @return mixed
      */
     protected function applyFilters(array $filters, $value)
     {
-        foreach($filters as $filter) {
+        foreach ($filters as $filter) {
             $value = $filter->filter($value);
         }
 
@@ -163,6 +184,7 @@ class Writer
 
     /**
      * @param array $rawData
+     *
      * @return array
      */
     protected function filterInputKeys(array $rawData): array

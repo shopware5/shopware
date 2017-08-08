@@ -90,7 +90,7 @@ class SitePageMenu
         }
 
         /** @var Router $router */
-//        $seoUrls = $this->router->generateList($links);
+        //        $seoUrls = $this->router->generateList($links);
         $seoUrls = [];
         $menu = $this->assignSeoUrls($menu, $seoUrls);
 

@@ -105,8 +105,7 @@ class SeoUrlGeneratorRegistry
             }
             $newUrls->add($url);
         }
+
         return $newUrls;
-
-
     }
 }

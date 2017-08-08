@@ -25,7 +25,6 @@
 namespace Shopware\ShopTemplate\Struct;
 
 use Shopware\Framework\Struct\Hydrator;
-use Shopware\ShopTemplate\Struct\ShopTemplate;
 
 class ShopTemplateHydrator extends Hydrator
 {

@@ -55,7 +55,6 @@ class CategoryConditionHandler implements HandlerInterface
         Criteria $criteria,
         TranslationContext $context
     ): void {
-
         /* @var CategoryCondition $criteriaPart */
         if ($this->counter++ === 0) {
             $suffix = '';

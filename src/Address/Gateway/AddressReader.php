@@ -28,9 +28,9 @@ namespace Shopware\Address\Gateway;
 use Doctrine\DBAL\Connection;
 use Shopware\Address\Struct\AddressCollection;
 use Shopware\Address\Struct\AddressHydrator;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\Struct\TranslationContext;
 
 class AddressReader
 {

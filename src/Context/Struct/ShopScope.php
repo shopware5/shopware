@@ -24,8 +24,6 @@
 
 namespace Shopware\Context\Struct;
 
-use Shopware\Context\Struct\ShopContext;
-
 class ShopScope implements \JsonSerializable
 {
     /**

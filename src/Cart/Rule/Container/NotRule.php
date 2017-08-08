@@ -28,8 +28,8 @@ namespace Shopware\Cart\Rule\Container;
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Rule\Match;
 use Shopware\Cart\Rule\Rule;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 /**
  * NotRule inverses the return value of the child rule. Only one child is possible

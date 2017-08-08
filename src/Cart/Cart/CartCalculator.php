@@ -28,9 +28,8 @@ namespace Shopware\Cart\Cart;
 use Shopware\Cart\Delivery\DeliveryCollection;
 use Shopware\Cart\Exception\CircularCartCalculationException;
 use Shopware\Cart\LineItem\CalculatedLineItemCollection;
-use Shopware\Cart\Cart\CalculatedCart;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class CartCalculator
 {

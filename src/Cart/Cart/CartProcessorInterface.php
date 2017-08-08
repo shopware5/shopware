@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Cart\Cart;
 
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 interface CartProcessorInterface
 {

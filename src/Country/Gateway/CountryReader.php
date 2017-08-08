@@ -25,11 +25,11 @@
 namespace Shopware\Country\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Country\Struct\CountryHydrator;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Country\Struct\CountryCollection;
+use Shopware\Country\Struct\CountryHydrator;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -66,9 +66,9 @@ class CountryReader
     private $connection;
 
     /**
-     * @param Connection      $connection
-     * @param \Shopware\Framework\Struct\FieldHelper     $fieldHelper
-     * @param CountryHydrator $countryHydrator
+     * @param Connection                             $connection
+     * @param \Shopware\Framework\Struct\FieldHelper $fieldHelper
+     * @param CountryHydrator                        $countryHydrator
      */
     public function __construct(
         Connection $connection,
@@ -117,7 +117,7 @@ class CountryReader
 
     public function getCountryStates($countryIds, TranslationContext $context)
     {
-//        $query = $this->connection->createQueryBuilder();
+        //        $query = $this->connection->createQueryBuilder();
 //        $query->select($this->fieldHelper->getCountryStateFields());
 //
 //        $query->from('s_core_countries_states', 'countryState')

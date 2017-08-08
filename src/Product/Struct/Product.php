@@ -24,10 +24,10 @@
 
 namespace Shopware\Product\Struct;
 
+use Shopware\Framework\Struct\Struct;
 use Shopware\ProductManufacturer\Struct\ProductManufacturer;
 use Shopware\Tax\Struct\Tax;
 use Shopware\Unit\Struct\Unit;
-use Shopware\Framework\Struct\Struct;
 
 /**
  * @category  Shopware

@@ -1,4 +1,26 @@
 <?php declare(strict_types=1);
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Product\Tests;
 
@@ -12,7 +34,6 @@ class ApiTest extends KernelTestCase
 {
     const UUID = 'AA-BB-CC';
 
-
     /**
      * @var Connection
      */
@@ -25,11 +46,6 @@ class ApiTest extends KernelTestCase
         $this->connection = $container->get('dbal_connection');
 
         $this->connection->beginTransaction();
-    }
-
-    private function getWriter(): Writer
-    {
-        return self::$kernel->getContainer()->get('shopware.product.writer');
     }
 
     public function tearDown()
@@ -60,7 +76,7 @@ class ApiTest extends KernelTestCase
         ]);
 
         $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', [
-            'uuid' => self::UUID
+            'uuid' => self::UUID,
         ]);
 
         self::assertSame(self::UUID, $product['uuid']);
@@ -69,7 +85,7 @@ class ApiTest extends KernelTestCase
     public function test_update()
     {
         $this->getWriter()->insert([
-            'uuid' => self::UUID
+            'uuid' => self::UUID,
         ]);
 
         $this->getWriter()->update(self::UUID, [
@@ -104,7 +120,7 @@ class ApiTest extends KernelTestCase
     public function test_update_writes_default_columns_if_ommitted()
     {
         $this->getWriter()->insert([
-            'uuid' => self::UUID
+            'uuid' => self::UUID,
         ]);
 
         $newProduct = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
@@ -130,11 +146,11 @@ class ApiTest extends KernelTestCase
     public function test_update_invalid()
     {
         $this->getWriter()->insert([
-            'uuid' => self::UUID
+            'uuid' => self::UUID,
         ]);
 
         $tooLongValue = '';
-        for($i = 0; $i < 512; $i++) {
+        for ($i = 0; $i < 512; ++$i) {
             $tooLongValue .= '#';
         }
 
@@ -144,4 +160,8 @@ class ApiTest extends KernelTestCase
         ]);
     }
 
+    private function getWriter(): Writer
+    {
+        return self::$kernel->getContainer()->get('shopware.product.writer');
+    }
 }

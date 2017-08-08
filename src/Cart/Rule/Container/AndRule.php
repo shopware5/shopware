@@ -27,8 +27,8 @@ namespace Shopware\Cart\Rule\Container;
 
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Rule\Match;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 /**
  * AndRule returns true, if all child-rules are true

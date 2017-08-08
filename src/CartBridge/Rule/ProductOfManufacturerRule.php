@@ -26,9 +26,8 @@ namespace Shopware\Cart\Rule;
 
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\CartBridge\Rule\Data\ProductOfManufacturerRuleData;
-use Shopware\Cart\Rule\Rule;
-use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\StructCollection;
 
 class ProductOfManufacturerRule extends Rule
 {
