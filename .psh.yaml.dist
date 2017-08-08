@@ -28,7 +28,6 @@ const:
   DB_NAME: "shopware"
   SW_HOST: "10.101.101.56"
   PHP_VERSION: "7.1"
-  DOC_ROOT: "/var/www/shopware"
 
 dynamic:
   USERKEY: echo "$(id -u):$(id -g)"
@@ -51,4 +50,3 @@ environments:
       DB_NAME: "next"
       SW_HOST: "shopware.next"
       PHP_VERSION: "7.1"
-      DOC_ROOT: "/Users/jb/web/next"
