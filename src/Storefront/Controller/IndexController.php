@@ -13,9 +13,6 @@ class IndexController extends Controller
      */
     public function indexAction(ShopContext $context, Request $request)
     {
-        echo '<pre>';
-        print_r($context);
-        exit();
         return $this->render('frontend/home/index.html.twig', []);
     }
 }

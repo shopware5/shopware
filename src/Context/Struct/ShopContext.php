@@ -84,11 +84,6 @@ class ShopContext extends Struct
     protected $paymentMethod;
 
     /**
-     * @var TranslationContext
-     */
-    protected $translationContext;
-
-    /**
      * @var ShippingMethod
      */
     protected $shippingMethod;
@@ -120,7 +115,6 @@ class ShopContext extends Struct
         $this->paymentMethod = $paymentMethod;
         $this->shippingMethod = $shippingMethod;
         $this->shippingLocation = $shippingLocation;
-        $this->translationContext = TranslationContext::createFromShop($this->shop);
     }
 
     public function getShop(): Shop
@@ -173,7 +167,7 @@ class ShopContext extends Struct
 
     public function getTranslationContext(): TranslationContext
     {
-        return $this->translationContext;
+        return TranslationContext::createFromShop($this->shop);
     }
 
     public function getShippingLocation(): ShippingLocation
