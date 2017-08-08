@@ -5,7 +5,7 @@ mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ -e "CREATE DATABASE __DB_N
 
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/install/latest.sql
 
-__DOC_ROOT__/_sql/ApplyDeltas.php --migrationpath="__DOC_ROOT__/_sql/migrations/" --shoppath="__DOC_ROOT__" --mode=update --dbname=__DB_NAME__ --host=__DB_HOST__ --password=__DB_PASSWORD__ --username=__DB_USER__
+./_sql/ApplyDeltas.php --migrationpath="./_sql/migrations/" --shoppath="./" --mode=update --dbname=__DB_NAME__ --host=__DB_HOST__ --password=__DB_PASSWORD__ --username=__DB_USER__
 
 mysql -u __DB_USER__ -p__DB_PASSWORD__ -h __DB_HOST__ __DB_NAME__ < _sql/demo/latest.sql
 
