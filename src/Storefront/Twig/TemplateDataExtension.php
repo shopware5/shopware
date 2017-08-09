@@ -25,7 +25,16 @@
 namespace Shopware\Storefront\Twig;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Category\Gateway\CategoryRepository;
+use Shopware\Category\Struct\Category;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Config\ConfigServiceInterface;
+use Shopware\Search\Condition\ActiveCondition;
+use Shopware\Search\Condition\CustomerGroupCondition;
+use Shopware\Search\Condition\DisplayInNavigationCondition;
+use Shopware\Search\Condition\ParentCategoryCondition;
+use Shopware\Search\Criteria;
+use Shopware\Serializer\SerializerRegistry;
 use Shopware\Storefront\Component\SitePageMenu;
 use Shopware\Storefront\Theme\ThemeConfigReader;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -62,6 +71,14 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
      * @var ThemeConfigReader
      */
     private $themeConfigReader;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+    /**
+     * @var SerializerRegistry
+     */
+    private $serializer;
 
     public function __construct(
         TranslatorInterface $translator,
@@ -69,7 +86,9 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         ConfigServiceInterface $configService,
         SitePageMenu $sitePageMenu,
         Connection $connection,
-        ThemeConfigReader $themeConfigReader
+        ThemeConfigReader $themeConfigReader,
+        CategoryRepository $categoryRepository,
+        SerializerRegistry $serializer
     ) {
         $this->translator = $translator;
         $this->requestStack = $requestStack;
@@ -77,6 +96,8 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         $this->sitePageMenu = $sitePageMenu;
         $this->connection = $connection;
         $this->themeConfigReader = $themeConfigReader;
+        $this->categoryRepository = $categoryRepository;
+        $this->serializer = $serializer;
     }
 
     public function getFunctions(): array
@@ -100,6 +121,24 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
             return [];
         }
 
+        /** @var ShopContext $context */
+        $context = $request->attributes->get('_shop_context');
+
+        return [
+            'shopware' => [
+                'config' => $this->configService->getByShop($shop),
+                'theme' => $this->getThemeConfig(),
+            ],
+            'context' => $context,
+            'activeRoute' => $request->attributes->get('_route')
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getThemeConfig(): array
+    {
         $themeConfig = $this->themeConfigReader->get();
 
         $themeConfig = array_merge(
@@ -113,85 +152,8 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
             ]
         );
 
-        return [
-            'shopware' => [
-                'config' => $this->configService->getByShop($shop),
-                'theme' => $themeConfig,
-                'menu' => $this->sitePageMenu->getTree($shop['id']),
-                'mainCategories' => $this->getCategories(3),
-            ],
-        ];
+        return $themeConfig;
     }
 
-    public function getCategories($id)
-    {
-        $pathIds = $this->getCategoryPath($id);
-        $grouped = $this->getCategoryIdsWithParent($pathIds);
 
-        $ids = array_merge($pathIds, array_keys($grouped));
-
-        $cats = [];
-        foreach ($grouped as $name => $cat) {
-            $cats[] = [
-                'id' => 1,
-                'description' => $name,
-            ];
-        }
-
-        array_shift($cats);
-
-        return $cats;
-
-        $context = $this->contextService->getShopContext();
-        $categories = $this->categoryService->getList($ids, $context);
-
-        unset($grouped[$this->baseId]);
-
-        $tree = $this->buildTree($grouped, $this->baseId);
-
-        $result = $this->assignCategoriesToTree(
-            $categories,
-            $tree,
-            $pathIds,
-            $this->getChildrenCountOfCategories($ids)
-        );
-
-        return $result;
-    }
-
-    private function getCategoryPath($id)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $path = $query->select(['category.path'])
-            ->from('category', 'category')
-            ->where('category.id = :id')
-            ->setParameter('id', $id)
-            ->execute()
-            ->fetchColumn();
-
-        $ids = [$id];
-
-        if (!$path) {
-            return $ids;
-        }
-
-        $pathIds = explode('|', $path);
-
-        return array_filter(array_merge($ids, $pathIds));
-    }
-
-    private function getCategoryIdsWithParent($ids)
-    {
-        $query = $this->connection->createQueryBuilder();
-
-        return $query->select(['category.description', 'category.parent'])
-            ->from('category', 'category')
-            ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
-            ->andWhere('category.active = 1')
-            ->orderBy('category.position', 'ASC')
-            ->addOrderBy('category.id')
-            ->setParameter('parentId', $ids, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-    }
 }

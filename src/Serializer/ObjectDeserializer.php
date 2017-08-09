@@ -62,6 +62,7 @@ class ObjectDeserializer
             return $this->deserialize($argument);
         }, $data);
 
+
         //create object instance
         return $this->createInstance($class, $arguments);
     }
@@ -91,7 +92,12 @@ class ObjectDeserializer
         $reflectionClass = $this->getReflectionClass($class);
 
         if (!$reflectionClass->getConstructor()) {
-            return $reflectionClass->newInstance();
+            $instance = $reflectionClass->newInstance();
+
+            /* @var Struct $instance */
+            $instance->assign($arguments);
+
+            return $instance;
         }
 
         $constructorParams = $reflectionClass->getConstructor()->getParameters();

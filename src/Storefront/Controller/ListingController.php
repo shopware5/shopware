@@ -24,16 +24,17 @@
 
 namespace Shopware\Storefront\Controller;
 
+use Shopware\Context\Struct\ShopContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ListingController extends Controller
+class ListingController extends FrontendController
 {
     /**
      * @Route("/listing/{id}", name="listing_page", options={"seo"=true})
      */
-    public function indexAction($id, Request $request)
+    public function indexAction(int $id, ShopContext $context, Request $request)
     {
-        return $this->render('frontend/home/index.html.twig', []);
+        return $this->render('frontend/home/index.html.twig');
     }
 }

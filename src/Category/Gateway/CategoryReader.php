@@ -29,6 +29,7 @@ use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Category\Struct\CategoryHydrator;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
+use Shopware\Storefront\ListingPage\ListingPageUrlGenerator;
 
 class CategoryReader
 {
@@ -64,19 +65,22 @@ class CategoryReader
             ->addSelect('GROUP_CONCAT(customerGroups.customer_group_id) as __category_customer_groups')
         ;
 
-        $query->from('category', 'category')
-            ->leftJoin('category', 's_core_shops', 'shop', 'shop.category_id = category.id')
-            ->leftJoin('category', 'category_attribute', 'categoryAttribute', 'categoryAttribute.category_id = category.id')
-            ->leftJoin('category', 'category_avoid_customer_group', 'customerGroups', 'customerGroups.category_id = category.id')
-            ->leftJoin('category', 's_media', 'media', 'media.id = category.media_id')
-            ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
-            ->leftJoin('category', 's_product_streams', 'stream', 'category.stream_id = stream.id')
-            ->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId')
-            ->where('category.id IN (:categories)')
-            ->andWhere('category.active = 1')
-            ->addGroupBy('category.id')
-            ->setParameter('categories', $ids, Connection::PARAM_INT_ARRAY);
+        $query->from('category', 'category');
+        $query->leftJoin('category', 's_core_shops', 'shop', 'shop.category_id = category.id');
+        $query->leftJoin('category', 'category_attribute', 'categoryAttribute', 'categoryAttribute.category_id = category.id');
+        $query->leftJoin('category', 'category_avoid_customer_group', 'customerGroups', 'customerGroups.category_id = category.id');
+        $query->leftJoin('category', 's_media', 'media', 'media.id = category.media_id');
+        $query->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID');
+        $query->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
+        $query->leftJoin('category', 's_product_streams', 'stream', 'category.stream_id = stream.id');
+        $query->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId');
+        $query->leftJoin('category', 'seo_url', 'seoUrl', 'seoUrl.foreign_key = category.id AND seoUrl.name = :seoUrlName AND is_canonical = 1 AND seoUrl.shop_id = :shopId');
+        $query->where('category.id IN (:categories)');
+        $query->andWhere('category.active = 1');
+        $query->addGroupBy('category.id');
+        $query->setParameter('categories', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('shopId', $context->getShopId());
+        $query->setParameter(':seoUrlName', ListingPageUrlGenerator::ROUTE_NAME);
 
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);

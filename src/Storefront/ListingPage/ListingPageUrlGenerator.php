@@ -114,7 +114,7 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
                 continue;
             }
 
-            $url = $url . '/' . $identity->getId();
+            $url = rtrim($url, '/') . '/' . $identity->getId();
 
             $routes->add(
                 new SeoUrl(

@@ -72,6 +72,14 @@ class CategoryHydrator
 
         $category->assign(
             [
+                'uuid' => $data['__category_uuid'],
+                'level' => $data['__category_level'],
+                'createdAt' => new \DateTime($data['__category_added']),
+                'updatedAt' => new \DateTime($data['__category_changed_at']),
+                'active' => $data['__category_active'],
+                'facetIds' => array_filter(explode('|', $data['__category_facet_ids'])),
+                'sortingIds' => array_filter(explode('|', $data['__category_sorting_ids'])),
+
                 'position' => (int) $data['__category_position'],
                 'name' => (string) $data['__category_description'],
                 'metaTitle' => (string) $data['__category_meta_title'],
@@ -91,7 +99,7 @@ class CategoryHydrator
             ]
         );
 
-        //        if ($data['__media_id']) {
+        //        if ($data['__category_media_id']) {
         //            $category->setMedia(
         //                $this->mediaHydrator->hydrate($data)
         //            );
@@ -101,7 +109,7 @@ class CategoryHydrator
         //            $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
         //        }
         //
-        //        if (isset($data['__stream_id']) && $data['__stream_id']) {
+        //        if ($data['__category_stream_id']) {
         //            $category->setProductStream(
         //                $this->productStreamHydrator->hydrate($data)
         //            );

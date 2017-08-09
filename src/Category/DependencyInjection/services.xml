@@ -23,6 +23,9 @@
             <argument type="collection">
                 <argument type="service" id="shopware.category.gateway.handler.shop_condition_handler" />
                 <argument type="service" id="shopware.category.gateway.handler.active_condition_handler" />
+                <argument type="service" id="shopware.category.gateway.handler.parent_category_condition_handler" />
+                <argument type="service" id="shopware.category.gateway.handler.customer_group_condition_handler" />
+                <argument type="service" id="shopware.category.gateway.handler.display_in_navigation_condition_handler" />
             </argument>
         </service>
 
@@ -33,5 +36,9 @@
 
         <service class="Shopware\Category\Gateway\Handler\ShopConditionHandler" id="shopware.category.gateway.handler.shop_condition_handler"/>
         <service class="Shopware\Category\Gateway\Handler\ActiveConditionHandler" id="shopware.category.gateway.handler.active_condition_handler"/>
+        <service class="Shopware\Category\Gateway\Handler\ParentCategoryConditionHandler" id="shopware.category.gateway.handler.parent_category_condition_handler"/>
+        <service class="Shopware\Category\Gateway\Handler\CustomerGroupConditionHandler" id="shopware.category.gateway.handler.customer_group_condition_handler"/>
+        <service class="Shopware\Category\Gateway\Handler\DisplayInNavigationConditionHandler" id="shopware.category.gateway.handler.display_in_navigation_condition_handler"/>
+
     </services>
 </container>

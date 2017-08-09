@@ -24,7 +24,11 @@
 
 namespace Shopware\Storefront\Context;
 
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Storefront\DetailPage\DetailPageUrlGenerator;
+use Shopware\Storefront\ListingPage\ListingPageUrlGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -53,6 +57,11 @@ class ContextSubscriber implements EventSubscriberInterface
 
         $context = $this->contextService->getShopContext();
         $request->attributes->set(self::SHOP_CONTEXT_PROPERTY, $context);
+
+        $request->attributes->set(
+            'active_category_id',
+            $this->getActiveCategoryId($request, $context)
+        );
     }
 
     public static function getSubscribedEvents(): array
@@ -62,5 +71,19 @@ class ContextSubscriber implements EventSubscriberInterface
                 ['onKernelRequest', 0],
             ],
         ];
+    }
+
+    private function getActiveCategoryId(Request $request, ShopContext $context)
+    {
+        $route = $request->attributes->get('_route');
+
+        switch ($route) {
+            case ListingPageUrlGenerator::ROUTE_NAME:
+                return $request->attributes->get('_route_params')['id'];
+
+            case DetailPageUrlGenerator::ROUTE_NAME:
+            default:
+                return $context->getShop()->getCategory()->getId();
+        }
     }
 }

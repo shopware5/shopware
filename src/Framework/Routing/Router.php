@@ -127,24 +127,33 @@ class Router implements RouterInterface, RequestMatcherInterface
             $this->logger
         );
 
-        $url = $generator->generate($name, $parameters, $referenceType);
-
         if (!$context = $this->getContext()) {
-            return $url;
-        }
-
-        $route = $this->getRouteCollection()->get($name);
-        if ($route->getOption('seo') !== true) {
-            return $url;
+            return $generator->generate($name, $parameters, $referenceType);
         }
 
         if (!$shop = $context->getParameter('shop')) {
-            return $url;
+            return $generator->generate($name, $parameters, $referenceType);
         }
 
+        //rewrite base url for url generator
+        $stripBaseUrl = $shop['base_url'] ?? $shop['base_path'];
+        $stripBaseUrl = rtrim($stripBaseUrl, '/') . '/';
+        $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
+
+        $route = $this->getRouteCollection()->get($name);
+        if ($route->getOption('seo') !== true) {
+            return $generator->generate($name, $parameters, $referenceType);
+        }
+
+        //find seo url for path info
         $pathinfo = $generator->generate($name, $parameters, UrlGenerator::ABSOLUTE_PATH);
+        $pathinfo = str_replace($stripBaseUrl, '', $pathinfo);
         $pathinfo = '/' . trim($pathinfo, '/');
+
         $seoUrl = $this->urlResolver->getUrl($shop['id'], $pathinfo);
+
+        //generate new url with shop base path/url
+        $url = $generator->generate($name, $parameters, $referenceType);
 
         if ($seoUrl) {
             $url = str_replace($pathinfo, $seoUrl->getUrl(), $url);

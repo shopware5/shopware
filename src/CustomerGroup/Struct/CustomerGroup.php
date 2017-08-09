@@ -246,7 +246,7 @@ class CustomerGroup extends Struct
     /**
      * @param float $minimumOrderValue
      */
-    public function setMinimumOrderValue($minimumOrderValue)
+    public function setMinimumOrderValue($minimumOrderValue): void
     {
         $this->minimumOrderValue = $minimumOrderValue;
     }

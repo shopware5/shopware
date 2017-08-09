@@ -124,4 +124,12 @@ class CategoryCollection extends Collection
     {
         return $element->getId();
     }
+
+    public function sortByPosition(): CategoryCollection
+    {
+        $this->sort(function(Category $a, Category $b) {
+             return $a->getPosition() <=> $b->getPosition();
+        });
+        return $this;
+    }
 }

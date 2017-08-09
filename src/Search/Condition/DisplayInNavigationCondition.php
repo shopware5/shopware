@@ -22,19 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Storefront\Controller;
+namespace Shopware\Search\Condition;
 
-use Shopware\Context\Struct\ShopContext;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Search\ConditionInterface;
 
-class DetailController extends FrontendController
+class DisplayInNavigationCondition implements ConditionInterface
 {
     /**
-     * @Route("/detail/{number}", name="detail_page", options={"seo"="true"})
+     * @var bool
      */
-    public function indexAction(string $number, ShopContext $context, Request $request)
+    protected $display;
+
+    public function __construct(bool $display = true)
     {
-        return $this->render('frontend/home/index.html.twig', []);
+        $this->display = $display;
+    }
+
+    public function display(): bool
+    {
+        return $this->display;
+    }
+
+    public function getName(): string
+    {
+        return self::class;
     }
 }

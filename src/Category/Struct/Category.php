@@ -147,6 +147,41 @@ class Category extends Struct
      */
     protected $isShopCategory;
 
+    /**
+     * @var string
+     */
+    protected $uuid;
+
+    /**
+     * @var int
+     */
+    protected $level;
+
+    /**
+     * @var \DateTime
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    protected $updatedAt;
+
+    /**
+     * @var bool
+     */
+    protected $active;
+
+    /**
+     * @var array
+     */
+    protected $sortingIds;
+
+    /**
+     * @var array
+     */
+    protected $facetIds;
+
     public function __construct(int $id, ?int $parentId, array $path, string $name)
     {
         $this->id = $id;
@@ -507,5 +542,75 @@ class Category extends Struct
     public function setIsShopCategory(bool $isShopCategory): void
     {
         $this->isShopCategory = $isShopCategory;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): void
+    {
+        $this->level = $level;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    public function getSortingIds(): array
+    {
+        return $this->sortingIds;
+    }
+
+    public function setSortingIds(array $sortingIds): void
+    {
+        $this->sortingIds = $sortingIds;
+    }
+
+    public function getFacetIds(): array
+    {
+        return $this->facetIds;
+    }
+
+    public function setFacetIds(array $facetIds): void
+    {
+        $this->facetIds = $facetIds;
     }
 }

@@ -28,7 +28,7 @@ use Shopware\Context\Struct\ShopContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class IndexController extends Controller
+class IndexController extends FrontendController
 {
     /**
      * @Route("/", name="homepage", options={"seo"="false"})

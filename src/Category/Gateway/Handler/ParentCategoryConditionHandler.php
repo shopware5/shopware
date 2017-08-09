@@ -22,19 +22,31 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Storefront\Controller;
+namespace Shopware\Category\Gateway\Handler;
 
-use Shopware\Context\Struct\ShopContext;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Search\Condition\ParentCategoryCondition;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
+use Shopware\Search\HandlerInterface;
 
-class DetailController extends FrontendController
+class ParentCategoryConditionHandler implements HandlerInterface
 {
-    /**
-     * @Route("/detail/{number}", name="detail_page", options={"seo"="true"})
-     */
-    public function indexAction(string $number, ShopContext $context, Request $request)
+    public function supports(CriteriaPartInterface $criteriaPart): bool
     {
-        return $this->render('frontend/home/index.html.twig', []);
+        return $criteriaPart instanceof ParentCategoryCondition;
+    }
+
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        QueryBuilder $builder,
+        Criteria $criteria,
+        TranslationContext $context
+    ): void {
+        /* @var ParentCategoryCondition $criteriaPart */
+        $builder->andWhere('category.parent IN (:parentIds)');
+        $builder->setParameter('parentIds', $criteriaPart->getParentIds(), Connection::PARAM_INT_ARRAY);
     }
 }

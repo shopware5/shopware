@@ -24,12 +24,14 @@
 
 namespace Shopware\Storefront\Controller;
 
+
+use Shopware\Serializer\SerializerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyController;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends SymfonyController
 {
-    protected function render($view, array $parameters = [], Response $response = null): \Symfony\Component\HttpFoundation\Response
+    protected function render($view, array $parameters = [], Response $response = null): Response
     {
         //remove static template inheritance prefix
         if (strpos($view, '@') === 0) {
@@ -41,5 +43,11 @@ abstract class Controller extends SymfonyController
         $template = $this->get('shopware.storefront.twig.template_finder')->find($view, true);
 
         return parent::render($template, $parameters, $response);
+    }
+
+    protected function serialize($data): array
+    {
+        return $this->container->get('shopware.serializer.serializer_registry')
+            ->serialize($data, SerializerRegistry::FORMAT_ARRAY);
     }
 }
