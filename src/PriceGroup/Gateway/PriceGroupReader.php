@@ -91,7 +91,7 @@ class PriceGroupReader
             ->groupBy('priceGroupDiscount.id')
             ->orderBy('priceGroupDiscount.groupID')
             ->addOrderBy('priceGroupDiscount.discountstart')
-            ->setParameter(':customerGroup', $customerGroup->getId());
+            ->setParameter('customerGroup', $customerGroup->getId());
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

@@ -89,7 +89,7 @@ class CountryAreaReader
 
         $query->from('s_core_countries_areas', 'countryAreaArea')
             ->where('countryAreaArea.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

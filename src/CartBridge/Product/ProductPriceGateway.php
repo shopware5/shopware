@@ -126,14 +126,14 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
         $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
         $query->innerJoin('variant', 's_core_tax', 'tax', 'tax.id = product.taxID');
         $query->where('variant.ordernumber IN (:numbers)');
-        $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         $customerGroups = array_unique([
             $context->getCurrentCustomerGroup()->getKey(),
             $context->getFallbackCustomerGroup()->getKey(),
         ]);
         $query->andWhere('price.pricegroup IN (:customerGroups)');
-        $query->setParameter(':customerGroups', $customerGroups, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('customerGroups', $customerGroups, Connection::PARAM_STR_ARRAY);
 
         return $query;
     }

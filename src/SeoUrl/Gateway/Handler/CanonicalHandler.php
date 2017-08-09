@@ -47,6 +47,6 @@ class CanonicalHandler implements HandlerInterface
         $builder->andWhere('seoUrl.is_canonical = :canonical');
 
         /* @var CanonicalCondition $criteriaPart */
-        $builder->setParameter(':canonical', $criteriaPart->isCanonical());
+        $builder->setParameter('canonical', $criteriaPart->isCanonical());
     }
 }

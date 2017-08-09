@@ -86,8 +86,8 @@ class CustomerGroupDiscountGateway
         $query->andWhere('discounts.groupID = :id');
         $query->andWhere('discounts.basketdiscountstart <= :price');
         $query->orderBy('basketdiscountstart', 'DESC');
-        $query->setParameter(':price', $price);
-        $query->setParameter(':id', $customerGroup->getId());
+        $query->setParameter('price', $price);
+        $query->setParameter('id', $customerGroup->getId());
         $query->setMaxResults(1);
 
         $discount = $query->execute()->fetch(\PDO::FETCH_COLUMN);

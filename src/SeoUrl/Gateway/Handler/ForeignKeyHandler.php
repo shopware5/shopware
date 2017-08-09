@@ -48,6 +48,6 @@ class ForeignKeyHandler implements HandlerInterface
         $builder->andWhere('seoUrl.foreign_key IN (:foreignKeys)');
 
         /* @var ForeignKeyCondition $criteriaPart */
-        $builder->setParameter(':foreignKeys', $criteriaPart->getForeignKeys(), Connection::PARAM_INT_ARRAY);
+        $builder->setParameter('foreignKeys', $criteriaPart->getForeignKeys(), Connection::PARAM_INT_ARRAY);
     }
 }

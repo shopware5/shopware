@@ -77,7 +77,7 @@ class CustomerReader
         $query->leftJoin('paymentMethod', 's_core_paymentmeans_attributes', 'paymentMethodAttribute', 'paymentMethodAttribute.paymentmeanID = paymentMethod.id');
 
         $query->where('customer.id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addCustomerTranslation($query, $context);
 

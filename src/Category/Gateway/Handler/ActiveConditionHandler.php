@@ -47,6 +47,6 @@ class ActiveConditionHandler implements HandlerInterface
         $builder->andWhere('category.active = :active');
 
         /* @var ActiveCondition $criteriaPart */
-        $builder->setParameter(':active', $criteriaPart->isActive());
+        $builder->setParameter('active', $criteriaPart->isActive());
     }
 }

@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ListingController extends Controller
 {
     /**
-     * @Route("/listing/{id}", name="listing_page")
+     * @Route("/listing/{id}", name="listing_page", options={"seo"=true})
      */
     public function indexAction($id, Request $request)
     {

@@ -209,8 +209,8 @@ class SitePageMenu
             ->addOrderBy('page.position')
             ->addOrderBy('page.description');
 
-        $query->setParameter(':shopId', $shopId)
-            ->setParameter(':staticShopId', '%|' . $shopId . '|%');
+        $query->setParameter('shopId', $shopId)
+            ->setParameter('staticShopId', '%|' . $shopId . '|%');
 
         return $query;
     }

@@ -67,7 +67,7 @@ class CurrencyReader
         $query->addSelect($this->fieldHelper->getCurrencyFields())
             ->from('s_core_currencies', 'currency')
             ->where('currency.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $currencies = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 

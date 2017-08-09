@@ -95,7 +95,7 @@ class CountryReader
             ->innerJoin('country', 's_core_countries_areas', 'countryArea', 'countryArea.id = country.areaID')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
             ->where('country.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addCountryTranslation($query, $context);
 
@@ -126,7 +126,7 @@ class CountryReader
 //        $this->fieldHelper->addCountryStateTranslation($query, $context);
 //
 //        $query->where('countryState.countryID IN (:ids)')
-//            ->setParameter(':ids', $countryIds, Connection::PARAM_INT_ARRAY);
+//            ->setParameter('ids', $countryIds, Connection::PARAM_INT_ARRAY);
 //
 //        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 //

@@ -89,7 +89,7 @@ class CustomerGroupReader
         $query->from('s_core_customergroups', 'customerGroup')
             ->leftJoin('customerGroup', 's_core_customergroups_attributes', 'customerGroupAttribute', 'customerGroupAttribute.customerGroupID = customerGroup.id')
             ->where('customerGroup.groupkey IN (:keys)')
-            ->setParameter(':keys', $keys, Connection::PARAM_STR_ARRAY);
+            ->setParameter('keys', $keys, Connection::PARAM_STR_ARRAY);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

@@ -48,6 +48,6 @@ class NameHandler implements HandlerInterface
         $builder->andWhere('seoUrl.name IN (:names)');
 
         /* @var NameCondition $criteriaPart */
-        $builder->setParameter(':names', $criteriaPart->getNames(), Connection::PARAM_STR_ARRAY);
+        $builder->setParameter('names', $criteriaPart->getNames(), Connection::PARAM_STR_ARRAY);
     }
 }

@@ -124,8 +124,8 @@ class DeliveryCalculator
         $query->from('s_premium_shippingcosts', 'costs');
         $query->andWhere('costs.`from` <= :value');
         $query->andWhere('costs.dispatchID = :id');
-        $query->setParameter(':id', $shippingMethod->getId());
-        $query->setParameter(':value', $value);
+        $query->setParameter('id', $shippingMethod->getId());
+        $query->setParameter('value', $value);
         $query->addOrderBy('value', 'DESC');
         $query->setMaxResults(1);
 

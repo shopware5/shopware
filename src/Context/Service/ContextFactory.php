@@ -262,7 +262,7 @@ class ContextFactory implements ContextFactoryInterface
         $query->select(['id', '`default`', 'fallback_id']);
         $query->from('s_core_shops', 'shop');
         $query->where('shop.id = :id');
-        $query->setParameter(':id', $shopId);
+        $query->setParameter('id', $shopId);
 
         $data = $query->execute()->fetch(\PDO::FETCH_ASSOC);
 

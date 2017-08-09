@@ -139,7 +139,7 @@ class ShopReader
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
             ->groupBy('shop.id')
             ->andWhere('shop.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addCountryTranslation($query, $context);
         $this->fieldHelper->addPaymentTranslation($query, $context);

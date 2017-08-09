@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="homepage", options={"seo"="false"})
      */
     public function indexAction(ShopContext $context, Request $request)
     {

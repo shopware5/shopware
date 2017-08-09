@@ -121,7 +121,7 @@ class TaxReader
         );
 
         foreach ($data as $tax) {
-            $query->setParameter(':taxId', $tax['__tax_id']);
+            $query->setParameter('taxId', $tax['__tax_id']);
 
             /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
             $statement = $query->execute();
@@ -174,10 +174,10 @@ class TaxReader
             ->addOrderBy('taxRule.areaID', 'DESC')
             ->addOrderBy('taxRule.countryID', 'DESC')
             ->addOrderBy('taxRule.stateID', 'DESC')
-            ->setParameter(':area', $areaId)
-            ->setParameter(':country', $countryId)
-            ->setParameter(':state', $stateId)
-            ->setParameter(':customerGroup', $customerGroup->getId())
+            ->setParameter('area', $areaId)
+            ->setParameter('country', $countryId)
+            ->setParameter('state', $stateId)
+            ->setParameter('customerGroup', $customerGroup->getId())
             ->setFirstResult(0)
             ->setMaxResults(1);
 

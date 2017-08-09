@@ -60,7 +60,7 @@ class SeoUrlReader
         $query->select($this->fieldHelper->getSeoUrlFields());
         $query->from('seo_url', 'seoUrl');
         $query->andWhere('id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $urls = $query->execute()->fetch(\PDO::FETCH_COLUMN);
 

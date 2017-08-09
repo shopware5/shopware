@@ -1529,8 +1529,8 @@ class FieldHelper
             $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
             $translationTable . '.objectlanguage = :language' . $suffix
         );
-        $query->setParameter(':language' . $suffix, $shopId);
-        $query->setParameter(':' . $translationTable, $translationType);
+        $query->setParameter('language' . $suffix, $shopId);
+        $query->setParameter('' . $translationTable, $translationType);
         $query->addSelect($translationTable . '.objectdata as ' . $selectName);
     }
 }

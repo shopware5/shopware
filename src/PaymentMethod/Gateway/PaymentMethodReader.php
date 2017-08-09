@@ -76,7 +76,7 @@ class PaymentMethodReader
 
         $query = $this->createQuery($context);
         $query->where('paymentMethod.id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
 
         $services = [];

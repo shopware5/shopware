@@ -47,6 +47,6 @@ class PathInfoHandler implements HandlerInterface
     ): void {
         /* @var PathInfoCondition $criteriaPart */
         $builder->andWhere('seoUrl.path_info IN (:pathInfos)');
-        $builder->setParameter(':pathInfos', $criteriaPart->getPathInfos(), Connection::PARAM_STR_ARRAY);
+        $builder->setParameter('pathInfos', $criteriaPart->getPathInfos(), Connection::PARAM_STR_ARRAY);
     }
 }

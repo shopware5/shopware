@@ -47,6 +47,6 @@ class UrlHandler implements HandlerInterface
     ): void {
         /* @var UrlCondition $criteriaPart */
         $builder->andWhere('seoUrl.url_hash IN (:hashes)');
-        $builder->setParameter(':hashes', $criteriaPart->getHashes(), Connection::PARAM_STR_ARRAY);
+        $builder->setParameter('hashes', $criteriaPart->getHashes(), Connection::PARAM_STR_ARRAY);
     }
 }

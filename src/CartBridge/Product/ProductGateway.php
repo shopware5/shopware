@@ -104,7 +104,7 @@ class ProductGateway implements ProductGatewayInterface
         $query->groupBy('variant.id');
 
         $query->where('variant.ordernumber IN (:numbers)');
-        $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
     }

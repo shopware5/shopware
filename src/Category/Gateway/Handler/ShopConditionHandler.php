@@ -54,6 +54,6 @@ class ShopConditionHandler implements HandlerInterface
         );
 
         /* @var ShopCondition $criteriaPart */
-        $builder->setParameter(':shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
+        $builder->setParameter('shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
     }
 }

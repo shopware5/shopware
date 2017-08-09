@@ -133,13 +133,17 @@ class Router implements RouterInterface, RequestMatcherInterface
             return $url;
         }
 
+        $route = $this->getRouteCollection()->get($name);
+        if ($route->getOption('seo') !== true) {
+            return $url;
+        }
+
         if (!$shop = $context->getParameter('shop')) {
             return $url;
         }
 
         $pathinfo = $generator->generate($name, $parameters, UrlGenerator::ABSOLUTE_PATH);
         $pathinfo = '/' . trim($pathinfo, '/');
-
         $seoUrl = $this->urlResolver->getUrl($shop['id'], $pathinfo);
 
         if ($seoUrl) {

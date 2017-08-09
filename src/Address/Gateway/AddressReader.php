@@ -79,7 +79,7 @@ class AddressReader
         $query->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id');
 
         $query->where('address.id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addAddressTranslation($query, $context);
         $this->fieldHelper->addCountryTranslation($query, $context);

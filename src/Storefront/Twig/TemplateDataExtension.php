@@ -165,7 +165,7 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         $path = $query->select(['category.path'])
             ->from('category', 'category')
             ->where('category.id = :id')
-            ->setParameter(':id', $id)
+            ->setParameter('id', $id)
             ->execute()
             ->fetchColumn();
 
@@ -190,7 +190,7 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
             ->andWhere('category.active = 1')
             ->orderBy('category.position', 'ASC')
             ->addOrderBy('category.id')
-            ->setParameter(':parentId', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter('parentId', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }

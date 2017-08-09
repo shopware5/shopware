@@ -127,8 +127,8 @@ class ProductOfCategoriesRuleCollector implements CollectorInterface
         $query->innerJoin('category', 's_articles_details', 'variant', 'variant.articleID = category.articleID');
         $query->andWhere('category.categoryID IN (:categoryIds)');
         $query->andWhere('variant.ordernumber IN (:numbers)');
-        $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
-        $query->setParameter(':categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
 
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
     }

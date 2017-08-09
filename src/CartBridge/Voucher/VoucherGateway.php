@@ -58,7 +58,7 @@ class VoucherGateway implements VoucherGatewayInterface
     public function get(array $codes, ShopContext $context): VoucherDataCollection
     {
         $query = $this->createVoucherQuery($codes);
-        $query->setParameter(':codes', $codes, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('codes', $codes, Connection::PARAM_STR_ARRAY);
 
         $rows = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -111,7 +111,7 @@ class VoucherGateway implements VoucherGatewayInterface
         $query->from('s_emarketing_vouchers', 'voucher');
         $query->leftJoin('voucher', 's_emarketing_voucher_codes', 'codes', 'codes.voucherID = voucher.id AND codes.cashed != 1');
         $query->andWhere('voucher.vouchercode IN (:codes) OR codes.code IN (:codes)');
-        $query->setParameter(':codes', $codes, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('codes', $codes, Connection::PARAM_STR_ARRAY);
 
         return $query;
     }

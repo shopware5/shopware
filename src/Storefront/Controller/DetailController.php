@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DetailController extends Controller
 {
     /**
-     * @Route("/detail/{number}", name="detail_page")
+     * @Route("/detail/{number}", name="detail_page", options={"seo"="true"})
      */
     public function indexAction(string $number, ShopContext $context, Request $request)
     {

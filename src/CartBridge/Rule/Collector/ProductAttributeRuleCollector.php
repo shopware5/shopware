@@ -120,7 +120,7 @@ class ProductAttributeRuleCollector implements CollectorInterface
         $query->from('s_articles_attributes', 'attribute');
         $query->innerJoin('attribute', 's_articles_details', 'variant', 'variant.id = attribute.articledetailsID');
         $query->where('variant.ordernumber IN (:numbers)');
-        $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }

@@ -94,11 +94,11 @@ class ProductReader
 //            ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
         ;
         //todo@next move this to store front list product
-        //        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
+        //        $query->setParameter('fallback', $context->getFallbackCustomerGroup()->getKey());
         //        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
         //            $customerPriceQuery = $this->getPriceCountQuery(':current');
         //            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
-        //            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
+        //            $query->setParameter('current', $context->getCurrentCustomerGroup()->getKey());
         //        }
 
         $query->from('product_detail', 'variant')
@@ -115,7 +115,7 @@ class ProductReader
             ->where('variant.order_number IN (:numbers)')
             ->andWhere('variant.active = 1')
             ->andWhere('product.active = 1')
-            ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+            ->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         $this->fieldHelper->addProductTranslation($query, $context);
         $this->fieldHelper->addVariantTranslation($query, $context);

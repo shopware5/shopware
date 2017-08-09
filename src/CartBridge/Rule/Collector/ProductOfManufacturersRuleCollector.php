@@ -112,7 +112,7 @@ class ProductOfManufacturersRuleCollector implements CollectorInterface
         $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
         $query->from('s_articles_details', 'variant');
         $query->andWhere('variant.ordernumber IN (:numbers)');
-        $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
     }

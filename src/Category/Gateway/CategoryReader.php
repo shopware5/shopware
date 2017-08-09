@@ -76,7 +76,7 @@ class CategoryReader
             ->where('category.id IN (:categories)')
             ->andWhere('category.active = 1')
             ->addGroupBy('category.id')
-            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter('categories', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);

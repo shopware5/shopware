@@ -78,7 +78,7 @@ class CountryStateReader
         $this->fieldHelper->addCountryStateTranslation($query, $context);
 
         $query->where('countryState.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
