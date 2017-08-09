@@ -64,6 +64,11 @@ class Currency extends Struct
     protected $symbolPosition;
 
     /**
+     * @var int
+     */
+    protected $position;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -157,5 +162,15 @@ class Currency extends Struct
     public function setSymbolPosition($symbolPosition)
     {
         $this->symbolPosition = $symbolPosition;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
     }
 }

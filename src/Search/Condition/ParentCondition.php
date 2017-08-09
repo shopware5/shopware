@@ -4,7 +4,7 @@ namespace Shopware\Search\Condition;
 
 use Shopware\Search\ConditionInterface;
 
-class ParentCategoryCondition implements ConditionInterface
+class ParentCondition implements ConditionInterface
 {
     /**
      * @var int[]

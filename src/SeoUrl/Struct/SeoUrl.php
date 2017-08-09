@@ -58,7 +58,6 @@ class SeoUrl extends Struct
      */
     protected $url;
 
-
     /**
      * @var bool
      */
@@ -92,7 +91,7 @@ class SeoUrl extends Struct
     ) {
         $this->id = $id;
         $this->pathInfo = '/' . trim($pathInfo, '/');
-        $this->seoPathInfo = '/' . trim($seoPathInfo, '/');
+        $this->seoPathInfo = strtolower('/' . trim($seoPathInfo, '/'));
         $this->name = $name;
         $this->shopId = $shopId;
         $this->isCanonical = $isCanonical;

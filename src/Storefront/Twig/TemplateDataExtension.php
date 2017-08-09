@@ -26,14 +26,8 @@ namespace Shopware\Storefront\Twig;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Category\Gateway\CategoryRepository;
-use Shopware\Category\Struct\Category;
-use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Config\ConfigServiceInterface;
-use Shopware\Search\Condition\ActiveCondition;
-use Shopware\Search\Condition\CustomerGroupCondition;
-use Shopware\Search\Condition\DisplayInNavigationCondition;
-use Shopware\Search\Condition\ParentCategoryCondition;
-use Shopware\Search\Criteria;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Serializer\SerializerRegistry;
 use Shopware\Storefront\Component\SitePageMenu;
 use Shopware\Storefront\Theme\ThemeConfigReader;
@@ -71,10 +65,12 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
      * @var ThemeConfigReader
      */
     private $themeConfigReader;
+
     /**
      * @var CategoryRepository
      */
     private $categoryRepository;
+
     /**
      * @var SerializerRegistry
      */
@@ -115,18 +111,18 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
             return [];
         }
 
-        $shop = $request->attributes->get('_shop');
-
-        if (empty($shop)) {
+        /** @var ShopContext $context */
+        $context = $request->attributes->get('_shop_context');
+        if (!$context) {
             return [];
         }
 
-        /** @var ShopContext $context */
-        $context = $request->attributes->get('_shop_context');
-
         return [
             'shopware' => [
-                'config' => $this->configService->getByShop($shop),
+                'config' => $this->configService->getByShop(
+                    $context->getShop()->getId(),
+                    $context->getShop()->getParentId()
+                ),
                 'theme' => $this->getThemeConfig(),
             ],
             'context' => $context,
@@ -154,6 +150,4 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
 
         return $themeConfig;
     }
-
-
 }

@@ -93,6 +93,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
             $this->getStoreFrontCurrencyId()
         );
 
+        error_log(print_r($shopScope, true) . "\n", 3, '/var/log/test.log');
         $customerScope = new CustomerScope(
             $this->getStoreCustomerId(),
             null,
@@ -152,7 +153,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private function getStoreFrontShopId(): int
     {
-        return $this->requestStack->getCurrentRequest()->attributes->getInt('_shop_id');
+        return $this->requestStack->getMasterRequest()->attributes->getInt('_shop_id');
     }
 
     /**
@@ -160,7 +161,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private function getStoreFrontCurrencyId(): int
     {
-        return $this->requestStack->getCurrentRequest()->attributes->getInt('_currency_id');
+        return $this->requestStack->getMasterRequest()->attributes->getInt('_currency_id');
     }
 
     /**

@@ -11,9 +11,23 @@
             <argument id="shopware.framework.struct.field_helper" type="service"/>
             <argument id="dbal_connection" type="service"/>
         </service>
+
         <service class="Shopware\Currency\Gateway\CurrencyRepository" id="shopware.currency.gateway.currency_repository">
             <argument id="shopware.currency.gateway.currency_reader" type="service"/>
+            <argument id="shopware.currency.gateway.currency_searcher" type="service"/>
         </service>
+
+        <service class="Shopware\Currency\Gateway\CurrencySearcher" id="shopware.currency.gateway.currency_searcher">
+            <argument id="dbal_connection" type="service"/>
+            <argument type="collection">
+                <argument type="service" id="shopware.currency.gateway.handler.shop_condition_handler" />
+            </argument>
+            <argument id="shopware.framework.struct.field_helper" type="service"/>
+            <argument id="shopware.currency.struct.currency_hydrator" type="service"/>
+        </service>
+
+        <service class="Shopware\Currency\Gateway\Handler\ShopConditionHandler" id="shopware.currency.gateway.handler.shop_condition_handler"/>
+
 
     </services>
 </container>

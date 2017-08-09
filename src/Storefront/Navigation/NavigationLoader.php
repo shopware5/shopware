@@ -5,7 +5,7 @@ namespace Shopware\Storefront\Navigation;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Search\Condition\ActiveCondition;
 use Shopware\Search\Condition\CustomerGroupCondition;
-use Shopware\Search\Condition\ParentCategoryCondition;
+use Shopware\Search\Condition\ParentCondition;
 use Shopware\Search\Criteria;
 use Shopware\Category\Gateway\CategoryRepository;
 
@@ -29,7 +29,7 @@ class NavigationLoader
         $systemCategory = $context->getShop()->getCategory();
 
         $criteria = new Criteria();
-        $criteria->addCondition(new ParentCategoryCondition(array_merge($category->getPath(), [$category->getId()])));
+        $criteria->addCondition(new ParentCondition(array_merge($category->getPath(), [$category->getId()])));
         $criteria->addCondition(new ActiveCondition(true));
         $criteria->addCondition(new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()]));
 

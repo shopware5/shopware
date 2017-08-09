@@ -25,6 +25,8 @@
 namespace Shopware\Shop\Gateway;
 
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Currency\Struct\ShopSearchResult;
+use Shopware\Search\Criteria;
 use Shopware\Shop\Struct\ShopCollection;
 
 class ShopRepository
@@ -34,13 +36,24 @@ class ShopRepository
      */
     private $reader;
 
-    public function __construct(ShopReader $reader)
+    /**
+     * @var ShopSearcher
+     */
+    private $searcher;
+
+    public function __construct(ShopReader $reader, ShopSearcher $searcher)
     {
         $this->reader = $reader;
+        $this->searcher = $searcher;
     }
 
     public function read(array $ids, TranslationContext $context): ShopCollection
     {
         return $this->reader->read($ids, $context);
+    }
+
+    public function search(Criteria $criteria, TranslationContext $context): ShopSearchResult
+    {
+        return $this->searcher->search($criteria, $context);
     }
 }

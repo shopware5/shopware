@@ -693,9 +693,9 @@ class FieldHelper
         ];
     }
 
-    public function getShopFields(): array
+    public function getShopFields(bool $mainFallback = false): array
     {
-        return [
+        $fields = [
             'shop.id as __shop_id',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
@@ -703,6 +703,7 @@ class FieldHelper
             'shop.position as __shop_position',
             'shop.host as __shop_host',
             'shop.base_path as __shop_base_path',
+            'shop.position as __shop_position',
             'shop.base_url as __shop_base_url',
             'shop.hosts as __shop_hosts',
             'shop.secure as __shop_secure',
@@ -718,6 +719,35 @@ class FieldHelper
             'shop.active as __shop_active',
             'shop.tax_calculation_type as __shop_tax_calculation_type',
         ];
+
+        if ($mainFallback) {
+            $fields = array_merge($fields, [
+                "COALESCE(shop.host, main.host, 'localhost') as __shop_host",
+                "COALESCE(shop.base_path, main.base_path, '') as __shop_base_path",
+                'COALESCE(shop.secure, main.secure) as __shop_secure',
+                'COALESCE(shop.template_id, main.template_id) as __shop_template_id',
+                'COALESCE(shop.document_template_id, main.document_template_id) as __shop_document_template_id',
+                'COALESCE(shop.payment_id, main.payment_id) as __shop_payment_id',
+                'COALESCE(shop.dispatch_id, main.dispatch_id) as __shop_dispatch_id',
+                'COALESCE(shop.country_id, main.country_id) as __shop_country_id',
+                'COALESCE(shop.tax_calculation_type, main.tax_calculation_type) as __shop_tax_calculation_type',
+            ]);
+        } else {
+            $fields = array_merge($fields, [
+                'shop.host as __shop_host',
+                'shop.base_path as __shop_base_path',
+                'shop.secure as __shop_secure',
+                'shop.template_id as __shop_template_id',
+                'shop.document_template_id as __shop_document_template_id',
+                'shop.payment_id as __shop_payment_id',
+                'shop.dispatch_id as __shop_dispatch_id',
+                'shop.country_id as __shop_country_id',
+                'shop.tax_calculation_type as __shop_tax_calculation_type',
+            ]);
+        }
+
+
+        return $fields;
     }
 
     public function getCurrencyFields(): array

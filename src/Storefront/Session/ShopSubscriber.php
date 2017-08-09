@@ -138,6 +138,10 @@ class ShopSubscriber implements EventSubscriberInterface
         if (empty($shopId)) {
             return;
         }
+        if ($request->attributes->has(self::SHOP_CONTEXT_PROPERTY)) {
+            return;
+        }
+
         $context = $this->contextService->getShopContext();
         $request->attributes->set(self::SHOP_CONTEXT_PROPERTY, $context);
     }
@@ -155,11 +159,13 @@ class ShopSubscriber implements EventSubscriberInterface
     public function setShopCookie(FilterResponseEvent $event)
     {
         $request = $event->getRequest();
-        $shopId = $request->attributes->get('_shop_id');
-        if (empty($shopId)) {
+
+        if (!$request->attributes->has('_shop_id')) {
             return;
         }
-        $event->getResponse()->headers->setCookie(new Cookie('shop', $shopId));
+
+        $event->getResponse()->headers->setCookie(new Cookie('shop', $request->attributes->get('_shop_id')));
+        $event->getResponse()->headers->setCookie(new Cookie('currency', $request->attributes->get('_currency_id')));
     }
 
     private function getActiveCategoryId(Request $request, ShopContext $context)

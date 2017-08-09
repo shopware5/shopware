@@ -45,9 +45,7 @@ class DisplayInNavigationConditionHandler implements HandlerInterface
         TranslationContext $context
     ): void {
         $builder->andWhere('category.hide_top = :displayInNavigation');
-
         /* @var DisplayInNavigationCondition $criteriaPart */
-        $builder->setParameter(':displayInNavigation', !$criteriaPart->display());
-
+        $builder->setParameter('displayInNavigation', !$criteriaPart->display());
     }
 }

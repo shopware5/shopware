@@ -26,6 +26,8 @@ namespace Shopware\Currency\Gateway;
 
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Currency\Struct\CurrencyCollection;
+use Shopware\Currency\Struct\CurrencySearchResult;
+use Shopware\Search\Criteria;
 
 class CurrencyRepository
 {
@@ -34,13 +36,24 @@ class CurrencyRepository
      */
     private $reader;
 
-    public function __construct(CurrencyReader $reader)
+    /**
+     * @var CurrencySearcher
+     */
+    private $searcher;
+
+    public function __construct(CurrencyReader $reader, CurrencySearcher $searcher)
     {
         $this->reader = $reader;
+        $this->searcher = $searcher;
     }
 
     public function read(array $ids, TranslationContext $context): CurrencyCollection
     {
         return $this->reader->read($ids, $context);
+    }
+
+    public function search(Criteria $criteria, TranslationContext $context): CurrencySearchResult
+    {
+        return $this->searcher->search($criteria, $context);
     }
 }

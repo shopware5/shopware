@@ -68,4 +68,12 @@ class ShopCollection extends Collection
     {
         return $element->getId();
     }
+
+    public function sortByPosition(): ShopCollection
+    {
+        $this->sort(function(Shop $a, Shop $b) {
+            return $a->getPosition() <=> $b->getPosition();
+        });
+        return $this;
+    }
 }

@@ -27,7 +27,7 @@ namespace Shopware\Category\Gateway\Handler;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\Condition\ParentCategoryCondition;
+use Shopware\Search\Condition\ParentCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Search\HandlerInterface;
@@ -36,7 +36,7 @@ class ParentCategoryConditionHandler implements HandlerInterface
 {
     public function supports(CriteriaPartInterface $criteriaPart): bool
     {
-        return $criteriaPart instanceof ParentCategoryCondition;
+        return $criteriaPart instanceof ParentCondition;
     }
 
     public function handle(
@@ -45,7 +45,7 @@ class ParentCategoryConditionHandler implements HandlerInterface
         Criteria $criteria,
         TranslationContext $context
     ): void {
-        /* @var ParentCategoryCondition $criteriaPart */
+        /* @var ParentCondition $criteriaPart */
         $builder->andWhere('category.parent IN (:parentIds)');
         $builder->setParameter('parentIds', $criteriaPart->getParentIds(), Connection::PARAM_INT_ARRAY);
     }

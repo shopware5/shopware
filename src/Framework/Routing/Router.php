@@ -25,6 +25,8 @@
 namespace Shopware\Framework\Routing;
 
 use Psr\Log\LoggerInterface;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Storefront\Session\ShopSubscriber;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -184,8 +186,11 @@ class Router implements RouterInterface, RequestMatcherInterface
 
         //save detected shop to context for further processes
         $this->context->setParameter('shop', $shop);
+
+        $currencyId = $this->getCurrencyId($request, (int) $shop['currency_id']);
+
         $request->attributes->set('_shop_id', $shop['id']);
-        $request->attributes->set('_currency_id', $shop['currency_id']);
+        $request->attributes->set('_currency_id', $currencyId);
         $request->attributes->set('_shop', $shop);
 
         //set shop locale
@@ -256,5 +261,28 @@ class Router implements RouterInterface, RequestMatcherInterface
         $base = $generator->generate('homepage', [], UrlGenerator::ABSOLUTE_URL);
 
         return rtrim($base, '/') . '/' . ltrim($url, '/');
+    }
+
+    protected function getCurrencyId(Request $request, int $shopCurrencyId): int
+    {
+        if ($this->context->getMethod() === 'POST' && $request->get('__currency')) {
+            return (int)$request->get('__currency');
+        }
+
+        if ($request->cookies->has('currency')) {
+            return (int)$request->cookies->has('currency');
+        }
+
+        if ($request->attributes->has('_currency')) {
+            return (int) $request->attributes->get('_currency');
+        }
+
+        if ($request->attributes->has(ShopSubscriber::SHOP_CONTEXT_PROPERTY)) {
+            /** @var ShopContext $context */
+            $context = $request->attributes->get(ShopSubscriber::SHOP_CONTEXT_PROPERTY);
+            return $context->getCurrency()->getId();
+        }
+
+        return $shopCurrencyId;
     }
 }

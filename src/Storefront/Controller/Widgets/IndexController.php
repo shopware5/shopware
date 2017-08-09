@@ -26,66 +26,59 @@ namespace Shopware\Storefront\Controller\Widgets;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Storefront\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Shopware\Search\Condition\ActiveCondition;
+use Shopware\Search\Condition\ParentCondition;
+use Shopware\Search\Condition\ShopCondition;
+use Shopware\Search\Criteria;
 
 class IndexController extends Controller
 {
     /**
      * @Route("/widgets/index/shopMenu", name="widgets/shopMenu")
      * @Method({"GET"})
+     * @param ShopContext $context
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function shopMenuAction(Request $request)
+    public function shopMenuAction(ShopContext $context, Request $request)
     {
-        $shop = $request->attributes->get('_shop');
-        //        $shop['children'] = $this->getChildrenByShopId($shop['id']);
-        $shop['children'] = $this->getChildrenByShopId(1);
-        $shop['currencies'] = [];
-        $currencies = [];
-
-        if (!$request->get('hideCurrency', false)) {
-            //            $currencies = $this->getCurrenciesByShopId($shop['id']);
-            $currencies = $this->getCurrenciesByShopId(1);
-        }
-
-        $languages = array_filter(
-            $shop['children'],
-            function ($language) {
-                return (bool) $language['active'];
-            }
-        );
-
-        array_unshift($languages, $shop);
-
         return $this->render('@Shopware/widgets/index/shop_menu.html.twig', [
-            'shop' => $shop,
-            'currencies' => $currencies,
-            'languages' => $languages,
+            'shop' => $context->getShop(),
+            'currency' => $context->getCurrency(),
+            'shops' => $this->loadShops($context),
+            'currencies' => $this->loadCurrencies($context),
         ]);
     }
 
-    private function getCurrenciesByShopId(int $id)
+    private function loadShops(ShopContext $context)
     {
-        $builder = $this->container->get('dbal_connection')->createQueryBuilder();
+        $criteria = new Criteria();
 
-        return $builder->select(['currency.id', 'currency.currency', 'currency.templatechar as symbol'])
-            ->from('s_core_shop_currencies', 'shop_currency')
-            ->innerJoin('shop_currency', 's_core_currencies', 'currency', 'currency.id = shop_currency.currency_id')
-            ->where('shop_currency.shop_id = :shopId')
-            ->setParameter('shopId', $id)
-            ->execute()
-            ->fetchAll();
+        $criteria->addCondition(new ParentCondition([$context->getShop()->getParentId()]));
+        $criteria->addCondition(new ActiveCondition(true));
+
+        $repo = $this->get('shopware.shop.gateway.shop_repository');
+
+        $shops = $repo->search($criteria, $context->getTranslationContext());
+
+        $ids = array_merge([$context->getShop()->getParentId()], $shops->getIds());
+        $shops = $repo->read($ids, $context->getTranslationContext());
+
+        return $shops->sortByPosition();
     }
 
-    private function getChildrenByShopId($id)
+    private function loadCurrencies(ShopContext $context)
     {
-        $builder = $this->container->get('dbal_connection')->createQueryBuilder();
+        $criteria = new Criteria();
+        $criteria->addCondition(new ShopCondition([$context->getShop()->getParentId()]));
 
-        return $builder->select(['shop.*'])
-            ->from('s_core_shops', 'shop')
-            ->where('shop.main_id = :shopId')
-            ->setParameter('shopId', $id)
-            ->execute()
-            ->fetchAll();
+        $repo = $this->get('shopware.currency.gateway.currency_repository');
+        $currencies = $repo->search($criteria, $context->getTranslationContext());
+        $currencies->sortByPosition();
+
+        return $currencies;
     }
 }

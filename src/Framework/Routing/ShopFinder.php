@@ -26,6 +26,8 @@ namespace Shopware\Framework\Routing;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Storefront\Session\ShopSubscriber;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 
@@ -52,6 +54,16 @@ class ShopFinder
         //use shop cookie before detect shop by url
         if ($request->cookies->get('shop')) {
             return $this->loadShop((int) $request->cookies->get('shop'));
+        }
+
+        if ($request->attributes->has('_shop')) {
+            return $request->attributes->get('_shop');
+        }
+
+        if ($request->attributes->has(ShopSubscriber::SHOP_CONTEXT_PROPERTY)) {
+            /** @var ShopContext $context */
+            $context = $request->attributes->get(ShopSubscriber::SHOP_CONTEXT_PROPERTY);
+            return $this->loadShop($context->getShop()->getId());
         }
 
         $query = $this->createQuery();

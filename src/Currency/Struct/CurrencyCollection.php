@@ -68,4 +68,12 @@ class CurrencyCollection extends Collection
     {
         return $element->getId();
     }
+
+    public function sortByPosition(): CurrencyCollection
+    {
+        $this->sort(function(Currency $a, Currency $b) {
+            return $a->getPosition() <=> $b->getPosition();
+        });
+        return $this;
+    }
 }
