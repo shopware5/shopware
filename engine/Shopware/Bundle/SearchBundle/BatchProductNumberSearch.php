@@ -100,7 +100,7 @@ class BatchProductNumberSearch
         }
 
         // use internal pointer to return different products to each request with the same criteria/context
-        $items = array_slice($baseProducts, $this->pointer[$key], $numberOfProducts);
+        $items = array_slice($baseProducts, $this->pointer[$key], $numberOfProducts, true);
         $missingItems = $numberOfProducts - count($items);
         $this->pointer[$key] += count($items);
 
