@@ -30,25 +30,23 @@ use Shopware\Bundle\StoreFrontBundle\Product\ProductGateway;
 use Shopware\Cart\Cart\CalculatedCart;
 use Shopware\Cart\Product\CalculatedProduct;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Product\Gateway\ProductRepository;
 
 class ViewProductTransformer implements ViewLineItemTransformerInterface
 {
-    /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Product\ProductGateway
-     */
-    private $productGateway;
-
     /**
      * @var MediaServiceInterface
      */
     private $mediaService;
 
-    public function __construct(
-        ProductGateway $listProductGateway,
-        MediaServiceInterface $mediaService
-    ) {
-        $this->productGateway = $listProductGateway;
-        $this->mediaService = $mediaService;
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -65,17 +63,21 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
             return;
         }
 
-        $listProducts = $this->productGateway->getList($collection->getIdentifiers(), $context);
+        $listProducts = $this->productRepository->read(
+            $collection->getIdentifiers(),
+            $context->getTranslationContext(),
+            ProductRepository::FETCH_MINIMAL
+        );
 
-        $covers = $this->mediaService->getVariantCovers($listProducts, $context);
+//        $covers = $this->mediaService->getVariantCovers($listProducts, $context);
 
         foreach ($listProducts as $listProduct) {
             /** @var CalculatedProduct $calculated */
             $calculated = $collection->get($listProduct->getNumber());
 
-            if (isset($covers[$listProduct->getNumber()])) {
-                $listProduct->setCover($covers[$listProduct->getNumber()]);
-            }
+//            if (isset($covers[$listProduct->getNumber()])) {
+//                $listProduct->setCover($covers[$listProduct->getNumber()]);
+//            }
 
             $template = ViewProduct::createFromProducts($listProduct, $calculated);
 

@@ -45,9 +45,15 @@ class ProductGateway implements ProductGatewayInterface
      */
     private $priceGateway;
 
-    public function __construct(ProductPriceGatewayInterface $priceGateway)
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    public function __construct(ProductPriceGatewayInterface $priceGateway, Connection $connection)
     {
         $this->priceGateway = $priceGateway;
+        $this->connection = $connection;
     }
 
     public function get(array $numbers, ShopContext $context): ProductDataCollection
@@ -82,28 +88,28 @@ class ProductGateway implements ProductGatewayInterface
     private function getDetails(array $numbers, ShopContext $context): array
     {
         /** @var QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select([
-            'variant.ordernumber',
-            'variant.instock',
+            'variant.order_number',
+            'variant.stock',
             'variant.weight',
             'variant.width',
             'variant.height',
             'variant.length',
-            'variant.shippingtime',
-            "GROUP_CONCAT(DISTINCT customerGroups.customergroupId SEPARATOR '|') as blocked_groups",
+            'variant.shipping_time',
+            "GROUP_CONCAT(DISTINCT customerGroups.customer_group_id SEPARATOR '|') as blocked_groups",
             "GROUP_CONCAT(DISTINCT shop.id SEPARATOR '|') AS allowed_shops",
-            'article.laststock as closeout',
+            'product.last_stock as closeout',
         ]);
-        $query->from('s_articles_details', 'variant');
-        $query->innerJoin('variant', 's_articles', 'article', 'article.id = variant.articleID');
-        $query->leftJoin('variant', 's_articles_avoid_customergroups', 'customerGroups', 'customerGroups.articleID = variant.articleID');
-        $query->leftJoin('variant', 's_articles_categories_ro', 'categories_ro', 'categories_ro.articleID = variant.articleID');
-        $query->leftJoin('categories_ro', 's_core_shops', 'shop', 'shop.category_id = categories_ro.categoryID');
+        $query->from('product_detail', 'variant');
+        $query->innerJoin('variant', 'product', 'product', 'product.id = variant.product_id');
+        $query->leftJoin('variant', 'product_avoid_customer_group', 'customerGroups', 'customerGroups.product_id = variant.product_id');
+        $query->leftJoin('variant', 'product_category_ro', 'categories_ro', 'categories_ro.product_id = variant.product_id');
+        $query->leftJoin('categories_ro', 's_core_shops', 'shop', 'shop.category_id = categories_ro.category_id');
         $query->groupBy('variant.id');
 
-        $query->where('variant.ordernumber IN (:numbers)');
+        $query->where('variant.order_number IN (:numbers)');
         $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
@@ -116,7 +122,7 @@ class ProductGateway implements ProductGatewayInterface
         $delayInterval = new \DateInterval('P10D');
 
         return new DeliveryInformation(
-            (int) $row['instock'],
+            (int) $row['stock'],
             (float) $row['height'],
             (float) $row['width'],
             (float) $row['length'],

@@ -27,6 +27,7 @@ namespace Shopware\CartBridge\View;
 
 use Shopware\Cart\LineItem\CalculatedLineItemInterface;
 use Shopware\Cart\Product\CalculatedProduct;
+use Shopware\Media\Struct\Media;
 use Shopware\Product\Struct\Product;
 
 class ViewProduct extends Product implements ViewLineItemInterface
@@ -41,9 +42,8 @@ class ViewProduct extends Product implements ViewLineItemInterface
      */
     protected $type = 'product';
 
-    public function __construct(int $id, int $variantId, string $number, CalculatedProduct $product)
+    public function __construct(string $uuid, string $variantUuid, string $number, CalculatedProduct $product)
     {
-        parent::__construct($id, $variantId, $number);
         $this->product = $product;
     }
 
@@ -78,6 +78,11 @@ class ViewProduct extends Product implements ViewLineItemInterface
         }
 
         return $product;
+    }
+
+    public function getCover(): ? Media
+    {
+        return null;
     }
 
     public function jsonSerialize(): array

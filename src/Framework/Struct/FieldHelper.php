@@ -320,7 +320,7 @@ class FieldHelper
 
         $fields = array_merge(
             $fields,
-            $this->getTableFields('s_articles_prices_attributes', 'priceAttribute')
+            $this->getTableFields('product_price_attributes', 'priceAttribute')
         );
 
         return $fields;

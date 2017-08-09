@@ -114,7 +114,7 @@ class CategoryHydrator
             );
         }
 
-        if ($data['__seoUrl_id']) {
+        if (array_key_exists('__seoUrl_id', $data) && $data['__seoUrl_id']) {
             $category->setSeoUrl(
                 $this->seoUrlHydrator->hydrate($data)
             );

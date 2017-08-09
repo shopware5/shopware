@@ -34,6 +34,7 @@
 
         <service id="shopware.cart.product.gateway" class="Shopware\CartBridge\Product\ProductGateway" >
             <argument id="shopware.cart.product.price_gateway" type="service"/>
+            <argument id="dbal_connection" type="service"/>
         </service>
 
         <service id="shopware.cart.product.price_gateway" class="Shopware\CartBridge\Product\ProductPriceGateway">
@@ -46,7 +47,7 @@
             <argument type="service" id="shopware.storefront.context.storefront_context_service" />
             <argument type="service" id="session" />
             <argument type="service" id="shopware.cart.view.cart_transformer" />
-            <argument type="service" id="corelogger" />
+            <argument type="service" id="logger" />
             <argument type="service" id="shopware.cart.order.persister" />
         </service>
 
@@ -60,8 +61,7 @@
         </service>
 
         <service id="shopware.cart.view.product_transformer" class="Shopware\CartBridge\View\ViewProductTransformer">
-            <argument type="service" id="storefront.product.gateway" />
-            <argument type="service" id="storefront.media.service" />
+            <argument type="service" id="shopware.product.gateway.product_repository" />
         </service>
 
         <service id="shopware.cart.view.cart_transformer" class="Shopware\CartBridge\View\ViewCartTransformer">

@@ -49,18 +49,17 @@ class DeliveryCollection extends Collection
     /**
      * Sorts the delivery collection by earliest delivery date
      */
-    public function sort(): void
+    public function sortDeliveries(): DeliveryCollection
     {
-        usort(
-            $this->elements,
-            function (Delivery $a, Delivery $b) {
-                if ($a->getLocation() !== $b->getLocation()) {
-                    return -1;
-                }
-
-                return $a->getDeliveryDate()->getEarliest() > $b->getDeliveryDate()->getEarliest();
+        $this->sort(function(Delivery $a, Delivery $b) {
+            if ($a->getLocation() !== $b->getLocation()) {
+                return -1;
             }
-        );
+
+            return $a->getDeliveryDate()->getEarliest() > $b->getDeliveryDate()->getEarliest();
+        });
+
+        return $this;
     }
 
     public function getDelivery(DeliveryDate $deliveryDate, ShippingLocation $location): ? Delivery
