@@ -85,5 +85,11 @@
 
         <service class="Shopware\Framework\Struct\AttributeHydrator" id="shopware.framework.struct.attribute_hydrator"/>
 
+
+
+        <service class="Symfony\Component\Routing\RouteAssembler" id="symfony.component.routing.route_assembler">
+            <argument id="shopware.router" type="service"/>
+        </service>
+
     </services>
 </container>

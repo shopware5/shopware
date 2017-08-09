@@ -41,17 +41,23 @@ class SeoUrl extends Struct
     /**
      * @var string
      */
+    protected $name;
+
+    /**
+     * @var string
+     */
     protected $pathInfo;
+
+    /**
+     * @var string
+     */
+    protected $seoPathInfo;
 
     /**
      * @var string
      */
     protected $url;
 
-    /**
-     * @var string
-     */
-    protected $name;
 
     /**
      * @var bool
@@ -59,14 +65,9 @@ class SeoUrl extends Struct
     protected $isCanonical;
 
     /**
-     * @var null|string
-     */
-    protected $canonicalUrl;
-
-    /**
      * @var string
      */
-    protected $urlHash;
+    protected $seoHash;
 
     /**
      * @var int
@@ -84,24 +85,26 @@ class SeoUrl extends Struct
         string $name,
         int $foreignKey,
         string $pathInfo,
+        string $seoPathInfo,
         string $url,
         \DateTime $createdAt,
         bool $isCanonical = false
     ) {
         $this->id = $id;
         $this->pathInfo = '/' . trim($pathInfo, '/');
-        $this->url = '/' . trim($url, '/');
+        $this->seoPathInfo = '/' . trim($seoPathInfo, '/');
         $this->name = $name;
         $this->shopId = $shopId;
         $this->isCanonical = $isCanonical;
-        $this->urlHash = self::createUrlHash($this->url);
+        $this->seoHash = self::createSeoHash($this->seoPathInfo);
         $this->foreignKey = $foreignKey;
         $this->createdAt = $createdAt;
+        $this->url = $url;
     }
 
-    public static function createUrlHash(string $url): string
+    public static function createSeoHash(string $seoPathInfo): string
     {
-        return sha1($url);
+        return sha1($seoPathInfo);
     }
 
     public function getPathInfo(): string
@@ -109,9 +112,9 @@ class SeoUrl extends Struct
         return $this->pathInfo;
     }
 
-    public function getUrl(): string
+    public function getSeoPathInfo(): string
     {
-        return $this->url;
+        return $this->seoPathInfo;
     }
 
     public function getName(): string
@@ -144,8 +147,13 @@ class SeoUrl extends Struct
         return $this->createdAt;
     }
 
-    public function getUrlHash(): string
+    public function getSeoHash(): string
     {
-        return $this->urlHash;
+        return $this->seoHash;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
     }
 }

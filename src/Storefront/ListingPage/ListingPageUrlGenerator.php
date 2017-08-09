@@ -108,13 +108,13 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         foreach ($result as $identity) {
             $pathInfo = $this->generator->generate(self::ROUTE_NAME, ['id' => $identity->getId()]);
 
-            $url = $this->buildSeoUrl($identity->getId(), $categories);
+            $seoPathInfo = $this->buildSeoUrl($identity->getId(), $categories);
 
-            if (!$url || !$pathInfo) {
+            if (!$seoPathInfo || !$pathInfo) {
                 continue;
             }
 
-            $url = rtrim($url, '/') . '/' . $identity->getId();
+            $seoPathInfo = rtrim($seoPathInfo, '/') . '/' . $identity->getId();
 
             $routes->add(
                 new SeoUrl(
@@ -123,7 +123,8 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
                     self::ROUTE_NAME,
                     $identity->getId(),
                     $pathInfo,
-                    $url,
+                    $seoPathInfo,
+                    '',
                     new \DateTime(),
                     !$existingCanonicals->hasPathInfo($pathInfo)
                 )

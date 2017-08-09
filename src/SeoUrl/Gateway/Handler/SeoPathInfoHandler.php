@@ -22,44 +22,31 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Search\Condition;
+namespace Shopware\SeoUrl\Gateway\Handler;
 
-use Shopware\Search\ConditionInterface;
-use Shopware\SeoUrl\Struct\SeoUrl;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Search\Condition\SeoPathInfoCondition;
+use Shopware\Search\Criteria;
+use Shopware\Search\CriteriaPartInterface;
+use Shopware\Search\HandlerInterface;
 
-class UrlCondition implements ConditionInterface
+class SeoPathInfoHandler implements HandlerInterface
 {
-    /**
-     * @var string[]
-     */
-    protected $urls;
-
-    /**
-     * @var array
-     */
-    protected $hashes;
-
-    public function __construct(array $urls)
+    public function supports(CriteriaPartInterface $criteriaPart): bool
     {
-        $this->hashes = array_map(function ($url) {
-            return SeoUrl::createUrlHash($url);
-        }, $urls);
-
-        $this->urls = $urls;
+        return $criteriaPart instanceof SeoPathInfoCondition;
     }
 
-    public function getUrls(): array
-    {
-        return $this->urls;
-    }
-
-    public function getName(): string
-    {
-        return self::class;
-    }
-
-    public function getHashes(): array
-    {
-        return $this->hashes;
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        QueryBuilder $builder,
+        Criteria $criteria,
+        TranslationContext $context
+    ): void {
+        /* @var SeoPathInfoCondition $criteriaPart */
+        $builder->andWhere('seoUrl.seo_hash IN (:hashes)');
+        $builder->setParameter('hashes', $criteriaPart->getHashes(), Connection::PARAM_STR_ARRAY);
     }
 }

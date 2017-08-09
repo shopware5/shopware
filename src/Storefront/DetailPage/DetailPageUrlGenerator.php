@@ -106,9 +106,9 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
             }
 
             $pathInfo = $this->generator->generate(self::ROUTE_NAME, ['number' => $identity->getNumber()]);
-            $url = $this->slugify->slugify($product->getName()) . '/' . $this->slugify->slugify($product->getNumber());
+            $seoPathInfo = $this->slugify->slugify($product->getName()) . '/' . $this->slugify->slugify($product->getNumber());
 
-            if (!$url || !$pathInfo) {
+            if (!$seoPathInfo || !$pathInfo) {
                 continue;
             }
 
@@ -119,7 +119,8 @@ class DetailPageUrlGenerator implements SeoUrlGeneratorInterface
                     self::ROUTE_NAME,
                     $identity->getUuid(),
                     $pathInfo,
-                    $url,
+                    $seoPathInfo,
+                    '',
                     new \DateTime(),
                     !$existingCanonicals->hasPathInfo($pathInfo)
                 )

@@ -5,7 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service class="Shopware\SeoUrl\Struct\SeoUrlHydrator" id="shopware.seo_url.struct.seo_url_hydrator"/>
+        <service class="Shopware\SeoUrl\Struct\SeoUrlHydrator" id="shopware.seo_url.struct.seo_url_hydrator">
+            <argument type="service" id="service_container" />
+        </service>
 
         <service class="Shopware\SeoUrl\Gateway\SeoUrlReader" id="shopware.seo_url.gateway.seo_url_reader">
             <argument id="dbal_connection" type="service"/>
@@ -16,7 +18,7 @@
         <service class="Shopware\SeoUrl\Gateway\SeoUrlSearcher" id="shopware.seo_url.gateway.seo_url_searcher">
             <argument id="dbal_connection" type="service"/>
             <argument type="collection">
-                <argument type="service" id="shopware.seo_url.gateway.handler.url_handler" />
+                <argument type="service" id="shopware.seo_url.gateway.handler.seo_path_info_handler" />
                 <argument type="service" id="shopware.seo_url.gateway.handler.shop_handler" />
                 <argument type="service" id="shopware.seo_url.gateway.handler.path_info_handler" />
                 <argument type="service" id="shopware.seo_url.gateway.handler.canonical_handler" />
@@ -27,7 +29,7 @@
             <argument id="shopware.seo_url.struct.seo_url_hydrator" type="service"/>
         </service>
 
-        <service class="Shopware\SeoUrl\Gateway\Handler\UrlHandler" id="shopware.seo_url.gateway.handler.url_handler"/>
+        <service class="Shopware\SeoUrl\Gateway\Handler\SeoPathInfoHandler" id="shopware.seo_url.gateway.handler.seo_path_info_handler"/>
         <service class="Shopware\SeoUrl\Gateway\Handler\ShopHandler" id="shopware.seo_url.gateway.handler.shop_handler"/>
         <service class="Shopware\SeoUrl\Gateway\Handler\PathInfoHandler" id="shopware.seo_url.gateway.handler.path_info_handler"/>
         <service class="Shopware\SeoUrl\Gateway\Handler\CanonicalHandler" id="shopware.seo_url.gateway.handler.canonical_handler"/>

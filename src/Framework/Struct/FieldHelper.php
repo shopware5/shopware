@@ -1497,10 +1497,10 @@ class FieldHelper
             'seoUrl.name as __seoUrl_name',
             'seoUrl.shop_id as __seoUrl_shop_id',
             'seoUrl.path_info as __seoUrl_path_info',
-            'seoUrl.url as __seoUrl_url',
+            'seoUrl.seo_path_info as __seoUrl_seo_path_info',
             'seoUrl.created_at as __seoUrl_created_at',
             'seoUrl.is_canonical as __seoUrl_is_canonical',
-            'seoUrl.url_hash as __seoUrl_url_hash',
+            'seoUrl.seo_hash as __seoUrl_seo_hash',
         ];
     }
 

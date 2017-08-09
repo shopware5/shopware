@@ -29,6 +29,7 @@ namespace Shopware\Category\Struct;
 use Shopware\Framework\Struct\Struct;
 use Shopware\Media\Struct\Media;
 use Shopware\ProductStream\Struct\ProductStream;
+use Shopware\SeoUrl\Struct\SeoUrl;
 
 /**
  * @category  Shopware
@@ -138,11 +139,6 @@ class Category extends Struct
     protected $hideSortings;
 
     /**
-     * @var Category[]
-     */
-    protected $children = [];
-
-    /**
      * @var bool
      */
     protected $isShopCategory;
@@ -181,6 +177,16 @@ class Category extends Struct
      * @var array
      */
     protected $facetIds;
+
+    /**
+     * @var SeoUrl|null
+     */
+    protected $seoUrl;
+
+    /**
+     * @var Category[]
+     */
+    protected $children = [];
 
     public function __construct(int $id, ?int $parentId, array $path, string $name)
     {
@@ -612,5 +618,15 @@ class Category extends Struct
     public function setFacetIds(array $facetIds): void
     {
         $this->facetIds = $facetIds;
+    }
+
+    public function setSeoUrl(?SeoUrl $seoUrl)
+    {
+        $this->seoUrl = $seoUrl;
+    }
+
+    public function getSeoUrl(): ?SeoUrl
+    {
+        return $this->seoUrl;
     }
 }

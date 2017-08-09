@@ -62,6 +62,7 @@ class CategoryReader
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getRelatedProductStreamFields())
+            ->addSelect($this->fieldHelper->getSeoUrlFields())
             ->addSelect('GROUP_CONCAT(customerGroups.customer_group_id) as __category_customer_groups')
         ;
 

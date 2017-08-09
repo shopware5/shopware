@@ -109,5 +109,9 @@
             <argument id="shopware.storefront.context.storefront_context_service" type="service"/>
         </service>
 
+        <service class="Shopware\Storefront\Navigation\NavigationLoader" id="shopware.storefront.navigation.navigation_loader">
+            <argument id="shopware.category.gateway.category_repository" type="service"/>
+        </service>
+
     </services>
 </container>

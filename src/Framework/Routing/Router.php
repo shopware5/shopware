@@ -136,9 +136,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
 
         //rewrite base url for url generator
-        $stripBaseUrl = $shop['base_url'] ?? $shop['base_path'];
-        $stripBaseUrl = rtrim($stripBaseUrl, '/') . '/';
-        $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
+        $stripBaseUrl = $this->rewriteBaseUrl($shop['base_url'], $shop['base_path']);
 
         $route = $this->getRouteCollection()->get($name);
         if ($route->getOption('seo') !== true) {
@@ -156,7 +154,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         $url = $generator->generate($name, $parameters, $referenceType);
 
         if ($seoUrl) {
-            $url = str_replace($pathinfo, $seoUrl->getUrl(), $url);
+            $url = str_replace($pathinfo, $seoUrl->getSeoPathInfo(), $url);
         }
 
         return rtrim($url, '/');
@@ -194,12 +192,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         //set shop locale
         $request->setLocale($shop['locale']);
 
-        //generate new path info for detected shop
-        $stripBaseUrl = $shop['base_url'] ?? $shop['base_path'];
-        $stripBaseUrl = rtrim($stripBaseUrl, '/') . '/';
-
-        //rewrite base url for url generator
-        $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
+        $stripBaseUrl = $this->rewriteBaseUrl($shop['base_url'], $shop['base_path']);
 
         // strip base url from path info
         $pathinfo = $request->getBaseUrl() . $request->getPathInfo();
@@ -217,7 +210,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         if (!$seoUrl->isCanonical()) {
             $redirectUrl = $this->urlResolver->getUrl($shop['id'], $seoUrl->getPathInfo());
 
-            $request->attributes->set(self::SEO_REDIRECT_URL, $redirectUrl->getUrl());
+            $request->attributes->set(self::SEO_REDIRECT_URL, $redirectUrl->getSeoPathInfo());
         }
 
         return $this->match($pathinfo);
@@ -239,5 +232,30 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
 
         return $routes;
+    }
+
+    private function rewriteBaseUrl(?string $baseUrl, string $basePath): string
+    {
+        //generate new path info for detected shop
+        $stripBaseUrl = $baseUrl ?? $basePath;
+        $stripBaseUrl = rtrim($stripBaseUrl, '/').'/';
+
+        //rewrite base url for url generator
+        $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
+
+        return $stripBaseUrl;
+    }
+
+    public function assemble(string $url): string
+    {
+        $generator = new UrlGenerator(
+            $this->getRouteCollection(),
+            $this->getContext(),
+            $this->logger
+        );
+
+        $base = $generator->generate('homepage', [], UrlGenerator::ABSOLUTE_URL);
+
+        return rtrim($base, '/') . '/' . ltrim($url, '/');
     }
 }

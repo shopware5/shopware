@@ -24,6 +24,10 @@
 
 namespace Shopware\Category\Struct;
 
+use Shopware\Framework\Struct\AttributeHydrator;
+use Shopware\ProductStream\Struct\ProductStreamHydrator;
+use Shopware\SeoUrl\Struct\SeoUrlHydrator;
+
 /**
  * @category  Shopware
  *
@@ -31,35 +35,30 @@ namespace Shopware\Category\Struct;
  */
 class CategoryHydrator
 {
-    //    /**
-    //     * @var AttributeHydrator
-    //     */
-    //    private $attributeHydrator;
-    //
-    //    /**
-    //     * @var \Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator
-    //     */
-    //    private $mediaHydrator;
-    //
-    //    /**
-    //     * @var ProductStreamHydrator
-    //     */
-    //    private $productStreamHydrator;
-    //
-    //    /**
-    //     * @param AttributeHydrator                                     $attributeHydrator
-    //     * @param \Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator $mediaHydrator
-    //     * @param ProductStreamHydrator                                 $productStreamHydrator
-    //     */
-    //    public function __construct(
-    //        AttributeHydrator $attributeHydrator,
-    //        MediaHydrator $mediaHydrator,
-    //        ProductStreamHydrator $productStreamHydrator
-    //    ) {
-    //        $this->attributeHydrator = $attributeHydrator;
-    //        $this->mediaHydrator = $mediaHydrator;
-    //        $this->productStreamHydrator = $productStreamHydrator;
-    //    }
+    /**
+     * @var AttributeHydrator
+     */
+    private $attributeHydrator;
+
+    /**
+     * @var ProductStreamHydrator
+     */
+    private $productStreamHydrator;
+
+    /**
+     * @var SeoUrlHydrator
+     */
+    private $seoUrlHydrator;
+
+    public function __construct(
+        AttributeHydrator $attributeHydrator,
+        ProductStreamHydrator $productStreamHydrator,
+        SeoUrlHydrator $seoUrlHydrator
+    ) {
+        $this->attributeHydrator = $attributeHydrator;
+        $this->productStreamHydrator = $productStreamHydrator;
+        $this->seoUrlHydrator = $seoUrlHydrator;
+    }
 
     public function hydrate(array $data): Category
     {
@@ -99,21 +98,27 @@ class CategoryHydrator
             ]
         );
 
-        //        if ($data['__category_media_id']) {
-        //            $category->setMedia(
-        //                $this->mediaHydrator->hydrate($data)
-        //            );
-        //        }
-        //
-        //        if ($data['__categoryAttribute_id']) {
-        //            $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
-        //        }
-        //
-        //        if ($data['__category_stream_id']) {
-        //            $category->setProductStream(
-        //                $this->productStreamHydrator->hydrate($data)
-        //            );
-        //        }
+//        if ($data['__category_media_id']) {
+//            $category->setMedia(
+//                $this->mediaHydrator->hydrate($data)
+//            );
+//        }
+
+        if ($data['__categoryAttribute_id']) {
+            $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
+        }
+
+        if ($data['__category_stream_id']) {
+            $category->setProductStream(
+                $this->productStreamHydrator->hydrate($data)
+            );
+        }
+
+        if ($data['__seoUrl_id']) {
+            $category->setSeoUrl(
+                $this->seoUrlHydrator->hydrate($data)
+            );
+        }
 
         return $category;
     }
