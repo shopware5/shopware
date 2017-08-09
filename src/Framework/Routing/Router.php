@@ -175,8 +175,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     public function matchRequest(Request $request): array
     {
-        $shop = $this->shopFinder->findShopByRequest($this->context);
-
+        $shop = $this->shopFinder->findShopByRequest($this->context, $request);
         $pathinfo = $this->context->getPathInfo();
 
         if (!$shop) {

@@ -25,6 +25,8 @@
 namespace Shopware\Framework\Routing;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 
 class ShopFinder
@@ -39,13 +41,24 @@ class ShopFinder
         $this->connection = $connection;
     }
 
-    public function findShopByRequest(RequestContext $requestContext): array
+    public function findShopByRequest(RequestContext $requestContext, Request $request): array
     {
-        $query = $this->connection->createQueryBuilder();
+        //shop switcher used?
+        if ($requestContext->getMethod() === 'POST' && $request->get('__shop')) {
+            $shop = $this->loadShop((int) $request->get('__shop'));
+            return $shop;
+        }
 
-        $query->select(['shop.*', 'locale.locale']);
-        $query->from('s_core_shops', 'shop');
-        $query->innerJoin('shop', 's_core_locales', 'locale', 'locale.id=shop.locale_id');
+        //use shop cookie before detect shop by url
+        if ($request->cookies->get('shop')) {
+            return $this->loadShop((int) $request->cookies->get('shop'));
+        }
+
+        $query = $this->createQuery();
+        $query->andWhere('shop.active = 1');
+        //first use default shop than main shops
+        $query->addOrderBy('shop.default', 'DESC');
+        $query->addOrderBy('shop.main_id', 'ASC');
 
         $shops = $query->execute()->fetchAll();
 
@@ -54,8 +67,7 @@ class ShopFinder
         foreach ($shops as &$shop) {
             $base = $shop['base_url'] ?? $shop['base_path'];
 
-            $shop['base_url'] = rtrim($shop['base_url'], '/') . '/';
-            $shop['base_path'] = rtrim($shop['base_path'], '/') . '/';
+            $shop = $this->fixUrls($shop);
 
             $base = rtrim($base, '/') . '/';
             $paths[$base] = $shop;
@@ -85,5 +97,68 @@ class ShopFinder
         }
 
         return $bestMatch;
+    }
+
+    private function loadShop(int $shopId): array
+    {
+        $query = $this->createQuery();
+        $query->andWhere('shop.id = :shopId');
+        $query->setParameter('shopId', $shopId);
+        $shop = $query->execute()->fetch(\PDO::FETCH_ASSOC);
+
+        return $this->fixUrls($shop);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    protected function createQuery(): QueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select([
+            'shop.id',
+            'shop.uuid',
+            'shop.main_id',
+            'shop.name',
+            'shop.title',
+            'shop.position',
+            'shop.base_url',
+            'shop.hosts',
+            'shop.category_id',
+            'shop.locale_id',
+            'shop.currency_id',
+            'shop.customer_group_id',
+            'shop.fallback_id',
+            'shop.customer_scope',
+            'shop.default',
+            'shop.active',
+            "COALESCE(shop.host, main.host, 'localhost') as host",
+            "COALESCE(shop.base_path, main.base_path, '') as base_path",
+            "COALESCE(shop.secure, main.secure) as secure",
+            "COALESCE(shop.template_id, main.template_id) as template_id",
+            "COALESCE(shop.document_template_id, main.document_template_id) as document_template_id",
+            "COALESCE(shop.payment_id, main.payment_id) as payment_id",
+            "COALESCE(shop.dispatch_id, main.dispatch_id) as dispatch_id",
+            "COALESCE(shop.country_id, main.country_id) as country_id",
+            "COALESCE(shop.tax_calculation_type, main.tax_calculation_type) as tax_calculation_type",
+            'locale.locale'
+        ]);
+        $query->from('s_core_shops', 'shop');
+        $query->leftJoin('shop', 's_core_shops', 'main', 'main.id = shop.main_id');
+        $query->innerJoin('shop', 's_core_locales', 'locale', 'locale.id=shop.locale_id');
+        
+        return $query;
+    }
+
+    /**
+     * @param $shop
+     * @return mixed
+     */
+    protected function fixUrls($shop)
+    {
+        $shop['base_url'] = rtrim($shop['base_url'], '/').'/';
+        $shop['base_path'] = rtrim($shop['base_path'], '/').'/';
+
+        return $shop;
     }
 }

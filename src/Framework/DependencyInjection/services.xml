@@ -76,16 +76,10 @@
             <argument id="shopware.seo_url.gateway.seo_url_repository" type="service"/>
         </service>
 
-        <service class="Shopware\Framework\Routing\UrlRedirectListener" id="shopware.framework.routing.url_redirect_listener">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
         <!-- Validator -->
         <service id="shopware.validation.constraint_builder" class="Shopware\Framework\Validation\ConstraintBuilder"/>
 
         <service class="Shopware\Framework\Struct\AttributeHydrator" id="shopware.framework.struct.attribute_hydrator"/>
-
-
 
         <service class="Symfony\Component\Routing\RouteAssembler" id="symfony.component.routing.route_assembler">
             <argument id="shopware.router" type="service"/>
