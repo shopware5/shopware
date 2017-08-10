@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
@@ -92,9 +92,9 @@ class CriteriaTest extends TestCase
         $this->assertCount(1, $criteria->getConditions());
         $condition = $criteria->getCondition($condition->getName());
 
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\Condition\CategoryCondition', $condition);
+        $this->assertInstanceOf('Shopware\Search\Condition\CategoryCondition', $condition);
 
-        /* @var CategoryCondition $condition */
-        $this->assertEquals([3], $condition->getCategoryIds());
+        /* @var \Shopware\Search\Condition\CategoryCondition $condition */
+        $this->assertEquals([3], $condition->getCategoryUuids());
     }
 }

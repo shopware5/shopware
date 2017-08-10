@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Search\FacetInterface;
@@ -181,7 +181,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         $active = [];
         foreach ($criteria->getUserConditions() as $condition) {
             if ($condition instanceof CategoryCondition) {
-                $active = array_merge($active, $condition->getCategoryIds());
+                $active = array_merge($active, $condition->getCategoryUuids());
             }
         }
 

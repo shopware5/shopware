@@ -34,5 +34,5 @@ interface CriteriaPartInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 }

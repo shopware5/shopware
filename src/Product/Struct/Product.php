@@ -24,10 +24,7 @@
 
 namespace Shopware\Product\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Esd\Esd;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
-use Shopware\Bundle\StoreFrontBundle\Media\Media;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
 use Shopware\Framework\Struct\Struct;
@@ -40,18 +37,18 @@ use Shopware\Framework\Struct\Struct;
 class Product extends Struct
 {
     /**
-     * Unique identifier of the product (s_articles).
+     * Unique identifier of the product.
      *
-     * @var int
+     * @var string
      */
-    protected $id;
+    protected $uuid;
 
     /**
      * Unique identifier of the product variation (s_articles_details).
      *
      * @var int
      */
-    protected $variantId;
+    protected $variantUuid;
 
     /**
      * Unique identifier field.
@@ -97,7 +94,7 @@ class Product extends Struct
      * Defines the date when the product was released / will be
      * released and can be ordered.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $releaseDate;
 
@@ -238,11 +235,6 @@ class Product extends Struct
     protected $hasEsd;
 
     /**
-     * @var bool
-     */
-    protected $isPriceGroupActive;
-
-    /**
      * @var array
      */
     protected $blockedCustomerGroupIds = [];
@@ -265,14 +257,9 @@ class Product extends Struct
     protected $hasAvailableVariant;
 
     /**
-     * @var int
+     * @var string
      */
-    protected $mainVariantId;
-
-    /**
-     * @var bool
-     */
-    protected $isMainVariant;
+    protected $mainVariantUuid;
 
     /**
      * @var bool
@@ -305,70 +292,36 @@ class Product extends Struct
     protected $manufacturer;
 
     /**
-     * Contains the product cover which displayed
-     * as product image in listings or sliders.
-     *
-     * @var Media
+     * @var bool
      */
-    protected $cover;
+    protected $isMainVariant;
 
-    /**
-     * @var PriceGroup
-     */
-    protected $priceGroup;
-
-    /**
-     * Contains an offset of product states.
-     * States defines which processed the product has already passed through,
-     * like the price calculation, translation or other states.
-     *
-     * @var array
-     */
-    protected $states = [];
-
-    /**
-     * @var Esd
-     */
-    protected $esd;
-
-
-    /**
-     * Adds a new product state.
-     *
-     * @param $state
-     */
-    public function addState($state): void
-    {
-        $this->states[] = $state;
-    }
-
-    /**
-     * @return array
-     */
-    public function getStates(): array
-    {
-        return $this->states;
-    }
-
-    /**
-     * Resets the struct states.
-     */
-    public function resetStates(): void
-    {
-        $this->states = [];
-    }
-
-    /**
-     * Checks if the product has a specify state.
-     *
-     * @param $state
-     *
-     * @return bool
-     */
-    public function hasState($state): bool
-    {
-        return in_array($state, $this->states);
-    }
+    //    /**
+    //     * Contains the product cover which displayed
+    //     * as product image in listings or sliders.
+    //     *
+    //     * @var Media
+    //     */
+    //    protected $cover;
+    //
+    //    /**
+    //     * @var PriceGroup
+    //     */
+    //    protected $priceGroup;
+    //
+    //    /**
+    //     * Contains an offset of product states.
+    //     * States defines which processed the product has already passed through,
+    //     * like the price calculation, translation or other states.
+    //     *
+    //     * @var array
+    //     */
+    //    protected $states = [];
+    //
+    //    /**
+    //     * @var Esd
+    //     */
+    //    protected $esd;
 
     /**
      * @return bool
@@ -426,63 +379,63 @@ class Product extends Struct
         $this->shippingFree = $shippingFree;
     }
 
-//    /**
-//     * @param Unit $unit
-//     */
-//    public function setUnit(Unit $unit): void
-//    {
-//        $this->unit = $unit;
-//    }
-//
-//    /**
-//     * @return Unit
-//     */
-//    public function getUnit(): \Shopware\Bundle\StoreFrontBundle\Unit\Unit
-//    {
-//        return $this->unit;
-//    }
-//
-//    /**
-//     * @param Tax $tax
-//     */
-//    public function setTax($tax): void
-//    {
-//        $this->tax = $tax;
-//    }
-//
-//    /**
-//     * @return Tax
-//     */
-//    public function getTax(): \Shopware\Bundle\StoreFrontBundle\Tax\Tax
-//    {
-//        return $this->tax;
-//    }
-//
-//    /**
-//     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
-//     */
-//    public function setManufacturer($manufacturer): void
-//    {
-//        $this->manufacturer = $manufacturer;
-//    }
-//
-//    /**
-//     * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
-//     */
-//    public function getManufacturer(): \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
-//    {
-//        return $this->manufacturer;
-//    }
-//
-//    public function setCover(?Media $cover): void
-//    {
-//        $this->cover = $cover;
-//    }
-//
-//    public function getCover(): ? Media
-//    {
-//        return $this->cover;
-//    }
+    //    /**
+    //     * @param Unit $unit
+    //     */
+    //    public function setUnit(Unit $unit): void
+    //    {
+    //        $this->unit = $unit;
+    //    }
+    //
+    //    /**
+    //     * @return Unit
+    //     */
+    //    public function getUnit(): \Shopware\Bundle\StoreFrontBundle\Unit\Unit
+    //    {
+    //        return $this->unit;
+    //    }
+    //
+    //    /**
+    //     * @param Tax $tax
+    //     */
+    //    public function setTax($tax): void
+    //    {
+    //        $this->tax = $tax;
+    //    }
+    //
+    //    /**
+    //     * @return Tax
+    //     */
+    //    public function getTax(): \Shopware\Bundle\StoreFrontBundle\Tax\Tax
+    //    {
+    //        return $this->tax;
+    //    }
+    //
+    //    /**
+    //     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
+    //     */
+    //    public function setManufacturer($manufacturer): void
+    //    {
+    //        $this->manufacturer = $manufacturer;
+    //    }
+    //
+    //    /**
+    //     * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
+    //     */
+    //    public function getManufacturer(): \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
+    //    {
+    //        return $this->manufacturer;
+    //    }
+    //
+    //    public function setCover(?Media $cover): void
+    //    {
+    //        $this->cover = $cover;
+    //    }
+    //
+    //    public function getCover(): ? Media
+    //    {
+    //        return $this->cover;
+    //    }
 
     /**
      * @param string $name
@@ -631,15 +584,15 @@ class Product extends Struct
     /**
      * @param \DateTime $releaseDate
      */
-    public function setReleaseDate($releaseDate): void
+    public function setReleaseDate(?\DateTime $releaseDate): void
     {
         $this->releaseDate = $releaseDate;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getReleaseDate(): \DateTime
+    public function getReleaseDate(): ?\DateTime
     {
         return $this->releaseDate;
     }
@@ -692,17 +645,17 @@ class Product extends Struct
         return $this->stock;
     }
 
-//    /**
-//     * @return bool
-//     */
-//    public function isAvailable(): bool
-//    {
-//        if (!$this->isCloseouts()) {
-//            return true;
-//        }
-//
-//        return $this->getStock() >= $this->getUnit()->getMinPurchase();
-//    }
+    //    /**
+    //     * @return bool
+    //     */
+    //    public function isAvailable(): bool
+    //    {
+    //        if (!$this->isCloseouts()) {
+    //            return true;
+    //        }
+    //
+    //        return $this->getStock() >= $this->getUnit()->getMinPurchase();
+    //    }
 
     /**
      * @param float $weight
@@ -760,21 +713,21 @@ class Product extends Struct
         $this->createdAt = $createdAt;
     }
 
-//    /**
-//     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
-//     */
-//    public function getPriceGroup(): \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
-//    {
-//        return $this->priceGroup;
-//    }
-//
-//    /**
-//     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup $priceGroup
-//     */
-//    public function setPriceGroup(PriceGroup $priceGroup = null): void
-//    {
-//        $this->priceGroup = $priceGroup;
-//    }
+    //    /**
+    //     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+    //     */
+    //    public function getPriceGroup(): \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+    //    {
+    //        return $this->priceGroup;
+    //    }
+    //
+    //    /**
+    //     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup $priceGroup
+    //     */
+    //    public function setPriceGroup(PriceGroup $priceGroup = null): void
+    //    {
+    //        $this->priceGroup = $priceGroup;
+    //    }
 
     /**
      * @return string
@@ -872,85 +825,67 @@ class Product extends Struct
         $this->hasEsd = $hasEsd;
     }
 
-//    /**
-//     * @return \Shopware\Bundle\StoreFrontBundle\Esd\Esd
-//     */
-//    public function getEsd(): \Shopware\Bundle\StoreFrontBundle\Esd\Esd
-//    {
-//        return $this->esd;
-//    }
-//
-//    /**
-//     * @param Esd $esd
-//     */
-//    public function setEsd(Esd $esd = null): void
-//    {
-//        $this->esd = $esd;
-//    }
+    //    /**
+    //     * @return \Shopware\Bundle\StoreFrontBundle\Esd\Esd
+    //     */
+    //    public function getEsd(): \Shopware\Bundle\StoreFrontBundle\Esd\Esd
+    //    {
+    //        return $this->esd;
+    //    }
+    //
+    //    /**
+    //     * @param Esd $esd
+    //     */
+    //    public function setEsd(Esd $esd = null): void
+    //    {
+    //        $this->esd = $esd;
+    //    }
+    //
+    //    /**
+    //     * @return bool
+    //     */
+    //    public function isPriceGroupActive(): bool
+    //    {
+    //        return $this->isPriceGroupActive && $this->priceGroup;
+    //    }
+    //
+    //    /**
+    //     * @param bool $isPriceGroupActive
+    //     */
+    //    public function setIsPriceGroupActive($isPriceGroupActive): void
+    //    {
+    //        $this->isPriceGroupActive = $isPriceGroupActive;
+    //    }
 
-    /**
-     * @return bool
-     */
-    public function isPriceGroupActive(): bool
-    {
-        return $this->isPriceGroupActive && $this->priceGroup;
-    }
-
-    /**
-     * @param bool $isPriceGroupActive
-     */
-    public function setIsPriceGroupActive($isPriceGroupActive): void
-    {
-        $this->isPriceGroupActive = $isPriceGroupActive;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBlockedCustomerGroupIds(): array
+    public function getBlockedCustomerGroupUuids(): array
     {
         return $this->blockedCustomerGroupIds;
     }
 
-    /**
-     * @param array $blockedCustomerGroupIds
-     */
-    public function setBlockedCustomerGroupIds($blockedCustomerGroupIds): void
+    public function setBlockedCustomerGroupIds($blockedCustomerGroupUuids): void
     {
-        $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
+        $this->blockedCustomerGroupIds = $blockedCustomerGroupUuids;
     }
 
-    /**
-     * @return bool
-     */
     public function hasAvailableVariant(): bool
     {
         return $this->hasAvailableVariant;
     }
 
-    /**
-     * @param bool $hasAvailableVariant
-     */
-    public function setHasAvailableVariant($hasAvailableVariant): void
+    public function setHasAvailableVariant(bool $hasAvailableVariant): void
     {
         $this->hasAvailableVariant = $hasAvailableVariant;
     }
 
-    /**
-     * @return int
-     */
-    public function getMainVariantId(): int
+    public function getMainVariantUuid(): string
     {
-        return $this->mainVariantId;
+        return $this->mainVariantUuid;
     }
 
-    /**
-     * @param int $mainVariantId
-     */
-    public function setMainVariantId($mainVariantId): void
+    public function setMainVariantUuid(string $mainVariantUuid): void
     {
-        $this->mainVariantId = $mainVariantId;
-        $this->isMainVariant = ($this->variantId == $this->mainVariantId);
+        $this->mainVariantUuid = $mainVariantUuid;
+        $this->isMainVariant = ($this->variantUuid === $this->mainVariantUuid);
     }
 
     /**
@@ -991,24 +926,24 @@ class Product extends Struct
         return $this->comingSoon;
     }
 
-    public function getId(): int
+    public function getUuid(): string
     {
-        return $this->id;
+        return $this->uuid;
     }
 
-    public function setId(int $id): void
+    public function setUuid(string $uuid): void
     {
-        $this->id = $id;
+        $this->uuid = $uuid;
     }
 
-    public function getVariantId(): int
+    public function getVariantUuid(): string
     {
-        return $this->variantId;
+        return $this->variantUuid;
     }
 
-    public function setVariantId(int $variantId): void
+    public function setVariantUuid(string $variantUuid): void
     {
-        $this->variantId = $variantId;
+        $this->variantUuid = $variantUuid;
     }
 
     public function getNumber(): string

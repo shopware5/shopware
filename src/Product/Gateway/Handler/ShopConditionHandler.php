@@ -25,6 +25,7 @@
 namespace Shopware\Product\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Context\TranslationContext;
 use Shopware\Search\Condition\ShopCondition;
 use Shopware\Search\Criteria;
@@ -45,28 +46,28 @@ class ShopConditionHandler implements HandlerInterface
 
     public function handle(
         CriteriaPartInterface $criteriaPart,
-        \Doctrine\DBAL\Query\QueryBuilder $builder,
+        QueryBuilder $builder,
         Criteria $criteria,
         TranslationContext $context
-    ) {
+    ): void {
         $builder->innerJoin(
             'product',
-            's_articles_categories_ro',
+            'product_category_ro',
             'productCategory',
-            'productCategory.articleID = product.id'
+            'productCategory.product_uuid = product.uuid'
         );
 
         $builder->innerJoin(
             'productCategory',
             's_core_shops',
             'shop',
-            'shop.category_id = productCategory.categoryID AND shop.id IN (:shopIds)'
+            'shop.category_id = productCategory.category_id AND shop.id IN (:shopUuids)'
         );
 
-        /** @var ShopCondition $criteriaPart */
+        /* @var ShopCondition $criteriaPart */
         $builder->setParameter(
-            ':shopIds',
-            $criteriaPart->getIds(),
+            ':shopUuids',
+            $criteriaPart->getUuids(),
             Connection::PARAM_INT_ARRAY
         );
     }

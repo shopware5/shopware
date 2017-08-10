@@ -67,32 +67,39 @@ class ProductCollection extends Collection
         return $this->getKeys();
     }
 
-//    public function getUnits(): UnitCollection
-//    {
-//        $units = $this->map(function (Product $product) {
-//            return $product->getUnit();
-//        });
-//
-//        return new UnitCollection(array_filter($units));
-//    }
-//
-//    public function getManufacturers(): ManufacturerCollection
-//    {
-//        $manufacturers = $this->map(function (Product $product) {
-//            return $product->getManufacturer();
-//        });
-//
-//        return new ManufacturerCollection(array_filter($manufacturers));
-//    }
-//
-//    public function getTaxes(): TaxCollection
-//    {
-//        $taxes = $this->map(function (Product $product) {
-//            return $product->getTax();
-//        });
-//
-//        return new TaxCollection(array_filter($taxes));
-//    }
+    public function getProductUuids(): array
+    {
+        return $this->map(function(Product $product) {
+            return $product->getUuid();
+        });
+    }
+
+    //    public function getUnits(): UnitCollection
+    //    {
+    //        $units = $this->map(function (Product $product) {
+    //            return $product->getUnit();
+    //        });
+    //
+    //        return new UnitCollection(array_filter($units));
+    //    }
+    //
+    //    public function getManufacturers(): ManufacturerCollection
+    //    {
+    //        $manufacturers = $this->map(function (Product $product) {
+    //            return $product->getManufacturer();
+    //        });
+    //
+    //        return new ManufacturerCollection(array_filter($manufacturers));
+    //    }
+    //
+    //    public function getTaxes(): TaxCollection
+    //    {
+    //        $taxes = $this->map(function (Product $product) {
+    //            return $product->getTax();
+    //        });
+    //
+    //        return new TaxCollection(array_filter($taxes));
+    //    }
 
     protected function getKey(Product $element): string
     {

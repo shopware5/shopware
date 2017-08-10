@@ -84,7 +84,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 
             $article['link'] = $this->Front()->Router()->assemble([
                 'controller' => 'detail',
-                'sArticle' => $product->getId(),
+                'sArticle' => $product->getUuid(),
                 'number' => $product->getNumber(),
                 'title' => $product->getName(),
             ]);

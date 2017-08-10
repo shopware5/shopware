@@ -107,14 +107,14 @@ class SimilarProductService implements SimilarProductServiceInterface
         $fallback = [];
 
         foreach ($products as $product) {
-            if (!isset($numbers[$product->getId()])) {
+            if (!isset($numbers[$product->getUuid()])) {
                 $fallback[$product->getNumber()] = $product;
                 continue;
             }
 
             $result[$product->getNumber()] = $this->getProductsByNumbers(
                 $listProducts,
-                $numbers[$product->getId()]
+                $numbers[$product->getUuid()]
             );
         }
 
@@ -133,7 +133,7 @@ class SimilarProductService implements SimilarProductServiceInterface
             $criteria = $this->factory->createBaseCriteria([$context->getShop()->getCategory()->getId()], $context);
             $criteria->limit($limit);
 
-            $condition = new SimilarProductCondition($product->getId(), $product->getName());
+            $condition = new SimilarProductCondition($product->getUuid(), $product->getName());
 
             $criteria->addBaseCondition($condition);
             $criteria->addSorting(new PopularitySorting());

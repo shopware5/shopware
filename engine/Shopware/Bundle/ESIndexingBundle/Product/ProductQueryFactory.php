@@ -56,6 +56,7 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
             ->andWhere('categories.articleID > :lastId')
             ->andWhere('categories.categoryID = :categoryId')
             ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT)
+
             ->setParameter(':lastId', 0, \PDO::PARAM_INT)
             ->orderBy('categories.articleID');
 

@@ -1,12 +1,34 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Category\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Category\Struct\CategoryHydrator;
-use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Category\Struct\CategoryCollection;
+use Shopware\Category\Struct\CategoryHydrator;
 use Shopware\Context\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
 
 class CategoryReader
 {
@@ -39,14 +61,14 @@ class CategoryReader
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getRelatedProductStreamFields())
-            ->addSelect('GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups')
+            ->addSelect('GROUP_CONCAT(customerGroups.customer_group_id) as __category_customer_groups')
         ;
 
-        $query->from('s_categories', 'category')
+        $query->from('category', 'category')
             ->leftJoin('category', 's_core_shops', 'shop', 'shop.category_id = category.id')
-            ->leftJoin('category', 's_categories_attributes', 'categoryAttribute', 'categoryAttribute.categoryID = category.id')
-            ->leftJoin('category', 's_categories_avoid_customergroups', 'customerGroups', 'customerGroups.categoryID = category.id')
-            ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
+            ->leftJoin('category', 'category_attribute', 'categoryAttribute', 'categoryAttribute.category_id = category.id')
+            ->leftJoin('category', 'category_avoid_customer_group', 'customerGroups', 'customerGroups.category_id = category.id')
+            ->leftJoin('category', 's_media', 'media', 'media.id = category.media_id')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
             ->leftJoin('category', 's_product_streams', 'stream', 'category.stream_id = stream.id')

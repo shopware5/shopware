@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\ConditionInterface;
 use Shopware\Search\Criteria;
 use Shopware\Search\FacetInterface;

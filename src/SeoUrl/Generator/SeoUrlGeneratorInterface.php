@@ -22,46 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
+namespace Shopware\SeoUrl\Generator;
 
-use Assert\Assertion;
-use Shopware\Search\ConditionInterface;
+use Shopware\Context\TranslationContext;
+use Shopware\SeoUrl\Struct\SeoUrlCollection;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class CategoryCondition implements ConditionInterface
+interface SeoUrlGeneratorInterface
 {
     /**
-     * @var int[]
+     * @param int                $shopId
+     * @param TranslationContext $context
+     * @param int                $offset
+     * @param int                $limit
+     *
+     * @return SeoUrlCollection
      */
-    private $categoryIds;
+    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): SeoUrlCollection;
 
-    /**
-     * @param int[] $categoryIds
-     */
-    public function __construct(array $categoryIds)
-    {
-        Assertion::allIntegerish($categoryIds);
-        $this->categoryIds = array_map('intval', $categoryIds);
-        sort($this->categoryIds, SORT_NUMERIC);
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getCategoryIds()
-    {
-        return $this->categoryIds;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'category';
-    }
+    public function getName(): string;
 }

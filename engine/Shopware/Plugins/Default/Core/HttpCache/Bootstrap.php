@@ -914,14 +914,14 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                             if (!$product) {
                                 continue;
                             }
-                            $articleIds[] = $product->getId();
-                            $articleIds[] = $product->getVariantId();
+                            $articleIds[] = $product->getUuid();
+                            $articleIds[] = $product->getVariantUuid();
                         } elseif ($element['component']['type'] === ArticleSliderComponentHandler::COMPONENT_NAME) {
                             /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products */
                             $products = $element['data']['products'];
                             foreach ($products as $product) {
-                                $articleIds[] = $product->getId();
-                                $articleIds[] = $product->getVariantId();
+                                $articleIds[] = $product->getUuid();
+                                $articleIds[] = $product->getVariantUuid();
                             }
                         }
                     }

@@ -24,8 +24,6 @@
 
 namespace Shopware\Search;
 
-use Shopware\Search\CriteriaPartInterface;
-
 /**
  * @category  Shopware
  *

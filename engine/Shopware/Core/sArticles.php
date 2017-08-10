@@ -2453,7 +2453,7 @@ class sArticles
              INNER JOIN s_articles product
                 ON product.main_detail_id = variant.id
                 AND product.id = ?',
-            [$product->getId()]
+            [$product->getUuid()]
         );
 
         $data['sDescriptionKeywords'] = $this->getDescriptionKeywords(
@@ -2479,7 +2479,7 @@ class sArticles
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
 
-        $detail = $baseFile . '?sViewport=detail&sArticle=' . $product->getId();
+        $detail = $baseFile . '?sViewport=detail&sArticle=' . $product->getUuid();
         if ($categoryId) {
             $detail .= '&sCategory=' . $categoryId;
         }
@@ -2493,8 +2493,8 @@ class sArticles
 
         $basket = $baseFile . '?sViewport=basket&sAdd=' . $product->getNumber();
         $note = $baseFile . '?sViewport=note&sAdd=' . $product->getNumber();
-        $friend = $baseFile . '?sViewport=tellafriend&sDetails=' . $product->getId();
-        $pdf = $baseFile . '?sViewport=detail&sDetails=' . $product->getId() . '&sLanguage=' . $context->getShop()->getId() . '&sPDF=1';
+        $friend = $baseFile . '?sViewport=tellafriend&sDetails=' . $product->getUuid();
+        $pdf = $baseFile . '?sViewport=detail&sDetails=' . $product->getUuid() . '&sLanguage=' . $context->getShop()->getId() . '&sPDF=1';
 
         return [
             'linkBasket' => $basket,

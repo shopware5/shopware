@@ -105,29 +105,28 @@ class FieldHelper
     public function getArticleFields(): array
     {
         $fields = [
-            'product.id as __product_id',
-            'product.supplierID as __product_supplierID',
+            'product.uuid as __product_uuid',
+            'product.product_manufacturer_uuid as __product_product_manufacturer_uuid',
             'product.name as __product_name',
             'product.description as __product_description',
             'product.description_long as __product_description_long',
-            'product.shippingtime as __product_shippingtime',
-            'product.datum as __product_datum',
+            'product.shipping_time as __product_shipping_time',
+            'product.created_at as __product_created_at',
             'product.active as __product_active',
-            'product.taxID as __product_taxID',
-            'product.pseudosales as __product_pseudosales',
+            'product.tax_uuid as __product_tax_uuid',
+            'product.pseudo_sales as __product_pseudo_sales',
             'product.topseller as __product_topseller',
-            'product.metaTitle as __product_metaTitle',
+            'product.meta_title as __product_meta_title',
             'product.keywords as __product_keywords',
-            'product.changetime as __product_changetime',
-            'product.pricegroupID as __product_pricegroupID',
-            'product.pricegroupActive as __product_pricegroupActive',
-            'product.filtergroupID as __product_filtergroupID',
-            'product.laststock as __product_laststock',
+            'product.updated_at as __product_updated_at',
+            'product.price_group_id as __product_price_group_id',
+            'product.filter_group_uuid as __product_filter_group_uuid',
+            'product.last_stock as __product_last_stock',
             'product.crossbundlelook as __product_crossbundlelook',
             'product.notification as __product_notification',
             'product.template as __product_template',
             'product.mode as __product_mode',
-            'product.main_detail_id as __product_main_detail_id',
+            'product.main_detail_uuid as __product_main_detail_uuid',
             'product.available_from as __product_available_from',
             'product.available_to as __product_available_to',
             'product.configurator_set_id as __product_configurator_set_id',
@@ -135,7 +134,7 @@ class FieldHelper
 
         $fields = array_merge(
             $fields,
-            $this->getTableFields('s_articles_attributes', 'productAttribute')
+            $this->getTableFields('product_attribute', 'productAttribute')
         );
 
         return $fields;
@@ -159,14 +158,14 @@ class FieldHelper
     public function getVariantFields(): array
     {
         return [
-            'variant.id as __variant_id',
-            'variant.ordernumber as __variant_ordernumber',
-            'variant.suppliernumber as __variant_suppliernumber',
+            'variant.uuid as __variant_uuid',
+            'variant.order_number as __variant_order_number',
+            'variant.supplier_number as __variant_supplier_number',
             'variant.kind as __variant_kind',
-            'variant.additionaltext as __variant_additionaltext',
+            'variant.additional_text as __variant_additional_text',
             'variant.sales as __variant_sales',
             'variant.active as __variant_active',
-            'variant.instock as __variant_instock',
+            'variant.stock as __variant_stock',
             'variant.stockmin as __variant_stockmin',
             'variant.weight as __variant_weight',
             'variant.position as __variant_position',
@@ -174,10 +173,10 @@ class FieldHelper
             'variant.height as __variant_height',
             'variant.length as __variant_length',
             'variant.ean as __variant_ean',
-            'variant.unitID as __variant_unitID',
-            'variant.releasedate as __variant_releasedate',
-            'variant.shippingfree as __variant_shippingfree',
-            'variant.shippingtime as __variant_shippingtime',
+            'variant.unit_id as __variant_unit_id',
+            'variant.release_date as __variant_release_date',
+            'variant.shipping_free as __variant_shipping_free',
+            'variant.shipping_time as __variant_shipping_time',
         ];
     }
 
@@ -188,18 +187,18 @@ class FieldHelper
     {
         $fields = [
             'esd.id as __esd_id',
-            'esd.articleID as __esd_articleID',
-            'esd.articledetailsID as __esd_articledetailsID',
+            'esd.product_id as __esd_product_id',
+            'esd.product_detail_id as __esd_product_detail_id',
             'esd.file as __esd_file',
             'esd.serials as __esd_serials',
             'esd.notification as __esd_notification',
-            'esd.maxdownloads as __esd_maxdownloads',
-            'esd.datum as __esd_datum',
+            'esd.max_downloads as __esd_max_downloads',
+            'esd.created_at as __esd_created_at',
         ];
 
         $fields = array_merge(
             $fields,
-            $this->getTableFields('s_articles_esd_attributes', 'esdAttribute')
+            $this->getTableFields('product_esd_attribute', 'esdAttribute')
         );
 
         return $fields;
@@ -252,7 +251,7 @@ class FieldHelper
 
         $fields = array_merge(
             $fields,
-            $this->getTableFields('s_articles_supplier_attributes', 'manufacturerAttribute')
+            $this->getTableFields('product_manufacturer_attribute', 'manufacturerAttribute')
         );
 
         return $fields;
@@ -265,21 +264,23 @@ class FieldHelper
     {
         $fields = [
             'category.id as __category_id',
+            'category.uuid as __category_uuid',
             'category.parent as __category_parent_id',
             'category.position as __category_position',
             'category.path as __category_path',
+            'category.active as __category_active',
             'category.description as __category_description',
-            'category.meta_title as __category_metatitle',
-            'category.metakeywords as __category_metakeywords',
-            'category.metadescription as __category_metadescription',
-            'category.cmsheadline as __category_cmsheadline',
+            'category.meta_title as __category_meta_title',
+            'category.meta_keywords as __category_meta_keywords',
+            'category.meta_description as __category_meta_description',
+            'category.cms_headline as __category_cms_headline',
+            'category.cms_description as __category_cms_description',
             'category.product_box_layout as __category_product_box_layout',
-            'category.cmstext as __category_cmstext',
             'category.template as __category_template',
             'category.blog as __category_blog',
             'category.external as __category_external',
-            'category.hidefilter as __category_hidefilter',
-            'category.hidetop as __category_hidetop',
+            'category.hide_filter as __category_hide_filter',
+            'category.hide_top as __category_hide_top',
             'category.stream_id as __category_stream_id',
             'category.hide_sortings as __category_hide_sortings',
             '(shop.id IS NOT NULL) as __category_is_shop_category'
@@ -287,7 +288,7 @@ class FieldHelper
 
         $fields = array_merge(
             $fields,
-            $this->getTableFields('s_categories_attributes', 'categoryAttribute')
+            $this->getTableFields('category_attribute', 'categoryAttribute')
         );
 
         return $fields;
@@ -327,12 +328,12 @@ class FieldHelper
             'unit.id as __unit_id',
             'unit.description as __unit_description',
             'unit.unit as __unit_unit',
-            'variant.packunit as __unit_packunit',
-            'variant.purchaseunit as __unit_purchaseunit',
-            'variant.referenceunit as __unit_referenceunit',
-            'variant.purchasesteps as __unit_purchasesteps',
-            'variant.minpurchase as __unit_minpurchase',
-            'variant.maxpurchase as __unit_maxpurchase',
+            'variant.pack_unit as __unit_pack_unit',
+            'variant.purchase_unit as __unit_purchase_unit',
+            'variant.reference_unit as __unit_reference_unit',
+            'variant.purchase_steps as __unit_purchase_steps',
+            'variant.min_purchase as __unit_min_purchase',
+            'variant.max_purchase as __unit_max_purchase',
         ];
     }
 
@@ -1516,5 +1517,20 @@ class FieldHelper
         $query->setParameter(':language' . $suffix, $shopId);
         $query->setParameter(':' . $translationTable, $translationType);
         $query->addSelect($translationTable . '.objectdata as ' . $selectName);
+    }
+
+    public function getSeoUrlFields(): array
+    {
+        return [
+            'seoUrl.id as __seoUrl_id',
+            'seoUrl.foreign_key as __seoUrl_foreign_key',
+            'seoUrl.name as __seoUrl_name',
+            'seoUrl.shop_id as __seoUrl_shop_id',
+            'seoUrl.path_info as __seoUrl_path_info',
+            'seoUrl.url as __seoUrl_url',
+            'seoUrl.created_at as __seoUrl_created_at',
+            'seoUrl.is_canonical as __seoUrl_is_canonical',
+            'seoUrl.url_hash as __seoUrl_url_hash'
+        ];
     }
 }

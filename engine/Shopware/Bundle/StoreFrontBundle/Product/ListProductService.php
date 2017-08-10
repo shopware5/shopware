@@ -177,7 +177,7 @@ class ListProductService implements ListProductServiceInterface
      */
     private function isProductValid(ListProduct $product, ShopContextInterface $context)
     {
-        if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
+        if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupUuids())) {
             return false;
         }
 

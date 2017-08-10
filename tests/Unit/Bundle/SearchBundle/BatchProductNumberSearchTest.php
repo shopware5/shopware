@@ -23,7 +23,7 @@
  */
 
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CloseoutCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;

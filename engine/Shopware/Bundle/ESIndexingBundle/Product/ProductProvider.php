@@ -146,7 +146,7 @@ class ProductProvider implements ProductProviderInterface
         foreach ($products as $listProduct) {
             $product = Product::createFromListProduct($listProduct);
             $number = $product->getNumber();
-            $id = $product->getId();
+            $id = $product->getUuid();
 
             if (!$product->isMainVariant()) {
                 continue;
@@ -249,7 +249,7 @@ class ProductProvider implements ProductProviderInterface
     private function getProperties($products, TranslationContext $context)
     {
         $ids = array_map(function (ListProduct $product) {
-            return $product->getId();
+            return $product->getUuid();
         }, $products);
 
         $query = $this->connection->createQueryBuilder();

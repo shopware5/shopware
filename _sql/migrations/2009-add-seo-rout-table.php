@@ -27,13 +27,22 @@ class Migrations_Migration2009 extends Shopware\Components\Migrations\AbstractMi
     public function up($modus)
     {
         $sql = <<<SQL
-CREATE TABLE `seo_route` (
-    `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` varchar(200) NOT NULL,
-    `shop_id` int NOT NULL,
-    `url` text NOT NULL,
-    `seo_url` text NOT NULL
-);
+CREATE TABLE `seo_url` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url_hash` char(40) COLLATE utf8_unicode_ci NOT NULL,
+  `shop_id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `foreign_key` int(11) NOT NULL,
+  `path_info` text COLLATE utf8_unicode_ci NOT NULL,
+  `url` text COLLATE utf8_unicode_ci NOT NULL,
+  `is_canonical` int(1) NOT NULL,
+  `created_at` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `shop_id_url` (`shop_id`,`url`(1000)),
+  KEY `shop_id_path_info` (`shop_id`, `path_info`(1000)),
+  KEY `shop_canonical` (`shop_id`, `path_info`(1000), `is_canonical`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 SQL;
 
         $this->addSql($sql);

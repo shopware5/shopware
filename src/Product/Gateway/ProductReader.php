@@ -1,13 +1,35 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Product\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Product\Struct\ProductHydrator;
 use Shopware\Context\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Product\Struct\ProductCollection;
+use Shopware\Product\Struct\ProductHydrator;
 
 class ProductReader
 {
@@ -72,25 +94,25 @@ class ProductReader
 //            ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
         ;
         //todo@next move this to store front list product
-//        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
-//        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
-//            $customerPriceQuery = $this->getPriceCountQuery(':current');
-//            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
-//            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
-//        }
+        //        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
+        //        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+        //            $customerPriceQuery = $this->getPriceCountQuery(':current');
+        //            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
+        //            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
+        //        }
 
-        $query->from('s_articles_details', 'variant')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
-            ->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID')
-            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
-            ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
-            ->leftJoin('variant', 's_articles_attributes', 'productAttribute', 'productAttribute.articledetailsID = variant.id')
-            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.supplierID = product.supplierID')
-            ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
-            ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
-            ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
-            ->where('variant.ordernumber IN (:numbers)')
+        $query->from('product_detail', 'variant')
+            ->innerJoin('variant', 'product', 'product', 'product.uuid = variant.product_uuid')
+            ->innerJoin('product', 's_core_tax', 'tax', 'tax.uuid = product.tax_uuid')
+            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unit_id')
+            ->leftJoin('product', 'product_manufacturer', 'manufacturer', 'manufacturer.uuid = product.product_manufacturer_uuid')
+            ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.price_group_id')
+            ->leftJoin('variant', 'product_attribute', 'productAttribute', 'productAttribute.product_detail_uuid = variant.uuid')
+            ->leftJoin('product', 'product_manufacturer_attribute', 'manufacturerAttribute', 'manufacturerAttribute.product_manufacturer_uuid = manufacturer.uuid')
+            ->leftJoin('product', 'product_top_seller_ro', 'topSeller', 'topSeller.product_uuid = product.uuid')
+            ->leftJoin('variant', 'product_esd', 'esd', 'esd.product_detail_uuid = variant.uuid')
+            ->leftJoin('esd', 'product_esd_attribute', 'esdAttribute', 'esdAttribute.product_esd_uuid = esd.uuid')
+            ->where('variant.order_number IN (:numbers)')
             ->andWhere('variant.active = 1')
             ->andWhere('product.active = 1')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
@@ -112,8 +134,8 @@ class ProductReader
         $query = $this->connection->createQueryBuilder();
 
         $query->select('1')
-            ->from('s_articles_esd', 'variantEsd')
-            ->where('variantEsd.articleID = product.id')
+            ->from('product_esd', 'variantEsd')
+            ->where('variantEsd.product_uuid = product.uuid')
             ->setMaxResults(1);
 
         return $query;
@@ -126,9 +148,9 @@ class ProductReader
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select("GROUP_CONCAT(customerGroups.customergroupId SEPARATOR '|')")
-            ->from('s_articles_avoid_customergroups', 'customerGroups')
-            ->where('customerGroups.articleID = product.id');
+        $query->select("GROUP_CONCAT(customerGroups.customer_group_uuid SEPARATOR '|')")
+            ->from('product_avoid_customer_group', 'customerGroups')
+            ->where('customerGroups.product_uuid = product.uuid');
 
         return $query;
     }
@@ -140,11 +162,11 @@ class ProductReader
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select('COUNT(availableVariant.id)')
-            ->from('s_articles_details', 'availableVariant')
-            ->where('availableVariant.articleID = product.id')
+        $query->select('COUNT(availableVariant.uuid)')
+            ->from('product_detail', 'availableVariant')
+            ->where('availableVariant.product_uuid = product.uuid')
             ->andWhere('availableVariant.active = 1')
-            ->andWhere('availableVariant.instock >= availableVariant.minpurchase');
+            ->andWhere('availableVariant.stock >= availableVariant.min_purchase');
 
         return $query;
     }

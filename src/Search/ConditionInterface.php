@@ -24,8 +24,6 @@
 
 namespace Shopware\Search;
 
-use Shopware\Search\CriteriaPartInterface;
-
 /**
  * Defines a condition which can be added to the
  * \Shopware\Search\Criteria class.

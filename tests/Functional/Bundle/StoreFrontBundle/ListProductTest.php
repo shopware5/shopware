@@ -47,8 +47,8 @@ class ListProductTest extends TestCase
 
         $product = $this->getListProduct($number, $context);
 
-        $this->assertNotEmpty($product->getId());
-        $this->assertNotEmpty($product->getVariantId());
+        $this->assertNotEmpty($product->getUuid());
+        $this->assertNotEmpty($product->getVariantUuid());
         $this->assertNotEmpty($product->getName());
         $this->assertNotEmpty($product->getNumber());
         $this->assertNotEmpty($product->getManufacturer());

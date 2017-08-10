@@ -25,8 +25,9 @@
 namespace Shopware\Product\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Context\TranslationContext;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Search\HandlerInterface;
@@ -50,10 +51,12 @@ class CategoryConditionHandler implements HandlerInterface
 
     public function handle(
         CriteriaPartInterface $criteriaPart,
-        \Doctrine\DBAL\Query\QueryBuilder $builder,
+        QueryBuilder $builder,
         Criteria $criteria,
         TranslationContext $context
-    ) {
+    ): void {
+
+        /* @var CategoryCondition $criteriaPart */
         if ($this->counter++ === 0) {
             $suffix = '';
         } else {
@@ -62,17 +65,16 @@ class CategoryConditionHandler implements HandlerInterface
 
         $builder->innerJoin(
             'product',
-            's_articles_categories_ro',
+            'product_category_ro',
             "productCategory{$suffix}",
-            "productCategory{$suffix}.articleID = product.id
-            AND productCategory{$suffix}.categoryID IN (:category{$suffix})"
+            "productCategory{$suffix}.product_uuid = product.uuid
+            AND productCategory{$suffix}.category_uuid IN (:category{$suffix})"
         );
 
-        /* @var CategoryCondition $condition */
         $builder->setParameter(
             ":category{$suffix}",
-            $condition->getCategoryIds(),
-            Connection::PARAM_INT_ARRAY
+            $criteriaPart->getCategoryUuids(),
+            Connection::PARAM_STR_ARRAY
         );
     }
 }

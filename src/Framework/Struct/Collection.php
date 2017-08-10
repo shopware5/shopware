@@ -28,7 +28,7 @@ namespace Shopware\Framework\Struct;
 use ArrayIterator;
 use Shopware\Framework\Struct\Struct;
 
-abstract class Collection extends Struct implements \IteratorAggregate
+abstract class Collection extends Struct implements \IteratorAggregate, \Countable
 {
     /**
      * @var array

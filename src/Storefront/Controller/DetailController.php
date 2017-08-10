@@ -12,5 +12,6 @@ class DetailController extends Controller
      */
     public function indexAction(string $number, Request $request)
     {
+        return $this->render('frontend/home/index.html.twig', []);
     }
 }

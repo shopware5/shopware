@@ -25,7 +25,7 @@
 namespace Shopware\Components\ProductStream;
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;

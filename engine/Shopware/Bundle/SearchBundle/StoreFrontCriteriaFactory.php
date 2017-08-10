@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
@@ -259,10 +259,10 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
             return $criteria;
         }
 
-        /** @var CategoryCondition $condition */
+        /** @var \Shopware\Search\Condition\CategoryCondition $condition */
         $condition = $criteria->getBaseCondition('category');
 
-        if (!in_array($systemId, $condition->getCategoryIds())) {
+        if (!in_array($systemId, $condition->getCategoryUuids())) {
             $criteria->removeBaseCondition('category');
             $criteria->addCondition($condition);
             $criteria->addBaseCondition(new CategoryCondition([$systemId]));

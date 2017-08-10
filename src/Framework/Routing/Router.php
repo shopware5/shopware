@@ -14,6 +14,8 @@ use Psr\Log\LoggerInterface;
 
 class Router implements RouterInterface, RequestMatcherInterface
 {
+    const SEO_REDIRECT_URL = 'seo_redirect_url';
+
     /**
      * @var RequestContext
      */
@@ -45,9 +47,9 @@ class Router implements RouterInterface, RequestMatcherInterface
     private $shopFinder;
 
     /**
-     * @var SeoUrlReaderInterface
+     * @var UrlResolverInterface
      */
-    private $seoUrlReader;
+    private $urlResolver;
 
     /**
      * @var LoaderInterface
@@ -59,7 +61,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         \AppKernel $kernel,
         ?RequestContext $context = null,
         LoggerInterface $logger = null,
-        SeoUrlReaderInterface $seoUrlReader,
+        UrlResolverInterface $urlResolver,
         ShopFinder $shopFinder,
         LoaderInterface $routingLoader
     ) {
@@ -68,7 +70,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         $this->logger = $logger;
 
         $this->plugins = $kernel->getPlugins();
-        $this->seoUrlReader = $seoUrlReader;
+        $this->urlResolver = $urlResolver;
         $this->shopFinder = $shopFinder;
         $this->routingLoader = $routingLoader;
     }
@@ -113,62 +115,77 @@ class Router implements RouterInterface, RequestMatcherInterface
             return $url;
         }
 
-        $pathInfo = $generator->generate($name, $parameters, UrlGenerator::ABSOLUTE_PATH);
-        $pathInfo = '/' . trim($pathInfo, '/');
+        $pathinfo = $generator->generate($name, $parameters, UrlGenerator::ABSOLUTE_PATH);
+        $pathinfo = '/' . trim($pathinfo, '/');
 
-        $seoUrl = $this->seoUrlReader->fetchSeoUrl($shop['id'], $pathInfo);
+        $seoUrl = $this->urlResolver->getUrl($shop['id'], $pathinfo);
 
         if ($seoUrl) {
-            $url = str_replace($pathInfo, $seoUrl, $url);
+            $url = str_replace($pathinfo, $seoUrl->getUrl(), $url);
         }
 
-        return rtrim($url, '/') . '/';
+        return rtrim($url, '/');
     }
 
     public function match($pathinfo)
     {
+        $pathinfo = '/' . trim($pathinfo, '/');
 
+        $this->context->setPathInfo($pathinfo);
+
+        $matcher = new UrlMatcher($this->getRouteCollection(), $this->getContext());
+
+        $match = $matcher->match($pathinfo);
+
+        return $match;
     }
 
     public function matchRequest(Request $request): array
     {
         $shop = $this->shopFinder->findShopByRequest($this->context);
 
-        $pathInfo = $this->context->getPathInfo();
+        $pathinfo = $this->context->getPathInfo();
 
-        if ($shop['id']) {
-            //save detected shop to context for further processes
-            $this->context->setParameter('shop', $shop);
-            $request->attributes->set('_shop_id', $shop['id']);
-            $request->attributes->set('_shop', $shop);
-
-            //set shop locale
-            $request->setLocale($shop['locale']);
-
-            $url = implode('', [$request->getBaseUrl(), $request->getPathInfo()]);
-
-            //generate new path info for detected shop
-            $pathInfo = preg_replace('#^' . $shop['base_path'] . '#i', '', $url);
-            $pathInfo = '/' . trim($pathInfo, '/');
-
-            //resolve seo urls to use symfony url matcher for route detection
-            $seoUrl = $this->seoUrlReader->fetchUrl($shop['id'], $pathInfo);
-
-            if ($seoUrl) {
-                $pathInfo = $seoUrl;
-            }
-
-            //rewrite base url for url generator
-            $this->context->setBaseUrl(rtrim($shop['base_path'], '/'));
+        if (!$shop) {
+            return $this->match($pathinfo);
         }
 
-        $pathInfo = '/' . trim($pathInfo, '/');
+        //save detected shop to context for further processes
+        $this->context->setParameter('shop', $shop);
+        $request->attributes->set('_shop_id', $shop['id']);
+        $request->attributes->set('_shop', $shop);
 
-        $this->context->setPathInfo($pathInfo);
+        //set shop locale
+        $request->setLocale($shop['locale']);
 
-        $matcher = new UrlMatcher($this->getRouteCollection(), $this->getContext());
+        //generate new path info for detected shop
+        $stripBaseUrl = $shop['base_url'] ?? $shop['base_path'];
+        $stripBaseUrl = rtrim($stripBaseUrl, '/') . '/';
 
-        return $matcher->match($pathInfo);
+        //rewrite base url for url generator
+        $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
+
+        // strip base url from path info
+        $pathinfo = $request->getBaseUrl() . $request->getPathInfo();
+        $pathinfo = preg_replace('#^' . $stripBaseUrl . '#i', '', $pathinfo);
+        $pathinfo = '/' . trim($pathinfo, '/');
+
+        //resolve seo urls to use symfony url matcher for route detection
+        $seoUrl = $this->urlResolver->getPathInfo($shop['id'], $pathinfo);
+
+        if (!$seoUrl) {
+
+            return $this->match($pathinfo);
+        }
+
+        $pathinfo = $seoUrl->getPathInfo();
+        if (!$seoUrl->isCanonical()) {
+            $redirectUrl = $this->urlResolver->getUrl($shop['id'], $seoUrl->getPathInfo());
+
+            $request->attributes->set(self::SEO_REDIRECT_URL, $redirectUrl->getUrl());
+        }
+
+        return $this->match($pathinfo);
     }
 
     private function loadRoutes(): RouteCollection

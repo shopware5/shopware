@@ -31,13 +31,6 @@
             <argument id="shopware.category.gateway.category_searcher" type="service"/>
         </service>
 
-        <service class="Shopware\Category\Routing\ListingPageSeoUrlGenerator" id="shopware.category.routing.listing_page_seo_url_generator">
-            <argument id="dbal_connection" type="service"/>
-            <argument id="shopware.category.gateway.category_repository" type="service"/>
-            <argument id="slugify" type="service"/>
-            <argument id="shopware.router" type="service"/>
-        </service>
-
         <service class="Shopware\Category\Gateway\Handler\ShopConditionHandler" id="shopware.category.gateway.handler.shop_condition_handler"/>
         <service class="Shopware\Category\Gateway\Handler\ActiveConditionHandler" id="shopware.category.gateway.handler.active_condition_handler"/>
     </services>

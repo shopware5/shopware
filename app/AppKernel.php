@@ -92,7 +92,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Shopware\Framework\Framework(),
             new Shopware\Category\Category(),
-            new Shopware\Product\Product()
+            new Shopware\Product\Product(),
+            new \Shopware\SeoUrl\SeoUrl()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
