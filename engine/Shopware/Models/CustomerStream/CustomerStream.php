@@ -125,7 +125,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getConditions()
     {
@@ -133,7 +133,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param string $conditions
+     * @param string|null $conditions
      */
     public function setConditions($conditions)
     {
@@ -141,7 +141,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getFreezeUp()
     {
@@ -149,7 +149,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $freezeUp string|\DateTime
+     * @param $freezeUp \DateTime|string|null
      */
     public function setFreezeUp($freezeUp)
     {
