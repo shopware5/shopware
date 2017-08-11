@@ -349,8 +349,14 @@ class StructHydrator
         $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
         $plugin->setLocalUpdateAvailable(($data['update_version'] !== null));
         $plugin->setLink($data['link']);
-        $plugin->setRedirectToStore((bool) $data['redirectToStore']);
-        $plugin->setLowestPrice((float) $data['lowestPriceValue']);
+
+        if (array_key_exists('redirectToStore', $data)) {
+            $plugin->setRedirectToStore((bool) $data['redirectToStore']);
+        }
+
+        if (array_key_exists('lowestPriceValue', $data)) {
+            $plugin->setLowestPrice((float) $data['lowestPriceValue']);
+        }
 
         $plugin->setSource($data['source']);
         $plugin->setFormId($data['form_id']);
