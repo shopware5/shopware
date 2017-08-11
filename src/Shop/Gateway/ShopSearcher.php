@@ -5,7 +5,7 @@ namespace Shopware\Shop\Gateway;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Currency\Struct\ShopSearchResult;
+use Shopware\Shop\Struct\ShopSearchResult;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Search\Criteria;
 use Shopware\Search\Search;

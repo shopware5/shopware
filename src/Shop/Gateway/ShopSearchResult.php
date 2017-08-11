@@ -1,11 +1,9 @@
 <?php
 
-namespace Shopware\Currency\Struct;
+namespace Shopware\Shop\Struct;
 
 use Shopware\Search\SearchResultInterface;
 use Shopware\Search\SearchResultTrait;
-use Shopware\Shop\Struct\ShopIdentity;
-use Shopware\Shop\Struct\ShopIdentityCollection;
 
 class ShopSearchResult extends ShopIdentityCollection implements SearchResultInterface
 {

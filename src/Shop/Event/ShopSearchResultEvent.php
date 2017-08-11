@@ -3,7 +3,7 @@
 namespace Shopware\Shop\Event;
 
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Currency\Struct\ShopSearchResult;
+use Shopware\Shop\Struct\ShopSearchResult;
 use Shopware\Search\Criteria;
 use Symfony\Component\EventDispatcher\Event;
 

@@ -9,7 +9,7 @@ class ShopIdentityCollection extends Collection
     /**
      * @var ShopIdentity[]
      */
-    protected $elements = [];
+    protected $shopIdentitys = [];
 
     public function add(ShopIdentity $shopIdentity): void
     {
@@ -41,9 +41,16 @@ class ShopIdentityCollection extends Collection
         return null;
     }
 
-    protected function getKey(ShopIdentity $element): int
+    public function getIds(): array
     {
-        return $element->getId();
+        return $this->map(function (ShopIdentity $shopIdentity) {
+            return $shopIdentity->getId();
+        });
+    }
+
+    protected function getKey(ShopIdentity $shopIdentity): int
+    {
+        return $shopIdentity->getId();
     }
 
     public function sortByPosition(): ShopIdentityCollection

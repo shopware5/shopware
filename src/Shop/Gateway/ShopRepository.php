@@ -25,7 +25,7 @@
 namespace Shopware\Shop\Gateway;
 
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Currency\Struct\ShopSearchResult;
+use Shopware\Shop\Struct\ShopSearchResult;
 use Shopware\Search\Criteria;
 use Shopware\Shop\Event\ShopSearchResultEvent;
 use Shopware\Shop\Event\ShopsLoadedEvent;
@@ -64,7 +64,6 @@ class ShopRepository
     {
         switch ($fetchMode) {
             case self::FETCH_IDENTITY:
-
 
 
         }

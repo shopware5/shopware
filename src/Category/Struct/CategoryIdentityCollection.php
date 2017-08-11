@@ -11,10 +11,10 @@ class CategoryIdentityCollection extends Collection
      */
     protected $elements = [];
 
-    public function add(CategoryIdentity $category): void
+    public function add(CategoryIdentity $categoryIdentity): void
     {
-        $key = $this->getKey($category);
-        $this->elements[$key] = $category;
+        $key = $this->getKey($categoryIdentity);
+        $this->elements[$key] = $categoryIdentity;
     }
 
     public function remove(int $id): void
@@ -22,14 +22,14 @@ class CategoryIdentityCollection extends Collection
         parent::doRemoveByKey($id);
     }
 
-    public function removeElement(CategoryIdentity $category): void
+    public function removeElement(CategoryIdentity $categoryIdentity): void
     {
-        parent::doRemoveByKey($this->getKey($category));
+        parent::doRemoveByKey($this->getKey($categoryIdentity));
     }
 
-    public function exists(CategoryIdentity $category): bool
+    public function exists(CategoryIdentity $categoryIdentity): bool
     {
-        return parent::has($this->getKey($category));
+        return parent::has($this->getKey($categoryIdentity));
     }
 
     public function get(int $id): ? CategoryIdentity
@@ -43,9 +43,14 @@ class CategoryIdentityCollection extends Collection
 
     public function getIds(): array
     {
-        return $this->map(function (CategoryIdentity $category) {
-            return $category->getId();
+        return $this->fmap(function(CategoryIdentity $categoryIdentity) {
+            return $categoryIdentity->getId();
         });
+    }
+
+    protected function getKey(CategoryIdentity $element): int
+    {
+        return $element->getId();
     }
 
     public function getPaths(): array
@@ -87,11 +92,6 @@ class CategoryIdentityCollection extends Collection
         }
 
         return $result;
-    }
-
-    protected function getKey(CategoryIdentity $element): int
-    {
-        return $element->getId();
     }
 
     public function sortByPosition(): CategoryIdentityCollection
