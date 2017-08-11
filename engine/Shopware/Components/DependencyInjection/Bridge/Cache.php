@@ -103,7 +103,15 @@ class Cache
             return false;
         }
 
-        return extension_loaded('apcu');
+        if (!extension_loaded('apcu')) {
+            return false;
+        }
+
+        if (!ini_get('apc.enabled')) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
