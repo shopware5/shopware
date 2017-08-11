@@ -25,12 +25,15 @@
 namespace Shopware\Shop\Gateway;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Framework\Struct\SortArrayByKeysTrait;
-use Shopware\Shop\Struct\Shop;
+use Shopware\Shop\Gateway\Query\ShopDetailQuery;
+use Shopware\Shop\Gateway\Query\ShopIdentityQuery;
 use Shopware\Shop\Struct\ShopCollection;
 use Shopware\Shop\Struct\ShopHydrator;
+use Shopware\Shop\Struct\ShopIdentityCollection;
 
 class ShopReader
 {
@@ -61,98 +64,38 @@ class ShopReader
         $this->connection = $connection;
     }
 
-    public function read(array $ids, TranslationContext $context): ShopCollection
+    public function readIdentities(array $ids, TranslationContext $context): ShopIdentityCollection
     {
-        $shops = $this->getShops($ids, $context);
+        $query = new ShopIdentityQuery($this->connection, $this->fieldHelper, $context);
 
-        //check if parent shops has to be loaded
-        $mainIds = array_values(array_unique(array_filter(array_column($shops, '__shop_main_id'))));
-        $mainIds = array_diff($mainIds, $ids);
+        $rows = $query->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
 
-        $parents = [];
-        if (!empty($mainIds)) {
-            $parents = $this->getShops($mainIds, $context);
+        $shops = [];
+        foreach ($rows as $id => $row) {
+            $shops[$id] = $this->hydrator->hydrateIdentity($row);
         }
 
-        $result = [];
-        foreach ($shops as $row) {
-            $id = $row['__shop_id'];
-            $mainId = $row['__shop_main_id'];
+        $shops = $this->sortIndexedArrayByKeys($ids, $shops);
 
-            if ($mainId && isset($parents[$mainId])) {
-                $row['parent'] = $parents[$mainId];
-            } elseif ($mainId && isset($shops[$mainId])) {
-                $row['parent'] = $shops[$mainId];
-            } else {
-                $row['parent'] = null;
-            }
-
-            $result[$id] = $this->hydrator->hydrate($row);
-        }
-
-        return new ShopCollection($this->sortIndexedArrayByKeys($ids, $result));
+        return new ShopIdentityCollection($shops);
     }
 
-    /**
-     * @param int[]              $ids
-     * @param TranslationContext $context
-     *
-     * @return array[]
-     */
-    private function getShops(array $ids, TranslationContext $context): array
+    public function read(array $ids, TranslationContext $context): ShopCollection
     {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->addSelect($this->fieldHelper->getShopFields())
-            ->addSelect($this->fieldHelper->getCountryFields())
-            ->addSelect($this->fieldHelper->getCountryAreaFields())
-            ->addSelect($this->fieldHelper->getPaymentMethodFields())
-            ->addSelect($this->fieldHelper->getShippingMethodFields())
-            ->addSelect($this->fieldHelper->getCurrencyFields())
-            ->addSelect($this->fieldHelper->getTemplateFields())
-            ->addSelect($this->fieldHelper->getLocaleFields())
-            ->addSelect($this->fieldHelper->getCustomerGroupFields())
-            ->addSelect($this->fieldHelper->getCategoryFields())
-            ->addSelect($this->fieldHelper->getMediaFields())
-            ->addSelect('GROUP_CONCAT(customerGroups.customer_group_id) as __category_customer_groups')
-        ;
+        $query = new ShopDetailQuery($this->connection, $this->fieldHelper, $context);
 
-        $query->from('s_core_shops', 'shop')
-            ->innerJoin('shop', 's_core_currencies', 'currency', 'currency.id = shop.currency_id')
-            ->innerJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
-            ->innerJoin('shop', 's_core_customergroups', 'customerGroup', 'customerGroup.id = shop.customer_group_id')
-            ->innerJoin('shop', 'category', 'category', 'category.id = shop.category_id')
-            ->innerJoin('shop', 's_core_countries', 'country', 'country.id = shop.country_id')
-            ->innerJoin('shop', 's_core_paymentmeans', 'paymentMethod', 'paymentMethod.id = shop.payment_id')
-            ->innerJoin('shop', 's_premium_dispatch', 'shippingMethod', 'shippingMethod.id = shop.dispatch_id')
+        $query->andWhere('shop.id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-            ->leftJoin('country', 's_core_countries_areas', 'countryArea', 'countryArea.id = country.areaID')
-            ->leftJoin('shop', 's_core_templates', 'template', 'shop.template_id = template.id')
-            ->leftJoin('shippingMethod', 's_premium_dispatch_attributes', 'shippingMethodAttribute', 'shippingMethodAttribute.dispatchID = shippingMethod.id')
-            ->leftJoin('paymentMethod', 's_core_paymentmeans_attributes', 'paymentMethodAttribute', 'paymentMethodAttribute.paymentmeanID = paymentMethod.id')
-            ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
-            ->leftJoin('customerGroup', 's_core_customergroups_attributes', 'customerGroupAttribute', 'customerGroupAttribute.customerGroupID = customerGroup.id')
-            ->leftJoin('category', 'category_attribute', 'categoryAttribute', 'categoryAttribute.category_id = category.id')
-            ->leftJoin('category', 'category_avoid_customer_group', 'customerGroups', 'customerGroups.category_id = category.id')
-            ->leftJoin('category', 's_media', 'media', 'media.id = category.media_id')
-            ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
-            ->groupBy('shop.id')
-            ->andWhere('shop.id IN (:ids)')
-            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+        $rows = $query->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
 
-        $this->fieldHelper->addCountryTranslation($query, $context);
-        $this->fieldHelper->addPaymentTranslation($query, $context);
-        $this->fieldHelper->addDeliveryTranslation($query, $context);
-        $this->fieldHelper->addMediaTranslation($query, $context);
-
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
-        $result = [];
-
-        foreach ($data as $row) {
-            $result[$row['__shop_id']] = $row;
+        $shops = [];
+        foreach ($rows as $id => $row) {
+            $shops[$id] = $this->hydrator->hydrateDetail($row);
         }
 
-        return $result;
+        $shops = $this->sortIndexedArrayByKeys($ids, $shops);
+
+        return new ShopCollection($shops);
     }
 }

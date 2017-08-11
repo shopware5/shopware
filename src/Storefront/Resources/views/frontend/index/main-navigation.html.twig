@@ -18,7 +18,7 @@
 
                 {% for category in navigation.tree %}
                     {% block frontend_index_navigation_categories_top_entry %}
-                        {% if category.displayInNavigation %}
+                        {% if not category.hideTop %}
 
                             {% if category.seoUrl %}
                                 {% set url = category.seoUrl.url %}

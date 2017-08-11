@@ -3,11 +3,12 @@
 namespace Shopware\Storefront\Navigation;
 
 use Shopware\Category\Struct\Category;
+use Shopware\Category\Struct\CategoryIdentity;
 
 class Navigation
 {
     /**
-     * @var Category[]
+     * @var CategoryIdentity[]
      */
     protected $tree;
 
@@ -27,14 +28,14 @@ class Navigation
         return $this->tree;
     }
 
-    public function getActiveCategory(): Category
-    {
-        return $this->activeCategory;
-    }
-
     public function setTree(array $tree): void
     {
         $this->tree = $tree;
+    }
+
+    public function getActiveCategory(): Category
+    {
+        return $this->activeCategory;
     }
 
     public function setActiveCategory(Category $activeCategory): void

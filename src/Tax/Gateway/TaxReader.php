@@ -25,9 +25,9 @@
 namespace Shopware\Tax\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Cart\Delivery\ShippingLocation;
-use Shopware\Country\Struct\Country;
-use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\CountryIdentity;
 use Shopware\CountryState\Struct\CountryState;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\Framework\Struct\FieldHelper;
@@ -89,7 +89,7 @@ class TaxReader
      * - The tax rule is selected according to the following criteria
      *  - Customer group
      *  - CountryArea
-     *  - Country
+     *  - CountryIdentity
      *  - CountryState
      * - The above rules are prioritized, from first to last.
      *
@@ -115,7 +115,7 @@ class TaxReader
 
         $query = $this->getAreaQuery(
             $customerGroup,
-            $location->getCountry()->getArea(),
+            $location->getCountry()->getAreaId(),
             $location->getCountry(),
             $location->getState()
         );
@@ -143,20 +143,18 @@ class TaxReader
     }
 
     /**
-     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $customerGroup
-     * @param CountryArea                                  $area
-     * @param \Shopware\Country\Struct\Country             $country
-     * @param \Shopware\CountryState\Struct\CountryState   $state
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @param CustomerGroup $customerGroup
+     * @param int|null $areaId
+     * @param CountryIdentity $country
+     * @param CountryState $state
+     * @return QueryBuilder
      */
     private function getAreaQuery(
         CustomerGroup $customerGroup,
-        CountryArea $area = null,
-        Country $country = null,
+        ?int $areaId = null,
+        CountryIdentity $country = null,
         CountryState $state = null
-    ): \Doctrine\DBAL\Query\QueryBuilder {
-        $areaId = $area ? $area->getId() : null;
+    ): QueryBuilder {
         $countryId = $country ? $country->getId() : null;
         $stateId = $state ? $state->getId() : null;
 

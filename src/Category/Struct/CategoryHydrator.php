@@ -60,43 +60,18 @@ class CategoryHydrator
         $this->seoUrlHydrator = $seoUrlHydrator;
     }
 
+    public function hydrateIdentity(array $data): CategoryIdentity
+    {
+        $identity = new CategoryIdentity();
+        $this->assignData($data, $identity);
+
+        return $identity;
+    }
+
     public function hydrate(array $data): Category
     {
-        $category = new Category(
-            (int) $data['__category_id'],
-            (int) $data['__category_parent_id'],
-            array_filter(explode('|', $data['__category_path'])),
-            (string) $data['__category_description']
-        );
-
-        $category->assign(
-            [
-                'uuid' => $data['__category_uuid'],
-                'level' => $data['__category_level'],
-                'createdAt' => new \DateTime($data['__category_added']),
-                'updatedAt' => new \DateTime($data['__category_changed_at']),
-                'active' => $data['__category_active'],
-                'facetIds' => array_filter(explode('|', $data['__category_facet_ids'])),
-                'sortingIds' => array_filter(explode('|', $data['__category_sorting_ids'])),
-
-                'position' => (int) $data['__category_position'],
-                'name' => (string) $data['__category_description'],
-                'metaTitle' => (string) $data['__category_meta_title'],
-                'metaKeywords' => (string) $data['__category_meta_keywords'],
-                'metaDescription' => (string) $data['__category_meta_description'],
-                'cmsHeadline' => (string) $data['__category_cms_headline'],
-                'cmsText' => (string) $data['__category_cms_description'],
-                'productBoxLayout' => (string) $data['__category_product_box_layout'],
-                'template' => (int) $data['__category_template'],
-                'blog' => (int) $data['__category_blog'],
-                'externalLink' => (string) $data['__category_external'],
-                'displayFacets' => (bool) !$data['__category_hide_filter'],
-                'displayInNavigation' => (bool) !$data['__category_hide_top'],
-                'hideSortings' => (bool) $data['__category_hide_sortings'],
-                'blockedCustomerGroupIds' => explode(',', $data['__category_customer_groups']),
-                'isShopCategory' => (bool) $data['__category_is_shop_category'],
-            ]
-        );
+        $category = new Category();
+        $this->assignData($data, $category);
 
 //        if ($data['__category_media_id']) {
 //            $category->setMedia(
@@ -104,22 +79,55 @@ class CategoryHydrator
 //            );
 //        }
 
-        if ($data['__categoryAttribute_id']) {
-            $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
-        }
-
         if ($data['__category_stream_id']) {
             $category->setProductStream(
                 $this->productStreamHydrator->hydrate($data)
             );
         }
 
-        if (array_key_exists('__seoUrl_id', $data) && $data['__seoUrl_id']) {
-            $category->setSeoUrl(
-                $this->seoUrlHydrator->hydrate($data)
-            );
-        }
 
         return $category;
+    }
+
+    private function assignData(array $data, CategoryIdentity $identity): void
+    {
+        $identity->assign([
+            'id' => (int) $data['__category_id'],
+            'uuid' => $data['__category_uuid'],
+            'parent' => $data['__category_parent'] ? (int) $data['__category_parent'] : null,
+            'path' => array_filter(explode('|', $data['__category_path'])),
+            'name' => (string) $data['__category_description'],
+            'position' => (int) $data['__category_position'],
+            'level' => (int) $data['__category_level'],
+            'added' => new \DateTime($data['__category_added']),
+            'changedAt' => new \DateTime($data['__category_changed_at']),
+            'metaKeywords' => $data['__category_meta_keywords'],
+            'metaTitle' => $data['__category_meta_title'],
+            'metaDescription' => $data['__category_meta_description'],
+            'cmsHeadline' => $data['__category_cms_headline'],
+            'cmsDescription' => $data['__category_cms_description'],
+            'template' => $data['__category_template'],
+            'active' => (bool) $data['__category_active'],
+            'blog' => (bool) $data['__category_blog'],
+            'external' => $data['__category_external'],
+            'hideFilter' => (bool) $data['__category_hide_filter'],
+            'hideTop' => (bool) $data['__category_hide_top'],
+            'mediaId' => $data['__category_media_id'] ? (int) $data['__category_media_id']: null,
+            'mediaUuid' => $data['__category_media_uuid'],
+            'productBoxLayout' => $data['__category_product_box_layout'],
+            'streamId' => $data['__category_stream_id'] ? (int) $data['__category_stream_id'] : null,
+            'hideSortings' => (bool) $data['__category_hide_sortings'],
+            'sortingIds' => array_filter(explode('|', $data['__category_sorting_ids'])),
+            'facetIds' => array_filter(explode('|', $data['__category_facet_ids'])),
+            'isShopCategory' => (bool) $data['__category_is_shop_category']
+        ]);
+
+        if ($data['__categoryAttribute_id']) {
+            $this->attributeHydrator->addAttribute($identity, $data, 'categoryAttribute');
+        }
+
+        if ($data['__seoUrl_id']) {
+            $identity->setSeoUrl($this->seoUrlHydrator->hydrate($data));
+        }
     }
 }

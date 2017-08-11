@@ -93,7 +93,6 @@ class StorefrontContextService implements StorefrontContextServiceInterface
             $this->getStoreFrontCurrencyId()
         );
 
-        error_log(print_r($shopScope, true) . "\n", 3, '/var/log/test.log');
         $customerScope = new CustomerScope(
             $this->getStoreCustomerId(),
             null,

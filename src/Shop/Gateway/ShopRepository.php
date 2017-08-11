@@ -27,10 +27,17 @@ namespace Shopware\Shop\Gateway;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Currency\Struct\ShopSearchResult;
 use Shopware\Search\Criteria;
+use Shopware\Shop\Event\ShopSearchResultEvent;
+use Shopware\Shop\Event\ShopsLoadedEvent;
 use Shopware\Shop\Struct\ShopCollection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ShopRepository
 {
+    const FETCH_IDENTITY = 'identity';
+
+    const FETCH_DETAIL = 'detail';
+
     /**
      * @var ShopReader
      */
@@ -41,19 +48,46 @@ class ShopRepository
      */
     private $searcher;
 
-    public function __construct(ShopReader $reader, ShopSearcher $searcher)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(ShopReader $reader, ShopSearcher $searcher, EventDispatcherInterface $eventDispatcher)
     {
         $this->reader = $reader;
         $this->searcher = $searcher;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function read(array $ids, TranslationContext $context): ShopCollection
+    public function read(array $ids, TranslationContext $context, string $fetchMode = self::FETCH_IDENTITY): ShopCollection
     {
-        return $this->reader->read($ids, $context);
+        switch ($fetchMode) {
+            case self::FETCH_IDENTITY:
+
+
+
+        }
+        $collection = $this->reader->read($ids, $context);
+
+        $this->eventDispatcher->dispatch(
+            ShopsLoadedEvent::NAME,
+            new ShopsLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ShopSearchResult
     {
-        return $this->searcher->search($criteria, $context);
+        /** @var ShopSearchResult $result */
+        $result = $this->searcher->search($criteria, $context);
+
+        $this->eventDispatcher->dispatch(
+            ShopSearchResultEvent::NAME,
+            new ShopSearchResultEvent($result, $criteria, $context)
+        );
+
+        return $result;
     }
 }

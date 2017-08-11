@@ -25,111 +25,27 @@ declare(strict_types=1);
 
 namespace Shopware\Category\Struct;
 
-use Shopware\Framework\Struct\Collection;
-
-class CategoryCollection extends Collection
+class CategoryCollection extends CategoryIdentityCollection
 {
     /**
      * @var Category[]
      */
     protected $elements = [];
 
-    public function add(Category $category): void
-    {
-        $key = $this->getKey($category);
-        $this->elements[$key] = $category;
-    }
-
-    public function remove(int $id): void
-    {
-        parent::doRemoveByKey($id);
-    }
-
-    public function removeElement(Category $category): void
-    {
-        parent::doRemoveByKey($this->getKey($category));
-    }
-
-    public function exists(Category $category): bool
-    {
-        return parent::has($this->getKey($category));
-    }
-
-    public function get(int $id): ? Category
-    {
-        if ($this->has($id)) {
-            return $this->elements[$id];
-        }
-
-        return null;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getIds(): array
-    {
-        return $this->map(function (Category $category) {
-            return $category->getId();
-        });
-    }
-
-    public function getPaths(): array
-    {
-        return $this->map(function (Category $category) {
-            return $category->getPath();
-        });
-    }
-
-    public function getIdsIncludingPaths(): array
-    {
-        $ids = [];
-        foreach ($this->elements as $category) {
-            $ids[] = $category->getId();
-            foreach ($category->getPath() as $id) {
-                $ids[] = $id;
-            }
-        }
-
-        return array_keys(array_flip($ids));
-    }
-
-    /**
-     * @param int|null $parentId
-     *
-     * @return Category[]
-     */
-    public function getTree(?int $parentId): array
-    {
-        $result = [];
-        foreach ($this->elements as $category) {
-            if ($category->getParentId() != $parentId) {
-                continue;
-            }
-            $category->setChildren(
-                $this->getTree((int) $category->getId())
-            );
-            $result[] = $category;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param Category $element
-     *
-     * @return int
-     */
-    protected function getKey(Category $element): int
-    {
-        return $element->getId();
-    }
-
-    public function sortByPosition(): CategoryCollection
-    {
-        $this->sort(function(Category $a, Category $b) {
-             return $a->getPosition() <=> $b->getPosition();
-        });
-        return $this;
-    }
+//    public function getMedia(): MediaCollection
+//    {
+//        $media = $this->map(function(Category $category) {
+//            return $category->getMedia();
+//        });
+//
+//        return new MediaCollection(array_filter($media));
+//    }
+//
+//    public function getProductStreams(): ProductStreamCollection
+//    {
+//        $streams = $this->map(function(Category $category) {
+//            return $category->getProductStream();
+//        });
+//        return new ProductStreamCollection();
+//    }
 }

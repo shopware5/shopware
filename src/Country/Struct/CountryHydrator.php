@@ -51,68 +51,54 @@ class CountryHydrator extends Hydrator
         $this->countryAreaHydrator = $countryAreaHydrator;
     }
 
+    public function hydrateIdentity(array $data): CountryIdentity
+    {
+        $identity = new CountryIdentity();
+
+        $this->assign($data, $identity);
+
+        return $identity;
+    }
+
     public function hydrate(array $data): Country
     {
         $country = new Country();
+
+        $this->assign($data, $country);
+
+        if ($data['__countryArea_id']) {
+            $country->setArea($this->countryAreaHydrator->hydrate($data));
+        }
+        return $country;
+    }
+
+    private function assign(array $data, CountryIdentity $identity)
+    {
         $id = (int) $data['__country_id'];
 
         $translation = $this->getTranslation($data, '__country', [], $id);
         $data = array_merge($data, $translation);
 
-        $country->setId($id);
-        $country->setName($data['__country_countryname']);
-
-        if ($data['__countryArea_id']) {
-            $country->setArea($this->countryAreaHydrator->hydrate($data));
-        }
-
-        if (isset($data['__country_countryiso'])) {
-            $country->setIso($data['__country_countryiso']);
-        }
-
-        if (isset($data['__country_iso3'])) {
-            $country->setIso3($data['__country_iso3']);
-        }
-
-        if (isset($data['__country_notice'])) {
-            $country->setDescription($data['__country_notice']);
-        }
-
-        if (isset($data['__country_countryen'])) {
-            $country->setEn($data['__country_countryen']);
-        }
-
-        if (isset($data['__country_display_state_in_registration'])) {
-            $country->setDisplayStateSelection((bool) $data['__country_display_state_in_registration']);
-        }
-
-        if (isset($data['__country_force_state_in_registration'])) {
-            $country->setRequiresStateSelection((bool) $data['__country_force_state_in_registration']);
-        }
-
-        if (isset($data['__country_shippingfree'])) {
-            $country->setShippingFree((bool) $data['__country_shippingfree']);
-        }
-
-        if (isset($data['__country_taxfree'])) {
-            $country->setTaxFree((bool) $data['__country_taxfree']);
-        }
-
-        if (isset($data['__country_taxfree_ustid'])) {
-            $country->setTaxFreeForVatId((bool) $data['__country_taxfree_ustid']);
-        }
-
-        if (isset($data['__country_taxfree_ustid_checked'])) {
-            $country->setVatIdCheck((bool) $data['__country_taxfree_ustid_checked']);
-        }
-
-        $country->setPosition((int) $data['__country_position']);
-        $country->setActive((bool) $data['__country_active']);
+        $identity->assign([
+            'id' => (int) $data['__country_id'],
+            'countryName' => $data['__country_countryname'],
+            'countryIso' => $data['__country_countryiso'],
+            'areaId' => $data['__country_areaID'],
+            'countryEn' => $data['__country_countryen'],
+            'position' => $data['__country_position'],
+            'notice' => $data['__country_notice'],
+            'shippingFree' => $data['__country_shippingfree'],
+            'taxFree' => $data['__country_taxfree'],
+            'taxFreeUstid' => $data['__country_taxfree_ustid'],
+            'taxFreeUstidChecked' => $data['__country_taxfree_ustid_checked'],
+            'active' => $data['__country_active'],
+            'iso3' => $data['__country_iso3'],
+            'displayStateInRegistration' => $data['__country_display_state_in_registration'],
+            'forceStateInRegistration' => $data['__country_force_state_in_registration'],
+        ]);
 
         if ($data['__countryAttribute_id'] !== null) {
-            $this->attributeHydrator->addAttribute($country, $data, 'countryAttribute');
+            $this->attributeHydrator->addAttribute($identity, $data, 'countryAttribute');
         }
-
-        return $country;
     }
 }

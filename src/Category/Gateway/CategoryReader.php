@@ -25,14 +25,19 @@
 namespace Shopware\Category\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Category\Gateway\Query\CategoryDetailQuery;
+use Shopware\Category\Gateway\Query\CategoryIdentityQuery;
 use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Category\Struct\CategoryHydrator;
+use Shopware\Category\Struct\CategoryIdentityCollection;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Storefront\ListingPage\ListingPageUrlGenerator;
+use Shopware\Framework\Struct\SortArrayByKeysTrait;
 
 class CategoryReader
 {
+    use SortArrayByKeysTrait;
+
     /**
      * @var Connection
      */
@@ -55,58 +60,41 @@ class CategoryReader
         $this->hydrator = $hydrator;
     }
 
-    public function read(array $ids, TranslationContext $context): CategoryCollection
+    public function readIdentities(array $ids, TranslationContext $context): CategoryIdentityCollection
     {
-        $query = $this->connection->createQueryBuilder();
+        $query = new CategoryIdentityQuery($this->connection, $this->fieldHelper, $context);
 
-        $query->select($this->fieldHelper->getCategoryFields())
-//            ->addSelect($this->fieldHelper->getMediaFields())
-//            ->addSelect($this->fieldHelper->getRelatedProductStreamFields())
-            ->addSelect($this->fieldHelper->getSeoUrlFields())
-            ->addSelect('GROUP_CONCAT(customerGroups.customer_group_id) as __category_customer_groups')
-        ;
+        $query->andWhere('category.id IN (:ids)');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $query->from('category', 'category');
-        $query->leftJoin('category', 's_core_shops', 'shop', 'shop.category_id = category.id');
-        $query->leftJoin('category', 'category_attribute', 'categoryAttribute', 'categoryAttribute.category_id = category.id');
-        $query->leftJoin('category', 'category_avoid_customer_group', 'customerGroups', 'customerGroups.category_id = category.id');
-//        $query->leftJoin('category', 's_media', 'media', 'media.id = category.media_id');
-//        $query->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID');
-//        $query->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
-//        $query->leftJoin('category', 's_product_streams', 'stream', 'category.stream_id = stream.id');
-//        $query->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId');
-        $query->leftJoin('category', 'seo_url', 'seoUrl', 'seoUrl.foreign_key = category.id AND seoUrl.name = :seoUrlName AND is_canonical = 1 AND seoUrl.shop_id = :shopId');
-        $query->where('category.id IN (:categories)');
-        $query->andWhere('category.active = 1');
-        $query->addGroupBy('category.id');
-        $query->setParameter('categories', $ids, Connection::PARAM_INT_ARRAY);
-        $query->setParameter('shopId', $context->getShopId());
-        $query->setParameter('seoUrlName', ListingPageUrlGenerator::ROUTE_NAME);
+        $rows = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
 
-//        $this->fieldHelper->addMediaTranslation($query, $context);
-//        $this->fieldHelper->addProductStreamTranslation($query, $context);
-
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        //use php usort instead of running mysql order by to prevent file-sort and temporary table statement
-        usort($data, function ($a, $b) {
-            if ($a['__category_position'] === $b['__category_position']) {
-                return $a['__category_id'] > $b['__category_id'];
-            }
-
-            return $a['__category_position'] > $b['__category_position'];
-        });
-
-        $collection = new CategoryCollection();
-        foreach ($data as $row) {
-            $collection->add(
-                $this->hydrator->hydrate($row)
-            );
+        $categories = [];
+        foreach ($rows as $id => $row) {
+            $categories[$id] = $this->hydrator->hydrateIdentity($row);
         }
 
-        return $collection;
+        return new CategoryIdentityCollection(
+            $this->sortIndexedArrayByKeys($ids, $categories)
+        );
+    }
+
+    public function read(array $ids, TranslationContext $context): CategoryCollection
+    {
+        $query = new CategoryDetailQuery($this->connection, $this->fieldHelper, $context);
+
+        $query->andWhere('category.id IN (:ids)');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $rows = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
+
+        $categories = [];
+        foreach ($rows as $id => $row) {
+            $categories[$id] = $this->hydrator->hydrate($row);
+        }
+
+        return new CategoryCollection(
+            $this->sortIndexedArrayByKeys($ids, $categories)
+        );
     }
 }

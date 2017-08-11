@@ -48,9 +48,9 @@ class ShopConditionHandler implements HandlerInterface
         $builder->innerJoin(
             'category',
             's_core_shops',
-            'shop',
-            "shop.id IN (:shopIds) 
-            AND category.path LIKE CONCAT('%|', shop.category_id, '|')"
+            'shopCategories',
+            "shopCategories.id IN (:shopIds) 
+            AND category.path LIKE CONCAT('%|', shopCategories.category_id, '|')"
         );
 
         /* @var ShopCondition $criteriaPart */

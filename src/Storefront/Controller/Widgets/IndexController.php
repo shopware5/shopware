@@ -57,14 +57,14 @@ class IndexController extends Controller
     {
         $criteria = new Criteria();
 
-        $criteria->addCondition(new ParentCondition([$context->getShop()->getParentId()]));
+        $criteria->addCondition(new ParentCondition([$context->getShop()->getMainId()]));
         $criteria->addCondition(new ActiveCondition(true));
 
         $repo = $this->get('shopware.shop.gateway.shop_repository');
 
         $shops = $repo->search($criteria, $context->getTranslationContext());
 
-        $ids = array_merge([$context->getShop()->getParentId()], $shops->getIds());
+        $ids = array_merge([$context->getShop()->getMainId()], $shops->getIds());
         $shops = $repo->read($ids, $context->getTranslationContext());
 
         return $shops->sortByPosition();
@@ -73,7 +73,7 @@ class IndexController extends Controller
     private function loadCurrencies(ShopContext $context)
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new ShopCondition([$context->getShop()->getParentId()]));
+        $criteria->addCondition(new ShopCondition([$context->getShop()->getMainId()]));
 
         $repo = $this->get('shopware.currency.gateway.currency_repository');
         $currencies = $repo->search($criteria, $context->getTranslationContext());

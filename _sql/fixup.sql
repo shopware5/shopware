@@ -953,4 +953,5 @@ ALTER TABLE filter_option_attribute
     FOREIGN KEY (filter_option_uuid) REFERENCES filter_option (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
-
+INSERT IGNORE INTO `s_core_templates` (`id`, `template`, `name`, `description`, `author`, `license`, `esi`, `style_support`, `emotion`, `version`, `plugin_id`, `parent_id`) VALUES
+(11,	'Responsive',	'__theme_name__',	'__theme_description__',	'__author__',	'__license__',	1,	1,	1,	3,	NULL,	NULL);

@@ -131,14 +131,14 @@ class LegacyStructConverter
     {
         $data = json_decode(json_encode($country), true);
         $data = array_merge($data, [
-            'countryname' => $country->getName(),
-            'countryiso' => $country->getIso(),
-            'countryen' => $country->getEn(),
+            'countryname' => $country->getCountryName(),
+            'countryiso' => $country->getCountryIso(),
+            'countryen' => $country->getCountryEn(),
             'position' => $country->getPosition(),
             'shippingfree' => $country->isShippingFree(),
             'taxfree' => $country->isTaxFree(),
-            'taxfree_ustid' => $country->isTaxFreeForVatId(),
-            'taxfree_ustid_checked' => $country->checkVatId(),
+            'taxfree_ustid' => $country->isTaxFreeUstId(),
+            'taxfree_ustid_checked' => $country->isTaxFreeUstidChecked(),
             'active' => $country->isActive(),
             'iso3' => $country->getIso3(),
             'display_state_in_registration' => $country->displayStateSelection(),

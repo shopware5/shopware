@@ -10,6 +10,7 @@ use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Search\Criteria;
 use Shopware\Search\Search;
 use Shopware\Search\SearchResultInterface;
+use Shopware\Shop\Gateway\Query\ShopIdentityQuery;
 use Shopware\Shop\Struct\ShopHydrator;
 
 class ShopSearcher extends Search
@@ -33,15 +34,7 @@ class ShopSearcher extends Search
 
     protected function createQuery(Criteria $criteria, TranslationContext $context): QueryBuilder
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->select($this->fieldHelper->getShopFields());
-        $query->addSelect($this->fieldHelper->getLocaleFields());
-
-        $query->from('s_core_shops', 'shop');
-        $query->leftJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id');
-        $query->leftJoin('shop', 's_core_shops', 'main', 'main.id = shop.main_id');
-
-        return $query;
+        return new ShopIdentityQuery($this->connection, $this->fieldHelper, $context);
     }
 
     protected function createResult(array $rows, int $total): SearchResultInterface

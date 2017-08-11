@@ -75,7 +75,7 @@ class TranslationContext
         return new self(
             $shop->getId(),
             $shop->isDefault(),
-            $shop->getParentId()
+            $shop->getMainId()
         );
     }
 }

@@ -103,59 +103,52 @@ class ShopHydrator extends Hydrator
         return $identity;
     }
 
-    public function hydrate($data): Shop
+    public function hydrateDetail(array $data): Shop
     {
         $shop = new Shop();
         $this->assignData($data, $shop);
 
         $shop->setCurrency($this->currencyHydrator->hydrate($data));
         $shop->setCustomerGroup($this->customerGroupHydrator->hydrate($data));
-        $shop->setCategory($this->categoryHydrator->hydrate($data));
-        $shop->setTaxCalculation($data['__shop_tax_calculation_type']);
-
-        $parent = $data;
-        if ($data['parent']) {
-            $parent = $data['parent'];
-        }
-
-        $shop->setTemplate($this->templateHydrator->hydrate($parent));
-        $shop->setParentId((int) $parent['__shop_id']);
-        $shop->setHost((string) $parent['__shop_host']);
-        $shop->setPath((string) $parent['__shop_base_path']);
-        $shop->setCustomerScope((bool) $data['__shop_customer_scope']);
-        $shop->setUrl($data['__shop_base_url'] ?: $parent['__shop_base_url']);
-        $shop->setSecure((bool) $parent['__shop_secure']);
-
-        $hosts = [];
-        if ($parent['__shop_hosts']) {
-            $hosts = explode('\n', $parent['__shop_hosts']);
-            $hosts = array_unique(array_values(array_filter($hosts)));
-        }
-        $shop->setHosts($hosts);
-
+        $shop->setCategory($this->categoryHydrator->hydrateIdentity($data));
+        $shop->setTemplate($this->templateHydrator->hydrate($data));
         $shop->setPaymentMethod($this->paymentMethodHydrator->hydrate($data));
         $shop->setShippingMethod($this->shippingMethodHydrator->hydrate($data));
-        $shop->setCountry($this->countryHydrator->hydrate($data));
+        $shop->setCountry($this->countryHydrator->hydrateIdentity($data));
 
         return $shop;
     }
 
     protected function assignData(array $data, ShopIdentity $shop): void
     {
-        $shop->setId((int) $data['__shop_id']);
-        $shop->setIsDefault((bool) $data['__shop_default']);
-        $shop->setName($data['__shop_name']);
-        $shop->setTitle($data['__shop_title']);
-        $shop->setFallbackId((int) $data['__shop_fallback_id']);
-        $shop->setHost((string) $data['__shop_host']);
-        $shop->setPath((string) $data['__shop_base_path']);
-        $shop->setUrl((string) $data['__shop_base_url']);
-        $shop->setPosition((int) $data['__shop_position']);
-        $shop->setSecure((bool) $data['__shop_secure']);
-        $shop->setLocale($this->localeHydrator->hydrate($data));
+        $data['__shop_base_url'] = rtrim($data['__shop_base_url'], '/').'/';
+        $data['__shop_base_path'] = rtrim($data['__shop_base_path'], '/').'/';
 
-        if ($data['__shop_main_id']) {
-            $shop->setParentId((int) $data['__shop_main_id']);
-        }
+        $shop->setId((int) $data['__shop_id']);
+        $shop->setUuid($data['__shop_uuid']);
+        $shop->setMainId($data['__shop_main_id'] ? (int) $data['__shop_main_id'] : (int) $data['__shop_id']);
+        $shop->setName($data['__shop_name']);
+        $shop->setTitle($data['__shop_title']?: null);
+        $shop->setPosition((int) $data['__shop_position']);
+        $shop->setHost((string) $data['__shop_host']);
+        $shop->setBasePath((string) $data['__shop_base_path']);
+        $shop->setBaseUrl((string) $data['__shop_base_url']);
+        $shop->setHosts(array_filter(explode("\n", $data['__shop_hosts'])));
+        $shop->setSecure((bool) $data['__shop_secure']);
+        $shop->setTemplateId((int) $data['__shop_template_id']);
+        $shop->setDocumentTemplateId((int) $data['__shop_document_template_id']);
+        $shop->setCategoryId((int) $data['__shop_category_id']);
+        $shop->setCustomerGroupId((int) $data['__shop_customer_group_id']);
+        $shop->setFallbackId($data['__shop_fallback_id'] ? (int)$data['__shop_fallback_id'] : null);
+        $shop->setCustomerScope((int) $data['__shop_customer_scope']);
+        $shop->setDefault((bool) $data['__shop_default']);
+        $shop->setActive((bool) $data['__shop_active']);
+        $shop->setPaymentId((int) $data['__shop_payment_id']);
+        $shop->setDispatchId((int) $data['__shop_dispatch_id']);
+        $shop->setCountryId((int) $data['__shop_country_id']);
+        $shop->setTaxCalculationType($data['__shop_tax_calculation_type']);
+
+        $shop->setCurrency($this->currencyHydrator->hydrate($data));
+        $shop->setLocale($this->localeHydrator->hydrate($data));
     }
 }

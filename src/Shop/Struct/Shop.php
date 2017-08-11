@@ -24,28 +24,17 @@
 
 namespace Shopware\Shop\Struct;
 
-use Shopware\Category\Struct\Category;
-use Shopware\Country\Struct\Country;
-use Shopware\Currency\Struct\Currency;
+use Shopware\Category\Struct\CategoryIdentity;
+use Shopware\Country\Struct\CountryIdentity;
 use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\PaymentMethod\Struct\PaymentMethod;
 use Shopware\ShippingMethod\Struct\ShippingMethod;
 use Shopware\ShopTemplate\Struct\ShopTemplate;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shop extends ShopIdentity
 {
     /**
-     * @var string[]
-     */
-    protected $hosts;
-
-    /**
-     * @var Category
+     * @var CategoryIdentity
      */
     protected $category;
 
@@ -60,16 +49,6 @@ class Shop extends ShopIdentity
     protected $customerGroup;
 
     /**
-     * @var Currency
-     */
-    protected $currency;
-
-    /**
-     * @var bool
-     */
-    protected $customerScope;
-
-    /**
      * @var ShippingMethod
      */
     protected $shippingMethod;
@@ -80,14 +59,9 @@ class Shop extends ShopIdentity
     protected $paymentMethod;
 
     /**
-     * @var Country
+     * @var CountryIdentity
      */
     protected $country;
-
-    /**
-     * @var string
-     */
-    protected $taxCalculation;
 
     /**
      * @return bool
@@ -98,51 +72,19 @@ class Shop extends ShopIdentity
     }
 
     /**
-     * @return Category
+     * @return CategoryIdentity
      */
-    public function getCategory(): \Shopware\Category\Struct\Category
+    public function getCategory(): CategoryIdentity
     {
         return $this->category;
     }
 
     /**
-     * @param Category $category
+     * @param CategoryIdentity $category
      */
-    public function setCategory($category)
+    public function setCategory(CategoryIdentity $category)
     {
         $this->category = $category;
-    }
-
-    /**
-     * @return \string[]
-     */
-    public function getHosts(): array
-    {
-        return $this->hosts;
-    }
-
-    /**
-     * @param \string[] $hosts
-     */
-    public function setHosts($hosts)
-    {
-        $this->hosts = $hosts;
-    }
-
-    /**
-     * @return Currency
-     */
-    public function getCurrency(): \Shopware\Currency\Struct\Currency
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param Currency $currency
-     */
-    public function setCurrency(Currency $currency)
-    {
-        $this->currency = $currency;
     }
 
     /**
@@ -177,22 +119,6 @@ class Shop extends ShopIdentity
         $this->template = $template;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasCustomerScope(): bool
-    {
-        return $this->customerScope;
-    }
-
-    /**
-     * @param bool $customerScope
-     */
-    public function setCustomerScope($customerScope)
-    {
-        $this->customerScope = $customerScope;
-    }
-
     public function getShippingMethod(): ShippingMethod
     {
         return $this->shippingMethod;
@@ -213,23 +139,13 @@ class Shop extends ShopIdentity
         $this->paymentMethod = $paymentMethod;
     }
 
-    public function getCountry(): Country
+    public function getCountry(): CountryIdentity
     {
         return $this->country;
     }
 
-    public function setCountry(Country $country): void
+    public function setCountry(CountryIdentity $country): void
     {
         $this->country = $country;
-    }
-
-    public function getTaxCalculation(): string
-    {
-        return $this->taxCalculation;
-    }
-
-    public function setTaxCalculation(string $taxCalculation): void
-    {
-        $this->taxCalculation = $taxCalculation;
     }
 }

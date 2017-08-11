@@ -72,6 +72,11 @@ abstract class Collection extends Struct implements \IteratorAggregate, \Countab
         return array_map($closure, $this->elements);
     }
 
+    public function fmap(\Closure $closure): array
+    {
+        return array_filter($this->map($closure));
+    }
+
     public function sort(\Closure $closure)
     {
         uasort($this->elements, $closure);

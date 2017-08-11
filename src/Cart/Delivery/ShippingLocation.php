@@ -26,20 +26,19 @@ declare(strict_types=1);
 namespace Shopware\Cart\Delivery;
 
 use Shopware\Address\Struct\Address;
-use Shopware\Country\Struct\Country;
-use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\CountryIdentity;
 use Shopware\CountryState\Struct\CountryState;
 use Shopware\Framework\Struct\Struct;
 
 class ShippingLocation extends Struct
 {
     /**
-     * @var \Shopware\Country\Struct\Country
+     * @var CountryIdentity
      */
     protected $country;
 
     /**
-     * @var null|\Shopware\CountryState\Struct\CountryState
+     * @var null|CountryState
      */
     protected $state;
 
@@ -49,11 +48,11 @@ class ShippingLocation extends Struct
     protected $address;
 
     /**
-     * @param \Shopware\Country\Struct\Country                $country
-     * @param null|\Shopware\CountryState\Struct\CountryState $state
-     * @param null|\Shopware\Address\Struct\Address           $address
+     * @param CountryIdentity $country
+     * @param null|CountryState $state
+     * @param null|Address $address
      */
-    public function __construct(Country $country, ?CountryState $state, ?Address $address)
+    public function __construct(CountryIdentity $country, ?CountryState $state, ?Address $address)
     {
         $this->country = $country;
         if ($state) {
@@ -82,7 +81,7 @@ class ShippingLocation extends Struct
         );
     }
 
-    public static function createFromCountry(Country $country): ShippingLocation
+    public static function createFromCountry(CountryIdentity $country): ShippingLocation
     {
         return new self(
             $country,
@@ -91,7 +90,7 @@ class ShippingLocation extends Struct
         );
     }
 
-    public function getCountry(): Country
+    public function getCountry(): CountryIdentity
     {
         if ($this->address) {
             return $this->address->getCountry();
@@ -114,11 +113,8 @@ class ShippingLocation extends Struct
         return $this->address;
     }
 
-    /**
-     * @return \Shopware\CountryArea\Struct\CountryArea
-     */
-    public function getArea(): CountryArea
+    public function getAreaId(): int
     {
-        return $this->getCountry()->getArea();
+        return $this->getCountry()->getAreaId();
     }
 }

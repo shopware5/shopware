@@ -31,11 +31,14 @@
                 <argument type="service" id="shopware.category.gateway.handler.customer_group_condition_handler" />
                 <argument type="service" id="shopware.category.gateway.handler.display_in_navigation_condition_handler" />
             </argument>
+            <argument id="shopware.framework.struct.field_helper" type="service"/>
+            <argument id="shopware.category.struct.category_hydrator" type="service"/>
         </service>
 
         <service class="Shopware\Category\Gateway\CategoryRepository" id="shopware.category.gateway.category_repository">
             <argument id="shopware.category.gateway.category_reader" type="service"/>
             <argument id="shopware.category.gateway.category_searcher" type="service"/>
+            <argument id="event_dispatcher" type="service" />
         </service>
 
         <service class="Shopware\Category\Gateway\Handler\ShopConditionHandler" id="shopware.category.gateway.handler.shop_condition_handler"/>

@@ -25,55 +25,71 @@ declare(strict_types=1);
 
 namespace Shopware\Shop\Struct;
 
-use Shopware\Framework\Struct\Collection;
+use Shopware\Category\Struct\CategoryIdentityCollection;
+use Shopware\Country\Struct\CountryIdentityCollection;
+use Shopware\CustomerGroup\Struct\CustomerGroupCollection;
+use Shopware\PaymentMethod\Struct\PaymentMethodCollection;
+use Shopware\ShippingMethod\Struct\ShippingMethodCollection;
+use Shopware\ShopTemplate\Struct\ShopTemplateCollection;
 
-class ShopCollection extends Collection
+class ShopCollection extends ShopIdentityCollection
 {
     /**
      * @var Shop[]
      */
     protected $elements = [];
 
-    public function add(Shop $shop): void
+    public function getCategories(): CategoryIdentityCollection
     {
-        $key = $this->getKey($shop);
-        $this->elements[$key] = $shop;
+        return new CategoryIdentityCollection(
+            $this->fmap(function(Shop $shop) {
+                return $shop->getCategory();
+            })
+        );
     }
 
-    public function remove(int $id): void
+    public function getTemplates(): ShopTemplateCollection
     {
-        parent::doRemoveByKey($id);
+        return new ShopTemplateCollection(
+            $this->fmap(function(Shop $shop) {
+                return $shop->getTemplate();
+            })
+        );
     }
 
-    public function removeElement(Shop $shop): void
+    public function getCustomerGroups(): CustomerGroupCollection
     {
-        parent::doRemoveByKey($this->getKey($shop));
+        return new CustomerGroupCollection(
+            $this->fmap(function(Shop $shop) {
+                return $shop->getCustomerGroup();
+            })
+        );
     }
 
-    public function exists(Shop $shop): bool
+    public function getPaymentMethods(): PaymentMethodCollection
     {
-        return parent::has($this->getKey($shop));
+        return new PaymentMethodCollection(
+            $this->fmap(function(Shop $shop) {
+                return $shop->getPaymentMethod();
+            })
+        );
     }
 
-    public function get(int $id): ? Shop
+    public function getShippingMethods(): ShippingMethodCollection
     {
-        if ($this->has($id)) {
-            return $this->elements[$id];
-        }
-
-        return null;
+        return new ShippingMethodCollection(
+            $this->fmap(function(Shop $shop) {
+                return $shop->getShippingMethod();
+            })
+        );
     }
 
-    protected function getKey(Shop $element): int
+    public function getCountries(): CountryIdentityCollection
     {
-        return $element->getId();
-    }
-
-    public function sortByPosition(): ShopCollection
-    {
-        $this->sort(function(Shop $a, Shop $b) {
-            return $a->getPosition() <=> $b->getPosition();
-        });
-        return $this;
+        return new CountryIdentityCollection(
+            $this->fmap(function(Shop $shop) {
+                return $shop->getCountry();
+            })
+        );
     }
 }

@@ -138,7 +138,7 @@ class Converter
 
         $country = new \Shopware\Country\Struct\Country();
         $country->setId($shop->getCountry()->getId());
-        $country->setName($shop->getCountry()->getName());
+        $country->setCountryName($shop->getCountry()->getName());
         $struct->setCountry($country);
 
         return $struct;

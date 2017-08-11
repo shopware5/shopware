@@ -263,9 +263,10 @@ class FieldHelper
     public function getCategoryFields(): array
     {
         $fields = [
+            'category.id as array_key',
             'category.id as __category_id',
             'category.uuid as __category_uuid',
-            'category.parent as __category_parent_id',
+            'category.parent as __category_parent',
             'category.path as __category_path',
             'category.description as __category_description',
             'category.position as __category_position',
@@ -290,7 +291,7 @@ class FieldHelper
             'category.hide_sortings as __category_hide_sortings',
             'category.sorting_ids as __category_sorting_ids',
             'category.facet_ids as __category_facet_ids',
-            '(shop.id IS NOT NULL) as __category_is_shop_category',
+            'shop.id as __category_is_shop_category'
         ];
 
         $fields = array_merge(
@@ -693,22 +694,18 @@ class FieldHelper
         ];
     }
 
-    public function getShopFields(bool $mainFallback = false): array
+    public function getShopFields(): array
     {
-        $fields = [
+        return [
+            'shop.id as array_key',
             'shop.id as __shop_id',
+            'shop.uuid as __shop_uuid',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
             'shop.title as __shop_title',
             'shop.position as __shop_position',
-            'shop.host as __shop_host',
-            'shop.base_path as __shop_base_path',
             'shop.position as __shop_position',
             'shop.base_url as __shop_base_url',
-            'shop.hosts as __shop_hosts',
-            'shop.secure as __shop_secure',
-            'shop.template_id as __shop_template_id',
-            'shop.document_template_id as __shop_document_template_id',
             'shop.category_id as __shop_category_id',
             'shop.locale_id as __shop_locale_id',
             'shop.currency_id as __shop_currency_id',
@@ -717,37 +714,18 @@ class FieldHelper
             'shop.customer_scope as __shop_customer_scope',
             'shop.default as __shop_default',
             'shop.active as __shop_active',
-            'shop.tax_calculation_type as __shop_tax_calculation_type',
+            //fields which considers sub shop inheritance
+            'main.host as __shop_host',
+            'main.hosts as __shop_hosts',
+            'main.base_path as __shop_base_path',
+            'main.secure as __shop_secure',
+            'main.template_id as __shop_template_id',
+            'main.document_template_id as __shop_document_template_id',
+            'main.payment_id as __shop_payment_id',
+            'main.dispatch_id as __shop_dispatch_id',
+            'main.country_id as __shop_country_id',
+            'main.tax_calculation_type as __shop_tax_calculation_type',
         ];
-
-        if ($mainFallback) {
-            $fields = array_merge($fields, [
-                "COALESCE(shop.host, main.host, 'localhost') as __shop_host",
-                "COALESCE(shop.base_path, main.base_path, '') as __shop_base_path",
-                'COALESCE(shop.secure, main.secure) as __shop_secure',
-                'COALESCE(shop.template_id, main.template_id) as __shop_template_id',
-                'COALESCE(shop.document_template_id, main.document_template_id) as __shop_document_template_id',
-                'COALESCE(shop.payment_id, main.payment_id) as __shop_payment_id',
-                'COALESCE(shop.dispatch_id, main.dispatch_id) as __shop_dispatch_id',
-                'COALESCE(shop.country_id, main.country_id) as __shop_country_id',
-                'COALESCE(shop.tax_calculation_type, main.tax_calculation_type) as __shop_tax_calculation_type',
-            ]);
-        } else {
-            $fields = array_merge($fields, [
-                'shop.host as __shop_host',
-                'shop.base_path as __shop_base_path',
-                'shop.secure as __shop_secure',
-                'shop.template_id as __shop_template_id',
-                'shop.document_template_id as __shop_document_template_id',
-                'shop.payment_id as __shop_payment_id',
-                'shop.dispatch_id as __shop_dispatch_id',
-                'shop.country_id as __shop_country_id',
-                'shop.tax_calculation_type as __shop_tax_calculation_type',
-            ]);
-        }
-
-
-        return $fields;
     }
 
     public function getCurrencyFields(): array

@@ -24,13 +24,18 @@
 
 namespace Shopware\Category\Gateway;
 
-use Shopware\Category\Struct\CategoryCollection;
+use Shopware\Category\Event\CategoryIdentityLoadedEvent;
+use Shopware\Category\Event\CategoryLoadedEvent;
+use Shopware\Category\Struct\CategoryIdentityCollection;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Criteria;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CategoryRepository
 {
-    const FETCH_LIST = 'list';
+    const FETCH_IDENTITY = 'identity';
+
+    const FETCH_DETAIL = 'detail';
 
     /**
      * @var CategoryReader
@@ -42,19 +47,59 @@ class CategoryRepository
      */
     private $searcher;
 
-    public function __construct(CategoryReader $reader, CategorySearcher $searcher)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(CategoryReader $reader, CategorySearcher $searcher, EventDispatcherInterface $eventDispatcher)
     {
         $this->reader = $reader;
         $this->searcher = $searcher;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function search(Criteria $criteria, TranslationContext $context): CategorySearchResult
     {
-        return $this->searcher->search($criteria, $context);
+        /** @var CategorySearchResult $result */
+        $result = $this->searcher->search($criteria, $context);
+
+        $this->eventDispatcher->dispatch(
+            CategoryIdentityLoadedEvent::NAME,
+            new CategoryIdentityLoadedEvent($result, $context)
+        );
+
+        return $result;
     }
 
-    public function read(array $ids, TranslationContext $context, string $fetchMode): CategoryCollection
+    public function read(array $ids, TranslationContext $context, string $fetchMode = self::FETCH_IDENTITY): CategoryIdentityCollection
     {
-        return $this->reader->read($ids, $context);
+        switch ($fetchMode) {
+            case self::FETCH_DETAIL:
+                $categories = $this->reader->read($ids, $context);
+
+                $this->eventDispatcher->dispatch(
+                    CategoryIdentityLoadedEvent::NAME,
+                    new CategoryIdentityLoadedEvent($categories, $context)
+                );
+
+                $this->eventDispatcher->dispatch(
+                    CategoryLoadedEvent::NAME,
+                    new CategoryLoadedEvent($categories, $context)
+                );
+
+                return $categories;
+
+            default:
+            case self::FETCH_IDENTITY:
+                $identities = $this->reader->readIdentities($ids, $context);
+
+                $this->eventDispatcher->dispatch(
+                    CategoryIdentityLoadedEvent::NAME,
+                    new CategoryIdentityLoadedEvent($identities, $context)
+                );
+
+                return $identities;
+        }
     }
 }

@@ -125,7 +125,7 @@ class CountryService implements CountryServiceInterface
     {
         usort($countries, function (Country $a, Country $b) {
             if ($a->getPosition() == $b->getPosition()) {
-                return strnatcasecmp($a->getName(), $b->getName());
+                return strnatcasecmp($a->getCountryName(), $b->getCountryName());
             }
 
             return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
