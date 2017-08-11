@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\Shop;
+
 /**
  * Shopware Cron for article ratings
  */
@@ -65,6 +67,16 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $customers = $this->getCustomers($orderIds);
         $positions = $this->getPositions($orderIds);
 
+        $positionsNumbers = [];
+
+        foreach ($positions as $order_id => $order) {
+            $positionsNumbers = array_merge($positionsNumbers, array_column($order, 'articleordernumber'));
+        }
+
+        $positionsBaseProducts = Shopware()->Container()->get('shopware_storefront.base_product_factory')->createBaseProducts($positionsNumbers);
+
+        $positionImages = $this->getPositionImages($positionsBaseProducts);
+
         $count = 0;
         foreach ($orders as $orderId => $order) {
             if (empty($customers[$orderId]['email']) || count($positions[$orderId]) === 0) {
@@ -87,6 +99,30 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                 ]);
+
+                $position['link_rating_tab'] = Shopware()->Container()->get('router')->assemble([
+                    'module' => 'frontend', 'sViewport' => 'detail',
+                    'sArticle' => $position['articleID'],
+                    'action' => 'rating',
+                ]);
+
+                if (!isset($positionImages[$position['articleordernumber']]['source'])) {
+                    continue;
+                }
+
+                $position['image_original']
+                    = $position['image_small']
+                    = $position['image_large']
+                    = $positionImages[$position['articleordernumber']]['source'];
+
+                if (!isset($positionImages[$position['articleordernumber']]['thumbnails'])) {
+                    continue;
+                }
+
+                $thumbnails = $positionImages[$position['articleordernumber']]['thumbnails'];
+
+                $position['image_small'] = isset($thumbnails[0]) ? $thumbnails[0]['source'] : $position['image_original'];
+                $position['image_large'] = isset($thumbnails[1]) ? $thumbnails[1]['source'] : $position['image_original'];
             }
 
             $context = [
@@ -106,6 +142,29 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         }
 
         return $count . ' rating mail(s) sent.';
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct[] $positions
+     *
+     * @return array
+     */
+    public function getPositionImages($positions)
+    {
+        $defaultShopId = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveDefault()->getId();
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext($defaultShopId);
+
+        $positionCovers = Shopware()->Container()->get('shopware_storefront.media_service')->getCovers(
+            $positions,
+            $context
+        );
+
+        return array_map(
+            function ($mediaStruct) {
+                return Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($mediaStruct);
+            },
+            $positionCovers
+        );
     }
 
     /**
