@@ -20,6 +20,41 @@
             <argument type="service" id="service_container"/>
             <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 6.0.</deprecated>
         </service>
+        
+        <service id="modules" class="Shopware_Components_Modules" synthetic="true" />
+        <service id="modules.articles" class="sArticles">
+            <factory service="modules" method="Articles" />
+        </service>
+        <service id="modules.categories" class="sCategories">
+            <factory service="modules" method="Categories" />
+        </service>
+        <service id="modules.basket" class="sBasket">
+            <factory service="modules" method="Basket" />
+        </service>
+        <service id="modules.marketing" class="sMarketing">
+            <factory service="modules" method="Marketing" />
+        </service>
+        <service id="modules.system" class="sSystem">
+            <factory service="modules" method="System" />
+        </service>
+        <service id="modules.admin" class="sAdmin">
+            <factory service="modules" method="Admin" />
+        </service>
+        <service id="modules.order" class="sOrder">
+            <factory service="modules" method="Order" />
+        </service>
+        <service id="modules.cms" class="sCms">
+            <factory service="modules" method="Cms" />
+        </service>
+        <service id="modules.core" class="sCore">
+            <factory service="modules" method="Core" />
+        </service>
+        <service id="modules.rewrite_table" class="sRewriteTable">
+            <factory service="modules" method="RewriteTable" />
+        </service>
+        <service id="modules.export" class="sExport">
+            <factory service="modules" method="Export" />
+        </service>
 
         <service id="locale_factory" class="Shopware\Components\DependencyInjection\Bridge\Locale" />
         <service id="shopware.locale" alias="locale" />
