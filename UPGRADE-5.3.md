@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Changes
 
 * Changed `engine/Library/Smarty/sysplugins/smarty_internal_write_file.php` in order to prevent race condition when creating directories concurrently
+* Support namespaces for controllers. The event `Enlight_Controller_Dispatcher_ControllerPath_{module}_{controller}` now accepts a class name as return value to allow namespaces for controllers in plugins.
 
 ## 5.3.0
 
