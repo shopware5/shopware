@@ -1,4 +1,4 @@
-;(function($) {
+;(function ($) {
     'use strict';
 
     /**
@@ -23,12 +23,9 @@
          * @returns {Plugin}
          */
         init: function () {
-            var me = this;
+            this.$el.on(this.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(this.onAddArticleCompare, this));
 
-            // On add article to compare button
-            me.$el.on(me.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(me.onAddArticleCompare, me));
-
-            $.publish('plugin/swProductCompareAdd/onRegisterEvents', [ me ]);
+            $.publish('plugin/swProductCompareAdd/onRegisterEvents', [this]);
         },
 
         /**
@@ -64,13 +61,14 @@
                 openOverlay: false
             });
 
-            $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [ me, event ]);
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [me, event]);
 
             // Ajax request for adding article to compare list
             $.ajax({
-                'url': addArticleUrl,
-                'dataType': 'jsonp',
-                'success': function(data) {
+                url: addArticleUrl,
+                dataType: 'jsonp',
+                method: 'POST',
+                success: function (data) {
                     var compareMenu = $(me.opts.compareMenuSelector);
 
                     if (compareMenu.hasClass(me.opts.hiddenCls)) {
@@ -79,7 +77,7 @@
 
                     // Check if error thrown
                     if (data.indexOf('data-max-reached="true"') !== -1) {
-                        $.loadingIndicator.close(function() {
+                        $.loadingIndicator.close(function () {
                             $.modal.open(data, {
                                 sizing: 'content'
                             });
@@ -91,7 +89,7 @@
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();
 
                         // Prevent too fast closing of loadingIndicator and overlay
-                        $.loadingIndicator.close(function() {
+                        $.loadingIndicator.close(function () {
                             $('html, body').animate({
                                 scrollTop: ($('.top-bar').offset().top)
                             }, 'slow');
@@ -100,11 +98,11 @@
                         });
                     }
 
-                    $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [ me, event, data, compareMenu ]);
+                    $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [me, event, data, compareMenu]);
                 }
             });
 
-            $.publish('plugin/swProductCompareAdd/onAddArticleCompare', [ me, event ]);
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompare', [me, event]);
         },
 
         /** Destroys the plugin */

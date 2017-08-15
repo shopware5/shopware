@@ -1,4 +1,4 @@
-;(function($, window, undefined) {
+;(function ($, window, undefined) {
     'use strict';
 
     /**
@@ -71,26 +71,22 @@
         /**
          * Initializes the plugin
          */
-        init: function() {
-            var me = this;
+        init: function () {
+            this.applyDataAttributes();
 
-            me.applyDataAttributes();
+            this.$wishlistButton = $(this.opts.wishlistSelector);
+            this.$counter = $(this.opts.counterSelector);
 
-            me.$wishlistButton = $(me.opts.wishlistSelector);
-            me.$counter = $(me.opts.counterSelector);
-
-            me.registerEvents();
+            this.registerEvents();
         },
 
         /**
          * Registers the necessary event listeners for the plugin
          */
-        registerEvents: function() {
-            var me = this;
+        registerEvents: function () {
+            this.$el.on(this.getEventName('click'), '.action--note, .link--notepad', $.proxy(this.triggerRequest, this));
 
-            me.$el.on(me.getEventName('click'), '.action--note, .link--notepad', $.proxy(me.triggerRequest, me));
-
-            $.publish('plugin/swAjaxWishlist/onRegisterEvents', [ me ]);
+            $.publish('plugin/swAjaxWishlist/onRegisterEvents', [this]);
         },
 
         /**
@@ -100,24 +96,24 @@
          *
          * @param {object} event - event object
          */
-        triggerRequest: function(event) {
-            var me = this,
-                $target = $(event.currentTarget),
+        triggerRequest: function (event) {
+            var $target = $(event.currentTarget),
                 url = $target.attr('data-ajaxUrl');
 
-            if (url == undefined || $target.hasClass(me.opts.savedCls)) {
+            if (typeof url === 'undefined' || $target.hasClass(this.opts.savedCls)) {
                 return;
             }
 
             event.preventDefault();
 
             $.ajax({
-                'url': url,
-                'dataType': 'jsonp',
-                'success': $.proxy(me.responseHandler, me, $target)
+                url: url,
+                dataType: 'jsonp',
+                method: 'POST',
+                success: $.proxy(this.responseHandler, this, $target)
             });
 
-            $.publish('plugin/swAjaxWishlist/onTriggerRequest', [ me, event, url ]);
+            $.publish('plugin/swAjaxWishlist/onTriggerRequest', [this, event, url]);
         },
 
         /**
@@ -128,20 +124,19 @@
          * @param {object} $target - The associated element
          * @param {String} json - The ajax response as a JSON string
          */
-        responseHandler: function($target, json) {
-            var me = this,
-                response = JSON.parse(json);
+        responseHandler: function ($target, json) {
+            var response = JSON.parse(json);
 
-            $.publish('plugin/swAjaxWishlist/onTriggerRequestLoaded', [ me, $target, response ]);
+            $.publish('plugin/swAjaxWishlist/onTriggerRequestLoaded', [this, $target, response]);
 
             if (!response.success) {
                 return;
             }
 
-            me.updateCounter(response.notesCount);
-            me.animateElement($target);
+            this.updateCounter(response.notesCount);
+            this.animateElement($target);
 
-            $.publish('plugin/swAjaxWishlist/onTriggerRequestFinished', [ me, $target, response ]);
+            $.publish('plugin/swAjaxWishlist/onTriggerRequestFinished', [this, $target, response]);
         },
 
         /**
@@ -149,7 +144,7 @@
          *
          * @param {object} $target - The associated element
          */
-        animateElement: function($target) {
+        animateElement: function ($target) {
             var me = this,
                 $icon = $target.find('i'),
                 originalIcon = $icon[0].className,
@@ -160,15 +155,15 @@
             $text.html($target.attr('data-text') || me.opts.text);
             $icon.removeClass(originalIcon).addClass(me.opts.iconCls);
 
-            window.setTimeout(function() {
+            window.setTimeout(function () {
                 $target.removeClass(me.opts.savedCls);
                 $text.html(originalText);
                 $icon.removeClass(me.opts.iconCls).addClass(originalIcon);
 
-                $.publish('plugin/swAjaxWishlist/onAnimateElementFinished', [ me, $target ]);
+                $.publish('plugin/swAjaxWishlist/onAnimateElementFinished', [me, $target]);
             }, me.opts.delay);
 
-            $.publish('plugin/swAjaxWishlist/onAnimateElement', [ me, $target ]);
+            $.publish('plugin/swAjaxWishlist/onAnimateElement', [me, $target]);
         },
 
         /**
@@ -179,20 +174,19 @@
          * @returns {*|HTMLElement|$counter}
          */
         updateCounter: function (count) {
-            var me = this,
-                $btn = me.$wishlistButton,
+            var $btn = this.$wishlistButton,
                 animate = 'transition';
 
-            if (me.$counter.length) {
-                me.$counter.html(count);
-                return me.$counter;
+            if (this.$counter.length) {
+                this.$counter.html(count);
+                return this.$counter;
             }
 
             // Initial state don't has the badge, so we need to create it
-            me.$counter = $('<span>', {
+            this.$counter = $('<span>', {
                 'class': 'badge notes--quantity',
                 'html': count,
-                'css': { 'opacity': 0 }
+                'css': {'opacity': 0}
             }).appendTo($btn.find('a'));
 
             if (!$.support.transition) {
@@ -200,22 +194,20 @@
             }
 
             // Show it with a nice transition
-            me.$counter[animate]({
+            this.$counter[animate]({
                 'opacity': 1
             }, 500);
 
-            $.publish('plugin/swAjaxWishlist/onUpdateCounter', [ me, me.$counter, count ]);
+            $.publish('plugin/swAjaxWishlist/onUpdateCounter', [this, this.$counter, count]);
 
-            return me.$counter;
+            return this.$counter;
         },
 
         /**
          * Destroys the plugin
          */
-        destroy: function() {
-            var me = this;
-
-            me.$el.off(me.getEventName('click'));
+        destroy: function () {
+            this.$el.off(this.getEventName('click'));
         }
     });
 })(jQuery, window);

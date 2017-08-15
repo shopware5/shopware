@@ -45,6 +45,7 @@ class Context implements \JsonSerializable
      * @var array
      */
     public $params = [];
+
     /**
      * only for NOT mode_rewrite mode
      *
@@ -62,27 +63,12 @@ class Context implements \JsonSerializable
     /**
      * @var string
      */
-    protected $secureHost = null;
-
-    /**
-     * @var string
-     */
     protected $baseUrl = '';
-
-    /**
-     * @var string
-     */
-    protected $secureBaseUrl = null;
 
     /**
      * @var bool
      */
     protected $secure = false;
-
-    /**
-     * @var bool
-     */
-    protected $alwaysSecure = false;
 
     /**
      * @var bool
@@ -133,7 +119,7 @@ class Context implements \JsonSerializable
      * @param bool   $secure
      * @param array  $globalParams
      */
-    public function __construct($host = 'localhost', $baseUrl = '', $secure = false, $globalParams = [])
+    public function __construct($host = 'localhost', $baseUrl = '', $secure = false, array $globalParams = [])
     {
         $this->host = $host;
         $this->baseUrl = $baseUrl;
@@ -178,22 +164,6 @@ class Context implements \JsonSerializable
     /**
      * @return string
      */
-    public function getSecureHost()
-    {
-        return $this->secureHost !== null ? $this->secureHost : $this->host;
-    }
-
-    /**
-     * @param string $secureHost
-     */
-    public function setSecureHost($secureHost)
-    {
-        $this->secureHost = $secureHost;
-    }
-
-    /**
-     * @return string
-     */
     public function getBaseUrl()
     {
         return $this->baseUrl;
@@ -205,22 +175,6 @@ class Context implements \JsonSerializable
     public function setBaseUrl($baseUrl)
     {
         $this->baseUrl = $baseUrl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecureBaseUrl()
-    {
-        return $this->secureBaseUrl !== null ? $this->secureBaseUrl : $this->baseUrl;
-    }
-
-    /**
-     * @param string $secureBaseUrl
-     */
-    public function setSecureBaseUrl($secureBaseUrl)
-    {
-        $this->secureBaseUrl = $secureBaseUrl;
     }
 
     /**
@@ -237,22 +191,6 @@ class Context implements \JsonSerializable
     public function setSecure($secure)
     {
         $this->secure = $secure;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAlwaysSecure()
-    {
-        return $this->alwaysSecure;
-    }
-
-    /**
-     * @param bool $alwaysSecure
-     */
-    public function setAlwaysSecure($alwaysSecure)
-    {
-        $this->alwaysSecure = $alwaysSecure;
     }
 
     /**
@@ -304,10 +242,10 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param      $name
-     * @param null $default
+     * @param string     $name
+     * @param null|mixed $default
      *
-     * @return null|string
+     * @return null|mixed
      */
     public function getParam($name, $default = null)
     {
@@ -323,8 +261,8 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param $name
-     * @param $param
+     * @param string $name
+     * @param mixed  $param
      */
     public function setParam($name, $param)
     {
@@ -468,13 +406,12 @@ class Context implements \JsonSerializable
     {
         $self = new self(
             $shop->getHost(), $shop->getBaseUrl(),
-            $shop->getAlwaysSecure() || $shop->getSecure(),
+            $shop->getSecure(),
             []
         );
         $self->setShopId($shop->getId());
         $self->setUrlToLower($config->get('routerToLower'));
         $self->setBaseFile($config->get('baseFile'));
-        $self->setAlwaysSecure($shop->getAlwaysSecure());
         $self->setRemoveCategory((bool) $config->get('routerRemoveCategory'));
 
         return $self;

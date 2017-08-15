@@ -23,41 +23,41 @@
  */
 
 /**
- * @param $params
- * @param $template
- * @return void
+ * @param array  $params
+ * @param string $template
+ *
  * @throws Exception
  */
-function smarty_function_compileJavascript($params, $template)
+function smarty_function_compileJavascript(array $params, $template)
 {
     $time = $params['timestamp'];
     $output = $params['output'];
 
-    /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
+    /** @var $pathResolver \Shopware\Components\Theme\PathResolver */
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');
 
-    /**@var $shop \Shopware\Models\Shop\Shop*/
+    /** @var $shop \Shopware\Models\Shop\Shop */
     $shop = Shopware()->Container()->get('shop');
 
-    /**@var $settings \Shopware\Models\Theme\Settings*/
+    /** @var $settings \Shopware\Models\Theme\Settings */
     $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
         \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
     );
 
     /** @var $front Enlight_Controller_Front */
     $front = Shopware()->Front();
-    $secure = $front->Request()->isSecure();
 
     $file = $pathResolver->getJsFilePath($shop, $time);
-    $url = $pathResolver->formatPathToUrl($file, $shop, $secure);
+    $url = $pathResolver->formatPathToUrl($file, $shop);
 
     if (!$settings->getForceCompile() && file_exists($file)) {
         // see: http://stackoverflow.com/a/9473886
         $template->assign($output, [$url]);
+
         return;
     }
 
-    /**@var $compiler \Shopware\Components\Theme\Compiler*/
+    /** @var $compiler \Shopware\Components\Theme\Compiler */
     $compiler = Shopware()->Container()->get('theme_compiler');
     $compiler->compileJavascript($time, $shop->getTemplate(), $shop);
     $template->assign($output, [$url]);

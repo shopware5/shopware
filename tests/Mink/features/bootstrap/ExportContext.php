@@ -126,8 +126,8 @@ SQL;
         /** @var Connection $dbal */
         $dbal = Shopware()->Container()->get('dbal_connection');
         $dbal->exec('INSERT INTO s_core_shops
-          (id, main_id, name, title, position, host, base_path, base_url, hosts, secure, secure_host, secure_base_path, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, fallback_id, customer_scope, `default`, active, always_secure) VALUES
-		  ("3", NULL, "Export Testshop", "Export Testshop", "0", "' . $this->subShopDomain . '", NULL, NULL, "", "0", NULL, NULL, "23", "23", "3", "1", "1", "1", "1", "0", "0", "1", "0");');
+          (id, main_id, name, title, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, fallback_id, customer_scope, `default`, active) VALUES
+		  ("3", NULL, "Export Testshop", "Export Testshop", "0", "' . $this->subShopDomain . '", NULL, NULL, "", "0", "23", "23", "3", "1", "1", "1", "1", "0", "0", "1");');
 
         $dbal->exec('UPDATE s_export SET languageID=3 WHERE id in (4711, 4712, 4713, 4714)');
     }

@@ -152,8 +152,8 @@ class CacheWarmer
      *
      * @param string[] $viewPorts
      * @param int      $shopId
-     * @param null     $limit
-     * @param null     $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return string[]
      */
@@ -181,7 +181,7 @@ class CacheWarmer
             $qb->andWhere('org_path Like ' . $qb->createNamedParameter($viewPorts[0] . '%'));
         }
 
-        if ($limit != null && $offset != null) {
+        if ($limit !== null && $offset !== null) {
             $qb->setFirstResult($offset);
             $qb->setMaxResults($limit);
         }
@@ -235,12 +235,12 @@ class CacheWarmer
 
         //if not already the main shop get it
         $mainShop = !empty($shop['main_id']) ? $this->getShopDataById($shop['main_id']) : $shop;
-        $httpHost = $mainShop['always_secure'] ? 'https://' : 'http://';
+        $httpHost = $mainShop['secure'] ? 'https://' : 'http://';
         if ($shop['base_url']) {
             $baseUrl = $shop['base_url'];
         } else {
             // if no virtual url of the language shop is give us the one from the main shop. Otherwise use simply the base_path
-            $baseUrl = $mainShop['base_url'] ? $mainShop['base_url'] : $mainShop['base_path'];
+            $baseUrl = $mainShop['base_url'] ?: $mainShop['base_path'];
         }
         // use the main host if no language host ist available
         $shopHost = empty($shop['host']) ? $mainShop['host'] : $shop['host'];

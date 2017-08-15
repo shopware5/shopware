@@ -84,7 +84,7 @@
                         {block name='frontend_checkout_confirm_tos_revocation_notice'}
                             {if {config name=revocationnotice}}
                                 <div class="body--revocation" data-modalbox="true" data-targetSelector="a" data-mode="ajax" data-height="500" data-width="750">
-                                    {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
+                                    {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                                 </div>
                             {/if}
                         {/block}

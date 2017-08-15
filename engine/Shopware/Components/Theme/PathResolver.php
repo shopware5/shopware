@@ -88,7 +88,7 @@ class PathResolver
             return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $template['template'];
         }
 
-        if ($template['plugin_namespace'] == 'ShopwarePlugins') {
+        if ($template['plugin_namespace'] === 'ShopwarePlugins') {
             return implode(
                 DIRECTORY_SEPARATOR,
                 [
@@ -273,19 +273,12 @@ class PathResolver
     /**
      * @param string    $path
      * @param Shop\Shop $shop
-     * @param bool      $isSecureRequest
      *
      * @return string
      */
-    public function formatPathToUrl($path, Shop\Shop $shop, $isSecureRequest = false)
+    public function formatPathToUrl($path, Shop\Shop $shop)
     {
-        if ($isSecureRequest && $shop->getSecureBasePath()) {
-            $targetPath = $shop->getSecureBasePath();
-        } else {
-            $targetPath = $shop->getBasePath();
-        }
-
-        return str_replace($this->rootDir, $targetPath, $path);
+        return str_replace($this->rootDir, $shop->getBasePath(), $path);
     }
 
     /**

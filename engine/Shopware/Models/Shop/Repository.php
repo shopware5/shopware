@@ -418,9 +418,6 @@ class Repository extends ModelRepository
             $main = DetachedShop::createFromShop($main);
             $shop->setHost($main->getHost());
             $shop->setSecure($main->getSecure());
-            $shop->setAlwaysSecure($main->getAlwaysSecure());
-            $shop->setSecureHost($main->getSecureHost());
-            $shop->setSecureBasePath($main->getSecureBasePath());
             $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
             $shop->setTemplate($main->getTemplate());
             $shop->setCurrencies($main->getCurrencies());
@@ -429,19 +426,6 @@ class Repository extends ModelRepository
         }
 
         $shop->setBaseUrl($shop->getBaseUrl() ?: $shop->getBasePath());
-        if ($shop->getSecure()) {
-            $shop->setSecureHost($shop->getSecureHost() ?: $shop->getHost());
-            $shop->setSecureBasePath($shop->getSecureBasePath() ?: $shop->getBasePath());
-            $baseUrl = $shop->getSecureBasePath();
-            if ($shop->getBaseUrl() != $shop->getBasePath()) {
-                if (!$shop->getBasePath()) {
-                    $baseUrl .= $shop->getBaseUrl();
-                } elseif (strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
-                    $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
-                }
-            }
-            $shop->setSecureBaseUrl($baseUrl);
-        }
 
         return DetachedShop::createFromShop($shop);
     }
@@ -476,22 +460,6 @@ class Repository extends ModelRepository
                 if (!$shop || $currentShop['base_url'] > $shop['base_url']) {
                     $shop = $currentShop;
                 }
-            } elseif ($currentShop['secure']
-                && ($requestPath == $currentShop['secure_base_url']
-                    || (strpos($requestPath, $currentShop['secure_base_url']) === 0
-                        && in_array($requestPath[strlen($currentShop['secure_base_url'])], ['/', '?'])))
-            ) {
-                /*
-                 * Only if the shop is used in secure (ssl) mode
-                 *
-                 * Check if the url is the same as the (sub)shop url
-                 * or if its the beginning of it, followed by / or ?
-                 *
-                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
-                 */
-                if (!$shop || $currentShop['secure_base_url'] > $shop['secure_base_url']) {
-                    $shop = $currentShop;
-                }
             } elseif (!$shop && $currentShop['base_path'] . '/' === $requestPath) {
                 /*
                  * If no shop was found, use the one which basePath equals the requestPath
@@ -506,10 +474,6 @@ class Repository extends ModelRepository
                  */
                 $shop = $currentShop;
             }
-        }
-
-        if ($shop === null) {
-            return null;
         }
 
         return $shop;
@@ -564,7 +528,11 @@ class Repository extends ModelRepository
             return 0;
         });
 
-        return $this->setShopsArrayUrls($shops);
+        return array_map(function ($shop) {
+            $shop['base_url'] = $shop['base_url'] ?: $shop['base_path'];
+
+            return $shop;
+        }, $shops);
     }
 
     /**
@@ -602,13 +570,9 @@ class Repository extends ModelRepository
             'IFNULL(main_shop.host, shop.host) as host',
             'IFNULL(main_shop.hosts, shop.hosts) as hosts',
             'IFNULL(main_shop.secure, shop.secure) as secure',
-            'IFNULL(main_shop.always_secure, shop.always_secure) as always_secure',
-            'IFNULL(main_shop.secure_host, shop.secure_host) as secure_host',
-            'IFNULL(main_shop.secure_base_path, shop.secure_base_path) as secure_base_path',
             'IFNULL(main_shop.base_path, shop.base_path) as base_path',
             'IFNULL(main_shop.template_id, shop.template_id) as template_id',
             'IFNULL(main_shop.customer_scope, shop.customer_scope) as customer_scope',
-            "'' as secure_base_url",
         ]);
         $query->from('s_core_shops', 'shop');
         $query->leftJoin('shop', 's_core_shops', 'main_shop', 'shop.main_id = main_shop.id');
@@ -677,40 +641,5 @@ class Repository extends ModelRepository
             ->leftJoin('main.currencies', 'currencies')
 
             ->where('shop.active = 1');
-    }
-
-    /**
-     * @param array $shops
-     *
-     * @return array
-     */
-    private function setShopsArrayUrls($shops)
-    {
-        foreach ($shops as &$shop) {
-            $shop['base_url'] = $shop['base_url'] ?: $shop['base_path'];
-            if (!$shop['secure']) {
-                continue;
-            }
-
-            $shop['secure_host'] = $shop['secure_host'] ?: $shop['host'];
-            $shop['secure_base_path'] = $shop['secure_base_path'] ?: $shop['base_path'];
-            $shop['secure_base_url'] = $shop['secure_base_path'];
-
-            if ($shop['base_url'] == $shop['base_path']) {
-                continue;
-            }
-
-            if (!$shop['base_path']) {
-                $shop['secure_base_url'] .= $shop['base_url'];
-                continue;
-            }
-
-            if (strpos($shop['base_url'], $shop['base_path']) === 0) {
-                $shop['secure_base_url'] .= substr($shop['base_url'], strlen($shop['base_path']));
-                continue;
-            }
-        }
-
-        return $shops;
     }
 }
