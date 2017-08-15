@@ -53,14 +53,9 @@ class Template
         /** @var $template \Enlight_Template_Manager */
         $template = \Enlight_Class::Instance('Enlight_Template_Manager');
 
-        /*
-         * @deprecated with 5.3, config switch will be removed with 5.4
-         */
-        if (true === $securityConfig['enabled']) {
-            $template->enableSecurity(
-                new Security($template, $securityConfig)
-            );
-        }
+        $template->enableSecurity(
+            new Security($template, $securityConfig)
+        );
 
         $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
