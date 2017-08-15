@@ -83,11 +83,23 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
 
     initComponent: function() {
         var me = this;
-        me.salutationStore = Ext.create('Shopware.apps.Base.store.Salutation').load();
+
+        me.salutationStore = Ext.create('Shopware.apps.Base.store.Salutation').load({
+            callback: function () {
+                me.getView().refresh();
+                me.setLoading(false);
+            }
+        });
+
         me.callParent(arguments);
     },
 
     salutationRenderer: function(value) {
+        var me = this;
+        if (me.salutationStore.count() === 0) {
+            me.setLoading(true);
+            return '';
+        }
         return this.salutationStore.getByKey(value);
     },
 
