@@ -503,7 +503,6 @@ $app->map('/finalize/', function () use ($app, $container) {
 $app->map('/finish/', function () use ($app, $menuHelper, $container) {
     $menuHelper->setCurrent('finish');
 
-    $domain = $_SERVER['HTTP_HOST'];
     $basepath = str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']);
 
     /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
@@ -519,10 +518,7 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
 
     $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
-    $app->render(
-        'finish.php',
-        ['shop' => ['domain' => $domain, 'basepath' => $basepath]]
-    );
+    $app->render('finish.php', ['url' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $basepath]);
 })->name('finish')->via('GET', 'POST');
 
 $app->map('/database-import/importDatabase', function () use ($app, $container) {
