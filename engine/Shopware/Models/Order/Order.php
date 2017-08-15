@@ -206,6 +206,7 @@ class Order extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="order")
      */
     protected $paymentInstances;
+
     /**
      * Unique identifier field.
      *
@@ -445,6 +446,8 @@ class Order extends ModelEntity
     public function __construct()
     {
         $this->details = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->history = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
     }
 
