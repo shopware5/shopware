@@ -2,6 +2,15 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.2
+
+[View all changes from v5.3.1...v5.3.2](https://github.com/shopware/shopware/compare/v5.3.1...v5.3.2)
+
+### Additions
+
+* Added basic auth support for rest api
+
+
 ## 5.3.0
 
 [View all changes from v5.2.27...v5.3.0](https://github.com/shopware/shopware/compare/v5.2.27...v5.3.0)
