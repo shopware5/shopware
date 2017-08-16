@@ -82,6 +82,8 @@ class Md5Strategy implements StrategyInterface
         }
 
         foreach ($this->blacklist as $key => $value) {
+            // must be called 2 times, because the second level won't be matched in the first call
+            $realPath = str_replace($key, $value, $realPath);
             $realPath = str_replace($key, $value, $realPath);
         }
 
