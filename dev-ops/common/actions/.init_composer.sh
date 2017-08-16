@@ -2,4 +2,4 @@
 
 composer install --no-interaction --optimize-autoloader --no-suggest
 
-ln -srf vendor/bin/phpunit ./
+I: ln -srf vendor/bin/phpunit ./
