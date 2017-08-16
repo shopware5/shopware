@@ -309,7 +309,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
                 hidden: true,
             /*{/if}*/
-            handler: Ext.bind(me.onSaveStream, me),
+            handler: Ext.bind(me.onSaveStream, me)
         });
 
         me.streamDetailForm = Ext.create('Ext.form.Panel', {
@@ -329,7 +329,12 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                     layout: 'anchor',
                     flex: 1
                 }
-            ]
+            ],
+            listeners: {
+                'validitychange': function () {
+                    me.fireEvent('validitychange');
+                }
+            }
         });
 
         me.cardContainer = Ext.create('Ext.container.Container', {

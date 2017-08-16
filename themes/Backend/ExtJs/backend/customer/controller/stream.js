@@ -60,7 +60,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'tab-activated': me.onTabActivated,
                 'reset-progressbar': me.resetProgressbar,
                 'add-customer-to-stream': me.addCustomerToStream,
-                'refresh-stream-list': me.reloadStreamList
+                'refresh-stream-list': me.reloadStreamList,
+                'validitychange': me.streamDetailValidityChanged
             },
             'customer-stream-detail': {
                 'static-changed': me.staticCheckboxChanged
@@ -137,36 +138,29 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     staticCheckboxChanged: function(value) {
         var me = this,
-            streamView = me.getStreamView(),
-            conditionPanel = me.getConditionPanel();
-
-        me.refreshEmptyMessage();
+            streamView = me.getStreamView();
 
         if (value) {
             me.disableDateTimeInput(false);
             streamView.formPanel.setDisabled(true);
-            me.disableSaveButton(false);
-
             streamView.formPanel.getForm().getFields().findBy(function(field) {
                 var isValid = field.isValid(),
                     comp = field.getEl().up('.customer-stream-condition-field');
 
-                if (!comp || isValid) {
-                    return;
+                if (comp && !isValid) {
+                    streamView.filterPanel.remove(Ext.getCmp(comp.id).ownerCt);
                 }
-
-                streamView.filterPanel.remove(Ext.getCmp(comp.id).ownerCt);
             });
         } else {
             me.disableDateTimeInput(true);
             streamView.formPanel.setDisabled(false);
-            me.disableSaveButton(!conditionPanel.hasConditions);
         }
+        me.refreshSaveButton();
+        me.refreshEmptyMessage();
     },
 
     addStream: function() {
-        var me = this,
-            conditionPanel = me.getConditionPanel();
+        var me = this;
 
         me.loadStream(
             Ext.create('Shopware.apps.Customer.model.CustomerStream')
@@ -477,16 +471,13 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     streamSelectionChanged: function(selection) {
         var me = this,
-            streamView = me.getStreamView(),
-            conditionPanel = me.getConditionPanel();
-
-        me.refreshEmptyMessage();
+            streamView = me.getStreamView();
 
         if (me.preventStreamChanged) {
             return;
         }
-
         streamView.addCustomerToStreamSelection.setDisabled(true);
+
         if (selection.length <= 0) {
             streamView.resetFilterPanel();
             streamView.listStore.getProxy().extraParams = { };
@@ -496,8 +487,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         } else {
             me.loadStream(selection[0]);
         }
-
         me.loadChart();
+
+        me.refreshEmptyMessage();
     },
 
     loadStream: function(record) {
@@ -733,44 +725,69 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     },
 
     conditionPanelChange: function(count) {
-        var me = this,
-            streamDetailForm = me.getStreamDetailForm(),
-            conditionPanel = me.getConditionPanel();
-
+        var me = this;
         me.refreshEmptyMessage();
-
-        var isStatic = streamDetailForm.getForm().findField('static').value;
-
-        if (isStatic) {
-            return;
-        }
-
-        me.disableSaveButton(!conditionPanel.hasConditions);
-
+        me.refreshSaveButton();
     },
 
     deleteStreamItem: function() {
         var me = this;
-
         me.lastRecords = [];
         me.refreshAddButton();
     },
 
     refreshEmptyMessage: function() {
         var me = this,
+            conditionPanel = me.getConditionPanel(),
             selection = me.getStreamListing().getSelectionModel().getSelection(),
             isStatic = me.getStreamDetailForm().getForm().findField('static').value,
-            conditions = me.getConditionPanel().hasConditions;
+            conditions = me.hasConditions();
 
-        console.log(selection, isStatic, conditions);
-
-        if (selection !== [] && !isStatic && !conditions) {
-            me.getConditionPanel().add(me.getConditionPanel().createEmptyMessage());
+        if (selection.length === 1 && !isStatic && !conditions) {
+            if (conditionPanel.items.length <= 0) {
+                conditionPanel.add(conditionPanel.createEmptyMessage());
+            }
         } else {
             if (!conditions) {
-                me.getConditionPanel().removeAll();
+                conditionPanel.removeAll();
             }
         }
+    },
+
+    streamDetailValidityChanged: function () {
+        var me = this;
+        me.refreshSaveButton();
+    },
+
+    refreshSaveButton: function () {
+        var me = this;
+        me.disableSaveButton(!me.isStreamValid());
+    },
+
+    isStreamValid: function () {
+        var me = this,
+            isValid = me.getStreamDetailForm().getForm().isValid(),
+            selection = me.getStreamListing().getSelectionModel().getSelection(),
+            isStatic = me.getStreamDetailForm().getForm().findField('static').value,
+            conditions = me.hasConditions();
+
+        if (!isValid) {
+            return false;
+        }
+
+        if (selection.length === 1 && !isStatic && !conditions) {
+            return false;
+        }
+
+        return true;
+    },
+
+    hasConditions: function () {
+        var me = this;
+        if (!me.getConditionPanel()) {
+            return false;
+        }
+        return me.getConditionPanel().hasConditions;
     }
 
 });

@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     createSelectionModel: function() {
         var me = this;
 
-        me.selModel = Ext.create('Ext.selection.CheckboxModel', {
+        me.selModel = Ext.create('Ext.selection.RowModel', {
             mode: 'SINGLE',
             allowDeselect: true
         });

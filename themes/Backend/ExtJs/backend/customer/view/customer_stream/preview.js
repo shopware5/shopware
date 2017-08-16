@@ -319,24 +319,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
     },
 
     /**
-     * Creates the grid selection model for checkboxes
-     *
-     * @return [Ext.selection.CheckboxModel] grid selection model
-     */
-    getGridSelModel: function () {
-        var me = this;
-
-        return Ext.create('Ext.selection.CheckboxModel', {
-            listeners: {
-                // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange: function (sm, selections) {
-                    me.fireEvent('selection-changed', selections);
-                }
-            }
-        });
-    },
-
-    /**
      * Creates the paging toolbar for the customer grid to allow
      * and store paging. The paging toolbar uses the same store as the Grid
      *
@@ -345,11 +327,41 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
     getPagingBar: function () {
         var me = this;
 
-        return Ext.create('Ext.toolbar.Paging', {
+        var comboStore = Ext.create('Ext.data.Store', {
+            fields: [ 'value', 'display' ],
+            data: [
+                { value: 10, display: '10 {s name="items"}{/s}' },
+                { value: 20, display: '20 {s name="items"}{/s}' },
+                { value: 50, display: '50 {s name="items"}{/s}' },
+                { value: 100, display: '100 {s name="items"}{/s}' },
+                { value: 200, display: '200 {s name="items"}{/s}' }
+            ]
+        });
+
+        var combo = Ext.create('Ext.form.field.ComboBox', {
+            store: comboStore,
+            valueField: 'value',
+            displayField: 'display',
+            fieldLabel: '{s name="items_per_page"}{/s}',
+            labelStyle: 'margin-top: 2px',
+            width: 220,
+            labelWidth: 110,
+            listeners: {
+                scope: me,
+                change: Ext.bind(me.onPerPageChange, me)
+            }
+        });
+
+        var toolbar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
             dock: 'bottom',
             displayInfo: true
         });
+
+        toolbar.add([{ xtype: 'tbspacer' }, combo]);
+        combo.setValue(toolbar.store.pageSize);
+
+        return toolbar;
     },
 
     /**
@@ -360,6 +372,13 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
      */
     dateColumn: function (value) {
         return !value ? value : Ext.util.Format.date(value);
+    },
+
+    onPerPageChange: function(comp, newValue) {
+        var me = this;
+
+        me.store.pageSize = newValue;
+        me.store.load();
     }
 });
 // {/block}

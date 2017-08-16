@@ -102,8 +102,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     },
 
     createConditionContainer: function(configuration) {
-        var me = this;
-
         var panel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionField', {
             flex: 1,
             name: configuration.conditionClass,
@@ -162,14 +160,15 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     setValue: function(value) {
         var me = this;
 
-        me.removeAll();
+        if (!value) {
+            return;
+        }
 
+        me.removeAll();
         value = Ext.JSON.decode(value);
 
         var containers = [];
-
         me.hasConditions = true;
-        console.log('has conditions');
 
         for (var conditionClass in value) {
             var items = value[conditionClass],
@@ -177,6 +176,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
             handler.load(conditionClass, items, function(configuration) {
                 if (!me.conditionExists(containers, configuration)) {
+                    me.hasConditions = true;
                     var container = me.createConditionContainer(configuration);
                     containers.push(container);
                 }
@@ -185,6 +185,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
         me.add(containers);
         me.getForm().setValues(value);
+        me.fireEvent('condition-panel-change', 0);
     },
 
     getSubmitData: function() {
@@ -238,10 +239,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     onRemoveChildComponent: function(panel, comp) {
         var me = this;
 
-        if (me.isDisabled()) {
-            return;
-        }
-
         if (me.items.length > 0) {
             return;
         }
@@ -249,8 +246,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         if (comp.cls === 'customer-stream-empty-message') {
             return;
         }
-
-        console.log('has no conditions');
 
         me.hasConditions = false;
         me.fireEvent('condition-panel-change', 0);
