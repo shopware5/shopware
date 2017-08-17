@@ -10,6 +10,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Added basic auth support for rest api
 
+### Changes
+
+* Changed `engine/Library/Smarty/sysplugins/smarty_internal_write_file.php` in order to prevent race condition when creating directories concurrently
 
 ## 5.3.0
 
