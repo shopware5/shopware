@@ -56,7 +56,9 @@ class FilePermissionChanger
             if (array_key_exists('filePath', $filePermission) &&
                 array_key_exists('chmod', $filePermission) &&
                 is_writable($filePermission['filePath'])) {
-                chmod($filePermission['filePath'], $filePermission['chmod']);
+                // If the owner of a file is not the user of the currently running process, "is_writable" might return true
+                // while "chmod" below fails. So we suppress any errors in that case.
+                @chmod($filePermission['filePath'], $filePermission['chmod']);
             }
         }
     }
