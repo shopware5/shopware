@@ -3563,7 +3563,7 @@ SQL;
             [$userId]
         );
         $additional = $additional ?: [];
-        $attributes = $this->attributeLoader->load('s_user_attributes', $userId) ?: [];
+        $attributes = $this->attributeLoader->load('s_user_attributes', $userId);
         $userData['additional']['user'] = array_merge($attributes, $additional);
 
         return $userData;
@@ -3584,7 +3584,7 @@ SQL;
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
         $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
-        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']);
         $userData['shippingaddress'] = $shipping;
 
         if (!isset($userData['shippingaddress']['firstname'])) {
@@ -3637,7 +3637,7 @@ SQL;
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Customer::class, $userId);
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
-        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
+        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']);
         $userData['billingaddress'] = $billing;
 
         return $userData;

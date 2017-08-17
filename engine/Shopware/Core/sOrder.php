@@ -647,7 +647,7 @@ class sOrder
         $attributeData = array_merge($attributeData, $this->orderAttributes);
 
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
-        $attributes = $this->attributeLoader->load('s_order_attributes', $orderID) ?: [];
+        $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id']);
         unset($attributes['orderID']);
 
@@ -737,7 +737,7 @@ class sOrder
             );
 
             $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
-            $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID) ?: [];
+            $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID);
             unset($detailAttributes['id']);
             unset($detailAttributes['detailID']);
             $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
@@ -1140,7 +1140,7 @@ class sOrder
             $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
         }
 
-        $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $shippingAddressId) ?: [];
+        $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $shippingAddressId);
 
         $this->attributePersister->persist($attributes, 's_order_shippingaddress_attributes', $shippingId);
 
@@ -1185,7 +1185,7 @@ class sOrder
         } // - if user found
     }
 
- // Tell-a-friend
+    // Tell-a-friend
 
     /**
      * Send status mail
@@ -1865,7 +1865,7 @@ EOT;
 
         // add attributes to orderDetails
         foreach ($orderDetails as &$orderDetail) {
-            $attributes = $this->attributeLoader->load('s_order_details_attributes', $orderDetail['orderdetailsID']) ?: [];
+            $attributes = $this->attributeLoader->load('s_order_details_attributes', $orderDetail['orderdetailsID']);
             unset($attributes['id']);
             unset($attributes['detailID']);
             $orderDetail['attributes'] = $attributes;
@@ -1886,7 +1886,7 @@ EOT;
     private function getOrderForStatusMail($orderId)
     {
         $order = $this->getOrderById($orderId);
-        $attributes = $this->attributeLoader->load('s_order_attributes', $orderId) ?: [];
+        $attributes = $this->attributeLoader->load('s_order_attributes', $orderId);
         unset($attributes['id']);
         unset($attributes['orderID']);
         $order['attributes'] = $attributes;
