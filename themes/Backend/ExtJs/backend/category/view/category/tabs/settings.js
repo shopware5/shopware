@@ -442,6 +442,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 buttonText:me.snippets.defaultSettingsImageButtonText,
                 name:'imagePath',
                 readOnly:false,
+                valueField:'virtualPath',
                 supportText:me.snippets.defaultSettingsImageSupportText,
                 multiSelect:false,
                 anchor:'100%',
