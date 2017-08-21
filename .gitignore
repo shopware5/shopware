@@ -87,3 +87,4 @@ app/config/parameters.yml
 /docker-compose.override.yml
 /.psh.yml
 /dev-ops/docker/containers/*/createuser.sh
+/dev-ops/docker/containers/php7/Dockerfile
