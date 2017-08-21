@@ -24,7 +24,6 @@ RUN apt-get update -qq && apt-get install -y -qq \
         nano \
         sudo \
         vim \
-        ant \
         graphviz \
         netcat-openbsd \
         nodejs npm nodejs-legacy
@@ -41,7 +40,7 @@ RUN docker-php-ext-install iconv mcrypt mbstring \
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-RUN npm install -g grunt-cli bower grunt jasmine
+RUN npm install npm@latest -g
 
 ADD server-apache2-vhosts.conf /etc/apache2/sites-enabled/000-default.conf
 ADD server-apache2-run-as.conf /etc/apache2/conf-available
