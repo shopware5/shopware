@@ -28,6 +28,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
+use Shopware\Bundle\SearchBundle\Sorting\RandomSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
@@ -166,6 +167,8 @@ class ArticleComponentHandler implements ComponentHandlerInterface
             case self::TYPE_NEWCOMER:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
                 break;
+            case self::TYPE_RANDOM:
+                $criteria->addSorting(new RandomSorting());
         }
 
         return $criteria;
