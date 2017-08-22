@@ -65,21 +65,15 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
 
         $orderIds = array_keys($orders);
         $customers = $this->getCustomers($orderIds);
-        $positions = $this->getPositions($orderIds);
+        $orderPositions = $this->getPositions($orderIds);
 
-        $positionsNumbers = [];
+        $shopPositionBaseProducts = $this->structurePositionsArray($orderPositions);
 
-        foreach ($positions as $order_id => $order) {
-            $positionsNumbers = array_merge($positionsNumbers, array_column($order, 'articleordernumber'));
-        }
-
-        $positionsBaseProducts = Shopware()->Container()->get('shopware_storefront.base_product_factory')->createBaseProducts($positionsNumbers);
-
-        $positionImages = $this->getPositionImages($positionsBaseProducts);
+        $shopPositionImages = $this->getPositionImages($shopPositionBaseProducts);
 
         $count = 0;
         foreach ($orders as $orderId => $order) {
-            if (empty($customers[$orderId]['email']) || count($positions[$orderId]) === 0) {
+            if (empty($customers[$orderId]['email']) || empty($orderPositions[$orderId])) {
                 continue;
             }
 
@@ -94,32 +88,32 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop->setCurrency($repository->find($order['currencyID']));
             $shop->registerResources();
 
-            foreach ($positions[$orderId] as &$position) {
-                $position['link'] = Shopware()->Container()->get('router')->assemble([
+            foreach ($orderPositions[$orderId] as &$position) {
+                $position['link'] = $this->get('router')->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                 ]);
 
-                $position['link_rating_tab'] = Shopware()->Container()->get('router')->assemble([
+                $position['link_rating_tab'] = $this->get('router')->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                     'action' => 'rating',
                 ]);
 
-                if (!isset($positionImages[$position['articleordernumber']]['source'])) {
+                if (!isset($shopPositionImages[$shopId][$position['articleordernumber']]['source'])) {
                     continue;
                 }
 
                 $position['image_original']
                     = $position['image_small']
                     = $position['image_large']
-                    = $positionImages[$position['articleordernumber']]['source'];
+                    = $shopPositionImages[$shopId][$position['articleordernumber']]['source'];
 
-                if (!isset($positionImages[$position['articleordernumber']]['thumbnails'])) {
+                if (!isset($shopPositionImages[$shopId][$position['articleordernumber']]['thumbnails'])) {
                     continue;
                 }
 
-                $thumbnails = $positionImages[$position['articleordernumber']]['thumbnails'];
+                $thumbnails = $shopPositionImages[$shopId][$position['articleordernumber']]['thumbnails'];
 
                 $position['image_small'] = isset($thumbnails[0]) ? $thumbnails[0]['source'] : $position['image_original'];
                 $position['image_large'] = isset($thumbnails[1]) ? $thumbnails[1]['source'] : $position['image_original'];
@@ -128,7 +122,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $context = [
                 'sOrder' => $order,
                 'sUser' => $customers[$orderId],
-                'sArticles' => $positions[$orderId],
+                'sArticles' => $orderPositions[$orderId],
             ];
 
             $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
@@ -145,26 +139,31 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct[] $positions
+     * @param array $positions
      *
      * @return array
      */
-    public function getPositionImages($positions)
+    public function getPositionImages($shopPositions)
     {
-        $defaultShopId = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveDefault()->getId();
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext($defaultShopId);
+        $shopPositionImages = [];
 
-        $positionCovers = Shopware()->Container()->get('shopware_storefront.media_service')->getCovers(
-            $positions,
-            $context
-        );
+        foreach ($shopPositions as $shopId => $positions) {
+            $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
 
-        return array_map(
-            function ($mediaStruct) {
-                return Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($mediaStruct);
-            },
-            $positionCovers
-        );
+            $shopPositionImages[$shopId] = $this->get('shopware_storefront.media_service')->getCovers(
+                $positions,
+                $context
+            );
+
+            $shopPositionImages[$shopId] = array_map(
+                function ($mediaStruct) {
+                    return $this->get('legacy_struct_converter')->convertMediaStruct($mediaStruct);
+                },
+                $shopPositionImages[$shopId]
+            );
+        }
+
+        return $shopPositionImages;
     }
 
     /**
@@ -347,12 +346,16 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 d.esdarticle,
                 d.taxID,
                 t.tax,
-                d.esdarticle as esd
+                d.esdarticle as esd,
+                o.subshopID as subshopID,
+                o.language as language
             FROM s_order_details as d
             LEFT JOIN s_core_tax as t
             ON t.id = d.taxID                        
             LEFT JOIN s_articles_details ad
             ON d.articleordernumber = ad.ordernumber
+            LEFT JOIN s_order o
+            ON d.orderID = o.id
             WHERE d.orderID IN ($orderIds)
             AND ad.active = 1
             AND d.modus = 0
@@ -365,5 +368,70 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         }
 
         return $rows;
+    }
+
+    /**
+     * Transforms the array from order => positions to shop => positions
+     *
+     * Input:
+     *
+     * [
+     *   [order_1] => [
+     *     position_a,
+     *     position_b,
+     *     ...
+     *   ],
+     *   [order_2] => [
+     *     position_c,
+     *     position_d,
+     *     ...
+     *   ], ...
+     * ]
+     *
+     * Output:
+     *
+     * [
+     *   [shop_1] => [
+     *     position_a,
+     *     position_b,
+     *     ...
+     *   ],
+     *   [shop_2] => [
+     *     position_c,
+     *     position_d
+     *   ]
+     * ]
+     *
+     * by using the corresponding shopId for every order's positions.
+     *
+     * @param $orderPositions
+     *
+     * @return array
+     */
+    private function structurePositionsArray($orderPositions)
+    {
+        $shopPositionNumbers = [];
+
+        foreach ($orderPositions as $order_id => $positions) {
+            $firstPosition = $positions[array_keys($positions)[0]];
+            $shopId = is_numeric($firstPosition['language']) ? $firstPosition['language'] : $firstPosition['subshopID'];
+
+            if (!is_array($shopPositionNumbers[$shopId])) {
+                $shopPositionNumbers[$shopId] = [];
+            }
+
+            $shopPositionNumbers[$shopId] = array_merge(
+                array_column($positions, 'articleordernumber'),
+                $shopPositionNumbers[$shopId]);
+        }
+
+        $shopPositionBaseProducts = [];
+        $baseProductFactory = $this->get('shopware_storefront.base_product_factory');
+
+        foreach ($shopPositionNumbers as $shopId => $shopPositions) {
+            $shopPositionBaseProducts[$shopId] = $baseProductFactory->createBaseProducts($shopPositions);
+        }
+
+        return $shopPositionBaseProducts;
     }
 }
