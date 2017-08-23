@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
         var me = this, items = [];
         me.originalTitle = me.title;
         Ext.each(me.translatableFields, function(currentField) {
-           var elementType = currentField.xtype || { };
+           var elementType = currentField.xtype || " ";
 
            switch(elementType) {
                 case 'codemirrorfield' :
