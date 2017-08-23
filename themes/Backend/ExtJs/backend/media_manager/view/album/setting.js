@@ -71,7 +71,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             highDpiThumbsHelper: '{s name="settings/highDpiThumbsHelper"}Also generate high dpi versions of thumbnails{/s}',
             thumbQuality: '{s name="settings/thumbQuality"}Thumbnail quality{/s}',
             thumbQualitySupport: '{s name="settings/thumbQualitySupport"}Value between 1 and 100. Higher means more quality but bigger files{/s}',
-            highDpiQuality: '{s name="settings/highDpiQuality"}High dpi thumbnail quality{/s}'
+            highDpiQuality: '{s name="settings/highDpiQuality"}High dpi thumbnail quality{/s}',
+            invalidThumbnailSize:'{s name="settings/media/album/thumbnail/size/invalid"}Invalid size{/s}',
+            errorTitle:'{s name="error/title"}Error{/s}'
         }
     },
     /**
@@ -90,7 +92,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             id = ~~(1* me.settings.get('id'));
         }
 
-        me.items = [ me.createFormPanel() ]
+        me.items = [ me.createFormPanel() ];
 
         // Create buttons
         me.dockedItems = [{
@@ -221,6 +223,31 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             items: icons
         });
     },
+    /**
+     * Validates the size of a thumbnail in the form of widthXheight
+     * Examples: 800x600, 640x480, 320x240, etc
+     *
+     * @param string size
+     * @throws If the width or height are invalid
+     */
+    validateThumbnailSize:function(size){
+        var me = this,
+            width  = size.substring(0,size.indexOf('x')),
+            height = size.substring(size.indexOf('x')+1);
+        if(
+            (isNaN(width) || isNaN(height)) ||
+            (width <= 0   || height <= 0)   ||
+            (width > 9999 || height > 9999)
+        ){
+            var msg = Ext.String.format(
+                '[0]: "[1]"',
+                me.snippets.settings.invalidThumbnailSize,
+                Ext.String.htmlEncode(size)
+            );
+
+            throw msg;
+        }
+    },
 
     /**
      * Create a new fieldset which holds off the
@@ -232,9 +259,28 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
         var me = this;
 
         me.thumbnailField = Ext.create('Ext.form.field.Text', {
+            xtype:'textfield',
             fieldLabel: me.snippets.settings.thumbSize,
             name: 'thumbnail-size',
-            emptyText: '120x120'
+            emptyText: '120x120',
+            validateOnBlur: false,
+            validateOnChange:false,
+            enableKeyEvents:true,
+            listeners:{
+                keydown:function(_this,e,opts){
+                    if(_this.getErrors()){
+                        _this.clearInvalid();
+                    }
+                }
+            },
+            validator:function(data){
+                try{
+                    me.validateThumbnailSize(data);
+                    return true;
+                }catch(e){
+                    return e;
+                }
+            }
         });
 
         me.thumbnailSubmit = Ext.create('Ext.button.Button', {
@@ -264,7 +310,21 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
 
         me.thumbnailStore = Ext.create('Ext.data.Store',{
             fields: [ 'id', 'index', 'value' ],
-            data: me.settings.data.thumbnailSize
+            data: me.settings.data.thumbnailSize,
+            listeners:{
+                update:function(_this,data){
+                    try{
+                      me.validateThumbnailSize(data.data.value);
+                    }catch(e){
+                      Ext.Msg.alert(
+                         me.snippets.settings.errorTitle,
+                         e
+                      );
+                      data.data.value = data.modified.value;
+                      return false;
+                    }                    
+                }
+            }
         });
 
         me.thumbnailView = Ext.create('Ext.view.View', {
@@ -276,7 +336,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                 itemcontextmenu: me.onThumbnailContextMenu
             },
             plugins: [
-                Ext.create('Ext.ux.DataView.LabelEditor', { dataIndex: 'value' })
+                Ext.create('Ext.ux.DataView.LabelEditor', { 
+                    dataIndex: 'value'
+                })
             ]
         });
 
@@ -379,14 +441,16 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             size = me.thumbnailField.getValue(),
             store = me.thumbnailStore;
 
-        if (size.length > 0) {
-            store.add({
-                index: store.count(),
-                value: size
-            });
-            me.thumbnailGenerate.show();
+        if(!me.thumbnailField.isValid()){
+            return;
         }
-        me.thumbnailField.setValue('');
+
+        store.add({
+            index: store.count(),
+            value: size
+        });
+
+        me.thumbnailGenerate.show();
     },
 
     /**
