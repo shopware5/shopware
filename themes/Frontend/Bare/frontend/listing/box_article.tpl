@@ -1,5 +1,6 @@
 {block name="frontend_listing_box_article_includes"}
-
+    {$path = ''}
+    
     {if $productBoxLayout == 'minimal'}
         {$path = "frontend/listing/product-box/box-minimal.tpl"}
 
@@ -12,8 +13,8 @@
     {elseif $productBoxLayout == 'emotion'}
         {$path = "frontend/listing/product-box/box-emotion.tpl"}
 
-    {else}
-        {$path = "frontend/listing/product-box/box-emotion.tpl"}
+    {elseif $productBoxLayout == 'list'}
+        {$path = "frontend/listing/product-box/box-list.tpl"}
     {/if}
     
     {if $path == ''}
