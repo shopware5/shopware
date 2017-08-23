@@ -33,4 +33,43 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
         $this->assertSame($document, $attribute->getDocument());
         $this->assertSame($attribute, $document->getAttribute());
     }
+
+    /*
+     * Test order document creation for inactive subshops
+     */
+    public function testDocumentForInactiveSubshop()
+    {
+        // Temporarily set main shop to inactive
+        $shop = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class)->find(1);
+        $shop->setActive(false);
+
+        // Flush changed shop to the database, needed for the Document code
+        Shopware()->Models()->flush($shop);
+
+        try {
+            /*
+             * Used to fail with the following error before allowing inactive subshops
+             *  Error: Call to a member function setCurrency() on null
+             *  in engine/Shopware/Components/Document.php:538
+             */
+            $document = Shopware_Components_Document::initDocument(
+                57, // Arbitrary order
+                1,
+                [
+                    '_renderer' => 'pdf',
+                    '_preview' => true,
+                ]
+            );
+        } catch (Exception $e) {
+            // Append exception to possible failure ouputs (caused by the assert in the finally block)
+            throw $e;
+        } finally {
+            // Make sure we always clean up, since an inactive default shop would otherwise crash the next test execution
+            $shop->setActive(true);
+            Shopware()->Models()->flush($shop);
+
+            // Check that document was actually created
+            $this->assertNotNull($document);
+        }
+    }
 }
