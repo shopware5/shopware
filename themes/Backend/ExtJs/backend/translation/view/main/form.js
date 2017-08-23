@@ -75,16 +75,21 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
      */
     initComponent: function() {
         var me = this, items = [];
-
         me.originalTitle = me.title;
-
         Ext.each(me.translatableFields, function(currentField) {
-            var elementType = currentField.xtype || { };
-            switch(elementType) {
+           var elementType = currentField.xtype || { };
+
+           switch(elementType) {
                 case 'codemirrorfield' :
                     currentField.height = "100";
                     break;
+                case 'textfield':
+                    currentField.emptyText = Ext.util.Format.htmlEncode(
+                        currentField.emptyText
+                    );
+                    break;
             }
+            
             currentField.hidden = false;
             items.push(currentField);
         });
