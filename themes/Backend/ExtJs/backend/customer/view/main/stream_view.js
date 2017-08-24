@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         });
         return me.layoutButton;
     },
-    
+
     createAutoIndexCheckbox: function() {
         var me = this, value = false;
 
@@ -197,7 +197,14 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             sorters: [
                 { property: 'stream.name', direction: 'ASC' }
             ],
-            pageSize: 50000
+            pageSize: 50000,
+            listeners: {
+                'beforeload': function (store, operation) {
+                    if (!operation.forceReload) {
+                        operation.addRecords = true;
+                    }
+                }
+            }
         }).load();
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.Preview', {
@@ -223,7 +230,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
                 },
                 'collapse': function() {
                     me.listStore.load();
-                    me.fireEvent('refresh-stream-list');
                 },
                 'disable': function (elem) {
                     if (elem.items) {
@@ -252,7 +258,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             flex: 1,
             listeners: {
                 'selectionchange': Ext.bind(me.onSelectionChange, me),
-                'deselect': Ext.bind(me.onDeselectStream, me)
+                'beforedeselect': Ext.bind(me.onBeforeDeselect, me)
             }
         });
 
@@ -370,13 +376,6 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         return [ me.leftContainer, me.regionContainer ];
     },
 
-    resetFilterPanel: function() {
-        this.filterPanel.removeAll();
-        this.filterPanel.loadRecord(null);
-        this.formPanel.loadRecord(null);
-        this.formPanel.setDisabled(false);
-    },
-
     createConditionsMenu: function() {
         var me = this, items = [];
 
@@ -406,16 +405,21 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         ]);
     },
 
+    onBeforeDeselect: function (selModel, record) {
+        var me = this;
+
+        if (record) {
+            me.streamDetailForm.getForm().updateRecord(record);
+            me.formPanel.getForm().updateRecord(record);
+        }
+    },
+
     onChangeLayout: function (button, item) {
         this.fireEvent('switch-layout', item.layout);
     },
 
     onSelectionChange: function(selModel, selection) {
         this.fireEvent('stream-selection-changed', selection);
-    },
-
-    onDeselectStream: function(selModel, record, index) {
-        this.fireEvent('stream-deselected', record, index);
     },
 
     onOnChangeAutoIndex: function(checkbox, newValue) {

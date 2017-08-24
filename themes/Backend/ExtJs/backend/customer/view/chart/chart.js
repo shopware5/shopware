@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             grid: true,
             minimum: 0,
             label: {
-                renderer:function (value) {
+                renderer: function (value) {
                     return me.currencyRenderer(value);
                 }
             }
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             title: '{s name="month"}Month{/s}',
             fields: ['yearMonth'],
             label: {
-                renderer:function (value) {
+                renderer: function (value) {
                     var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
                     return Ext.util.Format.date(myDate, 'M, Y');
                 },
@@ -117,11 +117,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             series = [];
 
         Ext.each(me.getFields(), function(item) {
-            if (item.hasOwnProperty('title')) {
-                series.push(me.createLineSeries(item.name, item.title, item.currency));
-            } else {
-                series.push(me.createLineSeries('stream_' + item.id, item.name, item.currency));
-            }
+            series.push(me.createLineSeries(item.name, item.title, item.currency));
         });
 
         return series;

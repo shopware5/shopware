@@ -637,7 +637,7 @@ Ext.define('Shopware.grid.Controller', {
                 return false;
             }
 
-            if (!me.hasModelAction(record, 'destroy') || record.getId() === null) {
+            if (!me.hasModelAction(record, 'destroy')) {
                 grid.getStore().remove(record);
                 return true;
             }

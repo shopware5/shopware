@@ -44,10 +44,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
             searchField: false,
             editColumn: false,
             displayProgressOnSingleDelete: false,
-
-            /*{if !{acl_is_allowed resource=customerstream privilege=delete}}*/
-                deleteColumn: false,
-            /*{/if}*/
+            deleteColumn: false,
 
             columns: {
                 name: {
@@ -114,6 +111,22 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     createActionColumnItems: function() {
         var me = this, items = me.callParent(arguments);
 
+        items.push({
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'deleteStream',
+            handler: function (view, rowIndex, colIndex, item, ops, record) {
+                me.fireEvent('delete-stream', record);
+            },
+            getClass: function (value, metadata, record) {
+                if (!record.phantom) {
+                    /*{if !{acl_is_allowed resource=customerstream privilege=delete}}*/
+                    return 'x-hidden';
+                    /*{/if}*/
+                    return '';
+                }
+            }
+        });
+
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
             return items;
         /*{/if}*/
@@ -144,8 +157,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
                 me.fireEvent('index-stream', record, function () {
                     el.removeCls('rotate');
                     me.fireEvent('reset-progressbar');
-                    me.getStore().load(function () {
-                        me.fireEvent('restore-stream-selection');
+                    me.getStore().load({
+                        callback: function () {
+                            me.fireEvent('restore-stream-selection');
+                        }
                     });
                 });
             },
@@ -184,7 +199,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
 
         meta.tdAttr = 'data-qtip="' + qtip + '"';
 
-        if(record.get('id') === null) {
+        if (record.get('id') === null) {
             return record.get('name') + ' <span class="stream-name-column"><i style="color: #999;">({s name="stream/not_saved"}{/s})</i></span>';
         }
 

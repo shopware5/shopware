@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         if (!me.conditionExists(me.items.items, configuration)) {
             me.add(container);
             me.hasConditions = true;
-            me.fireEvent('condition-panel-change', 1);
+            me.fireEvent('condition-panel-change');
         }
     },
 
@@ -168,7 +168,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         value = Ext.JSON.decode(value);
 
         var containers = [];
-        me.hasConditions = true;
 
         for (var conditionClass in value) {
             var items = value[conditionClass],
@@ -185,7 +184,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
         me.add(containers);
         me.getForm().setValues(value);
-        me.fireEvent('condition-panel-change', 0);
+        me.fireEvent('condition-panel-change');
     },
 
     getSubmitData: function() {
@@ -248,7 +247,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         }
 
         me.hasConditions = false;
-        me.fireEvent('condition-panel-change', 0);
+        me.fireEvent('condition-panel-change');
     }
 });
 // {/block}
