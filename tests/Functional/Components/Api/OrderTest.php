@@ -562,6 +562,37 @@ class OrderTest extends TestCase
         }
     }
 
+    public function testCreateOrderWithDocuments()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+        $order['documents'] = [
+            [
+                'date' => new \DateTime(),
+                'amount' => 47.11,
+                'typeId' => 1,
+                'customerId' => 1,
+                'documentId' => 1,
+                'hash' => 4711,
+            ],
+            [
+                'date' => new \DateTime(),
+                'amount' => 47.12,
+                'typeId' => 1,
+                'customerId' => 1,
+                'documentId' => 1,
+                'hash' => 4711,
+            ],
+        ];
+
+        $order = $this->resource->create($order);
+
+        $this->assertCount(2, $order->getDocuments());
+    }
+
     /**
      * @param array $order
      *

@@ -30,6 +30,7 @@ use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Exception\ValidationException;
@@ -191,6 +192,8 @@ class CustomerStream extends Resource
     {
         $this->checkPrivilege('save');
 
+        $data = $this->prepareData($data);
+
         $stream = new CustomerStreamEntity();
         $stream->fromArray($data);
 
@@ -198,6 +201,8 @@ class CustomerStream extends Resource
         if ($violations->count() > 0) {
             throw new ValidationException($violations);
         }
+
+        $this->validateStream($stream);
 
         $this->getManager()->persist($stream);
         $this->getManager()->flush($stream);
@@ -221,11 +226,14 @@ class CustomerStream extends Resource
             throw new ParameterMissingException();
         }
 
+        /** @var \Shopware\Models\CustomerStream\CustomerStream $stream */
         $stream = $this->getManager()->find(CustomerStreamEntity::class, $id);
 
         if (!$stream) {
             throw new NotFoundException("Customer Stream with id $id not found");
         }
+
+        $data = $this->prepareData($data);
 
         $stream->fromArray($data);
 
@@ -233,6 +241,8 @@ class CustomerStream extends Resource
         if ($violations->count() > 0) {
             throw new ValidationException($violations);
         }
+
+        $this->validateStream($stream);
 
         if (!$stream->isStatic() && $index) {
             $this->indexStream($stream);
@@ -331,10 +341,11 @@ class CustomerStream extends Resource
             return false;
         }
 
+        $conditions = json_decode($conditions, true);
         $params = [
             'id' => $streamId,
             'freezeUp' => null,
-            'static' => $conditions === '{}' ? 1 : 0,
+            'static' => empty($conditions),
         ];
 
         $this->manager->getConnection()->executeUpdate(
@@ -393,6 +404,39 @@ class CustomerStream extends Resource
                 ]);
             }
         });
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    private function prepareData(array $data)
+    {
+        $conditions = json_decode($data['conditions'], true);
+        if (empty($conditions)) {
+            $data['conditions'] = null;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param $stream \Shopware\Models\CustomerStream\CustomerStream
+     *
+     * @throws CustomValidationException
+     */
+    private function validateStream($stream)
+    {
+        if (!$stream->isStatic()) {
+            if (!$stream->getConditions()) {
+                throw new CustomValidationException('A dynamic stream has to have at least one condition');
+            }
+
+            if ($stream->getFreezeUp()) {
+                throw new CustomValidationException('A dynamic stream can not have a freezeUp time');
+            }
+        }
     }
 }
 

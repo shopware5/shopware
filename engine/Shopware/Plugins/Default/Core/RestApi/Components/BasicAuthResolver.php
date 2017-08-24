@@ -32,7 +32,7 @@ use Shopware\Models\User\User;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class StaticResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
+class BasicAuthResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
 {
     /**
      * Contains the shopware model manager
@@ -73,6 +73,6 @@ class StaticResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
             return false;
         }
 
-        return md5($username . ':' . $realm . ':' . $apiKey);
+        return $apiKey;
     }
 }

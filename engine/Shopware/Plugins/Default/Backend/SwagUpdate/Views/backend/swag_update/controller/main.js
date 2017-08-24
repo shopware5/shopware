@@ -115,21 +115,29 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
 
     onPluginStoreLoaded: function() {
         var me = this,
-            pluginCount = 0;
+            updatablePlugins = 0,
+            updatablePluginsAfterUpgrade = 0;
 
         me.pluginsStore.each(function(plugin) {
             if (plugin.get('updatable')) {
-                pluginCount++;
+                updatablePlugins++;
+            }
+
+            if (plugin.get('updatableAfterUpgrade')) {
+                updatablePluginsAfterUpgrade++;
             }
         });
 
-        if (pluginCount == 0) {
+        if (updatablePlugins === 0 && updatablePluginsAfterUpgrade === 0) {
             return;
         }
 
-        me.mainWindow.showHintContainer(pluginCount);
-        me.changeTabIcon(me.mainWindow.down('#update-plugin-tab'), 10);
-        me.mainWindow.hintContainer.update();
+        if (updatablePlugins) {
+            me.changeTabIcon(me.mainWindow.down('#update-plugin-tab'), 10);
+            me.mainWindow.showHintContainer(updatablePlugins);
+            me.mainWindow.hintContainer.update();
+        }
+
         me.addQuickTips();
     },
 
@@ -139,10 +147,23 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
         Ext.tip.QuickTipManager.init();
         me.mainWindow.pluginsGrid.getStore().each(function(plugin) {
 
-            if(plugin.get('updatable') === true) {
+            if (plugin.get('updatable') === true) {
                 Ext.tip.QuickTipManager.register({
                     target: Ext.get(plugin.get('technicalName')),
                     text: '{s name="plugin/update/quick_tip"}{/s}',
+                    width: 180,
+                    dismissDelay: 10000
+                });
+            } else if (plugin.get('updatableAfterUpgrade') === true) {
+                var node = Ext.get(me.mainWindow.pluginsGrid.getView().getNode(plugin));
+
+                if (!node) {
+                    return;
+                }
+
+                Ext.tip.QuickTipManager.register({
+                    target: node.down('.x-action-col-cell'),
+                    text: '{s name="plugin/update/update_after_upgrade"}{/s}',
                     width: 180,
                     dismissDelay: 10000
                 });

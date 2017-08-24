@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,31 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-Ext.define('Shopware.apps.SwagUpdate.model.Plugins', {
 
-    extend: 'Ext.data.Model',
-
-    fields: [
-        { name: 'name', type: 'string' },
-        { name: 'version', type: 'string' },
-        { name: 'requiredVersion', type: 'string' },
-        { name: 'message', type: 'string' },
-        { name: 'errorLevel', type: 'int' },
-        { name: 'updatable', type: 'boolean' },
-        { name: 'updatableAfterUpgrade', type: 'boolean' },
-        { name: 'technicalName', type: 'string' }
-    ],
-
-    proxy: {
-        type: 'ajax',
-
-        api: {
-            read: '{url controller="SwagUpdate" action="plugins"}'
-        },
-
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
+class Migrations_Migration948 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $this->addSql('UPDATE `s_customer_streams` SET `conditions` = null WHERE LENGTH(conditions) < 10;');
+        $this->addSql('UPDATE `s_customer_streams` SET `static` = 1 WHERE `conditions` IS NULL;');
     }
-});
+}

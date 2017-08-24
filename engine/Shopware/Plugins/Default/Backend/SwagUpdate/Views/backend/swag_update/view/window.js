@@ -291,9 +291,15 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
     /**
      * @param { Ext.grid.Panel } grid
      * @param { number } index
+     * @param { number } colIndex
+     * @param { object } eOpts
+     * @param { event } event
+     * @param { Ext.data.Model } record
      */
-    onClickShowPluginUpdateDetails: function(grid, index) {
-        this.fireEvent('showPluginUpdateDetails', grid, index);
+    onClickShowPluginUpdateDetails: function(grid, index, colIndex, eOpts, event, record) {
+        if (record.get('updatable')) {
+            this.fireEvent('showPluginUpdateDetails', grid, index);
+        }
     },
 
     /**
@@ -304,11 +310,14 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
      */
     onGetClass: function(value, metadata, record) {
         if (record.get('updatable')) {
-            metadata.style = 'margin: 0 auto;';
-            return 'sprite-arrow-circle-315'
+            return 'sprite-arrow-circle-315';
         }
 
-        metadata.style = "display:none;"
+        if (record.get('updatableAfterUpgrade')) {
+            return 'sprite-exclamation';
+        }
+
+        return 'x-hide-display';
     },
 
     /**

@@ -148,7 +148,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                     new ProductAttributeCondition(
                         $facet->getField(),
                         ProductAttributeCondition::OPERATOR_NOT_IN,
-                        [null, 0, '0000-00-00']
+                        [0, '0']
                     )
                 );
 

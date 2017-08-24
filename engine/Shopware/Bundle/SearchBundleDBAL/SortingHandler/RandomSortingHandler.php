@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,31 +21,38 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-Ext.define('Shopware.apps.SwagUpdate.model.Plugins', {
 
-    extend: 'Ext.data.Model',
+namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-    fields: [
-        { name: 'name', type: 'string' },
-        { name: 'version', type: 'string' },
-        { name: 'requiredVersion', type: 'string' },
-        { name: 'message', type: 'string' },
-        { name: 'errorLevel', type: 'int' },
-        { name: 'updatable', type: 'boolean' },
-        { name: 'updatableAfterUpgrade', type: 'boolean' },
-        { name: 'technicalName', type: 'string' }
-    ],
+use Shopware\Bundle\SearchBundle\Sorting\RandomSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-    proxy: {
-        type: 'ajax',
-
-        api: {
-            read: '{url controller="SwagUpdate" action="plugins"}'
-        },
-
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class RandomSortingHandler implements SortingHandlerInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsSorting(SortingInterface $sorting)
+    {
+        return $sorting instanceof RandomSorting;
     }
-});
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateSorting(
+        SortingInterface $sorting,
+        QueryBuilder $query,
+        ShopContextInterface $context
+    ) {
+        $query->addOrderBy('rand()');
+    }
+}
