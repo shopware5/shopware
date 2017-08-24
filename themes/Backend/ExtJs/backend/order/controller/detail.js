@@ -537,7 +537,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * @param [Ext.container.Container] me
      */
     onCreateDocument: function(order, config, panel) {
-        var store = Ext.create('Shopware.apps.Order.store.Configuration');
+        var me = this,
+            store = Ext.create('Shopware.apps.Order.store.Configuration');
 
         panel.setLoading(true);
 
@@ -552,6 +553,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 if ( rawData.success === true ) {
                     var data = rawData.data[0];
                     order.set(data);
+
+                    Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.documents.successMessage, me.snippets.growlMessage);
 
                     var documentStore = order['getReceiptStore'],
                         documents = order.get('documents');
@@ -570,6 +573,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         model['getDocTypeStore'] = typeStore;
                         documentStore.add(model);
                     });
+                } else {
+                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.documents.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
                 }
             }
         });
