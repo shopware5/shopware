@@ -90,15 +90,19 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             }
             if (!Ext.isEmpty(plugin.subscriptionExpiration)) {
                 var subscriptionExpirationDate = Ext.Date.parse(plugin.subscriptionExpiration, 'Y-m-d'),
-                    isSubscriptionExpired = subscriptionExpirationDate < today,
+                    isSubscriptionExpired, daysDiffSubscription;
+
+                if (!Ext.isEmpty(subscriptionExpirationDate)) {
+                    isSubscriptionExpired = subscriptionExpirationDate < today;
                     daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
 
-                if (isSubscriptionExpired || daysDiffSubscription < 14) {
-                    preparedData.expiredPluginSubscriptions.push({
-                        label: plugin.label,
-                        expired: isSubscriptionExpired,
-                        daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription
-                    });
+                    if (isSubscriptionExpired || daysDiffSubscription < 14) {
+                        preparedData.expiredPluginSubscriptions.push({
+                            label: plugin.label,
+                            expired: isSubscriptionExpired,
+                            daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription
+                        });
+                    }
                 }
             }
             if (plugin.unknownLicense) {
@@ -108,18 +112,22 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             }
             if (!Ext.isEmpty(plugin.licenseExpiration)) {
                 var licenseExpiration = Ext.Date.parse(plugin.licenseExpiration, 'Y-m-d'),
-                    isLicenseExpired = licenseExpiration < today,
+                    isLicenseExpired, daysDiffLicense;
+
+                if (!Ext.isEmpty(licenseExpiration)) {
+                    isLicenseExpired = licenseExpiration < today;
                     daysDiffLicense = Math.round(Math.abs((licenseExpiration.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
 
-                if (!isLicenseExpired && daysDiffLicense > 14) {
-                    continue;
-                }
+                    if (!isLicenseExpired && daysDiffLicense > 14) {
+                        continue;
+                    }
 
-                preparedData.expiredLicensePlugins.push({
-                    label: plugin.label,
-                    expired: isLicenseExpired,
-                    daysLeft: isLicenseExpired ? 0 : daysDiffLicense
-                });
+                    preparedData.expiredLicensePlugins.push({
+                        label: plugin.label,
+                        expired: isLicenseExpired,
+                        daysLeft: isLicenseExpired ? 0 : daysDiffLicense
+                    });
+                }
             }
         }
 
