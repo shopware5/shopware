@@ -358,7 +358,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->container->get('multi_edit.' . $resource);
         $result = $resource->filter($ast, $offset, $limit, $sort);
 
-        if ($this->displayVariants($ast)) {
+        if ($this->container->get('multi_edit.product.filter')->displayVariants($ast)) {
             $result = $this->addAdditionalText($result);
         }
 
@@ -599,25 +599,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         return $products;
-    }
-
-    /**
-     * @param array[] $ast
-     *
-     * @return bool
-     */
-    private function displayVariants($ast)
-    {
-        foreach ($ast as $filter) {
-            if (!isset($filter['token'])) {
-                continue;
-            }
-            if ($filter['token'] === 'ISMAIN') {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
