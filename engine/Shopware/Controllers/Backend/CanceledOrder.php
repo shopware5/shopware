@@ -44,7 +44,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Get user, shipping and billing
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['orders', 'customer', 'billing', 'payment', 'shipping'])
-            ->from('Shopware\Models\Order\Order', 'orders')
+            ->from(\Shopware\Models\Order\Order::class, 'orders')
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.payment', 'payment')
             ->leftJoin('customer.defaultBillingAddress', 'billing')
@@ -54,8 +54,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $result = $builder->getQuery()->getArrayResult();
 
-        // Check requiered fields
-        if (empty($result) || $result[0]['customer'] === null || $result[0]['customer']['billing'] === null) {
+        // Check required fields
+        if (empty($result) || $result[0]['customer'] === null || $result[0]['customer']['defaultBillingAddress'] === null) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('errorMessage/noCustomerData', 'Could not get required customer data.'),
@@ -65,7 +65,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         // Get ordernumber
-        $numberRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Number');
+        $numberRepository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Number::class);
         $numberModel = $numberRepository->findOneBy(['name' => 'invoice']);
         if ($numberModel === null) {
             $this->View()->assign([
@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $numberModel->setNumber($newOrderNumber);
 
         // Set new ordernumber to the order and its details
-        $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
+        $orderModel = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $orderId);
         $orderModel->setNumber($newOrderNumber);
         foreach ($orderModel->getDetails() as $detailModel) {
             $detailModel->setNumber($newOrderNumber);
@@ -108,31 +108,43 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         // If there is no shipping address, set billing address to be the shipping address
-        if ($result[0]['customer']['shipping'] === null) {
-            $result[0]['customer']['shipping'] = $result[0]['customer']['billing'];
+        if ($result[0]['customer']['defaultShippingAddress'] === null) {
+            $result[0]['customer']['defaultShippingAddress'] = $result[0]['customer']['defaultBillingAddress'];
         }
 
+        $customer = Shopware()->Models()->find(\Shopware\Models\Customer\Customer::class, $result[0]['customer']['id']);
+
         // copy customer number into billing address from customer
-        $result[0]['customer']['billing']['number'] = $result[0]['customer']['number'];
+        $result[0]['customer']['defaultBillingAddress']['number'] = $customer->getNumber();
+
+        // Casting null values to empty strings to fulfill the restrictions of the s_order_billingaddress table
+        $billingAddress = array_map(function ($value) {
+            return (string) $value;
+        }, $result[0]['customer']['defaultBillingAddress']);
 
         // Create new entry in s_order_billingaddress
         $billingModel = new Shopware\Models\Order\Billing();
-        $billingModel->fromArray($result[0]['customer']['billing']);
-        $billingModel->setCountry(Shopware()->Models()->find('Shopware\Models\Country\Country', $result[0]['customer']['billing']['countryId']));
-        $billingModel->setCustomer(Shopware()->Models()->find('Shopware\Models\Customer\Customer', $result[0]['customer']['billing']['customerId']));
+        $billingModel->fromArray($billingAddress);
+        $billingModel->setCountry(Shopware()->Models()->find(\Shopware\Models\Country\Country::class, $result[0]['customer']['defaultBillingAddress']['countryId']));
+        $billingModel->setCustomer($customer);
         $billingModel->setOrder($orderModel);
         Shopware()->Models()->persist($billingModel);
 
+        // Casting null values to empty strings to fulfill the restrictions of the s_order_shippingaddress table
+        $shippingAddress = array_map(function ($value) {
+            return (string) $value;
+        }, $result[0]['customer']['defaultShippingAddress']);
+
         // Create new entry in s_order_shippingaddress
         $shippingModel = new Shopware\Models\Order\Shipping();
-        $shippingModel->fromArray($result[0]['customer']['shipping']);
-        $shippingModel->setCountry(Shopware()->Models()->find('Shopware\Models\Country\Country', $result[0]['customer']['shipping']['countryId']));
-        $shippingModel->setCustomer(Shopware()->Models()->find('Shopware\Models\Customer\Customer', $result[0]['customer']['shipping']['customerId']));
+        $shippingModel->fromArray($shippingAddress);
+        $shippingModel->setCountry(Shopware()->Models()->find(\Shopware\Models\Country\Country::class, $result[0]['customer']['defaultShippingAddress']['countryId']));
+        $shippingModel->setCustomer($customer);
         $shippingModel->setOrder($orderModel);
         Shopware()->Models()->persist($shippingModel);
 
         // Finally set the order to be a regular order
-        $statusModel = Shopware()->Models()->find('Shopware\Models\Order\Status', 1);
+        $statusModel = Shopware()->Models()->find(\Shopware\Models\Order\Status::class, 1);
         $orderModel->setOrderStatus($statusModel);
 
         Shopware()->Models()->flush();
@@ -216,8 +228,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Insert the percentage into each field manually
         if ($data !== null && isset($total)) {
-            for ($i = 0; $i < count($data); ++$i) {
-                if ($total != 0) {
+            for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
+                if ($total !== 0) {
                     $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
                 } else {
                     $data[$i]['percent'] = 0;
@@ -649,7 +661,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 continue;
             }
 
-            $model = Shopware()->Models()->find('\Shopware\Models\Order\Order', $order['id']);
+            $model = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $order['id']);
             if (!$model instanceof \Shopware\Models\Order\Order) {
                 continue;
             }
@@ -772,7 +784,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function getProductsOfOrder(Order $order)
     {
         /** @var $repository \Shopware\Components\Model\ModelRepository */
-        $repository = $this->get('models')->getRepository('Shopware\Models\Article\Detail');
+        $repository = $this->get('models')->getRepository(Shopware\Models\Article\Detail::class);
 
         $products = [];
         foreach ($order->getDetails() as $detail) {
@@ -828,7 +840,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function isValidStock(Shopware\Models\Article\Detail $variant, $newStock)
     {
-        if ($variant->getArticle()->getLastStock() && $newStock < 0) {
+        if ($newStock < 0 && $variant->getArticle()->getLastStock()) {
             return false;
         }
 
@@ -844,7 +856,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function isProductPosition(Shopware\Models\Order\Detail $orderDetailModel)
     {
-        return $orderDetailModel->getMode() == 0;
+        return $orderDetailModel->getMode() === 0;
     }
 
     /**
@@ -858,8 +870,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function translateMessage($name, $default = null)
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/canceled_order/controller/main');
-        $translation = $namespace->get($name, $default);
-
-        return $translation;
+        return $namespace->get($name, $default);
     }
 }
