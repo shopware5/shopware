@@ -35,6 +35,7 @@ Ext.define('Shopware.attribute.Window', {
     layout: 'border',
     iconCls: 'sprite-attributes',
     allowTranslation: true,
+    footerButton: false,
 
     initComponent: function() {
         var me = this;
