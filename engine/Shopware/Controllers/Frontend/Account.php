@@ -770,10 +770,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var $customer Customer */
         $customer = $this->get('models')->find('Shopware\Models\Customer\Customer', $confirmModel->getData());
         if (!$customer) {
-            throw new Exception($resetPasswordNamespace->get(
-                sprintf('PasswordResetNewMissingId', $confirmModel->getData()),
-                sprintf('Could not find the user with the ID "%s".', $confirmModel->getData())
-            ));
+            throw new Exception(sprintf($resetPasswordNamespace->get(
+                'PasswordResetNewMissingId',
+                'Could not find the user with the ID "%s".'
+            ), $confirmModel->getData()));
         }
 
         return $customer;
