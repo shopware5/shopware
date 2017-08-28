@@ -531,7 +531,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
             $childNodes = [];
             foreach ($attachments as $attachment) {
-                if ($shop->getId() != $attachment->getShopId()) {
+                if ($shop->getId() !== $attachment->getShopId()) {
                     continue;
                 }
 
@@ -601,7 +601,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Gets a single mail
      *
-     * @param $id
+     * @param int $id
      */
     protected function getSingleMail($id)
     {
@@ -646,7 +646,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Returns an array with the converted mail data and a mail object for the passed mail id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return array|bool
      */
@@ -689,9 +689,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     {
         return [
             'sShop' => $this->container->get('config')->get('ShopName'),
-            'sShopURL' => ($shop->getAlwaysSecure() ?
-                'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() :
-                'http://' . $shop->getHost() . $shop->getBasePath()),
+            'sShopURL' => ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBasePath(),
             'sConfig' => $this->container->get('config'),
         ];
     }

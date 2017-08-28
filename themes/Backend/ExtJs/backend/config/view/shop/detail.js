@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     mainIdField = form.down('[name=mainId]');
                     type = mainIdField.getValue() ? 'lang' : 'sub';
                     typeSwitchField.setValue(type);
-                    typeSwitchField.setDisabled(value == 1);
+                    typeSwitchField.setDisabled(value === 1);
                 }
             }
         }
@@ -92,8 +92,8 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                         langFields = form.query('[isLangField]'),
                         requiredLangFields = form.query('[isLangRequired]'),
                         mainIdField = form.down('[name=mainId]'),
-                        mainAction = value == 'sub' ? 'show' : 'hide',
-                        langAction = value == 'lang' ? 'show' : 'hide';
+                        mainAction = value === 'sub' ? 'show' : 'hide',
+                        langAction = value === 'lang' ? 'show' : 'hide';
 
                     if(value === 'sub') {
                         mainIdField.clearValue();
@@ -105,19 +105,19 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                         field[mainAction]();
                     });
                     Ext.each(requiredMainFields, function(field) {
-                        field['allowBlank'] = value != 'sub';
+                        field['allowBlank'] = value !== 'sub';
                     });
 
                     Ext.each(langFields, function(field) {
                         field[langAction]();
                     });
                     Ext.each(requiredLangFields, function(field) {
-                        field['allowBlank'] = value != 'lang';
+                        field['allowBlank'] = value !== 'lang';
                     });
 
-                    if (value == 'lang') {
+                    if (value === 'lang') {
                         Ext.each(mainFields, function(field) {
-                            if (field.xtype != 'config-shop-currency') {
+                            if (field.xtype !== 'config-shop-currency') {
                                 field.setValue('');
                             }
                         });
@@ -210,36 +210,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             name: 'secure',
             fieldLabel: '{s name=shop/detail/secure_label}SSL support{/s}',
             isMainField: true,
-            hidden: true,
-            handler: function(button, value) {
-                var form = button.up('form'),
-                    fields = form.query('[isSecure]'),
-                    show = value ? 'show' : 'hide';
-                Ext.each(fields, function(field) {
-                    field[show]();
-                    if(!value) {
-                        field.setValue(null);
-                    }
-                });
-            }
-        }, {
-            xtype: 'config-element-boolean',
-            name: 'alwaysSecure',
-            fieldLabel: '{s name=shop/detail/always_secure}Use always SSL{/s}',
-            hidden: true,
-            isSecure: true
-        }, {
-            name: 'secureHost',
-            emptyText: '{s name=shop/detail/secure_host_empty_text}secure.example.com{/s}',
-            fieldLabel: '{s name=shop/detail/secure_host_label}SSL host{/s}',
-            hidden: true,
-            isSecure: true
-        },{
-            name: 'secureBasePath',
-            emptyText: '{s name=shop/detail/secure_path_empty_text}/secure{/s}',
-            fieldLabel: '{s name=shop/detail/secure_path_label}SSL base path{/s}',
-            hidden: true,
-            isSecure: true
+            hidden: true
         },{
             xtype: 'config-element-textarea',
             name: 'hosts',

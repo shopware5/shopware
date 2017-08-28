@@ -39,7 +39,7 @@ class FrontendPreFilter implements PreFilterInterface
      */
     public function preFilter($params, Context $context)
     {
-        if (isset($params['sDetails']) && isset($params['action']) && $params['action'] == 'detail') {
+        if (isset($params['sDetails'], $params['action']) && $params['action'] === 'detail') {
             $params['sArticle'] = $params['sDetails'];
             unset($params['sDetails']);
         }
@@ -51,10 +51,10 @@ class FrontendPreFilter implements PreFilterInterface
             $params = array_merge(['controller' => null], $params);
         }
 
-        unset($params['sUseSSL'], $params['fullPath'], $params['appendSession'], $params['forceSecure'], $params['sCoreId']);
-        unset($params['rewriteOld'], $params['rewriteAlias'], $params['rewriteUrl']);
+        unset($params['sUseSSL'], $params['fullPath'], $params['appendSession'], $params['forceSecure'],
+            $params['sCoreId'], $params['rewriteOld'], $params['rewriteAlias'], $params['rewriteUrl']);
 
-        if (isset($params['controller']) && $params['controller'] == 'detail' && $context->isRemoveCategory()) {
+        if (isset($params['controller']) && $params['controller'] === 'detail' && $context->isRemoveCategory()) {
             unset($params['sCategory']);
         }
 

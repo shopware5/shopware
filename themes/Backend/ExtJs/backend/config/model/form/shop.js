@@ -60,13 +60,10 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
         { name: 'basePath', type: 'string', useNull: true },
         { name: 'baseUrl', type: 'string', useNull: true },
         { name: 'secure', type: 'boolean' },
-        { name: 'alwaysSecure', type: 'boolean' },
-        { name: 'secureHost', type: 'string', useNull: true },
-        { name: 'secureBasePath', type: 'string', useNull: true },
         { name: 'hosts', type: 'string', useNull: true },
         { name: 'customerScope', type: 'boolean' },
 
-        // Use "convert" because "mappping" not working with "useNull"
+        // Use "convert" because "mapping" is not working with "useNull"
         { name: 'mainId', convert: function(v, record) {
             return v || record.raw && record.raw.main && record.raw.main.id;
         }, useNull: true, defaultValue: null },

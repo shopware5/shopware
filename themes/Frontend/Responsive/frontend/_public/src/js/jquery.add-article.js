@@ -1,4 +1,4 @@
-;(function($, window) {
+;(function ($, window) {
     'use strict';
 
     /**
@@ -83,19 +83,18 @@
          * @method init
          */
         init: function () {
-            var me = this,
-                opts = me.opts;
+            var opts = this.opts;
 
             // Applies HTML data attributes to the current options
-            me.applyDataAttributes();
+            this.applyDataAttributes();
 
             opts.showModal = !!opts.showModal && opts.showModal !== 'false';
 
             // Will be automatically removed when destroy() is called.
-            me._on(me.$el, opts.eventName, $.proxy(me.sendSerializedForm, me));
+            this._on(this.$el, opts.eventName, $.proxy(this.sendSerializedForm, this));
 
             // Close modal on continue shopping button
-            $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
+            $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(this.closeModal, this));
 
             StateManager.addPlugin(opts.productSliderSelector, 'swProductSlider');
         },
@@ -125,14 +124,15 @@
                 });
             }
 
-            $.publish('plugin/swAddArticle/onBeforeAddArticle', [ me, ajaxData ]);
+            $.publish('plugin/swAddArticle/onBeforeAddArticle', [me, ajaxData]);
 
             $.ajax({
-                'data': ajaxData,
-                'dataType': 'jsonp',
-                'url': opts.addArticleUrl,
-                'success': function (result) {
-                    $.publish('plugin/swAddArticle/onAddArticle', [ me, result ]);
+                data: ajaxData,
+                dataType: 'jsonp',
+                method: 'POST',
+                url: opts.addArticleUrl,
+                success: function (result) {
+                    $.publish('plugin/swAddArticle/onAddArticle', [me, result]);
 
                     if (!opts.showModal) {
                         return;
@@ -149,7 +149,7 @@
 
                         StateManager.updatePlugin(opts.productSliderSelector, 'swProductSlider');
 
-                        $.publish('plugin/swAddArticle/onAddArticleOpenModal', [ me, result ]);
+                        $.publish('plugin/swAddArticle/onAddArticleOpenModal', [me, result]);
                     });
                 }
             });
@@ -166,7 +166,7 @@
 
             $.modal.close();
 
-            $.publish('plugin/swAddArticle/onCloseModal', [ this ]);
+            $.publish('plugin/swAddArticle/onCloseModal', [this]);
         },
 
         /**
@@ -177,11 +177,9 @@
          * @event onCloseModal
          */
         onCloseModal: function () {
-            var me = this;
+            StateManager.destroyPlugin(this.opts.productSliderSelector, 'swProductSlider');
 
-            StateManager.destroyPlugin(me.opts.productSliderSelector, 'swProductSlider');
-
-            $.publish('plugin/swAddArticle/onCloseModal', [ me ]);
+            $.publish('plugin/swAddArticle/onCloseModal', [this]);
         }
     });
 })(jQuery, window);

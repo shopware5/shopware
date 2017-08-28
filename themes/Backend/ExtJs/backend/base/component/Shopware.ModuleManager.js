@@ -130,7 +130,7 @@ Ext.define('Shopware.ModuleManager', {
             'width': '100%',
             'height': '100%',
             'border': '0',
-            'src': (fullPath ? name : '{url module="backend" controller="" forceSecure}' + name),
+            'src': (fullPath ? name : '{url module="backend" controller=""}' + name),
             'data-instance': instance
         }));
 

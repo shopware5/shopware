@@ -1,4 +1,4 @@
-;(function($, window) {
+;(function ($, window) {
     /**
      * Shopware AJAX variant
      *
@@ -39,16 +39,15 @@
         /**
          * Initializes the plugin and sets up the necessary event handler
          */
-        init: function() {
-            var me = this,
-                ie;
+        init: function () {
+            var ie;
 
             // Check if we have a variant configurator
-            if (!me.$el.find('.product--configurator').length) {
+            if (!this.$el.find('.product--configurator').length) {
                 return;
             }
 
-            me.applyDataAttributes();
+            this.applyDataAttributes();
 
             // Detecting IE version using feature detection (IE7+, browsers prior to IE7 are detected as 7)
             ie = (function () {
@@ -62,18 +61,18 @@
             })();
 
             if (ie && ie <= 9) {
-                me.hasHistorySupport = false;
+                this.hasHistorySupport = false;
             }
 
-            me.$el
-                .on(me.getEventName('click'), '*[data-ajax-variants="true"]', $.proxy(me.onChange, me))
-                .on(me.getEventName('change'), '*[data-ajax-select-variants="true"]', $.proxy(me.onChange, me))
-                .on(me.getEventName('click'), '.reset--configuration', $.proxy(me.onChange, me));
+            this.$el
+                .on(this.getEventName('click'), '*[data-ajax-variants="true"]', $.proxy(this.onChange, this))
+                .on(this.getEventName('change'), '*[data-ajax-select-variants="true"]', $.proxy(this.onChange, this))
+                .on(this.getEventName('click'), '.reset--configuration', $.proxy(this.onChange, this));
 
-            $(window).on('popstate', $.proxy(me.onPopState, me));
+            $(window).on('popstate', $.proxy(this.onPopState, this));
 
-            if (me.hasHistorySupport) {
-                me.publishInitialState();
+            if (this.hasHistorySupport) {
+                this.publishInitialState();
             }
         },
 
@@ -82,9 +81,8 @@
          *
          * @returns void
          */
-        publishInitialState: function() {
-            var me = this,
-                stateObj = me._createHistoryStateObject();
+        publishInitialState: function () {
+            var stateObj = this._createHistoryStateObject();
 
             window.history.replaceState(stateObj.state, stateObj.title);
         },
@@ -96,7 +94,7 @@
          * @param {Object} values
          * @param {Boolean} pushState
          */
-        requestData: function(values, pushState) {
+        requestData: function (values, pushState) {
             var me = this,
                 stateObj = me._createHistoryStateObject();
 
@@ -105,7 +103,7 @@
                 delay: 100
             });
 
-            $.publish('plugin/swAjaxVariant/onBeforeRequestData', [ me, values, stateObj.location ]);
+            $.publish('plugin/swAjaxVariant/onBeforeRequestData', [me, values, stateObj.location]);
 
             values.template = 'ajax';
 
@@ -117,7 +115,7 @@
                 url: stateObj.location,
                 data: values,
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     var $response = $($.parseHTML(response, document, true)),
                         $productDetails,
                         $productDescription,
@@ -138,14 +136,14 @@
                     window.controller = window.snippets = window.themeConfig = window.lastSeenProductsConfig = window.csrfConfig = null;
                     $(me.opts.footerJavascriptInlineSelector).replaceWith($response.filter(me.opts.footerJavascriptInlineSelector));
 
-                    StateManager.addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
+                    StateManager.addPlugin('*[data-image-slider="true"]', 'swImageSlider', {touchControls: true})
                         .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')
                         .addPlugin('*[data-image-gallery="true"]', 'swImageGallery')
                         .addPlugin('*[data-add-article="true"]', 'swAddArticle')
                         .addPlugin('*[data-modalbox="true"]', 'swModalbox');
 
                     // Plugin developers should subscribe to this event to update their plugins accordingly
-                    $.publish('plugin/swAjaxVariant/onRequestData', [ me, response, values, stateObj.location ]);
+                    $.publish('plugin/swAjaxVariant/onRequestData', [me, response, values, stateObj.location]);
 
                     if (pushState && me.hasHistorySupport) {
                         var location = stateObj.location + '?number=' + ordernumber;
@@ -157,7 +155,7 @@
                         window.history.pushState(stateObj.state, stateObj.title, location);
                     }
                 },
-                complete: function() {
+                complete: function () {
                     $.loadingIndicator.close();
                 }
             });
@@ -168,18 +166,16 @@
          * in it's browser.
          *
          * @param {EventObject} event
-         * @returns {boolean}
          */
-        onPopState: function(event) {
-            var me = this,
-                state = event.originalEvent.state;
+        onPopState: function (event) {
+            var state = event.originalEvent.state;
 
             if (!state || !state.hasOwnProperty('type') || state.type !== 'sw-ajax-variants') {
                 return;
             }
 
-            if ($('html').hasClass('is--safari') && me.initialPopState) {
-                me.initialPopState = false;
+            if ($('html').hasClass('is--safari') && this.initialPopState) {
+                this.initialPopState = false;
                 return;
             }
 
@@ -189,29 +185,29 @@
 
             // Prevents the scrolling to top in webkit based browsers
             if (state && state.scrollPos) {
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     $(window).scrollTop(state.scrollPos);
                 }, 10);
             }
 
-            $.publish('plugin/swAjaxVariant/onPopState', [ me, state ]);
+            $.publish('plugin/swAjaxVariant/onPopState', [this, state]);
 
             if (state && state.values) {
-                me.requestData(state.values, false);
+                this.requestData(state.values, false);
             }
         },
 
         /**
          * Event handler which will fired when the user selects a variant in the storefront.
+         *
          * @param {EventObject} event
          */
-        onChange: function(event) {
-            var me = this,
-                $target = $(event.target),
+        onChange: function (event) {
+            var $target = $(event.target),
                 $form = $target.parents('form'),
                 values = {};
 
-            $.each($form.serializeArray(), function(i, item) {
+            $.each($form.serializeArray(), function (i, item) {
                 if (item.name === '__csrf_token') {
                     return;
                 }
@@ -221,7 +217,7 @@
 
             event.preventDefault();
 
-            if (!me.hasHistorySupport) {
+            if (!this.hasHistorySupport) {
                 $.loadingIndicator.open({
                     closeOnClick: false,
                     delay: 0
@@ -231,22 +227,23 @@
                 return false;
             }
 
-            $.publish('plugin/swAjaxVariant/onChange', [ me, values, $target ]);
+            $.publish('plugin/swAjaxVariant/onChange', [this, values, $target]);
 
-            me.requestData(values, true);
+            this.requestData(values, true);
         },
 
         /**
          * Helper method which returns all available url parameters.
+         *
          * @returns {Object}
          * @private
          */
-        _getUrlParams: function() {
+        _getUrlParams: function () {
             var search = window.location.search.substring(1),
                 urlParams = search.split('&'),
                 params = {};
 
-            $.each(urlParams, function(i, param) {
+            $.each(urlParams, function (i, param) {
                 param = param.split('=');
 
                 if (param[0].length && param[1].length && !params.hasOwnProperty(param[0])) {
@@ -258,11 +255,12 @@
         },
 
         /**
-         * Helper method which returns the full URL of the shop
+         * Helper method which returns the full URL of the shop.
+         *
          * @returns {string}
          * @private
          */
-        _getUrl: function() {
+        _getUrl: function () {
             return window.location.protocol + '//' + window.location.host + window.location.pathname;
         },
 
@@ -275,15 +273,14 @@
          * @returns {Object} state object including title and location
          * @private
          */
-        _createHistoryStateObject: function() {
-            var me = this,
-                $form = me.$el.find(me.opts.configuratorFormSelector),
-                urlParams = me._getUrlParams(),
-                location = me._getUrl();
+        _createHistoryStateObject: function () {
+            var $form = this.$el.find(this.opts.configuratorFormSelector),
+                urlParams = this._getUrlParams(),
+                location = this._getUrl();
 
             return {
                 state: {
-                    type: me.opts.historyIdentifier,
+                    type: this.opts.historyIdentifier,
                     values: $form.serialize(),
                     scrollPos: $(window).scrollTop()
                 },

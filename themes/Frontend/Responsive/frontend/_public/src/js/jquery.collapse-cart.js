@@ -1,4 +1,4 @@
-;(function($, window) {
+;(function ($, window) {
     'use strict';
 
     $.plugin('swCollapseCart', {
@@ -177,7 +177,7 @@
                 );
             }
 
-            $.publish('plugin/swCollapseCart/onRegisterEvents', [ me ]);
+            $.publish('plugin/swCollapseCart/onRegisterEvents', [me]);
         },
 
         /**
@@ -187,12 +187,10 @@
          * @event onBeforeAddArticle
          */
         onBeforeAddArticle: function () {
-            var me = this;
+            this.showLoadingIndicator();
+            this.openMenu();
 
-            me.showLoadingIndicator();
-            me.openMenu();
-
-            $.publish('plugin/swCollapseCart/onBeforeAddArticle', [ me ]);
+            $.publish('plugin/swCollapseCart/onBeforeAddArticle', [this]);
         },
 
         /**
@@ -200,22 +198,23 @@
          * Loads the cart via AJAX and appends it to the basket.
          *
          * @event onArticleAdded
+         * @param {jQuery.Event} event
+         * @param {Object} plugin
+         * @param {string} response
          */
         onArticleAdded: function (event, plugin, response) {
-            var me = this;
-
-            if (me.isDisplayMode('collapsible')) {
+            if (this.isDisplayMode('collapsible')) {
                 return;
             }
 
-            me.$el
+            this.$el
                 .html(response)
                 .find('.ajax--cart .alert')
                 .removeClass('is--hidden');
 
             picturefill();
 
-            $.publish('plugin/swCollapseCart/onArticleAdded', [ me ]);
+            $.publish('plugin/swCollapseCart/onArticleAdded', [this]);
         },
 
         /**
@@ -258,7 +257,7 @@
                 }
             }
 
-            $.publish('plugin/swCollapseCart/onMouseEnter', [ me, event ]);
+            $.publish('plugin/swCollapseCart/onMouseEnter', [me, event]);
         },
 
         /**
@@ -268,17 +267,16 @@
          * @param {jQuery.Event} event
          */
         onMouseLeave: function (event) {
-            var me = this,
-                target = event.toElement || event.relatedTarget || event.target;
+            var target = event.toElement || event.relatedTarget || event.target;
 
-            $.publish('plugin/swCollapseCart/onMouseLeave', [ me, event ]);
+            $.publish('plugin/swCollapseCart/onMouseLeave', [this, event]);
 
-            if (me.isElementOrChild(me.$el[0], target) || me.isElementOrChild(me._$triggerEl[0], target)) {
+            if (this.isElementOrChild(this.$el[0], target) || this.isElementOrChild(this._$triggerEl[0], target)) {
                 return;
             }
 
-            me.closeMenu();
-            me.clearBuffer();
+            this.closeMenu();
+            this.clearBuffer();
         },
 
         /**
@@ -290,7 +288,7 @@
         onCloseButtonClick: function (event) {
             event.preventDefault();
 
-            $.publish('plugin/swCollapseCart/onCloseButton', [ this ]);
+            $.publish('plugin/swCollapseCart/onCloseButton', [this]);
 
             this.closeMenu();
         },
@@ -317,18 +315,19 @@
                 url = $form.attr('action');
             }
 
-            $.publish('plugin/swCollapseCart/onRemoveArticle', [ me, event ]);
+            $.publish('plugin/swCollapseCart/onRemoveArticle', [me, event]);
             $parent.html(me._$loadingIcon.clone());
 
             $.ajax({
-                'url': url,
-                'dataType': 'jsonp',
-                'success': function(result) {
+                url: url,
+                dataType: 'jsonp',
+                method: 'POST',
+                success: function (result) {
                     me.$el.html(result);
 
                     picturefill();
 
-                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [ me, event, result ]);
+                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [me, event, result]);
                 }
             });
         },
@@ -340,21 +339,17 @@
          * @param func
          * @param bufferTime
          */
-        buffer: function(func, bufferTime) {
-            var me = this;
-
-            me.clearBuffer();
-            me.bufferTimeout = setTimeout(func, bufferTime);
+        buffer: function (func, bufferTime) {
+            this.clearBuffer();
+            this.bufferTimeout = setTimeout(func, bufferTime);
         },
 
         /**
          * Clears the open cart timeout
          */
-        clearBuffer: function() {
-            var me = this;
-
-            if (me.bufferTimeout) {
-                clearTimeout(me.bufferTimeout);
+        clearBuffer: function () {
+            if (this.bufferTimeout) {
+                clearTimeout(this.bufferTimeout);
             }
         },
 
@@ -388,14 +383,12 @@
          * @method showLoadingIndicator
          */
         showLoadingIndicator: function () {
-            var me = this;
-
-            me.$el.html($('<div>', {
-                'class': me.opts.loadingIconWrapperClass,
-                'html': me._$loadingIcon.clone()
+            this.$el.html($('<div>', {
+                'class': this.opts.loadingIconWrapperClass,
+                'html': this._$loadingIcon.clone()
             }));
 
-            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', [ me ]);
+            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', [this]);
         },
 
         /**
@@ -406,18 +399,17 @@
          * @method closeMenu
          */
         openMenu: function () {
-            var me = this,
-                plugin;
+            var plugin;
 
-            me._isOpened = true;
+            this._isOpened = true;
 
-            if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_swOffcanvasMenu'))) {
+            if (this.isDisplayMode('offcanvas') && (plugin = this._$triggerEl.data('plugin_swOffcanvasMenu'))) {
                 plugin.openMenu();
             } else {
-                me.$el.addClass(me.opts.activeClass);
+                this.$el.addClass(this.opts.activeClass);
             }
 
-            $.publish('plugin/swCollapseCart/onMenuOpen', [ me ]);
+            $.publish('plugin/swCollapseCart/onMenuOpen', [this]);
         },
 
         /**
@@ -437,15 +429,15 @@
                 return;
             }
 
-            $.publish('plugin/swCollapseCart/onLoadCart', [ me ]);
+            $.publish('plugin/swCollapseCart/onLoadCart', [me]);
 
             me._$linkEl.addClass('is--disabled');
             me._isCartLoading = true;
 
             $.ajax({
-                'url': opts.ajaxCartURL,
-                'dataType': 'jsonp',
-                'success': function (result) {
+                url: opts.ajaxCartURL,
+                dataType: 'jsonp',
+                success: function (result) {
                     $el.html(result);
                     picturefill();
 
@@ -453,9 +445,9 @@
                         callback();
                     }
 
-                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [ me, result ]);
+                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [me, result]);
                 },
-                'complete': function () {
+                complete: function () {
                     me._$linkEl.removeClass('is--disabled');
                     me._isCartLoading = false;
                 }
@@ -470,18 +462,17 @@
          * @method closeMenu
          */
         closeMenu: function () {
-            var me = this,
-                plugin;
+            var plugin;
 
-            me._isOpened = false;
+            this._isOpened = false;
 
-            if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_swOffcanvasMenu'))) {
+            if (this.isDisplayMode('offcanvas') && (plugin = this._$triggerEl.data('plugin_swOffcanvasMenu'))) {
                 plugin.closeMenu();
             } else {
-                me.$el.removeClass(me.opts.activeClass);
+                this.$el.removeClass(this.opts.activeClass);
             }
 
-            $.publish('plugin/swCollapseCart/onCloseMenu', [ me ]);
+            $.publish('plugin/swCollapseCart/onCloseMenu', [this]);
         },
 
         /**
@@ -490,15 +481,13 @@
          *
          * @param event
          */
-        onClick: function(event) {
-            var me = this;
-
-            if (me.isCartLoading()) {
+        onClick: function (event) {
+            if (this.isCartLoading()) {
                 event.preventDefault();
                 return false;
             }
 
-            me._wasClicked = true;
+            this._wasClicked = true;
         },
 
         /**
@@ -506,7 +495,7 @@
          *
          * @returns {boolean}
          */
-        isCartLoading: function() {
+        isCartLoading: function () {
             return !!this._isCartLoading;
         },
 
@@ -515,21 +504,21 @@
          *
          * @returns {boolean}
          */
-        isOverMe: function() {
+        isOverMe: function () {
             return !!this._isOverMe;
         },
 
         /**
          * Indicates that the mouse is over the element
          */
-        onMouseHoverStart: function() {
+        onMouseHoverStart: function () {
             this._isOverMe = true;
         },
 
         /**
          * Indicates that the mouse is not over the element anymore
          */
-        onMouseHoverEnd: function() {
+        onMouseHoverEnd: function () {
             this._isOverMe = false;
         },
 
@@ -540,11 +529,9 @@
          * @method destroy
          */
         destroy: function () {
-            var me = this;
+            this.off(this.eventSuffix);
 
-            me.off(me.eventSuffix);
-
-            me._destroy();
+            this._destroy();
         }
     });
 })(jQuery, window);
