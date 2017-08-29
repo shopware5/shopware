@@ -57,7 +57,7 @@
 
                             <a href="{$categoryLink}" title="{s name="ButtonShowPrepend"}{/s} {$category.name|escape} {s name="ButtonShowAppend"}{/s}"
                                class="navigation--link is--display-button"
-                               {if $category.external}target="{$category.externalTarget}"{/if}>
+                               {if $category.external && $category.externalTarget}target="{$category.externalTarget}"{/if}>
                                 {block name="widgets_listing_get_category_categories_show_link_name"}
                                     {s name="ButtonShowPrepend"}{/s} {$category.name} {s name="ButtonShowAppend"}{/s}
                                 {/block}
@@ -77,12 +77,12 @@
                                     {if $children.external}
                                         {$link = $children.external}
                                     {/if}
-                                    
+
                                     <a href="{$link}" title="{$children.name|escape}"
                                        class="navigation--link{if $children.childrenCount} link--go-forward{/if}"
                                        data-category-id="{$children.id}"
                                        data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}"
-                                       {if $children.external}target="{$children.externalTarget}"{/if}>
+                                       {if $children.external && $category.externalTarget}target="{$children.externalTarget}"{/if}>
 
                                         {block name="widgets_listing_get_category_categories_item_link_name"}
                                             {$children.name}
