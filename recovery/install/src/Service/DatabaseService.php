@@ -187,6 +187,7 @@ SELECT PRIVILEGE_TYPE, REPLACE(GRANTEE,"'","") AS _grantee
 FROM information_schema.SCHEMA_PRIVILEGES
 WHERE PRIVILEGE_TYPE=:priv AND TABLE_SCHEMA=:name
 HAVING _grantee = USER()
+OR _grantee=CONCAT(SUBSTRING_INDEX(USER(),'@',1),'@%')
 EOL;
 
             $stmt = $this->connection->prepare($sql);
@@ -262,7 +263,8 @@ EOL;
             $sql = <<<'EOL'
 SELECT REPLACE(GRANTEE,"'","") AS _grantee, PRIVILEGE_TYPE
 FROM information_schema.USER_PRIVILEGES WHERE PRIVILEGE_TYPE = :privilege
-HAVING _grantee=USER()
+HAVING _grantee = USER()
+OR _grantee=CONCAT(SUBSTRING_INDEX(USER(),'@',1),'@%')
 EOL;
 
             $stmt = $this->connection->prepare($sql);
