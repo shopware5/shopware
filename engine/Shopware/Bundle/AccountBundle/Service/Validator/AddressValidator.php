@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Service\Validator;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -44,7 +44,7 @@ class AddressValidator implements AddressValidatorInterface
     private $validator;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $context;
 
@@ -62,12 +62,12 @@ class AddressValidator implements AddressValidatorInterface
      * AddressValidator constructor.
      *
      * @param ValidatorInterface                                                $validator
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $context
+     * @param \Shopware\Storefront\Context\StorefrontContextServiceInterface $context
      * @param \Shopware_Components_Config                                       $config
      */
     public function __construct(
         ValidatorInterface $validator,
-        ContextServiceInterface $context,
+        StorefrontContextServiceInterface $context,
         \Shopware_Components_Config $config
     ) {
         $this->validator = $validator;

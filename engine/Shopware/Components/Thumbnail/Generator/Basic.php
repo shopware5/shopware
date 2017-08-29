@@ -29,7 +29,7 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
 
 /**
- * Shopware Basic Thumbnail Generator
+ * Shopware Basic MediaThumbnail Generator
  *
  * This is a generator which creates image objects
  * based on the passed image path which will be used

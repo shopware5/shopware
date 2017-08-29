@@ -25,9 +25,9 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Cart\Price\PriceDefinition;
+use Shopware\Cart\Price\PriceDefinitionCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
 
 class PriceDefinitionCollectionTest extends TestCase
 {

@@ -29,7 +29,7 @@ use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class EmotionElementService implements EmotionElementServiceInterface
 {
@@ -69,11 +69,11 @@ class EmotionElementService implements EmotionElementServiceInterface
 
     /**
      * @param int[]                                                          $emotionIds
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return \Shopware\Bundle\EmotionBundle\Struct\Emotion[]
      */
-    public function getList(array $emotionIds, ShopContextInterface $context)
+    public function getList(array $emotionIds, ShopContext $context)
     {
         $elements = $this->gateway->getList($emotionIds, $context->getTranslationContext());
 
@@ -84,9 +84,9 @@ class EmotionElementService implements EmotionElementServiceInterface
 
     /**
      * @param array                                                          $elementList
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    private function handleElements(array $elementList, ShopContextInterface $context)
+    private function handleElements(array $elementList, ShopContext $context)
     {
         $prepareCollection = new PrepareDataCollection();
 
@@ -116,9 +116,9 @@ class EmotionElementService implements EmotionElementServiceInterface
     /**
      * @param PrepareDataCollection $collection
      * @param Element               $element
-     * @param ShopContextInterface  $context
+     * @param \Shopware\Context\Struct\ShopContext  $context
      */
-    private function prepareElement(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    private function prepareElement(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         $handler = $this->findElementHandler($element);
         $handler->prepare($collection, $element, $context);
@@ -127,9 +127,9 @@ class EmotionElementService implements EmotionElementServiceInterface
     /**
      * @param ResolvedDataCollection $collection
      * @param Element                $element
-     * @param ShopContextInterface   $context
+     * @param ShopContext   $context
      */
-    private function handleElement(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    private function handleElement(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $handler = $this->findElementHandler($element);
         $handler->handle($collection, $element, $context);

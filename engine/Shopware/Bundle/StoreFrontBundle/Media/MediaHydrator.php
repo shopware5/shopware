@@ -26,9 +26,11 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaService;
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Media\Struct\Media;
+use Shopware\MediaThumbnail\Struct\MediaThumbnail;
 
 /**
  * @category  Shopware
@@ -57,12 +59,6 @@ class MediaHydrator extends Hydrator
      */
     private $database;
 
-    /**
-     * @param AttributeHydrator                      $attributeHydrator
-     * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
-     * @param MediaService                           $mediaService
-     * @param Connection                             $database
-     */
     public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaService $mediaService, Connection $database)
     {
         $this->attributeHydrator = $attributeHydrator;
@@ -106,13 +102,6 @@ class MediaHydrator extends Hydrator
         if (isset($data['__media_path'])) {
             $media->setPath($data['__media_path']);
             $media->setFile($this->mediaService->getUrl($data['__media_path']));
-        }
-
-        /*
-         * Live Migration to add width/height to images
-         */
-        if ($this->isUpdateRequired($media, $data)) {
-            $data = $this->updateMedia($data);
         }
 
         if (isset($data['__media_width'])) {
@@ -168,30 +157,6 @@ class MediaHydrator extends Hydrator
     }
 
     /**
-     * @param Media $media
-     * @param array $data
-     *
-     * @return bool
-     */
-    private function isUpdateRequired(Media $media, array $data)
-    {
-        if ($media->getType() != Media::TYPE_IMAGE) {
-            return false;
-        }
-        if (!array_key_exists('__media_width', $data)) {
-            return false;
-        }
-        if (!array_key_exists('__media_height', $data)) {
-            return false;
-        }
-        if ($data['__media_width'] !== null && $data['__media_height'] !== null) {
-            return false;
-        }
-
-        return $this->mediaService->getFilesystem()->has($data['__media_path']);
-    }
-
-    /**
      * @param array $data Contains the array data for the media
      *
      * @return array
@@ -217,7 +182,7 @@ class MediaHydrator extends Hydrator
                 $retina = $this->mediaService->getUrl($retina);
             }
 
-            $thumbnails[] = new Thumbnail(
+            $thumbnails[] = new MediaThumbnail(
                 $this->mediaService->getUrl($row['source']),
                 $retina,
                 $row['maxWidth'],
@@ -226,28 +191,5 @@ class MediaHydrator extends Hydrator
         }
 
         return $thumbnails;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private function updateMedia(array $data)
-    {
-        list($width, $height) = getimagesizefromstring($this->mediaService->getFilesystem()->read($data['__media_path']));
-        $this->database->executeUpdate(
-            'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
-            [
-                ':width' => $width,
-                ':height' => $height,
-                ':id' => $data['__media_id'],
-            ]
-        );
-
-        $data['__media_width'] = $width;
-        $data['__media_height'] = $height;
-
-        return $data;
     }
 }

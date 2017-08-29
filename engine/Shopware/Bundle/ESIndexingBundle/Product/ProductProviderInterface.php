@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 interface ProductProviderInterface
 {
     /**
-     * @param Shop     $shop
+     * @param \Shopware\Shop\Struct\Shop     $shop
      * @param string[] $numbers
      *
      * @return Product[]

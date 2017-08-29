@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class ListingSortingGateway
 {
@@ -71,7 +71,7 @@ class ListingSortingGateway
 
     /**
      * @param int[]              $ids
-     * @param TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return ListingSorting[] indexed by id, sorted by provided id array
      */
@@ -116,7 +116,7 @@ class ListingSortingGateway
     }
 
     /**
-     * @param TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return ListingSorting[]
      */
@@ -147,7 +147,7 @@ class ListingSortingGateway
     /**
      * Returns the base query to select the custom sorting data.
      *
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return QueryBuilder
      */

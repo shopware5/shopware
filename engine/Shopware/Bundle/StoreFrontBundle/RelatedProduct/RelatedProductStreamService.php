@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -50,7 +50,7 @@ class RelatedProductStreamService implements RelatedProductStreamServiceInterfac
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         $productStreams = $this->gateway->getList($products, $context->getTranslationContext());
 

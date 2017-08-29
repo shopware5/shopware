@@ -34,8 +34,8 @@ use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Blog\Blog;
 use Shopware\Bundle\StoreFrontBundle\Blog\BlogServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 class CategoryTeaserComponentHandler implements ComponentHandlerInterface
@@ -94,9 +94,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     /**
      * @param PrepareDataCollection                                                      $collection
      * @param Element                                                                    $element
-     * @param ShopContext|\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param ShopContext|\Shopware\Context\Struct\ShopContext $context
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         $imageType = $element->getConfig()->get('image_type');
         $key = 'emotion-element--' . $element->getId();
@@ -129,9 +129,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     /**
      * @param ResolvedDataCollection $collection
      * @param Element                $element
-     * @param ShopContextInterface   $context
+     * @param \Shopware\Context\Struct\ShopContext   $context
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $imageType = $element->getConfig()->get('image_type');
         $key = 'emotion-element--' . $element->getId();
@@ -180,9 +180,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element              $element
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    private function fetchCategory(Element $element, ShopContextInterface $context)
+    private function fetchCategory(Element $element, ShopContext $context)
     {
         $categoryId = (int) $element->getConfig()->get('category_selection');
         $category = $this->categoryService->getList([$categoryId], $context);
@@ -196,11 +196,11 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param int                  $categoryId
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Blog
      */
-    private function getRandomBlog($categoryId, ShopContextInterface $context)
+    private function getRandomBlog($categoryId, ShopContext $context)
     {
         $blogId = $this->findBlogIdByCategoryId($categoryId);
         $blog = $this->blogService->getList([$blogId], $context);

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -36,18 +36,18 @@ interface ConfiguratorServiceInterface
 {
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]        $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array Each array element contains a Configurator\PropertyGroup[] array. The first level is indexed with the product number
      */
-    public function getProductsConfigurations($products, ShopContextInterface $context);
+    public function getProductsConfigurations($products, ShopContext $context);
 
     /**
      * @param BaseProduct                                                    $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param array                                                          $selection
      *
      * @return ConfiguratorSet
      */
-    public function getProductConfigurator(BaseProduct $product, ShopContextInterface $context, array $selection);
+    public function getProductConfigurator(BaseProduct $product, ShopContext $context, array $selection);
 }

@@ -215,7 +215,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 continue;
             }
 
-            /** @var $media \Shopware\Bundle\StoreFrontBundle\Media\Media */
+            /** @var $media \Shopware\Media\Struct\Media */
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 

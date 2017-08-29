@@ -24,7 +24,7 @@
 
 namespace Shopware\Product\Gateway;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Product\Exception\NotSupportedFetchMode;
 use Shopware\Product\Struct\ProductCollection;
 use Shopware\Search\Criteria;

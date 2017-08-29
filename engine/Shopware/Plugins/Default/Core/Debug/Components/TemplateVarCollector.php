@@ -101,7 +101,7 @@ class TemplateVarCollector implements CollectorInterface
                 $template_var = $this->encode($template_var);
                 $rows[] = [$template_spec, $template_var];
             }
-            $table = ['Template Vars > ' . $template_name . ' (' . (count($template_vars)) . ')', $rows];
+            $table = ['ShopTemplate Vars > ' . $template_name . ' (' . (count($template_vars)) . ')', $rows];
             try {
                 $this->results[] = $table;
             } catch (Exception $e) {

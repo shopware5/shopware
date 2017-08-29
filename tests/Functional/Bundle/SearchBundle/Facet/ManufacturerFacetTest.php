@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -81,7 +81,7 @@ class ManufacturerFacetTest extends TestCase
     {
         $supplier1 = $this->helper->createManufacturer();
         $supplier2 = $this->helper->createManufacturer([
-            'name' => 'Test-Manufacturer-2',
+            'name' => 'Test-ProductManufacturer-2',
         ]);
 
         $result = $this->search(
@@ -104,7 +104,7 @@ class ManufacturerFacetTest extends TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param \Shopware\Models\Category\Category                    $category
      * @param Supplier                                              $manufacturer
      *

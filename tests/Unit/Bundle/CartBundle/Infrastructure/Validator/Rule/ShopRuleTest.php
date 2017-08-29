@@ -25,12 +25,12 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ShopRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Rule\Rule;
+use Shopware\CartBridge\Rule\ShopRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Shop\Struct\Shop;
 
 class ShopRuleTest extends TestCase
 {
@@ -187,7 +187,7 @@ class ShopRuleTest extends TestCase
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Cart\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
@@ -214,8 +214,8 @@ class ShopRuleTest extends TestCase
             [true],
             [false],
             [''],
-            [Rule::OPERATOR_GTE],
-            [Rule::OPERATOR_LTE],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_GTE],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_LTE],
         ];
     }
 }

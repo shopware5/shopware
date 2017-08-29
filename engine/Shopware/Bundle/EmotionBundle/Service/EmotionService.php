@@ -26,9 +26,9 @@ namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Shop\Gateway\ShopReader;
 
 class EmotionService implements EmotionServiceInterface
 {
@@ -43,7 +43,7 @@ class EmotionService implements EmotionServiceInterface
     private $elementService;
 
     /**
-     * @var ShopGateway
+     * @var \Shopware\Shop\Gateway\ShopReader
      */
     private $shopGateway;
 
@@ -55,13 +55,13 @@ class EmotionService implements EmotionServiceInterface
     /**
      * @param EmotionGateway                                                      $gateway
      * @param EmotionElementServiceInterface                                      $elementService
-     * @param ShopGateway                                                         $shopGateway
+     * @param ShopReader                                                         $shopGateway
      * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
      */
     public function __construct(
         EmotionGateway $gateway,
         EmotionElementServiceInterface $elementService,
-        ShopGateway $shopGateway,
+        ShopReader $shopGateway,
         \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
     ) {
         $this->gateway = $gateway;
@@ -72,11 +72,11 @@ class EmotionService implements EmotionServiceInterface
 
     /**
      * @param array                                                          $emotionIds
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Emotion[]
      */
-    public function getList(array $emotionIds, ShopContextInterface $context)
+    public function getList(array $emotionIds, ShopContext $context)
     {
         $emotions = $this->gateway->getList($emotionIds, $context);
         $elements = $this->elementService->getList($emotionIds, $context);
@@ -104,9 +104,9 @@ class EmotionService implements EmotionServiceInterface
 
     /**
      * @param Emotion[]            $emotions
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      */
-    private function resolveCategories(array $emotions, ShopContextInterface $context)
+    private function resolveCategories(array $emotions, ShopContext $context)
     {
         $categoryIds = array_map(function (Emotion $emotion) {
             return $emotion->getCategoryIds();
@@ -131,7 +131,7 @@ class EmotionService implements EmotionServiceInterface
 
     /**
      * @param Emotion[]                                                    $emotions
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     private function resolveShops(array $emotions, TranslationContext $context)
     {
@@ -146,7 +146,7 @@ class EmotionService implements EmotionServiceInterface
             return;
         }
 
-        $shops = $this->shopGateway->getList($shopIds, $context);
+        $shops = $this->shopGateway->read($shopIds, $context);
 
         /** @var Emotion $emotion */
         foreach ($emotions as $emotion) {

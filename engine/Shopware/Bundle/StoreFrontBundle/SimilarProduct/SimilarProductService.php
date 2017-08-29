@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
 
@@ -87,7 +87,7 @@ class SimilarProductService implements SimilarProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         /**
          * returns an array which is associated with the different product numbers.

@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -69,7 +69,7 @@ class MediaGateway
      * @param int[]              $ids
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[] Indexed by the media id
+     * @return \Shopware\Media\Struct\Media[] Indexed by the media id
      */
     public function getList($ids, TranslationContext $context)
     {

@@ -24,30 +24,30 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface ListingFacetServiceInterface
 {
     /**
      * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return ListingFacet[]
      */
-    public function getList(array $ids, ShopContextInterface $context);
+    public function getList(array $ids, ShopContext $context);
 
     /**
      * @param int[]                                                          $categoryIds
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array indexed by category id, each element contains an array of ListingFacet[]
      */
-    public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context);
+    public function getFacetsOfCategories(array $categoryIds, ShopContext $context);
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ListingFacet[] indexed by id, sorted by position
      */
-    public function getAllCategoryFacets(ShopContextInterface $context);
+    public function getAllCategoryFacets(ShopContext $context);
 }

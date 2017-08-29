@@ -29,7 +29,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Search\ConditionInterface;
 use Shopware\Search\Criteria;
 use Shopware\Search\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -88,7 +88,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createQueryWithSorting(Criteria $criteria, ShopContextInterface $context)
+    public function createQueryWithSorting(Criteria $criteria, ShopContext $context)
     {
         $query = $this->createQuery($criteria, $context);
 
@@ -100,7 +100,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createProductQuery(Criteria $criteria, ShopContextInterface $context)
+    public function createProductQuery(Criteria $criteria, ShopContext $context)
     {
         $query = $this->createQueryWithSorting($criteria, $context);
 
@@ -139,7 +139,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createQuery(Criteria $criteria, ShopContextInterface $context)
+    public function createQuery(Criteria $criteria, ShopContext $context)
     {
         $query = $this->createQueryBuilder();
 
@@ -175,9 +175,9 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * @param Criteria                                                       $criteria
      * @param QueryBuilder                                                   $query
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
+    private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContext $context)
     {
         foreach ($criteria->getConditions() as $condition) {
             $handler = $this->getConditionHandler($condition);
@@ -188,11 +188,11 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * @param \Shopware\Search\Criteria                                                       $criteria
      * @param QueryBuilder                                                   $query
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @throws \Exception
      */
-    private function addSorting(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
+    private function addSorting(Criteria $criteria, QueryBuilder $query, ShopContext $context)
     {
         foreach ($criteria->getSortings() as $sorting) {
             $handler = $this->getSortingHandler($sorting);

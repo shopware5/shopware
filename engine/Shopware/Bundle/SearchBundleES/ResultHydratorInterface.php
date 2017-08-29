@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleES;
 
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface ResultHydratorInterface
 {
@@ -37,12 +37,12 @@ interface ResultHydratorInterface
      * @param array                     $elasticResult
      * @param ProductNumberSearchResult $result
      * @param Criteria                  $criteria
-     * @param ShopContextInterface      $context
+     * @param ShopContext      $context
      */
     public function hydrate(
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     );
 }

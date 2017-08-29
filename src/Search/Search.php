@@ -26,7 +26,7 @@ namespace Shopware\Search;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 abstract class Search
 {
@@ -143,7 +143,10 @@ abstract class Search
     }
 
     /**
+     * todo@next remove this function, only for simple debugging
+     *
      * @param $query
+     *
      * @return array
      */
     protected function fetchRows(QueryBuilder $query): array

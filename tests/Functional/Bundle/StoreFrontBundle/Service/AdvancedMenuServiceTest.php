@@ -28,9 +28,9 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Tests\Functional\DataGenerator\CategoryDataGenerator;
 
 /**
@@ -59,7 +59,7 @@ class AdvancedMenuServiceTest extends TestCase
     private $reader;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
+     * @var \Shopware\Context\Struct\ShopContext
      */
     private $context;
 

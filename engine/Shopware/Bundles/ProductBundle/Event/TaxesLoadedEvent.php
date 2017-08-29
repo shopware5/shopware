@@ -26,7 +26,7 @@ namespace ProductBundle\Event;
 
 use EventBundle\Event;
 use ProductBundle\Struct\TaxCollection;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 class TaxesLoadedEvent extends Event
 {

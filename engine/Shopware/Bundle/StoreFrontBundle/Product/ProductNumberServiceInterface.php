@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -43,12 +43,12 @@ interface ProductNumberServiceInterface
      * 4. Returns the first active order number
      *
      * @param string                                                         $number
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param array                                                          $selection Key - value array, key contains the configurator group id, value contains the configurator option id
      *
      * @return string
      */
-    public function getAvailableNumber($number, ShopContextInterface $context, $selection = []);
+    public function getAvailableNumber($number, ShopContext $context, $selection = []);
 
     /**
      * Returns the main product number of the provided product id.

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 use Shopware\Search\Criteria;
 use Shopware\Search\FacetInterface;
 use Shopware\Search\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface PartialFacetHandlerInterface
 {
@@ -35,7 +35,7 @@ interface PartialFacetHandlerInterface
      * @param FacetInterface       $facet
      * @param \Shopware\Search\Criteria             $reverted
      * @param \Shopware\Search\Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return \Shopware\Search\FacetResultInterface
      */
@@ -43,7 +43,7 @@ interface PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     );
 
     /**

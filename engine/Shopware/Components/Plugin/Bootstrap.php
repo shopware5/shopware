@@ -681,7 +681,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component
-     *     @var string $template           Required; Template class name which will be loaded in the frontend
+     *     @var string $template           Required; ShopTemplate class name which will be loaded in the frontend
      *     @var string $xType              Required; Ext JS xtype for the backend module component
      *     @var string $cls                Optional; $cls Css class which used in the frontend emotion
      *     @var string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
@@ -770,7 +770,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      'label' => 'Display recently viewed items'
      ),
      'thumb' => array(
-     'label' => 'Thumbnail size',
+     'label' => 'MediaThumbnail size',
      'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
      )
      )

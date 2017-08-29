@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -77,12 +77,12 @@ class ProductMediaGateway
      * <php>
      * array(
      *     'Product.1' => array(
-     *          Shopware\Bundle\StoreFrontBundle\Media\Media(id=1)
-     *          Shopware\Bundle\StoreFrontBundle\Media\Media(id=2)
+     *          Shopware\Media\Struct\Media(id=1)
+     *          Shopware\Media\Struct\Media(id=2)
      *      ),
      *     'Product.2' => array(
-     *          Shopware\Bundle\StoreFrontBundle\Media\Media(id=1)
-     *          Shopware\Bundle\StoreFrontBundle\Media\Media(id=2)
+     *          Shopware\Media\Struct\Media(id=1)
+     *          Shopware\Media\Struct\Media(id=2)
      *      )
      * )
      * </php>
@@ -90,7 +90,7 @@ class ProductMediaGateway
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
      * @param TranslationContext                                      $context
      *
-     * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Media\Media array.
+     * @return array Indexed by the product order number. Each element contains a \Shopware\Media\Struct\Media array.
      */
     public function getList($products, TranslationContext $context)
     {
@@ -140,15 +140,15 @@ class ProductMediaGateway
      *
      * <php>
      * array(
-     *     'Product.1' => Shopware\Bundle\StoreFrontBundle\Media\Media(id=1)
-     *     'Product.2' => Shopware\Bundle\StoreFrontBundle\Media\Media(id=1)
+     *     'Product.1' => Shopware\Media\Struct\Media(id=1)
+     *     'Product.2' => Shopware\Media\Struct\Media(id=1)
      * )
      * </php>
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
      * @param TranslationContext                                      $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[] Indexed by the product number
+     * @return \Shopware\Media\Struct\Media[] Indexed by the product number
      */
     public function getCovers($products, TranslationContext $context)
     {
@@ -207,7 +207,7 @@ class ProductMediaGateway
     }
 
     /**
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

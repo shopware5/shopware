@@ -28,15 +28,15 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\AdvancedMenu;
 
 use Shopware\Category\Struct\CategoryCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface AdvancedMenuServiceInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param int                                                            $depth
      *
      * @return \Shopware\Category\Struct\CategoryCollection
      */
-    public function get(ShopContextInterface $context, int $depth): CategoryCollection;
+    public function get(ShopContext $context, int $depth): CategoryCollection;
 }

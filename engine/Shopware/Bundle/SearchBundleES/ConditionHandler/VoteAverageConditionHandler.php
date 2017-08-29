@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class VoteAverageConditionHandler implements PartialConditionHandlerInterface
 {
@@ -49,7 +49,7 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /* @var VoteAverageCondition $criteriaPart */
         $search->addFilter(
@@ -66,7 +66,7 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /* @var VoteAverageCondition $criteriaPart */
         $search->addPostFilter(

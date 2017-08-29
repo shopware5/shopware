@@ -28,7 +28,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -52,11 +52,11 @@ class CriteriaFactory implements CriteriaFactoryInterface
 
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return \Shopware\Search\Criteria
      */
-    public function createCriteria(Request $request, ShopContextInterface $context)
+    public function createCriteria(Request $request, ShopContext $context)
     {
         $criteria = $this->criteriaFactory->createListingCriteria($request, $context);
 

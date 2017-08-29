@@ -35,7 +35,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -88,7 +88,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $aggregation = new TermsAggregation('manufacturer');
         $aggregation->setField('manufacturer.id');
@@ -103,7 +103,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations']['manufacturer'])) {
             return;
@@ -126,7 +126,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
 
     /**
      * @param Criteria                                                      $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer[] $manufacturers
+     * @param \Shopware\ProductManufacturer\Struct\ProductManufacturer[] $manufacturers
      *
      * @return array
      */
@@ -139,7 +139,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
         }
 
         $items = [];
-        /** @var $manufacturer \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer */
+        /** @var $manufacturer \Shopware\ProductManufacturer\Struct\ProductManufacturer */
         foreach ($manufacturers as $manufacturer) {
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
@@ -174,7 +174,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             $label = $facet->getLabel();
         } else {
             $label = $this->snippetManager->getNamespace('frontend/listing/facet_labels')
-                ->get('manufacturer', 'Manufacturer');
+                ->get('manufacturer', 'ProductManufacturer');
         }
 
         return new ValueListFacetResult(

@@ -37,7 +37,7 @@ use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -71,7 +71,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param FacetInterface|ProductAttributeFacet $facet
      * @param \Shopware\Search\Criteria                             $reverted
      * @param \Shopware\Search\Criteria                             $criteria
-     * @param ShopContextInterface                 $context
+     * @param ShopContext                 $context
      *
      * @return \Shopware\Search\FacetResultInterface|null
      */
@@ -79,7 +79,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
@@ -119,7 +119,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param QueryBuilder                                                   $query
      * @param ProductAttributeFacet                                          $facet
      * @param \Shopware\Search\Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return null|RadioFacetResult|ValueListFacetResult
      */
@@ -127,7 +127,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         QueryBuilder $query,
         ProductAttributeFacet $facet,
         Criteria $criteria,
-        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+        \Shopware\Context\Struct\ShopContext $context
     ) {
         $sqlField = 'productAttribute.' . $facet->getField();
 
@@ -263,7 +263,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param QueryBuilder                                                   $query
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
     private function addTranslations($query, $context)
     {

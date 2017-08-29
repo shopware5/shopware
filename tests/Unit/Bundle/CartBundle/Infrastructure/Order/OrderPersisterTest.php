@@ -26,9 +26,9 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Cart;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Infrastructure\Order\OrderPersister;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\CartBridge\Order\OrderPersister;
+use Shopware\Context\Struct\ShopContext;
 
 class OrderPersisterTest extends TestCase
 {

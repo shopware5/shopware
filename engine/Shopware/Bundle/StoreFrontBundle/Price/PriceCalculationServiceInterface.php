@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
@@ -47,7 +47,7 @@ interface PriceCalculationServiceInterface
      * struct which contains only the calculated price values and the reference to his rule.
      *
      * @param ListProduct                                                    $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function calculateProduct(ListProduct $product, ShopContextInterface $context);
+    public function calculateProduct(ListProduct $product, ShopContext $context);
 }

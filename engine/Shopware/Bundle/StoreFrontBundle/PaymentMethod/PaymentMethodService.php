@@ -25,14 +25,16 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Rule\ValidatableFilter;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Rule\ValidatableFilter;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\PaymentMethod\Gateway\PaymentMethodReader;
+use Shopware\PaymentMethod\Struct\PaymentMethod;
 
 class PaymentMethodService
 {
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway
+     * @var \Shopware\PaymentMethod\Gateway\PaymentMethodReader
      */
     private $gateway;
 
@@ -41,20 +43,20 @@ class PaymentMethodService
      */
     private $ruleFilter;
 
-    public function __construct(PaymentMethodGateway $gateway)
+    public function __construct(PaymentMethodReader $gateway)
     {
         $this->gateway = $gateway;
     }
 
     /**
-     * @param CalculatedCart                                                 $calculatedCart
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Cart\Cart\CalculatedCart                                                 $calculatedCart
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod[]
+     * @return \Shopware\PaymentMethod\Struct\PaymentMethod[]
      */
     public function getAvailable(
         CalculatedCart $calculatedCart,
-        ShopContextInterface $context
+        ShopContext $context
     ): array {
         $payments = $this->gateway->getAll($context->getTranslationContext());
 

@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
+use Shopware\Cart\Error\PaymentBlockedError;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\Product\ProductProcessor;
+use Shopware\Cart\Voucher\VoucherProcessor;
 
 /**
  * @category  Shopware

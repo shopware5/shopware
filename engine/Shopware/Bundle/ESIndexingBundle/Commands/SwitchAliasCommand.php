@@ -26,8 +26,8 @@ namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
-use Shopware\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

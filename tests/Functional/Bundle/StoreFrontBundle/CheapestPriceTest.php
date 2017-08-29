@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CheapestPriceTest extends TestCase
 {
@@ -371,7 +371,7 @@ class CheapestPriceTest extends TestCase
         $this->assertEquals(9, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
-    private function getConfiguratorProduct($number, ShopContextInterface $context) // ShopContext
+    private function getConfiguratorProduct($number, ShopContext $context) // ShopContext
     {
         $product = $this->helper->getSimpleProduct(
             $number,

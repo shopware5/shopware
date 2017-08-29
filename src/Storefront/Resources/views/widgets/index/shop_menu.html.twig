@@ -1,17 +1,17 @@
 {# Language switcher #}
 {% block frontend_index_actions_active_shop %}
-    {% if shop and languages|length > 1 %}
+    {% if shop and shops|length > 1 %}
         <div class="top-bar--language navigation--entry">
             {% block frontend_index_actions_active_shop_top_bar_language %}
                 <form method="post" class="language--form">
                     {% block frontend_index_actions_active_shop_language_form_content %}
                         <div class="field--select">
-                            <div class="language--flag {{ shop.locale }}">{{ shop.name }}</div>
+                            <div class="language--flag {{ shop.locale.locale }}">{{ shop.name }}</div>
 
                             {% block frontend_index_actions_active_shop_language_form_select %}
                                 <div class="select-field">
                                     <select name="__shop" class="language--select" data-auto-submit="true">
-                                        {% for language in languages %}
+                                        {% for language in shops %}
                                             <option value="{{ language.id }}" {% if language.id == shop.id %}selected="selected"{% endif %}>
                                                 {{ language.name }}
                                             </option>
@@ -40,9 +40,9 @@
                             {% block frontend_index_actions_currency_form_select %}
                                 <div class="select-field">
                                     <select name="__currency" class="currency--select" data-auto-submit="true">
-                                        {% for currency in currencies %}
-                                            <option value="{{ currency.id }}"{% if currency.id == shop.currency.id %} selected="selected"{% endif %}>
-                                                {% if currency.symbol != currency.currency %}{{ currency.symbol|raw }} {% endif %} {{ currency.currency }}
+                                        {% for selection in currencies %}
+                                            <option value="{{ selection.id }}"{% if selection.id == currency.id %} selected="selected"{% endif %}>
+                                                {% if selection.symbol != selection.currency %}{{ selection.symbol|raw }} {% endif %} {{ selection.currency }}
                                             </option>
                                         {% endfor %}
                                     </select>

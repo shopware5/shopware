@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * Shopware AdvancedMenu Controller
@@ -31,7 +31,7 @@ class Shopware_Controllers_Widgets_AdvancedMenu extends Enlight_Controller_Actio
 {
     public function indexAction()
     {
-        /** @var ShopContextInterface $context */
+        /** @var \Shopware\Context\Struct\ShopContext $context */
         $context = $this->get('storefront.context.service')->getShopContext();
 
         /** @var \Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuServiceInterface $reader */

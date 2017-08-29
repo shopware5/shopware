@@ -24,9 +24,9 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -418,7 +418,7 @@ Nordrhein-WestfalenDeutschland';
     {
         $state = new State();
 
-        $state->setName('Shopware State ' . uniqid(rand()));
+        $state->setName('Shopware CountryState ' . uniqid(rand()));
         $state->setActive(1);
         $state->setCountry($country);
         $state->setShortCode(uniqid(rand()));

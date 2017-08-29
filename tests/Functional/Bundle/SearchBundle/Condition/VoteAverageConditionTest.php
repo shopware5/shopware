@@ -25,8 +25,8 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -176,7 +176,7 @@ class VoteAverageConditionTest extends TestCase
     }
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      *
      * @return Category
      */

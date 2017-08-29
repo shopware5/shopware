@@ -34,7 +34,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -93,7 +93,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
      * @param FacetInterface|CategoryFacet $facet
      * @param Criteria                     $reverted
      * @param \Shopware\Search\Criteria                     $criteria
-     * @param ShopContextInterface         $context
+     * @param ShopContext         $context
      *
      * @return \Shopware\Search\FacetResultInterface
      */
@@ -101,7 +101,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $ids = $this->fetchCategoriesOfProducts($reverted, $context);
 
@@ -137,11 +137,11 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param array                $ids
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array
      */
-    private function filterSystemCategories(array $ids, ShopContextInterface $context)
+    private function filterSystemCategories(array $ids, ShopContext $context)
     {
         $system = array_merge(
             [$context->getShop()->getCategory()->getId()],
@@ -155,11 +155,11 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param \Shopware\Search\Criteria             $reverted
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return int[]
      */
-    private function fetchCategoriesOfProducts(Criteria $reverted, ShopContextInterface $context)
+    private function fetchCategoriesOfProducts(Criteria $reverted, ShopContext $context)
     {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');

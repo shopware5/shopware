@@ -1,11 +1,36 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Storefront\Twig;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Category\Gateway\CategoryRepository;
 use Shopware\Framework\Config\ConfigServiceInterface;
-use Shopware\Storefront\Theme\ThemeConfigReader;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Serializer\SerializerRegistry;
 use Shopware\Storefront\Component\SitePageMenu;
+use Shopware\Storefront\Theme\ThemeConfigReader;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -41,13 +66,25 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
      */
     private $themeConfigReader;
 
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+
+    /**
+     * @var SerializerRegistry
+     */
+    private $serializer;
+
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
         ConfigServiceInterface $configService,
         SitePageMenu $sitePageMenu,
         Connection $connection,
-        ThemeConfigReader $themeConfigReader
+        ThemeConfigReader $themeConfigReader,
+        CategoryRepository $categoryRepository,
+        SerializerRegistry $serializer
     ) {
         $this->translator = $translator;
         $this->requestStack = $requestStack;
@@ -55,12 +92,14 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
         $this->sitePageMenu = $sitePageMenu;
         $this->connection = $connection;
         $this->themeConfigReader = $themeConfigReader;
+        $this->categoryRepository = $categoryRepository;
+        $this->serializer = $serializer;
     }
 
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('snippet', function ($snippet, $namespace = null) { return $this->translator->trans($snippet, [], $namespace); })
+            new \Twig_Function('snippet', function ($snippet, $namespace = null) { return $this->translator->trans($snippet, [], $namespace); }),
         ];
     }
 
@@ -72,12 +111,30 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
             return [];
         }
 
-        $shop = $request->attributes->get('_shop');
-
-        if (empty($shop)) {
+        /** @var ShopContext $context */
+        $context = $request->attributes->get('_shop_context');
+        if (!$context) {
             return [];
         }
 
+        return [
+            'shopware' => [
+                'config' => $this->configService->getByShop(
+                    $context->getShop()->getId(),
+                    $context->getShop()->getMainId()
+                ),
+                'theme' => $this->getThemeConfig(),
+            ],
+            'context' => $context,
+            'activeRoute' => $request->attributes->get('_route')
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getThemeConfig(): array
+    {
         $themeConfig = $this->themeConfigReader->get();
 
         $themeConfig = array_merge(
@@ -91,85 +148,6 @@ class TemplateDataExtension extends \Twig_Extension implements \Twig_Extension_G
             ]
         );
 
-        return [
-            'shopware' => [
-                'config' => $this->configService->getByShop($shop),
-                'theme' => $themeConfig,
-                'menu' => $this->sitePageMenu->getTree($shop['id']),
-                'mainCategories' => $this->getCategories(3)
-            ]
-        ];
-    }
-
-    public function getCategories($id)
-    {
-        $pathIds = $this->getCategoryPath($id);
-        $grouped = $this->getCategoryIdsWithParent($pathIds);
-
-        $ids = array_merge($pathIds, array_keys($grouped));
-
-        $cats = [];
-        foreach ($grouped as $name => $cat) {
-            $cats[] = [
-                'id' => 1,
-                'description' => $name
-            ];
-        }
-
-        array_shift($cats);
-
-        return $cats;
-
-        $context = $this->contextService->getShopContext();
-        $categories = $this->categoryService->getList($ids, $context);
-
-        unset($grouped[$this->baseId]);
-
-        $tree = $this->buildTree($grouped, $this->baseId);
-
-        $result = $this->assignCategoriesToTree(
-            $categories,
-            $tree,
-            $pathIds,
-            $this->getChildrenCountOfCategories($ids)
-        );
-
-        return $result;
-    }
-
-    private function getCategoryPath($id)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $path = $query->select(['category.path'])
-            ->from('category', 'category')
-            ->where('category.id = :id')
-            ->setParameter(':id', $id)
-            ->execute()
-            ->fetchColumn();
-
-        $ids = [$id];
-
-        if (!$path) {
-            return $ids;
-        }
-
-        $pathIds = explode('|', $path);
-
-        return array_filter(array_merge($ids, $pathIds));
-    }
-
-    private function getCategoryIdsWithParent($ids)
-    {
-        $query = $this->connection->createQueryBuilder();
-
-        return $query->select(['category.description', 'category.parent'])
-            ->from('category', 'category')
-            ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
-            ->andWhere('category.active = 1')
-            ->orderBy('category.position', 'ASC')
-            ->addOrderBy('category.id')
-            ->setParameter(':parentId', $ids, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $themeConfig;
     }
 }

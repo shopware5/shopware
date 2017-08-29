@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Address;
@@ -53,7 +53,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     protected static $connection;
 
     /**
-     * @var ContextServiceInterface
+     * @var StorefrontContextServiceInterface
      */
     protected static $contextService;
 

@@ -28,7 +28,7 @@ use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\DependencyInjection\Container;
 
 class CombinedConditionQueryBuilder
@@ -49,11 +49,11 @@ class CombinedConditionQueryBuilder
     /**
      * @param array                                                          $conditions
      * @param \Shopware\Search\Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return BoolQuery
      */
-    public function build(array $conditions, Criteria $criteria, ShopContextInterface $context)
+    public function build(array $conditions, Criteria $criteria, ShopContext $context)
     {
         $search = new Search();
 

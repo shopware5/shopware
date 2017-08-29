@@ -25,11 +25,11 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\PriceCollection;
+use Shopware\Cart\Tax\CalculatedTax;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
 
 class PriceCollectionTest extends TestCase
 {

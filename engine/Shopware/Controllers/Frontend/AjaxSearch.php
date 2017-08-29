@@ -24,7 +24,7 @@
 
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * Search controller for suggest search
@@ -51,7 +51,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 
         $this->setDefaultSorting();
 
-        /** @var ShopContextInterface $context */
+        /** @var \Shopware\Context\Struct\ShopContext $context */
         $context = $this->get('storefront.context.service')->getShopContext();
 
         $criteria = $this->get('shopware_search.store_front_criteria_factory')

@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -52,7 +52,7 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $query->innerJoin(
             'product',

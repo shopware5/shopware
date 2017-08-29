@@ -250,7 +250,7 @@ class Country extends Resource
                 if ($area) {
                     $params['area'] = $area;
                 } else {
-                    throw new ApiException\NotFoundException("Area by id {$areaId} not found");
+                    throw new ApiException\NotFoundException("CountryArea by id {$areaId} not found");
                 }
             } else {
                 $params['area'] = null;
@@ -286,7 +286,7 @@ class Country extends Resource
             /** @var \Shopware\Models\Country\State $stateModel */
             $stateModel = $this->getManager()->find('Shopware\Models\Country\State', $state['id']);
             if (!$stateModel) {
-                throw new ApiException\NotFoundException("State by id {$state['id']} not found");
+                throw new ApiException\NotFoundException("CountryState by id {$state['id']} not found");
             }
 
             // Update state

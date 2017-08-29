@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -52,7 +52,7 @@ class ShippingFreeConditionTest extends TestCase
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
+     * @param \Shopware\Context\Struct\ShopContext                        $context
      * @param bool                               $shippingFree
      *
      * @return array

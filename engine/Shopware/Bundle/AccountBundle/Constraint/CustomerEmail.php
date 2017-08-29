@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 use Symfony\Component\Validator\Constraint;
 
 class CustomerEmail extends Constraint

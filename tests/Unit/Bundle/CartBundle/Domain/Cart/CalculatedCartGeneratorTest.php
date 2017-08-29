@@ -25,25 +25,25 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
-use Shopware\Bundle\CartBundle\Domain\Error\VoucherNotFoundError;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
-use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Cart\CalculatedCartGenerator;
+use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Cart\ProcessorCart;
+use Shopware\Cart\Delivery\Delivery;
+use Shopware\Cart\Delivery\DeliveryCollection;
+use Shopware\Cart\Delivery\DeliveryDate;
+use Shopware\Cart\Delivery\DeliveryPositionCollection;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Error\ErrorCollection;
+use Shopware\Cart\Error\VoucherNotFoundError;
+use Shopware\Cart\LineItem\CalculatedLineItemCollection;
+use Shopware\Cart\Price\AmountCalculator;
+use Shopware\Cart\Price\CartPrice;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\ShippingMethod\Struct\ShippingMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class CalculatedCartGeneratorTest extends TestCase
@@ -67,7 +67,7 @@ class CalculatedCartGeneratorTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertCalculatedCart(
-            new CalculatedCart(
+            new \Shopware\Cart\Cart\CalculatedCart(
                 $container,
                 new CalculatedLineItemCollection(),
                 $price,
@@ -140,7 +140,7 @@ class CalculatedCartGeneratorTest extends TestCase
         $context = $this->createMock(ShopContext::class);
 
         $this->assertCalculatedCart(
-            new CalculatedCart(
+            new \Shopware\Cart\Cart\CalculatedCart(
                 $container,
                 new CalculatedLineItemCollection(),
                 $price,

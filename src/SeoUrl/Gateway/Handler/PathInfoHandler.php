@@ -26,7 +26,7 @@ namespace Shopware\SeoUrl\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\PathInfoCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
@@ -47,6 +47,6 @@ class PathInfoHandler implements HandlerInterface
     ): void {
         /* @var PathInfoCondition $criteriaPart */
         $builder->andWhere('seoUrl.path_info IN (:pathInfos)');
-        $builder->setParameter(':pathInfos', $criteriaPart->getPathInfos(), Connection::PARAM_STR_ARRAY);
+        $builder->setParameter('pathInfos', $criteriaPart->getPathInfos(), Connection::PARAM_STR_ARRAY);
     }
 }

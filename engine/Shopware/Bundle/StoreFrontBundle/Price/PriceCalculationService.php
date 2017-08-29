@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
+use Shopware\Tax\Struct\Tax;
 
 /**
  * @category  Shopware
@@ -40,7 +40,7 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      */
     public function calculateProduct(
         ListProduct $product,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
@@ -83,14 +83,14 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      *
      * @param ListProduct          $product
      * @param PriceRule            $priceRule
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return Price
      */
     private function calculateCheapestAvailablePrice(
         ListProduct $product,
         PriceRule $priceRule,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $priceRule->setPrice(
             $priceRule->getUnit()->getMinPurchase() * $priceRule->getPrice()
@@ -113,15 +113,15 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      * All price structs will be calculated through this function.
      *
      * @param PriceRule                                 $rule
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\Tax $tax
-     * @param ShopContextInterface                      $context
+     * @param \Shopware\Tax\Struct\Tax $tax
+     * @param ShopContext                      $context
      *
      * @return Price
      */
     private function calculatePriceStruct(
         PriceRule $rule,
         Tax $tax,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $price = new Price($rule);
 
@@ -154,12 +154,12 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      * and the pseudo price of a price struct.
      *
      * @param $price
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\Tax $tax
-     * @param ShopContextInterface                      $context
+     * @param \Shopware\Tax\Struct\Tax $tax
+     * @param ShopContext                      $context
      *
      * @return float
      */
-    private function calculatePrice($price, Tax $tax, ShopContextInterface $context)
+    private function calculatePrice($price, Tax $tax, ShopContext $context)
     {
         /**
          * Important:

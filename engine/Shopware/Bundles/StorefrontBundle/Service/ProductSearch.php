@@ -3,12 +3,12 @@
 namespace StorefrontBundle\Service;
 
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use StorefrontBundle\Struct\ProductSearchResult;
 
 class ProductSearch
 {
-    public function search(Criteria $criteria, ShopContextInterface $context): ProductSearchResult
+    public function search(Criteria $criteria, ShopContext $context): ProductSearchResult
     {
         // prepare criteria and add "frontend conditions" as base conditions
 

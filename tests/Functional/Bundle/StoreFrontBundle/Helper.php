@@ -25,16 +25,16 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Cart\Delivery\ShippingLocation;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ProductConfigurationGateway;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
-use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
-use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\PaymentMethod\Struct\PaymentMethod;
+use Shopware\ShippingMethod\Struct\ShippingMethod;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Components\Api\Resource;
 use Shopware\Kernel;
 use Shopware\Models;
@@ -110,7 +110,7 @@ class Helper
 
     public function getProductConfigurator(
         StoreFrontBundle\Product\ListProduct $listProduct,
-        StoreFrontBundle\Context\ShopContext $context,
+        \Shopware\Context\Struct\ShopContext $context,
         array $selection = [],
         ProductConfigurationGateway $productConfigurationGateway = null,
         ConfiguratorGateway $configuratorGateway = null
@@ -132,14 +132,14 @@ class Helper
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct             $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext             $context
+     * @param \Shopware\Context\Struct\ShopContext             $context
      * @param \Shopware\Bundle\StoreFrontBundle\Property\ProductPropertyGateway $productPropertyGateway
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet
      */
     public function getProductProperties(
         StoreFrontBundle\Product\ListProduct $product,
-        StoreFrontBundle\Context\ShopContext $context,
+        \Shopware\Context\Struct\ShopContext $context,
         StoreFrontBundle\Property\ProductPropertyGateway $productPropertyGateway = null
     ) {
         if ($productPropertyGateway === null) {
@@ -154,12 +154,12 @@ class Helper
 
     /**
      * @param array                $numbers
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param array                $configs
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
-    public function getListProducts($numbers, ShopContextInterface $context, array $configs = [])
+    public function getListProducts($numbers, ShopContext $context, array $configs = [])
     {
         $config = Shopware()->Container()->get('config');
         $originals = [];
@@ -179,12 +179,12 @@ class Helper
 
     /**
      * @param string                                                         $number
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param array                                                          $configs
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct
      */
-    public function getListProduct($number, ShopContextInterface $context, array $configs = [])
+    public function getListProduct($number, ShopContext $context, array $configs = [])
     {
         return array_shift($this->getListProducts([$number], $context, $configs));
     }
@@ -195,7 +195,7 @@ class Helper
      *
      * @param $number
      * @param Tax                                                           $tax
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $customerGroup
      * @param float                                                         $priceOffset
      *
      * @return array
@@ -612,7 +612,7 @@ class Helper
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup used for the price definition
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $customerGroup used for the price definition
      * @param string                                                        $number
      * @param array                                                         $data          contains nested configurator group > option array
      *
@@ -736,7 +736,7 @@ class Helper
     public function getManufacturerData()
     {
         return [
-            'name' => 'Test-Manufacturer',
+            'name' => 'Test-ProductManufacturer',
         ];
     }
 
@@ -909,7 +909,7 @@ class Helper
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      */
     public function refreshSearchIndexes(Shop $shop)
     {
@@ -1253,7 +1253,7 @@ class Helper
     /**
      * @param Models\Tax\Tax[] $taxes
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax[]
+     * @return \Shopware\Tax\Struct\Tax[]
      */
     private function buildTaxRules(array $taxes)
     {

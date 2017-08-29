@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\AccountBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
 interface RegisterServiceInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      * @param Customer                                    $customer
      * @param Address                                     $billing
      * @param Address|null                                $shipping

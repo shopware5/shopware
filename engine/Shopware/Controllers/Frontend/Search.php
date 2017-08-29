@@ -62,7 +62,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             return;
         }
 
-        /** @var $context \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface */
+        /** @var $context \Shopware\Context\Struct\ShopContext */
         $context = $this->get('storefront.context.service')->getShopContext();
 
         $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')

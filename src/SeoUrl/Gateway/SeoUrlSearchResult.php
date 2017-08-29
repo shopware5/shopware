@@ -46,7 +46,7 @@ class SeoUrlSearchResult extends SeoUrlCollection implements SearchResultInterfa
 
     public function getIds()
     {
-        return $this->map(function(SeoUrl $seoUrl) {
+        return $this->map(function (SeoUrl $seoUrl) {
             return $seoUrl->getId();
         });
     }
@@ -58,6 +58,7 @@ class SeoUrlSearchResult extends SeoUrlCollection implements SearchResultInterfa
                 return true;
             }
         }
+
         return false;
     }
 }

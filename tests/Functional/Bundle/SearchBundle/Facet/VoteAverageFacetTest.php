@@ -25,8 +25,8 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -163,7 +163,7 @@ class VoteAverageFacetTest extends TestCase
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      *
      * @return Category
      */

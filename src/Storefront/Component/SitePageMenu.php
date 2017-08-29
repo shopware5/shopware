@@ -90,7 +90,7 @@ class SitePageMenu
         }
 
         /** @var Router $router */
-//        $seoUrls = $this->router->generateList($links);
+        //        $seoUrls = $this->router->generateList($links);
         $seoUrls = [];
         $menu = $this->assignSeoUrls($menu, $seoUrls);
 
@@ -209,8 +209,8 @@ class SitePageMenu
             ->addOrderBy('page.position')
             ->addOrderBy('page.description');
 
-        $query->setParameter(':shopId', $shopId)
-            ->setParameter(':staticShopId', '%|' . $shopId . '|%');
+        $query->setParameter('shopId', $shopId)
+            ->setParameter('staticShopId', '%|' . $shopId . '|%');
 
         return $query;
     }

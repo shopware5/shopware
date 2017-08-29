@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Search\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Listing\ListingSortingServiceInterface;
 
 class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
@@ -48,12 +48,12 @@ class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     /**
      * @param Request                                                        $request
      * @param \Shopware\Search\Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
     public function handleRequest(
         Request $request,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!$request->has('sSort')) {
             return;

@@ -5,7 +5,7 @@ namespace VoteBundle\Gateway\Handler;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use SearchBundle\Condition\ProductNumberCondition;
 use Shopware\Search\HandlerInterface;
 

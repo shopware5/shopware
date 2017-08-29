@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
@@ -44,9 +44,9 @@ interface GraduatedPricesServiceInterface
      * price group discounts definition.
      *
      * @param ListProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return array[] indexed by the product number, each array element contains a PriceRule array
      */
-    public function getList($products, ShopContextInterface $context);
+    public function getList($products, ShopContext $context);
 }

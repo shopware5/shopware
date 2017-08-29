@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class AdvancedMenuService implements AdvancedMenuServiceInterface
 {
@@ -60,12 +60,12 @@ class AdvancedMenuService implements AdvancedMenuServiceInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param int                                                            $depth
      *
      * @return \Shopware\Category\Struct\CategoryCollection
      */
-    public function get(ShopContextInterface $context, int $depth): CategoryCollection
+    public function get(ShopContext $context, int $depth): CategoryCollection
     {
         $ids = $this->categoryDepthService->get($context->getShop()->getCategory(), $depth);
 

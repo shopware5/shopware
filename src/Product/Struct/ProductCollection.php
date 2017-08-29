@@ -69,7 +69,7 @@ class ProductCollection extends Collection
 
     public function getProductUuids(): array
     {
-        return $this->map(function(Product $product) {
+        return $this->map(function (Product $product) {
             return $product->getUuid();
         });
     }

@@ -28,15 +28,15 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
+use Shopware\Cart\Price\PriceDefinition;
+use Shopware\Cart\Price\PriceDefinitionCollection;
+use Shopware\Cart\Product\ProductPriceCollection;
+use Shopware\Cart\Tax\TaxRule;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\CartBridge\Product\ProductPriceGateway;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
-use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\Tax\Struct\TaxHydrator;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class ProductPriceGatewayTest extends TestCase
@@ -261,7 +261,7 @@ class ProductPriceGatewayTest extends TestCase
     /**
      * @param string $key
      *
-     * @return CustomerGroup
+     * @return \Shopware\CustomerGroup\Struct\CustomerGroup
      */
     private function createCustomerGroup($key): CustomerGroup
     {

@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
 
@@ -56,7 +56,7 @@ class ProductMediaTest extends TestCase
 
             $this->assertCount(3, $productMediaList);
 
-            /** @var $media \Shopware\Bundle\StoreFrontBundle\Media\Media */
+            /** @var $media \Shopware\Media\Struct\Media */
             foreach ($productMediaList as $media) {
                 if ($media->isPreview()) {
                     $this->assertMediaFile('sasse-korn', $media);
@@ -159,7 +159,7 @@ class ProductMediaTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context, $imageCount = 2)
+    private function getVariantImageProduct($number, \Shopware\Context\Struct\ShopContext $context, $imageCount = 2)
     {
         $data = $this->getProduct(
             $number,
@@ -183,9 +183,9 @@ class ProductMediaTest extends TestCase
         return $data;
     }
 
-    private function assertMediaFile($expected, \Shopware\Bundle\StoreFrontBundle\Media\Media $media)
+    private function assertMediaFile($expected, \Shopware\Media\Struct\Media $media)
     {
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Media\Media', $media);
+        $this->assertInstanceOf('Shopware\Media\Struct\Media', $media);
         $this->assertNotEmpty($media->getThumbnails());
         $this->assertContains($expected, $media->getFile());
 

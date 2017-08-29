@@ -26,7 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\ProductManufacturer\Struct\ProductManufacturerHydrator;
 
 /**
  * @category  Shopware
@@ -36,7 +37,7 @@ use Shopware\Context\TranslationContext;
 class ManufacturerGateway
 {
     /**
-     * @var ManufacturerHydrator
+     * @var ProductManufacturerHydrator
      */
     private $manufacturerHydrator;
 
@@ -63,12 +64,12 @@ class ManufacturerGateway
     /**
      * @param Connection           $connection
      * @param \Shopware\Framework\Struct\FieldHelper          $fieldHelper
-     * @param ManufacturerHydrator $manufacturerHydrator
+     * @param ProductManufacturerHydrator $manufacturerHydrator
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        ManufacturerHydrator $manufacturerHydrator
+        ProductManufacturerHydrator $manufacturerHydrator
     ) {
         $this->connection = $connection;
         $this->manufacturerHydrator = $manufacturerHydrator;
@@ -77,9 +78,9 @@ class ManufacturerGateway
 
     /**
      * @param int[]              $ids
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer[] Indexed by the manufacturer id
+     * @return \Shopware\ProductManufacturer\Struct\ProductManufacturer[] Indexed by the manufacturer id
      */
     public function getList(array $ids, TranslationContext $context)
     {

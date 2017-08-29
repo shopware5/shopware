@@ -25,19 +25,19 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Rule\Rule;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\GoodsCountRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\LineItem\CalculatedLineItemCollection;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Rule\Container\AndRule;
+use Shopware\Cart\Rule\Rule;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Cart\Voucher\CalculatedVoucher;
+use Shopware\Cart\Voucher\VoucherProcessor;
+use Shopware\CartBridge\Rule\GoodsCountRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class GoodsCountRuleTest extends TestCase
@@ -189,7 +189,7 @@ class GoodsCountRuleTest extends TestCase
     /**
      * @dataProvider unsupportedOperators
      *
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Rule\Exception\UnsupportedOperatorException
+     * @expectedException \Shopware\Cart\Rule\Exception\UnsupportedOperatorException
      *
      * @param string $operator
      */
@@ -212,8 +212,8 @@ class GoodsCountRuleTest extends TestCase
             [true],
             [false],
             [''],
-            [Rule::OPERATOR_EQ],
-            [Rule::OPERATOR_NEQ],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_EQ],
+            [\Shopware\Cart\Rule\Rule::OPERATOR_NEQ],
         ];
     }
 }

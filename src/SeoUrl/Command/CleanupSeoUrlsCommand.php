@@ -24,7 +24,7 @@
 
 namespace Shopware\SeoUrl\Command;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\CanonicalCondition;
 use Shopware\Search\Criteria;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CleanupSeoUrlsCommand extends ContainerAwareCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('seo:url:cleanup')

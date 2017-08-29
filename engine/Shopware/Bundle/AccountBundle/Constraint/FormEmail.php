@@ -29,12 +29,12 @@ use Symfony\Component\Validator\Constraint;
 class FormEmail extends Constraint
 {
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Shop\Shop
+     * @var \Shopware\Shop\Struct\Shop
      */
     protected $shop;
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
+     * @return \Shopware\Shop\Struct\Shop
      */
     public function getShop()
     {

@@ -45,7 +45,7 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\SearchBundleES\StructHydrator;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyOption;
 use Shopware\Components\QueryAliasMapper;
@@ -115,7 +115,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $aggregation = new TermsAggregation('properties');
         $aggregation->setField('properties.id');
@@ -130,7 +130,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations'])) {
             return;

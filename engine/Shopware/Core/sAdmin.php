@@ -114,7 +114,7 @@ class sAdmin
     private $snippetManager;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -162,7 +162,7 @@ class sAdmin
         Shopware_Components_Snippet_Manager              $snippetManager = null,
         Shopware_Components_Modules                      $moduleManager = null,
         sSystem                                          $systemModule = null,
-        StoreFrontBundle\Context\ContextServiceInterface $contextService = null,
+        \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService = null,
         EmailValidatorInterface                          $emailValidator = null,
         AddressServiceInterface                          $addressService = null,
         NumberRangeIncrementerInterface                  $numberRangeIncrementer = null
@@ -3512,7 +3512,7 @@ SQL;
         );
 
         $userData['additional']['country'] = $userData['additional']['country'] ?: [];
-        // State selection
+        // CountryState selection
         $userData['additional']['state'] = $this->db->fetchRow(
             'SELECT *, name as statename FROM s_core_countries_states WHERE id = ?',
             [$userData['billingaddress']['stateID']]
@@ -3572,7 +3572,7 @@ SQL;
         );
         $this->session->offsetSet('sCountry', $userData['additional']['countryShipping']['id']);
 
-        // State selection
+        // CountryState selection
         $userData['additional']['stateShipping'] = $this->db->fetchRow(
             'SELECT *, name as statename FROM s_core_countries_states WHERE id = ?',
             [$userData['shippingaddress']['stateID']]

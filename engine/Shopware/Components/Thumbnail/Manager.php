@@ -30,7 +30,7 @@ use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Settings;
 
 /**
- * Shopware Thumbnail Manager
+ * Shopware MediaThumbnail Manager
  *
  * This class handles the generation of thumbnails.
  * It uses a passed thumbnail generator which will be used for creating the thumbnails.

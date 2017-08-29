@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
 use Shopware\Framework\Struct\Struct;
-use Shopware\Bundle\StoreFrontBundle\Media\Media;
+use Shopware\Media\Struct\Media;
 
 /**
  * @category  Shopware
@@ -50,7 +50,7 @@ class ConfiguratorOption extends Struct
     protected $selected;
 
     /**
-     * @var Media
+     * @var \Shopware\Media\Struct\Media
      */
     protected $media;
 
@@ -108,7 +108,7 @@ class ConfiguratorOption extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media
+     * @return \Shopware\Media\Struct\Media
      */
     public function getMedia()
     {
@@ -116,7 +116,7 @@ class ConfiguratorOption extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media $media
+     * @param \Shopware\Media\Struct\Media $media
      */
     public function setMedia($media)
     {

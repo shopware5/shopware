@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ListingPriceTable implements ListingPriceTableInterface
 {
@@ -51,11 +51,11 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return DoctrineQueryBuilder
      */
-    public function get(ShopContextInterface $context)
+    public function get(ShopContext $context)
     {
         $priceTable = $this->getPriceTable($context);
 
@@ -92,11 +92,11 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return bool
      */
-    private function hasDifferentCustomerGroups(ShopContextInterface $context)
+    private function hasDifferentCustomerGroups(ShopContext $context)
     {
         return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
     }
@@ -135,11 +135,11 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return string
      */
-    private function getSelection(ShopContextInterface $context)
+    private function getSelection(ShopContext $context)
     {
         $current = $context->getCurrentCustomerGroup();
         $currency = $context->getCurrency();
@@ -180,11 +180,11 @@ class ListingPriceTable implements ListingPriceTableInterface
     /**
      * Builds the tax cases for the price selection query
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return string
      */
-    private function buildTaxCase(ShopContextInterface $context)
+    private function buildTaxCase(ShopContext $context)
     {
         $cases = [];
         foreach ($context->getTaxRules() as $rule) {
@@ -195,11 +195,11 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return DoctrineQueryBuilder
      */
-    private function getPriceTable(ShopContextInterface $context)
+    private function getPriceTable(ShopContext $context)
     {
         $priceTable = $this->connection->createQueryBuilder();
         $priceTable->select($this->getPriceColumns());

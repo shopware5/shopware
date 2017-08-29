@@ -25,11 +25,11 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\CustomerGroupRule;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\CartBridge\Rule\CustomerGroupRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 
 class CustomerGroupRuleTest extends TestCase
 {

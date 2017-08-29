@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Framework\Struct;
 
 use ArrayIterator;
-use Shopware\Framework\Struct\Struct;
 
 abstract class Collection extends Struct implements \IteratorAggregate, \Countable
 {
@@ -71,6 +70,11 @@ abstract class Collection extends Struct implements \IteratorAggregate, \Countab
     public function map(\Closure $closure): array
     {
         return array_map($closure, $this->elements);
+    }
+
+    public function fmap(\Closure $closure): array
+    {
+        return array_filter($this->map($closure));
     }
 
     public function sort(\Closure $closure)

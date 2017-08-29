@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
 use Shopware\Framework\Struct\Struct;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
-use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
+use Shopware\Unit\Struct\Unit;
 
 /**
  * @category  Shopware
@@ -69,7 +69,7 @@ class PriceRule extends Struct
      * Contains the associated customer group of this price.
      * Each graduated product price is defined for a single customer group.
      *
-     * @var CustomerGroup
+     * @var \Shopware\CustomerGroup\Struct\CustomerGroup
      */
     protected $customerGroup;
 
@@ -159,7 +159,7 @@ class PriceRule extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $customerGroup
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -167,7 +167,7 @@ class PriceRule extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
+     * @return \Shopware\CustomerGroup\Struct\CustomerGroup
      */
     public function getCustomerGroup()
     {
@@ -175,7 +175,7 @@ class PriceRule extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Unit\Unit $unit
+     * @param \Shopware\Unit\Struct\Unit $unit
      */
     public function setUnit($unit)
     {
@@ -183,7 +183,7 @@ class PriceRule extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Unit\Unit
+     * @return \Shopware\Unit\Struct\Unit
      */
     public function getUnit()
     {

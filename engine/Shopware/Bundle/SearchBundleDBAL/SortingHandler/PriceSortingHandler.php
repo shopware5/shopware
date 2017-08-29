@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -66,7 +66,7 @@ class PriceSortingHandler implements SortingHandlerInterface
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!$query->hasState(PriceConditionHandler::LISTING_PRICE_JOINED)) {
             $table = $this->listingPriceTable->get($context);

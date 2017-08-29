@@ -433,7 +433,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
     private function refreshContext()
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $service */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $service */
         $service = $this->get('storefront.context.service');
         $service->refresh();
     }

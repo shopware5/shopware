@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Search\Criteria;
 
 /**
@@ -37,58 +37,58 @@ interface StoreFrontCriteriaFactoryInterface
 {
     /**
      * @param int[]                $categoryIds
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Criteria
      */
-    public function createBaseCriteria($categoryIds, ShopContextInterface $context);
+    public function createBaseCriteria($categoryIds, ShopContext $context);
 
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Criteria
      */
-    public function createSearchCriteria(Request $request, ShopContextInterface $context);
+    public function createSearchCriteria(Request $request, ShopContext $context);
 
     /**
      * @param Request              $request
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Criteria
      */
-    public function createListingCriteria(Request $request, ShopContextInterface $context);
+    public function createListingCriteria(Request $request, ShopContext $context);
 
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Criteria
      */
-    public function createAjaxSearchCriteria(Request $request, ShopContextInterface $context);
+    public function createAjaxSearchCriteria(Request $request, ShopContext $context);
 
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Criteria
      */
-    public function createAjaxListingCriteria(Request $request, ShopContextInterface $context);
+    public function createAjaxListingCriteria(Request $request, ShopContext $context);
 
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Criteria
      */
-    public function createAjaxCountCriteria(Request $request, ShopContextInterface $context);
+    public function createAjaxCountCriteria(Request $request, ShopContext $context);
 
     /**
      * @param Request                                                        $request
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param int                                                            $categoryId
      *
      * @return \Shopware\Search\Criteria
      */
-    public function createProductNavigationCriteria(Request $request, ShopContextInterface $context, $categoryId);
+    public function createProductNavigationCriteria(Request $request, ShopContext $context, $categoryId);
 }

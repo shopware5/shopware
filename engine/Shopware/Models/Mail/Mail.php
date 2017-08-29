@@ -156,7 +156,7 @@ class Mail extends ModelEntity
      * Defines the mailtype
      * 1 - User-Defined Mail
      * 2 - System Mail
-     * 3 - State Mail - Can be further differentiated into order-state-mails and payment-state-mails
+     * 3 - CountryState Mail - Can be further differentiated into order-state-mails and payment-state-mails
      *
      * @var int
      *

@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 
 class DownloadTest extends TestCase
@@ -82,7 +82,7 @@ class DownloadTest extends TestCase
 
     /**
      * @param $number
-     * @param ShopContext                        $context
+     * @param \Shopware\Context\Struct\ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
      * @param null                               $additionally
      *

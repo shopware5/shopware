@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Price;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -79,7 +79,7 @@ class GraduatedPricesGateway
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
      * @param TranslationContext                                      $context
-     * @param CustomerGroup                                           $customerGroup
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup                                           $customerGroup
      *
      * @return array indexed by the product order number, each array element contains a Struct\Product\PriceRule array
      */

@@ -25,7 +25,7 @@
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 
 /**
  * Deprecated Shopware Class to provide article export feeds
@@ -89,7 +89,7 @@ class sExport
     private $shopData;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Context\Service\\Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -112,14 +112,14 @@ class sExport
     private $configuratorService;
 
     /**
-     * @param ContextServiceInterface                                                         $contextService
+     * @param \Shopware\Context\Service\\Shopware\Storefront\Context\StorefrontContextServiceInterface                                                         $contextService
      * @param \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface $additionalTextService
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql                                         $db
      * @param Shopware_Components_Config                                                      $config
      * @param StoreFrontBundle\Service\ConfiguratorServiceInterface                           $configuratorService
      */
     public function __construct(
-        ContextServiceInterface $contextService = null,
+        StorefrontContextServiceInterface $contextService = null,
         AdditionalTextServiceInterface $additionalTextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,

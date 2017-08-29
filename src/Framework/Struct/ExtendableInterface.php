@@ -25,8 +25,6 @@ declare(strict_types=1);
 
 namespace Shopware\Framework\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-
 /**
  * @category  Shopware
  *

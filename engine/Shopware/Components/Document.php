@@ -43,7 +43,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     public $_order;
 
     /**
-     * Shopware Template Object (Smarty)
+     * Shopware ShopTemplate Object (Smarty)
      *
      * @var \Enlight_Template_Manager
      */

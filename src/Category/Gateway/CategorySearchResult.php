@@ -24,79 +24,17 @@
 
 namespace Shopware\Category\Gateway;
 
-use Shopware\Category\Struct\CategoryIdentity;
-use Shopware\Framework\Struct\Collection;
+use Shopware\Category\Struct\CategoryIdentityCollection;
 use Shopware\Search\SearchResultInterface;
 use Shopware\Search\SearchResultTrait;
 
-class CategorySearchResult extends Collection implements SearchResultInterface
+class CategorySearchResult extends CategoryIdentityCollection implements SearchResultInterface
 {
     use SearchResultTrait;
-
-    /**
-     * @var CategoryIdentity[]
-     */
-    protected $elements = [];
 
     public function __construct(array $elements, int $total)
     {
         parent::__construct($elements);
         $this->total = $total;
-    }
-
-    public function add(CategoryIdentity $identity): void
-    {
-        $this->elements[$this->getKey($identity)] = $identity;
-    }
-
-    public function remove(string $number): void
-    {
-        parent::doRemoveByKey($number);
-    }
-
-    public function removeElement(CategoryIdentity $identity): void
-    {
-        parent::doRemoveByKey($this->getKey($identity));
-    }
-
-    public function get(int $id): ? CategoryIdentity
-    {
-        if ($this->has($id)) {
-            return $this->elements[$id];
-        }
-
-        return null;
-    }
-
-    public function getIds(): array
-    {
-        return $this->map(function (CategoryIdentity $identity) {
-            return $identity->getId();
-        });
-    }
-
-    public function getIdsIncludingPaths(): array
-    {
-        $ids = [];
-        foreach ($this->elements as $identity) {
-            $ids[] = $identity->getId();
-            foreach ($identity->getPath() as $id) {
-                $ids[] = $id;
-            }
-        }
-
-        return array_keys(array_flip($ids));
-    }
-
-    public function getPaths(): array
-    {
-        return $this->map(function (CategoryIdentity $identity) {
-            return $identity->getPath();
-        });
-    }
-
-    protected function getKey(CategoryIdentity $element): string
-    {
-        return $element->getId();
     }
 }

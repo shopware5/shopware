@@ -126,7 +126,7 @@ class CountryTest extends TestCase
     {
         $state = new State();
         $state->fromArray([
-            'name' => 'Test State',
+            'name' => 'Test CountryState',
             'shortCode' => 'TS',
         ]);
         Shopware()->Models()->persist($state);
@@ -142,7 +142,7 @@ class CountryTest extends TestCase
             'states' => [
                 [
                     'id' => $state->getId(),
-                    'name' => 'New State Name',
+                    'name' => 'New CountryState Name',
                     'shortCode' => 'NSC',
                 ],
             ],
@@ -208,7 +208,7 @@ class CountryTest extends TestCase
         $oldState = $country->getStates()->first();
         $state = new State();
         $state->fromArray([
-            'name' => 'Test State 2',
+            'name' => 'Test CountryState 2',
             'shortCode' => 'TS2',
         ]);
         Shopware()->Models()->persist($state);
@@ -227,7 +227,7 @@ class CountryTest extends TestCase
                 ],
                 [
                     'id' => $state->getId(),
-                    'name' => 'New State 2 Name',
+                    'name' => 'New CountryState 2 Name',
                     'shortCode' => 'NSC2',
                 ],
             ],

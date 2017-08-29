@@ -22,16 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Exception\CartTokenNotFoundException;
-use Shopware\Bundle\CartBundle\Domain\Exception\LineItemNotFoundException;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Exception\CartTokenNotFoundException;
+use Shopware\Cart\Exception\LineItemNotFoundException;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\Price\PriceDefinition;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopScope;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 
 class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
@@ -252,7 +252,7 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
         return $fallback;
     }
 
-    private function saveContext($token, ShopContextInterface $context): void
+    private function saveContext($token, ShopContext $context): void
     {
         $this->container->get('dbal_connection')->executeUpdate(
             'INSERT INTO `s_cart_api_context` (`token`, `content`) 
@@ -265,7 +265,7 @@ class Shopware_Controllers_Api_Cart extends Shopware_Controllers_Api_Rest
         );
     }
 
-    private function loadContext($token): ShopContextInterface
+    private function loadContext($token): ShopContext
     {
         $content = $this->container->get('dbal_connection')->fetchColumn(
             'SELECT content FROM s_cart_api_context WHERE `token` = :token',

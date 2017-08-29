@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Storefront\Context\StorefrontContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Components\Model\ModelManager;
 
@@ -50,7 +50,7 @@ class SitemapXMLRepository
     private $connection;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Context\Service\ContextServiceInterface
      */
     private $contextService;
 
@@ -68,13 +68,13 @@ class SitemapXMLRepository
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param ModelManager                       $em
-     * @param ContextServiceInterface            $contextService
+     * @param \Shopware\Context\Service\ContextServiceInterface            $contextService
      */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         ModelManager $em,
-        ContextServiceInterface $contextService)
+        StorefrontContextServiceInterface $contextService)
     {
         $this->em = $em;
         $this->connection = $this->em->getConnection();

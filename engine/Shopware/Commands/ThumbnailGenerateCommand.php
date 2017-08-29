@@ -74,7 +74,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:thumbnail:generate')
-            ->setDescription('Generates a new Thumbnail.')
+            ->setDescription('Generates a new MediaThumbnail.')
             ->addOption(
                 'albumid',
                 null,
@@ -137,12 +137,12 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     protected function printExitMessage()
     {
         if (0 === count($this->errors)) {
-            $this->output->writeln('<info>Thumbnail generation finished successfully</info>');
+            $this->output->writeln('<info>MediaThumbnail generation finished successfully</info>');
 
             return;
         }
 
-        $this->output->writeln('<error>Thumbnail generation finished with errors</error>');
+        $this->output->writeln('<error>MediaThumbnail generation finished with errors</error>');
 
         foreach ($this->errors as $error) {
             $this->output->writeln('<comment>' . $error . '</comment>');

@@ -115,7 +115,7 @@ class Blog extends Struct
     protected $mediaIds;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Media\Media[]
+     * @var \Shopware\Media\Struct\Media[]
      */
     protected $medias;
 
@@ -392,7 +392,7 @@ class Blog extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[]
+     * @return \Shopware\Media\Struct\Media[]
      */
     public function getMedias()
     {
@@ -400,7 +400,7 @@ class Blog extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media[] $medias
+     * @param \Shopware\Media\Struct\Media[] $medias
      */
     public function setMedias(array $medias)
     {

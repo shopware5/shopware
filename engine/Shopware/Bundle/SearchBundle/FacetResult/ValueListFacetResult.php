@@ -71,7 +71,7 @@ class ValueListFacetResult extends Struct implements FacetResultInterface
      * @param ValueListItem[]                                      $values
      * @param string                                               $fieldName
      * @param string|null                                          $template
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
+     * @param \Shopware\Framework\Struct\Attribute[] $attributes
      */
     public function __construct(
         $facetName,

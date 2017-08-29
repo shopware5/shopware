@@ -24,12 +24,12 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 
 class TestContext extends ShopContext
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\Area $area
+     * @param \Shopware\CountryArea\Struct\CountryArea $area
      */
     public function setArea($area)
     {
@@ -45,7 +45,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\Country $country
+     * @param \Shopware\Country\Struct\Country $country
      */
     public function setCountry($country)
     {
@@ -53,7 +53,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Currency\Currency $currency
+     * @param \Shopware\Currency\Struct\Currency $currency
      */
     public function setCurrency($currency)
     {
@@ -61,7 +61,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $currentCustomerGroup
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $currentCustomerGroup
      */
     public function setCurrentCustomerGroup($currentCustomerGroup)
     {
@@ -69,7 +69,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $fallbackCustomerGroup
+     * @param \Shopware\CustomerGroup\Struct\CustomerGroup $fallbackCustomerGroup
      */
     public function setFallbackCustomerGroup($fallbackCustomerGroup)
     {
@@ -77,7 +77,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup[] $priceGroups
+     * @param \Shopware\PriceGroup\Struct\PriceGroup[] $priceGroups
      */
     public function setPriceGroups($priceGroups)
     {
@@ -85,7 +85,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      */
     public function setShop($shop)
     {
@@ -93,7 +93,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\State $state
+     * @param \Shopware\CountryState\Struct\CountryState $state
      */
     public function setState($state)
     {
@@ -101,7 +101,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\Tax[] $taxRules
+     * @param \Shopware\Tax\Struct\Tax[] $taxRules
      */
     public function setTaxRules($taxRules)
     {

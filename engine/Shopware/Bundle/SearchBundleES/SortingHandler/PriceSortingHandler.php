@@ -31,7 +31,7 @@ use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class PriceSortingHandler implements HandlerInterface
 {
@@ -63,7 +63,7 @@ class PriceSortingHandler implements HandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var PriceSorting $criteriaPart */
         $field = $this->fieldMapping->getPriceField($context);

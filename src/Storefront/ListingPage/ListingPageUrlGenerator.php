@@ -1,33 +1,50 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Storefront\ListingPage;
 
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\DBAL\Connection;
 use Shopware\Category\Gateway\CategoryRepository;
-use Shopware\Category\Struct\CategoryCollection;
 use Shopware\Category\Struct\CategoryIdentity;
-use Shopware\Context\TranslationContext;
+use Shopware\Category\Struct\CategoryIdentityCollection;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Routing\Router;
+use Shopware\Search\Condition\ActiveCondition;
 use Shopware\Search\Condition\CanonicalCondition;
 use Shopware\Search\Condition\ForeignKeyCondition;
 use Shopware\Search\Condition\NameCondition;
+use Shopware\Search\Condition\ShopCondition;
+use Shopware\Search\Criteria;
 use Shopware\SeoUrl\Gateway\SeoUrlRepository;
 use Shopware\SeoUrl\Generator\SeoUrlGeneratorInterface;
 use Shopware\SeoUrl\Struct\SeoUrl;
-use Shopware\Search\Condition\ActiveCondition;
-use Shopware\Search\Condition\ShopCondition;
-use Shopware\Search\Criteria;
 use Shopware\SeoUrl\Struct\SeoUrlCollection;
 
 class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
 {
     const ROUTE_NAME = 'listing_page';
-
-    /**
-     * @var Connection
-     */
-    private $connection;
 
     /**
      * @var CategoryRepository
@@ -56,7 +73,6 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         Router $generator,
         SeoUrlRepository $seoUrlRepository
     ) {
-        $this->connection = $connection;
         $this->categoryRepository = $categoryRepository;
         $this->slugify = $slugify;
         $this->generator = $generator;
@@ -72,13 +88,14 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         $criteria->addCondition(new ActiveCondition(true));
 
         $result = $this->categoryRepository->search($criteria, $context);
-        $categories = $this->categoryRepository->read($result->getIdsIncludingPaths(), $context, CategoryRepository::FETCH_LIST);
+        $categories = $this->categoryRepository->read($result->getIdsIncludingPaths(), $context, CategoryRepository::FETCH_IDENTITY);
 
         $criteria = new Criteria();
         $criteria->addCondition(new CanonicalCondition(true));
         $criteria->addCondition(new ForeignKeyCondition($categories->getIds()));
         $criteria->addCondition(new NameCondition([self::ROUTE_NAME]));
         $criteria->addCondition(new ShopCondition([$shopId]));
+        
         $existingCanonicals = $this->seoUrlRepository->search($criteria, $context);
 
         $routes = new SeoUrlCollection();
@@ -86,13 +103,13 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         foreach ($result as $identity) {
             $pathInfo = $this->generator->generate(self::ROUTE_NAME, ['id' => $identity->getId()]);
 
-            $url = $this->buildSeoUrl($identity->getId(), $categories);
+            $seoPathInfo = $this->buildSeoUrl($identity->getId(), $categories);
 
-            if (!$url || !$pathInfo) {
+            if (!$seoPathInfo || !$pathInfo) {
                 continue;
             }
 
-            $url = $url . '/' . $identity->getId();
+            $seoPathInfo = rtrim($seoPathInfo, '/') . '/' . $identity->getId();
 
             $routes->add(
                 new SeoUrl(
@@ -101,7 +118,8 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
                     self::ROUTE_NAME,
                     $identity->getId(),
                     $pathInfo,
-                    $url,
+                    $seoPathInfo,
+                    '',
                     new \DateTime(),
                     !$existingCanonicals->hasPathInfo($pathInfo)
                 )
@@ -116,16 +134,16 @@ class ListingPageUrlGenerator implements SeoUrlGeneratorInterface
         return self::ROUTE_NAME;
     }
 
-    private function buildSeoUrl(int $id, CategoryCollection $categories): ?string
+    private function buildSeoUrl(?int $id, CategoryIdentityCollection $categories): ?string
     {
         $category = $categories->get($id);
-        if (!$category->getParentId() || $category->isShopCategory()) {
+        if (!$category->getParent() || $category->isShopCategory()) {
             return null;
         }
 
         $name = $this->slugify->slugify($category->getName());
 
-        $parent = $this->buildSeoUrl($category->getParentId(), $categories);
+        $parent = $this->buildSeoUrl($category->getParent(), $categories);
 
         if (!$parent) {
             return $name . '/';

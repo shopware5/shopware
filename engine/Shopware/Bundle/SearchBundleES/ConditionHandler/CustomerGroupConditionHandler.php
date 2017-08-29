@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
 {
@@ -50,7 +50,7 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var CustomerGroupCondition $criteriaPart */
         $filter = new BoolQuery();
@@ -68,7 +68,7 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var CustomerGroupCondition $criteriaPart */
         $filter = new BoolQuery();

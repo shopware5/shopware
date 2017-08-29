@@ -31,20 +31,20 @@ use ProductBundle\ProductRepository;
 use StorefrontBundle\Event\ListProductsLoadedEvent;
 use ProductBundle\Struct\ListProduct;
 use Shopware\Product\Struct\ProductCollection;
-use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use StorefrontBundle\Struct\ListProduct as StoreFrontListProduct;
 
 class ListProductService
 {
     /**
      * @param array $numbers
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @event ListProductsLoadedEvent
      *
      * @return ProductCollection
      */
-    public function read(array $numbers, ShopContextInterface $context): ProductCollection
+    public function read(array $numbers, ShopContext $context): ProductCollection
     {
         return new ProductCollection();
     }

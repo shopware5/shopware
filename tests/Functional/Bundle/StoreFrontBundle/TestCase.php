@@ -30,7 +30,7 @@ use Shopware\Search\Criteria;
 use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Search\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
@@ -62,7 +62,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param Category                                              $category
      *
      * @return Article[]
@@ -83,7 +83,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
+     * @return \Shopware\CustomerGroup\Struct\CustomerGroup
      */
     public function getEkCustomerGroup()
     {
@@ -162,7 +162,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param \Shopware\Search\Criteria $criteria
      * @param Category $category
      * @param $conditions
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,
@@ -299,7 +299,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param Category                                              $category
      * @param array                                                 $additionally
      *

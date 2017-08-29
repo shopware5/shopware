@@ -25,7 +25,7 @@
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -95,7 +95,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return;
         }
 
-        /** @var ShopContextInterface $context */
+        /** @var ShopContext $context */
         $context = $this->get('storefront.context.service')->getShopContext();
 
         /** @var Enlight_Components_Session_Namespace $session */

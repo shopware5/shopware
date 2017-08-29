@@ -26,7 +26,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * Class PropertyMapping

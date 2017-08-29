@@ -24,46 +24,45 @@
 
 namespace Shopware\Category\Gateway;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Category\Struct\CategoryIdentity;
-use Shopware\Context\TranslationContext;
+use Shopware\Category\Gateway\Query\CategoryIdentityQuery;
+use Shopware\Category\Struct\CategoryHydrator;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Search\Criteria;
 use Shopware\Search\Search;
 use Shopware\Search\SearchResultInterface;
 
 class CategorySearcher extends Search
 {
+    /**
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
+     * @var CategoryHydrator
+     */
+    private $hydrator;
+
+    public function __construct(Connection $connection, array $handlers, FieldHelper $fieldHelper, CategoryHydrator $hydrator)
+    {
+        parent::__construct($connection, $handlers);
+        $this->fieldHelper = $fieldHelper;
+        $this->hydrator = $hydrator;
+    }
+
     protected function createQuery(Criteria $criteria, TranslationContext $context): QueryBuilder
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select([
-            'category.id',
-            'category.parent as parent_id',
-            'category.path',
-            'category.active',
-            'category.position',
-        ]);
-
-        $query->from('category', 'category');
-
-        return $query;
+        return new CategoryIdentityQuery($this->connection, $this->fieldHelper, $context);
     }
 
     protected function createResult(array $rows, int $total): SearchResultInterface
     {
-        $rows = array_map(
-            function (array $row) {
-                return new CategoryIdentity(
-                    (int) $row['id'],
-                    $row['parent_id'] ? (int) $row['parent_id'] : null,
-                    (int) $row['position'],
-                    array_filter(explode('|', $row['path'])),
-                    (bool) $row['active']
-                );
-            },
-            $rows
-        );
+        $rows = array_map(function(array $row) {
+            return $this->hydrator->hydrateIdentity($row);
+        }, $rows);
 
         return new CategorySearchResult($rows, $total);
     }

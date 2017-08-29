@@ -34,7 +34,7 @@ use Shopware\Search\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -89,7 +89,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
      * @param \Shopware\Search\FacetInterface       $facet
      * @param Criteria             $reverted
      * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return \Shopware\Search\FacetResultInterface|null
      */
@@ -97,7 +97,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
@@ -161,10 +161,10 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      * @param QueryBuilder         $query
      */
-    private function joinVoteAverage(ShopContextInterface $context, QueryBuilder $query)
+    private function joinVoteAverage(ShopContext $context, QueryBuilder $query)
     {
         $shopCondition = '';
         if ($this->config->get('displayOnlySubShopVotes')) {

@@ -24,14 +24,14 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Cart\Delivery\DeliveryDate;
+use Shopware\Cart\Delivery\DeliveryInformation;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Product\CalculatedProduct;
+use Shopware\Cart\Rule\Container\AndRule;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
 
 class DummyProduct extends CalculatedProduct
 {

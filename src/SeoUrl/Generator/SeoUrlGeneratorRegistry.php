@@ -25,7 +25,7 @@
 namespace Shopware\SeoUrl\Generator;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\ForeignKeyCondition;
 use Shopware\Search\Condition\NameCondition;
 use Shopware\Search\Condition\ShopCondition;
@@ -105,8 +105,7 @@ class SeoUrlGeneratorRegistry
             }
             $newUrls->add($url);
         }
+
         return $newUrls;
-
-
     }
 }

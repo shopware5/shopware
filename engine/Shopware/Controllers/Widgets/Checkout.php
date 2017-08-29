@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
+use Shopware\CartBridge\Service\StoreFrontCartService;
 
 /**
  * Shopware Application
@@ -31,7 +31,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
 {
     public function infoAction()
     {
-        /** @var StoreFrontCartService $service */
+        /** @var \Shopware\CartBridge\Service\StoreFrontCartService $service */
         $service = $this->get('shopware.cart.storefront_service');
 
         /** @var Enlight_Components_Session_Namespace $session */

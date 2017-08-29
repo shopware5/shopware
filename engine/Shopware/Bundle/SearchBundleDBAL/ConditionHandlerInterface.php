@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Shopware\Search\ConditionInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -50,11 +50,11 @@ interface ConditionHandlerInterface
      *
      * @param ConditionInterface   $condition
      * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     );
 }

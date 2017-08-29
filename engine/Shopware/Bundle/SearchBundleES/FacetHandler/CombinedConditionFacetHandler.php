@@ -34,7 +34,7 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\CombinedConditionQueryBuilder;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
@@ -66,7 +66,7 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var CombinedConditionFacet $criteriaPart */
         $query = $this->combinedConditionQueryBuilder->build(
@@ -88,7 +88,7 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations'])) {
             return;

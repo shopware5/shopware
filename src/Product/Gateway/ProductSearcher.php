@@ -26,7 +26,7 @@ namespace Shopware\Product\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Struct\FieldHelper;
 use Shopware\Product\Struct\ProductIdentity;
 use Shopware\Search\Criteria;

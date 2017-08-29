@@ -25,14 +25,14 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface ListingPriceTableInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return QueryBuilder
      */
-    public function get(ShopContextInterface $context);
+    public function get(ShopContext $context);
 }

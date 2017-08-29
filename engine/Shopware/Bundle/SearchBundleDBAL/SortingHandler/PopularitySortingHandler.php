@@ -29,7 +29,7 @@ use Shopware\Search\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -52,7 +52,7 @@ class PopularitySortingHandler implements SortingHandlerInterface
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!$query->hasState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE)) {
             $query->leftJoin(

@@ -27,7 +27,7 @@ namespace Shopware\Framework\Struct;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Psr\Cache\CacheItemPoolInterface;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -263,27 +263,35 @@ class FieldHelper
     public function getCategoryFields(): array
     {
         $fields = [
+            'category.id as array_key',
             'category.id as __category_id',
             'category.uuid as __category_uuid',
-            'category.parent as __category_parent_id',
-            'category.position as __category_position',
+            'category.parent as __category_parent',
             'category.path as __category_path',
-            'category.active as __category_active',
             'category.description as __category_description',
-            'category.meta_title as __category_meta_title',
+            'category.position as __category_position',
+            'category.level as __category_level',
+            'category.added as __category_added',
+            'category.changed_at as __category_changed_at',
             'category.meta_keywords as __category_meta_keywords',
+            'category.meta_title as __category_meta_title',
             'category.meta_description as __category_meta_description',
             'category.cms_headline as __category_cms_headline',
             'category.cms_description as __category_cms_description',
-            'category.product_box_layout as __category_product_box_layout',
             'category.template as __category_template',
+            'category.active as __category_active',
             'category.blog as __category_blog',
             'category.external as __category_external',
             'category.hide_filter as __category_hide_filter',
             'category.hide_top as __category_hide_top',
+            'category.media_id as __category_media_id',
+            'category.media_uuid as __category_media_uuid',
+            'category.product_box_layout as __category_product_box_layout',
             'category.stream_id as __category_stream_id',
             'category.hide_sortings as __category_hide_sortings',
-            '(shop.id IS NOT NULL) as __category_is_shop_category'
+            'category.sorting_ids as __category_sorting_ids',
+            'category.facet_ids as __category_facet_ids',
+            'shop.id as __category_is_shop_category'
         ];
 
         $fields = array_merge(
@@ -313,7 +321,7 @@ class FieldHelper
 
         $fields = array_merge(
             $fields,
-            $this->getTableFields('s_articles_prices_attributes', 'priceAttribute')
+            $this->getTableFields('product_price_attributes', 'priceAttribute')
         );
 
         return $fields;
@@ -391,7 +399,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getAreaFields(): array
+    public function getCountryAreaFields(): array
     {
         return [
             'countryArea.id as __countryArea_id',
@@ -434,7 +442,7 @@ class FieldHelper
     /**
      * @return array
      */
-    public function getStateFields(): array
+    public function getCountryStateFields(): array
     {
         $fields = [
             'countryState.id as __countryState_id',
@@ -689,18 +697,15 @@ class FieldHelper
     public function getShopFields(): array
     {
         return [
+            'shop.id as array_key',
             'shop.id as __shop_id',
+            'shop.uuid as __shop_uuid',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
             'shop.title as __shop_title',
             'shop.position as __shop_position',
-            'shop.host as __shop_host',
-            'shop.base_path as __shop_base_path',
+            'shop.position as __shop_position',
             'shop.base_url as __shop_base_url',
-            'shop.hosts as __shop_hosts',
-            'shop.secure as __shop_secure',
-            'shop.template_id as __shop_template_id',
-            'shop.document_template_id as __shop_document_template_id',
             'shop.category_id as __shop_category_id',
             'shop.locale_id as __shop_locale_id',
             'shop.currency_id as __shop_currency_id',
@@ -709,7 +714,17 @@ class FieldHelper
             'shop.customer_scope as __shop_customer_scope',
             'shop.default as __shop_default',
             'shop.active as __shop_active',
-            'shop.tax_calculation_type as __shop_tax_calculation_type',
+            //fields which considers sub shop inheritance
+            'main.host as __shop_host',
+            'main.hosts as __shop_hosts',
+            'main.base_path as __shop_base_path',
+            'main.secure as __shop_secure',
+            'main.template_id as __shop_template_id',
+            'main.document_template_id as __shop_document_template_id',
+            'main.payment_id as __shop_payment_id',
+            'main.dispatch_id as __shop_dispatch_id',
+            'main.country_id as __shop_country_id',
+            'main.tax_calculation_type as __shop_tax_calculation_type',
         ];
     }
 
@@ -1213,12 +1228,12 @@ class FieldHelper
     /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
-     * @param string                                                       $fromPart        Table which uses as from part
-     * @param string                                                       $joinCondition   Join condition for the objectkey column
-     * @param string                                                       $translationType Type of the translation
-     * @param string                                                       $selectName      Name of the additional selection
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param string                                      $fromPart        Table which uses as from part
+     * @param string                                      $joinCondition   Join condition for the objectkey column
+     * @param string                                      $translationType Type of the translation
+     * @param string                                      $selectName      Name of the additional selection
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addTranslation(
         $fromPart,
@@ -1262,8 +1277,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCountryTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1272,8 +1287,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCountryStateTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1282,8 +1297,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addMediaTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1291,8 +1306,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addUnitTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1300,8 +1315,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $queryBuilder
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $queryBuilder
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addEsdTranslation(QueryBuilder $queryBuilder, TranslationContext $context): void
     {
@@ -1309,8 +1324,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addConfiguratorGroupTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1318,8 +1333,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addConfiguratorOptionTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1327,8 +1342,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addDownloadTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1336,8 +1351,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addLinkTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1345,8 +1360,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addProductTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1354,8 +1369,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addVariantTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1363,8 +1378,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPriceTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1372,8 +1387,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder       $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addManufacturerTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1381,8 +1396,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addImageTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1390,8 +1405,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPropertySetTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1399,8 +1414,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder       $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPropertyGroupTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1408,8 +1423,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addPropertyOptionTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1417,8 +1432,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addProductStreamTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1426,8 +1441,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCustomerTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1435,8 +1450,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addAddressTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1444,8 +1459,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addEmotionElementTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1453,8 +1468,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCustomSortingTranslation(QueryBuilder $query, TranslationContext $context): void
     {
@@ -1462,8 +1477,8 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder                                                 $query
-     * @param \Shopware\Context\TranslationContext $context
+     * @param QueryBuilder                                $query
+     * @param \Shopware\Context\Struct\TranslationContext $context
      */
     public function addCustomFacetTranslation($query, $context): void
     {
@@ -1480,6 +1495,21 @@ class FieldHelper
     {
         $this->addTranslation('paymentMethod', 'config_payment', $query, $context, 1);
         $this->addTranslation('paymentMethodAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentMethod.id');
+    }
+
+    public function getSeoUrlFields(): array
+    {
+        return [
+            'seoUrl.id as __seoUrl_id',
+            'seoUrl.foreign_key as __seoUrl_foreign_key',
+            'seoUrl.name as __seoUrl_name',
+            'seoUrl.shop_id as __seoUrl_shop_id',
+            'seoUrl.path_info as __seoUrl_path_info',
+            'seoUrl.seo_path_info as __seoUrl_seo_path_info',
+            'seoUrl.created_at as __seoUrl_created_at',
+            'seoUrl.is_canonical as __seoUrl_is_canonical',
+            'seoUrl.seo_hash as __seoUrl_seo_hash',
+        ];
     }
 
     /**
@@ -1514,23 +1544,8 @@ class FieldHelper
             $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
             $translationTable . '.objectlanguage = :language' . $suffix
         );
-        $query->setParameter(':language' . $suffix, $shopId);
-        $query->setParameter(':' . $translationTable, $translationType);
+        $query->setParameter('language' . $suffix, $shopId);
+        $query->setParameter('' . $translationTable, $translationType);
         $query->addSelect($translationTable . '.objectdata as ' . $selectName);
-    }
-
-    public function getSeoUrlFields(): array
-    {
-        return [
-            'seoUrl.id as __seoUrl_id',
-            'seoUrl.foreign_key as __seoUrl_foreign_key',
-            'seoUrl.name as __seoUrl_name',
-            'seoUrl.shop_id as __seoUrl_shop_id',
-            'seoUrl.path_info as __seoUrl_path_info',
-            'seoUrl.url as __seoUrl_url',
-            'seoUrl.created_at as __seoUrl_created_at',
-            'seoUrl.is_canonical as __seoUrl_is_canonical',
-            'seoUrl.url_hash as __seoUrl_url_hash'
-        ];
     }
 }

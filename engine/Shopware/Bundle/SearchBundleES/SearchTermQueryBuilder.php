@@ -26,14 +26,14 @@ namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function buildQuery(ShopContextInterface $context, $term)
+    public function buildQuery(ShopContext $context, $term)
     {
         $boolQuery = new BoolQuery();
         $boolQuery->addParameter('minimum_should_match', 1);

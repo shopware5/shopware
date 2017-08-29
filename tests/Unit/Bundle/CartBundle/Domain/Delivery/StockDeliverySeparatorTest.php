@@ -25,34 +25,34 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPosition;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Delivery\StockDeliverySeparator;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
-use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
-use Shopware\Bundle\CartBundle\Domain\Rule\Container\AndRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\StoreFrontBundle\Address\Address;
-use Shopware\Bundle\StoreFrontBundle\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Country\State;
-use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
+use Shopware\Cart\Delivery\Delivery;
+use Shopware\Cart\Delivery\DeliveryCollection;
+use Shopware\Cart\Delivery\DeliveryDate;
+use Shopware\Cart\Delivery\DeliveryInformation;
+use Shopware\Cart\Delivery\DeliveryPosition;
+use Shopware\Cart\Delivery\DeliveryPositionCollection;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Delivery\StockDeliverySeparator;
+use Shopware\Cart\LineItem\CalculatedLineItemCollection;
+use Shopware\Cart\LineItem\LineItem;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\PriceCalculator;
+use Shopware\Cart\Price\PriceRounding;
+use Shopware\Cart\Product\CalculatedProduct;
+use Shopware\Cart\Product\ProductProcessor;
+use Shopware\Cart\Rule\Container\AndRule;
+use Shopware\Cart\Tax\CalculatedTax;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxCalculator;
+use Shopware\Cart\Tax\TaxRule;
+use Shopware\Cart\Tax\TaxRuleCalculator;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Cart\Voucher\CalculatedVoucher;
+use Shopware\Address\Struct\Address;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
+use Shopware\ShippingMethod\Struct\ShippingMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class StockDeliverySeparatorTest extends TestCase
@@ -312,10 +312,10 @@ class StockDeliverySeparatorTest extends TestCase
     private static function createShippingLocation(): ShippingLocation
     {
         $address = new Address();
-        $address->setState(new State());
+        $address->setState(new CountryState());
 
         $country = new Country();
-        $country->setArea(new Area());
+        $country->setArea(new CountryArea());
 
         $address->setCountry($country);
         $address->getState()->setCountry($country);

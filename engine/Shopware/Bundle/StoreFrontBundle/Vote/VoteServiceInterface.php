@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -36,17 +36,17 @@ interface VoteServiceInterface
 {
     /**
      * @param BaseProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Vote list
      */
-    public function getList($products, ShopContextInterface $context);
+    public function getList($products, ShopContext $context);
 
     /**
      * @param BaseProduct[]                                                  $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return VoteAverage[] Indexed by the product order number - Sorted by the vote create date
      */
-    public function getAverages($products, ShopContextInterface $context);
+    public function getAverages($products, ShopContext $context);
 }

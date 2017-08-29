@@ -24,7 +24,7 @@
 
 namespace Shopware\SeoUrl\Gateway;
 
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Criteria;
 use Shopware\SeoUrl\Struct\SeoUrlCollection;
 

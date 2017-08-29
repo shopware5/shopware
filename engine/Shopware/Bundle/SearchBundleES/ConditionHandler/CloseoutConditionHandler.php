@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\CloseoutCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CloseoutConditionHandler implements PartialConditionHandlerInterface
 {
@@ -49,7 +49,7 @@ class CloseoutConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addFilter(new TermQuery('closeouts', 1));
     }
@@ -61,7 +61,7 @@ class CloseoutConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addPostFilter(new TermQuery('closeouts', 1));
     }

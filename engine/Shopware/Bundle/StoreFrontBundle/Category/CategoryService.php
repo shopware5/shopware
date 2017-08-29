@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Category\Struct\Category;
 
 /**
@@ -50,7 +50,7 @@ class CategoryService implements CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($ids, ShopContextInterface $context)
+    public function getList($ids, ShopContext $context)
     {
         $categories = $this->categoryGateway->getList($ids, $context->getTranslationContext());
 
@@ -60,7 +60,7 @@ class CategoryService implements CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductsCategories(array $products, ShopContextInterface $context)
+    public function getProductsCategories(array $products, ShopContext $context)
     {
         $categories = $this->categoryGateway->getProductsCategories($products, $context->getTranslationContext());
 
@@ -74,11 +74,11 @@ class CategoryService implements CategoryServiceInterface
 
     /**
      * @param Category[]                                                     $categories
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Category[] $categories Indexed by the category id
      */
-    private function filterValidCategories($categories, ShopContextInterface $context)
+    private function filterValidCategories($categories, ShopContext $context)
     {
         $customerGroup = $context->getCurrentCustomerGroup();
 

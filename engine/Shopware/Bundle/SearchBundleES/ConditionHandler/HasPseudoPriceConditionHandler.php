@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
 {
@@ -49,7 +49,7 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addFilter(
             new RangeQuery(
@@ -66,7 +66,7 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $search->addPostFilter(
             new RangeQuery(
@@ -77,11 +77,11 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return string
      */
-    private function getPseudoPriceField(ShopContextInterface $context)
+    private function getPseudoPriceField(ShopContext $context)
     {
         $key = $context->getCurrentCustomerGroup()->getKey();
         $currency = $context->getCurrency()->getId();

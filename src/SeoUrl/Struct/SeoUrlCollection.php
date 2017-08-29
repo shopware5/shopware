@@ -41,7 +41,7 @@ class SeoUrlCollection extends Collection
     public function add(SeoUrl $route): void
     {
         $this->elements[] = $route;
-        $this->mapping[$route->getPathInfo()] = $route->getUrl();
+        $this->mapping[$route->getPathInfo()] = $route->getSeoPathInfo();
     }
 
     public function getByPathInfo(string $pathInfo): ?SeoUrl
@@ -51,28 +51,31 @@ class SeoUrlCollection extends Collection
                 return $element;
             }
         }
+
         return null;
     }
 
-    public function getByUrl(string $url): ?SeoUrl
+    public function getBySeoPathInfo(string $seoPathInfo): ?SeoUrl
     {
         foreach ($this->elements as $element) {
-            if ($element->getUrl() === $url) {
+            if ($element->getSeoPathInfo() === $seoPathInfo) {
                 return $element;
             }
         }
+
         return null;
     }
 
     public function hasPathInfo(string $pathInfo): bool
     {
-        return (array_key_exists($pathInfo, $this->mapping));
+        return array_key_exists($pathInfo, $this->mapping);
     }
 
-    public function hasUrl(string $url): bool
+    public function hasSeoPathInfo(string $seoPathInfo): bool
     {
         $mapping = array_flip($this->mapping);
-        return (array_key_exists($url, $mapping));
+
+        return array_key_exists($seoPathInfo, $mapping);
     }
 
     public function getMapping(): array
@@ -88,7 +91,7 @@ class SeoUrlCollection extends Collection
 
     public function getForeignKeys(): array
     {
-        return $this->map(function(SeoUrl $url) {
+        return $this->map(function (SeoUrl $url) {
             return $url->getForeignKey();
         });
     }

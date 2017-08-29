@@ -30,7 +30,7 @@ use Shopware\Search\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -77,7 +77,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');

@@ -26,11 +26,11 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Service\ContextFactoryInterface;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopScope;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -58,7 +58,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     protected static $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     protected static $contextService;
 
@@ -325,7 +325,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
+     * @return \Shopware\Shop\Struct\Shop
      */
     private function getShop()
     {
@@ -345,7 +345,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     {
         $state = new State();
 
-        $state->setName('Shopware State ' . uniqid(rand()));
+        $state->setName('Shopware CountryState ' . uniqid(rand()));
         $state->setActive(1);
         $state->setCountry($country);
         $state->setShortCode(uniqid(rand()));

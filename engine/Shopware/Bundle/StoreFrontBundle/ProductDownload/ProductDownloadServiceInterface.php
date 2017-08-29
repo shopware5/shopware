@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductDownload;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -36,9 +36,9 @@ interface ProductDownloadServiceInterface
 {
     /**
      * @param BaseProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload classes
      */
-    public function getList($products, ShopContextInterface $context);
+    public function getList($products, ShopContext $context);
 }

@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
 
@@ -215,9 +215,9 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function assertMediaFile($expected, \Shopware\Bundle\StoreFrontBundle\Media\Media $media)
+    private function assertMediaFile($expected, \Shopware\Media\Struct\Media $media)
     {
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Media\Media', $media);
+        $this->assertInstanceOf('Shopware\Media\Struct\Media', $media);
         $this->assertNotEmpty($media->getThumbnails());
         $this->assertContains($expected, $media->getFile());
 

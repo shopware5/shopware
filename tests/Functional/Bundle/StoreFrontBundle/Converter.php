@@ -33,11 +33,11 @@ class Converter
     /**
      * @param Models\Tax\Tax $tax
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax
+     * @return \Shopware\Tax\Struct\Tax
      */
     public function convertTax(Models\Tax\Tax $tax)
     {
-        return new \Shopware\Bundle\StoreFrontBundle\Tax\Tax(
+        return new \Shopware\Tax\Struct\Tax(
             $tax->getId(),
             $tax->getName(),
             $tax->getTax()
@@ -47,11 +47,11 @@ class Converter
     /**
      * @param Models\Price\Group $entity
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+     * @return \Shopware\PriceGroup\Struct\PriceGroup
      */
     public function convertPriceGroup(Models\Price\Group $entity)
     {
-        $struct = new \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup();
+        $struct = new \Shopware\PriceGroup\Struct\PriceGroup();
 
         $struct->setId($entity->getId());
 
@@ -60,7 +60,7 @@ class Converter
         $discounts = [];
 
         foreach ($entity->getDiscounts() as $discountEntity) {
-            $discount = new \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount();
+            $discount = new \Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount();
 
             $discount->setId($discountEntity->getId());
 
@@ -81,11 +81,11 @@ class Converter
      *
      * @param \Shopware\Models\Shop\Currency $currency
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Currency\Currency
+     * @return \Shopware\Currency\Struct\Currency
      */
     public function convertCurrency(Models\Shop\Currency $currency)
     {
-        $struct = new \Shopware\Bundle\StoreFrontBundle\Currency\Currency();
+        $struct = new \Shopware\Currency\Struct\Currency();
 
         $struct->setId($currency->getId());
         $struct->setName($currency->getName());
@@ -101,11 +101,11 @@ class Converter
      *
      * @param \Shopware\Models\Shop\Shop $shop
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
+     * @return \Shopware\Shop\Struct\Shop
      */
     public function convertShop(Models\Shop\Shop $shop)
     {
-        $struct = new \Shopware\Bundle\StoreFrontBundle\Shop\Shop();
+        $struct = new \Shopware\Shop\Struct\Shop();
         $struct->setId($shop->getId());
 
         $struct->setName($shop->getName());
@@ -136,9 +136,9 @@ class Converter
             $struct->setCategory($category);
         }
 
-        $country = new \Shopware\Bundle\StoreFrontBundle\Country\Country();
+        $country = new \Shopware\Country\Struct\Country();
         $country->setId($shop->getCountry()->getId());
-        $country->setName($shop->getCountry()->getName());
+        $country->setCountryName($shop->getCountry()->getName());
         $struct->setCountry($country);
 
         return $struct;
@@ -147,11 +147,11 @@ class Converter
     /**
      * @param Models\Customer\Group $group
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
+     * @return \Shopware\CustomerGroup\Struct\CustomerGroup
      */
     public function convertCustomerGroup(Models\Customer\Group $group)
     {
-        $customerGroup = new \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup();
+        $customerGroup = new \Shopware\CustomerGroup\Struct\CustomerGroup();
         $customerGroup->setKey($group->getKey());
         $customerGroup->setUseDiscount($group->getMode());
         $customerGroup->setId($group->getId());
@@ -167,13 +167,13 @@ class Converter
     /**
      * @param Models\Shop\Locale $locale
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Locale
+     * @return \Shopware\Locale\Struct\Locale
      */
     public function convertLocale($locale)
     {
-        $struct = new \Shopware\Bundle\StoreFrontBundle\Shop\Locale();
+        $struct = new \Shopware\Locale\Struct\Locale();
         if (!$locale) {
-            return new \Shopware\Bundle\StoreFrontBundle\Shop\Locale();
+            return new \Shopware\Locale\Struct\Locale();
         }
 
         $struct->setId($locale->getId());

@@ -1,4 +1,26 @@
 <?php declare(strict_types=1);
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Product\Writer;
 
@@ -83,7 +105,6 @@ EOD;
     }
 EOD;
 
-
     private $serviceDefinitionTemplate = <<<'EOD'
 <service id="shopware.product.%s.writer_field_%s" class="Shopware\Product\Writer\Field\%s\%s">
     <argument type="service" id="shopware.validation.constraint_builder"/>   
@@ -131,7 +152,7 @@ EOD;
 
     public function generate(string $table, string $path)
     {
-        $path .=  '/' . ucfirst($this->toCammelCase($table));
+        $path .= '/' . ucfirst($this->toCammelCase($table));
         $connection = $this->container->get('dbal_connection');
 
         $schemaManager = $connection->getSchemaManager();
@@ -140,8 +161,8 @@ EOD;
 
         $foreignKeys = [];
         /** @var ForeignKeyConstraint $key */
-        foreach($rawForeignKeys as $key) {
-            if(1 !== count($key->getLocalColumns())) {
+        foreach ($rawForeignKeys as $key) {
+            if (1 !== count($key->getLocalColumns())) {
                 echo "ERROR: Unable to generate\n";
 
                 continue;
@@ -155,14 +176,14 @@ EOD;
         $services = [];
 
         /** @var Column $column */
-        foreach($columns as $column) {
+        foreach ($columns as $column) {
             $service = $this->makeColumn($column->getName(), (string) $column->getType(), $table, $path);
 
-            if($service) {
+            if ($service) {
                 $services[] = $service;
             }
 
-            if(false === strpos($column->getName(), '_uuid')) {
+            if (false === strpos($column->getName(), '_uuid')) {
                 continue;
             }
 
@@ -174,21 +195,21 @@ EOD;
             sprintf($this->serviceFileTemplate, implode('        ' . PHP_EOL, $services))
         );
 
-//        echo '$loader->load(\'../Writer/Field/' . $this->toMinusCase($table) . '-fields.xml\');' . "\n";
+        //        echo '$loader->load(\'../Writer/Field/' . $this->toMinusCase($table) . '-fields.xml\');' . "\n";
     }
 
     private function makeColumn(string $columnName, string $columnType, string $table, string $path)
     {
-        if('id' === $columnName) {
+        if ('id' === $columnName) {
             return;
         }
 
         $cammelCaseName = $this->toCammelCase($columnName);
         $className = ucfirst($cammelCaseName) . 'Field';
 
-//            echo $path . '::' . $column->getName() . '::' . $column->getType() . "\n";
+        //            echo $path . '::' . $column->getName() . '::' . $column->getType() . "\n";
 
-        switch($columnType) {
+        switch ($columnType) {
             case 'Integer':
                 $fieldClass = 'IntField';
                 break;
@@ -214,18 +235,19 @@ EOD;
                 break;
             default:
                 echo "ERROR: {$columnType}\n";
+
                 return;
         }
 
-        if(false !== strpos($columnName, '_uuid')) {
+        if (false !== strpos($columnName, '_uuid')) {
             $fieldClass = 'ReferenceField';
         }
 
-        if(array_key_exists($columnName, $this->map)) {
+        if (array_key_exists($columnName, $this->map)) {
             $fieldClass = $this->map[$columnName];
         }
 
-        if($columnType === 'Virtual') {
+        if ($columnType === 'Virtual') {
             $constructor = sprintf(
                 $this->virtualConstructTemplate,
                 $cammelCaseName,

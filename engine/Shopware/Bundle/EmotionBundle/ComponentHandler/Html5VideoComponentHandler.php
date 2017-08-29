@@ -28,7 +28,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class Html5VideoComponentHandler implements ComponentHandlerInterface
 {
@@ -62,18 +62,18 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
     /**
      * @param PrepareDataCollection                                          $collection
      * @param Element                                                        $element
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
     }
 
     /**
      * @param ResolvedDataCollection                                         $collection
      * @param Element                                                        $element
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $mediaFields = ['webm_video', 'ogg_video', 'h264_video', 'fallback_picture'];
 

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator;
 
@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator;
 class PropertyHydrator extends Hydrator
 {
     /**
-     * @var AttributeHydrator
+     * @var \Shopware\Framework\Struct\AttributeHydrator
      */
     private $attributeHydrator;
 
@@ -46,7 +46,7 @@ class PropertyHydrator extends Hydrator
     private $mediaHydrator;
 
     /**
-     * @param AttributeHydrator $attributeHydrator
+     * @param \Shopware\Framework\Struct\AttributeHydrator $attributeHydrator
      * @param MediaHydrator     $mediaHydrator
      */
     public function __construct(

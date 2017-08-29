@@ -29,7 +29,7 @@ use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -67,7 +67,7 @@ class PriceConditionHandler implements ConditionHandlerInterface
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!$query->hasState(self::LISTING_PRICE_JOINED)) {
             $table = $this->listingPriceTable->get($context);

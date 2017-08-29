@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\AdditionalText;
 
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
@@ -52,7 +52,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function buildAdditionalTextLists($products, ShopContextInterface $context)
+    public function buildAdditionalTextLists($products, ShopContext $context)
     {
         $required = [];
         foreach ($products as &$product) {

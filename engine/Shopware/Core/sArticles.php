@@ -79,7 +79,7 @@ class sArticles
     protected $mediaRepository = null;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
+     * @var \Shopware\Storefront\Context\StorefrontContextServiceInterface
      */
     private $contextService;
 
@@ -2015,14 +2015,14 @@ class sArticles
 
     /**
      * @param int                                                            $categoryId
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param Enlight_Controller_Request_RequestHttp                         $request
      *
      * @return \Shopware\Search\Criteria
      */
     private function createProductNavigationCriteria(
         $categoryId,
-        StoreFrontBundle\Context\ShopContextInterface $context,
+        \Shopware\Context\Struct\ShopContext $context,
         Enlight_Controller_Request_RequestHttp $request
     ) {
         $streamId = $this->getStreamIdOfCategory($categoryId);
@@ -2060,7 +2060,7 @@ class sArticles
      * @param SearchBundle\ProductNumberSearchResult $searchResult
      * @param $orderNumber
      * @param $categoryId
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array
      */
@@ -2068,7 +2068,7 @@ class sArticles
         SearchBundle\ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        StoreFrontBundle\Context\ShopContextInterface $context
+        \Shopware\Context\Struct\ShopContext $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2345,7 +2345,7 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param $categoryId
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      * @param Enlight_Controller_Request_Request                             $request
      * @param \Shopware\Search\Criteria                                          $criteria
      *
@@ -2353,7 +2353,7 @@ class sArticles
      */
     private function getListing(
         $categoryId,
-        StoreFrontBundle\Context\ShopContextInterface $context,
+        \Shopware\Context\Struct\ShopContext $context,
         Enlight_Controller_Request_Request $request,
         \Shopware\Search\Criteria $criteria
     ) {

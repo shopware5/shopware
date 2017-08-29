@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Exception\TaxRuleNotSupportedException;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleInterface;
-use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
+use Shopware\Cart\Exception\TaxRuleNotSupportedException;
+use Shopware\Cart\Price\PriceRounding;
+use Shopware\Cart\Tax\TaxCalculator;
+use Shopware\Cart\Tax\TaxRule;
+use Shopware\Cart\Tax\TaxRuleCalculator;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Cart\Tax\TaxRuleInterface;
+use Shopware\Tax\Struct\Tax;
 
 class TaxCalculatorTest extends TestCase
 {

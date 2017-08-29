@@ -30,7 +30,7 @@ use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ProductNameSortingHandler implements HandlerInterface
 {
@@ -49,7 +49,7 @@ class ProductNameSortingHandler implements HandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /* @var ProductNameSorting $criteriaPart */
         $search->addSort(

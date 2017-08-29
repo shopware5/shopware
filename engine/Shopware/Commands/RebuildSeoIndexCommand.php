@@ -24,9 +24,9 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopScope;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

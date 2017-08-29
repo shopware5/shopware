@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -63,7 +63,7 @@ class ConfiguratorService implements ConfiguratorServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductsConfigurations($products, ShopContextInterface $context)
+    public function getProductsConfigurations($products, ShopContext $context)
     {
         $configuration = $this->productConfigurationGateway->getList($products, $context->getTranslationContext());
 
@@ -75,7 +75,7 @@ class ConfiguratorService implements ConfiguratorServiceInterface
      */
     public function getProductConfigurator(
         BaseProduct $product,
-        ShopContextInterface $context,
+        ShopContext $context,
         array $selection
     ) {
         $configurator = $this->configuratorGateway->get($product, $context->getTranslationContext());

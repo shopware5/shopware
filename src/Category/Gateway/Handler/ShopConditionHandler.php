@@ -26,7 +26,7 @@ namespace Shopware\Category\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\ShopCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
@@ -48,12 +48,12 @@ class ShopConditionHandler implements HandlerInterface
         $builder->innerJoin(
             'category',
             's_core_shops',
-            'shop',
-            "shop.id IN (:shopIds) 
-            AND category.path LIKE CONCAT('%|', shop.category_id, '|')"
+            'shopCategories',
+            "shopCategories.id IN (:shopIds) 
+            AND category.path LIKE CONCAT('%|', shopCategories.category_id, '|')"
         );
 
         /* @var ShopCondition $criteriaPart */
-        $builder->setParameter(':shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
+        $builder->setParameter('shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
     }
 }

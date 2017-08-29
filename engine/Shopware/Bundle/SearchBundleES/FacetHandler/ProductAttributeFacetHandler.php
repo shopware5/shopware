@@ -41,7 +41,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
@@ -67,7 +67,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var ProductAttributeFacet $criteriaPart */
         $field = 'attributes.core.' . $criteriaPart->getField();
@@ -108,7 +108,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         array $elasticResult,
         ProductNumberSearchResult $result,
         Criteria $criteria,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!isset($elasticResult['aggregations'])) {
             return;

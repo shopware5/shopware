@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -51,7 +51,7 @@ class SimilarProductConditionHandler implements ConditionHandlerInterface
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var SimilarProductCondition $condition */
         $productId = $condition->getProductId();

@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Shopware Emotion Model - Template
+ * Shopware Emotion Model - ShopTemplate
  *
  * @category   Shopware
  *

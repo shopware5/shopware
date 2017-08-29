@@ -185,7 +185,7 @@ class Emotion extends Struct
     protected $shopIds = [];
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Shop\Shop[]
+     * @var \Shopware\Shop\Struct\Shop[]
      */
     protected $shops = [];
 
@@ -622,7 +622,7 @@ class Emotion extends Struct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop[]
+     * @return \Shopware\Shop\Struct\Shop[]
      */
     public function getShops()
     {
@@ -630,7 +630,7 @@ class Emotion extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop[] $shops
+     * @param \Shopware\Shop\Struct\Shop[] $shops
      */
     public function setShops(array $shops)
     {

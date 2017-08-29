@@ -25,7 +25,7 @@
 namespace Shopware\Search;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 interface HandlerInterface
 {

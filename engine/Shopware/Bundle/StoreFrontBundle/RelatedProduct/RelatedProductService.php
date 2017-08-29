@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
 
@@ -60,7 +60,7 @@ class RelatedProductService implements RelatedProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         /**
          * returns an array which is associated with the different product numbers.

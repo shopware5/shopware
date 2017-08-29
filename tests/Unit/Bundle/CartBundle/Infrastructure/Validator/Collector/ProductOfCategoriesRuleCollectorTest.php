@@ -28,12 +28,12 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Product\ProductFetchDefinition;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\Collector\ProductOfCategoriesRuleCollector;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\Data\ProductOfCategoriesRuleData;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\ProductOfCategoriesRule;
+use Shopware\Cart\Product\ProductFetchDefinition;
+use Shopware\CartBridge\Rule\Collector\ProductOfCategoriesRuleCollector;
+use Shopware\CartBridge\Rule\Data\ProductOfCategoriesRuleData;
+use Shopware\CartBridge\Rule\ProductOfCategoriesRule;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ValidatableDefinition;
 
 class ProductOfCategoriesRuleCollectorTest extends TestCase

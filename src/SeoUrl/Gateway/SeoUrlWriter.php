@@ -50,11 +50,11 @@ class SeoUrlWriter
                     'seo_url',
                     [
                         'name' => $url->getName(),
-                        'url_hash' => $url->getUrlHash(),
+                        'seo_hash' => $url->getSeoHash(),
                         'foreign_key' => $url->getForeignKey(),
                         'shop_id' => $url->getShopId(),
                         'path_info' => $url->getPathInfo(),
-                        'url' => $url->getUrl(),
+                        'seo_path_info' => $url->getSeoPathInfo(),
                         'is_canonical' => $url->isCanonical(),
                         'created_at' => $url->getCreatedAt()->format('Y-m-d H:i:s'),
                     ]
@@ -64,10 +64,10 @@ class SeoUrlWriter
         }
     }
 
-    public function delete(array $ids)
+    public function delete(array $ids): void
     {
         $this->connection->executeUpdate(
-            "DELETE FROM seo_url WHERE id IN (:ids)",
+            'DELETE FROM seo_url WHERE id IN (:ids)',
             [':ids' => $ids],
             [':ids' => Connection::PARAM_INT_ARRAY]
         );

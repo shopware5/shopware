@@ -26,7 +26,7 @@ namespace Shopware\Bundle\ESIndexingBundle;
 
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 
 /**
  * Class IndexFactory
@@ -34,14 +34,14 @@ use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 interface IndexFactoryInterface
 {
     /**
-     * @param Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      *
      * @return IndexConfiguration
      */
     public function createIndexConfiguration(Shop $shop);
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Shop\Struct\Shop $shop
      *
      * @return ShopIndex
      */

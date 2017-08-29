@@ -30,7 +30,7 @@ use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\CombinedConditionQueryBuilder;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CombinedConditionHandler implements PartialConditionHandlerInterface
 {
@@ -59,7 +59,7 @@ class CombinedConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var CombinedCondition $criteriaPart */
         $query = $this->combinedConditionQueryBuilder->build(
@@ -78,7 +78,7 @@ class CombinedConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var CombinedCondition $criteriaPart */
         $query = $this->combinedConditionQueryBuilder->build(

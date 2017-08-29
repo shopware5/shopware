@@ -52,7 +52,7 @@ class ValueListItem extends Struct
      * @param int|string                                           $id
      * @param string                                               $label
      * @param bool                                                 $active
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
+     * @param \Shopware\Framework\Struct\Attribute[] $attributes
      */
     public function __construct($id, $label, $active, $attributes = [])
     {

@@ -302,7 +302,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchStreamListing($categoryId, $productStreamId)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService */
         $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 
@@ -361,7 +361,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchCategoryListing()
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService */
         $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 
@@ -392,7 +392,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchSearchListing()
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        /** @var \Shopware\Storefront\Context\StorefrontContextServiceInterface $contextService */
         $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 

@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
 use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -64,7 +64,7 @@ class IsNewConditionHandler implements ConditionHandlerInterface
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $dayLimit = (int) $this->config->get('markAsNew');
         $timestamp = strtotime('-' . $dayLimit . ' days');

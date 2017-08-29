@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Infrastructure\Rule\BillingCountryRule;
-use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\CartBridge\Rule\BillingCountryRule;
+use Shopware\Address\Struct\Address;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Struct\Country;
+use Shopware\Customer\Struct\Customer;
 
 class BillingCountryRuleTest extends TestCase
 {

@@ -42,9 +42,9 @@ interface ProductNumberSearchInterface
      * to add their own handler classes.
      *
      * @param Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ProductNumberSearchResult
      */
-    public function search(Criteria $criteria, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context);
+    public function search(Criteria $criteria, \Shopware\Context\Struct\ShopContext $context);
 }

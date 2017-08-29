@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
 use Shopware\Search\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -53,7 +53,7 @@ class SalesConditionHandler implements ConditionHandlerInterface
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder  $query,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         if (!$query->hasState(self::STATE_INCLUDES_TOPSELLER_TABLE)) {
             $query->leftJoin(

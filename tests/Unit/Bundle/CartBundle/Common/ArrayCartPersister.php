@@ -24,8 +24,8 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
+use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Cart\CartPersisterInterface;
 
 class ArrayCartPersister implements CartPersisterInterface
 {

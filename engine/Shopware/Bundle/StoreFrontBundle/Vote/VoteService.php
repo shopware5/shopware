@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -58,7 +58,7 @@ class VoteService implements VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         return $this->voteGateway->getList($products, $context->getTranslationContext());
     }
@@ -66,7 +66,7 @@ class VoteService implements VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAverages($products, ShopContextInterface $context)
+    public function getAverages($products, ShopContext $context)
     {
         return $this->voteAverageGateway->getList($products, $context->getTranslationContext());
     }

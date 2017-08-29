@@ -30,7 +30,7 @@ use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class CategoryConditionHandler implements PartialConditionHandlerInterface
 {
@@ -49,7 +49,7 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /* @var \Shopware\Search\Condition\CategoryCondition $criteriaPart */
         $search->addFilter(
@@ -64,7 +64,7 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /* @var CategoryCondition $criteriaPart */
         $search->addPostFilter(

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -35,9 +35,9 @@ interface ListProductServiceInterface
 {
     /**
      * @param string[]             $numbers
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return ListProduct[] indexed by the product order number
      */
-    public function getList(array $numbers, ShopContextInterface $context);
+    public function getList(array $numbers, ShopContext $context);
 }

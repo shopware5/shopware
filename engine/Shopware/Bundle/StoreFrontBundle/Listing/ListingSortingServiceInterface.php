@@ -24,30 +24,30 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 interface ListingSortingServiceInterface
 {
     /**
      * @param int[]                                                          $ids
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ListingSorting[] indexed by id, sorted by provided id array
      */
-    public function getList(array $ids, ShopContextInterface $context);
+    public function getList(array $ids, ShopContext $context);
 
     /**
      * @param int[]                                                          $categoryIds
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array[] indexed by category id, sorted by category mapping or position
      */
-    public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context);
+    public function getSortingsOfCategories(array $categoryIds, ShopContext $context);
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ListingSorting[] indexed by id, sorted by position
      */
-    public function getAllCategorySortings(ShopContextInterface $context);
+    public function getAllCategorySortings(ShopContext $context);
 }

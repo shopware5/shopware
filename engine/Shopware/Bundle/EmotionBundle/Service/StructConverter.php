@@ -190,7 +190,7 @@ class StructConverter
                 break;
 
             case ManufacturerSliderComponentHandler::COMPONENT_NAME:
-                /** @var \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer */
+                /** @var \Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer */
                 foreach ($element->getData()->get('manufacturers') as $manufacturer) {
                     $manufacturerArray = $this->converter->convertManufacturerStruct($manufacturer);
 

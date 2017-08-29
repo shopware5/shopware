@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\SearchBundle\BatchProductSearch;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class DataCollectionResolver implements DataCollectionResolverInterface
 {
@@ -64,11 +64,11 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param PrepareDataCollection                                          $prepareDataCollection
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ResolvedDataCollection
      */
-    public function resolve(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
+    public function resolve(PrepareDataCollection $prepareDataCollection, ShopContext $context)
     {
         // resolve prepared data
         $batchResult = $this->resolveBatchRequest($prepareDataCollection, $context);
@@ -83,11 +83,11 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param PrepareDataCollection                                          $prepareDataCollection
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return array
      */
-    private function resolveMedia(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
+    private function resolveMedia(PrepareDataCollection $prepareDataCollection, ShopContext $context)
     {
         $mediaIds = $this->convertMediaPathsToIds($prepareDataCollection->getMediaPathList());
         $mediaIds = array_merge($prepareDataCollection->getMediaIdList(), $mediaIds);
@@ -128,11 +128,11 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param PrepareDataCollection                                          $prepareDataCollection
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return \Shopware\Bundle\SearchBundle\BatchProductNumberSearchResult
      */
-    private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
+    private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContext $context)
     {
         $request = $prepareDataCollection->getBatchRequest();
 

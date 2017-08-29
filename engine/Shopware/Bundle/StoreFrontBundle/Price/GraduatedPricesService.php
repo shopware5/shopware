@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\CustomerGroup\Struct\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
@@ -52,7 +52,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ShopContextInterface $context)
+    public function getList($products, ShopContext $context)
     {
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(
@@ -139,7 +139,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
      *
      * @param PriceRule                                                    $reference
      * @param CustomerGroup                                                $customerGroup
-     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount[] $discounts
+     * @param \Shopware\PriceGroupDiscount\Struct\PriceGroupDiscount[] $discounts
      *
      * @return array
      */

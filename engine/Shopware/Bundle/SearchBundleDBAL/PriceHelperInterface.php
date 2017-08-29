@@ -36,27 +36,27 @@ interface PriceHelperInterface
     /**
      * Returns the full selection for the cheapest price
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return string
      */
-    public function getSelection(\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context);
+    public function getSelection(\Shopware\Context\Struct\ShopContext $context);
 
     /**
      * Joins the customer prices to the provided query
      *
      * @param QueryBuilder                                                   $query
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function joinPrices(QueryBuilder $query, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context);
+    public function joinPrices(QueryBuilder $query, \Shopware\Context\Struct\ShopContext $context);
 
     /**
      * Joins the fallback customer group prices for the provided query
      *
      * @param QueryBuilder                                                   $query
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    public function joinDefaultPrices(QueryBuilder $query, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context);
+    public function joinDefaultPrices(QueryBuilder $query, \Shopware\Context\Struct\ShopContext $context);
 
     /**
      * Joins variants to the selected products which are available

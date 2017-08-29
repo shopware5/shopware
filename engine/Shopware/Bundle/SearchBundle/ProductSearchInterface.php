@@ -38,9 +38,9 @@ interface ProductSearchInterface
      * get the product result for the passed criteria object.
      *
      * @param Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ProductSearchResult
      */
-    public function search(Criteria $criteria, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context);
+    public function search(Criteria $criteria, \Shopware\Context\Struct\ShopContext $context);
 }

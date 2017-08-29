@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Error;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
+use Shopware\Cart\Error\ErrorCollection;
 
 class ErrorCollectionTest extends TestCase
 {
@@ -58,7 +58,7 @@ class ErrorCollectionTest extends TestCase
     }
 }
 
-class OtherError extends \Shopware\Bundle\CartBundle\Domain\Error\Error
+class OtherError extends \Shopware\Cart\Error\Error
 {
     public function getMessageKey(): string
     {
@@ -76,7 +76,7 @@ class OtherError extends \Shopware\Bundle\CartBundle\Domain\Error\Error
     }
 }
 
-class Error extends \Shopware\Bundle\CartBundle\Domain\Error\Error
+class Error extends \Shopware\Cart\Error\Error
 {
     /**
      * @var int

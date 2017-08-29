@@ -34,7 +34,7 @@ use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class SimilarProductConditionHandler implements PartialConditionHandlerInterface
 {
@@ -68,7 +68,7 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         /** @var SimilarProductCondition $criteriaPart */
         $productId = $criteriaPart->getProductId();
@@ -97,7 +97,7 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
-        ShopContextInterface $context
+        ShopContext $context
     ) {
         $this->handleFilter($criteriaPart, $criteria, $search, $context);
     }

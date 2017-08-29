@@ -26,7 +26,7 @@ namespace StorefrontBundle\Event;
 
 use EventBundle\Event;
 use Shopware\Search\Criteria;
-use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use StorefrontBundle\Struct\ListingPage;
 
 class ListingPageLoadedEvent extends Event
@@ -42,11 +42,11 @@ class ListingPageLoadedEvent extends Event
     protected $criteria;
 
     /**
-     * @var ShopContextInterface
+     * @var \Shopware\Context\Struct\ShopContext
      */
     protected $context;
 
-    public function __construct(ListingPage $page, Criteria $criteria, ShopContextInterface $context)
+    public function __construct(ListingPage $page, Criteria $criteria, ShopContext $context)
     {
         $this->page = $page;
         $this->criteria = $criteria;
@@ -63,7 +63,7 @@ class ListingPageLoadedEvent extends Event
         return $this->criteria;
     }
 
-    public function getContext(): ShopContextInterface
+    public function getContext(): ShopContext
     {
         return $this->context;
     }

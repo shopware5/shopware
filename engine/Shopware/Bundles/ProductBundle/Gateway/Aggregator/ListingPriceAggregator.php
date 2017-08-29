@@ -28,11 +28,11 @@ use Doctrine\DBAL\Connection;
 use ProductBundle\Struct\ListingPrice;
 use ProductBundle\Struct\ListingPriceCollection;
 use ProductBundle\Struct\Price;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Cart\Tax\TaxCalculator;
+use Shopware\Cart\Tax\TaxRule;
+use Shopware\Cart\Tax\TaxRuleCollection;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -85,7 +85,7 @@ class ListingPriceAggregator
 
     /**
      * @param string[] $numbers
-     * @param \Shopware\Context\TranslationContext $context
+     * @param \Shopware\Context\Struct\TranslationContext $context
      * @param int $customerGroupId
      * @return ListingPriceCollection
      */

@@ -38,7 +38,7 @@ class RefererTracerTest extends TestCase
     private $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
+     * @var \Shopware\Context\Struct\ShopContext
      */
     private $context;
 

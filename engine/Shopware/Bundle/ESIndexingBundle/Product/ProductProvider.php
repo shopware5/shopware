@@ -28,12 +28,12 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Framework\Struct\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\CheckoutScope;
+use Shopware\Context\Service\ContextFactoryInterface;
+use Shopware\Storefront\Context\StorefrontContextService;
+use Shopware\Context\Struct\CustomerScope;
+use Shopware\Context\Struct\ShopScope;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceRule;
@@ -41,7 +41,7 @@ use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\ProductGateway;
 use Shopware\Bundle\StoreFrontBundle\Property\PropertyHydrator;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Shop\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Vote\VoteServiceInterface;
 
 class ProductProvider implements ProductProviderInterface
@@ -95,7 +95,7 @@ class ProductProvider implements ProductProviderInterface
      * @param ProductGateway                                                           $productGateway
      * @param CheapestPriceServiceInterface                                            $cheapestPriceService
      * @param VoteServiceInterface                                                     $voteService
-     * @param ContextFactoryInterface                                                  $contextFactory
+     * @param \Shopware\Context\Service\ContextFactoryInterface                                                  $contextFactory
      * @param Connection                                                               $connection
      * @param IdentifierSelector                                                       $identifierSelector
      * @param \Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface $priceCalculationService
@@ -131,7 +131,7 @@ class ProductProvider implements ProductProviderInterface
     {
         $context = $this->contextFactory->create(
             new ShopScope($shop->getId()),
-            new CustomerScope(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CustomerScope(null, StorefrontContextService::FALLBACK_CUSTOMER_GROUP),
             new CheckoutScope()
         );
 
@@ -242,7 +242,7 @@ class ProductProvider implements ProductProviderInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
-     * @param \Shopware\Context\TranslationContext                                      $context
+     * @param \Shopware\Context\Struct\TranslationContext                                      $context
      *
      * @return \array[]
      */
@@ -317,7 +317,7 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop             $shop
+     * @param \Shopware\Shop\Struct\Shop             $shop
      * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
      * @param $priceRules
      *
@@ -341,7 +341,7 @@ class ProductProvider implements ProductProviderInterface
             }
             $rules = $priceRules[$number];
 
-            /** @var $context \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface */
+            /** @var $context \Shopware\Context\Struct\ShopContext */
             foreach ($contexts as $context) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();
@@ -388,7 +388,7 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param Shop    $shop
+     * @param \Shopware\Shop\Struct\Shop    $shop
      * @param Product $product
      *
      * @return bool

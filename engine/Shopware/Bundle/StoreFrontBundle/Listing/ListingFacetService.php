@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ListingFacetService implements ListingFacetServiceInterface
 {
@@ -44,7 +44,7 @@ class ListingFacetService implements ListingFacetServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContext $context)
     {
         return $this->gateway->getList($ids, $context->getTranslationContext());
     }
@@ -52,7 +52,7 @@ class ListingFacetService implements ListingFacetServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context)
+    public function getFacetsOfCategories(array $categoryIds, ShopContext $context)
     {
         return $this->gateway->getFacetsOfCategories($categoryIds, $context->getTranslationContext());
     }
@@ -60,7 +60,7 @@ class ListingFacetService implements ListingFacetServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllCategoryFacets(ShopContextInterface $context)
+    public function getAllCategoryFacets(ShopContext $context)
     {
         return $this->gateway->getAllCategoryFacets($context->getTranslationContext());
     }

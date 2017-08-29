@@ -35,14 +35,14 @@ class ResolvedDataCollection extends Struct
     private $batchResult;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Media\Media[]
+     * @var \Shopware\Media\Struct\Media[]
      */
     private $mediaList = [];
 
     /**
      * @param int $mediaId
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media|null
+     * @return \Shopware\Media\Struct\Media|null
      */
     public function getMedia($mediaId)
     {
@@ -56,7 +56,7 @@ class ResolvedDataCollection extends Struct
     /**
      * @param int $mediaPath
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media|null
+     * @return \Shopware\Media\Struct\Media|null
      */
     public function getMediaByPath($mediaPath)
     {
@@ -84,7 +84,7 @@ class ResolvedDataCollection extends Struct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media[] $mediaList
+     * @param \Shopware\Media\Struct\Media[] $mediaList
      */
     public function setMediaList($mediaList)
     {

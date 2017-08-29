@@ -24,10 +24,10 @@
 
 namespace Shopware\Product\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
-use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
-use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
 use Shopware\Framework\Struct\Struct;
+use Shopware\ProductManufacturer\Struct\ProductManufacturer;
+use Shopware\Tax\Struct\Tax;
+use Shopware\Unit\Struct\Unit;
 
 /**
  * @category  Shopware
@@ -287,7 +287,7 @@ class Product extends Struct
     protected $tax;
 
     /**
-     * @var Manufacturer
+     * @var ProductManufacturer
      */
     protected $manufacturer;
 
@@ -319,7 +319,7 @@ class Product extends Struct
     //    protected $states = [];
     //
     //    /**
-    //     * @var Esd
+    //     * @var ProductEsd
     //     */
     //    protected $esd;
 
@@ -390,7 +390,7 @@ class Product extends Struct
     //    /**
     //     * @return Unit
     //     */
-    //    public function getUnit(): \Shopware\Bundle\StoreFrontBundle\Unit\Unit
+    //    public function getUnit(): \Shopware\Unit\Struct\Unit
     //    {
     //        return $this->unit;
     //    }
@@ -406,13 +406,13 @@ class Product extends Struct
     //    /**
     //     * @return Tax
     //     */
-    //    public function getTax(): \Shopware\Bundle\StoreFrontBundle\Tax\Tax
+    //    public function getTax(): \Shopware\Tax\Struct\Tax
     //    {
     //        return $this->tax;
     //    }
     //
     //    /**
-    //     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
+    //     * @param \Shopware\ProductManufacturer\Struct\ProductManufacturer $manufacturer
     //     */
     //    public function setManufacturer($manufacturer): void
     //    {
@@ -420,9 +420,9 @@ class Product extends Struct
     //    }
     //
     //    /**
-    //     * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
+    //     * @return \Shopware\ProductManufacturer\Struct\ProductManufacturer
     //     */
-    //    public function getManufacturer(): \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer
+    //    public function getManufacturer(): \Shopware\ProductManufacturer\Struct\ProductManufacturer
     //    {
     //        return $this->manufacturer;
     //    }
@@ -714,15 +714,15 @@ class Product extends Struct
     }
 
     //    /**
-    //     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+    //     * @return \Shopware\PriceGroup\Struct\PriceGroup
     //     */
-    //    public function getPriceGroup(): \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
+    //    public function getPriceGroup(): \Shopware\PriceGroup\Struct\PriceGroup
     //    {
     //        return $this->priceGroup;
     //    }
     //
     //    /**
-    //     * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup $priceGroup
+    //     * @param \Shopware\PriceGroup\Struct\PriceGroup $priceGroup
     //     */
     //    public function setPriceGroup(PriceGroup $priceGroup = null): void
     //    {
@@ -826,17 +826,17 @@ class Product extends Struct
     }
 
     //    /**
-    //     * @return \Shopware\Bundle\StoreFrontBundle\Esd\Esd
+    //     * @return \Shopware\ProductEsd\Struct\ProductEsd
     //     */
-    //    public function getEsd(): \Shopware\Bundle\StoreFrontBundle\Esd\Esd
+    //    public function getEsd(): \Shopware\ProductEsd\Struct\ProductEsd
     //    {
     //        return $this->esd;
     //    }
     //
     //    /**
-    //     * @param Esd $esd
+    //     * @param ProductEsd $esd
     //     */
-    //    public function setEsd(Esd $esd = null): void
+    //    public function setEsd(ProductEsd $esd = null): void
     //    {
     //        $this->esd = $esd;
     //    }

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class BannerComponentHandler implements ComponentHandlerInterface
 {
@@ -46,7 +46,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         $collection->addMediaPaths([$element->getConfig()->get('file')]);
 
@@ -57,7 +57,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $bannerPath = $element->getConfig()->get('file');
         $media = $collection->getMediaByPath($bannerPath);
@@ -74,9 +74,9 @@ class BannerComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element              $element
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      */
-    private function generateLink(Element $element, ShopContextInterface $context)
+    private function generateLink(Element $element, ShopContext $context)
     {
         $link = $element->getConfig()->get('link');
         if (empty($link)) {
@@ -95,9 +95,9 @@ class BannerComponentHandler implements ComponentHandlerInterface
     /**
      * @param PrepareDataCollection                                          $collection
      * @param Element                                                        $element
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      */
-    private function addMappings(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    private function addMappings(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         /** @var array $mappings */
         $mappings = $element->getConfig()->get('bannerMapping', []);

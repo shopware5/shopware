@@ -26,7 +26,7 @@ namespace Shopware\SeoUrl\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\ShopCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
@@ -47,6 +47,6 @@ class ShopHandler implements HandlerInterface
     ): void {
         /* @var ShopCondition $criteriaPart */
         $builder->andWhere('seoUrl.shop_id IN (:shopIds)');
-        $builder->setParameter(':shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
+        $builder->setParameter('shopIds', $criteriaPart->getUuids(), Connection::PARAM_INT_ARRAY);
     }
 }

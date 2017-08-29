@@ -25,17 +25,17 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Country\Country;
-use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
+use Shopware\Cart\Delivery\Delivery;
+use Shopware\Cart\Delivery\DeliveryCollection;
+use Shopware\Cart\Delivery\DeliveryDate;
+use Shopware\Cart\Delivery\DeliveryPositionCollection;
+use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Price\Price;
+use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\CountryArea\Struct\CountryArea;
+use Shopware\Country\Struct\Country;
+use Shopware\ShippingMethod\Struct\ShippingMethod;
 
 class DeliveryCollectionTest extends TestCase
 {
@@ -122,8 +122,8 @@ class DeliveryCollectionTest extends TestCase
     private static function createShippingLocation(): ShippingLocation
     {
         $country = new Country();
-        $country->setArea(new Area());
+        $country->setArea(new CountryArea());
 
-        return ShippingLocation::createFromCountry($country);
+        return \Shopware\Cart\Delivery\ShippingLocation::createFromCountry($country);
     }
 }

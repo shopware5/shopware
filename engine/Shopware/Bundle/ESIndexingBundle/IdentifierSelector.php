@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
-use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
+use Shopware\Context\Struct\TranslationContext;
+use Shopware\Shop\Struct\Shop;
+use Shopware\Shop\Gateway\ShopReader;
 
 /**
  * Class IdentifierSelector
@@ -40,30 +40,30 @@ class IdentifierSelector
     private $connection;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway
+     * @var \Shopware\Shop\Gateway\ShopReader
      */
     private $shopGateway;
 
     /**
      * @param Connection                                         $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway $shopGateway
+     * @param \Shopware\Shop\Gateway\ShopReader $shopGateway
      */
     public function __construct(
         Connection $connection,
-        ShopGateway $shopGateway
+        ShopReader $shopGateway
     ) {
         $this->connection = $connection;
         $this->shopGateway = $shopGateway;
     }
 
     /**
-     * @return Shop[]
+     * @return \Shopware\Shop\Struct\Shop[]
      */
     public function getShops()
     {
         $context = new TranslationContext(1, true, null);
 
-        return $this->shopGateway->getList($this->getShopIds(), $context);
+        return $this->shopGateway->read($this->getShopIds(), $context);
     }
 
     /**

@@ -42,14 +42,14 @@ interface FacetHandlerInterface
      *
      * @param FacetInterface                                                 $facet
      * @param \Shopware\Search\Criteria                                                       $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return null|FacetResultInterface|FacetResultInterface[]
      */
     public function generateFacet(
         FacetInterface $facet,
         Criteria $criteria,
-        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+        \Shopware\Context\Struct\ShopContext $context
     );
 
     /**

@@ -25,12 +25,15 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
+use Shopware\Country\Gateway\CountryReader;
+use Shopware\Country\Struct\Country;
+use Shopware\CountryState\Struct\CountryState;
 
 class CountryService implements CountryServiceInterface
 {
     /**
-     * @var CountryGateway
+     * @var CountryReader
      */
     private $gateway;
 
@@ -42,10 +45,10 @@ class CountryService implements CountryServiceInterface
     /**
      * CountryService constructor.
      *
-     * @param CountryGateway $gateway
+     * @param CountryReader $gateway
      * @param Connection     $connection
      */
-    public function __construct(CountryGateway $gateway, Connection $connection)
+    public function __construct(CountryReader $gateway, Connection $connection)
     {
         $this->gateway = $gateway;
         $this->connection = $connection;
@@ -54,14 +57,14 @@ class CountryService implements CountryServiceInterface
     /**
      * Returns all available countries for the provided shop context
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return Country[] indexed by id
      */
-    public function getAvailable(ShopContextInterface $context)
+    public function getAvailable(ShopContext $context)
     {
         $ids = $this->getCountryIds();
-        $countries = $this->gateway->getCountries($ids, $context->getTranslationContext());
+        $countries = $this->gateway->read($ids, $context->getTranslationContext());
         $states = $this->gateway->getCountryStates($ids, $context->getTranslationContext());
 
         $result = [];
@@ -95,14 +98,14 @@ class CountryService implements CountryServiceInterface
     }
 
     /**
-     * @param State[] $countryStates
+     * @param CountryState[] $countryStates
      *
-     * @return State[]
+     * @return CountryState[]
      */
     private function sortStates($countryStates)
     {
         usort($countryStates, function (
-            State $a, State $b) {
+            CountryState $a, CountryState $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getName(), $b->getName());
             }
@@ -122,7 +125,7 @@ class CountryService implements CountryServiceInterface
     {
         usort($countries, function (Country $a, Country $b) {
             if ($a->getPosition() == $b->getPosition()) {
-                return strnatcasecmp($a->getName(), $b->getName());
+                return strnatcasecmp($a->getCountryName(), $b->getCountryName());
             }
 
             return ($a->getPosition() < $b->getPosition()) ? -1 : 1;

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductDownload;
 
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Framework\Struct\AttributeHydrator;
 use Shopware\Framework\Struct\Hydrator;
 
 /**

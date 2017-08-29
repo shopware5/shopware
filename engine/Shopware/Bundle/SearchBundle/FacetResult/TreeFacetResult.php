@@ -71,7 +71,7 @@ class TreeFacetResult extends Struct implements FacetResultInterface
      * @param string                                               $label
      * @param TreeItem[]                                           $values
      * @param null|string                                          $template
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
+     * @param \Shopware\Framework\Struct\Attribute[] $attributes
      */
     public function __construct(
         $facetName,

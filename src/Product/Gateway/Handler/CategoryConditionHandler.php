@@ -26,7 +26,7 @@ namespace Shopware\Product\Gateway\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Context\TranslationContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Search\Condition\CategoryCondition;
 use Shopware\Search\Criteria;
 use Shopware\Search\CriteriaPartInterface;
@@ -55,7 +55,6 @@ class CategoryConditionHandler implements HandlerInterface
         Criteria $criteria,
         TranslationContext $context
     ): void {
-
         /* @var CategoryCondition $criteriaPart */
         if ($this->counter++ === 0) {
             $suffix = '';

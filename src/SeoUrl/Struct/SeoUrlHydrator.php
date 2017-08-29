@@ -24,19 +24,35 @@
 
 namespace Shopware\SeoUrl\Struct;
 
+use Shopware\Framework\Routing\Router;
 use Shopware\Framework\Struct\Hydrator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SeoUrlHydrator extends Hydrator
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     public function hydrate(array $row): SeoUrl
     {
+        /** @var Router $router */
+        $router = $this->container->get('shopware.router');
+
         return new SeoUrl(
             (int) $row['__seoUrl_id'],
             (int) $row['__seoUrl_shop_id'],
             $row['__seoUrl_name'],
             (int) $row['__seoUrl_foreign_key'],
             $row['__seoUrl_path_info'],
-            $row['__seoUrl_url'],
+            $row['__seoUrl_seo_path_info'],
+            $router->assemble($row['__seoUrl_seo_path_info']),
             new \DateTime($row['__seoUrl_created_at']),
             (bool) $row['__seoUrl_is_canonical']
         );

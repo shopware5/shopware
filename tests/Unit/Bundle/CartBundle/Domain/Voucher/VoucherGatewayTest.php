@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Voucher;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGateway;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Cart\Voucher\VoucherGateway;
+use Shopware\Context\Struct\ShopContext;
 
 class VoucherGatewayTest extends TestCase
 {
     /**
-     * @expectedException \Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException
+     * @expectedException \Shopware\Cart\Exception\NotImplementedException
      */
     public function testDummyGatewayThrowsException(): void
     {

@@ -33,7 +33,7 @@ use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Search\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware_Components_Config as ShopwareConfig;
@@ -101,7 +101,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContext $context)
     {
         $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
         $key = 'emotion-element--' . $element->getId();
@@ -143,7 +143,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContext $context)
     {
         $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
         $key = 'emotion-element--' . $element->getId();
@@ -208,11 +208,11 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element              $element
-     * @param ShopContextInterface $context
+     * @param ShopContext $context
      *
      * @return \Shopware\Search\Criteria
      */
-    private function generateCriteria(Element $element, ShopContextInterface $context)
+    private function generateCriteria(Element $element, ShopContext $context)
     {
         $type = $element->getConfig()->get('article_slider_type');
         $limit = (int) $element->getConfig()->get('article_slider_max_number');

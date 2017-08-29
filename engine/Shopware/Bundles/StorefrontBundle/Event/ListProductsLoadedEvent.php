@@ -26,7 +26,7 @@ namespace StorefrontBundle\Event;
 
 use EventBundle\Event;
 use Shopware\Product\Struct\ProductCollection;
-use Shopware\Bundle\StorefrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 class ListProductsLoadedEvent extends Event
 {
@@ -36,11 +36,11 @@ class ListProductsLoadedEvent extends Event
     protected $listProducts;
 
     /**
-     * @var ShopContextInterface
+     * @var \Shopware\Context\Struct\ShopContext
      */
     protected $context;
 
-    public function __construct(ProductCollection $listProducts, ShopContextInterface $context)
+    public function __construct(ProductCollection $listProducts, ShopContext $context)
     {
         $this->listProducts = $listProducts;
         $this->context = $context;
@@ -51,7 +51,7 @@ class ListProductsLoadedEvent extends Event
         return $this->listProducts;
     }
 
-    public function getContext(): ShopContextInterface
+    public function getContext(): ShopContext
     {
         return $this->context;
     }

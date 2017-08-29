@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Context\Struct\ShopContext;
 
 /**
  * @category  Shopware
@@ -35,9 +35,9 @@ interface ShopPageServiceInterface
 {
     /**
      * @param int[]                                                          $ids
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param \Shopware\Context\Struct\ShopContext $context
      *
      * @return ShopPage[] Indexed by the shop page id
      */
-    public function getList(array $ids, ShopContextInterface $context);
+    public function getList(array $ids, ShopContext $context);
 }
