@@ -1,6 +1,6 @@
 <?php
 
-class Migrations_Migration637 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration637 extends Shopware\Framework\Migration\AbstractMigration
 {
     public function up($modus)
     {
@@ -22,7 +22,7 @@ UPDATE `s_core_config_element_translations` SET `description` = 'If no similar a
 SQL;
         $this->addSql($sql);
 
-        if ($modus == \Shopware\Components\Migrations\AbstractMigration::MODUS_UPDATE) {
+        if ($modus == \Shopware\Framework\Migration\AbstractMigration::MODUS_UPDATE) {
             return;
         }
 

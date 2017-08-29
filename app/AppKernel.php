@@ -93,7 +93,6 @@ class AppKernel extends Kernel
             new Shopware\Framework\Framework(),
             new Shopware\Category\Category(),
             new Shopware\Product\Product(),
-            new Shopware\SeoUrl\SeoUrl(),
             new Shopware\Nexus\Nexus(),
             new Shopware\SeoUrl\SeoUrl(),
             new Shopware\Address\Address(),

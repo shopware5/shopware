@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Migrations\AbstractMigration;
+use Shopware\Framework\Migration\AbstractMigration;
 
 class Migrations_Migration2004 extends AbstractMigration
 {

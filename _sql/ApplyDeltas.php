@@ -51,15 +51,15 @@ try {
     exit(1);
 }
 
-require __DIR__ . '/../engine/Shopware/Components/Migrations/AbstractMigration.php';
-require __DIR__ . '/../engine/Shopware/Components/Migrations/Manager.php';
+require __DIR__ . '/../src/Framework/Migration/AbstractMigration.php';
+require __DIR__ . '/../src/Framework/Migration/Manager.php';
 
 $modeArg = getopt('', ['mode:']);
 if (!isset($modeArg['mode']) || $modeArg['mode'] == 'install') {
-    $mode = \Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL;
+    $mode = \Shopware\Framework\Migration\AbstractMigration::MODUS_INSTALL;
 } else {
-    $mode = \Shopware\Components\Migrations\AbstractMigration::MODUS_UPDATE;
+    $mode = \Shopware\Framework\Migration\AbstractMigration::MODUS_UPDATE;
 }
-$migrationManger = new Shopware\Components\Migrations\Manager($conn, $deployConfig['migrationpath']);
+$migrationManger = new Shopware\Framework\Migration\Manager($conn, $deployConfig['migrationpath']);
 
 $migrationManger->run($mode);

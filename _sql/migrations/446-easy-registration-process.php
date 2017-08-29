@@ -1,9 +1,9 @@
 <?php
-class Migrations_Migration446 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration446 Extends Shopware\Framework\Migration\AbstractMigration
 {
     public function up($modus)
     {
-        if ($modus !== \Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL) {
+        if ($modus !== \Shopware\Framework\Migration\AbstractMigration::MODUS_INSTALL) {
             return;
         }
         

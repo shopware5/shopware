@@ -5,7 +5,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
-use Shopware\Components\Migrations\AbstractMigration;
+use Shopware\Framework\Migration\AbstractMigration;
 
 class Migrations_Migration918 extends AbstractMigration
 {

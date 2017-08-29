@@ -1,6 +1,6 @@
 <?php
 
-use Shopware\Components\Migrations\AbstractMigration;
+use Shopware\Framework\Migration\AbstractMigration;
 
 class Migrations_Migration913 extends AbstractMigration
 {

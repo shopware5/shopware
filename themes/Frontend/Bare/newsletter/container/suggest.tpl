@@ -1,1 +1,0 @@
-{extends file='newsletter/container/article.tpl'}
