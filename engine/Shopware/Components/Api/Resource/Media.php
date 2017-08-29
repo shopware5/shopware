@@ -244,7 +244,7 @@ class Media extends Resource
         $name = $name . '.' . $ext;
         $path = $this->load($link, $name);
         $name = pathinfo($path, PATHINFO_FILENAME);
-        $file = new File($path);
+        $file = new UploadedFile($path, $link);
 
         $media = new MediaModel();
 
