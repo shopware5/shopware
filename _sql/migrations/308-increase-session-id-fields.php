@@ -1,5 +1,5 @@
 <?php
-class Migrations_Migration308 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration308 Extends Shopware\Framework\Migration\AbstractMigration
 {
     /**
      * Increase the lenght of all fields that contain the session id

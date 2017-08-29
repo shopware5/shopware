@@ -1,6 +1,6 @@
 <?php
 
-class Migrations_Migration773 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration773 extends Shopware\Framework\Migration\AbstractMigration
 {
     /**
      * @param string $modus
