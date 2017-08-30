@@ -33,6 +33,10 @@ Ext.define('Shopware.apps.Vote.store.Vote', {
     model: 'Shopware.apps.Vote.model.Vote',
     configure: function() {
         return { controller: 'Vote' };
-    }
+    },
+    sorters: [{
+        property: 'datum',
+        direction: 'DESC'
+    }]
 });
 //{/block}
