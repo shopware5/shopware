@@ -344,7 +344,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             method: 'POST',
             params: {
                 orderId: record.get('id'),
-                refreshInStock: shouldRefreshInStock
+                refreshInStock: shouldRefreshInStock ? 1 : 0
             },
             success: function(response) {
                 var status = Ext.decode(response.responseText);
