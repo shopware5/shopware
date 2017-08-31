@@ -1,16 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Shopware\Media;
+namespace Shopware\Filesystem;
 
-use Shopware\Media\DependencyInjection\Compiler\MediaOptimizerCompilerPass;
-use Shopware\Media\DependencyInjection\Compiler\MediaStrategyCompilerPass;
+use Shopware\Filesystem\DependencyInjection\FilesystemAdapterCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class Media extends Bundle
+class Filesystem extends Bundle
 {
+    protected $name = 'Filesystem';
+
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
@@ -18,7 +19,6 @@ class Media extends Bundle
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection/'));
         $loader->load('services.xml');
 
-        $container->addCompilerPass(new MediaOptimizerCompilerPass());
-        $container->addCompilerPass(new MediaStrategyCompilerPass());
+        $container->addCompilerPass(new FilesystemAdapterCompilerPass());
     }
 }
