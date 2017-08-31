@@ -518,7 +518,16 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
 
     $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
-    $app->render('finish.php', ['url' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $basepath]);
+    $schema = 'http';
+    // This is for supporting Apache 2.2
+    if (array_key_exists('HTTPS', $_SERVER) && strtolower($_SERVER['HTTPS']) === 'on') {
+        $schema = 'https';
+    }
+    if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
+        $schema = $_SERVER['REQUEST_SCHEME'];
+    }
+
+    $app->render('finish.php', ['url' => $schema . '://' . $_SERVER['HTTP_HOST'] . $basepath]);
 })->name('finish')->via('GET', 'POST');
 
 $app->map('/database-import/importDatabase', function () use ($app, $container) {
