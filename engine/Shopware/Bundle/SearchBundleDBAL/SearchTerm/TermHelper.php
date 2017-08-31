@@ -42,13 +42,20 @@ class TermHelper implements TermHelperInterface
     private $useBadWords;
 
     /**
+     * @var bool
+     */
+    private $replaceUmlauts;
+
+    /**
      * @param $config
      * @param bool $useBadWords
+     * @param bool $replaceUmlauts
      */
-    public function __construct($config, $useBadWords = true)
+    public function __construct($config, $useBadWords = true, $replaceUmlauts = true)
     {
         $this->config = $config;
         $this->useBadWords = $useBadWords;
+        $this->replaceUmlauts = $replaceUmlauts;
     }
 
     /**
@@ -60,11 +67,13 @@ class TermHelper implements TermHelperInterface
      */
     public function splitTerm($string)
     {
-        $string = str_replace(
-            ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
-            ['Ue', 'ue', 'ae', 'Ae', 'oe', 'Oe', 'ss'],
-            $string
-        );
+        if ($this->replaceUmlauts) {
+            $string = str_replace(
+                ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
+                ['Ue', 'ue', 'ae', 'Ae', 'oe', 'Oe', 'ss'],
+                $string
+            );
+        }
 
         $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
 
