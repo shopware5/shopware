@@ -28,6 +28,7 @@ use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Configurator\Group;
+use Shopware\Models\Article\Esd;
 
 /**
  * @category  Shopware
@@ -748,6 +749,154 @@ class VariantTest extends TestCase
                 }
             }
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateEsdVariant()
+    {
+        $params = array(
+            'name' => 'My awesome liquor',
+            'description' => 'hmmmmm',
+            'active' => true,
+            'taxId'      => 1,
+            'mainDetail' => array(
+                'number' => 'brand1' . uniqid(rand()),
+                'inStock' => 15,
+                'active' => true,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from'  => 1,
+                        'price' => 50
+                    )
+                ),
+                'esd' => [
+                    'link' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
+                    'reuse' => true,
+                ],
+
+            )
+        );
+
+        $article = $this->resourceArticle->create($params);
+
+        $this->assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
+        $this->assertEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateEsdWithSerialsVariant()
+    {
+        $params = array(
+            'name' => 'My awesome liquor',
+            'description' => 'hmmmmm',
+            'active' => true,
+            'taxId'      => 1,
+            'mainDetail' => array(
+                'number' => 'brand2' . uniqid(rand()),
+                'inStock' => 15,
+                'active' => true,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from'  => 1,
+                        'price' => 50
+                    )
+                ),
+                'esd' => [
+                    'link' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
+                    'reuse' => true,
+                    'hasSerials' => true,
+                    'serials' => [
+                        [
+                            'serialnumber' => '1000'
+                        ],
+                        [
+                            'serialnumber' => '1001'
+                        ],
+                        [
+                            'serialnumber' => '1002'
+                        ],
+                        [
+                            'serialnumber' => '1003'
+                        ],
+                        [
+                            'serialnumber' => '1004'
+                        ],
+                    ]
+                ],
+
+            )
+        );
+
+        $article = $this->resourceArticle->create($params);
+
+        $this->assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
+        $this->assertEquals(5, $article->getMainDetail()->getEsd()->getSerials()->count());
+        $this->assertTrue($article->getMainDetail()->getEsd()->getHasSerials());
+        $this->assertEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
+    }
+
+    /**
+     * @depends testCreateEsdVariant
+     * @return void
+     */
+    public function testCreateEsdReuseVariant()
+    {
+        $params = array(
+            'name' => 'My awesome liquor',
+            'description' => 'hmmmmm',
+            'active' => true,
+            'taxId'      => 1,
+            'mainDetail' => array(
+                'number' => 'brand2' . uniqid(rand()),
+                'inStock' => 15,
+                'active' => true,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from'  => 1,
+                        'price' => 50
+                    )
+                ),
+                'esd' => [
+                    'link' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
+                    'hasSerials' => true,
+                    'serials' => [
+                        [
+                            'serialnumber' => '1000'
+                        ],
+                        [
+                            'serialnumber' => '1001'
+                        ],
+                        [
+                            'serialnumber' => '1002'
+                        ],
+                        [
+                            'serialnumber' => '1003'
+                        ],
+                        [
+                            'serialnumber' => '1004'
+                        ],
+                    ]
+                ],
+
+            )
+        );
+
+        $article = $this->resourceArticle->create($params);
+
+        $this->assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
+        $this->assertEquals(5, $article->getMainDetail()->getEsd()->getSerials()->count());
+        $this->assertTrue($article->getMainDetail()->getEsd()->getHasSerials());
+        $this->assertNotEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
     }
 
     private function getVariantOptionsOfSet($configuratorSet)
