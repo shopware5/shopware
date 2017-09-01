@@ -44,6 +44,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**
      * Index action method
+     *
+     * @throws \Enlight_Controller_Exception
      */
     public function indexAction()
     {
@@ -115,6 +117,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Listing of all manufacturer products.
      * Templates extends from the normal listing template.
+     *
+     * @throws \Enlight_Exception
      */
     public function manufacturerAction()
     {
@@ -157,7 +161,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $facets = [];
         foreach ($categoryArticles['facets'] as $facet) {
-            if (!$facet instanceof FacetResultInterface || $facet->getFacetName() == 'manufacturer') {
+            if (!$facet instanceof FacetResultInterface || $facet->getFacetName() === 'manufacturer') {
                 continue;
             }
             $facets[] = $facet;
@@ -193,6 +197,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * @param int  $categoryId
      * @param bool $withStreams
+     *
+     * @throws \Exception
      *
      * @return array
      */
@@ -249,7 +255,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $location = ['controller' => 'index'];
         } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
             $location = ['controller' => 'index'];
-        } elseif ($this->get('config')->get('categoryDetailLink') && $checkRedirect) {
+        } elseif ($checkRedirect && $this->get('config')->get('categoryDetailLink')) {
             /** @var $context ShopContextInterface */
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
@@ -329,7 +335,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
-        if (!in_array($defaultShopCategoryId, array_keys($categoryPath))) {
+        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
             $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
             $this->Response()->setHttpResponseCode(404);
 
@@ -343,7 +349,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * Helper function used in the listing action to detect if
      * the user is trying to open the page matching the shop's root category
      *
-     * @param $categoryId
+     * @param int $categoryId
      *
      * @return bool
      */
@@ -355,7 +361,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $queryParamsNames = array_keys($this->Request()->getParams());
         $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
 
-        return $defaultShopCategoryId == $categoryId && !$paramsDiff;
+        return $defaultShopCategoryId === (int) $categoryId && !$paramsDiff;
     }
 
     /**
@@ -466,6 +472,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * @param int   $categoryId
      * @param array $categoryContent
+     *
+     * @throws \Enlight_Exception
      */
     private function loadCategoryListing($categoryId, array $categoryContent)
     {
@@ -527,7 +535,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param $requestCategoryId
+     * @param int $requestCategoryId
      *
      * @throws Enlight_Controller_Exception
      *
