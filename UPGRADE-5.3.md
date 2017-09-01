@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.3
+
+[View all changes from v5.3.2...v5.3.3](https://github.com/shopware/shopware/compare/v5.3.2...v5.3.3)
+
+### Additions
+
+* Added new container parameter `active_plugins` which contains an array of installed and active plugins
+
 ## 5.3.2
 
 [View all changes from v5.3.1...v5.3.2](https://github.com/shopware/shopware/compare/v5.3.1...v5.3.2)

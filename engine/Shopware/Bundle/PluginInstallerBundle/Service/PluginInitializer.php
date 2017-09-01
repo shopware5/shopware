@@ -41,6 +41,11 @@ class PluginInitializer
     private $pluginDirectory;
 
     /**
+     * @var array[]
+     */
+    private $activePlugins = [];
+
+    /**
      * @param PDO $connection
      * @param $pluginDirectory
      */
@@ -58,12 +63,20 @@ class PluginInitializer
     public function initializePlugins()
     {
         $plugins = [];
+        $shopwarePlugins = [];
 
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
-        $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE namespace LIKE "ShopwarePlugins" AND active = 1 AND installation_date IS NOT NULL;');
-        $activePlugins = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $stmt = $this->connection->query('SELECT name, version, namespace FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL;');
+        $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
+
+        foreach ($this->activePlugins as $pluginName => &$plugin) {
+            if ($plugin['namespace'] === 'ShopwarePlugins') {
+                $shopwarePlugins[] = $pluginName;
+            }
+            $plugin = $plugin['version'];
+        }
 
         foreach (new \DirectoryIterator($this->pluginDirectory) as $pluginDir) {
             if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
@@ -84,7 +97,7 @@ class PluginInitializer
                 throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
             }
 
-            $isActive = in_array($pluginName, $activePlugins, true);
+            $isActive = in_array($pluginName, $shopwarePlugins, true);
 
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
@@ -96,5 +109,13 @@ class PluginInitializer
         }
 
         return $plugins;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActivePlugins()
+    {
+        return $this->activePlugins;
     }
 }
