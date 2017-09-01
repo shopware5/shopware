@@ -666,7 +666,7 @@ class Kernel implements HttpKernelInterface
      *
      * @param \Shopware\Components\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string                                                                                                     $alias
-     * @param array|string                                                                                               $options
+     * @param array                                                                                                      $options
      */
     protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {

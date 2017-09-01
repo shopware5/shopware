@@ -40,8 +40,10 @@ class PathResolverTest extends TestCase
     {
         $this->pathResolver = new PathResolver(
             '/my/root/dir',
-            [],
-            $this->createTemplateManagerMock()
+            ['/my/root/dir/templates'],
+            $this->createTemplateManagerMock(),
+            '/my/root/dir/template',
+            '/my/root/dir/web/cache'
         );
     }
 

@@ -171,7 +171,7 @@ class Util
         $builder = $this->entityManager->createQueryBuilder();
 
         $builder->select(['plugins'])
-            ->from('Shopware\Models\Plugin\Plugin', 'plugins')
+            ->from(\Shopware\Models\Plugin\Plugin::class, 'plugins')
             ->where('plugins.active = true')
             ->andWhere('plugins.installed IS NOT NULL');
 

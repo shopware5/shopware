@@ -67,7 +67,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
 
         $headers = $response->getHeaders();
         foreach ($headers as $header) {
-            if ($header['name'] == 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
+            if ($header['name'] === 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
                 $source = str_replace(["\r\n", "\r"], "\n", $source);
                 $expressions = [
                     // Remove comments
@@ -148,7 +148,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         if (!empty($this->backLinkWhiteList)) {
-            if ($src[1] == 'a' && preg_match('#^https?://#', $src[3])) {
+            if ($src[1] === 'a' && preg_match('#^https?://#', $src[3])) {
                 $host = @parse_url($src[3], PHP_URL_HOST);
                 if (!strstr($src[0], 'rel=') && !in_array($host, $this->backLinkWhiteList)) {
                     $src[0] = rtrim($src[0], '>') . ' rel="nofollow">';
@@ -209,7 +209,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
 
         $replaceCanonical = !($isCanonical && $forceCanonicalHttp);
 
-        if ($this->useSecure && $src[1] != 'a' && $replaceCanonical) {
+        if ($this->useSecure && $src[1] !== 'a' && $replaceCanonical) {
             $link = str_replace('http://' . $this->basePath, 'https://' . $this->basePath, $link);
         }
 

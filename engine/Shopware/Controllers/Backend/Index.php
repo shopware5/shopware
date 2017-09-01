@@ -224,7 +224,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
 
         /** @var $menu \Shopware\Models\Menu\Repository */
-        $menu = Shopware()->Models()->getRepository('Shopware\Models\Menu\Menu');
+        $menu = Shopware()->Models()->getRepository(\Shopware\Models\Menu\Menu::class);
         $nodes = $menu->createQueryBuilder('m')
             ->select('m')
             ->leftJoin('m.plugin', 'p')
@@ -285,7 +285,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     private function checkIsFeedbackRequired()
     {
-        return Shopware::VERSION_TEXT !== '___VERSION_TEXT___' && strlen(Shopware::VERSION_TEXT) !== 0;
+        return Shopware::VERSION_TEXT !== '___VERSION_TEXT___' && '' !== Shopware::VERSION_TEXT;
     }
 
     /**
@@ -295,7 +295,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     private function checkForInstallationSurveyNecessity($identity)
     {
-        if (!$identity->role->getAdmin() || Shopware::VERSION_TEXT === '___VERSION_TEXT___') {
+        if (Shopware::VERSION_TEXT === '___VERSION_TEXT___' || !$identity->role->getAdmin()) {
             return false;
         }
         $installationSurvey = $this->container->get('config')->get('installationSurvey', false);

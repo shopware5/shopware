@@ -42,7 +42,7 @@
         </service>
 
         <service id="shopware_plugininstaller.plugin_download_service" class="Shopware\Bundle\PluginInstallerBundle\Service\DownloadService">
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.downloadsdir%</argument>
             <argument>%shopware.plugin_directories%</argument>
             <argument type="service" id="shopware_plugininstaller.store_client"/>
             <argument type="service" id="dbal_connection" />

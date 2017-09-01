@@ -32,9 +32,4 @@ $loader = require __DIR__ . '/vendor/autoload.php';
 
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
-define('PUBLICDIR', __DIR__ . '/web/');
-define('PUBLICPATH', '/web');
-define('PROJECTDIR', __DIR__);
-define('FRONTENDTHEMEDIR', PROJECTDIR . '/custom/themes');
-
 return $loader;

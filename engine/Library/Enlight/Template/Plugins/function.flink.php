@@ -23,7 +23,7 @@
  */
 
 /**
- * @param $params
+ * @param array $params
  * @param $template
  *
  * @return bool|mixed|string
@@ -32,16 +32,18 @@ function smarty_function_flink($params, $template)
 {
     $file = $params['file'];
 
-    /** @var $front Enlight_Controller_Front */
-    $front = Shopware()->Front();
-    $request = $front->Request();
+    $request = Shopware()->Front()->Request();
+    $docPath = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
-    // check if we got an URI or a local link
+    // Check if we got an URI or a local link
     if (!empty($file) && strpos($file, '/') !== 0 && strpos($file, '://') === false) {
         $useIncludePath = $template->smarty->getUseIncludePath();
 
-        // try to find the file on the filesystem
-        foreach ($template->smarty->getTemplateDir() as $dir) {
+        /** @var string[] $templateDirs */
+        $templateDirs = $template->smarty->getTemplateDir();
+
+        // Try to find the file on the filesystem
+        foreach ($templateDirs as $dir) {
             if (file_exists($dir . $file)) {
                 $file = Enlight_Loader::realpath($dir) . DS . str_replace('/', DS, $file);
                 break;
@@ -57,34 +59,22 @@ function smarty_function_flink($params, $template)
             }
         }
 
-        if (method_exists(Shopware(), 'DocPath')) {
-            $docPath = Shopware()->DocPath();
-        } else {
-            $docPath = getcwd() . DIRECTORY_SEPARATOR;
-        }
-
-        $fullFile = $file;
-
-        // some clean up code
+        // Some cleanup code
         if (strpos($file, $docPath) === 0) {
             $file = substr($file, strlen($docPath));
         }
 
-        // make sure we have the right separator for the web context
+        // Make sure we have the right separator for the web context
         if (DIRECTORY_SEPARATOR !== '/') {
             $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
         }
+
         if (strpos($file, './') === 0) {
             $file = substr($file, 2);
         }
-        // if we did not find the file, we are returning a false
-        if (strpos($file, '/') !== 0) {
-            if (!file_exists($docPath . $file)) {
-                //return false;
-            }
-            if ($request !== null) {
-                $file = $request->getBasePath() . '/' . $file;
-            }
+
+        if ($request !== null) {
+            $file = $request->getBasePath() . DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
         }
     }
 
@@ -92,29 +82,9 @@ function smarty_function_flink($params, $template)
         $file = $request->getBasePath() . '/';
     }
 
-    $filePath = $file;
-
-    if ($request !== null && strpos($file, '/') === 0 && !empty($params['fullPath'])) {
+    if ($request !== null && !empty($params['fullPath']) && strpos($file, '/') === 0) {
         $file = $request->getScheme() . '://' . $request->getHttpHost() . $file;
     }
-
-//
-//    if ($fullFile) {
-//        $link = PUBLICDIR . $filePath;
-//        $dir = dirname($link);
-//
-//
-//        if (!is_dir($dir)) {
-//            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
-//                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
-//            }
-//        } elseif (!is_writable($dir)) {
-//            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'web', $dir));
-//        }
-//
-//
-//        symlink($fullFile, $link);
-//    }
 
     return $file;
 }
