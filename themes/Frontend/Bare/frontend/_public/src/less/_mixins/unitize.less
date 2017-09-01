@@ -21,8 +21,8 @@ In addition to the general `.unitize()` mixin, Shopware contains specific mixins
 `.unitize-max-height(@value)`<br/>
 `.unitize-max-width(@value)`<br/>
 `.unitize-min-width(@value)`<br/>
-`.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue)`<br/>
-`.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue)`<br/>
+`.unitize-padding(@topValue, @rightValue: @topValue, @bottomValue: @topValue, @leftValue: @rightValue)`<br/>
+`.unitize-margin(@topValue, @rightValue: @topValue, @bottomValue: @topValue, @leftValue: @rightValue)`<br/>
 `.unitize-variable(@value)`<br/>
 */
 
@@ -41,7 +41,7 @@ In addition to the general `.unitize()` mixin, Shopware contains specific mixins
 	@{property}: ~"@{remValue}rem";
 }
 
-.unitize-multiple(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor, @property: padding) {
+.unitize-multiple(@topValue, @rightValue: @topValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor, @property: padding) {
 	@pxTopValue: @topValue;
 	@emTopValue: (@topValue / @baseValue);
 
@@ -82,11 +82,11 @@ In addition to the general `.unitize()` mixin, Shopware contains specific mixins
     .unitize(min-width, @value, @baseValue);
 }
 
-.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
+.unitize-margin(@topValue, @rightValue: @topValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, margin);
 }
 
-.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
+.unitize-padding(@topValue, @rightValue: @topValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, padding);
 }
 
