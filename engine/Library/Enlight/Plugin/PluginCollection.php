@@ -76,7 +76,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Getter method for the plugin list.
      *
-     * @return  ArrayIterator
+     * @return ArrayObject
      */
     public function getIterator()
     {
