@@ -137,8 +137,31 @@ class Filter
         } else {
             $builder->orderBy('detail.id', 'DESC');
         }
+        
+        if (!$this->displayVariants($tokens)) {
+            $builder->addGroupBy('article.id');
+        }
 
         return $builder;
+    }
+    
+    /**
+     * @param array[] $tokens
+     *
+     * @return bool
+     */
+    public function displayVariants($tokens)
+    {
+        foreach ($tokens as $filter) {
+            if (!isset($filter['token'])) {
+                continue;
+            }
+            if ($filter['token'] === 'ISMAIN') {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
