@@ -1,5 +1,5 @@
-import 'src/app/component/molecule/sw-sidebar/sw-sidebar.less';
-import template from 'src/app/component/molecule/sw-sidebar/sw-sidebar.html.twig';
+import 'src/app/component/organism/sw-sidebar/sw-sidebar.less';
+import template from 'src/app/component/organism/sw-sidebar/sw-sidebar.html.twig';
 
 export default Shopware.ComponentFactory.register('sw-sidebar', {
     inject: ['menuService'],
@@ -13,7 +13,7 @@ export default Shopware.ComponentFactory.register('sw-sidebar', {
 
     methods: {
         getIconName(name) {
-            return `icon--${name}`;
+            return `icon-${name}`;
         }
     }
 });
