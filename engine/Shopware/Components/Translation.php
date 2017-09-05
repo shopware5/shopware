@@ -32,16 +32,17 @@ class Shopware_Components_Translation
     /**
      * Filter translation data for saving.
      *
-     * @param      $type
-     * @param      $data
-     * @param null $key
+     * @param string $type
+     * @param array  $data
+     * @param null   $key
      *
-     * @return array
+     * @return string
      */
     public function filterData($type, $data, $key = null)
     {
         $map = $this->getMapping($type);
-        $tmp = isset($key) ? $data[$key] : $data;
+        $tmp = (null !== $key) ? $data[$key] : $data;
+
         if ($map !== false) {
             foreach (array_flip($map) as $from => $to) {
                 if (isset($tmp[$from])) {
@@ -54,26 +55,26 @@ class Shopware_Components_Translation
             if (!is_string($value)) {
                 continue;
             }
-            if (strlen(trim($value)) == 0) {
+            if ('' === trim($value)) {
                 unset($tmp[$tmpKey]);
             }
         }
-        if (isset($key)) {
-            $data[$key] = $tmp;
-        } else {
-            $data = $tmp;
-        }
-        $data = serialize($data);
 
-        return $data;
+        if (null === $key) {
+            $data = $tmp;
+        } else {
+            $data[$key] = $tmp;
+        }
+
+        return serialize($data);
     }
 
     /**
      * Un filter translation data for output.
      *
-     * @param      $type
-     * @param      $data
-     * @param null $key
+     * @param string $type
+     * @param mixed  $data
+     * @param null   $key
      *
      * @return array
      */
@@ -106,16 +107,16 @@ class Shopware_Components_Translation
     /**
      * Reads a single translation data from the storage.
      *
-     * @param      $language
-     * @param      $type
-     * @param int  $key
-     * @param bool $merge
+     * @param int    $language
+     * @param string $type
+     * @param int    $key
+     * @param bool   $merge
      *
      * @return array
      */
     public function read($language, $type, $key = 1, $merge = false)
     {
-        if ($type == 'variantMain') {
+        if ($type === 'variantMain') {
             $type = 'article';
         }
 
@@ -139,11 +140,11 @@ class Shopware_Components_Translation
      * Reads a single translation data from the storage.
      * Also loads fallback (has less priority)
      *
-     * @param      $language
-     * @param      $fallback
-     * @param      $type
-     * @param int  $key
-     * @param bool $merge
+     * @param int    $language
+     * @param string $fallback
+     * @param string $type
+     * @param int    $key
+     * @param bool   $merge
      *
      * @return array
      */
@@ -162,16 +163,16 @@ class Shopware_Components_Translation
     /**
      * Reads multiple translation data from storage.
      *
-     * @param      $language
-     * @param      $type
-     * @param int  $key
-     * @param bool $merge
+     * @param int    $language
+     * @param string $type
+     * @param int    $key
+     * @param bool   $merge
      *
      * @return array
      */
     public function readBatch($language, $type, $key = 1, $merge = false)
     {
-        if ($type == 'variantMain') {
+        if ($type === 'variantMain') {
             $type = 'article';
         }
 
@@ -249,9 +250,9 @@ class Shopware_Components_Translation
     /**
      * Deletes translations from storage.
      *
-     * @param     $language
-     * @param     $type
-     * @param int $key
+     * @param int    $language
+     * @param string $type
+     * @param int    $key
      *
      * @return array
      */
@@ -284,6 +285,8 @@ class Shopware_Components_Translation
      *
      * @param mixed $data
      * @param bool  $merge
+     *
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function writeBatch($data, $merge = false)
     {
@@ -307,17 +310,19 @@ class Shopware_Components_Translation
     /**
      * Saves translation data to the storage.
      *
-     * @param       $language
-     * @param       $type
-     * @param int   $key
-     * @param mixed $data
-     * @param bool  $merge
+     * @param int    $language
+     * @param string $type
+     * @param int    $key
+     * @param mixed  $data
+     * @param bool   $merge
+     *
+     * @throws \Zend_Db_Adapter_Exception
      *
      * @return int|bool
      */
     public function write($language, $type, $key = 1, $data = null, $merge = false)
     {
-        if ($type == 'variantMain') {
+        if ($type === 'variantMain') {
             $type = 'article';
             $data = array_merge(
                 $this->read($language, $type, $key),
@@ -355,7 +360,7 @@ class Shopware_Components_Translation
                 $type, $merge ? 1 : $key, $language,
             ]);
         }
-        if ($type == 'article') {
+        if ($type === 'article') {
             $this->fixArticleTranslation($language, $key, $data);
         }
     }
@@ -437,6 +442,8 @@ class Shopware_Components_Translation
      * @param int    $languageId
      * @param int    $articleId
      * @param string $data
+     *
+     * @throws \Exception
      */
     protected function fixArticleTranslation($languageId, $articleId, $data)
     {
@@ -503,6 +510,9 @@ class Shopware_Components_Translation
      * @param int   $articleId
      * @param int   $languageId
      * @param array $data
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Exception
      */
     private function addArticleTranslation($articleId, $languageId, array $data)
     {
@@ -524,6 +534,8 @@ class Shopware_Components_Translation
      * @param int   $articleId
      * @param int   $languageId
      * @param array $data
+     *
+     * @throws \Exception
      */
     private function insertArticleTranslation($articleId, $languageId, array $data)
     {
@@ -542,6 +554,8 @@ class Shopware_Components_Translation
     /**
      * @param int   $id
      * @param array $data
+     *
+     * @throws \Exception
      */
     private function updateArticleTranslation($id, array $data)
     {

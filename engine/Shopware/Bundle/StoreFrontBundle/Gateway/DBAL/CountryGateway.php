@@ -110,6 +110,10 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getAreas(array $ids, Struct\ShopContextInterface $context)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getAreaFields());
@@ -137,6 +141,10 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getCountries(array $ids, Struct\ShopContextInterface $context)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getCountryFields());
@@ -166,6 +174,10 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getStates(array $ids, Struct\ShopContextInterface $context)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         $query = $this->createStateQuery($context);
 
         $query->where('countryState.id IN (:ids)')
@@ -190,6 +202,10 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getCountryStates($countryIds, Struct\ShopContextInterface $context)
     {
+        if (empty($countryIds)) {
+            return [];
+        }
+
         $query = $this->createStateQuery($context);
 
         $query->where('countryState.countryID IN (:ids)')
