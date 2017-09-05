@@ -17,7 +17,7 @@ Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
         }
         if (me.record.getPaymentData().first().get('name') === 'sepa') {
             me.fieldContainer.show();
-            me.accountHolderField.hide();
+            me.accountHolderField.show();
             me.accountNumberField.hide();
             me.bankCodeField.hide();
             me.ibanField.show();

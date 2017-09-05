@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
                     });
                 }
                 paymentFieldSet.accountNumberField.hide().allowBlank = true;
-                paymentFieldSet.accountHolderField.hide().allowBlank = true;
+                paymentFieldSet.accountHolderField.show().allowBlank = true;
                 paymentFieldSet.bankCodeField.hide().allowBlank = true;
                 paymentFieldSet.bankNameField.allowBlank = true;
                 paymentFieldSet.useBillingDataField.show();
