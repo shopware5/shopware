@@ -25,13 +25,14 @@
 namespace Shopware\Framework\Routing;
 
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\Condition\CanonicalCondition;
+use Shopware\Search\Condition\IsCanonicalCondition;
 use Shopware\Search\Condition\PathInfoCondition;
-use Shopware\Search\Condition\ShopCondition;
 use Shopware\Search\Condition\SeoPathInfoCondition;
+use Shopware\Search\Condition\ShopUuidCondition;
 use Shopware\Search\Criteria;
-use Shopware\SeoUrl\Gateway\SeoUrlRepository;
+use Shopware\SeoUrl\SeoUrlRepository;
 use Shopware\SeoUrl\Struct\SeoUrl;
+use Shopware\SeoUrl\Struct\SeoUrlBasicStruct;
 
 class UrlResolver implements UrlResolverInterface
 {
@@ -45,27 +46,22 @@ class UrlResolver implements UrlResolverInterface
         $this->seoUrlRepository = $seoUrlRepository;
     }
 
-    public function getPathInfo(int $shopId, string $url): ?SeoUrl
+    public function getPathInfo(string $shopUuid, string $url, TranslationContext $context): ?SeoUrlBasicStruct
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new ShopCondition([$shopId]));
+        $criteria->addCondition(new ShopUuidCondition([$shopUuid]));
         $criteria->addCondition(new SeoPathInfoCondition([$url]));
-
-        $context = new TranslationContext($shopId, true, null);
-
         $urls = $this->seoUrlRepository->search($criteria, $context);
 
         return $urls->getBySeoPathInfo($url);
     }
 
-    public function getUrl(int $shopId, string $pathInfo): ?SeoUrl
+    public function getUrl(string $shopUuid, string $pathInfo, TranslationContext $context): ?SeoUrlBasicStruct
     {
         $criteria = new Criteria();
-        $criteria->addCondition(new ShopCondition([$shopId]));
+        $criteria->addCondition(new ShopUuidCondition([$shopUuid]));
         $criteria->addCondition(new PathInfoCondition([$pathInfo]));
-        $criteria->addCondition(new CanonicalCondition(true));
-
-        $context = new TranslationContext($shopId, true, null);
+        $criteria->addCondition(new IsCanonicalCondition(true));
 
         $urls = $this->seoUrlRepository->search($criteria, $context);
 

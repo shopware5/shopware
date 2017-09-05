@@ -25,19 +25,13 @@
 namespace Shopware\SeoUrl\Generator;
 
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\SeoUrl\Struct\SeoUrlBasicCollection;
 use Shopware\SeoUrl\Struct\SeoUrlCollection;
+use Shopware\Shop\Struct\ShopBasicStruct;
 
 interface SeoUrlGeneratorInterface
 {
-    /**
-     * @param int                $shopId
-     * @param TranslationContext $context
-     * @param int                $offset
-     * @param int                $limit
-     *
-     * @return SeoUrlCollection
-     */
-    public function fetch(int $shopId, TranslationContext $context, int $offset, int $limit): SeoUrlCollection;
+    public function fetch(ShopBasicStruct $shop, TranslationContext $context, int $offset, int $limit): SeoUrlBasicCollection;
 
     public function getName(): string;
 }

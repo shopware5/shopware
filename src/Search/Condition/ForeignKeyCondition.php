@@ -29,18 +29,18 @@ use Shopware\Search\ConditionInterface;
 class ForeignKeyCondition implements ConditionInterface
 {
     /**
-     * @var int[]
+     * @var string[]
      */
-    protected $foreignKeys;
+    protected $foreignKeies;
 
-    public function __construct(array $foreignKeys)
+    public function __construct(array $foreignKeies)
     {
-        $this->foreignKeys = $foreignKeys;
+        $this->foreignKeies = $foreignKeies;
     }
 
-    public function getForeignKeys(): array
+    public function getForeignKeies(): array
     {
-        return $this->foreignKeys;
+        return $this->foreignKeies;
     }
 
     public function getName(): string

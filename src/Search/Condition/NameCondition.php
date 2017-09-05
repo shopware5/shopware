@@ -31,20 +31,20 @@ class NameCondition implements ConditionInterface
     /**
      * @var string[]
      */
-    protected $names = [];
+    protected $names;
 
     public function __construct(array $names)
     {
         $this->names = $names;
     }
 
-    public function getName(): string
-    {
-        return self::class;
-    }
-
     public function getNames(): array
     {
         return $this->names;
+    }
+
+    public function getName(): string
+    {
+        return self::class;
     }
 }

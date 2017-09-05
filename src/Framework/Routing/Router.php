@@ -26,9 +26,12 @@ namespace Shopware\Framework\Routing;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Plugin\Plugin;
+use Shopware\Shop\Struct\ShopDetailStruct;
 use Shopware\Storefront\Session\ShopSubscriber;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
@@ -81,6 +84,11 @@ class Router implements RouterInterface, RequestMatcherInterface
      */
     private $routingLoader;
 
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
     public function __construct(
         $resource,
         \AppKernel $kernel,
@@ -98,6 +106,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         $this->urlResolver = $urlResolver;
         $this->shopFinder = $shopFinder;
         $this->routingLoader = $routingLoader;
+        $this->container = $kernel->getContainer();
     }
 
     public function setContext(RequestContext $context): void
@@ -134,12 +143,13 @@ class Router implements RouterInterface, RequestMatcherInterface
             return $generator->generate($name, $parameters, $referenceType);
         }
 
+        /** @var ShopDetailStruct $shop */
         if (!$shop = $context->getParameter('shop')) {
             return $generator->generate($name, $parameters, $referenceType);
         }
 
         //rewrite base url for url generator
-        $stripBaseUrl = $this->rewriteBaseUrl($shop['base_url'], $shop['base_path']);
+        $stripBaseUrl = $this->rewriteBaseUrl($shop->getBaseUrl(), $shop->getBasePath());
 
         $route = $this->getRouteCollection()->get($name);
         if ($route->getOption('seo') !== true) {
@@ -151,7 +161,11 @@ class Router implements RouterInterface, RequestMatcherInterface
         $pathinfo = str_replace($stripBaseUrl, '', $pathinfo);
         $pathinfo = '/' . trim($pathinfo, '/');
 
-        $seoUrl = $this->urlResolver->getUrl($shop['id'], $pathinfo);
+        $seoUrl = $this->urlResolver->getUrl(
+            $shop->getUuid(),
+            $pathinfo,
+            TranslationContext::createFromShop($shop)
+        );
 
         //generate new url with shop base path/url
         $url = $generator->generate($name, $parameters, $referenceType);
@@ -171,7 +185,9 @@ class Router implements RouterInterface, RequestMatcherInterface
 
         $matcher = new UrlMatcher($this->getRouteCollection(), $this->getContext());
 
-        return $matcher->match($pathinfo);
+        $match = $matcher->match($pathinfo);
+
+        return $match;
     }
 
     public function matchRequest(Request $request): array
@@ -185,38 +201,76 @@ class Router implements RouterInterface, RequestMatcherInterface
 
         //save detected shop to context for further processes
         $this->context->setParameter('shop', $shop);
-
-        $currencyId = $this->getCurrencyId($request, (int) $shop['currency_id']);
-
-        $request->attributes->set('_shop_id', $shop['id']);
-        $request->attributes->set('_currency_id', $currencyId);
         $request->attributes->set('_shop', $shop);
 
-        //set shop locale
-        $request->setLocale($shop['locale']);
+        $currencyUuid = $this->getCurrencyUuid($request, $shop->getCurrencyUuid());
 
-        $stripBaseUrl = $this->rewriteBaseUrl($shop['base_url'], $shop['base_path']);
+        $request->attributes->set('_shop_uuid', $shop->getUuid());
+        $request->attributes->set('_currency_uuid', $currencyUuid);
+
+        //set shop locale
+        $request->setLocale($shop->getLocale()->getLocale());
+
+        $stripBaseUrl = $this->rewriteBaseUrl($shop->getBaseUrl(), $shop->getBasePath());
 
         // strip base url from path info
         $pathinfo = $request->getBaseUrl() . $request->getPathInfo();
         $pathinfo = preg_replace('#^' . $stripBaseUrl . '#i', '', $pathinfo);
         $pathinfo = '/' . trim($pathinfo, '/');
 
+        $translationContext = TranslationContext::createFromShop($shop);
+
         //resolve seo urls to use symfony url matcher for route detection
-        $seoUrl = $this->urlResolver->getPathInfo($shop['id'], $pathinfo);
+        $seoUrl = $this->urlResolver->getPathInfo($shop->getUuid(), $pathinfo, $translationContext);
 
         if (!$seoUrl) {
             return $this->match($pathinfo);
         }
 
         $pathinfo = $seoUrl->getPathInfo();
-        if (!$seoUrl->isCanonical()) {
-            $redirectUrl = $this->urlResolver->getUrl($shop['id'], $seoUrl->getPathInfo());
-
+        if (!$seoUrl->getIsCanonical()) {
+            $redirectUrl = $this->urlResolver->getUrl($shop->getUuid(), $seoUrl->getPathInfo(), $translationContext);
             $request->attributes->set(self::SEO_REDIRECT_URL, $redirectUrl->getSeoPathInfo());
         }
 
         return $this->match($pathinfo);
+    }
+
+    public function assemble(string $url): string
+    {
+        $generator = new UrlGenerator(
+            $this->getRouteCollection(),
+            $this->getContext(),
+            $this->logger
+        );
+
+        $base = $generator->generate('homepage', [], UrlGenerator::ABSOLUTE_URL);
+
+        return rtrim($base, '/') . '/' . ltrim($url, '/');
+    }
+
+    protected function getCurrencyUuid(Request $request, string $currencyUuid): string
+    {
+        if ($this->context->getMethod() === 'POST' && $request->get('__currency')) {
+            return (string) $request->get('__currency');
+        }
+
+        if ($request->cookies->has('currency')) {
+            return (string) $request->cookies->get('currency');
+        }
+
+        if ($request->attributes->has('_currency_uuid')) {
+            return (string) $request->attributes->get('_currency_uuid');
+        }
+
+        if ($request->attributes->has(ShopSubscriber::SHOP_CONTEXT_PROPERTY)) {
+            /** @var ShopContext $context */
+            $context = $request->attributes->get(ShopSubscriber::SHOP_CONTEXT_PROPERTY);
+
+            return $context->getCurrency()->getUuid();
+        }
+
+        return $currencyUuid;
     }
 
     private function loadRoutes(): RouteCollection
@@ -241,47 +295,11 @@ class Router implements RouterInterface, RequestMatcherInterface
     {
         //generate new path info for detected shop
         $stripBaseUrl = $baseUrl ?? $basePath;
-        $stripBaseUrl = rtrim($stripBaseUrl, '/').'/';
+        $stripBaseUrl = rtrim($stripBaseUrl, '/') . '/';
 
         //rewrite base url for url generator
         $this->context->setBaseUrl(rtrim($stripBaseUrl, '/'));
 
         return $stripBaseUrl;
-    }
-
-    public function assemble(string $url): string
-    {
-        $generator = new UrlGenerator(
-            $this->getRouteCollection(),
-            $this->getContext(),
-            $this->logger
-        );
-
-        $base = $generator->generate('homepage', [], UrlGenerator::ABSOLUTE_URL);
-
-        return rtrim($base, '/') . '/' . ltrim($url, '/');
-    }
-
-    protected function getCurrencyId(Request $request, int $shopCurrencyId): int
-    {
-        if ($this->context->getMethod() === 'POST' && $request->get('__currency')) {
-            return (int)$request->get('__currency');
-        }
-
-        if ($request->cookies->has('currency')) {
-            return (int)$request->cookies->has('currency');
-        }
-
-        if ($request->attributes->has('_currency')) {
-            return (int) $request->attributes->get('_currency');
-        }
-
-        if ($request->attributes->has(ShopSubscriber::SHOP_CONTEXT_PROPERTY)) {
-            /** @var ShopContext $context */
-            $context = $request->attributes->get(ShopSubscriber::SHOP_CONTEXT_PROPERTY);
-            return $context->getCurrency()->getId();
-        }
-
-        return $shopCurrencyId;
     }
 }
