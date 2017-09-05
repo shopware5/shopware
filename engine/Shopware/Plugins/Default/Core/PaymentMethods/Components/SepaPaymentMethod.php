@@ -89,6 +89,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'bankname' => $request->getParam('sSepaBankName'),
             'iban' => preg_replace('/\s+|\./', '', $request->getParam('sSepaIban')),
             'bic' => $request->getParam('sSepaBic'),
+            'account_holder' => $request->getParam('sSepaAccountHolder'),
         ];
 
         $data = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Save_Payment_Data', $data, [
@@ -126,6 +127,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
                 'sSepaBankName' => $paymentData['bankName'],
                 'sSepaIban' => $paymentData['iban'],
                 'sSepaBic' => $paymentData['bic'],
+                'sSepaAccountHolder' => $paymentData['accountHolder'],
             ];
 
             $arrayData = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Current_Payment_Data_Array', $arrayData, [
@@ -169,7 +171,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'city' => $paymentData['sSepaUseBillingData'] ? $addressData->getCity() : null,
 
             'bank_name' => $paymentData['sSepaBankName'],
-            'account_holder' => $paymentData['sSepaUseBillingData'] ? ($addressData->getFirstname() . ' ' . $addressData->getLastname()) : null,
+            'account_holder' => !empty($paymentData['sSepaAccountHolder']) ? $paymentData['sSepaAccountHolder'] : ($paymentData['sSepaUseBillingData'] ? ($addressData->getFirstname() . ' ' . $addressData->getLastname()) : null),
             'bic' => $paymentData['sSepaBic'],
             'iban' => $paymentData['sSepaIban'],
 
