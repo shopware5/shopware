@@ -6,7 +6,7 @@
             <input name="sSepaAccountHolder"
                    type="text"
                    id="accountHolder"
-                   placeholder="{s name='PaymentDebitPlaceholderName'}{/s}"
+                   placeholder="{s name='PaymentSepaPlaceholderName'}{/s}"
                    value="{$form_data.sSepaAccountHolder|escape}"
                    class="{if $error_flags.sSepaAccountHolder} has--error{/if}" />
         </p>
