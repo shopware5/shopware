@@ -105,8 +105,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
         if (form.getForm().isValid() && paymentData) {
             switch (paymentMean.get('name')) {
                 case 'sepa':
-                    values['paymentData[accountHolder]'] = "";
-                    values['paymentData[accountHolder]'] = "";
+                    values['paymentData[accountNumber]'] = "";
                     values['paymentData[bankCode]'] = "";
                     break;
                 case 'debit':
