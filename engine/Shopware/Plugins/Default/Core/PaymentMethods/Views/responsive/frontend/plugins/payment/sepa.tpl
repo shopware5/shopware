@@ -3,6 +3,14 @@
 <div class="debit">
     {block name="frontend_checkout_shipping_payment_core_payment_fields_sepa"}
         <p class="none">
+            <input name="sSepaAccountHolder"
+                   type="text"
+                   id="accountHolder"
+                   placeholder="{s name='PaymentDebitPlaceholderName'}{/s}"
+                   value="{$form_data.sSepaAccountHolder|escape}"
+                   class="{if $error_flags.sSepaAccountHolder} has--error{/if}" />
+        </p>
+        <p class="none">
             <input name="sSepaIban"
                    type="text"
                    id="iban"
