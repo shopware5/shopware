@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added smarty block `backend/base/store/corner_position` for corner position configuration store
 * Added functionality to open the drop down menus of the main menu in the backend by using either mouse hover or mouse click (configurable in basic settings)
 * Updated mPDF to version 6.1.4
+* Added variables `image_small`, `image_large`, `image_original`, `link_rating_tab` to product rating reminder email
 
 ## 5.3.2
 
