@@ -4031,7 +4031,7 @@ INSERT INTO `s_core_states` (`id`, `description`, `position`, `group`, `mail`) V
 (30, 'Es wurde kein Kredit genehmigt.', 30, 'payment', 1),
 (31, 'Der Kredit wurde vorlaeufig akzeptiert.', 31, 'payment', 1),
 (32, 'Der Kredit wurde genehmigt.', 32, 'payment', 1),
-(33, 'Die Zahlung wurde angewiesen.', 33, 'payment', 1),
+(33, 'Die Zahlung wurde von der Hanseatic Bank angewiesen.', 33, 'payment', 1),
 (34, 'Es wurde eine Zeitverlaengerung eingetragen.', 34, 'payment', 1),
 (35, 'Vorgang wurde abgebrochen.', 35, 'payment', 1);
 
