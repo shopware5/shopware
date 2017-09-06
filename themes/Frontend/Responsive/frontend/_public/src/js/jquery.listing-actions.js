@@ -657,7 +657,7 @@
          * It removes the clicked filter param form the set of active filters
          * and updates the specific component.
          *
-         * @param event
+         * @param {Event} event
          */
         onActiveFilterClick: function (event) {
             var me = this,
@@ -666,9 +666,25 @@
                 isMobile = StateManager.isCurrentState(['xs', 's']);
 
             if (param === 'reset') {
+                // Reset all facets
                 $.each(me.activeFilterElements, function (key) {
                     me.removeActiveFilter(key);
                     me.resetFilterProperty(key);
+                });
+
+                // Reset all options inside the facets
+                $.each(me.$filterComponents, function (i, component) {
+                    var $component = $(component),
+                        componentPlugin = $component.data('plugin_swFilterComponent');
+
+                    $.each(componentPlugin.$inputs, function(i, item) {
+                        componentPlugin.disable($(item), false);
+                        componentPlugin.disableComponent(false);
+                    });
+
+                    $component
+                        .find('.' + me.opts.disabledCls)
+                        .removeClass(me.opts.disabledCls);
                 });
 
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
@@ -1015,7 +1031,7 @@
         /**
          * Enables the loading animation in the listing
          *
-         * @param {object} loadingIndicator
+         * @param {Object} loadingIndicator
          * @param {boolean} loadProducts
          * @param {function} callback
          */
@@ -1048,9 +1064,10 @@
 
         /**
          * Disables the loading animation for the listing
-         * @param {object} loadingIndicator
+         *
+         * @param {Object} loadingIndicator
          * @param {boolean} loadProducts
-         * @param {object} response
+         * @param {Object} response
          * @param {function} callback
          */
         disableLoading: function (loadingIndicator, loadProducts, response, callback) {
@@ -1069,6 +1086,7 @@
         },
 
         /**
+         * Builds the URL by taking the basic path and adding parameters to it.
          *
          * @param {string} formParams
          * @param {boolean} loadProducts
@@ -1084,11 +1102,12 @@
             if (loadFacets) {
                 url += '&loadFacets=1';
             }
+
             return url;
         },
 
         /**
-         * updates the listing with new products
+         * Updates the listing with new products
          *
          * @param {Object} response
          */
@@ -1129,7 +1148,7 @@
         },
 
         /**
-         * updates the off canvas filter close button with the amount of products
+         * Updates the off canvas filter close button with the amount of products
          *
          * @param {int} totalCount
          */
@@ -1304,7 +1323,7 @@
          * Updates the layout of an existing filter label element.
          *
          * @param param
-         * @param label
+         * @param {string} label
          */
         updateActiveFilterElement: function (param, label) {
             this.activeFilterElements[param].html(this.getLabelIcon() + label);
@@ -1400,7 +1419,7 @@
         /**
          * Creates the label content for the special rating component.
          *
-         * @param stars | Integer
+         * @param {int} stars
          * @returns {string}
          */
         createStarLabel: function (stars) {
