@@ -552,6 +552,15 @@ $app->map('/database-import/importDatabase', function () use ($app, $container) 
     // how many queries should be executed per http request?
     $batchSize = 100;
 
+    /** @var Shopware\Recovery\Install\Service\DatabaseService $databaseService */
+    $databaseService = $container->offsetGet('database.service');
+
+    //For end users, we hide the error if we can not create the database or alter it.
+    try {
+        $databaseService->createDatabase($_SESSION['parameters']['c_database_schema']);
+    } catch (\Exception $e) {
+    }
+
     $preSql = <<<'EOD'
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -698,7 +707,10 @@ $app->post('/check-database-connection', function () use ($container, $app) {
 
     /** @var $databaseService DatabaseService */
     $databaseService = $container->offsetGet('database.service');
-    $databaseNames = $databaseService->getAvailableDatabaseNames();
+
+    //No need for listing the following schemas
+    $omitSchemas = ['information_schema', 'performance_schema', 'sys', 'mysql'];
+    $databaseNames = $databaseService->getSchemas($omitSchemas);
 
     $result = [];
     foreach ($databaseNames as $databaseName) {
