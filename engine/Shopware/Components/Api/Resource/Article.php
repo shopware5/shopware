@@ -496,7 +496,7 @@ class Article extends Resource implements BatchInterface
      * Short method to completely generate all images from an article, main images and variant images
      *
      * @param ArticleModel $article
-     * @param bool         $force   Force all images to regene
+     * @param bool         $force   Force all images to be regenerated
      *
      * @see \Shopware\Components\Api\Resource\Article::generateMainThumbnails()
      * @see \Shopware\Components\Api\Resource\Article::generateVariantImages()
@@ -511,7 +511,7 @@ class Article extends Resource implements BatchInterface
      * Generate the main thumbnails of an article
      *
      * @param ArticleModel $article
-     * @param bool         $force   force to regenerate main thumbnails
+     * @param bool         $force   Force to regenerate main thumbnails
      */
     public function generateMainThumbnails(ArticleModel $article, $force = false)
     {
@@ -727,7 +727,7 @@ class Article extends Resource implements BatchInterface
      * configurator groups of the set.
      * The groups are sorted by the position value.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return mixed
      */
@@ -749,7 +749,7 @@ class Article extends Resource implements BatchInterface
      * Selects all images of the main variant of the passed article id.
      * The images are sorted by their position value.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -770,7 +770,7 @@ class Article extends Resource implements BatchInterface
     /**
      * Selects all configured download files for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -790,7 +790,7 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all configured links
      * for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -812,7 +812,7 @@ class Article extends Resource implements BatchInterface
      * This function returns only the directly assigned categories.
      * To prevent a big data, this function selects only the category name and id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -832,7 +832,7 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all similar articles
      * of the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return mixed
      */
@@ -854,7 +854,7 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all accessory articles
      * of the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return mixed
      */
@@ -876,7 +876,7 @@ class Article extends Resource implements BatchInterface
      * Returns the configured article seo categories.
      * This categories are used for the seo url generation.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -898,7 +898,7 @@ class Article extends Resource implements BatchInterface
      * Additionally the function selects the variant prices
      * and configurator options for each variant.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -915,7 +915,7 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to remove article details for a given article
      *
-     * @param $article \Shopware\Models\Article\Article
+     * @param \Shopware\Models\Article\Article $article
      */
     protected function removeArticleDetails($article)
     {
