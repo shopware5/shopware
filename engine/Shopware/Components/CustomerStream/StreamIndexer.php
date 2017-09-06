@@ -110,7 +110,7 @@ class StreamIndexer implements StreamIndexerInterface
         $result = $this->numberSearch->search($criteria);
 
         $insert = $this->connection->prepare(
-            'INSERT INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)'
+            'INSERT IGNORE INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)'
         );
 
         foreach ($result->getIds() as $customerId) {

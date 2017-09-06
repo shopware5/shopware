@@ -184,7 +184,7 @@ class Address extends Resource
 
         $this->setupContext($address->getCustomer()->getShop()->getId());
 
-        $params = $this->prepareAddressData($params, true);
+        $params = $this->prepareAddressData($params, $address->getCustomer()->getId(), true);
         $address->fromArray($params);
 
         $this->addressService->update($address);
@@ -249,15 +249,38 @@ class Address extends Resource
     }
 
     /**
-     * Resolves id's to models
+     * Resolves ids to models
      *
-     * @param array $data
-     * @param bool  $filter
+     * @param array    $data
+     * @param null|int $customerId
+     * @param bool     $filter
+     *
+     * @throws ApiException\NotFoundException         if the given customer id in the data array is invalid
+     * @throws ApiException\CustomValidationException when attempting to change a customer id on an address
      *
      * @return array
      */
-    private function prepareAddressData(array $data, $filter = false)
+    private function prepareAddressData(array $data, $customerId = null, $filter = false)
     {
+        /*
+         * Check if the API user tries to set an address to a *different* customer
+         * if the customer is the same as the owner of the address, then no exception will be thrown
+         * if it is different, depending on the case, an \InvalidArgumentException or a \LogicException will be thrown
+         */
+        if (isset($data['customer'])) {
+            $data['customer'] = (int) $data['customer'];
+
+            if ($data['customer'] <= 0) {
+                throw new ApiException\NotFoundException('Invalid customer id');
+            }
+
+            if ($customerId !== null && $data['customer'] !== $customerId) {
+                throw new ApiException\CustomValidationException('Changing a customer id on addresses is not supported');
+            }
+
+            unset($data['customer']);
+        }
+
         $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(Country::class, (int) $data['country']) : null;
         $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(State::class, $data['state']) : null;
 

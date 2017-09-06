@@ -332,7 +332,7 @@ class PluginLicenceService
         $information = [
             'label' => $data['label'],
             'name' => $data['module'],
-            'licenseExpiration' => $data['expiration'],
+            'licenseExpiration' => (new \DateTime($data['expiration']))->format('Y-m-d'),
         ];
 
         return new PluginInformationStruct($information);

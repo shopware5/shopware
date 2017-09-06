@@ -493,36 +493,64 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * This function generates all variant image entities
-     * for the passed article id.
-     * The function expects that the variants and the mapping of the article images
-     * already exists.
+     * Short method to completely generate all images from an article, main images and variant images
      *
-     * @param $id
+     * @param ArticleModel $article
+     * @param bool         $force   Force all images to be regenerated
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @see \Shopware\Components\Api\Resource\Article::generateMainThumbnails()
+     * @see \Shopware\Components\Api\Resource\Article::generateVariantImages()
      */
-    public function generateVariantImages($id)
+    public function generateImages(ArticleModel $article, $force = false)
     {
-        if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+        $this->generateMainThumbnails($article, $force);
+        $this->generateVariantImages($article, $force);
+    }
+
+    /**
+     * Generate the main thumbnails of an article
+     *
+     * @param ArticleModel $article
+     * @param bool         $force   Force to regenerate main thumbnails
+     */
+    public function generateMainThumbnails(ArticleModel $article, $force = false)
+    {
+        /** @var $generator \Shopware\Components\Thumbnail\Manager */
+        $generator = $this->getContainer()->get('thumbnail_manager');
+
+        /** @var $mediaService \Shopware\Bundle\MediaBundle\MediaService */
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        /** @var $image Image */
+        foreach ($article->getImages() as $image) {
+            $media = $image->getMedia();
+
+            if (!$force && $mediaService->has(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath())) {
+                continue;
+            }
+
+            foreach ($media->getThumbnailFilePaths() as $size => $path) {
+                $generator->createMediaThumbnail($media, [$size], true);
+            }
         }
+    }
 
-        /** @var $article \Shopware\Models\Article\Article */
-        $article = $this->getRepository()->find($id);
-
-        if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
-        }
-
-        $builder = $this->getArticleImageMappingsQuery($id);
+    /**
+     * This method generates all variant image entities for a given article model instance.
+     * The method expects that the variants and the mapping of the article images already exist.
+     *
+     * @param ArticleModel $article
+     * @param bool         $force   Force variant image regeneration
+     */
+    public function generateVariantImages(ArticleModel $article, $force = false)
+    {
+        $builder = $this->getArticleImageMappingsQuery($article->getId());
 
         $mappings = $builder->getQuery()->getResult();
 
         /** @var $mapping Image\Mapping */
         foreach ($mappings as $mapping) {
-            $builder = $this->getArticleVariantQuery($id);
+            $builder = $this->getArticleVariantQuery($article->getId());
 
             /** @var $rule Image\Rule */
             foreach ($mapping->getRules() as $rule) {
@@ -541,7 +569,8 @@ class Article extends Resource implements BatchInterface
                     'parent',
                     $mapping->getImage()
                 );
-                if ($exist) {
+
+                if (!$force && $exist) {
                     continue;
                 }
 
@@ -698,7 +727,7 @@ class Article extends Resource implements BatchInterface
      * configurator groups of the set.
      * The groups are sorted by the position value.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return mixed
      */
@@ -720,7 +749,7 @@ class Article extends Resource implements BatchInterface
      * Selects all images of the main variant of the passed article id.
      * The images are sorted by their position value.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -741,7 +770,7 @@ class Article extends Resource implements BatchInterface
     /**
      * Selects all configured download files for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -761,7 +790,7 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all configured links
      * for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -783,7 +812,7 @@ class Article extends Resource implements BatchInterface
      * This function returns only the directly assigned categories.
      * To prevent a big data, this function selects only the category name and id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -803,7 +832,7 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all similar articles
      * of the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return mixed
      */
@@ -825,7 +854,7 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all accessory articles
      * of the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return mixed
      */
@@ -847,7 +876,7 @@ class Article extends Resource implements BatchInterface
      * Returns the configured article seo categories.
      * This categories are used for the seo url generation.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -869,7 +898,7 @@ class Article extends Resource implements BatchInterface
      * Additionally the function selects the variant prices
      * and configurator options for each variant.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -886,7 +915,7 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to remove article details for a given article
      *
-     * @param $article \Shopware\Models\Article\Article
+     * @param \Shopware\Models\Article\Article $article
      */
     protected function removeArticleDetails($article)
     {

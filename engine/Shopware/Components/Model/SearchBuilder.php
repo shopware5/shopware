@@ -49,6 +49,11 @@ class SearchBuilder
     public function addSearchTerm($query, $term, array $fields)
     {
         $terms = $this->termHelper->splitTerm($term);
+
+        if (empty($terms)) {
+            return;
+        }
+
         $conditions = [];
         $select = [];
 

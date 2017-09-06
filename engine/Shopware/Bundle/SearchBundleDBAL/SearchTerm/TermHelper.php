@@ -37,11 +37,18 @@ class TermHelper implements TermHelperInterface
     private $config;
 
     /**
-     * @param $config
+     * @var bool
      */
-    public function __construct($config)
+    private $useBadWords;
+
+    /**
+     * @param $config
+     * @param bool $useBadWords
+     */
+    public function __construct($config, $useBadWords = true)
     {
         $this->config = $config;
+        $this->useBadWords = $useBadWords;
     }
 
     /**
@@ -75,8 +82,10 @@ class TermHelper implements TermHelperInterface
             return [];
         }
 
-        // Check if any keyword is on blacklist
-        $words = $this->filterBadWordsFromString($words);
+        if ($this->useBadWords) {
+            // Check if any keyword is on blacklist
+            $words = $this->filterBadWordsFromString($words);
+        }
 
         return $words;
     }

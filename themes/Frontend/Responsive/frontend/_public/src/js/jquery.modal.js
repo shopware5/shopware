@@ -370,7 +370,7 @@
         },
 
         /**
-         * Sets the title of the modal box.
+         * Sets the transition of the modal box.
          *
          * @public
          * @method setTransition
@@ -780,7 +780,7 @@
         },
 
         /**
-         * This method closes the modal box when its opened, destroys
+         * This method closes the modal box when it is opened, destroys
          * the plugin and removes all registered events
          *
          * @public
