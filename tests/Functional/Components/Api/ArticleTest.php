@@ -2229,7 +2229,7 @@ class ArticleTest extends TestCase
             }
         }
 
-        $this->resource->generateVariantImages($article->getId());
+        $this->resource->generateVariantImages($article);
 
         $article = $this->resource->getOne($article->getId());
 
