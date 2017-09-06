@@ -40,55 +40,60 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      * Define that the shipping field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend: 'Ext.form.FieldSet',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-shipping-field-set',
+    alias: 'widget.order-shipping-field-set',
+
     /**
      * Set css class for this component
      * @string
      */
     cls: Ext.baseCSSPrefix + 'shipping-field-set',
+
     /**
      * Enable field set collapse
      * @boolean
      */
-    collapsible:true,
+    collapsible: true,
+
     /**
      * Marks that the field set is collapsed at the start.
      * @boolean
      */
-    collapsed:false,
+    collapsed: false,
 
     /**
      * Layout of the component.
      * @string
      */
     layout: 'column',
+
     /**
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name=shipping/title}Alternative shipping address{/s}',
-        titleField:'{s name=address/title_field}Title{/s}',
-        firstName:'{s name=address/first_name}First name{/s}',
-        lastName:'{s name=address/last_name}Last name{/s}',
-        street:'{s name=address/street}street{/s}',
-        zipCode:'{s name=address/zip_code}Zip code{/s}',
-        city:'{s name=address/city}City{/s}',
-        additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
-        additionalAddressLine2:'{s name=address/additionalAddressLine2}Additional address line 2{/s}',
-        salutation:{
-            label:'{s name=address/salutation}Salutation{/s}',
+    snippets: {
+        title: '{s name=shipping/title}Alternative shipping address{/s}',
+        titleField: '{s name=address/title_field}Title{/s}',
+        firstName: '{s name=address/first_name}First name{/s}',
+        lastName: '{s name=address/last_name}Last name{/s}',
+        street: '{s name=address/street}street{/s}',
+        zipCode: '{s name=address/zip_code}Zip code{/s}',
+        city: '{s name=address/city}City{/s}',
+        additionalAddressLine1: '{s name=address/additionalAddressLine1}Additional address line 1{/s}',
+        additionalAddressLine2: '{s name=address/additionalAddressLine2}Additional address line 2{/s}',
+        salutation: {
+            label: '{s name=address/salutation}Salutation{/s}'
         },
-        country:'{s name=address/country}Country{/s}',
-        phone:'{s name=address/phone}Phone{/s}',
-        state:'{s name=address/state}State{/s}',
-        company:'{s name=address/company}Company{/s}',
-        department:'{s name=address/department}Department{/s}',
+        country: '{s name=address/country}Country{/s}',
+        phone: '{s name=address/phone}Phone{/s}',
+        state: '{s name=address/state}State{/s}',
+        company: '{s name=address/company}Company{/s}',
+        department: '{s name=address/department}Department{/s}',
         copyBilling: '{s name=shipping/copy_billing}For usability purposes, click here to use the billing address as shipping address.{/s}',
         copyButton: '{s name=shipping/copy_button}Copy data{/s}'
     },
@@ -103,18 +108,17 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.title = me.snippets.title;
         me.items = me.createElements();
         me.addEvents(
-                /**
-                 * Fired when the user changes his country. Used to fill the state box
-                 * @param field
-                 * @param newValue
-                 */
-                'countryChanged'
-
+            /**
+             * Fired when the user changes his country. Used to fill the state box
+             * @param field
+             * @param newValue
+             */
+            'countryChanged'
         );
         me.callParent(arguments);
     },
@@ -123,43 +127,43 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      * Creates the three containers for the field set
      * to display the form fields in two columns.
      *
-     * @return [Array] Contains the left and right container
+     * @return { Array } Contains the left and right container
      */
-    createElements:function () {
+    createElements: function () {
         var leftContainer, rightContainer, me = this;
 
         leftContainer = Ext.create('Ext.container.Container', {
-            columnWidth:.5,
-            border:false,
-            layout:'anchor',
-            defaults:{
-                anchor:'95%',
+            columnWidth: .5,
+            border: false,
+            layout: 'anchor',
+            defaults: {
+                anchor: '95%',
                 labelWidth: 155,
-                minWidth:250,
+                minWidth: 250,
                 labelStyle: 'font-weight: 700;',
                 style: {
                     margin: '0 0 10px'
                 },
-                xtype:'textfield'
+                xtype: 'textfield'
             },
-            items:me.createLeftElements()
+            items: me.createLeftElements()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
-            columnWidth:.5,
-            border:false,
-            layout:'anchor',
-            defaults:{
-                anchor:'95%',
+            columnWidth: .5,
+            border: false,
+            layout: 'anchor',
+            defaults: {
+                anchor: '95%',
                 labelWidth: 155,
-                minWidth:250,
+                minWidth: 250,
                 labelStyle: 'font-weight: 700;',
                 style: {
                     margin: '0 0 10px'
                 },
-                xtype:'textfield'
+                xtype: 'textfield'
             },
-            items:me.createRightElements()
+            items: me.createRightElements()
         });
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
@@ -175,112 +179,111 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
 
         me.attributeForm.loadAttribute(id);
 
-        return [ leftContainer, rightContainer, me.attributeForm ];
+        return [leftContainer, rightContainer, me.attributeForm];
     },
 
 
     /**
      * Creates the left container of the shipping field set.
      *
-     * @return [Array] Contains the different form fields of the left container
+     * @return { Array } Contains the different form fields of the left container
      */
-    createLeftElements:function () {
+    createLeftElements: function () {
         var me = this;
 
-
         return [{
-            xtype:'combobox',
+            xtype: 'combobox',
             queryMode: 'local',
-            triggerAction:'all',
-            name:'shipping[salutation]',
-            fieldLabel:me.snippets.salutation.label,
-            mode:'local',
-            editable:false,
+            triggerAction: 'all',
+            name: 'shipping[salutation]',
+            fieldLabel: me.snippets.salutation.label,
+            mode: 'local',
+            editable: false,
             valueField: 'key',
             displayField: 'label',
             store: Ext.create('Shopware.apps.Base.store.Salutation').load()
         }, {
-            name:'shipping[title]',
-            fieldLabel:me.snippets.titleField,
+            name: 'shipping[title]',
+            fieldLabel: me.snippets.titleField,
             allowBlank: true
-        },{
-            name:'shipping[firstName]',
-            fieldLabel:me.snippets.firstName
         }, {
-            name:'shipping[lastName]',
-            fieldLabel:me.snippets.lastName
+            name: 'shipping[firstName]',
+            fieldLabel: me.snippets.firstName
         }, {
-            name:'shipping[company]',
-            fieldLabel:me.snippets.company
+            name: 'shipping[lastName]',
+            fieldLabel: me.snippets.lastName
         }, {
-            name:'shipping[department]',
-            fieldLabel:me.snippets.department
+            name: 'shipping[company]',
+            fieldLabel: me.snippets.company
         }, {
-            name:'shipping[phone]',
-            fieldLabel:me.snippets.phone
+            name: 'shipping[department]',
+            fieldLabel: me.snippets.department
+        }, {
+            name: 'shipping[phone]',
+            fieldLabel: me.snippets.phone
         }];
     },
 
     /**
      * Creates the right container of the shipping field set.
      *
-     * @return [Array] Contains the different form fields for the right container
+     * @return { Array } Contains the different form fields for the right container
      */
-    createRightElements:function () {
+    createRightElements: function () {
         var me = this;
 
         me.countryStateCombo = Ext.create('Ext.form.field.ComboBox', {
-            name:'shipping[stateId]',
+            name: 'shipping[stateId]',
             action: 'shippingStateId',
-            fieldLabel:me.snippets.state,
+            fieldLabel: me.snippets.state,
             valueField: 'id',
             displayField: 'name',
             forceSelection: true,
-            labelWidth:155,
+            labelWidth: 155,
             store: Ext.create('Shopware.store.CountryState'),
             minWidth: 250,
             editable: false,
             hidden: true,
-            triggerAction:'all',
+            triggerAction: 'all',
             queryMode: 'local'
         });
 
         me.countryCombo = Ext.create('Ext.form.field.ComboBox', {
-            triggerAction:'all',
-            name:'shipping[countryId]',
-            fieldLabel:me.snippets.country,
-            valueField:'id',
+            triggerAction: 'all',
+            name: 'shipping[countryId]',
+            fieldLabel: me.snippets.country,
+            valueField: 'id',
             queryMode: 'local',
-            displayField:'name',
+            displayField: 'name',
             forceSelection: true,
-            store:me.countriesStore,
-            labelWidth:155,
-            minWidth:250,
-            required:true,
-            editable:false,
-            allowBlank:false,
+            store: me.countriesStore,
+            labelWidth: 155,
+            minWidth: 250,
+            required: true,
+            editable: false,
+            allowBlank: false,
             listeners: {
-                change: function(field, newValue, oldValue, record) {
+                change: function (field, newValue, oldValue, record) {
                     me.fireEvent('countryChanged', field, newValue, me.countryStateCombo, me.record.getShipping().first());
                 }
             }
         });
 
         return [{
-            name:'shipping[street]',
-            fieldLabel:me.snippets.street
+            name: 'shipping[street]',
+            fieldLabel: me.snippets.street
         }, {
-            name:'shipping[additionalAddressLine1]',
-            fieldLabel:me.snippets.additionalAddressLine1
+            name: 'shipping[additionalAddressLine1]',
+            fieldLabel: me.snippets.additionalAddressLine1
         }, {
-            name:'shipping[additionalAddressLine2]',
-            fieldLabel:me.snippets.additionalAddressLine2
+            name: 'shipping[additionalAddressLine2]',
+            fieldLabel: me.snippets.additionalAddressLine2
         }, {
-            name:'shipping[zipCode]',
-            fieldLabel:me.snippets.zipCode
+            name: 'shipping[zipCode]',
+            fieldLabel: me.snippets.zipCode
         }, {
-            name:'shipping[city]',
-            fieldLabel:me.snippets.city
+            name: 'shipping[city]',
+            fieldLabel: me.snippets.city
         }, me.countryStateCombo, me.countryCombo];
     }
 });

@@ -219,7 +219,8 @@ class Shipping extends ModelEntity
 
     /**
      * Contains the phone number of the shipping address
-     * @var string $phone
+     *
+     * @var string
      * @ORM\Column(name="phone", type="string", length=40)
      */
     private $phone = '';
@@ -438,11 +439,13 @@ class Shipping extends ModelEntity
      * Setter function for the phone column property.
      *
      * @param string $phone
+     *
      * @return Shipping
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
+
         return $this;
     }
 
