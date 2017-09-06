@@ -190,6 +190,12 @@ class Plugin extends ModelEntity
     private $capabilitySecureUninstall = false;
 
     /**
+     * @var string
+     * @ORM\Column(name="translations", type="text")
+     */
+    private $translations;
+
+    /**
      * INVERSE SIDE
      *
      * @var \Shopware\Models\Config\Form[]|ArrayCollection
@@ -245,6 +251,12 @@ class Plugin extends ModelEntity
      * @ORM\OrderBy({"type" = "ASC"})
      */
     private $licenses;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="in_safe_mode", type="boolean")
+     */
+    private $inSafeMode = false;
 
     /**
      * Class constructor.
@@ -590,7 +602,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return
+     * @return ArrayCollection
      */
     public function getLicenses()
     {
@@ -598,7 +610,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param  $licenses
+     * @param $licenses
      */
     public function setLicenses($licenses)
     {
@@ -707,5 +719,37 @@ class Plugin extends ModelEntity
     public function isLegacyPlugin()
     {
         return $this->namespace !== 'ShopwarePlugins';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param string $translations
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInSafeMode()
+    {
+        return $this->inSafeMode;
+    }
+
+    /**
+     * @param bool $inSafeMode
+     */
+    public function setInSafeMode($inSafeMode)
+    {
+        $this->inSafeMode = $inSafeMode;
     }
 }

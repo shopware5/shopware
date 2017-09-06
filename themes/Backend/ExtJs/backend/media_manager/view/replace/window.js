@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
     minimizable: false,
     resizable: false,
     modal: true,
-    width: 610,
+    width: 615,
     maxHeight: 500,
     baseHeight: 210,
     rowHeight: 136,
@@ -211,19 +211,37 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
      */
     startUpload: function() {
         var me = this,
+            mediaManager = me.mediaManager,
+            selectedRecord = mediaManager.dataView.getSelectionModel().getSelection()[0],
             length = me.replaceGrid.rows.length,
             rows = me.replaceGrid.rows,
             row;
+
+        if (mediaManager.selectedLayout === 'table') {
+            selectedRecord = mediaManager.down('mediamanager-media-grid').getSelectionModel().getSelection()[0];
+        }
 
         me.setLoading(true);
 
         if (me.rowIndex >= length) {
             Shopware.Notification.createGrowlMessage(
                 '',
-                '{s name="mediaManager/replaceWindiw/window/saved"}{/s}'
+                '{s name="mediaManager/replaceWindow/window/saved"}{/s}'
             );
-            me.mediaManager.mediaStore.reload();
-            me.mediaManager.down('mediamanager-media-grid').reconfigure(me.mediaManager.mediaStore);
+            mediaManager.mediaStore.load({
+                callback: function() {
+                    if (!selectedRecord) {
+                        return;
+                    }
+
+                    var record = mediaManager.mediaStore.getById(selectedRecord.get('id'));
+                    if (record) {
+                        mediaManager.infoView.update(record.getData());
+                    }
+                }
+            });
+
+
             me.close();
             return;
         }

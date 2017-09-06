@@ -32,12 +32,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SearchTermCondition implements ConditionInterface
+class SearchTermCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var string
      */
-    private $term;
+    protected $term;
 
     /**
      * @param string $term
@@ -62,5 +62,13 @@ class SearchTermCondition implements ConditionInterface
     public function getTerm()
     {
         return $this->term;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

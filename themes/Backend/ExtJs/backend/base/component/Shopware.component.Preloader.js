@@ -69,7 +69,6 @@ Ext.define('Shopware.component.Preloader', {
         /*{/if}*/
 
         'Shopware.apps.ProductStream': false
-
     }, {
         'Shopware.apps.Emotion': false,
         'Shopware.apps.MediaManager': false

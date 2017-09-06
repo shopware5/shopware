@@ -66,8 +66,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function getListAction()
     {
         try {
-            $limit = intval($this->Request()->limit);
-            $offset = intval($this->Request()->start);
+            $limit = (int) $this->Request()->limit;
+            $offset = (int) $this->Request()->start;
 
             //order data
             $order = (array) $this->Request()->getParam('sort', []);
@@ -91,9 +91,9 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function getStatisticListAction()
     {
         try {
-            $limit = intval($this->Request()->limit);
-            $offset = intval($this->Request()->start);
-            $partnerId = intval($this->Request()->partnerId);
+            $limit = (int) $this->Request()->limit;
+            $offset = (int) $this->Request()->start;
+            $partnerId = (int) $this->Request()->partnerId;
 
             //order data
             $order = (array) $this->Request()->getParam('sort', []);
@@ -148,7 +148,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      */
     public function getChartDataAction()
     {
-        $partnerId = intval($this->Request()->partnerId);
+        $partnerId = (int) $this->Request()->partnerId;
 
         $fromDate = $this->getFromDate();
         $toDate = $this->getToDate();
@@ -240,7 +240,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function validateTrackingCodeAction()
     {
         $trackingCode = $this->Request()->value;
-        $partnerId = intval($this->Request()->param);
+        $partnerId = (int) $this->Request()->param;
 
         /** @var $repository \Shopware\Models\Partner\Repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
@@ -255,7 +255,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function downloadStatisticAction()
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
-        $partnerId = intval($this->Request()->partnerId);
+        $partnerId = (int) $this->Request()->partnerId;
 
         /** @var $repository \Shopware\Models\Partner\Repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
@@ -274,8 +274,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         foreach ($resultArray as $value) {
             $date = $value['orderTime']->format('d-m-Y');
             $value['orderTime'] = $date;
-            $value['netTurnOver'] = number_format(floatval($value['netTurnOver']), 2, ',', '.');
-            $value['provision'] = number_format(floatval($value['provision']), 2, ',', '.');
+            $value['netTurnOver'] = number_format((float) $value['netTurnOver'], 2, ',', '.');
+            $value['provision'] = number_format((float) $value['provision'], 2, ',', '.');
             fputcsv($fp, $value, ';');
         }
         fclose($fp);

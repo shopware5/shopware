@@ -163,7 +163,7 @@ class Customer extends Resource
     {
         $this->checkPrivilege('read');
 
-        $builder = $this->getRepository()->createQueryBuilder('customer');
+        $builder = $this->getListQuery();
 
         $builder->addFilter($criteria);
         $builder->addOrderBy($orderBy);
@@ -406,6 +406,14 @@ class Customer extends Resource
         $data['paymentData'] = $paymentDataInstances;
 
         return $data;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function getListQuery()
+    {
+        return $this->getRepository()->createQueryBuilder('customer');
     }
 
     private function prepareCustomerData($params, CustomerModel $customer)

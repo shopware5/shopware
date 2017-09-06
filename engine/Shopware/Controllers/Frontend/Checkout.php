@@ -207,7 +207,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->saveTemporaryOrder();
 
-        if ($this->getMinimumCharge()) {
+        if ($this->getMinimumCharge() || count($this->View()->sBasket['content']) <= 0) {
             return $this->forward('cart');
         }
 
@@ -376,6 +376,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->saveDefaultAddresses();
         $this->resetTemporaryAddresses();
 
+        $this->session->offsetUnset('sComment');
+
         $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
         $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
@@ -394,7 +396,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
             Shopware()->Session()->unsetAll();
-            $this->get('shopware.csrftoken_validator')->invalidateToken($this->Response());
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
 
@@ -464,7 +465,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function addArticleAction()
     {
-        $ordernumber = $this->Request()->getParam('sAdd');
+        $ordernumber = trim($this->Request()->getParam('sAdd'));
         $quantity = $this->Request()->getParam('sQuantity');
         $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
 
@@ -993,16 +994,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $result = [];
 
         if (!empty($basket['sShippingcostsTax'])) {
-            $basket['sShippingcostsTax'] = number_format(floatval($basket['sShippingcostsTax']), 2);
+            $basket['sShippingcostsTax'] = number_format((float) $basket['sShippingcostsTax'], 2);
 
             $result[$basket['sShippingcostsTax']] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
             if (empty($result[$basket['sShippingcostsTax']])) {
                 unset($result[$basket['sShippingcostsTax']]);
-            }
-        } elseif ($basket['sShippingcostsWithTax']) {
-            $result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
-            if (empty($result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)])) {
-                unset($result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)]);
             }
         }
 
@@ -1513,7 +1509,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function setAddressAction()
     {
-        $this->View()->loadTemplate('');
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
         $target = $this->Request()->getParam('target', 'shipping');
         $sessionKey = $target == 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
 
@@ -1837,6 +1833,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $address['country'] = json_decode(json_encode($countryStruct), true);
         $address['state'] = json_decode(json_encode($stateStruct), true);
+        $address['attribute'] = $this->get('shopware_attribute.data_loader')->load($sourceTable . '_attributes', $address['id']);
 
         return $address;
     }
@@ -1883,7 +1880,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         /** @var BasketSignatureGeneratorInterface $generator */
         $generator = $this->get('basket_signature_generator');
         $basket = $this->session->offsetGet('sOrderVariables')->getArrayCopy();
-        $signature = $generator->generateSignature($basket, $this->session->get('sUserId'));
+        $signature = $generator->generateSignature($basket['sBasket'], $this->session->get('sUserId'));
 
         /** @var BasketPersister $persister */
         $persister = $this->get('basket_persister');

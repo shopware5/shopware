@@ -267,6 +267,15 @@ class Category extends ModelEntity
     private $external;
 
     /**
+     * Controls the target attribute if there is an external link set
+     *
+     * @var string
+     *
+     * @ORM\Column(name="external_target", type="text", nullable=false)
+     */
+    private $externalTarget = '';
+
+    /**
      * Should any filter shown on the category page be hidden?
      *
      * @var int
@@ -751,6 +760,26 @@ class Category extends ModelEntity
     public function getExternal()
     {
         return $this->external;
+    }
+
+    /**
+     * Returns the target property for the external link
+     *
+     * @return string
+     */
+    public function getExternalTarget()
+    {
+        return $this->externalTarget;
+    }
+
+    /**
+     * Sets the target property for the external link
+     *
+     * @param string $externalTarget
+     */
+    public function setExternalTarget($externalTarget)
+    {
+        $this->externalTarget = $externalTarget;
     }
 
     /**

@@ -764,8 +764,10 @@
             me.applyDataAttributes();
 
             me.$container = me.$el.find(me.opts.containerSelector);
-
+            me.$image = me.$container.find('img');
             me.imageRatio = me.opts.width / me.opts.height;
+
+            me._hasPictureElement = (me.$container.find('picture').length >= 1);
 
             me.resizeBanner();
             me.registerEvents();
@@ -799,6 +801,12 @@
                 'width': bannerWidth,
                 'height': bannerHeight
             });
+
+            if (me._hasPictureElement) {
+                me.$image.css({
+                    'width': bannerWidth
+                });
+            }
 
             $.publish('plugin/swEmotionBanner/onResizeBanner', [ me ]);
         },

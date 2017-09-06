@@ -78,7 +78,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     private function removeThumbnails(SymfonyStyle $io)
     {
         $mediaService = $this->getContainer()->get('shopware_media.media_service');
-        $filesystem = $mediaService->getAdapter();
+        $filesystem = $mediaService->getFilesystem();
 
         $thumbnailFiles = $this->searchThumbnails($io, $filesystem);
 

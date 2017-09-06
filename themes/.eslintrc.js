@@ -11,8 +11,9 @@ module.exports = {
         'picturefill': true,
         'StorageManager': true,
         'Modernizr': true,
-        'Overlay': true
-
+        'Overlay': true,
+        'Shopware': true,
+        'Ext': true
     },
     'rules': {
         'arrow-parens': 0,
@@ -37,7 +38,10 @@ module.exports = {
         'one-var': 0,
         'indent': [
             'error',
-            4
-        ]
+            4,
+            { 'SwitchCase': 1 }
+        ],
+
+        'standard/no-callback-literal': 0
     }
 };

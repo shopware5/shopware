@@ -32,12 +32,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ManufacturerCondition implements ConditionInterface
+class ManufacturerCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var int[]
      */
-    private $manufacturerIds;
+    protected $manufacturerIds;
 
     /**
      * @param int[] $manufacturerIds
@@ -63,5 +63,13 @@ class ManufacturerCondition implements ConditionInterface
     public function getManufacturerIds()
     {
         return $this->manufacturerIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

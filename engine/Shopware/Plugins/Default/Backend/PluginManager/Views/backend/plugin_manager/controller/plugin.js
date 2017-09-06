@@ -111,6 +111,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'destroy-login':               me.destroyLogin,
             'store-register':              me.register,
             'check-licence-plugin':        me.checkLicencePlugin,
+            'clear-all-cache':             me.clearAllCache,
             scope: me
         };
     },
@@ -816,6 +817,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             Shopware.Notification.createStickyGrowlMessage({ text: message });
         }
 
+        Shopware.app.Application.fireEvent('plugin-state-changed', plugin);
+
         var caches = this.getResponseCacheClearTask(response);
         if (caches !== null) {
             this.clearCache(caches, plugin, callback, scope);
@@ -843,6 +846,20 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             return response.scheduled.cache;
         }
         return null;
+    },
+
+    clearAllCache: function () {
+        var me = this;
+
+        var getCaches = Ext.Ajax.request({
+            async: false,
+            url: '{url controller=PluginManager action=getAllCaches}',
+            method: 'GET'
+        });
+
+        var response = Ext.decode(getCaches.responseText);
+
+        me.clearCache(response.caches);
     },
 
     clearCache: function(caches, plugin, callback, scope) {

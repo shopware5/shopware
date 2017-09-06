@@ -50,7 +50,11 @@ class OptimizerService implements OptimizerServiceInterface
         $mime = $this->getMimeTypeByFile($filepath);
 
         $optimizer = $this->getOptimizerByMimeType($mime);
+
+        // Reading and resetting the permissions on the file since some optimizer are unable to do so themselves.
+        $perms = fileperms($filepath);
         $optimizer->run($filepath);
+        chmod($filepath, $perms);
     }
 
     /**

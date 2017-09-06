@@ -374,7 +374,9 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             width:90,
             items:[
                 me.createOpenCustomerColumn(),
-                me.createDeleteOrderColumn(),
+                /*{if {acl_is_allowed privilege=delete}}*/
+                    me.createDeleteOrderColumn(),
+                /*{/if}*/
                 me.createEditOrderColumn()
             ]
         });
@@ -480,12 +482,13 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             }
         });
 
-
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
             ui: 'shopware-ui',
             items:[
+                /*{if {acl_is_allowed privilege=update}}*/
                 me.createDocumentButton,
+                /*{/if}*/
                 '->',
                 {
                     xtype:'textfield',

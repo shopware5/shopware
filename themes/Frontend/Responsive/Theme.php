@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Themes\Responsive;
 
@@ -8,32 +30,38 @@ use Shopware\Components\Theme\ConfigSet;
 
 class Theme extends \Shopware\Components\Theme
 {
+    /**
+     * Defines the extended Theme.
+     *
+     * @var string
+     */
     protected $extend = 'Bare';
 
     /**
-     * Defines the human readable theme name
-     * which displayed in the backend
+     * Defines the human readable theme name which is displayed in the backend.
+     *
      * @var string
      */
     protected $name = '__theme_name__';
 
     /**
-     * Allows to define a description text
-     * for the theme
-     * @var null
+     * Allows to define a description text for the theme.
+     *
+     * @var string
      */
     protected $description = '__theme_description__';
 
     /**
      * Name of the theme author.
-     * @var null
+     *
+     * @var string
      */
     protected $author = '__author__';
 
     /**
      * License of the theme source code.
      *
-     * @var null
+     * @var string
      */
     protected $license = '__license__';
 
@@ -43,21 +71,21 @@ class Theme extends \Shopware\Components\Theme
     protected $injectBeforePlugins = true;
 
     /**
-     * Javascript files which will be used in the theme
+     * Javascript files which will be used in the theme.
      *
      * @var array
      */
     protected $javascript = [
-
         // Third party plugins / libraries
+        'src/js/vendors/modernizr/modernizr.custom.35977.js',
         'vendors/js/jquery/jquery.min.js',
         'vendors/js/picturefill/picturefill.min.js',
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',
         'vendors/js/jquery.event.swipe/jquery.event.swipe.js',
+        'vendors/js/flatpickr/flatpickr.min.js',
 
         // Shopware specific plugins
-        'src/js/jquery.ie-fixes.js',
         'src/js/jquery.plugin-base.js',
         'src/js/jquery.state-manager.js',
         'src/js/jquery.storage-manager.js',
@@ -106,90 +134,127 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.panel-auto-resizer.js',
         'src/js/jquery.address-selection.js',
         'src/js/jquery.address-editor.js',
+        'src/js/jquery.datepicker.js',
+        'src/js/jquery.storage-field.js',
         'src/js/jquery.cookie-permission.js',
-        'src/js/jquery.shopware-responsive.js'
+        'src/js/jquery.shopware-responsive.js',
     ];
 
+    /**
+     * Holds default fieldSet configuration.
+     *
+     * @var array
+     */
     private $fieldSetDefaults = [
         'layout' => 'column',
         'height' => 170,
         'flex' => 0,
-        'defaults' => ['columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0']
+        'defaults' => ['columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0'],
     ];
 
+    /**
+     * Holds default theme colors.
+     *
+     * @var array
+     */
     private $themeColorDefaults = [
-        "brand-primary" => "#D9400B",
-        "brand-primary-light" => "saturate(lighten(@brand-primary,12%), 5%)",
-        "brand-secondary" => "#5F7285",
-        "brand-secondary-dark" => "darken(@brand-secondary, 15%)",
-        "gray" => "#F5F5F8",
-        "gray-light" => "lighten(@gray, 1%)",
-        "gray-dark" => "darken(@gray-light, 10%)",
-        "border-color" => "@gray-dark",
-        "highlight-success" => "#2ECC71",
-        "highlight-error" => "#E74C3C",
-        "highlight-notice" => "#F1C40F",
-        "highlight-info" => "#4AA3DF",
-        "body-bg" => "darken(@gray-light, 5%)",
-        "overlay-bg" => "#000000",
-        "overlay-dark-bg" => "@overlay-bg",
-        "overlay-light-bg" => "#FFFFFF",
-        "overlay-opacity" => "0.7",
-        "text-color" => "@brand-secondary",
-        "text-color-dark" => "@brand-secondary-dark",
-        "link-color" => "@brand-primary",
-        "link-hover-color" => "darken(@link-color, 10%)",
-        "rating-star-color" => "@highlight-notice",
-        "btn-default-top-bg" => "#FFFFFF",
-        "btn-default-bottom-bg" => "@gray-light",
-        "btn-default-hover-bg" => "#FFFFFF",
-        "btn-default-text-color" => "@text-color",
-        "btn-default-hover-text-color" => "@brand-primary",
-        "btn-default-border-color" => "@border-color",
-        "btn-default-hover-border-color" => "@brand-primary",
-        "btn-primary-top-bg" => "@brand-primary-light",
-        "btn-primary-bottom-bg" => "@brand-primary",
-        "btn-primary-hover-bg" => "@brand-primary",
-        "btn-primary-text-color" => "#FFFFFF",
-        "btn-primary-hover-text-color" => "@btn-primary-text-color",
-        "btn-secondary-top-bg" => "@brand-secondary",
-        "btn-secondary-bottom-bg" => "@brand-secondary-dark",
-        "btn-secondary-hover-bg" => "@brand-secondary-dark",
-        "btn-secondary-text-color" => "#FFFFFF",
-        "btn-secondary-hover-text-color" => "@btn-secondary-text-color",
-        "panel-header-bg" => "@gray-light",
-        "panel-header-color" => "@text-color",
-        "panel-border" => "@border-color",
-        "panel-bg" => "#FFFFFF",
-        "label-color" => "@text-color",
-        "input-bg" => "@gray-light",
-        "input-color" => "@brand-secondary",
-        "input-placeholder-color" => "lighten(@text-color, 15%)",
-        "input-border" => "@border-color",
-        "input-focus-bg" => "#FFFFFF",
-        "input-focus-border" => "@brand-primary",
-        "input-focus-color" => "@brand-secondary",
-        "input-error-bg" => "desaturate(lighten(@highlight-error, 38%), 20%)",
-        "input-error-border" => "@highlight-error",
-        "input-error-color" => "@highlight-error",
-        "input-success-bg" => "#FFFFFF",
-        "input-success-border" => "@highlight-success",
-        "input-success-color" => "@brand-secondary-dark",
-        "panel-table-header-bg" => "@panel-bg",
-        "panel-table-header-color" => "@text-color-dark",
-        "table-row-bg" => "#FFFFFF",
-        "table-row-color" => "@brand-secondary",
-        "table-row-highlight-bg" => "darken(@table-row-bg, 4%)",
-        "table-header-bg" => "@brand-secondary",
-        "table-header-color" => "#FFFFFF",
-        "badge-discount-bg" => "@highlight-error",
-        "badge-discount-color" => "#FFFFFF",
-        "badge-newcomer-bg" => "@highlight-notice",
-        "badge-newcomer-color" => "#FFFFFF",
-        "badge-recommendation-bg" => "@highlight-success",
-        "badge-recommendation-color" => "#FFFFFF",
-        "badge-download-bg" => "@highlight-info",
-        "badge-download-color" => "#FFFFFF"
+        'brand-primary' => '#D9400B',
+        'brand-primary-light' => 'saturate(lighten(@brand-primary,12%), 5%)',
+        'brand-secondary' => '#5F7285',
+        'brand-secondary-dark' => 'darken(@brand-secondary, 15%)',
+        'gray' => '#F5F5F8',
+        'gray-light' => 'lighten(@gray, 1%)',
+        'gray-dark' => 'darken(@gray-light, 10%)',
+        'border-color' => '@gray-dark',
+        'highlight-success' => '#2ECC71',
+        'highlight-error' => '#E74C3C',
+        'highlight-notice' => '#F1C40F',
+        'highlight-info' => '#4AA3DF',
+        'body-bg' => 'darken(@gray-light, 5%)',
+        'overlay-bg' => '#000000',
+        'overlay-dark-bg' => '@overlay-bg',
+        'overlay-light-bg' => '#FFFFFF',
+        'overlay-opacity' => '0.7',
+        'text-color' => '@brand-secondary',
+        'text-color-dark' => '@brand-secondary-dark',
+        'link-color' => '@brand-primary',
+        'link-hover-color' => 'darken(@link-color, 10%)',
+        'rating-star-color' => '@highlight-notice',
+        'btn-default-top-bg' => '#FFFFFF',
+        'btn-default-bottom-bg' => '@gray-light',
+        'btn-default-hover-bg' => '#FFFFFF',
+        'btn-default-text-color' => '@text-color',
+        'btn-default-hover-text-color' => '@brand-primary',
+        'btn-default-border-color' => '@border-color',
+        'btn-default-hover-border-color' => '@brand-primary',
+        'btn-primary-top-bg' => '@brand-primary-light',
+        'btn-primary-bottom-bg' => '@brand-primary',
+        'btn-primary-hover-bg' => '@brand-primary',
+        'btn-primary-text-color' => '#FFFFFF',
+        'btn-primary-hover-text-color' => '@btn-primary-text-color',
+        'btn-secondary-top-bg' => '@brand-secondary',
+        'btn-secondary-bottom-bg' => '@brand-secondary-dark',
+        'btn-secondary-hover-bg' => '@brand-secondary-dark',
+        'btn-secondary-text-color' => '#FFFFFF',
+        'btn-secondary-hover-text-color' => '@btn-secondary-text-color',
+        'panel-header-bg' => '@gray-light',
+        'panel-header-color' => '@text-color',
+        'panel-border' => '@border-color',
+        'panel-bg' => '#FFFFFF',
+        'label-color' => '@text-color',
+        'input-bg' => '@gray-light',
+        'input-color' => '@brand-secondary',
+        'input-placeholder-color' => 'lighten(@text-color, 15%)',
+        'input-border' => '@border-color',
+        'input-focus-bg' => '#FFFFFF',
+        'input-focus-border' => '@brand-primary',
+        'input-focus-color' => '@brand-secondary',
+        'input-error-bg' => 'desaturate(lighten(@highlight-error, 38%), 20%)',
+        'input-error-border' => '@highlight-error',
+        'input-error-color' => '@highlight-error',
+        'input-success-bg' => '#FFFFFF',
+        'input-success-border' => '@highlight-success',
+        'input-success-color' => '@brand-secondary-dark',
+        'panel-table-header-bg' => '@panel-bg',
+        'panel-table-header-color' => '@text-color-dark',
+        'table-row-bg' => '#FFFFFF',
+        'table-row-color' => '@brand-secondary',
+        'table-row-highlight-bg' => 'darken(@table-row-bg, 4%)',
+        'table-header-bg' => '@brand-secondary',
+        'table-header-color' => '#FFFFFF',
+        'badge-discount-bg' => '@highlight-error',
+        'badge-discount-color' => '#FFFFFF',
+        'badge-newcomer-bg' => '@highlight-notice',
+        'badge-newcomer-color' => '#FFFFFF',
+        'badge-recommendation-bg' => '@highlight-success',
+        'badge-recommendation-color' => '#FFFFFF',
+        'badge-download-bg' => '@highlight-info',
+        'badge-download-color' => '#FFFFFF',
+    ];
+
+    /**
+     * Holds default font configuration.
+     *
+     * @var array
+     */
+    private $themeFontDefaults = [
+        'font-base-stack' => '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;',
+        'font-headline-stack' => '@font-base-stack',
+        'font-size-base' => 14,
+        'font-base-weight' => 500,
+        'font-light-weight' => 300,
+        'font-bold-weight' => 700,
+        'font-size-h1' => 26,
+        'font-size-h2' => 21,
+        'font-size-h3' => 18,
+        'font-size-h4' => 16,
+        'font-size-h5' => '@font-size-base',
+        'font-size-h6' => 12,
+        'panel-header-font-size' => 14,
+        'label-font-size' => 14,
+        'input-font-size' => 14,
+        'btn-font-size' => 14,
+        'btn-icon-size' => 10,
     ];
 
     /**
@@ -208,6 +273,137 @@ class Theme extends \Shopware\Components\Theme
         $tab->addElement($this->createBottomTabPanel());
     }
 
+    /**
+     * Helper function to merge default theme colors with color schemes.
+     *
+     * @param ArrayCollection $collection
+     */
+    public function createConfigSets(ArrayCollection $collection)
+    {
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_turquoise__')->setDescription(
+            '__color_scheme_turquoise_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#1db3b8',
+                    'brand-primary-light' => 'lighten(@brand-primary, 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_green__')->setDescription(
+            '__color_scheme_green_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#72a425',
+                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 5%), 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_red__')->setDescription(
+            '__color_scheme_red_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#be0a30',
+                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 10%), 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_pink__')->setDescription(
+            '__color_scheme_pink_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#d31e81',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_gray__')->setDescription(
+            '__color_scheme_gray_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#555555',
+                    'brand-primary-light' => 'lighten(@brand-primary, 10%)',
+                    'brand-secondary' => '#999999',
+                    'brand-secondary-dark' => 'darken(@brand-secondary, 8%)',
+                    'text-color' => '@brand-primary-light',
+                    'text-color-dark' => '@brand-primary',
+                    'link-color' => '@brand-secondary',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_brown__')->setDescription(
+            '__color_scheme_brown_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#613400',
+                    'brand-primary-light' => 'saturate(lighten(@brand-primary,5%), 5%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_blue__')->setDescription(
+            '__color_scheme_blue_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#009ee0',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_black__')->setDescription(
+            '__color_scheme_black_description__'
+        )->setValues(
+            array_merge(
+                $this->themeColorDefaults,
+                [
+                    'brand-primary' => '#000000',
+                    'brand-primary-light' => 'lighten(@brand-primary, 20%)',
+                    'brand-secondary' => '#555555',
+                    'brand-secondary-dark' => 'darken(@brand-secondary, 10%)',
+                ]
+            )
+        );
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('__color_scheme_orange__')->setDescription(
+            '__color_scheme_orange_description__'
+        )->setValues($this->themeColorDefaults);
+        $collection->add($set);
+    }
+
     private function createBasicFieldSet()
     {
         $attributes = array_merge($this->fieldSetDefaults, ['height' => 130]);
@@ -221,28 +417,28 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'brand-primary',
                 '@brand-primary',
-                '#D9400B'
+                $this->themeColorDefaults['brand-primary']
             )
         );
         $fieldSet->addElement(
             $this->createColorPickerField(
                 'brand-primary-light',
                 '@brand-primary-light',
-                'saturate(lighten(@brand-primary, 12%), 5%)'
+                $this->themeColorDefaults['brand-primary-light']
             )
         );
         $fieldSet->addElement(
             $this->createColorPickerField(
                 'brand-secondary',
                 '@brand-secondary',
-                '#5F7285'
+                $this->themeColorDefaults['brand-secondary']
             )
         );
         $fieldSet->addElement(
             $this->createColorPickerField(
                 'brand-secondary-dark',
                 '@brand-secondary-dark',
-                'darken(@brand-secondary, 15%)'
+                $this->themeColorDefaults['brand-secondary-dark']
             )
         );
 
@@ -250,7 +446,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the child-tabs of ("Responsive colors")
+     * Helper function to create the child-tabs of ("Responsive colors").
+     *
      * @return Form\Container\Tab
      */
     private function createBottomTabPanel()
@@ -259,8 +456,8 @@ class Theme extends \Shopware\Components\Theme
             'bottom_tab_panel',
             [
                 'attributes' => [
-                    'plain' => true
-                ]
+                    'plain' => true,
+                ],
             ]
         );
 
@@ -274,7 +471,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("General")
+     * Helper function to create the tab ("General").
+     *
      * @return Form\Container\Tab
      */
     private function createGeneralTab()
@@ -284,8 +482,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_general__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -300,28 +498,28 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'gray',
                 '@gray',
-                '#F5F5F8'
+                $this->themeColorDefaults['gray']
             )
         );
         $fieldSetGrey->addElement(
             $this->createColorPickerField(
                 'gray-light',
                 '@gray-light',
-                'lighten(@gray, 1%)'
+                $this->themeColorDefaults['gray-light']
             )
         );
         $fieldSetGrey->addElement(
             $this->createColorPickerField(
                 'gray-dark',
                 '@gray-dark',
-                'darken(@gray-light, 10%)'
+                $this->themeColorDefaults['gray-dark']
             )
         );
         $fieldSetGrey->addElement(
             $this->createColorPickerField(
                 'border-color',
                 '@border-color',
-                '@gray-dark'
+                $this->themeColorDefaults['border-color']
             )
         );
 
@@ -340,28 +538,28 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'highlight-success',
                 '@highlight-success',
-                '#2ECC71'
+                $this->themeColorDefaults['highlight-success']
             )
         );
         $fieldSetHighlights->addElement(
             $this->createColorPickerField(
                 'highlight-error',
                 '@highlight-error',
-                '#E74C3C'
+                $this->themeColorDefaults['highlight-error']
             )
         );
         $fieldSetHighlights->addElement(
             $this->createColorPickerField(
                 'highlight-notice',
                 '@highlight-notice',
-                '#F1C40F'
+                $this->themeColorDefaults['highlight-notice']
             )
         );
         $fieldSetHighlights->addElement(
             $this->createColorPickerField(
                 'highlight-info',
                 '@highlight-info',
-                '#4AA3DF'
+                $this->themeColorDefaults['highlight-info']
             )
         );
 
@@ -378,49 +576,49 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'body-bg',
                 '@body-bg',
-                'darken(@gray-light, 5%)'
+                $this->themeColorDefaults['body-bg']
             )
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'text-color',
                 '@text-color',
-                '@brand-secondary'
+                $this->themeColorDefaults['text-color']
             )
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'text-color-dark',
                 '@text-color-dark',
-                '@brand-secondary-dark'
+                $this->themeColorDefaults['text-color-dark']
             )
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'link-color',
                 '@link-color',
-                '@brand-primary'
+                $this->themeColorDefaults['link-color']
             )
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'link-hover-color',
                 '@link-hover-color',
-                'darken(@link-color, 10%)'
+                $this->themeColorDefaults['link-hover-color']
             )
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'rating-star-color',
                 '@rating-star-color',
-                '@highlight-notice'
+                $this->themeColorDefaults['rating-star-color']
             )
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'overlay-bg',
                 '@overlay-bg',
-                '#000000'
+                $this->themeColorDefaults['overlay-bg']
             )
         );
 
@@ -444,7 +642,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'overlay-opacity',
                 '@overlay-opacity',
-                '0.7'
+                $this->themeColorDefaults['overlay-opacity']
             )
         );
 
@@ -454,7 +652,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Typography")
+     * Helper function to create the tab ("Typography").
+     *
      * @return Form\Container\Tab
      */
     private function createTypographyTab()
@@ -476,42 +675,42 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'font-base-stack',
                 '@font-base-stack',
-                '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;'
+                $this->themeFontDefaults['font-base-stack']
             )
         );
         $fieldSetBasic->addElement(
             $this->createTextField(
                 'font-headline-stack',
                 '@font-headline-stack',
-                '@font-base-stack'
+                $this->themeFontDefaults['font-headline-stack']
             )
         );
         $fieldSetBasic->addElement(
             $this->createTextField(
                 'font-size-base',
                 '@font-size-base',
-                '14'
+                $this->themeFontDefaults['font-size-base']
             )
         );
         $fieldSetBasic->addElement(
             $this->createTextField(
                 'font-base-weight',
                 '@font-base-weight',
-                '500'
+                $this->themeFontDefaults['font-base-weight']
             )
         );
         $fieldSetBasic->addElement(
             $this->createTextField(
                 'font-light-weight',
                 '@font-light-weight',
-                '300'
+                $this->themeFontDefaults['font-light-weight']
             )
         );
         $fieldSetBasic->addElement(
             $this->createTextField(
                 'font-bold-weight',
                 '@font-bold-weight',
-                '700'
+                $this->themeFontDefaults['font-bold-weight']
             )
         );
 
@@ -528,42 +727,42 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'font-size-h1',
                 '@font-size-h1',
-                '26'
+                $this->themeFontDefaults['font-size-h1']
             )
         );
         $fieldSetHeadlines->addElement(
             $this->createTextField(
                 'font-size-h2',
                 '@font-size-h2',
-                '21'
+                $this->themeFontDefaults['font-size-h2']
             )
         );
         $fieldSetHeadlines->addElement(
             $this->createTextField(
                 'font-size-h3',
                 '@font-size-h3',
-                '18'
+                $this->themeFontDefaults['font-size-h3']
             )
         );
         $fieldSetHeadlines->addElement(
             $this->createTextField(
                 'font-size-h4',
                 '@font-size-h4',
-                '16'
+                $this->themeFontDefaults['font-size-h4']
             )
         );
         $fieldSetHeadlines->addElement(
             $this->createTextField(
                 'font-size-h5',
                 '@font-size-h5',
-                '@font-size-base'
+                $this->themeFontDefaults['font-size-h5']
             )
         );
         $fieldSetHeadlines->addElement(
             $this->createTextField(
                 'font-size-h6',
                 '@font-size-h6',
-                '12'
+                $this->themeFontDefaults['font-size-h6']
             )
         );
 
@@ -573,7 +772,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Buttons & Panels")
+     * Helper function to create the tab ("Buttons & Panels").
+     *
      * @return Form\Container\Tab
      */
     private function createButtonsTab()
@@ -583,8 +783,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_buttons__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -599,14 +799,14 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'btn-font-size',
                 '@btn-font-size',
-                '14'
+                $this->themeFontDefaults['btn-font-size']
             )
         );
         $fieldSetButtons->addElement(
             $this->createTextField(
                 'btn-icon-size',
                 '@btn-icon-size',
-                '10'
+                $this->themeFontDefaults['btn-icon-size']
             )
         );
 
@@ -623,49 +823,49 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'btn-default-top-bg',
                 '@btn-default-top-bg',
-                '#FFFFFF'
+                $this->themeColorDefaults['btn-default-top-bg']
             )
         );
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
                 'btn-default-bottom-bg',
                 '@btn-default-bottom-bg',
-                '@gray-light'
+                $this->themeColorDefaults['btn-default-bottom-bg']
             )
         );
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
                 'btn-default-hover-bg',
                 '@btn-default-hover-bg',
-                '#FFFFFF'
+                $this->themeColorDefaults['btn-default-hover-bg']
             )
         );
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
                 'btn-default-text-color',
                 '@btn-default-text-color',
-                '@text-color'
+                $this->themeColorDefaults['btn-default-text-color']
             )
         );
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
                 'btn-default-hover-text-color',
                 '@btn-default-hover-text-color',
-                '@brand-primary'
+                $this->themeColorDefaults['btn-default-hover-text-color']
             )
         );
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
                 'btn-default-border-color',
                 '@btn-default-border-color',
-                '@border-color'
+                $this->themeColorDefaults['btn-default-border-color']
             )
         );
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
                 'btn-default-hover-border-color',
                 '@btn-default-hover-border-color',
-                '@brand-primary'
+                $this->themeColorDefaults['btn-default-hover-border-color']
             )
         );
 
@@ -682,35 +882,35 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'btn-primary-top-bg',
                 '@btn-primary-top-bg',
-                '@brand-primary-light'
+                $this->themeColorDefaults['btn-primary-top-bg']
             )
         );
         $fieldSetPrimaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-primary-bottom-bg',
                 '@btn-primary-bottom-bg',
-                '@brand-primary'
+                $this->themeColorDefaults['btn-primary-bottom-bg']
             )
         );
         $fieldSetPrimaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-primary-hover-bg',
                 '@btn-primary-hover-bg',
-                '@brand-primary'
+                $this->themeColorDefaults['btn-primary-hover-bg']
             )
         );
         $fieldSetPrimaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-primary-text-color',
                 '@btn-primary-text-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['btn-primary-text-color']
             )
         );
         $fieldSetPrimaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-primary-hover-text-color',
                 '@btn-primary-hover-text-color',
-                '@btn-primary-text-color'
+                $this->themeColorDefaults['btn-primary-hover-text-color']
             )
         );
 
@@ -727,35 +927,35 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'btn-secondary-top-bg',
                 '@btn-secondary-top-bg',
-                '@brand-secondary'
+                $this->themeColorDefaults['btn-secondary-top-bg']
             )
         );
         $fieldSetSecondaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-secondary-bottom-bg',
                 '@btn-secondary-bottom-bg',
-                '@brand-secondary-dark'
+                $this->themeColorDefaults['btn-secondary-bottom-bg']
             )
         );
         $fieldSetSecondaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-secondary-hover-bg',
                 '@btn-secondary-hover-bg',
-                '@brand-secondary-dark'
+                $this->themeColorDefaults['btn-secondary-hover-bg']
             )
         );
         $fieldSetSecondaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-secondary-text-color',
                 '@btn-secondary-text-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['btn-secondary-text-color']
             )
         );
         $fieldSetSecondaryButtons->addElement(
             $this->createColorPickerField(
                 'btn-secondary-hover-text-color',
                 '@btn-secondary-hover-text-color',
-                '@btn-secondary-text-color'
+                $this->themeColorDefaults['btn-secondary-hover-text-color']
             )
         );
 
@@ -772,35 +972,35 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'panel-header-bg',
                 '@panel-header-bg',
-                '@gray-light'
+                $this->themeColorDefaults['panel-header-bg']
             )
         );
         $fieldSetPanels->addElement(
             $this->createTextField(
                 'panel-header-font-size',
                 '@panel-header-font-size',
-                '14'
+                $this->themeFontDefaults['panel-header-font-size']
             )
         );
         $fieldSetPanels->addElement(
             $this->createColorPickerField(
                 'panel-header-color',
                 '@panel-header-color',
-                '@text-color'
+                $this->themeColorDefaults['panel-header-color']
             )
         );
         $fieldSetPanels->addElement(
             $this->createColorPickerField(
                 'panel-border',
                 '@panel-border',
-                '@border-color'
+                $this->themeColorDefaults['panel-border']
             )
         );
         $fieldSetPanels->addElement(
             $this->createColorPickerField(
                 'panel-bg',
                 '@panel-bg',
-                '#FFFFFF'
+                $this->themeColorDefaults['panel-bg']
             )
         );
 
@@ -810,7 +1010,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Forms")
+     * Helper function to create the tab ("Forms").
+     *
      * @return Form\Container\Tab
      */
     private function createFormsTab()
@@ -820,8 +1021,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_forms__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -836,14 +1037,14 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'label-font-size',
                 '@label-font-size',
-                '14'
+                $this->themeFontDefaults['label-font-size']
             )
         );
         $fieldSetLabels->addElement(
             $this->createColorPickerField(
                 'label-color',
                 '@label-color',
-                '@text-color'
+                $this->themeColorDefaults['label-color']
             )
         );
 
@@ -860,35 +1061,35 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'input-font-size',
                 '@input-font-size',
-                '14'
+                $this->themeFontDefaults['input-font-size']
             )
         );
         $fieldSetFormBase->addElement(
             $this->createColorPickerField(
                 'input-bg',
                 '@input-bg',
-                '@gray-light'
+                $this->themeColorDefaults['input-bg']
             )
         );
         $fieldSetFormBase->addElement(
             $this->createColorPickerField(
                 'input-color',
                 '@input-color',
-                '@brand-secondary'
+                $this->themeColorDefaults['input-color']
             )
         );
         $fieldSetFormBase->addElement(
             $this->createColorPickerField(
                 'input-placeholder-color',
                 '@input-placeholder-color',
-                'lighten(@text-color, 15%)'
+                $this->themeColorDefaults['input-placeholder-color']
             )
         );
         $fieldSetFormBase->addElement(
             $this->createColorPickerField(
                 'input-border',
                 '@input-border',
-                '@border-color'
+                $this->themeColorDefaults['input-border']
             )
         );
 
@@ -905,63 +1106,63 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'input-focus-bg',
                 '@input-focus-bg',
-                '#FFFFFF'
+                $this->themeColorDefaults['input-focus-bg']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-focus-border',
                 '@input-focus-border',
-                '@brand-primary'
+                $this->themeColorDefaults['input-focus-border']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-focus-color',
                 '@input-focus-color',
-                '@brand-secondary'
+                $this->themeColorDefaults['input-focus-color']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-error-bg',
                 '@input-error-bg',
-                'desaturate(lighten(@highlight-error, 38%), 20%)'
+                $this->themeColorDefaults['input-error-bg']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-error-border',
                 '@input-error-border',
-                '@highlight-error'
+                $this->themeColorDefaults['input-error-border']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-error-color',
                 '@input-error-color',
-                '@highlight-error'
+                $this->themeColorDefaults['input-error-color']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-success-bg',
                 '@input-success-bg',
-                '#FFFFFF'
+                $this->themeColorDefaults['input-success-bg']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-success-border',
                 '@input-success-border',
-                '@highlight-success'
+                $this->themeColorDefaults['input-success-border']
             )
         );
         $fieldSetFormStates->addElement(
             $this->createColorPickerField(
                 'input-success-color',
                 '@input-success-color',
-                '@brand-secondary-dark'
+                $this->themeColorDefaults['input-success-color']
             )
         );
 
@@ -971,7 +1172,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Tables & Badges")
+     * Helper function to create the tab ("Tables & Badges").
+     *
      * @return Form\Container\Tab
      */
     private function createTablesTab()
@@ -981,8 +1183,8 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_tables__',
             [
                 'attributes' => [
-                    'autoScroll' => true
-                ]
+                    'autoScroll' => true,
+                ],
             ]
         );
 
@@ -997,49 +1199,49 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'panel-table-header-bg',
                 '@panel-table-header-bg',
-                '@panel-bg'
+                $this->themeColorDefaults['panel-table-header-bg']
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
                 'panel-table-header-color',
                 '@panel-table-header-color',
-                '@text-color-dark'
+                $this->themeColorDefaults['panel-table-header-color']
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
                 'table-row-bg',
                 '@table-row-bg',
-                '#FFFFFF'
+                $this->themeColorDefaults['table-row-bg']
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
                 'table-row-color',
                 '@table-row-color',
-                '@brand-secondary'
+                $this->themeColorDefaults['table-row-color']
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
                 'table-row-highlight-bg',
                 '@table-row-highlight-bg',
-                'darken(@table-row-bg, 4%)'
+                $this->themeColorDefaults['table-row-highlight-bg']
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
                 'table-header-bg',
                 '@table-header-bg',
-                '@brand-secondary'
+                $this->themeColorDefaults['table-header-bg']
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
                 'table-header-color',
                 '@table-header-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['table-header-color']
             )
         );
 
@@ -1056,56 +1258,56 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'badge-discount-bg',
                 '@badge-discount-bg',
-                '@highlight-error'
+                $this->themeColorDefaults['badge-discount-bg']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-discount-color',
                 '@badge-discount-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['badge-discount-color']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-newcomer-bg',
                 '@badge-newcomer-bg',
-                '@highlight-notice'
+                $this->themeColorDefaults['badge-newcomer-bg']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-newcomer-color',
                 '@badge-newcomer-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['badge-newcomer-color']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-recommendation-bg',
                 '@badge-recommendation-bg',
-                '@highlight-success'
+                $this->themeColorDefaults['badge-recommendation-bg']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-recommendation-color',
                 '@badge-recommendation-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['badge-recommendation-color']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-download-bg',
                 '@badge-download-bg',
-                '@highlight-info'
+                $this->themeColorDefaults['badge-download-bg']
             )
         );
         $fieldSetBadges->addElement(
             $this->createColorPickerField(
                 'badge-download-color',
                 '@badge-download-color',
-                '#FFFFFF'
+                $this->themeColorDefaults['badge-download-color']
             )
         );
 
@@ -1115,7 +1317,8 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the main tab ("Responsive configuration")
+     * Helper function to create the main tab ("Responsive configuration").
+     *
      * @return Form\Container\Tab
      */
     private function createMainConfigTab()
@@ -1128,8 +1331,8 @@ class Theme extends \Shopware\Components\Theme
                     'layout' => 'anchor',
                     'autoScroll' => true,
                     'padding' => '0',
-                    'defaults' => ['anchor' => '100%']
-                ]
+                    'defaults' => ['anchor' => '100%'],
+                ],
             ]
         );
 
@@ -1141,8 +1344,8 @@ class Theme extends \Shopware\Components\Theme
                     'padding' => '10',
                     'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
-                ]
+                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%'],
+                ],
             ]
         );
 
@@ -1256,7 +1459,7 @@ class Theme extends \Shopware\Components\Theme
                     ['value' => 1, 'text' => '__lightbox_zoom_factor_none__'],
                     ['value' => 2, 'text' => '__lightbox_zoom_factor_2x__'],
                     ['value' => 3, 'text' => '__lightbox_zoom_factor_3x__'],
-                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__']
+                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__'],
                 ],
                 $this->getLabelAttribute(
                     'lightbox_zoom_factor_description',
@@ -1281,7 +1484,19 @@ class Theme extends \Shopware\Components\Theme
                 true,
                 ['attributes' => [
                     'lessCompatible' => false,
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description'),
+                ]]
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'asyncJavascriptLoading',
+                '__async_javascript_loading__',
+                true,
+                ['attributes' => [
+                    'lessCompatible' => false,
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description'),
                 ]]
             )
         );
@@ -1296,8 +1511,8 @@ class Theme extends \Shopware\Components\Theme
                     'padding' => '10',
                     'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155]
-                ]
+                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155],
+                ],
             ]
         );
 
@@ -1325,143 +1540,16 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to get the attribute of a checkbox field which shows a description label
+     * Helper function to get the attribute of a checkbox field which shows a description label.
+     *
      * @param $snippetName
+     *
      * @return array
      */
     private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
     {
         $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+
         return ['attributes' => [$labelType => $description]];
-    }
-
-    /**
-     * Helper function to merge default theme colors with color schemes
-     * @param ArrayCollection $collection
-     */
-    public function createConfigSets(ArrayCollection $collection)
-    {
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_turquoise__')->setDescription(
-            '__color_scheme_turquoise_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#1db3b8',
-                    'brand-primary-light' => 'lighten(@brand-primary, 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_green__')->setDescription(
-            '__color_scheme_green_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#72a425',
-                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 5%), 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_red__')->setDescription(
-            '__color_scheme_red_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#be0a30',
-                    'brand-primary-light' => 'saturate(lighten(@brand-primary, 10%), 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_pink__')->setDescription(
-            '__color_scheme_pink_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#d31e81'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_gray__')->setDescription(
-            '__color_scheme_gray_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#555555',
-                    'brand-primary-light' => 'lighten(@brand-primary, 10%)',
-                    'brand-secondary' => '#999999',
-                    'brand-secondary-dark' => 'darken(@brand-secondary, 8%)',
-                    'text-color' => '@brand-primary-light',
-                    'text-color-dark' => '@brand-primary',
-                    'link-color' => '@brand-secondary'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_brown__')->setDescription(
-            '__color_scheme_brown_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#613400',
-                    'brand-primary-light' => 'saturate(lighten(@brand-primary,5%), 5%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_blue__')->setDescription(
-            '__color_scheme_blue_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#009ee0'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_black__')->setDescription(
-            '__color_scheme_black_description__'
-        )->setValues(
-            array_merge(
-                $this->themeColorDefaults,
-                [
-                    'brand-primary' => '#000000',
-                    'brand-primary-light' => 'lighten(@brand-primary, 20%)',
-                    'brand-secondary' => '#555555',
-                    'brand-secondary-dark' => 'darken(@brand-secondary, 10%)'
-                ]
-            )
-        );
-        $collection->add($set);
-
-        $set = new ConfigSet();
-        $set->setName('__color_scheme_orange__')->setDescription(
-            '__color_scheme_orange_description__'
-        )->setValues($this->themeColorDefaults);
-        $collection->add($set);
     }
 }

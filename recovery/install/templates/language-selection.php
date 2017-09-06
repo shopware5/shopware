@@ -6,7 +6,12 @@
 
 <form action="<?= $menuHelper->getNextUrl() ?>" method="get">
     <input type="hidden" class="hidden-action" value="<?= $menuHelper->getCurrentUrl() ?>" />
-    <label for="language"><?= $t->t('language-selection_select_language') ?></label>
+
+    <p>
+        <label for="language"><?= $t->t('language-selection_select_language') ?></label>
+
+        <?= $t->t('language-selection_info_message') ?>
+    </p>
     <select id="language" name="language" class="language-selection">
         <?php foreach ($languages as $language): ?>
             <option value="<?= $language ?>" <?= ($selectedLanguage == $language) ? 'selected' : '' ?>>
@@ -14,10 +19,6 @@
             </option>
         <?php endforeach ?>
     </select>
-
-    <p>
-        <?= $t->t('language-selection_info_message') ?>
-    </p>
 
     <div class="actions clearfix">
         <button type="submit" class="btn btn-primary btn-arrow-right is--right"><?= $t->t('forward') ?></button>

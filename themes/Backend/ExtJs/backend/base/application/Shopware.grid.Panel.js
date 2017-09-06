@@ -1,5 +1,3 @@
-
-
 /**
  * The Shopware.grid.Panel components contains the Shopware boiler plate
  * code for a full featured backend listing.
@@ -63,8 +61,8 @@
  *
  * The events are documented in the { @link #registerEvents } function
  */
-//{namespace name=backend/application/main}
-//{block name="backend/application/Shopware.grid.Panel"}
+// {namespace name=backend/application/main}
+// {block name="backend/application/Shopware.grid.Panel"}
 Ext.define('Shopware.grid.Panel', {
 
     /**
@@ -89,6 +87,8 @@ Ext.define('Shopware.grid.Panel', {
     mixins: {
         helper: 'Shopware.model.Helper'
     },
+
+    cls: 'shopware-grid-panel',
 
     /**
      * Is defined, when the { @link #displayConfig.toolbar } property is set to true.
@@ -468,7 +468,6 @@ Ext.define('Shopware.grid.Panel', {
              */
             rowNumbers: false,
 
-
             /**
              * Enables the Ext.grid.plugin.RowEditing plugin.
              * The plugin allows to modify the grid rows over a
@@ -638,13 +637,13 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         if (!(me.store instanceof Ext.data.Store)) {
-            me.throwException(me.$className + ": Component requires a configured store, which has to been passed in the class constructor.");
+            me.throwException(me.$className + ': Component requires a configured store, which has to been passed in the class constructor.');
         }
         if (me.alias.length <= 0) {
-            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+            me.throwException(me.$className + ': Component requires a configured Ext JS widget alias.');
         }
         if (me.alias.length === 1 && me.alias[0] === 'widget.shopware-grid-panel') {
-            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+            me.throwException(me.$className + ': Component requires a configured Ext JS widget alias.');
         }
     },
 
@@ -673,7 +672,7 @@ Ext.define('Shopware.grid.Panel', {
                 return {
                     gridClass: me.$className,
                     eventAlias: me.eventAlias
-                }
+                };
             }
         });
         me.controller.init();
@@ -697,7 +696,6 @@ Ext.define('Shopware.grid.Panel', {
         }
         return me.callParent(arguments);
     },
-
 
     /**
      * Registers the additional shopware events for this component
@@ -818,7 +816,7 @@ Ext.define('Shopware.grid.Panel', {
             /**
              * Event fired after the grid columns created. This event can be used
              * to add additional column over the Ext JS event system.
-             * 
+             *
              * @param { Shopware.grid.Panel } grid - Instance of this component.
              * @param { Array } columns - The filled columns array contains all generated columns.
              */
@@ -1124,7 +1122,7 @@ Ext.define('Shopware.grid.Panel', {
         }
 
         me.fireEvent(me.eventAlias + '-before-create-columns', me, columns);
-        
+
         if (me.getConfig('rowNumbers')) {
             columns.push(me.createRowNumberColumn());
         }
@@ -1136,7 +1134,7 @@ Ext.define('Shopware.grid.Panel', {
             var modelField = me.getFieldByName(model.fields.items, key);
             column = me.createColumn(model, modelField);
 
-            //column created? then push it into the columns array
+            // column created? then push it into the columns array
             if (column !== null) columns.push(column);
         });
 
@@ -1187,7 +1185,6 @@ Ext.define('Shopware.grid.Panel', {
         var fieldAssociation = me.getFieldAssociation(field.name);
 
         if (fieldAssociation === undefined) {
-
             switch (field.type.type) {
                 case 'int':
                     column = me.applyIntegerColumnConfig(column);
@@ -1206,7 +1203,6 @@ Ext.define('Shopware.grid.Panel', {
                     column = me.applyFloatColumnConfig(column);
                     break;
             }
-
         } else {
             column.association = fieldAssociation;
             column.renderer = me.associationColumnRenderer;
@@ -1231,7 +1227,6 @@ Ext.define('Shopware.grid.Panel', {
 
         return column;
     },
-
 
     /**
      * Creates the action column for the grid panel.
@@ -1317,9 +1312,7 @@ Ext.define('Shopware.grid.Panel', {
         column = {
             action: 'delete',
             iconCls: 'sprite-minus-circle-frame',
-            handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.fireEvent(me.eventAlias + '-delete-item', me, record, rowIndex, colIndex, item, opts);
-            }
+            handler: Ext.bind(me._onDelete, me)
         };
 
         me.fireEvent(me.eventAlias + '-delete-action-column-created', me, column);
@@ -1342,9 +1335,7 @@ Ext.define('Shopware.grid.Panel', {
         column = {
             action: 'edit',
             iconCls: 'sprite-pencil',
-            handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.fireEvent(me.eventAlias + '-edit-item', me, record, rowIndex, colIndex, item, opts);
-            }
+            handler: Ext.bind(me._onEdit, me)
         };
 
         me.fireEvent(me.eventAlias + '-edit-action-column-created', me, column);
@@ -1396,7 +1387,7 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Array }
      */
     createPlugins: function () {
-        var me = this, items = [], item;
+        var me = this, items = [];
 
         me.fireEvent(me.eventAlias + '-before-create-plugins', me, items);
 
@@ -1404,7 +1395,7 @@ Ext.define('Shopware.grid.Panel', {
             me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
                 clicksToEdit: 2
             });
-            items.push(me.rowEditor)
+            items.push(me.rowEditor);
         }
 
         me.fireEvent(me.eventAlias + '-after-create-plugins', me, items);
@@ -1522,12 +1513,13 @@ Ext.define('Shopware.grid.Panel', {
 
         me.pagingbar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
-            dock: 'bottom'
+            dock: 'bottom',
+            displayInfo: true
         });
 
         if (me.getConfig('pageSize')) {
             var pageSizeCombo = me.createPageSizeCombo();
-            me.pagingbar.add('->', pageSizeCombo, { xtype: 'tbspacer', width: 6 });
+            me.pagingbar.add(pageSizeCombo, { xtype: 'tbspacer', width: 6 });
         }
 
         me.fireEvent(me.eventAlias + '-paging-bar-created', me, me.pagingbar);
@@ -1556,6 +1548,7 @@ Ext.define('Shopware.grid.Panel', {
         me.pageSizeCombo = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.pageSizeLabel,
             labelWidth: 110,
+            cls: 'page-size-combo',
             queryMode: 'local',
             value: value,
             width: 220,
@@ -1670,7 +1663,7 @@ Ext.define('Shopware.grid.Panel', {
             items.push(me.createAddButton());
         }
         if (me.getConfig('deleteButton')) {
-            items.push(me.createDeleteButton())
+            items.push(me.createDeleteButton());
         }
 
         me.fireEvent(me.eventAlias + '-before-create-right-toolbar-items', me, items);
@@ -1726,10 +1719,7 @@ Ext.define('Shopware.grid.Panel', {
             text: me.deleteButtonText,
             disabled: true,
             iconCls: 'sprite-minus-circle-frame',
-            handler: function () {
-                var selModel = me.getSelectionModel();
-                me.fireEvent(me.eventAlias + '-delete-items', me, selModel.getSelection(), this);
-            }
+            handler: Ext.bind(me._onMultiDelete, me)
         });
 
         me.fireEvent(me.eventAlias + '-delete-button-created', me, me.deleteButton);
@@ -1771,7 +1761,6 @@ Ext.define('Shopware.grid.Panel', {
 
         me.fireEvent(me.eventAlias + '-search', me, field, value);
     },
-
 
     /**
      * Helper function which is used from the { @link Shopware.detail.Controller }
@@ -1831,19 +1820,19 @@ Ext.define('Shopware.grid.Panel', {
     associationColumnRenderer: function(value, metaData, record, rowIndex, colIndex) {
         var column = this.columns[colIndex], result;
 
-        //check if the association was assigned to the grid column
+        // check if the association was assigned to the grid column
         if (!column.association) {
             return value;
         }
-        //if the association assigned, we can get the association store of the record
+        // if the association assigned, we can get the association store of the record
         var associationStore = record[column.association.storeName];
 
-        //check if the association was loaded through the listing query
+        // check if the association was loaded through the listing query
         if (!(associationStore instanceof Ext.data.Store) || associationStore.getCount() <= 0) {
             return value;
         }
 
-        //get the first record of the store to display the human readable data
+        // get the first record of the store to display the human readable data
         var associationRecord = associationStore.first();
         if (!(associationRecord instanceof Ext.data.Model)) {
             return value;
@@ -1863,6 +1852,12 @@ Ext.define('Shopware.grid.Panel', {
         me.fireEvent(me.eventAlias + '-add-item', me, me.createNewRecord());
     },
 
+    _onMultiDelete: function () {
+        var me = this;
+        var selModel = me.getSelectionModel();
+        me.fireEvent(me.eventAlias + '-delete-items', me, selModel.getSelection(), this);
+    },
+
     /**
      * @param selModel
      * @param selection
@@ -1870,7 +1865,17 @@ Ext.define('Shopware.grid.Panel', {
     onSelectionChange: function(selModel, selection) {
         var me = this;
         return me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
+    },
+
+    _onDelete: function (view, rowIndex, colIndex, item, opts, record) {
+        var me = this;
+        me.fireEvent(me.eventAlias + '-delete-item', me, record, rowIndex, colIndex, item, opts);
+    },
+
+    _onEdit: function (view, rowIndex, colIndex, item, opts, record) {
+        var me = this;
+        me.fireEvent(me.eventAlias + '-edit-item', me, record, rowIndex, colIndex, item, opts);
     }
 });
 
-//{/block}
+// {/block}

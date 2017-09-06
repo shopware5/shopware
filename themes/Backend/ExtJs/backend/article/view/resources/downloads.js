@@ -209,15 +209,23 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
             store: me.article.getDownload(),
             name: 'download-listing',
             height: 180,
-            plugins: [{
-                ptype: 'grid-attributes',
-                table: 's_articles_downloads_attributes'
-            }],
+            plugins: [
+                {
+                    ptype: 'grid-attributes',
+                    table: 's_articles_downloads_attributes'
+                },
+                Ext.create('Ext.grid.plugin.CellEditing', {
+                    clicksToEdit: 1
+                })
+            ],
             columns: [
                 {
                     header: me.snippets.name,
                     dataIndex: 'name',
-                    flex: 1
+                    flex: 1,
+                    editor: {
+                        xtype: 'textfield'
+                    }
                 }, {
                     header: me.snippets.link,
                     dataIndex: 'file',

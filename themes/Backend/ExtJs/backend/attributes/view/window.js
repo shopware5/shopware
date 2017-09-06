@@ -53,7 +53,8 @@ Ext.define('Shopware.apps.Attributes.view.Window', {
         var me = this;
 
         me.listingStore = Ext.create('Shopware.apps.Attributes.store.Column');
-
+        me.listingStore.getProxy().extraParams.raw = 1;
+        
         me.listing = Ext.create('Shopware.apps.Attributes.view.Listing', {
             region: 'center',
             store: me.listingStore,
@@ -77,6 +78,14 @@ Ext.define('Shopware.apps.Attributes.view.Window', {
         me.detailForm = Ext.create('Ext.form.Panel', {
             items: [me.detail],
             region: 'east',
+            plugins: {
+                ptype: 'snippet-translation',
+                namespace: 'backend/attribute_columns',
+                getSnippetName: function(field) {
+                    var record = me.detailForm.getRecord();
+                    return record.get('tableName') + '_' + record.get('columnName') + '_' + field.name;
+                }
+            },
             disabled: true,
             bodyPadding: 20,
             cls: 'shopware-form',

@@ -82,7 +82,7 @@ class DataLoader
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        return $query->execute()->fetch(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetch(\PDO::FETCH_ASSOC) ?: [];
     }
 
     /**
@@ -107,8 +107,6 @@ class DataLoader
         $query->andWhere('objectkey = :key');
         $query->setParameter(':key', $foreignKey);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
-
-        return $data;
+        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC) ?: [];
     }
 }

@@ -818,7 +818,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('countryiso', $country);
             $this->assertArrayHasKey('areaID', $country);
             $this->assertArrayHasKey('countryen', $country);
-            $this->assertArrayHasKey('shippingfree', $country);
             $this->assertArrayHasKey('taxfree', $country);
             $this->assertArrayHasKey('display_state_in_registration', $country);
             $this->assertArrayHasKey('force_state_in_registration', $country);
@@ -884,7 +883,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('countryiso', $country);
         $this->assertArrayHasKey('areaID', $country);
         $this->assertArrayHasKey('countryen', $country);
-        $this->assertArrayHasKey('shippingfree', $country);
         $this->assertArrayHasKey('taxfree', $country);
         $this->assertArrayHasKey('display_state_in_registration', $country);
         $this->assertArrayHasKey('force_state_in_registration', $country);
@@ -915,7 +913,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('countryiso', $country);
         $this->assertArrayHasKey('areaID', $country);
         $this->assertArrayHasKey('countryen', $country);
-        $this->assertArrayHasKey('shippingfree', $country);
         $this->assertArrayHasKey('taxfree', $country);
         $this->assertArrayHasKey('display_state_in_registration', $country);
         $this->assertArrayHasKey('force_state_in_registration', $country);
@@ -1244,7 +1241,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'countryen' => 'NAMIBIA',
                         'position' => '10',
                         'notice' => '',
-                        'shippingfree' => '0',
                         'taxfree' => '0',
                         'taxfree_ustid' => '0',
                         'taxfree_ustid_checked' => '0',
@@ -1262,7 +1258,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'countryen' => 'NAMIBIA',
                         'position' => '10',
                         'notice' => '',
-                        'shippingfree' => '0',
                         'taxfree' => '0',
                         'taxfree_ustid' => '0',
                         'taxfree_ustid_checked' => '0',
@@ -1324,7 +1319,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                     'countryen' => 'GERMANY',
                     'position' => '1',
                     'notice' => '',
-                    'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',
@@ -1374,7 +1368,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                     'countryen' => 'AUSTRALIA',
                     'position' => '10',
                     'notice' => '',
-                    'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',
@@ -2232,7 +2225,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'countryen' => 'GERMANY',
                 'position' => '1',
                 'notice' => '',
-                'shippingfree' => '0',
             ],
             $result
         );

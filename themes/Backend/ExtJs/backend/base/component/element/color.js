@@ -39,7 +39,9 @@ Ext.define('Shopware.apps.Base.view.element.Color', {
     },
 
     //invalidText: "Colors must be in a the hex format #FFFFFF.",
-    regex: /^#[0-9A-F]{6}|[0-9A-F]{3}$/i,
+    // {literal}
+    regex: /^#([0-9A-F]{6}|[0-9A-F]{3})$/i,
+    // {/literal}
 
     initComponent: function () {
         this.callParent()

@@ -153,8 +153,15 @@ class SearchIndexer implements SearchIndexerInterface
                     continue;
                 }
 
-                // Build array from columns fieldIDs and fields
-                $fields = array_combine(explode(', ', $table['fieldIDs']), explode(', ', $table['fields']));
+                // Build array from columns fieldIDs, fields and do_not_split
+                $fieldIds = explode(', ', $table['fieldIDs']);
+                $fieldNames = explode(', ', $table['fields']);
+                $doNotSplits = explode(', ', $table['doNotSplit']);
+                $fields = [];
+                foreach ($fieldIds as $key => $fieldId) {
+                    $fields[$fieldId] = ['fieldName' => $fieldNames[$key], 'doNotSplit' => $doNotSplits[$key]];
+                }
+
                 $keywords = [];
                 $sqlIndex = [];
 
@@ -162,8 +169,13 @@ class SearchIndexer implements SearchIndexerInterface
                 foreach ($getTableKeywords as $currentRow => $row) {
                     // Go through every column of result
                     foreach ($fields as $fieldID => $field) {
-                        // Split string from column into keywords
-                        $field_keywords = $this->termHelper->splitTerm($row[$field]);
+                        $field_keywords = [$row[$field['fieldName']]];
+
+                        if (!(bool) $field['doNotSplit']) {
+                            // Split string from column into keywords
+                            $field_keywords = $this->termHelper->splitTerm($row[$field['fieldName']]);
+                        }
+
                         if (empty($field_keywords)) {
                             continue;
                         }
@@ -300,7 +312,8 @@ class SearchIndexer implements SearchIndexerInterface
                 st.referenz_table, 
                 st.foreign_key,
                 GROUP_CONCAT(sf.id SEPARATOR ', ') AS fieldIDs,
-                GROUP_CONCAT(sf.field SEPARATOR ', ') AS `fields`
+                GROUP_CONCAT(sf.field SEPARATOR ', ') AS `fields`,
+                GROUP_CONCAT(sf.do_not_split SEPARATOR ', ') AS `doNotSplit`
             FROM s_search_fields sf FORCE INDEX (tableID)
                 INNER JOIN s_search_tables st
                     ON st.id = sf.tableID

@@ -71,6 +71,10 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'custom_search.facet.classes.VoteAverageFacet',
         'custom_search.facet.classes.ProductAttributeFacet',
         'custom_search.facet.classes.CombinedConditionFacet',
+        'custom_search.facet.classes.WeightFacet',
+        'custom_search.facet.classes.LengthFacet',
+        'custom_search.facet.classes.HeightFacet',
+        'custom_search.facet.classes.WidthFacet',
 
         'custom_search.sorting.Listing',
         'custom_search.sorting.Detail',

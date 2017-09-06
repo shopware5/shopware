@@ -109,6 +109,11 @@ class Category extends Extendable implements \JsonSerializable
     protected $externalLink;
 
     /**
+     * @var string
+     */
+    protected $externalTarget;
+
+    /**
      * @var Media
      */
     protected $media;
@@ -318,6 +323,22 @@ class Category extends Extendable implements \JsonSerializable
     public function getExternalLink()
     {
         return $this->externalLink;
+    }
+
+    /**
+     * @param string $externalTarget
+     */
+    public function setExternalTarget($externalTarget)
+    {
+        $this->externalTarget = $externalTarget;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalTarget()
+    {
+        return $this->externalTarget;
     }
 
     /**

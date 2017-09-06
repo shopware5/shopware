@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -51,7 +51,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     private $manufacturerService;
 
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -67,13 +67,13 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param ManufacturerServiceInterface         $manufacturerService
-     * @param QueryBuilderFactory                  $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {

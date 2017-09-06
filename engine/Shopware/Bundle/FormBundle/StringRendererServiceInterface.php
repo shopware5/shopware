@@ -25,14 +25,13 @@
 
 namespace Shopware\Bundle\FormBundle;
 
-use Enlight_View_Default as View;
-
 interface StringRendererServiceInterface
 {
     /**
      * @param $string
      * @param array $viewVariables
      * @param array $sElement
+     *
      * @return string
      */
     public function render($string, array $viewVariables, array $sElement);

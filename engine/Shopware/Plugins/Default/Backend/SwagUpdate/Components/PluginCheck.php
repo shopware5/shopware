@@ -71,20 +71,23 @@ class PluginCheck
         try {
             $results = [];
             foreach ($installedPlugins as $plugin) {
+                $technicalName = $plugin['name'];
                 $key = strtolower($plugin['name']);
                 $name = $plugin['label'];
+
                 $inStore = array_key_exists($key, $storePlugins);
-                $available = array_key_exists($key, $updatesAvailable);
-                $updatable = $available && $plugin['version'] < $updatesAvailable[$key]->getVersion();
-                $description = $this->getPluginStateDescription($inStore, $available);
+                $targetVersionUpdateAvailable = array_key_exists($key, $updatesAvailable);
+                $description = $this->getPluginStateDescription($inStore, $targetVersionUpdateAvailable);
 
                 $results[] = [
                     'inStore' => $inStore,
                     'name' => $name,
                     'message' => $description,
-                    'updatable' => $updatable,
+                    'updatable' => $inStore && version_compare($plugin['version'], $storePlugins[$key]->getVersion(), '<'),
+                    'updatableAfterUpgrade' => $inStore && $targetVersionUpdateAvailable && $storePlugins[$key]->getVersion() !== $updatesAvailable[$key]->getVersion(),
                     'id' => sprintf('plugin_incompatible-%s', $name),
-                    'errorLevel' => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING,
+                    'technicalName' => $technicalName,
+                    'errorLevel' => ($targetVersionUpdateAvailable) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING,
                 ];
             }
         } catch (\Exception $e) {

@@ -2261,6 +2261,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $mainData['releaseDate'] = $mainDetail->getReleaseDate();
             $mainData['shippingTime'] = $mainDetail->getShippingTime();
             $mainData['shippingFree'] = $mainDetail->getShippingFree();
+            $mainData['width'] = $mainDetail->getWidth();
+            $mainData['height'] = $mainDetail->getHeight();
+            $mainData['len'] = $mainDetail->getLen();
         }
         if ($mapping['attributes']) {
             $builder = Shopware()->Models()->createQueryBuilder();
@@ -3036,8 +3039,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             //we iterate the options to get the option ids in a one dimensional array.
             foreach ($group['options'] as $option) {
                 if ($option['active']) {
-                    $options[] = $option['id'];
-                    $allOptions[$option['id']] = $option['id'];
+                    $options[] = (int) $option['id'];
+                    $allOptions[$option['id']] = (int) $option['id'];
                 }
             }
 
@@ -3832,7 +3835,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 continue;
             }
 
-            $priceData['to'] = intval($priceData['to']);
+            $priceData['to'] = (int) $priceData['to'];
 
             //if the "to" value isn't numeric, set the place holder "beliebig"
             if ($priceData['to'] <= 0) {

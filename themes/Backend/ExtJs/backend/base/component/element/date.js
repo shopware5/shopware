@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Base.view.element.Date', {
         if(!value) {
             return null;
         } else if (typeof(value) == 'string') {
-            return new Date(value);
+            return (value === "0000-00-00") ? null : new Date(value);
         } else {
             return value;
         }

@@ -31,12 +31,12 @@ use Shopware\Tests\Unit\Bundle\FormBundle\fixtures\View;
 class StringRendererServiceTest extends TestCase
 {
     /**
-     * @var StringRendererService $stringRenderService
+     * @var StringRendererService
      */
     private $stringRendererService;
 
     /**
-     * @var View $view ;
+     * @var View ;
      */
     private $view;
 
@@ -65,7 +65,7 @@ class StringRendererServiceTest extends TestCase
     public function testStringWithMultiLevelPlaceholder()
     {
         $view = ['someKey' => [
-            'secondKey' => 'secondVal'
+            'secondKey' => 'secondVal',
         ]];
         $input = 'foobar {$someKey.secondKey}';
         $expectedOutput = 'foobar secondVal';

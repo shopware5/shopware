@@ -38,7 +38,11 @@ class TextMappingFactory
      */
     public static function factory(Client $client)
     {
-        $info = $client->info([]);
+        try {
+            $info = $client->info([]);
+        } catch (\Exception $e) {
+            return new TextMappingES2();
+        }
 
         if (version_compare($info['version']['number'], '5', '>=')) {
             return new TextMappingES5();

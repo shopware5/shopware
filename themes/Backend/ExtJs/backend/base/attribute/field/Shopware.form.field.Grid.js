@@ -47,6 +47,8 @@ Ext.define('Shopware.form.field.Grid', {
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body shopware-multi-selection-form-item-body',
     separator: '|',
     allowBlank: true,
+    
+    fieldLabelConfig: 'default',
 
     /**
      * @required
@@ -68,16 +70,27 @@ Ext.define('Shopware.form.field.Grid', {
      */
     animateAddItem: true,
 
+    useSeparator: true,
+
     /**
      * @boolean
      */
     ignoreDisabled: true,
+
+    allowDelete: true,
+
+    allowAdd: true,
 
     initComponent: function() {
         var me = this;
 
         me.store = me.initializeStore();
         me.items = me.createItems();
+
+        if (me.fieldLabelConfig !== 'default') {
+            me.fieldLabel = '';
+        }
+
         me.callParent(arguments);
     },
 
@@ -178,7 +191,13 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     createActionColumnItems: function() {
-        return [this.createDeleteColumn()];
+        var items = [];
+
+        if (this.allowDelete) {
+            items.push(this.createDeleteColumn());
+        }
+
+        return items;
     },
 
     createDeleteColumn: function() {
@@ -206,6 +225,7 @@ Ext.define('Shopware.form.field.Grid', {
     removeItem: function(record) {
         var me = this;
         me.store.remove(record);
+        me.fixLayout();
     },
 
     /**
@@ -228,6 +248,7 @@ Ext.define('Shopware.form.field.Grid', {
         if (!exist) {
             this.store.add(record);
         }
+        me.fixLayout();
         return !exist;
     },
 
@@ -242,12 +263,19 @@ Ext.define('Shopware.form.field.Grid', {
             margin = '0 25 0 0';
         }
 
+        var emptyText = '';
+        if (me.fieldLabelConfig === 'as_empty_text') {
+            emptyText = me.fieldLabel;
+        }
+
         return {
+            emptyText: emptyText,
             helpText: me.helpText,
             helpTitle: me.helpTitle,
             store: me.searchStore,
             multiSelect: true,
             margin: margin,
+            hidden: !me.allowAdd,
             isFormField: false,
             pageSize: me.searchStore.pageSize,
             listeners: {
@@ -315,6 +343,9 @@ Ext.define('Shopware.form.field.Grid', {
             return null;
         }
 
+        if (!me.useSeparator) {
+            return recordData;
+        }
         return me.separator + recordData.join(me.separator) + me.separator;
     },
 
@@ -324,13 +355,17 @@ Ext.define('Shopware.form.field.Grid', {
         me.store.removeAll();
         if (!value) {
             me.isValid();
+            me.fixLayout();
             return;
         }
 
         try {
-            var ids = value.split(me.separator);
-            ids = ids.filter(function(value) {
-                return value.length > 0;
+            var ids = value;
+            if (me.useSeparator) {
+                ids = value.split(me.separator);
+            }
+            ids = ids.filter(function(id) {
+                return id.length > 0 || id > 0;
             });
         } catch (e) {
             return;
@@ -345,8 +380,20 @@ Ext.define('Shopware.form.field.Grid', {
             params: { ids: Ext.JSON.encode(ids) },
             callback: function() {
                 me.isValid();
+                me.fixLayout();
             }
         });
+    },
+
+    fixLayout: function() {
+        if (!this.rendered) {
+            return;
+        }
+        if (this.getHeight() <= 0) {
+            return;
+        }
+
+        this.setHeight(this.getHeight());
     },
 
     getSubmitData: function() {
@@ -358,7 +405,7 @@ Ext.define('Shopware.form.field.Grid', {
     isValid: function() {
         var me = this;
 
-        if (me.searchField) {
+        if (me.searchField && me.searchField.combo) {
             me.searchField.combo.clearInvalid();
         }
 
@@ -370,7 +417,7 @@ Ext.define('Shopware.form.field.Grid', {
             return true;
         }
 
-        if (me.searchField) {
+        if (me.searchField && me.searchField.combo) {
             me.searchField.combo.markInvalid([
                 '{s name="not_empty"}{/s}'
             ]);

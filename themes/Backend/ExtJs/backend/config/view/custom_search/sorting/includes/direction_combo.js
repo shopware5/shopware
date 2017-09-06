@@ -33,7 +33,6 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.includes.DirectionCo
     queryMode: 'local',
     fieldLabel: '{s name="direction_combo"}{/s}',
     allowBlank: false,
-
     name: 'direction',
     value: 'DESC',
 

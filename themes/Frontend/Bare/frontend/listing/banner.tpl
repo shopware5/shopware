@@ -2,12 +2,7 @@
     {if $sBanner}
         <div class="banner--container">
 
-            {if $sBanner.extension=="swf"}
-
-                {* @deprecated Flash banner *}
-                {block name='frontend_listing_swf_banner'}{/block}
-
-            {elseif $sBanner.media.thumbnails}
+            {if $sBanner.media.thumbnails}
                 {if !$sBanner.link || $sBanner.link == "#" || $sBanner.link == ""}
 
                     {* Image only banner *}

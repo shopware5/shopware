@@ -30,7 +30,6 @@ use Doctrine\DBAL\Connection;
  * This adapter allows you to implement cron tasks in your application.
  * The adapter handles all action between the controller and database.
  */
-
 class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Adapter
 {
     /**
@@ -46,6 +45,16 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     private $connection;
 
     /**
+     * @var Enlight_Components_Cron_Job[]|null
+     */
+    private $allJobsList;
+
+    /**
+     * @var Enlight_Components_Cron_Job[]|null
+     */
+    private $overdueJobsList;
+
+    /**
      * @param Connection $connection
      */
     public function __construct(Doctrine\DBAL\Connection $connection)
@@ -59,15 +68,15 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     public function updateJob(Enlight_Components_Cron_Job $job)
     {
         $data = [];
-        $data['action']           = $job->getAction();
+        $data['action'] = $job->getAction();
         $data[$this->connection->quoteIdentifier('interval')] = $job->getInterval();
-        $data['data']             = serialize($job->getData());
-        $data['active']           = $job->getActive() ? '1' : '0';
-        $data['next']             = $job->getNext() ? $job->getNext()->toString('YYYY-MM-dd HH:mm:ss') : null;
-        $data['start']            = $job->getStart() ? $job->getStart()->toString('YYYY-MM-dd HH:mm:ss') : null;
-        $data['end']              = $job->getEnd() ? $job->getEnd()->toString('YYYY-MM-dd HH:mm:ss') : null;
+        $data['data'] = serialize($job->getData());
+        $data['active'] = $job->getActive() ? '1' : '0';
+        $data['next'] = $job->getNext() ? $job->getNext()->toString('YYYY-MM-dd HH:mm:ss') : null;
+        $data['start'] = $job->getStart() ? $job->getStart()->toString('YYYY-MM-dd HH:mm:ss') : null;
+        $data['end'] = $job->getEnd() ? $job->getEnd()->toString('YYYY-MM-dd HH:mm:ss') : null;
         $data['disable_on_error'] = $job->getDisableOnError() ? '1' : '0';
-        $data['name']             = $job->getName();
+        $data['name'] = $job->getName();
 
         if (null === $job->getId()) {
             $this->connection->insert($this->tableName, $data);
@@ -91,7 +100,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         return $this->connection->update(
             $this->tableName,
             ['end' => null],
-            ['id'  => $job->getId()]
+            ['id' => $job->getId()]
         ) > 0;
     }
 
@@ -126,28 +135,19 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
      */
     public function getNextJob($force = false)
     {
-        $qb = $this->connection->createQueryBuilder();
+        if ($force) {
+            if (!$this->allJobsList) {
+                $this->allJobsList = $this->getAllJobs();
+            }
 
-        $qb->select('*')
-            ->from($this->tableName, 'c')
-            ->andWhere('c.active = 1')
-            ->andWhere('c.end IS NOT NULL')
-            ->orderBy('c.next');
-
-        if (!$force) {
-            $qb->andWhere('c.next <= :dateNow');
-            $qb->setParameter('dateNow', new DateTime(), 'datetime');
+            return array_pop($this->allJobsList);
         }
 
-        $row = $qb->execute()->fetch();
-
-        if (!$row) {
-            return null;
+        if (!$this->overdueJobsList) {
+            $this->overdueJobsList = $this->getOverdueJobs();
         }
 
-        $row['data'] = unserialize($row['data']);
-
-        return new Enlight_Components_Cron_Job($row);
+        return array_pop($this->overdueJobsList);
     }
 
     /**
@@ -198,13 +198,14 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
      *
      * @param $column
      * @param $value
+     *
      * @return Enlight_Components_Cron_Job|null
      */
     private function getJobByColumn($column, $value)
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $field = 'c.'.$column;
+        $field = 'c.' . $column;
 
         $qb->select('*')
             ->from($this->tableName, 'c')
@@ -220,5 +221,31 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $row['data'] = unserialize($row['data']);
 
         return new Enlight_Components_Cron_Job($row);
+    }
+
+    /**
+     * @return Enlight_Components_Cron_Job[]
+     */
+    private function getOverdueJobs()
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $qb->select('*')
+            ->from($this->tableName, 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('c.end IS NOT NULL')
+            ->orderBy('c.next')
+            ->andWhere('c.next <= :dateNow')
+            ->setParameter('dateNow', new DateTime(), 'datetime');
+
+        $rows = $qb->execute()->fetchAll();
+
+        $overdueJobsList = [];
+        foreach ($rows as $row) {
+            $row['data'] = unserialize($row['data']);
+            $overdueJobsList[$row['id']] = new Enlight_Components_Cron_Job($row);
+        }
+
+        return $overdueJobsList;
     }
 }

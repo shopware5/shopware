@@ -41,7 +41,7 @@ class XmlCronjobReader
         try {
             $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/cronjob.xsd');
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseInfo($dom);
@@ -79,9 +79,9 @@ class XmlCronjobReader
 
         $cronjobEntry['name'] = $this->getFirstChild($entry, 'name');
         $cronjobEntry['action'] = $this->getFirstChild($entry, 'action');
-        $cronjobEntry['active'] = $this->toBool($this->getFirstChild($entry, 'active'));
+        $cronjobEntry['active'] = XmlUtils::phpize($this->getFirstChild($entry, 'active'));
         $cronjobEntry['interval'] = $this->getFirstChild($entry, 'interval');
-        $cronjobEntry['disable_on_error'] = $this->toBool($this->getFirstChild($entry, 'disableOnError'));
+        $cronjobEntry['disable_on_error'] = XmlUtils::phpize($this->getFirstChild($entry, 'disableOnError'));
 
         return $cronjobEntry;
     }
@@ -119,15 +119,5 @@ class XmlCronjobReader
         }
 
         return $children;
-    }
-
-    /**
-     * @param string $string
-     *
-     * @return bool
-     */
-    private function toBool($string)
-    {
-        return $string == 'true' ? true : false;
     }
 }

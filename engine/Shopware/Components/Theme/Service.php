@@ -310,6 +310,12 @@ class Service
                 $data['value'] = $this->mediaService->normalize($data['value']);
             }
 
+            // Don't save default values
+            if ($element->getDefaultValue() === $data['value']) {
+                $element->getValues()->removeElement($value);
+                continue;
+            }
+
             $value->setShop($shop);
             $value->setElement($element);
             $value->setValue($data['value']);
@@ -392,6 +398,18 @@ class Service
                 $element['defaultValue'],
                 $namespace
             );
+
+            if ($element['attributes']) {
+                $element['attributes']['supportText'] = $this->convertSnippet(
+                    $element['attributes']['supportText'],
+                    $namespace
+                );
+
+                $element['attributes']['helpText'] = $this->convertSnippet(
+                    $element['attributes']['helpText'],
+                    $namespace
+                );
+            }
 
             if (isset($element['selection'])) {
                 foreach ($element['selection'] as &$selection) {

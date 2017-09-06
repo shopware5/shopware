@@ -247,7 +247,7 @@ class Emotion extends ModelEntity
 
     /**
      * @var int
-     * @ORM\Column(name="rows", type="integer", nullable=false)
+     * @ORM\Column(name="`rows`", type="integer", nullable=false)
      */
     private $rows;
 
@@ -314,6 +314,18 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="preview_secret", type="string", nullable=true)
      */
     private $previewSecret;
+
+    /**
+     * @var string
+     * @ORM\Column(name="customer_stream_ids", type="string", nullable=true)
+     */
+    private $customerStreamIds;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="replacement", type="string", nullable=true)
+     */
+    private $replacement;
 
     /**
      * Class constructor.
@@ -898,5 +910,31 @@ class Emotion extends ModelEntity
     public function setPreviewSecret($previewSecret)
     {
         $this->previewSecret = $previewSecret;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReplacement()
+    {
+        return $this->replacement;
+    }
+
+    /**
+     * @param string|null $replacement
+     */
+    public function setReplacement($replacement)
+    {
+        $this->replacement = $replacement;
+    }
+
+    public function getCustomerStreamIds()
+    {
+        return $this->customerStreamIds;
+    }
+
+    public function setCustomerStreamIds($customerStreamIds)
+    {
+        $this->customerStreamIds = $customerStreamIds;
     }
 }

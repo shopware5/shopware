@@ -82,7 +82,6 @@ class CartPosition extends MultipleElement
         $names = [
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
-            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
             'articleName' => rtrim($elements['name']->getText(), '.'),
         ];
 

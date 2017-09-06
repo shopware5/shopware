@@ -34,7 +34,9 @@
 
     {* Promotion *}
     {block name='frontend_home_index_promotions'}
-        {if $hasEmotion}
+        {if $hasCustomerStreamEmotion}
+            {action module=frontend controller=listing action=layout sCategory=$sCategoryContent.id}
+        {elseif $hasEmotion}
             <div class="content--emotions">
                 {foreach $emotions as $emotion}
                     <div class="emotion--wrapper"

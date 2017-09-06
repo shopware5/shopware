@@ -163,6 +163,8 @@ $app->map('/clearCache', function () use ($container) {
 })->via('GET', 'POST')->name('clearCache');
 
 $app->map('/done', function () use ($app, $container) {
+    $container->get('shopware.update.chmod')->changePermissions();
+
     /** @var \Shopware\Components\Theme\Installer $themeService */
     $themeService = $container->get('shopware.theme_installer');
     $themeService->synchronize();

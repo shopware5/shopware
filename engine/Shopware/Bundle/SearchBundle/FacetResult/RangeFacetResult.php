@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\SearchBundle\TemplateSwitchable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
@@ -33,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RangeFacetResult extends Extendable implements FacetResultInterface
+class RangeFacetResult extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
     /**
      * @var string
@@ -81,9 +82,19 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     protected $activeMin;
 
     /**
+     * @var string|null
+     */
+    protected $suffix;
+
+    /**
      * @var null|string
      */
     protected $template;
+
+    /**
+     * @var int
+     */
+    protected $digits;
 
     /**
      * @param string      $facetName
@@ -95,8 +106,10 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
      * @param float       $activeMax
      * @param string      $minFieldName
      * @param string      $maxFieldName
-     * @param string|null $template
      * @param Attribute[] $attributes
+     * @param null|string $suffix
+     * @param int         $digits
+     * @param string|null $template
      */
     public function __construct(
         $facetName,
@@ -109,6 +122,8 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $minFieldName,
         $maxFieldName,
         $attributes = [],
+        $suffix = null,
+        $digits = 2,
         $template = 'frontend/listing/filter/facet-range.tpl'
     ) {
         $this->facetName = $facetName;
@@ -122,6 +137,8 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
         $this->maxFieldName = $maxFieldName;
         $this->attributes = $attributes;
         $this->template = $template;
+        $this->suffix = $suffix;
+        $this->digits = $digits;
     }
 
     /**
@@ -250,5 +267,21 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDigits()
+    {
+        return $this->digits;
     }
 }

@@ -146,6 +146,7 @@
         </service>
 
         <service id="shopware_search_es.product_attribute_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ProductAttributeFacetHandler">
+            <argument type="service" id="shopware_attribute.crud_service" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -182,6 +183,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.search_random_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\RandomSortingHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.service_subscriber" class="Shopware\Bundle\SearchBundleES\Subscriber\ServiceSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
@@ -201,5 +206,24 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.width_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\WidthConditionHandler">
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.height_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\HeightConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.length_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\LengthConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.weight_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\WeightConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.product_dimensions_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ProductDimensionsFacetHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
     </services>
 </container>

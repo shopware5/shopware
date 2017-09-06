@@ -72,10 +72,11 @@ class CustomListingHydrator extends Hydrator
 
     /**
      * @param array $data
+     * @param array $streams
      *
      * @return CustomFacet
      */
-    public function hydrateFacet(array $data)
+    public function hydrateFacet(array $data, array $streams)
     {
         $id = (int) $data['__customFacet_id'];
         $translation = $this->getTranslation($data, '__customFacet', [], $id);
@@ -91,8 +92,12 @@ class CustomListingHydrator extends Hydrator
         $translation = $this->extractFields('__customFacet_', $translation);
         $facets = json_decode($data['__customFacet_facet'], true);
 
-        foreach ($facets as &$facet) {
+        foreach ($facets as $class => &$facet) {
             $facet = array_merge($facet, $translation);
+
+            if (array_key_exists('streamId', $facet)) {
+                $facet['stream'] = $streams[$facet['streamId']];
+            }
         }
 
         $facets = $this->reflector->unserialize(

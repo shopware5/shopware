@@ -27,59 +27,61 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Store - Customer list backend module.
  *
  * The detail store is used for the customer detail page and allows the user
  * to edit or add customers.
  */
-//{block name="backend/customer/store/batch"}
+// {block name="backend/customer/store/batch"}
 Ext.define('Shopware.apps.Customer.store.Batch', {
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Disable auto loading
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Customer.model.Batch',
+    model: 'Shopware.apps.Customer.model.Batch',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url controller="Customer" action="loadStores"}',
+        url: '{url controller="Customer" action="loadStores"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
 
     }
 
 });
-//{/block}
+// {/block}

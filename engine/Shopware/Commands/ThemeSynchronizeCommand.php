@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeSynchronizeCommand extends ShopwareCommand

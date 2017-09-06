@@ -184,9 +184,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\User', 'attribute')
-                      ->where('attribute.userId = ?1')
-                      ->setParameter(1, $userId);
+                ->from('Shopware\Models\Attribute\User', 'attribute')
+                ->where('attribute.userId = ?1')
+                ->setParameter(1, $userId);
 
         return $builder;
     }
@@ -222,7 +222,7 @@ class Repository extends ModelRepository
                 ->leftJoin('resources.privileges', 'privileges');
 
         if (!empty($filter)) {
-            $builder->where($builder->expr()->like('resources.name', '?1'))
+            $builder->where('resources.name LIKE ?1')
                     ->setParameter(1, $filter . '%');
         }
 
@@ -257,9 +257,9 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['rule.resourceId'])
                 ->from('Shopware\Models\User\Rule', 'rule')
-                ->where($builder->expr()->isNull('rule.privilegeId'))
-                ->andWhere($builder->expr()->isNotNull('rule.resourceId'))
-                ->andWhere($builder->expr()->eq('rule.roleId', '?1'))
+                ->where('rule.privilegeId IS NULL')
+                ->andWhere('rule.resourceId IS NOT NULL')
+                ->andWhere('rule.roleId = ?1')
                 ->setParameter(1, $roleId);
 
         return $builder;

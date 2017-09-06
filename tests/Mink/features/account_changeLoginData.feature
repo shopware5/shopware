@@ -115,12 +115,12 @@ Feature: Successful changes of login data
 
         When  I fill in "email" with "test@example.info"
         And   I press "E-Mail senden"
-        Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet."
+        Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet, sofern die von Ihnen eingegebene E-Mail Adresse registriert ist."
 
         When  I follow "Zurück"
         And   I fill in "email" with "test@example.com"
         And   I press "E-Mail senden"
-        Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet."
+        Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet, sofern die von Ihnen eingegebene E-Mail Adresse registriert ist."
 
         When  I follow "Mein Konto"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
@@ -148,7 +148,7 @@ Feature: Successful changes of login data
 
         Then  I should see "Die persönlichen Daten wurden erfolgreich gespeichert."
         Then  I follow "Übersicht"
-        And   I should be welcome'd with with "Willkommen, <firstname> <lastname>"
+        And   I should be welcomed with "Willkommen, <firstname> <lastname>"
 
         Examples:
           | salutation | firstname | lastname   |

@@ -56,6 +56,7 @@ class Requirements
     public function toArray()
     {
         $result = [
+            'hasIoncube'  => false,
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
@@ -73,9 +74,9 @@ class Requirements
             $check['group'] = (string) $requirement->group;
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
-            $check['version'] = (string) $requirement->version;
-            $check['check'] = (bool) (string) $requirement->result;
-            $check['error'] = (bool) $requirement->error;
+            $check['version']  = (string) $requirement->version;
+            $check['check']   = (bool) (string) $requirement->result;
+            $check['error']    = (bool) $requirement->error;
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
@@ -85,6 +86,10 @@ class Requirements
                 $result['hasWarnings'] = true;
             } else {
                 $check['status'] = 'ok';
+
+                if (strtolower($check['name']) === 'ioncube loader') {
+                    $result['hasIoncube'] = true;
+                }
             }
             unset($check['check'], $check['error']);
 
@@ -315,23 +320,6 @@ class Requirements
             return (bool) session_save_path();
         } elseif (ini_get('session.save_path')) {
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks the disk free space
-     *
-     * @return bool|string
-     */
-    private function checkDiskFreeSpace()
-    {
-        if (function_exists('disk_free_space')) {
-            // Prevent Warning: disk_free_space() [function.disk-free-space]: Value too large for defined data type
-            $freeSpace = @disk_free_space(__DIR__);
-
-            return $this->encodeSize($freeSpace);
         }
 
         return false;

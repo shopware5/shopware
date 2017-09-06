@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 /**
  * @category  Shopware
  *
@@ -34,6 +36,18 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
     public function init()
     {
         $this->sSYSTEM = Shopware()->System();
+    }
+
+    public function preDispatch()
+    {
+        $config = $this->container->get('config');
+
+        if (!$config->get('showTellAFriend')) {
+            throw new Enlight_Controller_Exception(
+                'Tell a friend is not activated for the current shop',
+                404
+            );
+        }
     }
 
     public function successAction()
@@ -55,7 +69,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         }
 
         // Get Article-Information
-        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, intval($id));
+        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
         if (empty($sArticle['articleName'])) {
             return $this->forward('index', 'index');
         }
@@ -125,7 +139,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $this->View()->sComment = $this->Request()->getPost('sComment');
             }
         }
-        $this->View()->rand = md5(uniqid(rand()));
+        $this->View()->rand = Random::getAlphanumericString(32);
         $this->View()->sArticle = $sArticle;
     }
 }

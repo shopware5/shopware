@@ -124,9 +124,9 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     public function getListAction()
     {
         try {
-            $limit = intval($this->Request()->limit);
-            $offset = intval($this->Request()->start);
-            $categoryId = (intval($this->Request()->categoryId) == 0) ? 1 : intval($this->Request()->categoryId);
+            $limit = (int) $this->Request()->limit;
+            $offset = (int) $this->Request()->start;
+            $categoryId = ((int) $this->Request()->categoryId == 0) ? 1 : (int) $this->Request()->categoryId;
 
             //order data
             $order = (array) $this->Request()->getParam('sort', []);
@@ -263,8 +263,8 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getBlogCommentsAction()
     {
-        $limit = intval($this->Request()->limit);
-        $offset = intval($this->Request()->start);
+        $limit = (int) $this->Request()->limit;
+        $offset = (int) $this->Request()->start;
         //order data
         $order = (array) $this->Request()->getParam('sort', []);
 
@@ -273,7 +273,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         }
         /** @var $filter array */
         $filter = $this->Request()->getParam('filter', []);
-        $blogId = intval($this->Request()->blogId);
+        $blogId = (int) $this->Request()->blogId;
 
         $dataQuery = $this->getRepository()->getBlogCommentsById($blogId, $filter, $order, $offset, $limit);
         $totalCount = $this->getManager()->getQueryCount($dataQuery);
@@ -507,7 +507,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * @param $tags
      *
-     * @return array
+     * @return string
      */
     private function flatBlogTags($tags)
     {

@@ -47,15 +47,19 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createInfoPanel: true,
     createDeleteButton: true,
     createMediaQuantitySelection: true,
+    thumbnailSize: 70,
+    /**
+     * Button section
+     */
     deleteBtn: null,
+    displayTypeBtn: null,
     selectedLayout: 'grid',
-    width: 1120,
-
     snippets: {
         noMediaFound: '{s name=noMediaFound}No Media found{/s}',
         uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
         noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
         moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
+        previewSize: '{s name=previewSizeFieldLabel}Preview size{/s}',
         mediaInfo: {
             name: '{s name=mediaInfo/name}Name:{/s}',
             uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
@@ -70,6 +74,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             archive: '{s name=formatTypes/archive}-archive{/s}',
             pdf: '{s name=formatTypes/pdf}PDF-document{/s}',
             graphic: '{s name=formatTypes/graphic}-graphic{/s}',
+            vector: '{s name=formatTypes/vector}-vector{/s}',
             unknown: '{s name=formatTypes/unknown}unknown file{/s}'
         },
         fieldsText:{
@@ -82,7 +87,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Initializes the component and sets the neccessary
+     * Initializes the component and sets the necessary
      * toolbars and items.
      *
      * @return void
@@ -94,11 +99,22 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         me.tbar = me.createActionToolbar();
         me.bbar = me.createPagingToolbar();
 
+        me.createPreviewSizeComboBox(me.bbar);
+
         // Are we're having file extensions which should filter the store?
         if(me.validTypes) {
             var proxy = me.mediaStore.getProxy();
             proxy.extraParams.validTypes = me.setValidTypes();
         }
+
+        me.mediaViewContainer = Ext.create('Ext.container.Container', {
+            style: 'overflow-y: scroll',
+            items: [
+                /* {if {acl_is_allowed privilege=upload}} */
+                me.createDropZone(),
+                /* {/if} */
+            ]
+        });
 
         me.cardContainer = Ext.create('Ext.panel.Panel', {
             layout: 'card',
@@ -106,19 +122,13 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             region: 'center',
             unstyled: true,
             style: 'background: #fff',
-            items: [{
-                xtype: 'container',
-                style: 'overflow-y: scroll',
-                items: [
-                /* {if {acl_is_allowed privilege=upload}} */
-                    me.createDropZone(),
-                /* {/if} */
-                    me.createMediaView()
-                ]
-            }, {
-                xtype: 'mediamanager-media-grid',
-                mediaStore: me.mediaStore
-            }]
+            items: [
+                me.mediaViewContainer,
+                {
+                    xtype: 'mediamanager-media-grid',
+                    mediaStore: me.mediaStore
+                }
+            ]
         });
 
         // Create the items of the container
@@ -159,37 +169,54 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     /**
      * Creates the template for the media view panel
      *
-     * @return [object] generated Ext.XTemplate
+     * @return { object } generated Ext.XTemplate
      */
     createMediaViewTemplate: function() {
+        var me = this,
+            tSize = me.thumbnailSize,
+            tStyle = Ext.String.format('style="width:[0]px;height:[0]px;"',tSize),
+            imgStyle = Ext.String.format('style="max-width:[0]px;max-height:[0]px"',tSize-2);
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="thumb-wrap" id="{name}">',
-
-                // If the type is image, then show the image
-                '<tpl if="type == &quot;IMAGE&quot;">',
-                '<div class="thumb">',
-                    '<div class="inner-thumb"><img src="{thumbnail}?{timestamp}" title="{name}" /></div>',
-                '</div>',
-                '</tpl>',
-
-                // All other types should render an icon
-                '<tpl if="type != &quot;IMAGE&quot;">',
-                    '<div class="thumb icon">',
-                        '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
-                    '</div>',
-                '</tpl>',
-                '<span class="x-editable">{[Ext.util.Format.ellipsis(values.name, 9)]}.{extension}</span></div>',
+            Ext.String.format('<div class="thumb-wrap" id="{name}" [0]>',tStyle),
+            // If the type is image, then show the image
+            '<tpl if="this.isImage(type, extension)">',
+            Ext.String.format('<div class="thumb" [0]>',tStyle),
+            Ext.String.format('<div class="inner-thumb" [0]>',tStyle),
+            Ext.String.format('<img src="{thumbnail}?{timestamp}" title="{name}" [0] /></div>', imgStyle),
+            '</div>',
             '</tpl>',
-            '<div class="x-clear"></div>{/literal}'
+
+            // All other types should render an icon
+            '<tpl if="!this.isImage(type, extension)">',
+            Ext.String.format('<div class="thumb icon" [0]>',tStyle),
+            '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
+            '</div>',
+            '</tpl>',
+            '<span class="x-editable">{[Ext.util.Format.ellipsis(values.name, 9)]}.{extension}</span></div>',
+            '</tpl>',
+            '<div class="x-clear"></div>{/literal}',
+            {
+                /**
+                 * Member function of the template to check if a certain file is an image.
+                 *
+                 * @param { string }type
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                isImage: function(type, extension) {
+                    return me._isImage(type, extension);
+                }
+            }
         )
     },
 
     /**
-     * Creates the media listing based on an Ext.view.View (know as DataView)
+     * Creates the media listing based on an Ext.view.View (known as DataView)
      * and binds the "Media"-store to it
      *
-     * @return [object] this.dataView - created Ext.view.View
+     * @return { object } this.dataView - created Ext.view.View
      */
     createMediaView: function() {
         var me = this;
@@ -230,7 +257,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 scope: me
             },
             'deselect': {
-                fn: Ext.bind(me.lockButtons, me),
+                fn: me.onLockDeleteButton,
                 scope: me
             }
         });
@@ -239,23 +266,10 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Locks the delete and replace button
-     *
-     * @param { Ext.selection.DataViewModel } rowModel
-     * @return void
-     */
-    lockButtons: function(rowModel) {
-        var me = this;
-
-        me.onLockDeleteButton(rowModel);
-        me.lockReplaceMediaButton(rowModel);
-    },
-
-    /**
      * Creates a new upload drop zone which uploads the dropped files
      * to the server and adds them to the active album
      *
-     * @return [object] this.mediaDropZone - created Shopware.app.FileUpload
+     * @return { object } this.mediaDropZone - created Shopware.app.FileUpload
      */
     createDropZone: function() {
         var me = this;
@@ -280,7 +294,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * Note that the template has different member methods
      * which are only callable in the actual template.
      *
-     * @return [object] generated Ext.XTemplate
+     * @return { object } generated Ext.XTemplate
      */
     createInfoPanelTemplate: function() {
         var me = this;
@@ -289,14 +303,14 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 '<div class="media-info-pnl">',
 
                     // If the type is image, then show the image
-                    '<tpl if="type == &quot;IMAGE&quot;">',
-                    '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="{thumbnail}?{timestamp}" title="{name}" /></div>',
-                    '</div>',
+                    '<tpl if="this.isImage(type, extension)">',
+                        '<div class="thumb">',
+                            '<div class="inner-thumb"><img src="{thumbnail}?{timestamp}" title="{name}" /></div>',
+                        '</div>',
                     '</tpl>',
 
                     // All other types should render an icon
-                    '<tpl if="type != &quot;IMAGE&quot;">',
+                    '<tpl if="!this.isImage(type, extension)">',
                         '<div class="thumb icon">',
                             '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
                         '</div>',
@@ -324,29 +338,53 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                                 '<span>{width} x {height} Pixel</span>',
                             '</p>',
                         '</tpl>',
-                        '<p>',
-                            '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
-                            '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
-                        '</p>',
+
+                        '<tpl if="this.allowInBrowserRendering(extension)">',
+                            '<p>',
+                                '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
+                                '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
+                            '</p>',
+                        '</tpl>',
                     '</div>',
                 '</div>',
             '</tpl>{/literal}',
             {
                 /**
+                 * Checks if this file type is allowed to be rendered inside of the browser
+                 *
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                allowInBrowserRendering: function(extension) {
+                    return !Ext.Array.contains(['svg'], extension.toLowerCase());
+                },
+
+                /**
+                 * Member function of the template to check if a certain file is an image
+                 *
+                 * @param { string } type
+                 * @param { string } extension
+                 * @returns { boolean }
+                 */
+                isImage: function(type, extension) {
+                    return me._isImage(type, extension);
+                },
+
+                /**
                  * Member function of the template which formats a date string
                  *
-                 * @param [string] value - Date string in the following format: Y-m-d H:i:s
-                 * @return [string] formatted date string
+                 * @param { string } value - Date string in the following format: Y-m-d H:i:s
+                 * @return { string } formatted date string
                  */
                 formatDate: function(value) {
                     return Ext.util.Format.date(value);
                 },
 
                 /**
-                 * Formates the output type
+                 * Formats the output type
                  *
-                 * @param [string] type - Type of the media
-                 * @param [string] extension - File extension of the media
+                 * @param { string } type - Type of the media
+                 * @param { string } extension - File extension of the media
                  */
                 formatDataType: function(type, extension) {
                     var result = '';
@@ -368,6 +406,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                         case 'IMAGE':
                             result = extension + me.snippets.formatTypes.graphic;
                             break;
+                        case 'VECTOR':
+                            result = extension + me.snippets.formatTypes.vector;
+                            break;
                         default:
                             result = me.snippets.formatTypes.unknown;
                             break;
@@ -379,10 +420,10 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Creates a new panel which displays additional informations
+     * Creates a new panel which displays additional information
      * about the selected media.
      *
-     * @return [object] this.infoPanel - generated Ext.panel.Panel
+     * @return { object } this.infoPanel - generated Ext.panel.Panel
      */
     createInfoPanel: function() {
         var me = this;
@@ -420,11 +461,32 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
+     * Event handler for the replace button. Open a new replace media window.
+     */
+    onClickReplaceButton: function() {
+        var me = this,
+            selection = me.dataView.getSelectionModel().getSelection(),
+            replaceWindow, grid;
+
+        if (me.selectedLayout === 'table') {
+            grid = me.down('mediamanager-media-grid');
+            selection = grid.selModel.getSelection();
+        }
+
+        replaceWindow = Ext.create('Shopware.apps.MediaManager.view.replace.Window', {
+            selectedMedias: selection,
+            mediaManager: me
+        });
+
+        replaceWindow.show();
+    },
+
+    /**
      * Creates the action toolbar for the media view. The toolbar
      * contains 2 buttons ("add item" and "delete marked items")
      * and a search field to filter the media view.
      *
-     * @return [object] created Ext.toolbar.Toolbar
+     * @return { object } created Ext.toolbar.Toolbar
      */
     createActionToolbar: function() {
         var me = this;
@@ -432,10 +494,10 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         if(Ext.isIE) {
             me.addBtn = Ext.create('Shopware.app.FileUpload', {
                 requestURL: '{url controller="mediaManager" action="upload"}',
-                padding: 0,
                 padding: '6 0 0',
                 fileInputConfig: {
                     buttonOnly: true,
+                    width: 190,
                     buttonText : me.snippets.fieldsText.addButton,
                     buttonConfig : {
                         iconCls:'sprite-plus-circle'
@@ -445,6 +507,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         } else {
             me.addBtn = Ext.create('Ext.form.field.File', {
                 buttonOnly: true,
+                width: 190,
                 buttonText : me.snippets.fieldsText.addButton,
                 listeners: {
                     scope: this,
@@ -452,7 +515,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     /**
                      * Enable multi selection on the file upload button
                      *
-                     * @param [object] btn - rendered Ext.button.Button
+                     * @param { object } btn - rendered Ext.button.Button
                      * @return void
                      */
                     afterrender: function(btn) {
@@ -466,15 +529,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
         /* {/if} */
 
-        /*{if {acl_is_allowed privilege=update}}*/
-            me.replaceButton = Ext.create('Ext.button.Button', {
-                text: '{s name="replace/media/button/text"}{/s}',
-                iconCls:'sprite-blue-document-convert',
-                disabled: true,
-                handler: Ext.bind(me.onClickReplaceButton, me)
-            });
-        /* {/if} */
-
         var searchField = Ext.create('Ext.form.field.Text', {
             emptyText: me.snippets.fieldsText.searchField,
             cls: 'searchfield',
@@ -484,15 +538,25 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             action: 'mediamanager-media-view-search'
         });
 
+        /*{if {acl_is_allowed privilege=update}}*/
+        me.replaceButton = Ext.create('Ext.button.Button', {
+            text: '{s name="replace/media/button/text"}{/s}',
+            iconCls:'sprite-blue-document-convert',
+            disabled: true,
+            handler: Ext.bind(me.onClickReplaceButton, me)
+        });
+        /* {/if} */
+
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',
             items: [
-        /* {if {acl_is_allowed privilege=create}} */
+
+                /* {if {acl_is_allowed privilege=create}} */
                 this.addBtn,
-        /* {/if} */
-        /*{if {acl_is_allowed privilege=update}}*/
+                /* {/if} */
+                /*{if {acl_is_allowed privilege=update}}*/
                 me.replaceButton
-        /* {/if} */
+                /* {/if} */
             ]
         });
 
@@ -511,11 +575,17 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
         /* {/if} */
 
-        toolbar.add({
+        /**
+         * Initialize the display type button
+         */
+
+        me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
             showText: true,
-            xtype: 'cycle',
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
+            handler: function(btn) {
+                btn.fireEvent('layout-button-click', btn, btn.getActiveItem());
+            },
             menu: {
                 items: [{
                     text: '{s name=toolbar/view_chart}Grid{/s}',
@@ -530,6 +600,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             }
         });
 
+        toolbar.add(me.displayTypeBtn);
+
         toolbar.add(
             '->',
             searchField,
@@ -540,30 +612,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Event handler for the replace button. Open a new replace media window.
-     */
-    onClickReplaceButton: function() {
-        var me = this,
-            selection = me.dataView.getSelectionModel().getSelection(),
-            replaceWindow, grid;
-
-        if (me.selectedLayout == 'table') {
-            grid = me.down('mediamanager-media-grid');
-            selection = grid.selModel.getSelection();
-        }
-
-        replaceWindow = Ext.create('Shopware.apps.MediaManager.view.replace.Window', {
-            selectedMedias: selection,
-            mediaManager: me
-        });
-
-        replaceWindow.show();
-    },
-
-    /**
      * Creates the paging toolbar for the media view.
      *
-     * @return [object] generated Ext.toolbar.Toolbar
+     * @return { object } generated Ext.toolbar.Toolbar
      */
     createPagingToolbar: function() {
         var me = this;
@@ -573,6 +624,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             labelWidth: 110,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
+            action: 'perPageComboBox',
+            editable: false,
             width: 210,
             listeners: {
                 scope: me,
@@ -594,35 +647,46 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             displayField: 'name',
             valueField: 'value'
         });
+
         pageSize.setValue(me.mediaStore.pageSize + '');
 
         var toolbar = Ext.create('Ext.toolbar.Paging', {
-            store: me.mediaStore
+            store: me.mediaStore,
+            height: 35
         });
 
         if(me.createMediaQuantitySelection) {
             toolbar.add('->', pageSize, { xtype: 'tbspacer', width: 6 });
         }
 
-        // Create the data for the preview image size
-        var imageSizeData = [], i = 1;
-        for( ; i < 9; i++) {
-            var size = 16 * i;
-            imageSizeData.push({ value: size, name: size + 'x' + size + 'px' });
-        }
+        me.pageSize = pageSize;
+
+        return toolbar;
+    },
+
+    /**
+     * @param { object } toolbar
+     */
+    createPreviewSizeComboBox: function(toolbar) {
+        var me = this;
+
+        me.tableImageSizes = me.createPreviewSizeStoreData(16);
+        me.gridImageSizes = me.createPreviewSizeStoreData(36, 5);
+        me.gridImageSizes.shift();
 
         // Preview image size selection, especially for the list view
         me.imageSize = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: 'Preview-Größe',
+            fieldLabel: me.snippets.previewSize,
             queryMode: 'local',
-            labelWidth: 90,
-            width: 190,
-            hidden: true,
+            labelWidth: 120,
+            width: 220,
+            hidden: false,
+            editable: false,
             displayField: 'name',
             valueField: 'value',
             store: Ext.create('Ext.data.Store', {
                 fields: [ 'value', 'name' ],
-                data: imageSizeData
+                data: me.gridImageSizes
             }),
             listeners: {
                 scope: me,
@@ -632,9 +696,28 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             }
         });
         me.imageSize.setValue(16);
-        toolbar.add(me.imageSize, { xtype: 'tbspacer', width: 6 });
-        return toolbar;
 
+        toolbar.add(me.imageSize, { xtype: 'tbspacer', width: 6 });
+    },
+
+    /**
+     * @param { int } imageSize
+     * @param { int? } iterations
+     * @returns { Array }
+     */
+    createPreviewSizeStoreData: function(imageSize, iterations) {
+        var imageSizeData = [],
+            i = 1,
+            size;
+
+        iterations = iterations || 9;
+
+        for( ; i < iterations; i++) {
+            size = imageSize * i;
+            imageSizeData.push({ value: size, name: size + 'x' + size + 'px' });
+        }
+
+        return imageSizeData;
     },
 
     /**
@@ -645,7 +728,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * unlocks the "delete media(s)" button.
      *
      * @event select
-     * @param [object] rowModel - Associated Ext.selection.RowModel from the Ext.view.View
+     * @param { object } rowModel - Associated Ext.selection.RowModel from the Ext.view.View
      * @return void
      */
     onSelectMedia: function(rowModel) {
@@ -655,9 +738,20 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         me.onUnlockDeleteButton();
         me.unlockReplaceMediaButton();
 
-        if (me.infoView) {
+        if(me.infoView) {
             me.infoView.update(record.data);
             me.attributeButton.setRecord(record);
+        }
+    },
+
+    /**
+     * Unlocks the "delete media(s)" button in the top toolbar
+     *
+     * @return void
+     */
+    onUnlockDeleteButton: function() {
+        if(this.deleteBtn) {
+            this.deleteBtn.setDisabled(false);
         }
     },
 
@@ -688,17 +782,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Unlocks the "delete media(s)" button in the top toolbar
-     *
-     * @return void
-     */
-    onUnlockDeleteButton: function() {
-        if(this.deleteBtn) {
-            this.deleteBtn.setDisabled(false);
-        }
-    },
-
-    /**
      * Event listener method which fires when the user
      * deselects a media in the media view.
      *
@@ -718,16 +801,19 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * a entry in the "media per page"-combo box.
      *
      * @event select
-     * @param [object] combo - Ext.form.field.ComboBox
-     * @param [array] records - Array of selected entries
+     * @param { object } combo - Ext.form.field.ComboBox
+     * @param { array } records - Array of selected entries
      * @return void
      */
     onChangeMediaQuantity: function(combo, records) {
+
         var record = records[0],
             me = this;
 
         me.mediaStore.pageSize = record.get('value');
         me.mediaStore.loadPage(1);
+
+        me.fireEvent('media-view-media-quantity-changed', me, record.get('value'));
     },
 
     /**
@@ -737,7 +823,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * Initializes the drag zone for the media view.
      *
      * @event render
-     * @param [object] view - Associated Ext.view.View
+     * @param { object } view - Associated Ext.view.View
      * @return void
      */
     initializeMediaDragZone: function(view) {
@@ -753,8 +839,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
              * (e.g. finding a child by class name). Make sure your returned object has a "ddel" attribute (with an HTML Element) for other functions to work.
              *
              * @private
-             * @param [object] e - Ext.EventImplObj
-             * @return [object] dragData
+             * @param { object } e - Ext.EventImplObj
+             * @return { object } dragData
              */
             getDragData: function(e) {
                 var sourceEl = e.getTarget(view.itemSelector, 10), d;
@@ -806,6 +892,19 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 return this.dragData.repairXY;
             }
         });
+    },
+
+    /**
+     * Simple function to check if a certain file is an image.
+     *
+     * @param { string }type
+     * @param { string } extension
+     * @returns { boolean }
+     *
+     * @private
+     */
+    _isImage: function (type, extension) {
+        return type === 'IMAGE' && !Ext.Array.contains(['tif', 'tiff'], extension);
     }
 });
 //{/block}

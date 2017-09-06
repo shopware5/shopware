@@ -73,5 +73,7 @@ class PluginReinstallCommand extends ShopwareCommand
         $pluginManager->uninstallPlugin($plugin, $removeData);
         $pluginManager->installPlugin($plugin);
         $pluginManager->activatePlugin($plugin);
+
+        $output->writeln(sprintf('Plugin %s has been reinstalled successfully.', $pluginName));
     }
 }

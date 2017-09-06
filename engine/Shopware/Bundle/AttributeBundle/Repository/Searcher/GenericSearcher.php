@@ -28,6 +28,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\Model\SearchBuilder;
 
 /**
  * @category  Shopware
@@ -47,15 +48,25 @@ class GenericSearcher implements SearcherInterface
     protected $entityManager;
 
     /**
+     * @var SearchBuilder
+     */
+    protected $searchBuilder;
+
+    /**
      * GenericSearcher constructor.
      *
-     * @param string       $entity
-     * @param ModelManager $entityManager
+     * @param string        $entity
+     * @param ModelManager  $entityManager
+     * @param SearchBuilder $searchBuilder
      */
-    public function __construct($entity, ModelManager $entityManager)
+    public function __construct($entity, ModelManager $entityManager, SearchBuilder $searchBuilder = null)
     {
         $this->entity = $entity;
         $this->entityManager = $entityManager;
+        $this->searchBuilder = $searchBuilder;
+        if (!$this->searchBuilder) {
+            $this->searchBuilder = Shopware()->Container()->get('shopware.model.search_builder');
+        }
     }
 
     /**
@@ -104,13 +115,7 @@ class GenericSearcher implements SearcherInterface
      */
     protected function addSearchTermCondition(SearchCriteria $criteria, QueryBuilder $builder)
     {
-        $fields = $this->getSearchFields($criteria);
-        $search = [];
-        foreach ($fields as $field) {
-            $search[] = $field . ' LIKE :search';
-        }
-        $builder->andWhere(implode(' OR ', $search));
-        $builder->setParameter(':search', '%' . $criteria->term . '%');
+        $this->searchBuilder->addSearchTerm($builder, $criteria->term, $this->getSearchFields($criteria));
     }
 
     /**

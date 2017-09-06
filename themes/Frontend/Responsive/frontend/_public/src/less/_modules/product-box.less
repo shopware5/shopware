@@ -232,6 +232,7 @@ Shopware provides 3 product box types:<br/>
         .unitize-margin(15, 0, 0, 0);
         .unitize(font-size, 14);
         .unitize(line-height, 24);
+        overflow: auto;
 
         form {
             display: inline-block;
@@ -554,6 +555,17 @@ Creates a corner product badge on a product-box.
         .box--image {
             width: 50%;
         }
+
+        .has--sidebar-filter {
+            .box--basic {
+                .image--left(160);
+                width: 100%;
+            }
+
+            .box--minimal {
+                width: 33.3%;
+            }
+        }
     }
 }
 
@@ -585,6 +597,17 @@ Creates a corner product badge on a product-box.
 
         .box--image {
             width: 33.3%;
+        }
+
+        .has--sidebar-filter {
+            .box--basic {
+                .image--top(180);
+                width: 50%;
+            }
+
+            .box--minimal {
+                width: 25%;
+            }
         }
     }
 }
@@ -622,6 +645,12 @@ Creates a corner product badge on a product-box.
 
         .box--minimal {
             width: 20%;
+        }
+
+        .has--sidebar-filter {
+            .box--basic {
+                .image--left(170);
+            }
         }
     }
 }

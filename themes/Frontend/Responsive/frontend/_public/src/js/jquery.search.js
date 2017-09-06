@@ -384,7 +384,11 @@
 
             $.publish('plugin/swSearch/onSearchRequest', [ me, searchTerm ]);
 
-            $.ajax({
+            if (me.lastSearchAjax) {
+                me.lastSearchAjax.abort();
+            }
+
+            me.lastSearchAjax = $.ajax({
                 'url': me.requestURL,
                 'data': {
                     'sSearch': me.lastSearchTerm

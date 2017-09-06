@@ -116,21 +116,15 @@ class Repository extends ModelRepository
     public function getAlbumMediaQueryBuilder($albumId, $filter = null, $orderBy = null, $validTypes = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         $builder->select('media')
                 ->from('Shopware\Models\Media\Media', 'media');
         if ($albumId != null || $albumId != 0) {
-            $builder->where($expr->eq('media.albumId', $albumId));
+            $builder->where('media.albumId = :albumId')->setParameter('albumId', $albumId);
         }
 
         if ($filter !== null) {
-            $builder->andWhere(
-                $expr->orX(
-                    $expr->like('media.name', '?1'),
-                    $expr->like('media.description', '?1')
-                )
-            );
+            $builder->andWhere('(media.name LIKE ?1 OR media.description LIKE ?1)');
             $builder->setParameter(1, '%' . $filter . '%');
         }
 

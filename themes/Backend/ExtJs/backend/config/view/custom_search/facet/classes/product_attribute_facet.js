@@ -42,24 +42,54 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
                 labelWidth: 150,
                 name: 'formFieldName',
                 allowBlank: false,
+                helpText: '{s name="attribute_url"}{/s}',
                 fieldLabel: '{s name="request_parameter"}{/s}',
                 validator: Ext.bind(me.validateParameter, me)
-            },
-            {
+            }, {
                 xtype: 'textfield',
                 labelWidth: 150,
                 allowBlank: false,
                 translatable: true,
                 fieldLabel: '{s name="label"}{/s}',
                 name: 'label'
-            },
-            {
+            }, {
                 xtype: 'textfield',
                 labelWidth: 150,
+                helpText: '{s name="attribute_template"}{/s}',
                 name: 'template',
                 fieldLabel: '{s name="template_file"}{/s}'
-            }
+            },
+            me._createSuffixField(),
+            me._createDigitsField()
         ];
+    },
+
+    _createDigitsField: function() {
+        var me = this;
+
+        return me.digitsField = Ext.create('Ext.form.field.Number', {
+            name: 'digits',
+            minValue: 0,
+            hidden: true,
+            labelWidth: 150,
+            translatable: true,
+            value: 2,
+            fieldLabel: '{s name="digits"}{/s}',
+            helpText: '{s name="digits_help_attribute"}{/s}'
+        });
+    },
+
+    _createSuffixField: function() {
+        var me = this;
+
+        return me.suffixField = Ext.create('Ext.form.field.Text', {
+            name: 'suffix',
+            labelWidth: 150,
+            translatable: true,
+            hidden: true,
+            fieldLabel: '{s name="suffix"}{/s}',
+            helpText: '{s name="suffix_help_attribute"}{/s}'
+        });
     },
 
     _createModeSelection: function() {
@@ -94,8 +124,25 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
             ),
             displayField: 'label',
             queryMode: 'local',
+            listeners: {
+                change: function(combo, newValue) {
+                    me._switchMode(newValue);
+                }
+            },
             store: me._createModeStore()
         });
+    },
+
+    _switchMode: function(mode) {
+        var me = this;
+
+        if (mode === 'range') {
+            me.suffixField.show();
+            me.digitsField.show();
+        } else {
+            me.suffixField.hide();
+            me.digitsField.hide();
+        }
     },
 
     _getLabelOfObject: function(values) {

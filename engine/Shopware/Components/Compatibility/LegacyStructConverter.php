@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Components\DependencyInjection\Container;
@@ -48,7 +48,7 @@ class LegacyStructConverter
     private $config;
 
     /**
-     * @var ContextService
+     * @var ContextServiceInterface
      */
     private $contextService;
 
@@ -84,7 +84,7 @@ class LegacyStructConverter
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param ContextService              $contextService
+     * @param ContextServiceInterface     $contextService
      * @param \Enlight_Event_EventManager $eventManager
      * @param MediaServiceInterface       $mediaService
      * @param Connection                  $connection
@@ -94,7 +94,7 @@ class LegacyStructConverter
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        ContextService $contextService,
+        ContextServiceInterface $contextService,
         \Enlight_Event_EventManager $eventManager,
         MediaServiceInterface $mediaService,
         Connection $connection,
@@ -135,7 +135,6 @@ class LegacyStructConverter
             'countryiso' => $country->getIso(),
             'countryen' => $country->getEn(),
             'position' => $country->getPosition(),
-            'shippingfree' => $country->isShippingFree(),
             'taxfree' => $country->isTaxFree(),
             'taxfree_ustid' => $country->isTaxFreeForVatId(),
             'taxfree_ustid_checked' => $country->checkVatId(),
@@ -263,6 +262,7 @@ class LegacyStructConverter
             'blog' => $category->isBlog(),
             'path' => $categoryPath,
             'external' => $category->getExternalLink(),
+            'externalTarget' => $category->getExternalTarget(),
             'hideFilter' => !$category->displayFacets(),
             'hideTop' => !$category->displayInNavigation(),
             'changed' => null,
@@ -345,6 +345,9 @@ class LegacyStructConverter
             '?sViewport=basket&sAdd=' . $promotion['ordernumber'];
 
         $promotion['linkDetails'] = $this->config->get('baseFile') .
+            '?sViewport=detail&sArticle=' . $promotion['articleID'];
+
+        $promotion['linkVariant'] = $this->config->get('baseFile') .
             '?sViewport=detail&sArticle=' . $promotion['articleID'] . '&number=' . $promotion['ordernumber'];
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_List_Product', $promotion, [
@@ -1207,10 +1210,6 @@ class LegacyStructConverter
                 'supplierID' => $product->getManufacturer()->getId(),
                 'supplierDescription' => $product->getManufacturer()->getDescription(),
             ];
-
-            if (!empty($manufacturer['supplierImg'])) {
-                $manufacturer['supplierImg'] = $this->mediaService->getUrl($manufacturer['supplierImg']);
-            }
 
             $data = array_merge($data, $manufacturer);
             $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();

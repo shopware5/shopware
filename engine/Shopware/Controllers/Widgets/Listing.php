@@ -51,6 +51,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             if (!$categoryId) {
                 throw new \InvalidArgumentException('Argument categoryId missing');
             }
+
+            if (!$this->Request()->has('sSort')) {
+                $default = $this->get('config')->get('defaultListingSorting');
+                $this->Request()->setParam('sSort', $default);
+            }
+
             /** @var $articleModule \sArticles */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($ordernumber, $categoryId, $this->Request());
@@ -105,6 +111,69 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $this->Request()->getParam('sCategory')
         ));
         $this->View()->assign('perPage', $perPage);
+    }
+
+    public function productsAction()
+    {
+        $numbers = $this->Request()->getParam('numbers');
+        if (is_string($numbers)) {
+            $numbers = array_filter(explode('|', $numbers));
+        }
+
+        if ($this->Request()->get('type') == 'slider') {
+            $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+        } else {
+            $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+        }
+
+        if (!is_array($numbers)) {
+            return;
+        }
+
+        $context = $this->container->get('shopware_storefront.context_service')
+            ->getShopContext();
+
+        $products = $this->container->get('shopware_storefront.list_product_service')
+            ->getList($numbers, $context);
+
+        $articles = $this->container->get('legacy_struct_converter')
+            ->convertListProductStructList($products);
+
+        $this->View()->assign(['sArticles' => $articles, 'articles' => $articles]);
+        $this->View()->assign($this->Request()->getParams());
+    }
+
+    public function streamAction()
+    {
+        $streamId = $this->Request()->getParam('streamId');
+
+        if ($this->Request()->get('type') == 'slider') {
+            $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
+        } else {
+            $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+        }
+
+        if (!$streamId) {
+            return;
+        }
+
+        $context = $this->container->get('shopware_storefront.context_service')
+            ->getShopContext();
+
+        $criteria = $this->container->get('shopware_product_stream.criteria_factory')
+            ->createCriteria($this->Request(), $context);
+
+        $this->container->get('shopware_product_stream.repository')
+            ->prepareCriteria($criteria, $streamId);
+
+        $products = $this->container->get('shopware_search.product_search')
+            ->search($criteria, $context);
+
+        $articles = $this->container->get('legacy_struct_converter')
+            ->convertListProductStructList($products->getProducts());
+
+        $this->View()->assign(['sArticles' => $articles, 'articles' => $articles]);
+        $this->View()->assign($this->Request()->getParams());
     }
 
     /**
@@ -304,7 +373,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         ];
 
         if ($this->Request()->getParam('loadFacets')) {
-            $body['facets'] = $result->getFacets();
+            $body['facets'] = array_values($result->getFacets());
         }
         if ($this->Request()->getParam('loadProducts')) {
             $body['listing'] = $this->fetchListing($result);

@@ -3,13 +3,13 @@ A [responsive image](http://www.whatwg.org/specs/web-apps/current-work/multipage
 * Authors: See [Authors.txt](https://raw.githubusercontent.com/scottjehl/picturefill/master/Authors.txt)
 * License: MIT
 
-[![build-status](https://api.travis-ci.org/scottjehl/picturefill.svg)](https://travis-ci.org/scottjehl/picturefill) [<img src="https://pf-slackin.herokuapp.com/badge.svg" alt="Join Slack channel">](https://pf-slackin.herokuapp.com/)
+[![build-status](https://api.travis-ci.org/scottjehl/picturefill.svg)](https://travis-ci.org/scottjehl/picturefill) [<img src="https://pf-slackin.herokuapp.com/badge.svg" alt="Join Slack channel">](https://pf-slackin.herokuapp.com/) [![picturefill on npm](https://img.shields.io/npm/v/picturefill.svg?style=flat)](https://www.npmjs.com/package/picturefill)
 
 Picturefill has three versions:
 
 * Version 1 mimics the Picture element pattern with `span` elements. It is no longer maintained.
 * Version 2 is a lightweight polyfill of the [Picture element draft specification](http://www.whatwg.org/specs/web-apps/current-work/multipage/embedded-content.html#embedded-content).
-* Version 3.0.0 is the current stable release.
+* Version 3.0.1 is the current stable release.
 
 ## Usage, Demos, Docs
 To find out how to use Picturefill, visit the [project site](http://scottjehl.github.com/picturefill/).
@@ -17,7 +17,7 @@ To find out how to use Picturefill, visit the [project site](http://scottjehl.gi
 ## The gotchas
 Be it browser issues, the responsive images specifications, or Picturefill itself, there are a couple gotchas you should be aware of when working with Picturefill:
 
-- Firefox 38 and 39 has some bugs [[1]](https://bugzilla.mozilla.org/show_bug.cgi?id=1139560) [[2]](https://bugzilla.mozilla.org/show_bug.cgi?id=1139554) [[3]](https://bugzilla.mozilla.org/show_bug.cgi?id=1135812) where images won't update on screen resize. These issues are addressed by Picturefill 3.0.0, and should be fixed in Firefox 41.
+- Firefox 38 and 39 has some bugs [[1]](https://bugzilla.mozilla.org/show_bug.cgi?id=1139560) [[2]](https://bugzilla.mozilla.org/show_bug.cgi?id=1139554) [[3]](https://bugzilla.mozilla.org/show_bug.cgi?id=1135812) where images won't update on screen resize. These issues are addressed by Picturefill 3.0.0, and was fixed in Firefox 41.
 
 - Per the `picture` spec, using `%` _isn't_ allowed in the `sizes` attribute. Using `%` will fallback to `100vw`.
 
@@ -35,7 +35,7 @@ Be it browser issues, the responsive images specifications, or Picturefill itsel
 ```html
 <picture>
     <source srcset="../img/sample.svg" media="(min-width: 768px)" />
-    <img srcset="data:image/gifbase64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    <img srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
         alt="Sample pic" />
 </picture>
 ```

@@ -155,7 +155,7 @@ class MediaMigration
     private function migrateFilesIn($directory, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFilesystem, ProgressBar $progressBar)
     {
         /** @var array $contents */
-        $contents = $fromFilesystem->getAdapter()->listContents($directory);
+        $contents = $fromFilesystem->getFilesystem()->listContents($directory);
 
         foreach ($contents as $item) {
             if ($item['type'] === 'dir') {
@@ -184,7 +184,7 @@ class MediaMigration
     private function countFilesToMigrate($directory, MediaServiceInterface $filesystem)
     {
         /** @var array $contents */
-        $contents = $filesystem->getAdapter()->listContents($directory);
+        $contents = $filesystem->getFilesystem()->listContents($directory);
         $cnt = 0;
 
         foreach ($contents as $item) {

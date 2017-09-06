@@ -96,6 +96,63 @@ class MediaTest extends TestCase
         $mediaService->delete($path);
     }
 
+    public function testReplaceMedia()
+    {
+        $data = $this->getSimpleTestData();
+        $base64Data = base64_encode(file_get_contents(__DIR__ . '/fixtures/shopware_logo.png'));
+        $updateData = [
+            'file' => 'data:image/png;base64,' . $base64Data,
+        ];
+
+        $source = __DIR__ . '/fixtures/test-bild.jpg';
+        $dest = __DIR__ . '/fixtures/test-bild-used.jpg';
+
+        //copy image to execute test case multiple times.
+        @unlink($dest);
+        copy($source, $dest);
+
+        $data['file'] = $dest;
+        $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($mediaService->has($path)) {
+            $mediaService->delete($path);
+        }
+
+        $media = $this->resource->create($data);
+
+        //check if the thumbnails are generated
+        $this->resource->update($media->getId(), $updateData);
+
+        $content = base64_encode($mediaService->read($path));
+
+        $this->assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
+    }
+
+    /**
+     * @expectedException \Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException
+     * @expectedExceptionMessage The media file extension "foo" is not allowed.
+     */
+    public function testUploadMediaWithNonWhitelistedExtension()
+    {
+        $source = __DIR__ . '/fixtures/test-bild.jpg';
+        $dest = __DIR__ . '/fixtures/test-bild-used.foo';
+
+        //copy image to execute test case multiple times.
+        @unlink($dest);
+        copy($source, $dest);
+
+        $data = $this->getSimpleTestData();
+        $data['file'] = $dest;
+
+        $path = Shopware()->DocPath('media_unknown') . 'test-bild-used.foo';
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($mediaService->has($path)) {
+            $mediaService->delete($path);
+        }
+
+        $this->resource->create($data);
+    }
+
     protected function getSimpleTestData()
     {
         return [

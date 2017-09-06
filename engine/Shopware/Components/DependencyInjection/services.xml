@@ -47,6 +47,7 @@
             <argument type="service" id="snippet_resource"/>
             <argument type="service" id="shopware.escaper" />
             <argument>%shopware.template%</argument>
+            <argument>%shopware.template_security%</argument>
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
@@ -528,21 +529,21 @@
             <argument type="service" id="service_container" />
             <argument type="service" id="config" />
             <argument type="service" id="template" />
-            <tag name="captcha" />
+            <tag name="shopware.captcha" />
         </service>
 
         <service id="shopware.captcha.honeypot_captcha" class="Shopware\Components\Captcha\HoneypotCaptcha">
-            <tag name="captcha" />
+            <tag name="shopware.captcha" />
         </service>
 
         <service id="shopware.captcha.no_captcha" class="Shopware\Components\Captcha\NoCaptcha">
-            <tag name="captcha" />
+            <tag name="shopware.captcha" />
         </service>
 
         <service id="shopware.captcha.legacy_captcha" class="Shopware\Components\Captcha\LegacyCaptcha">
             <argument type="service" id="config" />
             <argument type="service" id="template" />
-            <tag name="captcha" />
+            <tag name="shopware.captcha" />
         </service>
 
         <service id="shopware.captcha.repository" class="Shopware\Components\Captcha\CaptchaRepository">
@@ -566,5 +567,127 @@
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
+
+        <service id="shopware.api.emotionpreset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware.slug" />
+        </service>
+
+        <service id="shopware.api.customer_stream" class="Shopware\Components\Api\Resource\CustomerStream">
+            <argument id="shopware.logaware_reflection_helper" type="service"/>
+            <argument id="customer_search.dbal.number_search" type="service"/>
+            <argument id="shopware.customer_stream.repository" type="service"/>
+            <argument id="models" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <argument id="customer_search.dbal.indexing.indexer" type="service"/>
+            <argument id="shopware.customer_stream.stream_indexer" type="service"/>
+            <argument id="shopware.customer_stream.criteria_factory" type="service"/>
+        </service>
+
+        <service id="shopware.emotion.emotion_presetdata_transformer" class="Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware.emotion.emotion_exporter" class="Shopware\Components\Emotion\EmotionExporter">
+            <argument type="service" id="shopware.emotion.emotion_presetdata_transformer" />
+            <argument type="service" id="shopware.emotion.preset_data_synchronizer" />
+            <argument type="service" id="shopware.api.emotionpreset" />
+            <argument type="service" id="shopware_media.media_service" />
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.slug" />
+        </service>
+
+        <service id="shopware.emotion.emotion_importer" class="Shopware\Components\Emotion\EmotionImporter">
+            <argument type="service" id="shopware.api.emotionpreset" />
+            <argument type="service" id="file_system" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware.emotion.translation_importer" class="Shopware\Components\Emotion\EmotionTranslationImporter">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware.emotion.preset_loader" class="Shopware\Components\Emotion\Preset\PresetLoader">
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <service id="shopware.emotion.preset_installer" class="Shopware\Components\Emotion\Preset\PresetInstaller">
+            <argument type="service" id="shopware.api.emotionpreset" />
+            <argument type="service" id="shopware.slug" />
+        </service>
+
+        <service id="shopware.emotion.preset_data_synchronizer" class="Shopware\Components\Emotion\Preset\PresetDataSynchronizer">
+            <argument type="service" id="models" />
+            <argument type="service" id="events" />
+            <!--preset element handlers-->
+            <argument type="collection" />
+            <argument>%kernel.root_dir%</argument>
+        </service>
+
+        <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
+            <argument type="service" id="service_container" />
+
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
+        <service id="shopware.emotion.preset_bannerslider_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerSliderComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
+            <argument type="service" id="service_container" />
+
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
+        <service id="shopware.emotion.preset_categoryteaser_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\CategoryTeaserComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
+            <argument type="service" id="service_container" />
+
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
+        <service id="shopware.emotion.preset_html5_video_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\Html5VideoComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
+            <argument type="service" id="service_container" />
+
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
+        <service id="shopware.customer_stream.cookie_subscriber" class="Shopware\Components\CustomerStream\CookieSubscriber" >
+            <argument id="dbal_connection" type="service"/>
+            <argument id="service_container" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service id="shopware.customer_stream.repository" class="Shopware\Models\CustomerStream\CustomerStreamRepository" >
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="shopware.customer_stream.stream_indexer" class="Shopware\Components\CustomerStream\StreamIndexer">
+            <argument type="service" id="shopware.customer_stream.criteria_factory" />
+            <argument type="service" id="customer_search.dbal.number_search" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware.customer_stream.criteria_factory" class="Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.logaware_reflection_helper" />
+        </service>
+
+        <service id="shopware.model.search_builder" class="Shopware\Components\Model\SearchBuilder">
+            <argument id="shopware_backend_searchdbal.search_term_helper" type="service"/>
+        </service>
+
+        <service id="shopware_backend_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">
+            <argument type="service" id="config" />
+            <argument>false</argument>
+        </service>
+
     </services>
 </container>

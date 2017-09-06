@@ -109,8 +109,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $filter = $this->Request()->getParam('filter', null);
         $sort = $this->Request()->getParam('sort', null);
-        $limit = $this->Request()->getParam('limit', 10);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 10);
+        $offset = (int) $this->Request()->getParam('start', 0);
 
         if ($sort === null || $sort[1] === null) {
             $field = 'name';
@@ -120,48 +120,63 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             $direction = $sort[1]['direction'];
 
             // whitelist for valid fields
-            if (!in_array($field, ['name', 'number', 'internalId']) || !in_array($direction, ['ASC', 'DESC'])) {
+            if (!in_array($field, ['name', 'number', 'internalId'], true) || !in_array($direction, ['ASC', 'DESC'], true)) {
                 $field = 'name';
                 $direction = 'DESC';
             }
         }
 
         // Get Newsletter-Groups, empty newsletter groups and customer groups
-        $sql = "SELECT * FROM
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM
         (SELECT groups.id as internalId, COUNT(groupID) as number, groups.name, NULL as groupkey, FALSE as isCustomerGroup
             FROM s_campaigns_mailaddresses as addresses
             JOIN s_campaigns_groups AS groups ON groupID = groups.id
             WHERE customer=0
             GROUP BY groupID
         UNION
-                SELECT groups.id as internalId, 0 as number, groups.name, NULL as groupkey, FALSE as isCustomerGroup
-                FROM s_campaigns_groups groups
-                WHERE NOT EXISTS
-                (
+            SELECT groups.id as internalId, 0 as number, groups.name, NULL as groupkey, FALSE as isCustomerGroup
+            FROM s_campaigns_groups groups
+            WHERE NOT EXISTS
+            (
                 SELECT groupID
                 FROM s_campaigns_mailaddresses addresses
                 WHERE addresses.groupID = groups.id
-                )
+            )
         UNION
             SELECT groups.id as internalId, COUNT(customergroup) as number, groups.description, groups.groupkey as groupkey, TRUE as isCustomerGroup
-                        FROM s_campaigns_mailaddresses as addresses
+            FROM s_campaigns_mailaddresses as addresses
             LEFT JOIN s_user as users ON users.email = addresses.email
-                        JOIN s_core_customergroups AS groups ON users.customergroup = groups.groupkey
-                        WHERE customer=1
-                        GROUP BY groups.groupkey) as t
-        ORDER BY $field $direction";
+            JOIN s_core_customergroups AS groups ON users.customergroup = groups.groupkey
+            WHERE customer=1
+            GROUP BY groups.groupkey) as t
+            ORDER BY :field :direction LIMIT :limit OFFSET :offset';
 
-        $data = Shopware()->Db()->fetchAll($sql);
+        /** @var \Doctrine\Dbal\Connection $db */
+        $db = $this->get('dbal_connection');
 
-        $this->View()->assign([
-            'success' => true,
-            'data' => $data,
-            'total' => count($data),
-        ]);
+        try {
+            $query = $db->prepare($sql);
+            $query->bindParam('field', $field, \PDO::PARAM_STR);
+            $query->bindParam('direction', $direction, \PDO::PARAM_STR);
+            $query->bindParam('limit', $limit, \PDO::PARAM_INT);
+            $query->bindParam('offset', $offset, \PDO::PARAM_INT);
+            $query->execute();
+
+            $this->View()->assign([
+                'success' => true,
+                'data' => $query->fetchAll(\PDO::FETCH_ASSOC),
+                'total' => $db->fetchColumn('SELECT FOUND_ROWS()'),
+            ]);
+        } catch (\Doctrine\DBAL\DBALException $exception) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ]);
+        }
     }
 
     /**
-     * Updates an existing Recipient, e.g. to change is group
+     * Updates an existing recipient, e.g. to change it's group
      */
     public function updateRecipientAction()
     {
@@ -595,7 +610,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function listNewslettersAction()
     {
         $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', [['property' => 'mailing.date', 'direction' => 'DESC']]);
+        $sort = $this->Request()->getParam('sort', [['property' => 'mailing.date', 'direction' => 'DESC'], ['property' => 'mailing.id', 'direction' => 'DESC']]);
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
 
@@ -747,11 +762,13 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     private function serializeGroup($groups)
     {
-        $newGroup = [[], []];
+        $newGroup = [[], [], []];
 
         foreach ($groups as $key => $values) {
             if ($values['isCustomerGroup'] === true) {
                 array_push($newGroup[0][$values['groupkey']], $values['number']);
+            } elseif ($values['streamId'] !== null) {
+                array_push($newGroup[2][$values['streamId']], $values['number']);
             } else {
                 array_push($newGroup[1][$values['internalId']], $values['number']);
             }
@@ -774,16 +791,38 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $flattenedGroup = [];
         foreach ($groups as $group => $item) {
             foreach ($item as $id => $number) {
-                $groupKey = ($group === 0) ? $id : false;
-                $isCustomerGroup = ($group === 0) ? true : false;
-
-                $flattenedGroup[] = [
-                    'internalId' => ($group === 0) ? null : $id,
-                    'number' => $number,
-                    'name' => '',
-                    'groupkey' => $groupKey,
-                    'isCustomerGroup' => $isCustomerGroup,
-                ];
+                switch ($group) {
+                    case 0:
+                        $flattenedGroup[] = [
+                            'internalId' => null,
+                            'number' => $number,
+                            'name' => '',
+                            'streamId' => null,
+                            'groupkey' => $id,
+                            'isCustomerGroup' => true,
+                        ];
+                        break;
+                    case 1:
+                        $flattenedGroup[] = [
+                            'internalId' => $id,
+                            'number' => $number,
+                            'name' => '',
+                            'streamId' => null,
+                            'groupkey' => false,
+                            'isCustomerGroup' => false,
+                        ];
+                        break;
+                    case 2:
+                        $flattenedGroup[] = [
+                            'internalId' => null,
+                            'number' => $number,
+                            'name' => '',
+                            'streamId' => $id,
+                            'groupkey' => false,
+                            'isCustomerGroup' => false,
+                        ];
+                        break;
+                }
             }
         }
 

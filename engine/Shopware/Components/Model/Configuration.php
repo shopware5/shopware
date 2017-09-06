@@ -29,6 +29,7 @@ use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
@@ -61,7 +62,7 @@ class Configuration extends BaseConfiguration
      * @param \Zend_Cache_Core  $cache
      * @param RepositoryFactory $repositoryFactory
      */
-    public function __construct($options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory)
+    public function __construct(array $options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory)
     {
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
@@ -81,6 +82,7 @@ class Configuration extends BaseConfiguration
 
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
+        $this->addCustomStringFunction('IF', 'Shopware\Components\Model\Query\Mysql\IfElse');
         $this->addCustomStringFunction('RegExp', 'Shopware\Components\Model\Query\Mysql\RegExp');
         $this->addCustomStringFunction('Replace', 'Shopware\Components\Model\Query\Mysql\Replace');
 
@@ -90,7 +92,7 @@ class Configuration extends BaseConfiguration
         }
 
         if (isset($options['cacheProvider'])) {
-            $this->setCacheProvider($options['cacheProvider']);
+            $this->setCacheProvider($options);
         }
 
         if ($this->getMetadataCacheImpl() === null) {
@@ -106,7 +108,9 @@ class Configuration extends BaseConfiguration
     public function setCache(CacheProvider $cache)
     {
         // Set namespace for doctrine cache provider to avoid collisions
-        $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5($this->getProxyDir() . \Shopware::REVISION);
+        $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5(
+            $this->getProxyDir() . \Shopware::REVISION
+        );
         $cache->setNamespace('dc2_' . $namespace . '_');
 
         $this->setMetadataCacheImpl($cache);
@@ -133,30 +137,25 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param string $provider
+     * @param array $options
      *
      * @throws \Exception
      */
-    public function setCacheProvider($provider)
+    public function setCacheProvider(array $options)
     {
+        $provider = $options['cacheProvider'];
+
         $cache = null;
 
-        if (strtolower($provider) === 'auto') {
-            $cache = $this->detectCacheProvider();
-        } else {
-            if (strtolower($provider) === 'apc') {
-                $provider = 'apcu';
-            }
-
-            if (!class_exists($provider, false)) {
-                $provider = ucfirst($provider);
-                $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
-            }
-            if (!class_exists($provider)) {
-                throw new \Exception('Doctrine cache provider "' . $provider . "' not found failure.");
-            }
-
-            $cache = new $provider();
+        switch (strtolower($provider)) {
+            case 'auto':
+                $cache = $this->detectCacheProvider();
+                break;
+            case 'redis':
+                $cache = $this->createRedisCacheProvider($options);
+                break;
+            default:
+                $cache = $this->createDefaultProvider($provider);
         }
 
         if ($cache instanceof CacheProvider) {
@@ -169,7 +168,7 @@ class Configuration extends BaseConfiguration
      */
     public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
-        $cache = new Cache($cacheResource);
+        $cache = new Cache($cacheResource, null, ['Shopware_Models']);
 
         $this->setCache($cache);
     }
@@ -240,5 +239,52 @@ class Configuration extends BaseConfiguration
         }
 
         parent::setProxyDir($dir);
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return RedisCache
+     */
+    private function createRedisCacheProvider(array $options)
+    {
+        $redis = new \Redis();
+        if (isset($options['redisPersistent']) && $options['redisPersistent'] == true) {
+            $redis->pconnect($options['redisHost'], $options['redisPort']);
+        } else {
+            $redis->connect($options['redisHost'], $options['redisPort']);
+        }
+        $redis->select($options['redisDbIndex']);
+        $cache = new RedisCache();
+        $cache->setRedis($redis);
+
+        // RedisCache->setRedis might configure igbinary as serializer, which might cause problems
+        // this enforces the PHP serializer
+        $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+
+        return $cache;
+    }
+
+    /**
+     * @param $provider
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    private function createDefaultProvider($provider)
+    {
+        $provider = $provider === 'apc' ? 'apcu' : $provider;
+
+        if (!class_exists($provider, false)) {
+            $provider = ucfirst($provider);
+            $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
+        }
+
+        if (!class_exists($provider)) {
+            throw new \Exception('Doctrine cache provider "' . $provider . "' not found failure.");
+        }
+
+        return new $provider();
     }
 }

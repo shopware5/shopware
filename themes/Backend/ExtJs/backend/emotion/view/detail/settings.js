@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.generalFieldSet = me.createGeneralFieldSet();
         me.landingPageFieldSet = me.createLandingPageFieldset();
         me.deviceFieldset = me.createDeviceFieldset();
+        me.customerFieldSet = me.createCustomerFieldset();
         me.timingFieldSet = me.createTimingFieldSet();
 
         me.items = [
@@ -107,6 +108,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             me.generalFieldSet,
             me.landingPageFieldSet,
             me.deviceFieldset,
+            me.customerFieldSet,
             me.timingFieldSet
         ];
 
@@ -164,9 +166,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     if(value) {
                         me.generalFieldSet.hide();
                         me.landingPageFieldSet.show();
+                        me.customerFieldSet.hide();
                     } else {
                         me.landingPageFieldSet.hide();
                         me.generalFieldSet.show();
+                        me.customerFieldSet.show();
                     }
                 }
             }
@@ -532,6 +536,40 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 me.timeFields.validTo,
                 me.timeFields.validToTime
             ]
+        });
+    },
+
+    createCustomerFieldset: function() {
+        var me = this;
+
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
+            name: 'customerStreamIds',
+            labelWidth: 100,
+            fieldLabelConfig: 'as_empty_text',
+            height: 150,
+            fieldLabel: '{s name="customer_streams"}{/s}',
+            helpText: '{s name="customer_streams_help"}{/s}',
+            store: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream")
+        });
+
+        me.replacementSelection = Ext.create('Shopware.form.field.EmotionGrid', {
+            name: 'replacement',
+            fieldLabel: '{s name="replacement"}{/s}',
+            labelWidth: 100,
+            fieldLabelConfig: 'as_empty_text',
+            height: 150,
+            helpText: '{s name="replacement_help"}{/s}',
+            store: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion")
+        });
+
+        return Ext.create('Ext.form.FieldSet', {
+            collapsible: true,
+            title: '{s name="individualisation"}{/s}',
+            collapsed: false,
+            items: [me.customerStreamSelection, me.replacementSelection]
         });
     }
 });

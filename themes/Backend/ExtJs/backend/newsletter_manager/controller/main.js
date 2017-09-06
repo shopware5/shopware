@@ -27,13 +27,13 @@
  * @author shopware AG
  */
 
-//{namespace name="backend/newsletter_manager/main"}
+// {namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware Controller - Main controller
  * The main controller creates the main window
  */
-//{block name="backend/newsletter_manager/controller/main"}
+// {block name="backend/newsletter_manager/controller/main"}
 Ext.define('Shopware.apps.NewsletterManager.controller.Main', {
 
     extend: 'Ext.app.Controller',
@@ -59,6 +59,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Main', {
         me.subApplication.recipientGroupStore = me.getStore('RecipientGroup').load();
         me.subApplication.newsletterGroupStore = me.getStore('NewsletterGroup').load();
         me.subApplication.customerGroupStore = me.getStore('Shopware.apps.Base.store.CustomerGroup').load();
+
         // Don't do the default filtering - get all shops
         me.subApplication.shopStore = Ext.create('Shopware.apps.Base.store.Shop', {
             filters: []
@@ -77,7 +78,5 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Main', {
         me.mainWindow.show();
         me.callParent(arguments);
     }
-
-
 });
-//{/block}
+// {/block}

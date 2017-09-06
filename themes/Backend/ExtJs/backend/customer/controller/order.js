@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/order}
+// {namespace name=backend/customer/view/order}
 
 /**
  * Shopware Controller - Customer list backend module
@@ -38,14 +38,14 @@
  *  - Action column => Fired when the user clicks on the action column of the order grid to open the order detail window with the selected order.
  *  - Change date => Fired when the user changed a date field of the chart toolbar to filter the chart store.
  */
-//{block name="backend/customer/controller/order"}
+// {block name="backend/customer/controller/order"}
 Ext.define('Shopware.apps.Customer.controller.Order', {
 
     /**
      * Defines that this component is a extJs controller extension
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Init function of the controller which fires when the user want
@@ -54,19 +54,19 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
      * and creates and show the customer list window.
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
-            'customer-order-grid':{
-                openOrder:me.onOpenOrder,
+            'customer-order-grid': {
+                openOrder: me.onOpenOrder,
                 searchOrder: me.onSearchOrder
             },
-            'customer-detail-window datefield[name=fromDate]':{
-                change:me.onChangeFromDate
+            'customer-detail-window datefield[name=fromDate]': {
+                change: me.onChangeFromDate
             },
-            'customer-detail-window datefield[name=toDate]':{
-                change:me.onChangeToDate
+            'customer-detail-window datefield[name=toDate]': {
+                change: me.onChangeToDate
             }
         });
         me.callParent(arguments);
@@ -79,9 +79,9 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
      * @param value
      * @return void
      */
-    onChangeToDate:function (field, value) {
+    onChangeToDate: function (field, value) {
         var me = this;
-        if ( Ext.typeOf(value) != 'date' ) {
+        if (Ext.typeOf(value) != 'date') {
             return;
         }
 
@@ -89,8 +89,8 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
             store = chart.store;
 
         store.getProxy().extraParams = {
-            customerID:store.getProxy().extraParams.customerID,
-            fromDate:store.getProxy().extraParams.fromDate,
+            customerID: store.getProxy().extraParams.customerID,
+            fromDate: store.getProxy().extraParams.fromDate,
             toDate: me.getFormattedDate(value)
         };
         store.load();
@@ -104,9 +104,9 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
      * @param [Ext.Date] - The new value
      * @return void
      */
-    onChangeFromDate:function (field, value) {
+    onChangeFromDate: function (field, value) {
         var me = this;
-        if ( Ext.typeOf(value) != 'date' ) {
+        if (Ext.typeOf(value) != 'date') {
             return;
         }
 
@@ -114,8 +114,8 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
             store = chart.store;
 
         store.getProxy().extraParams = {
-            customerID:store.getProxy().extraParams.customerID,
-            toDate:store.getProxy().extraParams.toDate,
+            customerID: store.getProxy().extraParams.customerID,
+            toDate: store.getProxy().extraParams.toDate,
             fromDate: me.getFormattedDate(value)
         };
         store.load();
@@ -146,11 +146,11 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
      * @param [object] record - Associated store record
      * @return void
      */
-    onOpenOrder:function (record) {
+    onOpenOrder: function (record) {
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.Order',
             params: {
-                orderId:record.get('id')
+                orderId: record.get('id')
             }
         });
     },
@@ -159,27 +159,27 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
      * Event listener method which is fired when the user
      * insert a search string into the text field which is placed
      * on top of the customer order grid.
-     * @param [object] field - Ext.field.Text which is displayed on the top of the customer order grid
+     * @param [string] value - search string
+     * @param [object] store - store that will be filtered
      * @return boolean
      */
-    onSearchOrder:function (value, store) {
-        var me = this,
-            searchString = Ext.String.trim(value);
+    onSearchOrder: function (value, store) {
+        var searchString = Ext.String.trim(value);
 
-        //scroll the store to first page
+        // scroll the store to first page
         store.currentPage = 1;
 
-        //If the search-value is empty, reset the filter
-        if ( searchString.length === 0 ) {
+        // If the search-value is empty, reset the filter
+        if (searchString.length === 0) {
             store.clearFilter();
         } else {
-            //This won't reload the store
+            // This won't reload the store
             store.filters.clear();
-            //Loads the store with a special filter
+            // Loads the store with a special filter
             store.filter('filter', searchString);
         }
 
         return true;
     }
 });
-//{/block}
+// {/block}

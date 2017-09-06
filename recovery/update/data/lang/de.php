@@ -65,7 +65,7 @@ return [
     'migration_update_success' => 'Das Update wurde erfolgreich durchgeführt',
 
     'cleanup_header' => 'Aufräumen',
-    'cleanup_disclaimer' => 'Die folgenden Dateien gehören zu einer früheren Shopware Version und werden nach diesem Update nicht länger benötigt. Drücken sie "Weiter" um die Dateien automatisch zu löschen und das Update zu beenden. Wir empfehlen vorher ein Backup anzulegen. <br /><strong>Abhänging von der Menge der aufzuräumenden Dateien kann dieser Prozess einige Zeit in Anspruch nehmen.</strong>',
+    'cleanup_disclaimer' => 'Die folgenden Dateien gehören zu einer früheren Shopware Version und werden nach diesem Update nicht länger benötigt. Drücken Sie "Weiter" um die Dateien automatisch zu löschen und das Update zu beenden. Wir empfehlen vorher ein Backup anzulegen. <br /><strong>Abhänging von der Menge der aufzuräumenden Dateien kann dieser Prozess einige Zeit in Anspruch nehmen.</strong>',
     'cleanup_error' => 'Die folgenden Dateien konnten nicht gelöscht werden. Bitte löschen Sie dieser per Hand, oder stellen Sie sicher, dass Ihr Webserver genug rechte besitzt diese Dateien zu löschen. Drücken Sie "Weiter" um den Update Vorgang fortzusetzen.',
 
     'done_title' => 'Aktualisierung abgeschlossen',

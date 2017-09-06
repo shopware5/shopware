@@ -25,6 +25,7 @@
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -493,19 +494,19 @@ class sAdmin
         if (!count($paymentData)) {
             throw new Enlight_Exception('sValidateStep3 #01: Could not load paymentmean');
         }
-            // Include management class and check input data
-            if (!empty($paymentData['class'])) {
-                $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $requestData = $this->front->Request()->getParams();
-                $checkPayment = $sPaymentObject->validate($requestData);
-            }
+        // Include management class and check input data
+        if (!empty($paymentData['class'])) {
+            $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
+            $requestData = $this->front->Request()->getParams();
+            $checkPayment = $sPaymentObject->validate($requestData);
+        }
 
         return [
-                'checkPayment' => $checkPayment,
-                'paymentData' => $paymentData,
-                'sProcessed' => true,
-                'sPaymentObject' => &$sPaymentObject,
-            ];
+            'checkPayment' => $checkPayment,
+            'paymentData' => $paymentData,
+            'sProcessed' => true,
+            'sPaymentObject' => &$sPaymentObject,
+        ];
     }
 
     /**
@@ -536,7 +537,7 @@ class sAdmin
 
             $optInNewsletter = $this->config->get('optinnewsletter');
             if ($optInNewsletter) {
-                $hash = md5(uniqid(rand()));
+                $hash = Random::getAlphanumericString(32);
                 $data = serialize(['newsletter' => $email, 'subscribeToNewsletter' => true]);
 
                 $link = $this->front->Router()->assemble([
@@ -632,7 +633,8 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
-        Shopware()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
+
+        $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
     }
 
     /**
@@ -851,9 +853,9 @@ class sAdmin
         $this->session->offsetUnset('sUserPassword');
         $this->session->offsetUnset('sUserId');
         $this->eventManager->notify(
-                'Shopware_Modules_Admin_CheckUser_Failure',
-                ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
-            );
+            'Shopware_Modules_Admin_CheckUser_Failure',
+            ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
+        );
 
         return false;
     }
@@ -1052,8 +1054,8 @@ class sAdmin
 
             $countryList[$key]['flag'] =
                 ($countryList[$key]['id'] == $this->front->Request()->getPost('country')
-                || $countryList[$key]['id'] == $this->front->Request()->getPost('countryID')
-            );
+                    || $countryList[$key]['id'] == $this->front->Request()->getPost('countryID')
+                );
         }
 
         $countryList = $this->eventManager->filter(
@@ -1086,10 +1088,22 @@ class sAdmin
             return false;
         }
 
+        /** @var Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
+        $shop = $this->contextService->getShopContext()->getShop();
+        $shopUrl = 'http://' . $shop->getHost() . $shop->getPath();
+        // The -Secure variables don't fall back to the normal values, so we need to do some checks
+        if ($shop->getSecure()) {
+            if ($shop->getSecureHost() && $shop->getSecurePath()) {
+                $shopUrl = 'https://' . $shop->getSecureHost() . $shop->getSecurePath();
+            } else {
+                $shopUrl = 'https://' . $shop->getHost() . $shop->getPath();
+            }
+        }
+
         $context = [
             'sMAIL' => $email,
             'sShop' => $this->config->get('ShopName'),
-            'sShopURL' => 'http://' . $this->config->get('BasePath'),
+            'sShopURL' => $shopUrl,
             'sConfig' => $this->config,
         ];
 
@@ -1325,23 +1339,23 @@ class sAdmin
                 $pagesStructure['numbers'][$i]['markup'] = ($i == $destinationPage);
                 $pagesStructure['numbers'][$i]['value'] = $i;
                 $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $i]
-                );
+                        $additionalParams + ['sPage' => $i]
+                    );
             }
             // Previous page
             if ($destinationPage != 1) {
                 $pagesStructure['previous'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage - 1]
-                );
+                        $additionalParams + ['sPage' => $destinationPage - 1]
+                    );
             } else {
                 $pagesStructure['previous'] = null;
             }
             // Next page
             if ($destinationPage != $numberOfPages) {
                 $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage + 1],
-                    false
-                );
+                        $additionalParams + ['sPage' => $destinationPage + 1],
+                        false
+                    );
             } else {
                 $pagesStructure['next'] = null;
             }
@@ -1416,7 +1430,7 @@ class sAdmin
         $userData = [];
 
         $countryQuery =
-          'SELECT c.*, a.name AS countryarea
+            'SELECT c.*, a.name AS countryarea
           FROM s_core_countries c
           LEFT JOIN s_core_countries_areas a
            ON a.id = c.areaID AND a.active = 1
@@ -1507,14 +1521,14 @@ class sAdmin
         foreach ($queryRules as $rule) {
             if ($rule['rule1'] && !$rule['rule2']) {
                 $rule['rule1'] = 'sRisk' . $rule['rule1'];
-                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'])) {
+                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)) {
                     return true;
                 }
             } elseif ($rule['rule1'] && $rule['rule2']) {
                 $rule['rule1'] = 'sRisk' . $rule['rule1'];
                 $rule['rule2'] = 'sRisk' . $rule['rule2'];
-                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'])
-                    && $this->executeRiskRule($rule['rule2'], $user, $basket, $rule['value2'])
+                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)
+                    && $this->executeRiskRule($rule['rule2'], $user, $basket, $rule['value2'], $paymentID)
                 ) {
                     return true;
                 }
@@ -1531,10 +1545,11 @@ class sAdmin
      * @param array  $user
      * @param array  $basket
      * @param string $value
+     * @param int    $paymentID
      *
      * @return bool
      */
-    public function executeRiskRule($rule, $user, $basket, $value)
+    public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if ($event = $this->eventManager->notifyUntil(
             'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
@@ -1543,6 +1558,7 @@ class sAdmin
                 'user' => $user,
                 'basket' => $basket,
                 'value' => $value,
+                'paymentID' => $paymentID,
             ]
         )) {
             return $event->getReturn();
@@ -1797,7 +1813,7 @@ class sAdmin
         return
             $user['additional']['user']['firstlogin'] == date('Y-m-d')
             || !$user['additional']['user']['firstlogin']
-        ;
+            ;
     }
 
     /**
@@ -1813,7 +1829,7 @@ class sAdmin
     {
         return
             is_array($order['content']) ? count($order['content']) : $order['content'] >= $value
-        ;
+            ;
     }
 
     /**
@@ -2102,7 +2118,7 @@ class sAdmin
                 trim($user['shippingaddress']['zipcode'])
                 != trim($user['billingaddress']['zipcode'])
             )
-        ;
+            ;
     }
 
     /**
@@ -2135,7 +2151,7 @@ class sAdmin
         return
             preg_match("/$value/", strtolower($user['shippingaddress']['lastname']))
             || preg_match("/$value/", strtolower($user['billingaddress']['lastname']))
-        ;
+            ;
     }
 
     /**
@@ -2208,6 +2224,18 @@ class sAdmin
     {
         if (empty($unsubscribe)) {
             $errorFlag = [];
+            $config = Shopware()->Container()->get('config');
+
+            if ($this->shouldVerifyCaptcha($config)) {
+                /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+                $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
+
+                if (!$captchaValidator->validateByName($config->get('newsletterCaptcha'), $this->front->Request())) {
+                    return [
+                        'code' => 7,
+                    ];
+                }
+            }
 
             $fields = ['newsletter'];
             foreach ($fields as $field) {
@@ -2216,11 +2244,12 @@ class sAdmin
                     $errorFlag[$field] = true;
                 }
             }
+
             if (!empty($errorFlag)) {
                 return [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('ErrorFillIn', 'Please fill in all red fields'),
+                        ->get('ErrorFillIn', 'Please fill in all red fields'),
                     'sErrorFlag' => $errorFlag,
                 ];
             }
@@ -2240,14 +2269,14 @@ class sAdmin
             return [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureMail', 'Enter eMail address'),
+                    ->get('NewsletterFailureMail', 'Enter eMail address'),
             ];
         }
         if (!$this->emailValidator->isValid($email)) {
             return [
                 'code' => 1,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
+                    ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
             ];
         }
         if (!$unsubscribe) {
@@ -2260,13 +2289,13 @@ class sAdmin
                 $result = [
                     'code' => 4,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
+                        ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
                 ];
             } else {
                 $result = [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
+                        ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
                 ];
             }
         }
@@ -2340,12 +2369,10 @@ class sAdmin
         $sql = "
             SELECT c.id, c.id as countryID, countryname, countryiso,
                 (SELECT name FROM s_core_countries_areas WHERE id = areaID ) AS countryarea,
-                countryen, c.position, notice, c.shippingfree as shippingfree
+                countryen, c.position, notice
             FROM s_core_countries c
             WHERE $sql
         ";
-        $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
-        $cache[$country]['shippingfree'] = round($cache[$country]['shippingfree'] * $currencyFactor, 2);
 
         return $cache[$country] = $this->db->fetchRow($sql) ?: [];
     }
@@ -2963,9 +2990,18 @@ class sAdmin
             || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
             if (empty($dispatch['surcharge_calculation']) && !empty($payment['surcharge'])) {
+                $tax = (float) $basket['max_tax'];
+
+                if (!empty($dispatch['tax_calculation'])) {
+                    $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+                    $taxRule = $context->getTaxRule($dispatch['tax_calculation']);
+                    $tax = $taxRule->getTax();
+                }
+
                 return [
                     'brutto' => $payment['surcharge'],
-                    'netto' => round($payment['surcharge'] * 100 / (100 + $this->config->get('sTAXSHIPPING')), 2),
+                    'netto' => round($payment['surcharge'] * 100 / (100 + $tax), 2),
+                    'tax' => $tax,
                 ];
             }
 
@@ -3132,6 +3168,12 @@ class sAdmin
     private function regenerateSessionId()
     {
         $oldSessionId = session_id();
+
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId])) {
+            return;
+        }
+
         session_regenerate_id(true);
         $newSessionId = session_id();
 
@@ -3497,7 +3539,7 @@ SQL;
     {
         // Query country information
         $userData['additional']['country'] = $this->db->fetchRow(
-        'SELECT c.*, a.name AS countryarea
+            'SELECT c.*, a.name AS countryarea
           FROM s_core_countries c
           LEFT JOIN s_core_countries_areas a
            ON a.id = c.areaID AND a.active = 1
@@ -3521,7 +3563,7 @@ SQL;
             [$userId]
         );
         $additional = $additional ?: [];
-        $attributes = $this->attributeLoader->load('s_user_attributes', $userId) ?: [];
+        $attributes = $this->attributeLoader->load('s_user_attributes', $userId);
         $userData['additional']['user'] = array_merge($attributes, $additional);
 
         return $userData;
@@ -3542,7 +3584,7 @@ SQL;
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
         $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
-        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']);
         $userData['shippingaddress'] = $shipping;
 
         if (!isset($userData['shippingaddress']['firstname'])) {
@@ -3595,7 +3637,7 @@ SQL;
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Customer::class, $userId);
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
-        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
+        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']);
         $userData['billingaddress'] = $billing;
 
         return $userData;
@@ -3621,7 +3663,7 @@ SQL;
             $result = [
                 'code' => 10,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('UnknownError', 'Unknown error'),
+                    ->get('UnknownError', 'Unknown error'),
             ];
 
             return $result;
@@ -3645,12 +3687,21 @@ SQL;
                 $result = [
                     'code' => 10,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('UnknownError', 'Unknown error'),
+                        ->get('UnknownError', 'Unknown error'),
                 ];
 
                 return $result;
             }
         }
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_Newsletter_Registration_Success',
+            [
+                'subject' => $this,
+                'email' => $email,
+                'groupID' => $groupID,
+            ]
+        );
 
         $result = [
             'code' => 3,
@@ -4004,5 +4055,16 @@ SQL;
             ',
             ['id' => $this->session->offsetGet('sUserId')]
         );
+    }
+
+    /**
+     * @param $config
+     *
+     * @return bool
+     */
+    private function shouldVerifyCaptcha($config)
+    {
+        return $config->get('newsletterCaptcha') !== 'nocaptcha' &&
+            !($config->get('noCaptchaAfterLogin') && Shopware()->Modules()->Admin()->sCheckUser());
     }
 }

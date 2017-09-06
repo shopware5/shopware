@@ -28,6 +28,7 @@ use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
+use Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
 use Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
@@ -45,6 +46,7 @@ use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
@@ -125,6 +127,11 @@ class Kernel implements HttpKernelInterface
     private $plugins = [];
 
     /**
+     * @var string[]
+     */
+    private $activePlugins = [];
+
+    /**
      * @var string
      */
     private $pluginHash;
@@ -140,8 +147,6 @@ class Kernel implements HttpKernelInterface
      */
     public function __construct($environment, $debug)
     {
-        $debug = false;
-
         $this->environment = $environment;
         $this->debug = (bool) $debug;
         $this->name = 'Shopware';
@@ -177,10 +182,10 @@ class Kernel implements HttpKernelInterface
         /** @var $front \Enlight_Controller_Front * */
         $front = $this->container->get('front');
 
-        $request = $this->transformSymfonyRequestToEnlightRequest($request);
+        $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
 
         if ($front->Request() === null) {
-            $front->setRequest($request);
+            $front->setRequest($enlightRequest);
             $response = $front->dispatch();
         } else {
             $dispatcher = clone $front->Dispatcher();
@@ -191,11 +196,12 @@ class Kernel implements HttpKernelInterface
                 ->clearBody();
 
             $response->setHttpResponseCode(200);
-            $request->setDispatched(true);
-            $dispatcher->dispatch($request, $response);
+            $enlightRequest->setDispatched(true);
+            $dispatcher->dispatch($enlightRequest, $response);
         }
 
         $response = $this->transformEnlightResponseToSymfonyResponse($response);
+        $response->prepare($request);
 
         return $response;
     }
@@ -244,9 +250,9 @@ class Kernel implements HttpKernelInterface
             $headers
         );
 
-        foreach ($response->getCookies() as $cookieName => $cookieContent) {
+        foreach ($response->getCookies() as $cookieContent) {
             $sfCookie = new Cookie(
-                $cookieName,
+                $cookieContent['name'],
                 $cookieContent['value'],
                 $cookieContent['expire'],
                 $cookieContent['path'],
@@ -445,10 +451,12 @@ class Kernel implements HttpKernelInterface
     {
         $initializer = new PluginInitializer(
             $this->connection,
-            $this->getRootDir() . '/custom/plugins'
+            $this->config['plugin_directories']['ShopwarePlugins']
         );
 
         $this->plugins = $initializer->initializePlugins();
+
+        $this->activePlugins = $initializer->getActivePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);
     }
@@ -607,10 +615,8 @@ class Kernel implements HttpKernelInterface
         $loader->load('AccountBundle/services.xml');
         $loader->load('AttributeBundle/services.xml');
         $loader->load('EmotionBundle/services.xml');
-
-        if ($this->isElasticSearchEnabled()) {
-            $loader->load('SearchBundleES/services.xml');
-        }
+        $loader->load('SearchBundleES/services.xml');
+        $loader->load('CustomerSearchBundleDBAL/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -636,10 +642,11 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
+        $container->addCompilerPass(new HandlerRegistryCompilerPass());
+        $container->addCompilerPass(new SearchHandlerCompilerPass());
+        $container->addCompilerPass(new EmotionPresetCompilerPass());
 
-        if ($this->isElasticSearchEnabled()) {
-            $container->addCompilerPass(new SearchHandlerCompilerPass());
-        }
+        $container->setParameter('active_plugins', $this->activePlugins);
 
         $this->loadPlugins($container);
     }

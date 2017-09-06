@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Assert\Assertion;
+use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * The criteria object is used for the search gateway.
@@ -39,7 +40,7 @@ use Assert\Assertion;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Criteria implements \JsonSerializable
+class Criteria extends Extendable implements \JsonSerializable
 {
     /**
      * Offset for the limitation

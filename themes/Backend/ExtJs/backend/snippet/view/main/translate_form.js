@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
             fieldSetItems.push({
                 fieldLabel: locale.get('displayName'),
                 name: translation.internalId,
-                emptyText: Ext.util.Format.stripTags(translation.get('defaultValue')),
+                emptyText: Ext.util.Format.htmlEncode(Ext.util.Format.stripTags(translation.get('defaultValue'))),
                 value: translation.get('value')
             });
         });
@@ -129,11 +129,16 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
      * @return array
      */
     getButtons: function() {
+        var me = this;
+
         return [{
             cls: 'primary',
             text: '{s name=button_save_form}Save{/s}',
             action: 'save',
-            formBind: true
+            formBind: true,
+            handler: function() {
+                me.fireEvent('save')
+            }
         }];
     }
 });

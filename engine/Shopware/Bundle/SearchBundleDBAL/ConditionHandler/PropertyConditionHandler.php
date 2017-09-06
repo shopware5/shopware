@@ -55,6 +55,8 @@ class PropertyConditionHandler implements ConditionHandlerInterface
     ) {
         $tableKey = $condition->getName();
 
+        $suffix = md5(json_encode($condition));
+
         if ($query->hasState('property_' . $tableKey)) {
             return;
         }
@@ -63,10 +65,9 @@ class PropertyConditionHandler implements ConditionHandlerInterface
         $where = [];
         /** @var PropertyCondition $condition */
         foreach ($condition->getValueIds() as $valueId) {
-            $valueKey = $tableKey . '_' . $valueId;
-
-            $where[] = $tableKey . '.valueID = :' . $valueKey;
-            $query->setParameter(':' . $valueKey, $valueId);
+            $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
+            $where[] = $tableKey . '.valueID = ' . $valueKey;
+            $query->setParameter($valueKey, $valueId);
         }
 
         $where = implode(' OR ', $where);

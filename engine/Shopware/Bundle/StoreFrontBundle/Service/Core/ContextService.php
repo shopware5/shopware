@@ -137,7 +137,8 @@ class ContextService implements ContextServiceInterface
             $this->getStoreFrontCurrentCustomerGroupKey(),
             $this->getStoreFrontAreaId(),
             $this->getStoreFrontCountryId(),
-            $this->getStoreFrontStateId()
+            $this->getStoreFrontStateId(),
+            $this->getStoreFrontStreamIds()
         );
     }
 
@@ -336,7 +337,8 @@ class ContextService implements ContextServiceInterface
         $currentCustomerGroupKey = null,
         $areaId = null,
         $countryId = null,
-        $stateId = null
+        $stateId = null,
+        $streamIds = []
     ) {
         $shop = $this->shopGateway->get($shopId);
         $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
@@ -389,7 +391,54 @@ class ContextService implements ContextServiceInterface
             $priceGroups,
             $area,
             $country,
-            $state
+            $state,
+            $streamIds
         );
+    }
+
+    /**
+     * @param int $customerId
+     *
+     * @return array
+     */
+    private function getStreamsOfCustomerId($customerId)
+    {
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select('mapping.stream_id');
+        $query->from('s_customer_streams_mapping', 'mapping');
+        $query->where('mapping.customer_id = :customerId');
+        $query->setParameter(':customerId', $customerId);
+        $streams = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        sort($streams);
+
+        return $streams;
+    }
+
+    /**
+     * @return array
+     */
+    private function getStoreFrontStreamIds()
+    {
+        $customerId = $this->getStoreFrontCustomerId();
+
+        if (!$customerId) {
+            return [];
+        }
+
+        return $this->getStreamsOfCustomerId($customerId);
+    }
+
+    private function getStoreFrontCustomerId()
+    {
+        $session = $this->container->get('session');
+        if ($session->offsetGet('sUserId')) {
+            return (int) $session->offsetGet('sUserId');
+        }
+
+        if ($session->offsetGet('auto-user')) {
+            return (int) $session->offsetGet('auto-user');
+        }
+
+        return null;
     }
 }

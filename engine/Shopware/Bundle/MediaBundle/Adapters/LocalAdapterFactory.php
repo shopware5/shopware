@@ -33,6 +33,10 @@ class LocalAdapterFactory implements AdapterFactoryInterface
      */
     public function create(array $config)
     {
+        if (!array_key_exists('permissions', $config)) {
+            $config['permissions'] = [];
+        }
+
         return new Local(
             $config['path'],
             LOCK_EX,

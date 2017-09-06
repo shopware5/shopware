@@ -233,6 +233,9 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
                 callback: function() {
                     // save attributes
                     win.attributeForm.saveAttribute(record.getId());
+
+                    Shopware.app.Application.fireEvent('supplier-save-successfully', me, record, form);
+
                     // reload the store
                     store.load();
                     // and close the window.

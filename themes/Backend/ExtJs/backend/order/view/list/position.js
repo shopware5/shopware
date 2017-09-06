@@ -198,21 +198,23 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
                 xtype:'actioncolumn',
                 width:90,
                 items:[
-                    {
-                        iconCls:'sprite-minus-circle-frame',
-                        action:'deletePosition',
-                        tooltip: me.snippets.deletePosition,
-                        /**
-                         * Add button handler to fire the deleteOrder event which is handled
-                         * in the list controller.
-                         */
-                        handler:function (view, rowIndex, colIndex, item) {
-                            var store = view.getStore(),
-                                record = store.getAt(rowIndex);
+                    /*{if {acl_is_allowed privilege=update}}*/
+                        {
+                            iconCls:'sprite-minus-circle-frame',
+                            action:'deletePosition',
+                            tooltip: me.snippets.deletePosition,
+                            /**
+                             * Add button handler to fire the deleteOrder event which is handled
+                             * in the list controller.
+                             */
+                            handler:function (view, rowIndex, colIndex, item) {
+                                var store = view.getStore(),
+                                    record = store.getAt(rowIndex);
 
-                            me.fireEvent('deletePosition', record, store);
-                        }
-                    },
+                                me.fireEvent('deletePosition', record, store);
+                            }
+                        },
+                    /*{/if}*/
                     {
                         iconCls:'sprite-inbox',
                         action:'openArticle',

@@ -63,7 +63,7 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
             throw new \Exception('ProductAttributeCondition class requires a defined operator!');
         }
 
-        $placeholder = ':' . $condition->getField();
+        $placeholder = ':' . $condition->getField() . md5(json_encode($condition));
         $field = 'productAttribute.' . $condition->getField();
 
         switch (true) {
@@ -73,6 +73,11 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
                 } else {
                     $query->andWhere($field . ' IS NOT NULL');
                 }
+                break;
+
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_NOT_IN:
+                $query->andWhere($field . ' NOT IN (' . $placeholder . ')');
+                $query->setParameter($placeholder, $condition->getValue(), Connection::PARAM_STR_ARRAY);
                 break;
 
             case $condition->getOperator() === ProductAttributeCondition::OPERATOR_IN:

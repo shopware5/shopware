@@ -298,16 +298,43 @@ class Basic implements GeneratorInterface
      */
     private function optimizeImage($destination)
     {
-        if ($this->mediaService->getAdapterType() !== 'local') {
-            return;
-        }
-
-        $destination = $this->mediaService->encode($destination);
+        $tmpFilename = $this->downloadImage($destination);
 
         try {
-            $this->optimizerService->optimize($destination);
+            $this->optimizerService->optimize($tmpFilename);
+            $this->uploadImage($destination, $tmpFilename);
         } catch (OptimizerNotFoundException $exception) {
             // empty catch intended since no optimizer is available
         }
+        unlink($tmpFilename);
+    }
+
+    /**
+     * @param string $destination
+     *
+     * @return string
+     */
+    private function downloadImage($destination)
+    {
+        $tmpFilename = tempnam(sys_get_temp_dir(), 'optimize_image');
+        $handle = fopen($tmpFilename, 'wb');
+
+        stream_copy_to_stream(
+            $this->mediaService->readStream($destination),
+            $handle
+        );
+
+        return $tmpFilename;
+    }
+
+    /**
+     * @param string $destination
+     * @param string $tmpFilename
+     */
+    private function uploadImage($destination, $tmpFilename)
+    {
+        $fileHandle = fopen($tmpFilename, 'rb');
+        $this->mediaService->writeStream($destination, $fileHandle);
+        fclose($fileHandle);
     }
 }

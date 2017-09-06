@@ -370,7 +370,7 @@
         },
 
         /**
-         * Sets the title of the modal box.
+         * Sets the transition of the modal box.
          *
          * @public
          * @method setTransition
@@ -621,9 +621,10 @@
          */
         center: function () {
             var me = this,
-                $modalBox = me._$modalBox;
+                $modalBox = me._$modalBox,
+                windowHeight = window.innerHeight || $(window).height();
 
-            $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
+            $modalBox.css('top', (windowHeight - $modalBox.height()) / 2);
 
             $.publish('plugin/swModal/onCenter', [ me ]);
         },
@@ -755,7 +756,7 @@
             event.preventDefault();
 
             var me = this,
-                target = me.$target.length === 1 && me.$target || $(event.target);
+                target = (me.$target.length === 1 && me.$target) || $(event.target);
 
             $.modal.open(me.opts.content || (me.opts.mode !== 'local' ? target.attr('href') : target), me.opts);
 
@@ -779,7 +780,7 @@
         },
 
         /**
-         * This method closes the modal box when its opened, destroys
+         * This method closes the modal box when it is opened, destroys
          * the plugin and removes all registered events
          *
          * @public
@@ -798,4 +799,3 @@
         }
     });
 })(jQuery, window);
-

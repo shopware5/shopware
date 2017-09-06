@@ -27,27 +27,29 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Model - Customer list backend module.
  *
  * The customer model of the customer module represent a data row of the s_user or the
  * Shopware\Models\Customer\Customer doctrine model, with some additional data for the additional information panel.
  */
-//{block name="backend/customer/model/customer"}
+// {block name="backend/customer/model/customer"}
 Ext.define('Shopware.apps.Customer.model.Batch', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/customer/fields"}{/block}
-        { name:'id', type:'int' }
+    fields: [
+        // {block name="backend/customer/model/customer/fields"}{/block}
+        { name: 'id', type: 'int' }
     ],
 
     /**
@@ -55,15 +57,15 @@ Ext.define('Shopware.apps.Customer.model.Batch', {
      * One customer has a billing, shipping address and a debit information.
      * @array
      */
-    associations:[
-        { type:'hasMany', model:'Shopware.apps.Base.model.OrderStatus', name:'getOrderStatus', associationKey:'orderStatus' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.PaymentStatus', name:'getPaymentStatus', associationKey:'paymentStatus' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.Payment', name:'getPayment', associationKey:'payment' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.Dispatch', name:'getDispatch', associationKey:'dispatch'},
-        { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShop', associationKey:'shop'},
-        { type:'hasMany', model:'Shopware.apps.Base.model.Country', name:'getCountry', associationKey:'country'},
-        { type:'hasMany', model:'Shopware.apps.Base.model.CustomerGroup', name:'getCustomerGroup', associationKey:'customerGroup'}
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.OrderStatus', name: 'getOrderStatus', associationKey: 'orderStatus' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.PaymentStatus', name: 'getPaymentStatus', associationKey: 'paymentStatus' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Payment', name: 'getPayment', associationKey: 'payment' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Dispatch', name: 'getDispatch', associationKey: 'dispatch' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Shop', name: 'getShop', associationKey: 'shop' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Country', name: 'getCountry', associationKey: 'country' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.CustomerGroup', name: 'getCustomerGroup', associationKey: 'customerGroup' }
     ]
 
 });
-//{/block}
+// {/block}

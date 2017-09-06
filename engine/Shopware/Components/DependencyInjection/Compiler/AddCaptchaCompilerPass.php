@@ -41,6 +41,6 @@ class AddCaptchaCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.captcha.repository', 'captcha', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware.captcha.repository', 'shopware.captcha', 0);
     }
 }

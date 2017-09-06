@@ -49,7 +49,7 @@
                                                 <div class="option--container">
 
                                                     {block name="frontend_listing_filter_facet_multi_selection_input"}
-                                                        <span class="filter-panel--input">
+                                                        <span class="filter-panel--input filter-panel--{$inputType}">
                                                             {$name = "__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"}
                                                             {if $filterType == 'radio'}
                                                                 {$name = {$facet->getFieldName()|escape:'htmlall'} }
@@ -61,7 +61,7 @@
                                                                    value="{$option->getId()|escape:'htmlall'}"
                                                                    {if $option->isActive()}checked="checked" {/if}/>
 
-                                                            <span class="input--state">&nbsp;</span>
+                                                            <span class="input--state {$inputType}--state">&nbsp;</span>
                                                         </span>
                                                     {/block}
 

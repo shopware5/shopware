@@ -119,9 +119,10 @@ return array_replace_recursive([
         'apiEndpoint' => 'https://api.shopware.com',
     ],
     'plugin_directories' => [
-        'Default' => $this->AppPath('Plugins_' . 'Default'),
-        'Local' => $this->AppPath('Plugins_' . 'Local'),
-        'Community' => $this->AppPath('Plugins_' . 'Community'),
+        'Default' => $this->AppPath('Plugins_Default'),
+        'Local' => $this->AppPath('Plugins_Local'),
+        'Community' => $this->AppPath('Plugins_Community'),
+        'ShopwarePlugins' => $this->DocPath('custom_plugins'),
     ],
     'template' => [
         'compileCheck' => true,
@@ -171,7 +172,7 @@ return array_replace_recursive([
             'lifetime' => 3600,
             'cache_id_prefix' => md5($this->getCacheDir()),
         ],
-        'backend' => 'auto', // e.G auto, apcu, xcache
+        'backend' => 'auto', // e.G auto, apcu, xcache, redis
         'backendOptions' => [
             'hashed_directory_perm' => 0777 & ~umask(),
             'cache_file_perm' => 0666 & ~umask(),
@@ -189,7 +190,7 @@ return array_replace_recursive([
         'attributeDir' => $this->getCacheDir() . '/doctrine/attributes',
         'proxyDir' => $this->getCacheDir() . '/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => 'auto', // supports null, auto, Apcu, Array, Wincache and Xcache
+        'cacheProvider' => 'auto', // supports null, auto, Apcu, Array, Wincache, Xcache and redis
         'cacheNamespace' => null, // custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
     ],
     'backendsession' => [
@@ -198,5 +199,11 @@ return array_replace_recursive([
         'cookie_httponly' => 1,
         'use_trans_sid' => 0,
         'locking' => false,
+    ],
+    'template_security' => [
+        // @deprecated with 5.3, config switch will be removed with 5.4
+        'enabled' => true,
+        'php_modifiers' => include __DIR__ . '/smarty_functions.php',
+        'php_functions' => include __DIR__ . '/smarty_functions.php',
     ],
 ], $customConfig);

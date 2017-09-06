@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomFacetGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
@@ -73,9 +74,9 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $query->andWhere('customFacet.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $facets = $this->hydrate(
-            $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
-        );
+        $facets = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+
+        $facets = $this->hydrate($facets);
 
         return $this->getAndSortElementsByIds($ids, $facets);
     }
@@ -114,7 +115,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $query->orderBy('customFacet.position');
 
         return $this->hydrate(
-            $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
+            $query->execute()->fetchAll(PDO::FETCH_ASSOC)
         );
     }
 
@@ -131,7 +132,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $query->andWhere('customFacet.display_in_categories = 1');
         $query->addOrderBy('customFacet.position', 'ASC');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -159,10 +160,12 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
      */
     private function hydrate(array $data)
     {
+        $streams = $this->fetchAssignedStreams($data);
+
         $facets = [];
         foreach ($data as $row) {
             $id = (int) $row['__customFacet_id'];
-            $facets[$id] = $this->hydrator->hydrateFacet($row);
+            $facets[$id] = $this->hydrator->hydrateFacet($row, $streams);
         }
 
         return $facets;
@@ -199,7 +202,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
             ->where('categories.id IN (:ids)')
             ->setParameter(':ids', $categoryIds, Connection::PARAM_INT_ARRAY);
 
-        $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $mapping = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
         $allFacetIds = [];
 
         $hasEmpty = count(array_filter($mapping)) !== count($mapping);
@@ -219,5 +222,41 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
             },
             $mapping
         );
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    private function fetchAssignedStreams(array $data)
+    {
+        $streamIds = [];
+        foreach ($data as $facet) {
+            $config = json_decode($facet['__customFacet_facet'], true);
+            $config = array_shift($config);
+            if (array_key_exists('streamId', $config)) {
+                $streamIds[] = $config['streamId'];
+            }
+        }
+
+        if (empty($streamIds)) {
+            return [];
+        }
+
+        $query = $this->connection->createQueryBuilder();
+        $query->select([
+            'streams.id',
+            'streams.conditions',
+            'GROUP_CONCAT(variant.ordernumber) as numbers',
+        ]);
+        $query->from('s_product_streams', 'streams');
+        $query->leftJoin('streams', 's_product_streams_selection', 'articles', 'articles.stream_id = streams.id');
+        $query->leftJoin('articles', 's_articles_details', 'variant', 'variant.articleID = articles.article_id AND variant.kind = 1');
+        $query->where('streams.id IN (:ids)');
+        $query->groupBy('streams.id');
+        $query->setParameter(':ids', $streamIds, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 }

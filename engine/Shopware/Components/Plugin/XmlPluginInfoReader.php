@@ -33,7 +33,7 @@ class XmlPluginInfoReader
         try {
             $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/plugin.xsd');
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseInfo($dom);

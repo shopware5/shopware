@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
-use Shopware\Models\Media\Media;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface MediaReplaceServiceInterface

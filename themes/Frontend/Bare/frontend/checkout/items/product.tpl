@@ -26,7 +26,7 @@
                                             {$desc = $sBasketItem.articlename|escape}
 
                                             {if $image.thumbnails[0]}
-                                                <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
+                                                <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags|escape}" class="table--media-link"
                                                     {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
                                                    data-modalbox="true"
                                                    data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath forceSecure}"

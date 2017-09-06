@@ -132,7 +132,7 @@ Ext.define('Shopware.Notification', {
                 '</tpl>',
                 '<p>',
                     '<tpl if="title">',
-                        '<strong>[Ext.util.Format.htmlEncode(title)]</strong>&nbsp;',
+                        '<strong>[Ext.String.getText(title)]</strong>&nbsp;',
                     '</tpl>',
                     '{text}',
                 '</p>',

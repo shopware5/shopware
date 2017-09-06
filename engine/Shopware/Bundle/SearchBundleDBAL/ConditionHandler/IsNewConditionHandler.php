@@ -66,10 +66,12 @@ class IsNewConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $key = ':isNewDate' . md5(json_encode($condition));
+
         $dayLimit = (int) $this->config->get('markAsNew');
         $timestamp = strtotime('-' . $dayLimit . ' days');
 
-        $query->andWhere('product.datum >= :isNewDate')
-            ->setParameter(':isNewDate', date('Y-m-d', $timestamp));
+        $query->andWhere('product.datum >= ' . $key)
+            ->setParameter($key, date('Y-m-d', $timestamp));
     }
 }

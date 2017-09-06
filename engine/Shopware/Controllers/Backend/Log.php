@@ -335,10 +335,6 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      */
     private function getDefaultLogFile(array $files)
     {
-        foreach ($files as $file) {
-            return $file[0];
-        }
-
-        return false;
+        return isset($files[0]) ? $files[0] : false;
     }
 }

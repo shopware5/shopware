@@ -23,6 +23,10 @@ Feature: Recommendation tabs on detail page
     When I am on the detail page for article 178
     Then I should not see "Kunden haben sich ebenfalls angesehen"
 
+    When I am on the page "Account"
+    And I log me out
+    Then I should see "Logout erfolgreich!"
+
   @recommendations @javascript
   Scenario: I can see recommendations after I buy two articles
     And I am on the page "CheckoutConfirm"
@@ -38,3 +42,7 @@ Feature: Recommendation tabs on detail page
     Then I should see "Kunden kauften auch"
     And I should see "Kunden haben sich ebenfalls angesehen"
     And I should see "Fliegenklatsche grün"
+
+    When I am on the page "Account"
+    And I log me out
+    Then I should see "Logout erfolgreich!"

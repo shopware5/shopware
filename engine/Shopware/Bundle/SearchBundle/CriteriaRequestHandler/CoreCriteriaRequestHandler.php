@@ -27,13 +27,17 @@ namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
+use Shopware\Bundle\SearchBundle\Condition\HeightCondition;
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
+use Shopware\Bundle\SearchBundle\Condition\LengthCondition;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
+use Shopware\Bundle\SearchBundle\Condition\WeightCondition;
+use Shopware\Bundle\SearchBundle\Condition\WidthCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
@@ -86,6 +90,11 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addImmediateDeliveryCondition($request, $criteria);
         $this->addRatingCondition($request, $criteria);
         $this->addPriceCondition($request, $criteria);
+
+        $this->addWeightCondition($request, $criteria);
+        $this->addHeightCondition($request, $criteria);
+        $this->addWidthCondition($request, $criteria);
+        $this->addLengthCondition($request, $criteria);
     }
 
     /**
@@ -253,5 +262,57 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             return;
         }
         $criteria->addBaseCondition(new IsAvailableCondition());
+    }
+
+    private function addWeightCondition(Request $request, Criteria $criteria)
+    {
+        $min = $request->getParam('minWeight', null);
+        $max = $request->getParam('maxWeight', null);
+
+        if (!$min && !$max) {
+            return;
+        }
+
+        $condition = new WeightCondition((float) $min, (float) $max);
+        $criteria->addCondition($condition);
+    }
+
+    private function addWidthCondition(Request $request, Criteria $criteria)
+    {
+        $min = $request->getParam('minWidth', null);
+        $max = $request->getParam('maxWidth', null);
+
+        if (!$min && !$max) {
+            return;
+        }
+
+        $condition = new WidthCondition((float) $min, (float) $max);
+        $criteria->addCondition($condition);
+    }
+
+    private function addLengthCondition(Request $request, Criteria $criteria)
+    {
+        $min = $request->getParam('minLength', null);
+        $max = $request->getParam('maxLength', null);
+
+        if (!$min && !$max) {
+            return;
+        }
+
+        $condition = new LengthCondition((float) $min, (float) $max);
+        $criteria->addCondition($condition);
+    }
+
+    private function addHeightCondition(Request $request, Criteria $criteria)
+    {
+        $min = $request->getParam('minHeight', null);
+        $max = $request->getParam('maxHeight', null);
+
+        if (!$min && !$max) {
+            return;
+        }
+
+        $condition = new HeightCondition((float) $min, (float) $max);
+        $criteria->addCondition($condition);
     }
 }

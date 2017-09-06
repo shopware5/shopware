@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.RecipientGroup', {
         //{block name="backend/newsletter_manager/model/recipient_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'internalId', type: 'int' },
+        { name: 'streamId', type: 'int', useNull: true, defaultValue: null },
         { name: 'number', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'groupkey', type: 'string' },

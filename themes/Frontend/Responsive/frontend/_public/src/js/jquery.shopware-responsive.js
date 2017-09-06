@@ -32,6 +32,9 @@
         // OffCanvas menu
         .addPlugin('*[data-offcanvas="true"]', 'swOffcanvasMenu', ['xs', 's'])
 
+        // Datepicker
+        .addPlugin('*[data-datepicker="true"]', 'swDatePicker')
+
         // Search field
         .addPlugin('*[data-search="true"]', 'swSearch')
 
@@ -41,7 +44,7 @@
         }, ['xs', 's'])
 
         // Collapse panel
-        .addPlugin('#new-customer-action', 'swCollapsePanel', ['xs', 's'])
+        .addPlugin('#new-customer-action, .registration--menu-entry', 'swCollapsePanel', ['xs', 's'])
 
         // Image slider
         .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
@@ -115,6 +118,8 @@
         .addPlugin('*[data-address-selection="true"]', 'swAddressSelection')
         .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
         .addPlugin('*[data-cookie-permission="true"]', 'swCookiePermission')
+        .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
+        .addPlugin('*[data-storage-field="true"]', 'swStorageField')
     ;
 
     $(function($) {
@@ -157,9 +162,6 @@
             }
         });
 
-        // Start up the placeholder polyfill, see ```jquery.ie-fixes.js```
-        $('input, textarea').placeholder();
-
         $('.add-voucher--checkbox').on('change', function (event) {
             var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';
             event.preventDefault();
@@ -187,6 +189,8 @@
                 return;
             }
 
+            $.publish('plugin/swResponsive/onCartRefresh');
+
             $.ajax({
                 'url': ajaxCartRefresh,
                 'dataType': 'jsonp',
@@ -203,17 +207,13 @@
                     if (cart.quantity == 0) {
                         $cartQuantity.addClass('is--hidden');
                     }
+
+                    $.publish('plugin/swResponsive/onCartRefreshSuccess', [ cart ]);
                 }
             });
         }
 
         $.subscribe('plugin/swAddArticle/onAddArticle', cartRefresh);
         $.subscribe('plugin/swCollapseCart/onRemoveArticleFinished', cartRefresh);
-
-        $('.is--ctl-detail .reset--configuration').on('click', function () {
-            $.loadingIndicator.open({
-                closeOnClick: false
-            });
-        });
     });
 })(jQuery, window);

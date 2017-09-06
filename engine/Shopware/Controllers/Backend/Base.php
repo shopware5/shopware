@@ -24,6 +24,8 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Document\Document;
+use Shopware\Models\Shop\Locale;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -124,7 +126,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      *    [string]   description
      *    [int]      position
      *    [int]      active
-     * </code>
+     * </code>getlocalesaction
      */
     public function getPaymentsAction()
     {
@@ -290,7 +292,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         //search for values
         if (!empty($searchQuery)) {
             $builder->andWhere('s.name LIKE :searchQuery')
-                    ->setParameter('searchQuery', '%' . $searchQuery . '%');
+                ->setParameter('searchQuery', '%' . $searchQuery . '%');
         }
 
         $builder->addOrderBy($this->Request()->getParam('sort', []));
@@ -524,16 +526,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
 
         $fields = [
-                'details.id',
-                'articles.name',
-                'articles.description',
-                'articles.active',
-                'details.ordernumber',
-                'articles.id as articleId',
-                'details.inStock',
-                'supplier.name as supplierName',
-                'supplier.id as supplierId',
-                'details.additionalText',
+            'details.id',
+            'articles.name',
+            'articles.description',
+            'articles.active',
+            'details.ordernumber',
+            'articles.id as articleId',
+            'details.inStock',
+            'supplier.name as supplierName',
+            'supplier.id as supplierId',
+            'details.additionalText',
         ];
 
         $builder->select($fields);
@@ -563,7 +565,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         $builder->setFirstResult($this->Request()->getParam('start'))
-                ->setMaxResults($this->Request()->getParam('limit'));
+            ->setMaxResults($this->Request()->getParam('limit'));
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $builder->execute();
@@ -734,7 +736,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->addOrderBy((array) $this->Request()->getParam('sort', []));
 
         $builder->setFirstResult($this->Request()->getParam('start'))
-                ->setMaxResults($this->Request()->getParam('limit'));
+            ->setMaxResults($this->Request()->getParam('limit'));
 
         $query = $builder->getQuery();
 
@@ -750,7 +752,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getLocalesAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale');
+        $repository = $this->get('models')->getRepository(Locale::class);
 
         $builder = $repository->createQueryBuilder('l');
         $builder->select([
@@ -759,15 +761,22 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'l.language as language',
             'l.territory as territory',
         ]);
+
         $builder->addFilter((array) $this->Request()->getParam('filter', []));
-        $builder->addOrderBy((array) $this->Request()->getParam('sort', []));
+
+        $sort = $this->Request()->getParam('sort', []);
+        if (is_array($sort) && count($sort) === 0) {
+            $builder->addOrderBy('l.language');
+            $builder->addOrderBy('l.territory');
+        }
+        $builder->addOrderBy($sort);
 
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
 
         $query = $builder->getQuery();
 
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = $this->get('models')->getQueryCount($query);
         $data = $query->getArrayResult();
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -786,7 +795,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->addOrderBy((array) $this->Request()->getParam('sort', []));
 
         $builder->setFirstResult($this->Request()->getParam('start'))
-                ->setMaxResults($this->Request()->getParam('limit'));
+            ->setMaxResults($this->Request()->getParam('limit'));
 
         $query = $builder->getQuery();
 
@@ -949,13 +958,64 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $value = $this->getAvailableSalutationKeys();
 
+        $whitelist = $this->Request()->getParam('ids', []);
+
+        if (!empty($whitelist)) {
+            $whitelist = json_decode($whitelist, true);
+            $value = array_filter($value, function ($key) use ($whitelist) {
+                return in_array($key, $whitelist, true);
+            });
+        }
+
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
         $salutations = [];
         foreach ($value as $key) {
-            $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
+            $label = $namespace->get($key, $key);
+            if (empty(trim($label))) {
+                $label = $key;
+            }
+            $salutations[] = ['key' => $key, 'label' => $label];
         }
 
         $this->View()->assign('data', $salutations);
+    }
+
+    /**
+     * Returns a list of document types. Supports store paging, sorting and filtering over the standard ExtJs store
+     * parameters. Each document type has the following fields:
+     * <code>
+     *    [int]      id
+     *    [string]   name
+     *    [string]   template
+     *    [string]   numbers
+     *    [int]      left
+     *    [int]      right
+     *    [int]      top
+     *    [int]      bottom
+     *    [int]      pageBreak
+     * </code>
+     *
+     * @throws \Exception
+     */
+    public function getDocTypesAction()
+    {
+        $modelManager = $this->container->get('models');
+        $repository = $modelManager
+            ->getRepository(Document::class);
+
+        $builder = $repository->createQueryBuilder('d');
+
+        $builder->select('d')
+            ->addFilter((array) $this->Request()->getParam('filter', []))
+            ->addOrderBy((array) $this->Request()->getParam('sort', []))
+            ->setFirstResult($this->Request()->getParam('start', 0))
+            ->setMaxResults($this->Request()->getParam('limit', 250));
+
+        $query = $builder->getQuery();
+        $total = $modelManager->getQueryCount($query);
+        $data = $query->getArrayResult();
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**

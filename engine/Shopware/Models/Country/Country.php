@@ -122,13 +122,6 @@ class Country extends ModelEntity
     private $description;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
-     */
-    private $shippingFree;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="taxfree", type="integer", nullable=false)
@@ -327,30 +320,6 @@ class Country extends ModelEntity
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set shippingFree
-     *
-     * @param bool $shippingFree
-     *
-     * @return Country
-     */
-    public function setShippingFree($shippingFree)
-    {
-        $this->shippingFree = $shippingFree;
-
-        return $this;
-    }
-
-    /**
-     * Get shippingFree
-     *
-     * @return bool
-     */
-    public function getShippingFree()
-    {
-        return $this->shippingFree;
     }
 
     /**

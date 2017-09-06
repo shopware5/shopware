@@ -197,15 +197,16 @@ class Helper
      */
     public function getSimpleProduct(
         $number,
-        $tax, // Either Model/Tax or Struct/Tax
-        Group $customerGroup,
+        $tax = null, // Either Model/Tax or Struct/Tax
+        Group $customerGroup = null,
         $priceOffset = 0.00
     ) {
-        if ($customerGroup instanceof Models\Customer\Group) {
-            $struct = new Group();
-            $struct->setId($customerGroup->getId());
-            $struct->setKey($customerGroup->getKey());
-            $struct->setName($customerGroup->getName());
+        if (!$tax) {
+            $tax = $this->entityManager->find(Tax::class, 1);
+        }
+        $key = 'EK';
+        if ($customerGroup) {
+            $key = $customerGroup->getKey();
         }
 
         $data = $this->getProductData([
@@ -216,10 +217,7 @@ class Helper
             'number' => $number,
         ]);
 
-        $data['mainDetail']['prices'] = $this->getGraduatedPrices(
-            $customerGroup->getKey(),
-            $priceOffset
-        );
+        $data['mainDetail']['prices'] = $this->getGraduatedPrices($key, $priceOffset);
 
         $data['mainDetail'] += $this->getUnitData();
 

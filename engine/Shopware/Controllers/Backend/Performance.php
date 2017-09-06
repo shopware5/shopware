@@ -292,6 +292,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $elementRepository = $modelManager->getRepository(Element::class);
         $formRepository = $modelManager->getRepository(Form::class);
 
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
         if (strpos($name, ':') !== false) {
@@ -420,7 +421,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * calculates the number of all urls to create a cache entry for
+     * Calculates the number of all urls to create a cache entry for
      */
     public function getHttpURLsAction()
     {
@@ -429,16 +430,23 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         /** @var $cacheWarmer CacheWarmer */
         $cacheWarmer = $this->get('http_cache_warmer');
 
+        $counts = [
+            'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
+            'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
+            'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
+            'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
+            'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId),
+        ];
+
+        $counts = $this->get('events')->filter(
+            'Shopware_Controllers_Performance_filterCounts',
+            $counts
+        );
+
         $this->View()->assign([
             'success' => true,
             'data' => [
-                'counts' => [
-                    'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
-                    'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
-                    'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
-                    'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
-                    'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId),
-                ],
+                'counts' => $counts,
             ],
         ]);
     }
@@ -521,7 +529,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             ]),
             'various' => $this->genericConfigLoader([
                 'disableShopwareStatistics',
-                'LastArticles:show',
+                'LastArticles:lastarticles_show',
                 'LastArticles:lastarticlestoshow',
                 'disableArticleNavigation',
             ]),
@@ -537,6 +545,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Helper function to check some performance configurations.
+     *
+     * @return array
      */
     protected function getPerformanceCheckData()
     {
@@ -556,13 +566,13 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
+                'valid' => extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 3,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
                 'value' => extension_loaded('Zend OPcache'),
-                'valid' => extension_loaded('Zend OPcache') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
+                'valid' => extension_loaded('Zend OPcache') === true && ini_get('opcache.enable') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 4,

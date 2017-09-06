@@ -78,8 +78,15 @@ class BatchProductNumberSearchResult
             return $this->storage;
         }
 
-        $productNumbers = array_merge(...array_values($this->storage));
+        $productNumbers = [];
 
-        return array_keys($productNumbers);
+        /** @var BaseProduct[] $products */
+        foreach ($this->storage as $products) {
+            foreach ($products as $product) {
+                $productNumbers[] = $product->getNumber();
+            }
+        }
+
+        return $productNumbers;
     }
 }

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-var ajaxTimeout = {config name="ajaxTimeout"};
+var ajaxTimeout = {if {config name="ajaxTimeout"}}{config name="ajaxTimeout"}{else}30{/if};
 
 if (ajaxTimeout >= 6) {
     Ext.Ajax.timeout= ajaxTimeout * 1000;

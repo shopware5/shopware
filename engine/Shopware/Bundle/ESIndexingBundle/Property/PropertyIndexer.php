@@ -71,7 +71,7 @@ class PropertyIndexer implements DataIndexerInterface
      */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
-        $query = $this->queryFactory->createQuery();
+        $query = $this->queryFactory->createQuery(100);
         $progress->start($query->fetchCount(), 'Indexing properties');
 
         while ($ids = $query->fetch()) {

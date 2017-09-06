@@ -74,6 +74,8 @@
 
             {* Paging *}
             {block name="frontend_newsletter_listing_paging"}
+                {$pages = $sNumberPages}
+                {$baseUrl = {url controller="newsletter" action="listing"} }
                 {include file="frontend/listing/actions/action-pagination.tpl"}
             {/block}
         </div>

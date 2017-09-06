@@ -630,7 +630,7 @@
                         {* Additional customer comment for the order *}
                         {block name='frontend_checkout_confirm_comment'}
                             <div class="feature--user-comment block">
-                                <textarea class="user-comment--field" rows="5" cols="20" placeholder="{s name="ConfirmPlaceholderComment" namespace="frontend/checkout/confirm"}{/s}" data-pseudo-text="true" data-selector=".user-comment--hidden">{$sComment|escape}</textarea>
+                                <textarea class="user-comment--field" data-storage-field="true" data-storageKeyName="sComment" rows="5" cols="20" placeholder="{s name="ConfirmPlaceholderComment" namespace="frontend/checkout/confirm"}{/s}" data-pseudo-text="true" data-selector=".user-comment--hidden">{$sComment|escape}</textarea>
                             </div>
                         {/block}
                     </div>
@@ -648,33 +648,35 @@
 
     {block name='frontend_checkout_confirm_product_table'}
         <div class="product--table">
-            <div class="panel has--border">
-                <div class="panel--body is--rounded">
+            {block name="frontend_checkout_confirm_product_table_content"}
+                <div class="panel has--border">
+                    <div class="panel--body is--rounded">
 
-                    {* Product table header *}
-                    {block name='frontend_checkout_confirm_confirm_head'}
-                        {include file="frontend/checkout/confirm_header.tpl"}
-                    {/block}
+                        {* Product table header *}
+                        {block name='frontend_checkout_confirm_confirm_head'}
+                            {include file="frontend/checkout/confirm_header.tpl"}
+                        {/block}
 
-                    {block name='frontend_checkout_confirm_item_before'}{/block}
+                        {block name='frontend_checkout_confirm_item_before'}{/block}
 
-                    {* Basket items *}
-                    {block name='frontend_checkout_confirm_item_outer'}
-                        {foreach $sBasket.content as $sBasketItem}
-                            {block name='frontend_checkout_confirm_item'}
-                                {include file='frontend/checkout/confirm_item.tpl' isLast=$sBasketItem@last}
-                            {/block}
-                        {/foreach}
-                    {/block}
+                        {* Basket items *}
+                        {block name='frontend_checkout_confirm_item_outer'}
+                            {foreach $sBasket.content as $sBasketItem}
+                                {block name='frontend_checkout_confirm_item'}
+                                    {include file='frontend/checkout/confirm_item.tpl' isLast=$sBasketItem@last}
+                                {/block}
+                            {/foreach}
+                        {/block}
 
-                    {block name='frontend_checkout_confirm_item_after'}{/block}
+                        {block name='frontend_checkout_confirm_item_after'}{/block}
 
-                    {* Table footer *}
-                    {block name='frontend_checkout_confirm_confirm_footer'}
-                        {include file="frontend/checkout/confirm_footer.tpl"}
-                    {/block}
+                        {* Table footer *}
+                        {block name='frontend_checkout_confirm_confirm_footer'}
+                            {include file="frontend/checkout/confirm_footer.tpl"}
+                        {/block}
+                    </div>
                 </div>
-            </div>
+            {/block}
 
             {* Table actions *}
             {block name='frontend_checkout_confirm_confirm_table_actions'}

@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
         });
 
         me.communityStore.on('load', function(store, records) {
-            if (records.length <= 0) {
+            if (Ext.isEmpty(records)) {
                 me.content.setVisible(false);
                 me.noResultMessage.setVisible(true);
             }

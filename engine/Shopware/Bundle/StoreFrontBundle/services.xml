@@ -95,8 +95,10 @@
         </service>
 
         <service id="shopware_storefront.price_calculation_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculationService">
-            <argument type="service" id="shopware_storefront.price_group_discount_gateway"/>
+            <argument type="service" id="shopware_storefront.price_calculator"/>
         </service>
+
+        <service id="shopware_storefront.price_calculator" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculator"/>
 
         <service id="shopware_storefront.cheapest_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
             <argument type="service" id="shopware_storefront.cheapest_price_gateway"/>
@@ -309,6 +311,7 @@
 
         <service id="shopware_storefront.manufacturer_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="shopware_media.media_service" />
         </service>
 
         <service id="shopware_storefront.shop_page_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopPageHydrator">
@@ -446,6 +449,33 @@
 
         <service id="shopware_storefront.custom_listing_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator">
             <argument type="service" id="shopware.logaware_reflection_helper" />
+        </service>
+
+        <service id="customer_search.dbal.gateway.service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService">
+            <argument id="shopware_customer_search.gateway.customer_gateway" type="service"/>
+            <argument id="shopware_customer_search.gateway.address_gateway" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.customer_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator">
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.address_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressGateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_customer_search.gateway.address_hydrator" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.customer_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_customer_search.gateway.customer_hydrator" type="service"/>
+        </service>
+
+        <service id="shopware_customer_search.gateway.address_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AddressHydrator">
+            <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
         </service>
     </services>
 </container>

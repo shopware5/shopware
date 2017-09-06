@@ -164,10 +164,10 @@ The following FacetHandler wants to display the total count of products which so
 class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface
 {
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
      */
     public function __construct(
-        \Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory\QueryBuilderFactory $queryBuilderFactory
+        \Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface $queryBuilderFactory
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
     }

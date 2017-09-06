@@ -43,8 +43,8 @@ Ext.define('Shopware.form.field.ShopGrid', {
             me.createSortingColumn(),
             activeColumn,
             { dataIndex: 'name', flex: 1 },
+            { dataIndex: 'category', flex: 1, renderer: me.categoryRenderer },
             { dataIndex: 'basePath', width: 90 },
-            { dataIndex: 'category', flex: 1,renderer: me.categoryRenderer },
             me.createActionColumn()
         ];
     },

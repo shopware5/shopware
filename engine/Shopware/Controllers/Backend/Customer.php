@@ -87,9 +87,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function init()
     {
-        if (in_array($this->Request()->getActionName(), ['performOrderRedirect'])) {
+        if ($this->Request()->getActionName() === 'performOrderRedirect') {
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         }
+        $currency = Shopware()->Db()->fetchRow(
+            'SELECT templatechar as sign, (symbol_position = 16) currencyAtEnd
+            FROM s_core_currencies
+            WHERE standard = 1'
+        );
+
+        $this->View()->assign('currency', $currency);
+
         parent::init();
     }
 
@@ -138,36 +146,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 'customerGroup' => $customerGroups,
             ],
         ]);
-    }
-
-    /**
-     * Event listener method which fires when the customer list store is loaded. Returns an array of customer data
-     * which displayed in an Ext.grid.Panel. Grants by the limit and start parameter a paging
-     * for the customer list data. The filter parameter allows the user a full text search
-     * over the displayed fields.
-     */
-    public function getListAction()
-    {
-        //read store parameter to filter and paginate the data.
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', [['property' => 'customer.id', 'direction' => 'DESC']]);
-        $filter = $this->Request()->getParam('filter', null);
-        $filter = $filter[0]['value'];
-
-        $customerGroup = $this->Request()->getParam('customerGroup', null);
-
-        //get access on the customer repository
-        $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
-
-        //returns the customer data
-        $customers = $query->getArrayResult();
-
-        //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
-        $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
-        $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $this->View()->assign(['success' => true, 'data' => $customers, 'total' => $countResult['customerCount']]);
     }
 
     /**
@@ -242,8 +220,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Event listener method which fires when the detail page of a customer is loaded.
      * Returns an array of grouped order data to display them in a line chart.
-     *
-     * @return array Contains all customer orders group by year-month
      */
     public function getOrderChartAction()
     {
@@ -713,12 +689,29 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         if (empty($data['billing'])) {
-            $data['billing'] = $this->fetchAddress($data['default_billing_address_id']);
+            $billingAddress = $this->fetchAddress($data['default_billing_address_id']);
+
+            if ($billingAddress) {
+                $data['billing'] = new \Shopware\Models\Customer\Billing();
+                $data['billing']->fromAddress($billingAddress);
+                $data['billing'] = $this->container->get('models')->toArray($data['billing']);
+            }
+        }
+
+        if (empty($data['shipping'])) {
+            $shippingAddress = $this->fetchAddress($data['default_shipping_address_id']);
+
+            if ($shippingAddress) {
+                $data['shipping'] = new \Shopware\Models\Customer\Shipping();
+                $data['shipping']->fromAddress($shippingAddress);
+                $data['shipping'] = $this->container->get('models')->toArray($data['shipping']);
+            }
         }
 
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
         $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
         $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
+        $data['customerStreamIds'] = $this->fetchCustomerStreams($id);
 
         return $data;
     }
@@ -760,7 +753,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['paymentPreset'] = $params['paymentId'];
         }
 
-        if (empty($id) && empty($params['shipping'][0]['firstName']) && empty($params['shipping'][0]['lastName'])) {
+        if (empty($params['shipping'][0]['firstName']) && empty($params['shipping'][0]['lastName'])) {
             //shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }
@@ -801,7 +794,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * @param int $id
      *
-     * @return array|null
+     * @return Address|null
      */
     private function fetchAddress($id)
     {
@@ -813,6 +806,27 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
 
-        return $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        return $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
+    private function fetchCustomerStreams($id)
+    {
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+
+        $ids = $query->select(['mapping.stream_id'])
+            ->from('s_customer_streams_mapping', 'mapping')
+            ->innerJoin('mapping', 's_customer_streams', 'streams', 'streams.id = mapping.stream_id')
+            ->where('mapping.customer_id = :id')
+            ->addOrderBy('streams.name', 'ASC')
+            ->setParameter(':id', $id)
+            ->execute()
+            ->fetchAll(PDO::FETCH_COLUMN);
+
+        return implode('|', $ids);
     }
 }

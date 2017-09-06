@@ -42,13 +42,8 @@ Ext.define('Shopware.apps.Log.model.SystemLog', {
         { name: 'date', type: 'date' },
         { name: 'channel', type: 'string' },
         { name: 'level', type: 'string' },
+        { name: 'message', type: 'string' },
         {
-            name: 'message',
-            type: 'string',
-            convert: function (value, record) {
-                return (value || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
-        }, {
             name: 'code',
             type: 'string',
             convert: function (value, record) {

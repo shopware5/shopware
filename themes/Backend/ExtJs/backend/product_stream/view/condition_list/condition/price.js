@@ -58,7 +58,9 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Price', {
     },
 
     createField: function() {
-        return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Price', {
+        return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Range', {
+            minField: 'minPrice',
+            maxField: 'maxPrice',
             name: 'condition.'+ this.getName(),
             flex: 1
         });

@@ -2,41 +2,19 @@
 
 {block name="frontend_index_header_javascript_jquery" append}
 <script>
+(function (window) {
+
     {* Configuration of the partner chart *}
-    jQuery.partnerChart =  {ldelim}
+    window.partnerChart =  {ldelim}
         'timeUnit': '{s name='PartnerStatisticLabelTimeUnit'}{/s}',
         'netAmountLabel': '{s name='PartnerStatisticLabelNetTurnover'}{/s}'
     {rdelim};
 
-    jQuery.datePickerRegional = {ldelim}
-        closeText: "{s name='PartnerDatePickerCloseText'}{/s}",
-        prevText: "{s name='PartnerDatePickerPrevText'}{/s}",
-        nextText: "{s name='PartnerDatePickerNextText'}{/s}",
-        currentText: "{s name='PartnerDatePickerCurrentText'}{/s}",
-        monthNames: [{s name='PartnerDatePickerMonthNames'}{/s}],
-        monthNamesShort: [{s name='PartnerDatePickerMonthShortNames'}{/s}],
-        dayNames: [{s name='PartnerDatePickerDayNames'}{/s}],
-        dayNamesShort: [{s name='PartnerDatePickerDayShortNames'}{/s}],
-        dayNamesMin: [{s name='PartnerDatePickerDayMinNames'}{/s}],
-        weekHeader: "{s name='PartnerDatePickerWeekHeader'}{/s}",
-        dateFormat: "{s name='PartnerDatePickerDateFormat'}{/s}",
-        firstDay: 1,
-        isRTL: false,
-        showMonthAfterYear: false,
-        yearSuffix: "",
-        showOn: "button",
-        buttonText:"",
-        onSelect: function (dateText, inst) {ldelim}
-            $(this).parents('form').submit();
-        {rdelim}
-    {rdelim};
-
-    $('*[data-datepicker="true"]').datepicker(jQuery.datePickerRegional);
+})(window);
 </script>
 {/block}
 
 {block name="frontend_index_header_javascript_jquery_lib" append}
-    <script type="text/javascript" src="{link file='frontend/_public/src/js/jquery.ui.datepicker.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/raphael.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/popup.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/analytics.js'}"></script>
@@ -69,13 +47,13 @@
                             <div class="date-filter">
                                 <label class="date-filter--label" for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
                                 <div class="date-filter--input">
-                                    <input id="datePickerFrom" class="datepicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                                    <input id="datePickerFrom" class="datepicker text" data-datepicker="true" data-autoSubmit="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
                                 </div>
                             </div>
                             <div class="date-filter">
                                 <label class="date-filter--label" for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
                                 <div class="date-filter--input">
-                                    <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                                    <input id="datePickerTo" class="datepicker text" data-datepicker="true" data-autoSubmit="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
                                 </div>
                             </div>
                             <input type="submit" class="btn is--primary btn--filter is--small" value="{s name="PartnerStatisticSubmitFilter"}{/s}"/>

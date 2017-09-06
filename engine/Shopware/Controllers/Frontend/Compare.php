@@ -27,6 +27,9 @@
  */
 class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
 {
+    /**
+     * @var sArticles
+     */
     protected $articles;
 
     public function preDispatch()

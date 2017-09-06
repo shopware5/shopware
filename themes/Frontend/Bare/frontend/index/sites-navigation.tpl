@@ -12,7 +12,7 @@
                            title="{$page.description|escape}"
                            data-categoryId="{$page.id}"
                            data-fetchUrl="{url module=widgets controller=listing action=getCustomPage pageId={$page.id}}"
-                           {if $page.target}target="{$page.page}"{/if}>
+                           {if $page.target}target="{$page.target}"{/if}>
                             {$page.description}
 
                             {if $page.childrenCount}

@@ -27,63 +27,106 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Application - Customer list backend module
  *
  * Contains the configuration for the customer list backend module.
  * This component defines which controllers belong to the application or whether the bulk loading is activated.
  */
-//{block name="backend/customer/application"}
+// {block name="backend/customer/application"}
 Ext.define('Shopware.apps.Customer', {
 
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Customer',
+    name: 'Shopware.apps.Customer',
 
     /**
      * Extends from our special controller, which handles the sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Enable bulk loading
      * @boolean
      */
-    bulkLoad:true,
+    bulkLoad: true,
 
     /**
      * Sets the loading path for the sub-application.
      *
      * @string
      */
-    loadPath:'{url controller="customer" action=load}',
+    loadPath: '{url controller="customer" action=load}',
 
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'List', 'Detail', 'Order' ],
+    controllers: [ 'Detail', 'Order', 'Main', 'Stream' ],
 
     /**
      * The detail controller knows all form field sets and the detail window component
      * @array
      */
-    views:[
+    views: [
+
+        'main.QuickView',
+        'main.StreamView',
+        'main.CustomerList',
+        'main.CustomerListFilter',
+        'main.Window',
+        'main.Wizard',
+
         'detail.Window',
         'detail.Base',
         'detail.Debit',
         'detail.Comment',
-        'detail.Additional' ,
-        'list.List',
-        'main.Window',
+        'detail.Additional',
         'order.List',
         'order.Chart',
         'address.List',
         'address.detail.Window',
-        'address.detail.Address'
+        'address.detail.Address',
+
+        'chart.AmountChartFactory',
+        'chart.Chart',
+        'chart.MetaChart',
+
+        'customer_stream.Detail',
+        'customer_stream.Listing',
+        'customer_stream.Preview',
+        'customer_stream.ConditionPanel',
+        'customer_stream.Assignment',
+        'customer_stream.ConditionField',
+        'customer_stream.conditions.AgeCondition',
+        'customer_stream.conditions.HasAddressWithCountryCondition',
+        'customer_stream.conditions.HasCanceledOrdersCondition',
+        'customer_stream.conditions.HasNewsletterRegistrationCondition',
+        'customer_stream.conditions.IsCustomerSinceCondition',
+        'customer_stream.conditions.IsInCustomerGroupCondition',
+        'customer_stream.conditions.HasOrderCountCondition',
+        'customer_stream.conditions.OrderedAtWeekdayCondition',
+        'customer_stream.conditions.OrderedInLastDaysCondition',
+        'customer_stream.conditions.OrderedInShopCondition',
+        'customer_stream.conditions.RegisteredInShopCondition',
+        'customer_stream.conditions.OrderedOnDeviceCondition',
+        'customer_stream.conditions.OrderedProductCondition',
+        'customer_stream.conditions.OrderedProductOfCategoryCondition',
+        'customer_stream.conditions.OrderedProductOfManufacturerCondition',
+        'customer_stream.conditions.OrderedWithDeliveryCondition',
+        'customer_stream.conditions.OrderedWithPaymentCondition',
+        'customer_stream.conditions.HasTotalOrderAmountCondition',
+        'customer_stream.conditions.CustomerAttributeCondition',
+        'customer_stream.conditions.SalutationCondition',
+        'customer_stream.conditions.SearchTermCondition',
+        'customer_stream.conditions.field.AttributeValue',
+        'customer_stream.conditions.field.AttributeWindow',
+        'customer_stream.conditions.field.OperatorField'
     ],
 
     /**
@@ -91,13 +134,13 @@ Ext.define('Shopware.apps.Customer', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores:[ 'Detail', 'List', 'Orders', 'Chart', 'Batch', 'Address' ],
+    stores: [ 'Detail', 'Orders', 'Chart', 'Batch', 'Address', 'QuickView', 'Preview', 'CustomerStream' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
      * @array
      */
-    models:[ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'List', 'Order', 'Chart', 'Batch', 'Address'  ],
+    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'Order', 'Chart', 'Batch', 'Address', 'QuickView', 'CustomerStream' ],
 
     /**
      * Returns the main application window for this is expected
@@ -116,8 +159,10 @@ Ext.define('Shopware.apps.Customer', {
         var me = this,
             mainController = me.getController('Main');
 
+        me.currencySign = '{$currency.sign}';
+        me.currencyAtEnd = '{$currency.currencyAtEnd}';
+
         return mainController.mainWindow;
     }
 });
-//{/block}
-
+// {/block}

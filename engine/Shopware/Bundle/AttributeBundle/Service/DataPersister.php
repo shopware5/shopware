@@ -87,11 +87,17 @@ class DataPersister
 
         $exists = $this->dataLoader->load($table, $foreignKey);
 
-        if ($exists) {
-            $this->update($table, $data, $foreignKey);
-        } else {
+        if (!$exists) {
             $this->create($table, $data, $foreignKey);
+
+            return;
         }
+
+        if (empty($data)) {
+            return;
+        }
+
+        $this->update($table, $data, $foreignKey);
     }
 
     /**
@@ -226,14 +232,32 @@ class DataPersister
             }
             $value = $data[$column->getName()];
 
-            if ($this->isDateColumn($column) && empty($value)) {
-                $result[$column->getName()] = 'NULL';
+            if ($this->isDateColumn($column) && !$this->isValidDate($value)) {
+                $result[$column->getName()] = null;
             } else {
                 $result[$column->getName()] = $value;
             }
         }
 
         return $result;
+    }
+
+    private function isValidDate($date)
+    {
+        if (!$date) {
+            return false;
+        }
+        if (strpos('0000-00-00', $date) !== false) {
+            return false;
+        }
+
+        try {
+            new \DateTime($date);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

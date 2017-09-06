@@ -169,9 +169,17 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $result = $fs->checkDirectoryPermissions(Shopware()->DocPath(), true);
 
         if (!empty($result)) {
+            $wrongPermissionCount = count($result);
+
+            $this->container->get('corelogger')->error(
+                sprintf('SwagUpdate: There are %d files without write permission. FTP credentials are needed.', $wrongPermissionCount),
+                $result
+            );
+
             $this->View()->assign([
                 'success' => true,
                 'ftpRequired' => true,
+                'wrongPermissionCount' => $wrongPermissionCount,
             ]);
 
             return;

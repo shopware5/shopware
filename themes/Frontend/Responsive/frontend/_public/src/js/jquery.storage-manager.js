@@ -33,209 +33,11 @@
      * var sessionStorage = StorageManager.getSessionStorage();
      */
     window.StorageManager = (function () {
-        /**
-         * The polyfill for localStorage and sessionStorage.
-         * Uses cookies for storing items.
-         *
-         * @class StoragePolyFill
-         * @constructor
-         * @param {String} type
-         * @returns {Object}
-         */
-        function StoragePolyFill(type) {
-            /**
-             * Creates a cookie with a given name, its values as a string (e.g. JSON) and expiration in days
-             *
-             * @param {String} name
-             * @param {String} value
-             * @param {Number} days
-             */
-            function createCookie(name, value, days) {
-                var date,
-                    expires = '';
-
-                if (days) {
-                    date = new Date();
-                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                    expires = '; expires=' + date.toGMTString();
-                }
-
-                value = encodeURIComponent(value);
-
-                document.cookie = name + '=' + value + expires + '; path=/';
-            }
-
-            /**
-             * Searches for a cookie by the given name and returns its values.
-             *
-             * @param name
-             * @returns {String|null}
-             */
-            function readCookie(name) {
-                var nameEq = name + '=',
-                    cookies = document.cookie.split(';'),
-                    cookie,
-                    len = cookies.length,
-                    i = 0;
-
-                for (; i < len; i++) {
-                    cookie = cookies[i];
-
-                    while (cookie.charAt(0) == ' ') {
-                        cookie = cookie.substring(1, cookie.length);
-                    }
-
-                    if (cookie.indexOf(nameEq) == 0) {
-                        return decodeURIComponent(cookie.substring(nameEq.length, cookie.length));
-                    }
-                }
-                return null;
-            }
-
-            /**
-             * Turns the passed data object into a string via JSON.stringify() and sets it into its proper cookie.
-             *
-             * @param {Object} data
-             */
-            function setData(data) {
-                data = JSON.stringify(data);
-                if (type == 'session') {
-                    createCookie('sessionStorage', data, 0);
-                } else {
-                    createCookie('localStorage', data, 365);
-                }
-            }
-
-            /**
-             * clears the whole data set of a storage cookie.
-             */
-            function clearData() {
-                if (type == 'session') {
-                    createCookie('sessionStorage', '', 0);
-                } else {
-                    createCookie('localStorage', '', 365);
-                }
-            }
-
-            /**
-             * Returns the data set of a storage cookie.
-             *
-             * @returns {Object}
-             */
-            function getData() {
-                var data = (type == 'session') ? readCookie('sessionStorage') : readCookie('localStorage');
-
-                return data ? JSON.parse(data) : { };
-            }
-
-            var data = getData();
-
-            /**
-             * Returns an object to expose public functions and hides privates.
-             */
-            return {
-                /**
-                 * data set length.
-                 *
-                 * @public
-                 * @property length
-                 * @type {Number}
-                 */
-                length: 0,
-
-                /**
-                 * Clears the whole data set.
-                 *
-                 * @public
-                 * @method clear
-                 */
-                clear: function () {
-                    var me = this,
-                        p;
-
-                    for (p in data) {
-                        if (!data.hasOwnProperty(p)) {
-                            continue;
-                        }
-                        delete data[p];
-                    }
-
-                    me.length = 0;
-
-                    clearData();
-                },
-
-                /**
-                 * Returns the data item by the given key or null if the item was not found.
-                 *
-                 * @param key
-                 * @returns {String|null}
-                 */
-                getItem: function (key) {
-                    return typeof data[key] === 'undefined' ? null : data[key];
-                },
-
-                /**
-                 * Returns the data item key of the given index.
-                 *
-                 * @param {Number} index
-                 * @returns {String}
-                 */
-                key: function (index) {
-                    var i = 0,
-                        p;
-
-                    for (p in data) {
-                        if (!data.hasOwnProperty(p)) {
-                            continue;
-                        }
-
-                        if (i === index) {
-                            return p;
-                        }
-
-                        i++;
-                    }
-
-                    return null;
-                },
-
-                /**
-                 * Removes an item by the given key.
-                 *
-                 * @param {String} key
-                 */
-                removeItem: function (key) {
-                    var me = this;
-
-                    if (data.hasOwnProperty(key)) {
-                        me.length--;
-                    }
-
-                    delete data[key];
-
-                    setData(data);
-                },
-
-                /**
-                 * Sets the value of a storage item.
-                 *
-                 * @param {String} key
-                 * @param {String} value
-                 */
-                setItem: function (key, value) {
-                    var me = this;
-
-                    if (!data.hasOwnProperty(key)) {
-                        me.length++;
-                    }
-
-                    data[key] = value + ''; // forces the value to a string
-
-                    setData(data);
-                }
-            };
-        }
+        var storage = {
+                local: window.localStorage,
+                session: window.sessionStorage
+            },
+            p;
 
         /**
          * Helper function to detect if cookies are enabled.
@@ -254,38 +56,6 @@
             return writeTest;
         }
 
-        /**
-         * Helper function to detect if localStorage is enabled.
-         * @returns {boolean}
-         */
-        function hasLocalStorageSupport() {
-            try {
-                return (typeof window.localStorage !== 'undefined');
-            } catch (err) {
-                return false;
-            }
-        }
-
-        /**
-         * Helper function to detect if sessionStorage is enabled.
-         * @returns {boolean}
-         */
-        function hasSessionStorageSupport() {
-            try {
-                return (typeof window.sessionStorage !== 'undefined');
-            } catch (err) {
-                return false;
-            }
-        }
-
-        var localStorageSupport = hasLocalStorageSupport(),
-            sessionStorageSupport = hasSessionStorageSupport(),
-            storage = {
-                local: localStorageSupport ? window.localStorage : new StoragePolyFill('local'),
-                session: sessionStorageSupport ? window.sessionStorage : new StoragePolyFill('session')
-            },
-            p;
-
         // test for safari's "QUOTA_EXCEEDED_ERR: DOM Exception 22" issue.
         for (p in storage) {
             if (!storage.hasOwnProperty(p)) {
@@ -296,7 +66,6 @@
                 storage[p].setItem('storage', '');
                 storage[p].removeItem('storage');
             } catch (err) {
-                storage[p] = new StoragePolyFill(p);
             }
         }
 
@@ -384,17 +153,7 @@
             /**
              * Helper function call to check if cookies are enabled.
              */
-            hasCookiesSupport: hasCookiesSupport(),
-
-            /**
-             * Helper function call to check if localStorage is enabled.
-             */
-            hasLocalStorageSupport: hasLocalStorageSupport(),
-
-            /**
-             * Helper function call to check if sessionStorage is enabled.
-             */
-            hasSessionStorageSupport: hasSessionStorageSupport()
+            hasCookiesSupport: hasCookiesSupport()
         };
     })();
 })(window, document);

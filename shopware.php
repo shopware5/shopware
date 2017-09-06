@@ -45,21 +45,22 @@ if (is_file('files/update/update.json') || is_dir('update-assets')) {
     } else {
         echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
     }
+
     return;
 }
 
 // Check for installation
 if (is_dir('recovery/install') && !is_file('recovery/install/data/install.lock')) {
     if (PHP_SAPI == 'cli') {
-        echo 'Shopware 5 must be configured before use. Please run the Shopware installer by executing \'php recovery/install/index.php\'.'.PHP_EOL;
+        echo 'Shopware 5 must be configured before use. Please run the Shopware installer by executing \'php recovery/install/index.php\'.' . PHP_EOL;
     } else {
         $basePath = 'recovery/install';
         $baseURL = str_replace(basename(__FILE__), '', $_SERVER['SCRIPT_NAME']);
         $baseURL = rtrim($baseURL, '/');
-        $installerURL = $baseURL.'/'.$basePath;
+        $installerURL = $baseURL . '/' . $basePath;
 
         if (strpos($_SERVER['REQUEST_URI'], $basePath) === false) {
-            header('Location: '.$installerURL);
+            header('Location: ' . $installerURL);
             exit;
         }
 
@@ -89,8 +90,8 @@ if (!file_exists('vendor/autoload.php')) {
 
 require __DIR__ . '/autoload.php';
 
-use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
+use Shopware\Kernel;
 use Symfony\Component\HttpFoundation\Request;
 
 $environment = getenv('SHOPWARE_ENV') ?: getenv('REDIRECT_SHOPWARE_ENV') ?: 'production';
@@ -108,7 +109,7 @@ if (PHP_SAPI === 'cli' && isset($_SERVER['argv'][1])) {
     // We have to use a shutdown function to prevent "headers already sent" errors.
     register_shutdown_function(function () {
         echo PHP_EOL;
-        echo 'WARNING: Executing shopware.php via CLI is deprecated. Please use the command line tool in bin/console instead.'.PHP_EOL;
+        echo 'WARNING: Executing shopware.php via CLI is deprecated. Please use the command line tool in bin/console instead.' . PHP_EOL;
     });
 }
 

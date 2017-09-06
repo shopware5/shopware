@@ -57,7 +57,9 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.SearchRankin
         return {
             'class': 'Shopware\\Bundle\\SearchBundle\\Sorting\\SearchRankingSorting',
             'label': '{s name="search_ranking_sorting"}{/s}',
-            'parameters': { }
+            'parameters': {
+                'direction': 'DESC'
+            }
         };
     }
 });

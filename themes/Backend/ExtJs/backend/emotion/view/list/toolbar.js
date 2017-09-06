@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
         var me = this;
 
         me.searchField = Ext.create('Ext.form.field.Text', {
-            emptyText: '{s name=toolbar/search_emotion}Search emotion...{/s}',
+            emptyText: '{s name=toolbar/search_emotion}{/s}',
             cls: 'searchfield',
             width: 200,
             enableKeyEvents:true,
@@ -62,19 +62,53 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             }
         });
 
-        me.items = [{
-            text: '{s name=toolbar/add_emotion}Add emotion{/s}',
+        me.filefield = Ext.create('Ext.form.field.File', {
+            name: 'emotionfile',
+            buttonOnly: true,
+            buttonConfig : {
+                iconCls: 'sprite-import'
+            },
+            buttonText: '{s name=toolbar/import_emotion}{/s}',
+            cls: Ext.baseCSSPrefix + 'emotion-toolbar-import-btn',
+            margin: 0,
+            listeners: {
+                change: function(field, newValue) {
+                    me.fireEvent('uploadEmotion', me, field, newValue);
+                }
+            }
+        });
+
+        me.items = [
+            /*{if {acl_is_allowed privilege=create}}*/
+        {
+            text: '{s name=toolbar/add_emotion}{/s}',
             iconCls: 'sprite-plus-circle',
             action: 'emotion-list-toolbar-add'
         }, {
-            text: '{s name=toolbar/delete_selected_emotion}Delete selected shopping worlds{/s}',
+            text: '{s name=toolbar/add_emotion_from_preset}{/s}',
+            iconCls: 'sprite-emotion-presets',
+            action: 'emotion-list-toolbar-add-preset'
+        }, {
+            xtype: 'form',
+            bodyStyle: 'background-color: #ebedef; padding: 0;',
+            border: false,
+            items: [
+                me.filefield
+            ]
+        },
+        /*{/if}*/
+        /*{if {acl_is_allowed privilege=delete}}*/
+        {
+            text: '{s name=toolbar/delete_selected_emotion}{/s}',
             iconCls: 'sprite-minus-circle',
             action: 'emotion-list-toolbar-delete',
             disabled: true,
             handler: function() {
                 me.fireEvent('removeEmotions');
             }
-        }, '->', me.searchField, {
+        }
+        /*{/if}*/
+        , '->', me.searchField, {
             xtype: 'tbspacer',
             width: 6
         }];
@@ -99,7 +133,14 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
              *
              * @event
              */
-             'removeEmotions'
+             'removeEmotions',
+            /**
+             * Event will be fired when user clicks the "import" button
+             *
+             * @event
+             */
+            'uploadEmotion'
+
         );
     }
 

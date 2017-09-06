@@ -64,11 +64,32 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     createFormPanel: function() {
         var me = this;
 
+        if (me.theme.get('themeInfo')) {
+            me.createThemeInfoTab();
+        }
+
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'fit',
             items: me.configLayout
         });
+
         return me.formPanel;
+    },
+
+    /**
+     * If the theme has the folder "themeInfo" and a language html file like "en_EN.html"
+     * then add a theme info tab to the layout items to display the passed
+     * HTML content in the container.
+     */
+    createThemeInfoTab: function() {
+        var me = this;
+
+        me.configLayout[0].items.splice(0, 0, {
+            title: '{s name="info_tab_title"}{/s}',
+            html: me.theme.get('themeInfo'),
+            bodyPadding: 0,
+            xtype: 'theme-tab'
+        });
     },
 
     /**

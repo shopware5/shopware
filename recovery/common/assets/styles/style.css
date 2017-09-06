@@ -4,6 +4,11 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+html {
+    overflow-y: scroll;
+}
+
 body {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
@@ -121,6 +126,10 @@ textarea:disabled {
     cursor: not-allowed;
     background: #fafafa;
 }
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
 .license--agreement {
     font-size: 12px;
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
@@ -133,7 +142,14 @@ label {
     padding-left: 5px;
     display: block;
 }
-
+p label {
+    padding-left: 0;
+}
+label.width-auto {
+    width: auto;
+    display: inline;
+    padding-left: 3px;
+}
 ::-webkit-input-placeholder {
     color: #93a6b3;
     font-weight: 400;
@@ -359,6 +375,25 @@ label {
     top: 1px;
 }
 
+.btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-new-line {
+    clear: both;
+    display: block;
+    margin-top: 5px;
+}
+
+.database-hint {
+    margin: 18px 0 18px 0;
+}
+
+.install-buttons {
+    display: inline-block;
+}
+
 .is--inline {
     display: inline;
 }
@@ -397,10 +432,10 @@ label {
     overflow: auto;
 }
 .alert-success {
-    color: #15591c;
+    color: #379838;
     border-color: rgba(55, 208, 70, 0.4);
     background: rgba(55, 208, 70, 0.2);
-}
+}z
 .alert-info {
     color: #02567f;
     border-color: rgba(31, 179, 251, 0.4);
@@ -451,7 +486,21 @@ label {
 .alert pre {
     overflow: visible;
 }
-
+h3.alert-heading {
+    margin-top: 5px;
+    color: inherit;
+}
+.alert .huge {
+    float: left;
+    font-size: 50px;
+    padding: 0 20px 0 0;
+}
+.success {
+    color: #379838;
+}
+.error {
+    color: #9D3145;
+}
 /** Table */
 table {
     width: 100%;
@@ -483,6 +532,11 @@ table .warning {
 
 table .error {
     background: rgba(197, 66, 91, 0.2);
+}
+.hide-successful table .success,
+.hide-successful table .warning,
+.hide-successful table .notice-text {
+    display: none;
 }
 
 /** Header */
@@ -672,27 +726,43 @@ table .error {
 .navigation--list {
     display: none;
 }
-.progress-container .progress-text, .counter-text {
-    text-align: center;
+.progress-container .progress-text, .counter-container {
     font-size: 12px;
     color: #7e8b9b;
     text-shadow: 0 1px 0 #fff;
 }
+
+.progress-container .progress-text {
+    text-align: center;
+}
+
+.counter-container {
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+.counter-text {
+    font-weight: bold;
+}
+
+.counter-numbers, .counter-text, .counter-content:not(.is--hidden) {
+    display: inline;
+    font-size: 14px;
+}
+
+.counter-content {
+    color: #379838;
+    font-weight: bold;
+}
+
 .progress-actions {
-    margin: 20px 0 0;
+    margin: 25px 0 0;
 }
-.progress-container {
-    border: 1px solid #CAD9E0;
-    background: #fff;
-    padding: 20px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-}
+
 .progress-container .progress {
     /*border-color: #afcae0;*/
     background: #ebf0f3;
-    height: 30px;
+    height: 22px;
 
     margin-bottom: 20px;
     overflow: hidden;
@@ -736,6 +806,11 @@ table .error {
     padding: 0;
     font-weight: bold;
 }
+
+.edition--selection label:first-of-type {
+    margin-top: 20px;
+}
+
 .fileCounterContainer {
     padding: 10px;
     width: 200px;
@@ -814,6 +889,7 @@ table .error {
 .startCleanUpProcess:disabled {
     background: #ccc;
 }
+
 @media screen and (min-width: 995px) {
     body {
         background: url("../../../common/assets/images/bg.jpg") no-repeat center center fixed;

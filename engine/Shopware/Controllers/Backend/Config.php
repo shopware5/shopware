@@ -58,25 +58,33 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
 
+        $fallback = $this->getFallbackLocaleId($locale->getId());
+
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
-            ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId = :localeId')
+            ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId IN(:localeId, :fallbackId)')
             ->leftJoin('form.translations', 'translation', \Doctrine\ORM\Query\Expr\Join::WITH, 'translation.localeId = :localeId')
+            ->leftJoin('form.translations', 'translationFallback', \Doctrine\ORM\Query\Expr\Join::WITH, 'translationFallback.localeId = :fallbackId')
             ->leftJoin('form.children', 'children')
+            ->leftJoin('form.plugin', 'plugin')
             ->select([
                 'form.id',
-                'IFNULL(translation.label,IFNULL(form.label, form.name)) as label',
+                'COALESCE(translation.label, translationFallback.label, form.label, form.name) as label',
                 'COUNT(children.id) as childrenCount',
+                'plugin.translations',
             ])
             ->groupBy('form.id')
-            ->setParameter('localeId', $locale->getId());
+            ->setParameter('localeId', $locale->getId())
+            ->setParameter('fallbackId', $fallback)
+        ;
 
         // Search forms
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
             $builder->where('form.name LIKE :search')
                 ->orWhere('form.label LIKE :search')
                 ->orWhere('translation.label LIKE :search')
+                ->orWhere('translationFallback.label LIKE :search')
                 ->orWhere('element.name LIKE :search')
                 ->orWhere('element.label LIKE :search')
                 ->orWhere('elementTranslation.label LIKE :search')
@@ -92,6 +100,23 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         $data = $builder->getQuery()->getArrayResult();
+
+        foreach ($data as &$treeItem) {
+            if (!$treeItem['translations']) {
+                unset($treeItem['translations']);
+                continue;
+            }
+
+            $shortLanguage = substr($locale->toString(), 0, 2);
+            $translations = json_decode($treeItem['translations'], true);
+
+            if (isset($translations[$shortLanguage]['label'])) {
+                $treeItem['label'] = $translations[$shortLanguage]['label'];
+            }
+
+            unset($treeItem['translations']);
+        }
+
         $this->View()->assign([
             'success' => true,
             'data' => $data,
@@ -111,13 +136,17 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $locale = $user->locale;
         $language = $locale->toString();
 
+        $fallback = $this->getFallbackLocaleId($locale->getId());
+
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
-            ->leftJoin('form.translations', 'formTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId = :localeId')
-            ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId = :localeId')
+            ->leftJoin('form.translations', 'formTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId IN (:localeId, :fallbackId)', 'formTranslation.localeId')
+            ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId IN (:localeId, :fallbackId)', 'elementTranslation.localeId')
             ->leftJoin('element.values', 'value')
-            ->select(['form', 'element', 'value', 'elementTranslation', 'formTranslation'])
+            ->leftJoin('form.plugin', 'plugin')
+            ->select(['form', 'element', 'value', 'elementTranslation', 'formTranslation', 'plugin'])
+            ->setParameter('fallbackId', $fallback)
             ->setParameter('localeId', $locale->getId());
 
         $builder->addOrderBy((array) $this->Request()->getParam('sort', []))
@@ -125,20 +154,37 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        foreach ($data['elements'] as &$values) {
-            foreach ($values['translations'] as $array) {
-                if ($array['label'] !== null) {
-                    $values['label'] = $array['label'];
-                }
-                if ($array['description'] !== null) {
-                    $values['description'] = $array['description'];
-                }
+        if (isset($data['plugin']['translations'])) {
+            $shortLanguage = substr($language, 0, 2);
+            $translations = json_decode($data['plugin']['translations'], true);
+
+            if (isset($translations[$shortLanguage]['label'])) {
+                $data['label'] = $translations[$shortLanguage]['label'];
+            } elseif (isset($translations[$shortLanguage]['en'])) {
+                $data['label'] = $translations['en']['label'];
             }
+
+            if (isset($translations[$shortLanguage]['description'])) {
+                $data['description'] = $translations[$shortLanguage]['description'];
+            } elseif (isset($translations['en']['description'])) {
+                $data['description'] = $translations['en']['description'];
+            }
+        }
+
+        unset($data['plugin']);
+
+        $data = $this->translateValues($fallback, $data);
+        $data = $this->translateValues($locale->getId(), $data);
+
+        foreach ($data['elements'] as &$values) {
+            $values = $this->translateValues($fallback, $values);
+            $values = $this->translateValues($locale->getId(), $values);
 
             if (!in_array($values['type'], ['select', 'combo'])) {
                 continue;
             }
 
+            $values['options']['store'] = $this->translateStore('en', $values['options']['store']);
             $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
         }
 
@@ -250,8 +296,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getTableListAction()
     {
         $name = $this->Request()->get('_repositoryClass');
-        $limit = intval($this->Request()->get('limit'));
-        $start = intval($this->Request()->get('start'));
+        $limit = (int) $this->Request()->get('limit');
+        $start = (int) $this->Request()->get('start');
         $table = $this->getTable($name);
         $filter = $this->Request()->get('filter');
         $data = [];
@@ -319,7 +365,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
             case 'searchField':
                 $sqlParams = [];
-                $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table
+                $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table, f.do_not_split
                         FROM ' . Shopware()->Db()->quoteTableAs($table, 'f') . '
                         LEFT JOIN s_search_tables t on f.tableID = t.id';
 
@@ -830,6 +876,32 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
+     * @param string|int $localeId
+     * @param array      $values
+     *
+     * @return array
+     */
+    private function translateValues($localeId, array $values)
+    {
+        if (!array_key_exists('translations', $values)) {
+            return $values;
+        }
+        if (!array_key_exists($localeId, $values['translations'])) {
+            return $values;
+        }
+        $translation = $values['translations'][$localeId];
+
+        if ($translation['label'] !== null) {
+            $values['label'] = $translation['label'];
+        }
+        if ($translation['description'] !== null) {
+            $values['description'] = $translation['description'];
+        }
+
+        return $values;
+    }
+
+    /**
      * Helper function to translate the store of select- and combo-fields
      * Store value will be replaced by the value in the correct language.
      * If there is no matching language in array defined, the first array element will be used.
@@ -1236,5 +1308,23 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             'subject' => $this,
             'element' => $element,
         ]);
+    }
+
+    /**
+     * @param $currentLocaleId
+     *
+     * @return int
+     */
+    private function getFallbackLocaleId($currentLocaleId)
+    {
+        if ($currentLocaleId === 1) {
+            return 1;
+        }
+
+        $fallback = (int) $this->container->get('dbal_connection')->fetchColumn(
+            "SELECT id FROM s_core_locales WHERE locale = 'en_GB'"
+        );
+
+        return $fallback;
     }
 }

@@ -42,7 +42,7 @@
                                                         {$disabled = !$option->isActive() && $facet->isActive()}
 
                                                         {block name="frontend_listing_filter_facet_value_tree_input"}
-                                                            <span class="filter-panel--input{if $disabled} is--disabled{/if}">
+                                                            <span class="filter-panel--input filter-panel--checkbox{if $disabled} is--disabled{/if}">
                                                                 <input type="checkbox"
                                                                        data-parent-id="{$parent}"
                                                                        id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
@@ -50,7 +50,7 @@
                                                                        value="{$option->getId()|escape:'htmlall'}"
                                                                        {if $option->isActive()}checked="checked"{elseif $disabled}disabled="disabled"{/if}/>
 
-                                                                <span class="input--state">&nbsp;</span>
+                                                                <span class="input--state checkbox--state">&nbsp;</span>
                                                             </span>
                                                         {/block}
 

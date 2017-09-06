@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                         nodeDir + '/jquery/dist/jquery.min.js',
                         nodeDir + '/jquery/dist/jquery.min.map',
                         nodeDir + '/jquery/README.md',
-                        nodeDir + '/jquery/MIT-LICENSE.txt'
+                        nodeDir + '/jquery/LICENSE.txt'
                     ],
                     dest: vendorDir + '/js/jquery',
                     flatten: true
@@ -88,6 +88,18 @@ module.exports = function (grunt) {
                         nodeDir + '/picturefill/README.md'
                     ],
                     dest: vendorDir + '/js/picturefill',
+                    flatten: true
+                }]
+            },
+            'flatpickr': {
+                files: [{
+                    expand: true,
+                    src: [
+                        nodeDir + '/flatpickr/dist/flatpickr.min.js',
+                        nodeDir + '/flatpickr/LICENSE.md',
+                        nodeDir + '/flatpickr/README.md'
+                    ],
+                    dest: vendorDir + '/js/flatpickr',
                     flatten: true
                 }]
             },

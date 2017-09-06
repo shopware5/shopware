@@ -95,6 +95,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             'display-expired-plugins': me.displayExpiredPluginsPage,
             'display-connect-introduction': me.displayConnectIntroductionPage,
             'display-importexport-teaser': me.displayImportExportTeaserPage,
+            'load-store-listing': me.loadListingWithParams,
             scope: me
         });
 
@@ -397,6 +398,25 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         me.displayListingPage();
         me.removeNavigationSelection();
         me.loadStoreListing(category);
+    },
+
+    loadListingWithParams: function(filters) {
+        var me = this,
+            navigation = me.getCategoryTree(),
+            storeListing = me.getStoreListing();
+
+        me.displayListingPage();
+        me.removeNavigationSelection();
+        
+        storeListing.store.clearFilter();
+
+        navigation.disable();
+        storeListing.resetListing();
+        storeListing.store.filter(filters);
+
+        me.filterStoreListing(function() {
+            navigation.enable();
+        });
     },
 
     loadStoreListing: function(category) {

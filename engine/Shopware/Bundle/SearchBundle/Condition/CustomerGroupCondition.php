@@ -32,12 +32,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CustomerGroupCondition implements ConditionInterface
+class CustomerGroupCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var int[]
      */
-    private $customerGroupIds;
+    protected $customerGroupIds;
 
     /**
      * @param int[] $customerGroupIds
@@ -63,5 +63,13 @@ class CustomerGroupCondition implements ConditionInterface
     public function getCustomerGroupIds()
     {
         return $this->customerGroupIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

@@ -99,6 +99,54 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * Assert that numbers that are small enough to be represented as floating points by PHP when they are converted to
+     * string are rounded correctly by sArticles::sRound.
+     */
+    public function testsRoundWithFloatingPointRepresentation()
+    {
+        $sArticles = new sArticles();
+        $input = 0.00001; // 1.0E-5
+
+        // Round 1.0E-5
+        $result = $sArticles->sRound($input);
+
+        $this->assertEquals(0, $result);
+    }
+
+    /**
+     * Assert that negative numbers that are small enough to be represented as floating points by PHP when they are
+     * converted to string are rounded correctly by sArticles::sRound. Also assert that they are not represented as -0
+     * (negative zero)
+     */
+    public function testsRoundWithFloatingPointRepresentationNegative()
+    {
+        $sArticles = new sArticles();
+        $input = -0.00001; // -1.0E-5
+
+        // Round -1.0E-5
+        $result = $sArticles->sRound($input);
+
+        $this->assertEquals(0, $result);
+        // Make sure we don't get negative zero
+        $this->assertEquals('0', (string) $result);
+    }
+
+    /**
+     * Assert that numbers that are small enough to be represented as floating points by PHP when they are converted to
+     * string are rounded correctly by sArticles::sRound.
+     */
+    public function testsRoundWithFloatingPointRepresentationLarge()
+    {
+        $sArticles = new sArticles();
+        $input = 100000000000000.0; // 1.0E14
+
+        // Round 1.0E14
+        $result = $sArticles->sRound($input);
+
+        $this->assertEquals(100000000000000, $result);
+    }
+
     protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
     {
         $this->assertInstanceOf('Shopware\Models\Category\Category', $this->readAttribute($sArticles, 'category'));

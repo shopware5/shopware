@@ -158,7 +158,9 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
                 })
             }
         });
-        buttons.push(saveButton);
+        /*{if {acl_is_allowed privilege=update}}*/
+            buttons.push(saveButton);
+        /*{/if}*/
 
         return buttons;
     },

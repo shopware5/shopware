@@ -32,7 +32,7 @@ use Shopware\Models\Snippet\Snippet;
 class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var string path to termporary uploaded file for import
+     * @var string path to temporary uploaded file for import
      */
     protected $uploadedFilePath;
 
@@ -77,8 +77,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      * Get snippets action
      * Returns an filtered and paginated array of Snippets.
      *
-     * Snippets of the mainlanguage (shopId = 1 && localeId = 1) that do not
-     * exists in the selected language are joined into the resultset using a UNION Select
+     * Snippets of the main language (shopId = 1 && localeId = 1) that do not
+     * exists in the selected language are joined into the result set using a UNION Select
      *
      * <code>
      * (
@@ -750,9 +750,9 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     /**
      * Returns locale id by locale
      *
-     * @param unknown_type $locale
+     * @param string $locale
      *
-     * @return unknown
+     * @return string
      */
     protected function getLocaleId($locale)
     {
@@ -766,7 +766,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Tranforms the data to an ExtJs-Tree-Compatible format
+     * Transforms the data to an ExtJs-Tree-Compatible format
      *
      * @param $array
      *
@@ -790,7 +790,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Recursive function that tranforms the data to an ExtJs-Tree-Compatible format
+     * Recursive function that transforms the data to an ExtJs-Tree-Compatible format
      *
      * @param $items
      * @param string $ns
@@ -819,7 +819,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Recursive function that tranforms the namespaced array values into a tree-structure
+     * Recursive function that transforms the namespaced array values into a tree-structure
      *
      * @param $item
      *

@@ -356,27 +356,45 @@ class sArticles
 
         $date = date('Y-m-d H:i:s');
 
-        $sql = '
-            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ';
+        $container = Shopware()->Container();
+        $shopId = null;
+        if ($container->initialized('Shop')) {
+            $shopId = $container->get('Shop')->getId();
+        }
 
-        $insertComment = $this->db->executeUpdate($sql, [
-            $article,
-            $sVoteName,
-            $sVoteSummary,
-            $sVoteComment,
-            $sVoteStars,
-            $date,
-            $active,
-            $sVoteMail,
+        $connection = $container->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->insert('s_articles_vote');
+        $query->values([
+            'articleID' => ':articleID',
+            'name' => ':name',
+            'headline' => ':headline',
+            'comment' => ':comment',
+            'points' => ':points',
+            'datum' => ':datum',
+            'active' => ':active',
+            'email' => ':email',
+            'shop_id' => ':shopId',
         ]);
 
-        if (empty($insertComment)) {
+        $query->setParameters([
+            ':articleID' => $article,
+            ':name' => $sVoteName,
+            ':headline' => $sVoteSummary,
+            ':comment' => $sVoteComment,
+            ':points' => $sVoteStars,
+            ':datum' => $date,
+            ':active' => $active,
+            ':email' => $sVoteMail,
+            ':shopId' => $shopId,
+        ]);
+
+        $success = $query->execute();
+        if (empty($success)) {
             throw new Enlight_Exception('sSaveComment #00: Could not save comment');
         }
 
-        $insertId = $this->db->lastInsertId();
+        $insertId = $connection->lastInsertId();
         if (!isset($this->session['sArticleCommentInserts'])) {
             $this->session['sArticleCommentInserts'] = new ArrayObject();
         }
@@ -421,9 +439,9 @@ class sArticles
     public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
     {
         if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
-                'subject' => $this,
-                'id' => $categoryId,
-            ])) {
+            'subject' => $this,
+            'id' => $categoryId,
+        ])) {
             return false;
         }
 
@@ -536,13 +554,13 @@ class sArticles
                     'sViewport' => 'cat',
                     'sCategory' => $id,
                     'sPage' => 1,
-                    'sSupplier' => $supplierValue['id'],
+                    'sSupplier' => $supplierId,
                 ];
             } else {
                 $links[$supplierId] = [
                     'controller' => 'listing',
                     'action' => 'manufacturer',
-                    'sSupplier' => $supplierValue['id'],
+                    'sSupplier' => $supplierId,
                 ];
             }
         }
@@ -550,7 +568,7 @@ class sArticles
         $seoUrls = Shopware()->Container()->get('router')->generateList($links);
         foreach ($getSupplier as &$supplier) {
             $id = $supplier['id'];
-            if (array_key_exists($supplier, $seoUrls)) {
+            if (array_key_exists($id, $seoUrls)) {
                 $supplier['link'] = $seoUrls[$id];
             }
         }
@@ -1207,6 +1225,9 @@ class sArticles
      */
     public function sRound($moneyfloat = null)
     {
+        if (is_numeric($moneyfloat)) {
+            $moneyfloat = sprintf('%F', $moneyfloat);
+        }
         $money_str = explode('.', $moneyfloat);
         if (empty($money_str[1])) {
             $money_str[1] = 0;
@@ -1519,7 +1540,7 @@ class sArticles
             WHERE ordernumber = :orderNumber
                 AND s_articles.id = s_articles_details.articleID
         ', [
-            'orderNumber' => $orderNumber,
+                'orderNumber' => $orderNumber,
             ]
         );
 
@@ -1809,7 +1830,9 @@ class sArticles
             $mainKey = 0;
 
             if (empty($sCombination)) {
-                $sArticle['image']['description'] = $sArticle['image']['res']['description'];
+                if (!empty($sArticle['image']['res']['description'])) {
+                    $sArticle['image']['description'] = $sArticle['image']['res']['description'];
+                }
                 $sArticle['image']['relations'] = $sArticle['image']['res']['relations'];
                 foreach ($sArticle['sConfigurator'] as $key => $group) {
                     foreach ($group['values'] as $key2 => $option) {
@@ -2123,7 +2146,7 @@ class sArticles
     }
 
     /**
-     * @param $categoryId
+     * @param int                                    $categoryId
      * @param Enlight_Controller_Request_RequestHttp $request
      *
      * @return string
@@ -2132,11 +2155,14 @@ class sArticles
     {
         $params = $this->queryAliasMapper->replaceLongParams($request->getParams());
 
-        unset($params['ordernumber']);
-        unset($params['categoryId']);
-        unset($params['module']);
-        unset($params['controller']);
-        unset($params['action']);
+        unset(
+            $params['__csrf_token'],
+            $params['ordernumber'],
+            $params['categoryId'],
+            $params['module'],
+            $params['controller'],
+            $params['action']
+        );
 
         $params = array_merge(
             $params,

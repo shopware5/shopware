@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                     },
                     {
                         fieldLabel: '{s name=fieldset/various/lastArticles}Display previously viewed items{/s}',
-                        name: 'various[LastArticles:show]',
+                        name: 'various[LastArticles:lastarticles_show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true

@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Index.view.Menu', {
                 success: function(response) {
                     me.removeAll();
                     me.add(Ext.create('Shopware.Search'));
-                    me.onMenuLoaded(response);
+                    me.insert(0, Ext.decode(response.responseText));
                     me.add({ xtype: 'tbfill' }, {
                         xtype: 'container',
                         cls  : 'x-main-logo-container',

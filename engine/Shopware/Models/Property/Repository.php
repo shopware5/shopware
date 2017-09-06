@@ -95,7 +95,7 @@ class Repository extends ModelRepository
         $builder = $this->getListGroupsQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                   ->setMaxResults($limit);
+                    ->setMaxResults($limit);
         }
 
         return $builder->getQuery();

@@ -99,7 +99,7 @@ class DatabaseWriter
 
                     // Find the matching value in db, if it exists
                     foreach ($rows as $key => $values) {
-                        if ($values['name'] == $name) {
+                        if (strtolower($values['name']) === strtolower($name)) {
                             $row = $values;
                             unset($rows[$key]);
                             break;
@@ -108,13 +108,14 @@ class DatabaseWriter
 
                     if ($row !== null) {
                         // Found a matching value, try update
-                        $this->updateRecord($value, $row);
+                        $this->updateRecord($name, $value, $row);
                     } else {
                         // No matching value, just insert a new one
                         $this->insertRecord($name, $value, $namespace, $localeId, $shopId);
                     }
                 }
             }
+
             $this->db->commit();
         } catch (\Exception $e) {
             $this->db->rollBack();
@@ -205,12 +206,14 @@ class DatabaseWriter
     }
 
     /**
+     * @param string $name
      * @param string $value
      * @param array  $row
      */
-    private function updateRecord($value, $row)
+    private function updateRecord($name, $value, $row)
     {
-        $hasSameValue = $row['value'] == $value;
+        $hasSameValue = $name === $row['name'] && $value === $row['value'];
+
         $isDirty = $row['dirty'] == 1;
 
         // snippet was never touched after insert
@@ -224,6 +227,7 @@ class DatabaseWriter
         }
 
         $queryData = [
+            'name' => $name,
             'value' => $value,
             'updated' => date('Y-m-d H:i:s', time()),
             'dirty' => 0,

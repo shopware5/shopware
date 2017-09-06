@@ -138,6 +138,8 @@ Ext.define('Shopware.apps.Site.controller.Form', {
                 record.set('helperId', responseObject.data.id);
                 me.getAttributeForm().saveAttribute(record.get('helperId'));
 
+                Shopware.app.Application.fireEvent('site-save-successfully', me, record, form);
+
                 form.loadRecord(record);
                 Shopware.Notification.createGrowlMessage('','{s name=onSaveSiteSuccess}The site has been saved successfully.{/s}', '{s name=mainWindowTitle}{/s}');
                 me.getStore('Nodes').load();

@@ -189,9 +189,9 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I should be welcome'd with with "([^"]*)"$/
+     * @Given /^I should be welcomed with "([^"]*)"$/
      */
-    public function iShouldBeWelcomeDWithWith($welcome)
+    public function iShouldBeWelcomedWith($welcome)
     {
         $welcome = preg_replace("/\s\s+/", ' ', $welcome);
 

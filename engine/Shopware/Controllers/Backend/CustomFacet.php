@@ -55,12 +55,12 @@ class Shopware_Controllers_Backend_CustomFacet extends Shopware_Controllers_Back
         $connection = $this->container->get('dbal_connection');
 
         $data = $connection->fetchAssoc(
-            'SELECT `hideFilter`, `facet_ids` FROM s_categories WHERE id = :id',
+            'SELECT `hidefilter`, `facet_ids` FROM s_categories WHERE id = :id',
             [':id' => $categoryId]
         );
 
         $connection->executeUpdate(
-            'UPDATE s_categories SET `hideFilter` = :hideFilter, `facet_ids` = :facetIds WHERE path LIKE :path',
+            'UPDATE s_categories SET `hidefilter` = :hideFilter, `facet_ids` = :facetIds WHERE path LIKE :path',
             [
                 ':hideFilter' => (int) $data['hideFilter'],
                 ':facetIds' => (string) $data['facet_ids'],

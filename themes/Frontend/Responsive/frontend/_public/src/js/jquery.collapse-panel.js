@@ -64,7 +64,18 @@
              *
              * @type {Number}
              */
-            animationSpeed: 400
+            animationSpeed: 400,
+
+            /**
+             * Prefix for the URL hash to prevent it from being interpreted as an anchor
+             * jumpmark
+             */
+            hashPrefix: 'show-',
+
+            /**
+             * Action which will be executed if the element is clicked
+             */
+            action: 'toggle'
         },
 
         /**
@@ -89,6 +100,8 @@
 
             me.$targetEl.addClass(opts.collapseTargetCls);
 
+            me.handleHashParameter();
+
             me.registerEvents();
         },
 
@@ -103,7 +116,16 @@
 
             me._on(me.$el, 'click', function (e) {
                 e.preventDefault();
-                me.toggleCollapse();
+                switch (me.opts.action) {
+                    case 'open':
+                        me.openPanel();
+                        break;
+                    case 'close':
+                        me.closePanel();
+                        break;
+                    default:
+                        me.toggleCollapse();
+                }
             });
 
             $.publish('plugin/swCollapsePanel/onRegisterEvents', [ me ]);
@@ -137,19 +159,23 @@
             var me = this,
                 opts = me.opts,
                 $targetEl = me.$targetEl,
-                siblings = $('.' + opts.collapseTargetCls).not($targetEl),
+                $siblings = $('.' + opts.collapseTargetCls).not($targetEl),
                 tabId = $targetEl.parent().attr('data-tab-id');
 
             me.$el.addClass(opts.activeTriggerCls);
 
-            $targetEl.slideDown(opts.animationSpeed, function () {
+            if ($targetEl.hasClass(opts.collapsedStateCls)) {
+                return;
+            }
+
+            $targetEl.finish().slideDown(opts.animationSpeed, function () {
                 $.publish('plugin/swCollapsePanel/onOpen', [ me ]);
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
-                siblings.slideUp(opts.animationSpeed, function () {
-                    siblings.removeClass(opts.collapsedStateCls);
-                    siblings.prev().removeClass(opts.activeTriggerCls);
+                $siblings.finish().slideUp(opts.animationSpeed, function () {
+                    $siblings.removeClass(opts.collapsedStateCls);
+                    $siblings.prev().removeClass(opts.activeTriggerCls);
                 });
             }
 
@@ -171,11 +197,32 @@
                 opts = me.opts;
 
             me.$el.removeClass(opts.activeTriggerCls);
-            me.$targetEl.slideUp(opts.animationSpeed, function() {
+
+            if (!me.$targetEl.hasClass(opts.collapsedStateCls)) {
+                return;
+            }
+
+            me.$targetEl.finish().slideUp(opts.animationSpeed, function() {
+                me.$targetEl.removeClass(opts.collapsedStateCls);
                 $.publish('plugin/swCollapsePanel/onClose', [ me ]);
-            }).removeClass(opts.collapsedStateCls);
+            });
 
             $.publish('plugin/swCollapsePanel/onClosePanel', [ me ]);
+        },
+
+        handleHashParameter: function () {
+            var me = this,
+                hash = window.location.hash,
+                prefixLength = me.opts.hashPrefix.length;
+
+            if (hash.indexOf(me.opts.hashPrefix) !== 1) {
+                return;
+            }
+            if (!me.$targetEl.is('#' + hash.substr(prefixLength + 1))) {
+                return;
+            }
+
+            me.openPanel();
         },
 
         /**

@@ -78,17 +78,31 @@ class PriceConditionHandler implements ConditionHandlerInterface
             $query->addState(self::LISTING_PRICE_JOINED);
         }
 
+        $suffix = md5(json_encode($condition));
+
+        $minKey = ':priceMin' . $suffix;
+        $maxKey = ':priceMax' . $suffix;
+
         /** @var PriceCondition $condition */
         if ($condition->getMaxPrice() > 0 && $condition->getMinPrice() > 0) {
-            $query->andWhere('listing_price.cheapest_price BETWEEN :priceMin AND :priceMax');
-            $query->setParameter(':priceMin', $condition->getMinPrice());
-            $query->setParameter(':priceMax', $condition->getMaxPrice());
-        } elseif ($condition->getMaxPrice() > 0) {
-            $query->andWhere('listing_price.cheapest_price <= :priceMax');
-            $query->setParameter(':priceMax', $condition->getMaxPrice());
-        } elseif ($condition->getMinPrice() > 0) {
-            $query->andWhere('listing_price.cheapest_price >= :priceMin');
-            $query->setParameter(':priceMin', $condition->getMinPrice());
+            $query->andWhere('listing_price.cheapest_price BETWEEN ' . $minKey . ' AND ' . $maxKey);
+            $query->setParameter($minKey, $condition->getMinPrice());
+            $query->setParameter($maxKey, $condition->getMaxPrice());
+
+            return;
+        }
+        if ($condition->getMaxPrice() > 0) {
+            $query->andWhere('listing_price.cheapest_price <= ' . $maxKey);
+            $query->setParameter($maxKey, $condition->getMaxPrice());
+
+            return;
+        }
+
+        if ($condition->getMinPrice() > 0) {
+            $query->andWhere('listing_price.cheapest_price >= ' . $minKey);
+            $query->setParameter($minKey, $condition->getMinPrice());
+
+            return;
         }
     }
 }

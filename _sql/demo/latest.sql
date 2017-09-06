@@ -5221,40 +5221,40 @@ TRUNCATE TABLE `s_core_config_mails_attachments`;
 TRUNCATE TABLE `s_core_config_mails_attributes`;
 
 TRUNCATE TABLE `s_core_countries`;
-INSERT INTO `s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `countryen`, `position`, `notice`, `shippingfree`, `taxfree`, `taxfree_ustid`, `taxfree_ustid_checked`, `active`, `iso3`, `display_state_in_registration`, `force_state_in_registration`) VALUES
-(2, 'Deutschland', 'DE', 1, 'GERMANY', 1, '', 0, 0, 0, 0, 1, 'DEU', 0, 0),
-(3, 'Arabische Emirate', 'AE', 2, 'ARAB EMIRATES', 10, '', 0, 0, 0, 0, 1, 'ARE', 0, 0),
-(4, 'Australien', 'AU', 2, 'AUSTRALIA', 10, '', 0, 0, 0, 0, 1, 'AUS', 0, 0),
-(5, 'Belgien', 'BE', 3, 'BELGIUM', 10, '', 0, 0, 0, 0, 1, 'BEL', 0, 0),
-(7, 'Dänemark', 'DK', 3, 'DENMARK', 10, '', 0, 0, 0, 0, 1, 'DNK', 0, 0),
-(8, 'Finnland', 'FI', 3, 'FINLAND', 10, '', 0, 0, 0, 0, 1, 'FIN', 0, 0),
-(9, 'Frankreich', 'FR', 3, 'FRANCE', 10, '', 0, 0, 0, 0, 0, 'FRA', 0, 0),
-(10, 'Griechenland', 'GR', 3, 'GREECE', 10, '', 0, 0, 0, 0, 0, 'GRC', 0, 0),
-(11, 'Großbritannien', 'GB', 3, 'GREAT BRITAIN', 10, '', 0, 0, 0, 0, 0, 'GBR', 0, 0),
-(12, 'Irland', 'IE', 3, 'IRELAND', 10, '', 0, 0, 0, 0, 0, 'IRL', 0, 0),
-(13, 'Island', 'IS', 3, 'ICELAND', 10, '', 0, 0, 0, 0, 0, 'ISL', 0, 0),
-(14, 'Italien', 'IT', 3, 'ITALY', 10, '', 0, 0, 0, 0, 1, 'ITA', 0, 0),
-(15, 'Japan', 'JP', 2, 'JAPAN', 10, '', 0, 0, 0, 0, 0, 'JPN', 0, 0),
-(16, 'Kanada', 'CA', 2, 'CANADA', 10, '', 0, 0, 0, 0, 0, 'CAN', 0, 0),
-(18, 'Luxemburg', 'LU', 3, 'LUXEMBOURG', 10, '', 0, 0, 0, 0, 0, 'LUX', 0, 0),
-(20, 'Namibia', 'NA', 2, 'NAMIBIA', 10, '', 0, 0, 0, 0, 0, 'NAM', 0, 0),
-(21, 'Niederlande', 'NL', 3, 'NETHERLANDS', 10, '', 0, 0, 0, 0, 1, 'NLD', 0, 0),
-(22, 'Norwegen', 'NO', 3, 'NORWAY', 10, '', 0, 0, 0, 0, 0, 'NOR', 0, 0),
-(23, 'Österreich', 'AT', 3, 'AUSTRIA', 1, '', 0, 0, 0, 0, 1, 'AUT', 0, 0),
-(24, 'Portugal', 'PT', 3, 'PORTUGAL', 10, '', 0, 0, 0, 0, 0, 'PRT', 0, 0),
-(25, 'Schweden', 'SE', 3, 'SWEDEN', 10, '', 0, 0, 0, 0, 0, 'SWE', 0, 0),
-(26, 'Schweiz', 'CH', 3, 'SWITZERLAND', 10, '', 0, 1, 0, 0, 1, 'CHE', 0, 0),
-(27, 'Spanien', 'ES', 3, 'SPAIN', 10, '', 0, 0, 0, 0, 1, 'ESP', 0, 0),
-(28, 'USA', 'US', 2, 'USA', 10, '', 0, 0, 0, 0, 0, 'USA', 0, 0),
-(29, 'Liechtenstein', 'LI', 3, 'LIECHTENSTEIN', 10, '', 0, 0, 0, 0, 0, 'LIE', 0, 0),
-(30, 'Polen', 'PL', 3, 'POLAND', 10, '', 0, 0, 0, 0, 0, 'POL', 0, 0),
-(31, 'Ungarn', 'HU', 3, 'HUNGARY', 10, '', 0, 0, 0, 0, 0, 'HUN', 0, 0),
-(32, 'Türkei', 'TR', 2, 'TURKEY', 10, '', 0, 0, 0, 0, 0, 'TUR', 0, 0),
-(33, 'Tschechien', 'CZ', 3, 'CZECH REPUBLIC', 10, '', 0, 0, 0, 0, 0, 'CZE', 0, 0),
-(34, 'Slowakei', 'SK', 3, 'SLOVAKIA', 10, '', 0, 0, 0, 0, 0, 'SVK', 0, 0),
-(35, 'Rum&auml;nien', 'RO', 3, 'ROMANIA', 10, '', 0, 0, 0, 0, 0, 'ROU', 0, 0),
-(36, 'Brasilien', 'BR', 2, 'BRAZIL', 10, '', 0, 0, 0, 0, 0, 'BRA', 0, 0),
-(37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 0, 'ISR', 0, 0);
+INSERT INTO `s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `countryen`, `position`, `notice`,  `taxfree`, `taxfree_ustid`, `taxfree_ustid_checked`, `active`, `iso3`, `display_state_in_registration`, `force_state_in_registration`) VALUES
+(2, 'Deutschland', 'DE', 1, 'GERMANY', 1, '', 0, 0, 0, 1, 'DEU', 0, 0),
+(3, 'Arabische Emirate', 'AE', 2, 'ARAB EMIRATES', 10, '', 0, 0, 0, 1, 'ARE', 0, 0),
+(4, 'Australien', 'AU', 2, 'AUSTRALIA', 10, '', 0, 0, 0, 1, 'AUS', 0, 0),
+(5, 'Belgien', 'BE', 3, 'BELGIUM', 10, '', 0, 0, 0, 1, 'BEL', 0, 0),
+(7, 'Dänemark', 'DK', 3, 'DENMARK', 10, '', 0, 0, 0, 1, 'DNK', 0, 0),
+(8, 'Finnland', 'FI', 3, 'FINLAND', 10, '', 0, 0, 0, 1, 'FIN', 0, 0),
+(9, 'Frankreich', 'FR', 3, 'FRANCE', 10, '', 0, 0, 0, 0, 'FRA', 0, 0),
+(10, 'Griechenland', 'GR', 3, 'GREECE', 10, '', 0, 0, 0, 0, 'GRC', 0, 0),
+(11, 'Großbritannien', 'GB', 3, 'GREAT BRITAIN', 10, '', 0, 0, 0, 0, 'GBR', 0, 0),
+(12, 'Irland', 'IE', 3, 'IRELAND', 10, '', 0, 0, 0, 0, 'IRL', 0, 0),
+(13, 'Island', 'IS', 3, 'ICELAND', 10, '', 0, 0, 0, 0, 'ISL', 0, 0),
+(14, 'Italien', 'IT', 3, 'ITALY', 10, '', 0, 0, 0, 1, 'ITA', 0, 0),
+(15, 'Japan', 'JP', 2, 'JAPAN', 10, '', 0, 0, 0, 0, 'JPN', 0, 0),
+(16, 'Kanada', 'CA', 2, 'CANADA', 10, '', 0, 0, 0, 0, 'CAN', 0, 0),
+(18, 'Luxemburg', 'LU', 3, 'LUXEMBOURG', 10, '', 0, 0, 0, 0, 'LUX', 0, 0),
+(20, 'Namibia', 'NA', 2, 'NAMIBIA', 10, '', 0, 0, 0, 0, 'NAM', 0, 0),
+(21, 'Niederlande', 'NL', 3, 'NETHERLANDS', 10, '', 0, 0, 0, 1, 'NLD', 0, 0),
+(22, 'Norwegen', 'NO', 3, 'NORWAY', 10, '', 0, 0, 0, 0, 'NOR', 0, 0),
+(23, 'Österreich', 'AT', 3, 'AUSTRIA', 1, '', 0, 0, 0, 1, 'AUT', 0, 0),
+(24, 'Portugal', 'PT', 3, 'PORTUGAL', 10, '', 0, 0, 0, 0, 'PRT', 0, 0),
+(25, 'Schweden', 'SE', 3, 'SWEDEN', 10, '', 0, 0, 0, 0, 'SWE', 0, 0),
+(26, 'Schweiz', 'CH', 3, 'SWITZERLAND', 10, '', 1, 0, 0, 1, 'CHE', 0, 0),
+(27, 'Spanien', 'ES', 3, 'SPAIN', 10, '', 0, 0, 0, 1, 'ESP', 0, 0),
+(28, 'USA', 'US', 2, 'USA', 10, '', 0, 0, 0, 0, 'USA', 0, 0),
+(29, 'Liechtenstein', 'LI', 3, 'LIECHTENSTEIN', 10, '', 0, 0, 0, 0, 'LIE', 0, 0),
+(30, 'Polen', 'PL', 3, 'POLAND', 10, '', 0, 0, 0, 0, 'POL', 0, 0),
+(31, 'Ungarn', 'HU', 3, 'HUNGARY', 10, '', 0, 0, 0, 0, 'HUN', 0, 0),
+(32, 'Türkei', 'TR', 2, 'TURKEY', 10, '', 0, 0, 0, 0, 'TUR', 0, 0),
+(33, 'Tschechien', 'CZ', 3, 'CZECH REPUBLIC', 10, '', 0, 0, 0, 0, 'CZE', 0, 0),
+(34, 'Slowakei', 'SK', 3, 'SLOVAKIA', 10, '', 0, 0, 0, 0, 'SVK', 0, 0),
+(35, 'Rum&auml;nien', 'RO', 3, 'ROMANIA', 10, '', 0, 0, 0, 0, 'ROU', 0, 0),
+(36, 'Brasilien', 'BR', 2, 'BRAZIL', 10, '', 0, 0, 0, 0, 'BRA', 0, 0),
+(37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0);
 
 TRUNCATE TABLE `s_core_countries_areas`;
 INSERT INTO `s_core_countries_areas` (`id`, `name`, `active`) VALUES
@@ -5366,7 +5366,7 @@ INSERT INTO `s_core_documents` (`id`, `name`, `template`, `numbers`, `left`, `ri
 TRUNCATE TABLE `s_core_documents_box`;
 INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`) VALUES
 (1, 1, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(2, 1, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
+(2, 1, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://assets.shopware.com/demoshop-logo/logo--tablet.png" alt="Demoshop" /></p>'),
 (3, 1, 'Header_Recipient', '', ''),
 (4, 1, 'Header', 'height: 60mm;', ''),
 (5, 1, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5382,7 +5382,7 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (15, 1, 'Content_Amount', 'margin-left:90mm;', ''),
 (16, 1, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>'),
 (68, 2, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(69, 2, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
+(69, 2, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://assets.shopware.com/demoshop-logo/logo--tablet.png" alt="Demoshop" /></p>'),
 (70, 2, 'Header_Recipient', '', ''),
 (71, 2, 'Header', 'height: 60mm;', ''),
 (72, 2, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5398,7 +5398,7 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (82, 2, 'Content_Amount', 'margin-left:90mm;', ''),
 (83, 2, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>'),
 (84, 3, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(85, 3, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
+(85, 3, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://assets.shopware.com/demoshop-logo/logo--tablet.png" alt="Demoshop" /></p>'),
 (86, 3, 'Header_Recipient', '', ''),
 (87, 3, 'Header', 'height: 60mm;', ''),
 (88, 3, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5414,7 +5414,7 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (98, 3, 'Content_Amount', 'margin-left:90mm;', ''),
 (99, 3, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>'),
 (100, 4, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(101, 4, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
+(101, 4, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://assets.shopware.com/demoshop-logo/logo--tablet.png" alt="Demoshop" /></p>'),
 (102, 4, 'Header_Recipient', '', ''),
 (103, 4, 'Header', 'height: 60mm;', ''),
 (104, 4, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -7873,22 +7873,22 @@ INSERT INTO `s_order_comparisons` (`id`, `sessionID`, `userID`, `articlename`, `
 TRUNCATE TABLE `s_order_details`;
 INSERT INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
 (42, 15, '20001', 197, 'SW10196', 836.134, 1, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 1, 19, ''),
-(43, 15, '20001', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-(44, 15, '20001', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+(43, 15, '20001', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 1, 19, ''),
+(44, 15, '20001', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 1, 19, ''),
 (178, 52, '0', 227, 'SW10002841', 35.99, 31, 'Aufschlag bei Zahlungsarten', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (179, 52, '0', 145, 'SW10145', 17.99, 1, 'Mütze Vintage Driver', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (180, 52, '0', 248, 'SW100755036993', 74.99, 9, 'Versandkosten nach Gewicht', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-(181, 52, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-(182, 52, '0', 0, 'sw-payment', -180.659, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+(181, 52, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, ''),
+(182, 52, '0', 0, 'sw-payment', -180.659, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, ''),
 (187, 54, '0', 211, 'SW10221', 50, 1, 'Prämienartikel ab 250 Euro Warenkorb Wert', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-(188, 54, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-(189, 54, '0', 1, 'GUTABS', -5, 1, 'Gutschein', 0, 0, 0, '0000-00-00', 2, 0, 0, 19, ''),
-(190, 54, '0', 0, 'sw-payment', -4.3, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+(188, 54, '0', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, ''),
+(189, 54, '0', 1, 'GUTABS', -5, 1, 'Gutschein', 0, 0, 0, '0000-00-00', 2, 0, 1, 19, ''),
+(190, 54, '0', 0, 'sw-payment', -4.3, 1, 'Abschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 1, 19, ''),
 (201, 57, '20002', 220, 'SW10001', 35.99, 1, 'Versandkostenfreier Artikel', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (202, 57, '20002', 227, 'SW10002841', 35.99, 1, 'Aufschlag bei Zahlungsarten', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (203, 57, '20002', 219, 'SW10185', 54.9, 1, 'Express Versand', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
 (204, 57, '20002', 197, 'SW10196', 34.99, 2, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 1, 19, ''),
-(205, 57, '20002', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
+(205, 57, '20002', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 4, 19, '');
 
 TRUNCATE TABLE `s_order_details_attributes`;
 INSERT INTO `s_order_details_attributes` (`id`, `detailID`, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`) VALUES
@@ -7926,7 +7926,7 @@ INSERT INTO `s_order_number` (`id`, `number`, `name`, `desc`) VALUES
 TRUNCATE TABLE `s_order_shippingaddress`;
 INSERT INTO `s_order_shippingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `countryID`, `stateID`) VALUES
 (1, 2, 15, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', 2, 3),
-(2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', 2, 0);
+(2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', 2, 3);
 
 TRUNCATE TABLE `s_order_shippingaddress_attributes`;
 INSERT INTO `s_order_shippingaddress_attributes` (`id`, `shippingID`, `text1`, `text2`, `text3`, `text4`, `text5`, `text6`) VALUES

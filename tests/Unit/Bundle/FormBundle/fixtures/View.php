@@ -24,8 +24,6 @@
 
 namespace Shopware\Tests\Unit\Bundle\FormBundle\fixtures;
 
-use Enlight_Template_Manager;
-
 class View
 {
     public function getAssign()
@@ -33,8 +31,7 @@ class View
         return [
             'forceMail' => 0,
             'id' => '5',
-            'sSupport' =>
-                [
+            'sSupport' => [
                     'id' => '5',
                     'name' => 'Kontaktformular',
                     'text' => '
@@ -67,10 +64,8 @@ Kommentar:
                     'metaDescription' => null,
                     'metaKeywords' => null,
                     'sErrors' => null,
-                    'sElements' =>
-                        [
-                            24 =>
-                                [
+                    'sElements' => [
+                            24 => [
                                     'id' => '24',
                                     'name' => 'anrede',
                                     'note' => 'Formular Name: {$sSupport.name} und Element Typ: {$sElement.type}',
@@ -81,8 +76,7 @@ Kommentar:
                                     'value' => 'Frau;Herr',
                                     'error_msg' => '',
                                 ],
-                            35 =>
-                                [
+                            35 => [
                                     'id' => '35',
                                     'name' => 'vorname',
                                     'note' => 'Feld Name: {$sElement.name}',
@@ -93,8 +87,7 @@ Kommentar:
                                     'value' => '',
                                     'error_msg' => '',
                                 ],
-                            36 =>
-                                [
+                            36 => [
                                     'id' => '36',
                                     'name' => 'nachname',
                                     'note' => 'Formular Name: {$sSupport.name}',
@@ -105,8 +98,7 @@ Kommentar:
                                     'value' => 'asd {$sElement.name}',
                                     'error_msg' => '',
                                 ],
-                            37 =>
-                                [
+                            37 => [
                                     'id' => '37',
                                     'name' => 'email',
                                     'note' => 'Formular Beschreibung {$sSupport.text}',
@@ -117,8 +109,7 @@ Kommentar:
                                     'value' => '',
                                     'error_msg' => '',
                                 ],
-                            38 =>
-                                [
+                            38 => [
                                     'id' => '38',
                                     'name' => 'telefon',
                                     'note' => '',
@@ -129,8 +120,7 @@ Kommentar:
                                     'value' => '',
                                     'error_msg' => '',
                                 ],
-                            39 =>
-                                [
+                            39 => [
                                     'id' => '39',
                                     'name' => 'betreff',
                                     'note' => '',
@@ -141,8 +131,7 @@ Kommentar:
                                     'value' => '',
                                     'error_msg' => '',
                                 ],
-                            40 =>
-                                [
+                            40 => [
                                     'id' => '40',
                                     'name' => 'kommentar',
                                     'note' => '',
@@ -154,8 +143,7 @@ Kommentar:
                                     'error_msg' => '',
                                 ],
                         ],
-                    'sFields' =>
-                        [
+                    'sFields' => [
                             24 => '
 ',
                             35 => '
@@ -183,8 +171,7 @@ Kommentar%*%
 
 ',
                         ],
-                    'sLabels' =>
-                        [
+                    'sLabels' => [
                             24 => 'Anrede*:
 ',
                             35 => 'Vorname*:
@@ -203,8 +190,7 @@ Kommentar%*%
                 ],
             'rand' => '0d1d9cd10021eac54c3f80ac32cdb7fd',
             'success' => null,
-            'theme' =>
-                [
+            'theme' => [
                     'appleTouchIcon' => 'frontend/_public/src/img/apple-touch-icon-precomposed.png',
                     'desktopLogo' => 'frontend/_public/src/img/logos/logo--tablet.png',
                     'favicon' => 'frontend/_public/src/img/favicon.ico',
@@ -316,7 +302,7 @@ Kommentar%*%
                     'badge-recommendation-color' => '#FFFFFF',
                     'badge-download-bg' => '@highlight-info',
                     'badge-download-color' => '#FFFFFF',
-                ]
+                ],
         ];
     }
 }

@@ -154,6 +154,10 @@ class CategoryHydrator extends Hydrator
             $category->setExternalLink($data['__category_external']);
         }
 
+        if (isset($data['__category_external_target'])) {
+            $category->setExternalTarget($data['__category_external_target']);
+        }
+
         if (isset($data['__category_hidefilter'])) {
             $category->setDisplayFacets((bool) !$data['__category_hidefilter']);
         }

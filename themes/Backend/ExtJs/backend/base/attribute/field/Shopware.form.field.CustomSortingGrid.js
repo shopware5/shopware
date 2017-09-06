@@ -31,7 +31,7 @@
 
 Ext.define('Shopware.form.field.CustomSortingGrid', {
     extend: 'Shopware.form.field.Grid',
-    alias: 'widget.shopware-form-field-dispatch-grid',
+    alias: 'widget.shopware-form-field-custom-sorting-grid',
     mixins: ['Shopware.model.Helper'],
     hideHeaders: false,
 

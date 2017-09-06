@@ -152,6 +152,15 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
             case ProductAttributeCondition::OPERATOR_CONTAINS:
                 return new MatchQuery($field, $criteriaPart->getValue());
 
+            case ProductAttributeCondition::OPERATOR_NOT_IN:
+                if ($type === 'string') {
+                    $field .= '.raw';
+                }
+                $filter = new BoolQuery();
+                $filter->add(new TermsQuery($field, $criteriaPart->getValue()), BoolQuery::MUST_NOT);
+
+                return $filter;
+
             case ProductAttributeCondition::OPERATOR_IN:
                 if ($type === 'string') {
                     $field .= '.raw';

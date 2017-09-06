@@ -864,7 +864,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         Shopware()->Db()->update(
             's_articles',
             ['main_detail_id' => $this->articleDetailId],
-                'id = ' . $this->articleId
+            'id = ' . $this->articleId
         );
     }
 
@@ -1099,7 +1099,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         preg_match_all(
             '#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\$]+)#',
-                utf8_encode($url) . '&',
+            utf8_encode($url) . '&',
             $matches
         );
         if (empty($matches[0])) {

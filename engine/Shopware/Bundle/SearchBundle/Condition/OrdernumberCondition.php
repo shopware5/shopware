@@ -31,12 +31,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class OrdernumberCondition implements ConditionInterface
+class OrdernumberCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var string[]
      */
-    private $ordernumbers;
+    protected $ordernumbers;
 
     /**
      * @param string[] $ordernumbers
@@ -60,5 +60,13 @@ class OrdernumberCondition implements ConditionInterface
     public function getOrdernumbers()
     {
         return $this->ordernumbers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

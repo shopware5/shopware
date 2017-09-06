@@ -53,6 +53,9 @@
 {include file='ExtJs/overrides/Ext.Timeout.js'}
 {include file='ExtJs/overrides/Ext.Ajax.js'}
 {include file='backend/base/component/Shopware.data.reader.Application.js'}
+{include file='ExtJs/overrides/Ext.form.field.Display.js'}
+{include file='ExtJs/overrides/Ext.String.js'}
+{include file='ExtJs/overrides/Ext.view.Table.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
@@ -131,6 +134,7 @@
 {include file='backend/base/store/category_tree.js'}
 {include file='backend/base/store/customer_group.js'}
 {include file='backend/base/store/dispatch.js'}
+{include file='backend/base/store/doc_type.js'}
 {include file='backend/base/store/payment.js'}
 {include file='backend/base/store/shop.js'}
 {include file='backend/base/store/shop_language.js'}
@@ -165,13 +169,13 @@
 {include file='backend/base/component/Shopware.VTypes.js'}
 {include file='backend/base/component/Shopware.form.field.TinyMCE.js'}
 {include file='backend/base/component/Shopware.form.plugin.Translation.js'}
+{include file='backend/base/component/Shopware.form.plugin.SnippetTranslation.js'}
 {include file='backend/base/component/Shopware.grid.HeaderToolTip.js'}
 {include file='backend/base/component/Shopware.Notification.js'}
 {include file='backend/base/component/Shopware.form.PasswordStrengthMeter.js'}
 {include file='backend/base/component/Shopware.form.field.CodeMirror.js'}
 {include file='backend/base/component/Shopware.form.field.ArticleSearch.js'}
 {include file='backend/base/component/Shopware.form.field.PagingComboBox.js'}
-{include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 {include file='backend/base/component/Shopware.container.Viewport.js'}
 {include file='backend/base/component/Shopware.DragAndDropSelector.js'}
 {include file='backend/base/component/Shopware.DataView.GooglePreview.js'}
@@ -258,6 +262,8 @@
 {include file='backend/base/attribute/field/Shopware.form.field.FormSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomerGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomerSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomerStreamGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomerStreamSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.DispatchGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.PaymentGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.PaymentSingleSelection.js'}
@@ -273,6 +279,7 @@
 {include file='backend/base/attribute/field/Shopware.form.field.CustomSortingGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomFacetGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.AttributeSingleSelection.js'}
+{include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}
@@ -286,6 +293,7 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PartnerFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.FormFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CustomerFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.CustomerStreamFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.DispatchFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PaymentFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.MailFieldHandler.js'}
@@ -304,3 +312,5 @@
 {include file='backend/base/store/custom_sorting.js'}
 {include file='backend/base/model/custom_facet.js'}
 {include file='backend/base/store/custom_facet.js'}
+
+{include file='backend/base/application/Shopware.helper.BatchRequests.js'}

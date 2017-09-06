@@ -47,6 +47,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
     position: relative;
 	top: 0; left: 0;
 	overflow: hidden;
+    white-space: nowrap;
 	-webkit-overflow-scrolling: touch; // Enable momentum scrolling
 
 	// Hide scrollbars in webkit browsers
@@ -58,6 +59,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
 	&.is--vertical {
 		overflow-y: scroll;
 		overflow-x: hidden;
+        white-space: normal;
 
 		.product-slider--item {
 			display: block;
@@ -95,6 +97,8 @@ For initializing a product slider the outer `product-slider` wrapper has to have
     left: 0;
 	overflow: hidden;
 	text-align: center;
+    width: 100%;
+    display: inline-block;
 }
 
 .product-slider--arrow {
@@ -173,7 +177,25 @@ For initializing a product slider the outer `product-slider` wrapper has to have
 	}
 }
 
-@media screen and(min-width: @desktopViewportWidth) {
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+    .product-slider--item {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+    .product-slider--item {
+        width: 33.33%;
+    }
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+    .product-slider--item {
+        width: 25%;
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
 
 	.product-slider--container.is--horizontal,
 	.product-slider--container.is--vertical {

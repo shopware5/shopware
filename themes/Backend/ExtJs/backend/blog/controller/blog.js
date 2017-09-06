@@ -445,6 +445,9 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                     var data = response.data;
 
                     me.getAttributeForm().saveAttribute(data.id);
+
+                    Shopware.app.Application.fireEvent('blog-save-successfully', me, data, form);
+
                     record.set('id', data.id);
 
                     //enable the tabpanel

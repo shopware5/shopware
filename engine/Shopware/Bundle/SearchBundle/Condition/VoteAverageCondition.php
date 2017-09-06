@@ -32,14 +32,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class VoteAverageCondition implements ConditionInterface
+class VoteAverageCondition implements ConditionInterface, \JsonSerializable
 {
     const STATE_INCLUDES_VOTE_TABLE = 'vote';
 
     /**
      * @var float
      */
-    private $average;
+    protected $average;
 
     /**
      * @param float $average
@@ -64,5 +64,13 @@ class VoteAverageCondition implements ConditionInterface
     public function getAverage()
     {
         return $this->average;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

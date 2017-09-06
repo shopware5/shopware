@@ -29,12 +29,12 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/controller/main"}
+// {namespace name=backend/first_run_wizard/main}
+// {block name="backend/first_run_wizard/controller/main"}
 
 Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
 
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
     mainWindow: null,
 
     refs: [
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         if (Ext.isEmpty(me.firstRunWizardIsConnected)) {
             me.firstRunWizardIsConnected = null;
         } else {
-            me.firstRunWizardIsConnected = me.firstRunWizardIsConnected == 'true';
+            me.firstRunWizardIsConnected = me.firstRunWizardIsConnected === 'true';
         }
 
         me.control({
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             isConnected: me.firstRunWizardIsConnected,
             listeners: {
                 afterrender: function() {
-                    me.navigateTo(me.firstRunWizardStep-1);
+                    me.navigateTo(me.firstRunWizardStep - 1);
                 }
             }
         });
@@ -84,14 +84,13 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         me.validateButtons();
 
         me.callParent(arguments);
-
     },
 
     navigateNext: function() {
         var me = this,
             calculatedStep = me.switchNavigation(+1);
 
-        if (calculatedStep == null) {
+        if (calculatedStep === null) {
             me.getWizardWindow().confirmedClose = true;
             me.getWizardWindow().close();
             return;
@@ -139,13 +138,13 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
                         url: '{url controller="Cache" action="clearCache"}',
                         method: 'POST',
                         params: {
-                            'cache[config]' : 'on',
-                            'cache[template]' : 'on',
-                            'cache[theme]' : 'on',
-                            'cache[http]' : 'on',
-                            'cache[proxy]' : 'on',
-                            'cache[search]' : 'on',
-                            'cache[router]' : 'on'
+                            'cache[config]': 'on',
+                            'cache[template]': 'on',
+                            'cache[theme]': 'on',
+                            'cache[http]': 'on',
+                            'cache[proxy]': 'on',
+                            'cache[search]': 'on',
+                            'cache[router]': 'on'
                         },
                         callback: function() {
                             location.reload();
@@ -153,7 +152,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
                     });
                 }
             });
-
         } else {
             Ext.util.Cookies.set('firstRunWizardStep', newStep);
         }
@@ -171,7 +169,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
                 return null;
             }
 
-            if (navigation.getStore().getAt(index + calculatedDirection - 1).get('disabled') == true ) {
+            if (navigation.getStore().getAt(index + calculatedDirection - 1).get('disabled') === true) {
                 calculatedDirection += direction;
             } else {
                 break;
@@ -239,4 +237,4 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
     }
 });
 
-//{/block}
+// {/block}

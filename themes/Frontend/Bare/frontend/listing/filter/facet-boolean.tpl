@@ -16,14 +16,14 @@
                 {/block}
 
                 {block name="frontend_listing_filter_facet_boolean_checkbox"}
-                    <span class="filter-panel--input">
+                    <span class="filter-panel--input filter-panel--checkbox">
                         <input type="checkbox"
                                id="{$facet->getFieldName()|escape:'htmlall'}"
                                name="{$facet->getFieldName()|escape:'htmlall'}"
                                value="1"
                                {if $facet->isActive()}checked="checked" {/if}/>
 
-                        <span class="input--state">&nbsp;</span>
+                        <span class="input--state checkbox--state">&nbsp;</span>
                     </span>
                 {/block}
             </div>

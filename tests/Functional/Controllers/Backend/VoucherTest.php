@@ -109,11 +109,14 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      */
     public function testAddVoucher()
     {
+        $this->manager->getConnection()->executeUpdate('DELETE FROM s_emarketing_vouchers WHERE ordercode = :code', [
+            ':code' => $this->voucherData['orderCode'],
+        ]);
+
         $params = $this->voucherData;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/saveVoucher');
         $this->assertTrue($this->View()->success);
-        $this->assertCount(20, $this->View()->data);
         $this->assertEquals($params['description'], $this->View()->data['description']);
 
         return $this->View()->data['id'];
@@ -224,9 +227,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/voucher/saveVoucher');
-
         $this->assertTrue($this->View()->success);
-        $this->assertCount(20, $this->View()->data);
         $this->assertEquals($params['description'], $this->View()->data['description']);
 
         return $id;

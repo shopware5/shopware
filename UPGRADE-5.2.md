@@ -2,11 +2,113 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+# 5.2.27
+
+[View all changes from v5.2.26...v5.2.27](https://github.com/shopware/shopware/compare/v5.2.26...v5.2.27)
+
+* Added config check to disable the `Tell a friend` page if it is disabled via config.
+* Fixed id collision in `themes/Backend/ExtJs/backend/base/component/Shopware.ModuleManager.js`
+* Added guetzli media optimizer
+* Added new event `Shopware_Plugins_HttpCache_ContextCookieValue` to modify HttpCache Context-Cookie.
+* Added support for uploading media with ftps in Rest-API
+* Added `{$smarty.block.parent}` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
+* Added new block `frontend_checkout_cart_item_details_essential_features` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
+* Added new block `frontend_checkout_confirm_product_table_content` around table in `themes/Frontend/Bare/frontend/checkout/confirm.tpl`.
+* Individual voucher codes are now searchable in voucher overview
+
+# 5.2.26
+
+[View all changes from v5.2.25...v5.2.26](https://github.com/shopware/shopware/compare/v5.2.25...v5.2.26)
+
+## 5.2.25
+
+[View all changes from v5.2.24...v5.2.25](https://github.com/shopware/shopware/compare/v5.2.24...v5.2.25)
+
+* Added notify event `Shopware_Modules_Basket_AddArticle_Added` in `engine/Shopware/Core/sBasket.php`
+* The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
+* Removed duplicate block and added more precise ones in `themes/Frontend/Bare/frontend/checkout/ajax_cart.tpl`
+
+# 5.2.24
+
+[View all changes from v5.2.23...v5.2.24](https://github.com/shopware/shopware/compare/v5.2.23...v5.2.24)
+
+* Fixed custom datefield format for articles
+* Fixed styling of image slider on tablet landscape view
+
+## 5.2.23
+
+[View all changes from v5.2.22...v5.2.23](https://github.com/shopware/shopware/compare/v5.2.22...v5.2.23)
+
+* Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
+* Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
+* Added default `limit` of 100 in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyIndexer::populate`
+* Added a base store for `Shopware.apps.Base.model.DocType`
+
+## 5.2.22
+
+[View all changes from v5.2.21...v5.2.22](https://github.com/shopware/shopware/compare/v5.2.21...v5.2.22)
+
+* Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
+* Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
+* Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
+* Added optional parameter `appendCSRFToken`  for JSONP-Requests. The CSRF token will only be sent if the parameter is true.
+* Added `src` attribute as a fallback for `srcset` to the main `<img />` tag in `themes/Frontend/Bare/frontend/detail/image.tpl` and `themes/Frontend/Bare/frontend/blog/images.tpl`
+
+## 5.2.21
+
+[View all changes from v5.2.20...v5.2.21](https://github.com/shopware/shopware/compare/v5.2.20...v5.2.21)
+
+* Updated Symfony to version 2.8.17
+* Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
+* Added support for creating new orders using the `Order` API resource
+* Added option `allowHtml` for ExtJS grid columns and display form fields in order to allow unescaped html output. Default value is: `false`
+* Added optional `Guzzle` client config parameter to `Shopware\Components\HttpClient\GuzzleFactory::createClient` method
+* Added events `sendRequestSuccess` and `sendRequestFailure` to `_sendRequest` in `themes/Backend/ExtJs/backend/category/controller/article_mapping.js`
+* Deprecated duplicate block `frontend_blog_detail_comments` in `frontend/blog/detail.tpl`, use `frontend_blog_detail_comments_count` and `frontend_blog_detail_comments_list` instead. 
+* Changed CSRF validation method in `engine/Shopware/Components/CSRFTokenValidator` from session validation to cookie validation.
+* Removed `invalidateToken` from `engine/Shopware/Components/CSRFTokenValidator`
+* Added opt-in for CSRF GET protection. Implement `engine/Shopware/Components/CSRFTGetProtectionAware` and return the controller actons which should be protected via `getCSRFProtectedActions`.
+* Added CSRF specific error message.
+* Changed behaviour of plugin installer to show the correct translated label and description in plugin manager and basic settings (new 5.2 plugin system only, see [DevDocs](https://developers.shopware.com/developers-guide/plugin-system/#plugin-metadata))
+
+## 5.2.20
+
+[View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
+
+* Reverted shopware/shopware#821 which added left joins for basket attributes in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+
+## 5.2.19
+
+[View all changes from v5.2.18...v5.2.19](https://github.com/shopware/shopware/compare/v5.2.18...v5.2.19)
+
+* Changed the loading of backend widgets to disable widgets of deactivated plugins
+* Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
+* Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
+* Added left join of `s_order_basket_attributes` in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+* Added event `blog-save-successfully` to `onSaveBlogArticle()` method in `themes/Backend/ExtJs/backend/blog/controller/blog.js`
+* Added event `customer-address-save-successfully` to `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `customer-save-successfully` to  `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `site-save-successfully` to `onSaveSite()` method in `themes/Backend/ExtJs/backend/site/controller/form.js`
+* Added event `supplier-save-successfully` to `onSupplierSave()` method in `themes/Backend/ExtJs/backend/supplier/controller/main.js`
+* Added the possibility to add a Theme info tab. Add a folder with the name "info" to your theme folder. Add a html file to the folder with the required language iso like "en_EN.html". The HTML content of the file is the content of the tab.
+* Changed internal loop variable name `positions` in `themes/Frontend/Bare/documents/index.tpl` to fix typo
+* Added configuration option `ShopwarePlugins` to `plugin_directories` in the `engine/Shopware/Configs/Default.php` to make the path of the plugin system directory configurable
+* Support for custom CSS files in themes added to Grunt tasks
+* Added command option `shopId` for `sw:theme:cache:generate`
+
+## 5.2.18
+
+[View all changes from v5.2.17...v5.2.18](https://github.com/shopware/shopware/compare/v5.2.17...v5.2.18)
+
+* Fixed invalid permissions after running media optimizer on some hosting systems
+* Fixed session error in exports
+
 ## 5.2.17
+
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
-* Changed default `session.gc_divisor` to `200`. To decrease session garbade collection probability.
+* Changed default `session.gc_divisor` to `200`. To decrease session garbage collection probability.
 * Added console command `sw:session:cleanup` to cleanup expired sessions.
 * Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
@@ -45,6 +147,12 @@ The api resources are now available in the dependency injection container using 
     shared="false">
 </service>
 ```
+
+## 5.2.16
+
+[View all changes from v5.2.15...v5.2.16](https://github.com/shopware/shopware/compare/v5.2.15...v5.2.16)
+
+* Improved form input filtering
 
 ## 5.2.15
 
@@ -276,6 +384,7 @@ There must be at least one option tag and inside each option tag where must be a
     * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
 * Removed synchronizing of plugin information column `changes`
 * Allow root menu elements for plugins. Added attribute `isRootMenu` in `menu.xml` Example: `<entry isRootMenu="true">`
+* Normalized the return value of `Album\Settings` getThumbnailSize to return a empty array instead of a array with an empty string when no size is active
 
 ## 5.2.3
 

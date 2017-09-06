@@ -36,7 +36,7 @@ class SimpleFacet implements FacetInterface
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @param string $name

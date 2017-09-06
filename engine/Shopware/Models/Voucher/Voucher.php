@@ -188,6 +188,12 @@ class Voucher extends ModelEntity
     private $taxConfig;
 
     /**
+     * @var string
+     * @ORM\Column(name="customer_stream_ids", type="text", nullable=true)
+     */
+    private $customerStreamIds;
+
+    /**
      * Getter Method to get the Id field from the Model
      *
      * @return int
@@ -670,5 +676,15 @@ class Voucher extends ModelEntity
     public function setAttribute($attribute)
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Voucher', 'attribute', 'voucher');
+    }
+
+    public function getCustomerStreamIds()
+    {
+        return $this->customerStreamIds;
+    }
+
+    public function setCustomerStreamIds($customerStreamIds)
+    {
+        $this->customerStreamIds = $customerStreamIds;
     }
 }

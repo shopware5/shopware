@@ -153,6 +153,8 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
         if (value !== null && !isNaN(value)) {
             this.dateField.setValue(value);
             this.timeField.setValue(value);
+        } else if (value === null) {
+            this.reset();
         }
     },
 

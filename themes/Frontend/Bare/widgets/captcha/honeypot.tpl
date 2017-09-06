@@ -7,6 +7,6 @@
     {/block}
 
     {block name='frontend_widgets_captcha_input_code'}
-        <input type="text" name="first_name_confirmation" value="" class="c-firstname-confirmation"/>
+        <input type="text" name="first_name_confirmation" value="" class="c-firstname-confirmation" autocomplete="off"/>
     {/block}
 {/block}

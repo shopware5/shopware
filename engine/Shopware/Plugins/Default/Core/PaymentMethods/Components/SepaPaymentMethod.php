@@ -50,6 +50,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
             $sErrorFlag['sSepaBankName'] = true;
         }
 
+        $sErrorFlag = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Validate_Data_Required', $sErrorFlag, [
+            'subject' => $this,
+            'paymentData' => $paymentData,
+        ]);
+
         if (count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
         }
@@ -77,7 +82,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
         $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
         $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
-            getPaymentsQuery(['name' => 'Sepa'])->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+        getPaymentsQuery(['name' => 'Sepa'])->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = [
             'use_billing_data' => ($request->getParam('sSepaUseBillingData') === 'true' ? 1 : 0),
@@ -85,6 +90,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'iban' => preg_replace('/\s+|\./', '', $request->getParam('sSepaIban')),
             'bic' => $request->getParam('sSepaBic'),
         ];
+
+        $data = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Save_Payment_Data', $data, [
+            'subject' => $this,
+            'params' => $request->getParams(),
+        ]);
 
         if (!$lastPayment) {
             $date = new \DateTime();
@@ -117,6 +127,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
                 'sSepaIban' => $paymentData['iban'],
                 'sSepaBic' => $paymentData['bic'],
             ];
+
+            $arrayData = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Current_Payment_Data_Array', $arrayData, [
+                'subject' => $this,
+                'paymentData' => $paymentData,
+            ]);
 
             return $arrayData;
         }
@@ -161,6 +176,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'amount' => $order['invoiceAmount'],
             'created_at' => $date->format('Y-m-d'),
         ];
+
+        $data = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Create_Payment_Instance_Data', $data, [
+            'subject' => $this,
+            'paymentData' => $paymentData,
+        ]);
 
         Shopware()->Db()->insert('s_core_payment_instance', $data);
 
@@ -244,7 +264,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'sepaSellerId' => Shopware()->Config()->get('sepaSellerId'),
         ]);
 
-        $data = Shopware()->Template()->fetch(__DIR__ . '/../Views/frontend/plugins/sepa/email.tpl');
+        Shopware()->Template()->addTemplateDir(__DIR__ . '/../Views/');
+        $data = Shopware()->Template()->fetch('frontend/plugins/sepa/email.tpl');
 
         $mpdf = new \mPDF('utf-8', 'A4', '', '');
         $mpdf->WriteHTML($data);

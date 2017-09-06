@@ -46,32 +46,21 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
      */
     name:'finish',
 
-    snippets: {
-        content: {
-            title: '{s name=finish/content/title}Finished{/s}',
-            message: '{s name=finish/content/message}The First Run Wizard is now complete and you are ready to start using your new Shopware shop. Information, help, and the latest Shopware news can be found in the following pages:{/s}'
-        },
-        buttons: {
-            finish: '{s name=finish/buttons/finish}Finish{/s}'
-        }
-    },
-
     initComponent: function() {
-        var me = this,
-            content = me.snippets.content;
+        var me = this;
 
         me.items = [
             {
                 xtype: 'container',
                 border: false,
                 style: 'font-weight: 700; line-height: 20px;',
-                html: '<h1>' + content.title + '</h1>'
+                html: '<h1>{s name=finish/content/almost_ready}Fast fertig!{/s}</h1>'
             },
             {
                 xtype: 'container',
                 border: false,
                 style: 'margin-bottom: 20px;',
-                html: '<p>' + content.message + '</p>',
+                html: '<p>{s name=finish/content/message}Erstelle Dir jetzt Deinen eigenen <a href=\"https://account.shopware.com/\">Shopware-Account</a>. Diesen benötigst Du, um Dich anschließend auf verschiedenen Shopware-Plattformen einzuloggen. Eine Übersicht der wichtigsten Shopware-Plattformen und deren Vorteile für Dich findest Du hier:{/s}</p>',
                 width: '100%'
             },
             {
@@ -79,6 +68,15 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
                 border: false,
                 width: '100%',
                 html: me.createTiles()
+            },
+            {
+                xtype: 'container',
+                border: false,
+                html: Ext.String.format(
+                    '<p>{s name=finish/shopware_id/text}Lege Dir Deinen Shopware-Account in wenigen Schritten an: <a href=\"[0]\" target=\"_blank\">Jetzt Shopware-Account erstellen</a>{/s}</p>',
+                    '{s name="finish/links/account"}https://account.shopware.com/{/s}'
+                ),
+                width: '100%'
             }
         ];
 
@@ -88,44 +86,46 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
     createTiles: function () {
         var tileData = [
             {
-                'link': '{s name="finish/links/help"}http://en.wiki.shopware.com/{/s}',
-                'icon': 'help',
-                'text': '{s name="finish/tile/help"}Shopware Help{/s}'
-            },
-            {
-                'link': '{s name="finish/links/templater"}http://en.wiki.shopware.com/Designer-s-Guide_cat_884.html{/s}',
-                'icon': 'templater',
-                'text': '{s name="finish/tile/templater"}Shopware for templaters{/s}'
-            },
-            {
-                'link': '{s name="finish/links/developer"}http://en.wiki.shopware.com/Developer-s-Guide_cat_888.html{/s}',
-                'icon': 'developer',
-                'text': '{s name="finish/tile/developer"}Shopware for developers{/s}'
-            },
-            {
-                'link': '{s name="finish/links/forum"}http://en.forum.shopware.com/{/s}',
-                'icon': 'forum',
-                'text': '{s name="finish/tile/forum"}Shopware Forum{/s}'
-            },
-            {
-                'link': '{s name="finish/links/account"}http://account.shopware.com/{/s}',
-                'icon': 'account',
-                'text': '{s name="finish/tile/account"}Shopware Account{/s}'
-            },
-            {
-                'link': '{s name="finish/links/store"}http://store.shopware.com/en/{/s}',
+                'link': '{s name="finish/links/store"}https://store.shopware.com/{/s}',
                 'icon': 'store',
-                'text': '{s name="finish/tile/store"}Shopware Store{/s}'
+                'text': '{s name="finish/tile/store"}Community Store{/s}',
+                'description': '{s name="finish/tile/storeDescription"}Hierin findest Du tausende Plugins und Themes, mit denen Du Deinen Onlineshop sinnvoll erweitern kannst. Viele davon sind sogar kostenfrei.{/s}'
+            },
+            {
+                'link': '{s name="finish/links/account"}https://account.shopware.com/{/s}',
+                'icon': 'account',
+                'text': '{s name="finish/tile/account"}Dein persönlicher Shopware-Account{/s}',
+                'description': '{s name="finish/tile/accountDescription"}Dies ist Dein zentraler Dreh- und Angelpunkt für alle Serviceleistungen rund um Shopware und Deinen Shop. So kannst Du hier z.B. direkt von uns als Hersteller Support beantragen, Dein Newsletter-Interessensprofil pflegen oder Deine eingesetzten Erweiterungen aus dem Community Store verwalten.{/s}'
+            },
+            {
+                'link': '{s name="finish/links/forum"}https://forum.shopware.com/?locale=de-DE{/s}',
+                'icon': 'forum',
+                'text': '{s name="finish/tile/forum"}Shopware-Forum{/s}',
+                'description': '{s name="finish/tile/forumDescription"}Wir leben eine offene Community. Deswegen kannst Du Dich in unserem Forum mit unserer weltweiten Community zu Shopware oder zu allgemeinen eCommerce-Themen austauschen. Ein Archiv von tausenden Beiträgen liefert Dir wertvolle Infos und Antworten auf Deine Fragen.{/s}'
+            },
+            {
+                'link': '{s name="finish/links/docs"}http://community.shopware.com/Doku_cat_938.html{/s}',
+                'icon': 'help',
+                'text': '{s name="finish/tile/docs"}Shopware-Dokumentation{/s}',
+                'description': '{s name="finish/tile/docsDescription"}Von der Installation über die Anwendung bis hin zur Entwicklung, Anpassung und Erweiterung von Shopware findest Du in der Doku alles, was Du für Deine tägliche Arbeit mit Shopware benötigst.{/s}'
             }
+
         ],
         tiles = [];
 
         Ext.each(tileData, function (tile) {
             tiles.push(Ext.String.format(
-                '<a class="tile-link" href="[0]" target="_blank"><span class="tile-icon icon-[1]"></span>[2]</a>',
+                '<a class="tile-link" href="[0]" target="_blank">' +
+                    '<span class="tile-icon icon-[1]"></span>' +
+                    '<span class="tile-description">' +
+                        '<h1>[2]</h1>' +
+                        '<p>[3]</p>' +
+                    '</span>' +
+                '</a>',
                 tile.link,
                 tile.icon,
-                tile.text
+                tile.text,
+                tile.description
             ));
         });
 
@@ -133,11 +133,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
     },
 
     getButtons: function() {
-        var me = this;
-
         return {
             next: {
-                text: me.snippets.buttons.finish
+                text: '{s name=finish/buttons/finish}Abschließen{/s}'
             }
         };
     }

@@ -29,7 +29,10 @@ Ext.define('Shopware.apps.SwagUpdate.model.Plugins', {
         { name: 'version', type: 'string' },
         { name: 'requiredVersion', type: 'string' },
         { name: 'message', type: 'string' },
-        { name: 'errorLevel', type: 'int' }
+        { name: 'errorLevel', type: 'int' },
+        { name: 'updatable', type: 'boolean' },
+        { name: 'updatableAfterUpgrade', type: 'boolean' },
+        { name: 'technicalName', type: 'string' }
     ],
 
     proxy: {

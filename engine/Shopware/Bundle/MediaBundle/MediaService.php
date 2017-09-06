@@ -241,7 +241,7 @@ class MediaService implements MediaServiceInterface
      *
      * @internal
      *
-     * @param $path
+     * @param string $path
      */
     public function migrateFile($path)
     {
@@ -275,7 +275,7 @@ class MediaService implements MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getFilesystem()
     {
         return $this->filesystem;
     }

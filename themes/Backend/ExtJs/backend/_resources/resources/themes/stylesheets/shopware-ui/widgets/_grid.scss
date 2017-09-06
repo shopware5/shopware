@@ -202,3 +202,11 @@
 .#{$prefix}grid-row.vertical-alignment {
 	vertical-align: middle !important;
 }
+
+.shopware-grid-panel {
+	.page-size-combo {
+		.x-form-item-label {
+			margin-top: 2px;
+		}
+	}
+}

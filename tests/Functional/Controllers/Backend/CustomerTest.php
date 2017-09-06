@@ -230,7 +230,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $newLocation = explode('/backend/', $headerLocation);
         $response = $this->dispatch('backend/' . $newLocation[1]);
 
-        $cookie = $response->getFullCookie('session-1');
+        $cookie = $this->getCookie($response, 'session-1');
         $this->assertTrue(strpos($headerLocation, $cookie['value']) !== false);
         $this->assertEquals(0, $cookie['expire']);
     }
@@ -246,6 +246,18 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
         $this->assertEquals('1', $customer->getGroup()->getId());
+    }
+
+    private function getCookie(\Enlight_Controller_Response_Response $response, $name)
+    {
+        $cookies = $response->getCookies();
+        foreach ($cookies as $cookie) {
+            if ($cookie['name'] === $name) {
+                return $cookie;
+            }
+        }
+
+        return null;
     }
 
     /**

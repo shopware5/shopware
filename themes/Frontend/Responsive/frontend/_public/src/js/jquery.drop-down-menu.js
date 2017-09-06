@@ -6,7 +6,10 @@
         defaults: {
             activeCls: 'js--is--dropdown-active',
             preventDefault: true,
-            closeOnBody: true
+            closeOnBody: true,
+            blockedElements: '.service--link, .compare--list, .compare--entry, ' +
+            '.compare--link, .btn--item-delete, .compare--icon-remove, .navigation--link, ' +
+            '.blocked--link'
         },
 
         init: function () {
@@ -20,7 +23,8 @@
         onClickMenu: function (event) {
             var me = this;
 
-            if ($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
+            me.applyDataAttributes();
+            if ($(event.target).is(me.opts.blockedElements)) {
                 return;
             }
 
@@ -41,7 +45,7 @@
         onClickBody: function(event) {
             var me = this;
 
-            if ($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
+            if ($(event.target).is(me.opts.blockedElements)) {
                 return;
             }
 

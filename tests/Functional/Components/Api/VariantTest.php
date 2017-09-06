@@ -779,7 +779,7 @@ class VariantTest extends TestCase
 
     private function getRandomId($table)
     {
-        return Shopware()->Db()->fetchOne('SELECT id FROM ' . $table . ' ORDER BY RAND() LIMIT 1');
+        return Shopware()->Db()->fetchOne('SELECT id FROM ' . $table . ' LIMIT 1');
     }
 
     private function getSimpleVariantData()

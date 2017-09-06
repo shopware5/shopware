@@ -23,7 +23,7 @@
                                 {block name='frontend_checkout_premium_slider_item'}
                                     <div class="premium-product--product product-slider--item">
 
-                                        <div class="product--inner">
+                                        <div class="product--inner" data-ordernumber="{$premium.sArticle.ordernumber}">
                                             {if $premium.available}
                                                 {block name='frontend_checkout_premium_info_free'}
                                                     <p class="premium-product--free">{s name="PremiumInfoFreeProduct"}{/s}</p>

@@ -55,17 +55,22 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->admin = Shopware()->Modules()->Admin();
+
+        $session = $this->container->get('session');
+        if ($session->get('sOneTimeAccount') && $this->Request()->has('sidebar')) {
+            $this->admin->logout();
+        }
+
         $this->addressRepository = $this->get('models')->getRepository(Address::class);
         $this->addressService = $this->get('shopware_account.address_service');
 
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
 
         if (!$this->View()->getAssign('sUserLoggedIn')) {
-            $this->forward('index', 'register');
-
-            return;
+            return $this->forward('index', 'register', 'frontend', $this->getForwardParameters());
         }
 
+        $this->View()->assign('userInfo', $this->get('shopware_account.store_front_greeting_service')->fetch());
         $this->View()->assign('sUserData', $this->admin->sGetUserData());
         $this->View()->assign('sAction', $this->Request()->getActionName());
     }
@@ -440,5 +445,23 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->get('session')->offsetSet('sArea', $areaId);
 
         $this->get('shopware_storefront.context_service')->initializeShopContext();
+    }
+
+    /**
+     * @return array
+     */
+    private function getForwardParameters()
+    {
+        if (!$this->Request()->getParam('sTarget') && !$this->Request()->getParam('sTargetAction')) {
+            return [
+                'sTarget' => $this->Request()->getControllerName(),
+                'sTargetAction' => $this->Request()->getActionName(),
+            ];
+        }
+
+        return [
+            'sTarget' => $this->Request()->getParam('sTarget'),
+            'sTargetAction' => $this->Request()->getParam('sTargetAction'),
+        ];
     }
 }

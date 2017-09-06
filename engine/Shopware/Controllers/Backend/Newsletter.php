@@ -299,9 +299,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $cronBootstrap = $this->getPluginBootstrap('Cron');
         if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
             $this->Response()
-                 ->clearHeaders()
-                 ->setHttpResponseCode(403)
-                 ->appendBody('Forbidden');
+                ->clearHeaders()
+                ->setHttpResponseCode(403)
+                ->appendBody('Forbidden');
 
             return;
         }
@@ -407,9 +407,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sConfig', Shopware()->Config());
         $template->assign('sBasefile', Shopware()->Config()->BaseFile);
 
+        $shop = Shopware()->Shop();
+
         if (!$template->isCached($mailing['template'])) {
             $template->assign('sMailing', $mailing);
-            $template->assign('sStart', 'http://' . Shopware()->Config()->BasePath . '/' . Shopware()->Config()->BaseFile);
+            $template->assign('sStart', ($shop->getAlwaysSecure() ?
+                'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() :
+                'http://' . $shop->getHost() . $shop->getBasePath()));
             $template->assign('sUserGroup', Shopware()->System()->sUSERGROUP);
             $template->assign('sUserGroupData', Shopware()->System()->sUSERGROUPDATA);
             $template->assign('sMainCategories', Shopware()->Modules()->Categories()->sGetMainCategories());
@@ -488,7 +492,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $id
      *
-     * @return array
+     * @return array|bool
      */
     public function getMailingVoucher($id)
     {
@@ -514,7 +518,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $id
      *
-     * @return array
+     * @return array|bool
      */
     public function getMailingEmails($id)
     {
@@ -550,6 +554,15 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $limit = !empty(Shopware()->Config()->MailCampaignsPerCall) ? (int) Shopware()->Config()->MailCampaignsPerCall : 1000;
         $limit = max(1, $limit);
 
+        $customerStreams = '1=2';
+        $ids = array_keys($mailing['groups'][2]);
+        if (!empty($ids)) {
+            $ids = array_map(function ($id) {
+                return (int) $id;
+            }, $ids);
+            $customerStreams = 'mapping.stream_id IN (' . implode(',', $ids) . ')';
+        }
+
         /**
          * Get mails belonging to selected customergroups of the selected subshop
          * -OR- belonging to the selected newsletter groups
@@ -561,16 +574,15 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
             LEFT JOIN s_user su
             ON sc.email=su.email
+            
+            LEFT JOIN s_customer_streams_mapping mapping
+              ON mapping.customer_id = su.id
 
             WHERE sc.lastmailing != ?
-            AND
-            (
-                (
-                su.language = ?
-                AND ($customerGroups)
-                )
-            OR
-                ($recipientGroups)
+            AND (
+              (su.language = ? AND ($customerGroups))
+              OR ($recipientGroups)
+              OR ($customerStreams)
             )
             GROUP BY sc.email
         ";

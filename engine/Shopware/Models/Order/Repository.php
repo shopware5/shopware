@@ -59,7 +59,7 @@ class Repository extends ModelRepository
         $builder = $this->getPaymentStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -83,8 +83,8 @@ class Repository extends ModelRepository
             'status.description as description',
         ]);
         $builder->from('Shopware\Models\Order\Status', 'status')
-                ->where('status.group = ?1')
-                ->setParameter(1, 'payment');
+            ->where('status.group = ?1')
+            ->setParameter(1, 'payment');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -113,7 +113,7 @@ class Repository extends ModelRepository
         $builder = $this->getOrderStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -138,7 +138,7 @@ class Repository extends ModelRepository
         ]);
         $builder->from('Shopware\Models\Order\Status', 'status');
         $builder->where('status.group = ?1')
-                ->setParameter(1, 'state');
+            ->setParameter(1, 'state');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -169,7 +169,7 @@ class Repository extends ModelRepository
         $builder = $this->getOrdersQueryBuilder($filters, $orderBy);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -218,35 +218,35 @@ class Repository extends ModelRepository
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.details', 'details')
-                ->leftJoin('orders.documents', 'documents')
-                ->leftJoin('documents.type', 'documentType')
-                ->leftJoin('orders.payment', 'payment')
-                ->leftJoin('orders.paymentStatus', 'paymentStatus')
-                ->leftJoin('orders.orderStatus', 'orderStatus')
-                ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('orders.paymentInstances', 'paymentInstances')
-                ->leftJoin('orders.billing', 'billing')
-                ->leftJoin('billing.country', 'billingCountry')
-                ->leftJoin('billing.state', 'billingState')
-                ->leftJoin('orders.shipping', 'shipping')
-                ->leftJoin('orders.shop', 'shop')
-                ->leftJoin('orders.dispatch', 'dispatch')
-                ->leftJoin('payment.attribute', 'paymentAttribute')
-                ->leftJoin('dispatch.attribute', 'dispatchAttribute')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('details.attribute', 'detailAttribute')
-                ->leftJoin('documents.attribute', 'documentAttribute')
-                ->leftJoin('orders.attribute', 'attribute')
-                ->leftJoin('orders.languageSubShop', 'subShop')
-                ->leftJoin('subShop.locale', 'locale')
-                ->leftJoin('shipping.country', 'shippingCountry')
-                ->leftJoin('shipping.state', 'shippingState');
+            ->leftJoin('orders.documents', 'documents')
+            ->leftJoin('documents.type', 'documentType')
+            ->leftJoin('orders.payment', 'payment')
+            ->leftJoin('orders.paymentStatus', 'paymentStatus')
+            ->leftJoin('orders.orderStatus', 'orderStatus')
+            ->leftJoin('orders.customer', 'customer')
+            ->leftJoin('orders.paymentInstances', 'paymentInstances')
+            ->leftJoin('orders.billing', 'billing')
+            ->leftJoin('billing.country', 'billingCountry')
+            ->leftJoin('billing.state', 'billingState')
+            ->leftJoin('orders.shipping', 'shipping')
+            ->leftJoin('orders.shop', 'shop')
+            ->leftJoin('orders.dispatch', 'dispatch')
+            ->leftJoin('payment.attribute', 'paymentAttribute')
+            ->leftJoin('dispatch.attribute', 'dispatchAttribute')
+            ->leftJoin('billing.attribute', 'billingAttribute')
+            ->leftJoin('shipping.attribute', 'shippingAttribute')
+            ->leftJoin('details.attribute', 'detailAttribute')
+            ->leftJoin('documents.attribute', 'documentAttribute')
+            ->leftJoin('orders.attribute', 'attribute')
+            ->leftJoin('orders.languageSubShop', 'subShop')
+            ->leftJoin('subShop.locale', 'locale')
+            ->leftJoin('shipping.country', 'shippingCountry')
+            ->leftJoin('shipping.state', 'shippingState');
 
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1']));
+        $builder->andWhere('orders.status != -1');
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
@@ -279,8 +279,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('detailStatus')
-                ->from('Shopware\Models\Order\DetailStatus', 'detailStatus')
-                ->orderBy('detailStatus.position', 'ASC');
+            ->from('Shopware\Models\Order\DetailStatus', 'detailStatus')
+            ->orderBy('detailStatus.position', 'ASC');
 
         return $builder;
     }
@@ -300,7 +300,7 @@ class Repository extends ModelRepository
         $builder = $this->getOrderStatusHistoryListQueryBuilder($orderId, $orderBy);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -327,11 +327,13 @@ class Repository extends ModelRepository
             'history.paymentStatusId as currentPaymentStatusId',
         ]);
         $builder->from('Shopware\Models\Order\History', 'history')
-                ->leftJoin('history.user', 'user')
-                ->where($builder->expr()->eq('history.orderId', '?1'))
-                ->setParameter(1, $orderId);
+            ->leftJoin('history.user', 'user')
+            ->where('history.orderId = ?1')
+            ->setParameter(1, $orderId);
 
-        $builder->addOrderBy($orderBy);
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
 
         return $builder;
     }
@@ -358,7 +360,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['types'])
-                ->from('Shopware\Models\Order\Document\Type', 'types');
+            ->from('Shopware\Models\Order\Document\Type', 'types');
 
         return $builder;
     }
@@ -386,14 +388,12 @@ class Repository extends ModelRepository
                        ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                        ->join('voucher.codes', 'codes')
                        ->where(
-                           $builder->expr()->orX(
-                               $builder->expr()->gte('voucher.validTo', $today),
-                               $builder->expr()->isNull('voucher.validTo')
-                           )
+                           '(voucher.validTo>= :today OR voucher.validTo IS NULL)')
+                           ->setParameter('today', $today
                        )
-                       ->andWhere($builder->expr()->isNull('codes.customerId'))
-                       ->andWhere($builder->expr()->eq('codes.cashed', 0))
-                       ->andWhere($builder->expr()->eq('voucher.modus', 1))
+                       ->andWhere('codes.customerId IS NULL')
+                       ->andWhere('codes.cashed= 0')
+                       ->andWhere('voucher.modus= 1')
                        ->getQuery();
     }
 
@@ -687,8 +687,15 @@ class Repository extends ModelRepository
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select(['DISTINCT customer.id']);
         $query->from('s_user', 'customer');
-        $query->where('customer.email LIKE :search');
-        $query->setParameter(':search', '%' . $term . '%');
+
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'customer.customernumber^1',
+            'customer.email^2',
+            'customer.firstname^3',
+            'customer.lastname^3',
+        ]);
+
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -724,18 +731,15 @@ class Repository extends ModelRepository
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select('address.orderID');
         $query->from($table, 'address');
-
-        $fields = [
-            'address.company LIKE :search',
-            'address.street LIKE :search',
-            'address.zipcode LIKE :search',
-            'address.city LIKE :search',
-            'address.lastname LIKE :search',
-            'address.firstname LIKE :search',
-        ];
-
-        $query->andWhere('(' . implode(' OR ', $fields) . ')');
-        $query->setParameter(':search', '%' . $term . '%');
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'address.company^1',
+            'address.street^1',
+            'address.zipcode^1',
+            'address.city^2',
+            'address.lastname^3',
+            'address.firstname^3',
+        ]);
 
         if (!empty($excludedOrderIds)) {
             $query->andWhere('address.orderID NOT IN (:ids)');
@@ -756,16 +760,15 @@ class Repository extends ModelRepository
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select('orders.id');
         $query->from('s_order', 'orders');
-        $fields = [
-            'orders.ordernumber LIKE :search',
-            'orders.transactionID LIKE :search',
-            'orders.comment LIKE :search',
-            'orders.customercomment LIKE :search',
-            'orders.internalcomment LIKE :search',
-        ];
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'orders.ordernumber^3',
+            'orders.transactionID^1',
+            'orders.comment^0.2',
+            'orders.customercomment^0.2',
+            'orders.internalcomment^0.2',
+        ]);
 
-        $query->andWhere('(' . implode(' OR ', $fields) . ')');
-        $query->setParameter(':search', '%' . $term . '%');
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);

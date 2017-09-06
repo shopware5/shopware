@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
         return {
             flex: 1,
             dataIndex: 'name',
+            allowHtml: true,
             renderer: function (value, meta, record) {
                 meta.tdAttr = 'data-qtip="' + Ext.String.format(me.toolTipTemplate, record.get('description').replace(/"/g, ''), record.get('filterString').replace(/"/g, '')) + '"';
 

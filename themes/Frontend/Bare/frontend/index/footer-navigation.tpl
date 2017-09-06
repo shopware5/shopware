@@ -114,6 +114,9 @@
 
                         {block name="frontend_index_footer_column_newsletter_form_field"}
                             <input type="email" name="newsletter" class="newsletter--field" placeholder="{s name="IndexFooterNewsletterValue"}{/s}" />
+                            {if {config name="newsletterCaptcha"} !== "nocaptcha"}
+                                <input type="hidden" name="redirect">
+                            {/if}
                         {/block}
 
                         {block name="frontend_index_footer_column_newsletter_form_submit"}

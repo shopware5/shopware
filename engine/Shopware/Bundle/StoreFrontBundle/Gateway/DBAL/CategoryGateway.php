@@ -144,6 +144,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->addGroupBy('category.id')
             ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
 
+        $this->fieldHelper->addCategoryTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);
 

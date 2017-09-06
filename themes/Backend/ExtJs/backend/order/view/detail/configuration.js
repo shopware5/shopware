@@ -310,7 +310,13 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
             }
         });
 
-        return [ me.resetButton, me.previewButton, me.createButton ];
+        return [
+            me.resetButton,
+            /*{if {acl_is_allowed privilege=update}}*/
+                me.previewButton,
+                me.createButton
+            /*{/if}*/
+        ];
     }
 
 });

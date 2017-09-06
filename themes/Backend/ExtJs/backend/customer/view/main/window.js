@@ -27,97 +27,71 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/main}
-
-/**
- * Shopware UI - Customer list main window.
- *
- * todo@all: Documentation
- */
-//{block name="backend/customer/view/main/window"}
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
-    /**
-     * Define that the customer main window is an extension of the enlight application window
-     * @string
-     */
-    extend:'Enlight.app.Window',
-    /**
-     * Set base css class prefix and module individual css class for css styling
-     * @string
-     */
-    cls:Ext.baseCSSPrefix + 'customer-list-window',
-    /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
-     */
-    alias:'widget.customer-list-main-window',
-    /**
-     * Set no border for the window
-     * @boolean
-     */
-    border:false,
-    /**
-     * True to automatically show the component upon creation.
-     * @boolean
-     */
-    autoShow:true,
-    /**
-     * Set border layout for the window
-     * @string
-     */
-    layout:'fit',
-    /**
-     * Define window width
-     * @integer
-     */
-    width:800,
-    /**
-     * Define window height
-     * @integer
-     */
-    height:'90%',
-    /**
-     * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
-     * @boolean
-     */
-    maximizable:true,
-    /**
-     * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
-     * @boolean
-     */
-    minimizable:true,
-    /**
-     * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
-     */
-    stateful:true,
-    /**
-     * The unique id for this object to use for state management purposes.
-     */
-    stateId:'shopware-customer-main-window',
-    /**
-     * Set window title which is displayed in the window header
-     * @string
-     */
-    title:'{s name=window_title}Customer list{/s}',
+    extend: 'Enlight.app.Window',
+    cls: Ext.baseCSSPrefix + 'customer-list-window',
+    alias: 'widget.customer-list-main-window',
+    border: false,
+    autoShow: true,
+    layout: {
+        type: 'fit'
+    },
+    width: '95%',
+    height: '95%',
+    title: '{s name=window_title}{/s}',
+
+    createItems: function() {
+        var me = this, tabs = [];
+
+        me.quickView = Ext.create('Shopware.apps.Customer.view.main.QuickView');
+        me.streamView = Ext.create('Shopware.apps.Customer.view.main.StreamView');
+
+        tabs.push(me.quickView);
+
+        /*{if {acl_is_allowed resource=customerstream privilege=read}}*/
+            tabs.push(me.streamView);
+        /*{/if}*/
+
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            flex: 1,
+            items: tabs,
+            activeTab: (me.subApp.action && me.subApp.action === 'customer_stream') ? 1 : 0
+        });
+
+        me.on('afterrender', function() {
+            if (me.subApp.action !== 'customer_stream' || !me.subApp.params || !me.subApp.params.streamId) {
+                return;
+            }
+
+            Ext.defer(function() {
+                var record = me.streamView.streamListing.getStore().getById(
+                    window.parseInt(me.subApp.params.streamId)
+                );
+
+                me.streamView.streamListing.getSelectionModel().select([record]);
+            }, 200);
+        });
+
+        return [me.tabPanel];
+    },
 
     /**
      * Initializes the component and builds up the main interface
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         Ext.suspendLayouts();
 
-        //add the customer list grid panel and set the store
-        me.items = [{
-            xtype:'customer-list',
-            store: me.listStore
-        }];
+        me.items = me.createItems();
+
         Ext.resumeLayouts(true);
 
         me.callParent(arguments);
     }
 });
-//{/block}
+// {/block}

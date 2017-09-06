@@ -267,6 +267,173 @@
             }
         },
 
+        'date': {
+
+            compOpts: {
+                datePickerSelector: '*[data-datepicker="true"]'
+            },
+
+            initComponent: function() {
+                var me = this;
+
+                me.$datePickerEl = me.$el.find(me.opts.datePickerSelector);
+                me.datePicker = me.$datePickerEl.data('plugin_swDatePicker');
+                me.isRangeSlider = me.$datePickerEl.attr('data-mode') == 'range';
+
+                me.$form = me.$el.parents('form');
+                me._bufferID = null;
+
+                me.registerComponentEvents();
+            },
+
+            registerComponentEvents: function() {
+                var me = this;
+
+                me._on(me.$datePickerEl, 'change', $.proxy(me.onChange, me));
+            },
+
+            onChange: function(event) {
+                var me = this;
+
+                me.disableComponent(false);
+
+                /**
+                 * Don't trigger the change when the date picker is suspended.
+                 * Used to silently reset the input values.
+                 */
+                if (!me.datePicker.suspended) {
+
+                    /**
+                     * If product live reload and time input are active, delay the ajax request, so the user is
+                     * able to finish typing.
+                     */
+                    if (me.datePicker.opts.enableTime && me.$form.attr('data-instant-filter-result') === 'true') {
+                        me.buffer($.proxy(me.triggerChange, me, event), 850);
+                    } else {
+                        me.triggerChange(event);
+                    }
+                }
+
+                $.publish('plugin/swFilterComponent/onChange', [ me, event ]);
+            },
+
+            triggerChange: function (event) {
+                var me = this,
+                    $el = $(event.currentTarget);
+
+                $el.trigger('onChange', [me, $el]);
+                me._bufferID = null;
+            },
+
+            buffer: function(callback, duration) {
+                var me = this;
+
+                if (me._bufferID) {
+                    window.clearTimeout(me._bufferID);
+                }
+
+                me._bufferID = window.setTimeout(callback, duration);
+            },
+
+            updateFacet: function(data) {
+                var me = this;
+
+                /**
+                 * When no data is selectable disable the component.
+                 */
+                if (data === null) {
+                    me.disableComponent(true);
+                    return;
+                }
+
+                var isFiltered = me.datePicker.flatpickr.selectedDates.length > 0;
+
+                /**
+                 * The component is a range facet.
+                 */
+                if (data.min && data.max) {
+                    /**
+                     * The min and max value for the range is the same, so no range can be selected.
+                     */
+                    if (data.min === data.max && !isFiltered) {
+                        me.disableComponent(true);
+                        return;
+                    }
+
+                    /**
+                     * The component is not filtered but restricted by other filter properties.
+                     */
+                    if (isFiltered) {
+                        me.disableComponent(false);
+                        return;
+                    }
+
+                    me.datePicker.suspendEvents();
+                    me.datePicker.flatpickr.set('minDate', data.min);
+                    me.datePicker.flatpickr.set('maxDate', data.max);
+                    me.datePicker.resumeEvents();
+                    me.disableComponent(false);
+
+                    return;
+                }
+
+                /**
+                 * The component is a single or multi selection.
+                 * There are no selectable values, so the component is disabled.
+                 */
+                if (!data.values || data.values.length <= 0) {
+                    me.disableComponent(true);
+                    return;
+                }
+
+                /**
+                 * The component is filtered, so it is not restricted.
+                 * Prevents that the component gets restricted by its own selection.
+                 */
+                if (isFiltered) {
+                    me.datePicker.flatpickr.set('enable', me.datePicker.opts.enabledDates);
+                    me.disableComponent(false);
+                    return;
+                }
+
+                var enabledDates = [];
+
+                $.each(data.values, function (index, option) {
+                    enabledDates.push(option.id);
+                });
+
+                /**
+                 * Restricts the components selection by available dates.
+                 */
+                me.datePicker.flatpickr.set('enable', enabledDates);
+
+                me.disableComponent(enabledDates.length <= 0);
+            },
+
+            disableComponent: function(disable) {
+                var me = this;
+
+                if (disable && this.$el.hasClass(this.opts.collapseCls)) {
+                    this.close();
+                }
+                this.setDisabledClass(this.$el, disable);
+
+                if (me.isRangeSlider) {
+                    me.datePicker.$rangeEndInput.removeAttr('disabled');
+                    me.datePicker.$rangeStartInput.removeAttr('disabled');
+                    if (disable) {
+                        me.datePicker.$rangeEndInput.prop('disabled', 'disabled');
+                        me.datePicker.$rangeStartInput.prop('disabled', 'disabled');
+                    }
+                } else {
+                    me.$datePickerEl.removeAttr('disabled');
+                    if (disable) {
+                        me.$datePickerEl.prop('disabled', 'disabled');
+                    }
+                }
+            }
+        },
+
         /**
          * Rating component
          */

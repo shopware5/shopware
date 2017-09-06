@@ -196,7 +196,9 @@
 
             $.publish('plugin/swAjaxVariant/onPopState', [ me, state ]);
 
-            me.requestData(state.values, false);
+            if (state && state.values) {
+                me.requestData(state.values, false);
+            }
         },
 
         /**

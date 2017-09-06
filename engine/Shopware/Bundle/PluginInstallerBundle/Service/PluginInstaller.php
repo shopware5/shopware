@@ -74,28 +74,28 @@ class PluginInstaller
     /**
      * @var string
      */
-    private $rootDirectory;
+    private $pluginDirectory;
 
     /**
      * @param ModelManager         $em
      * @param DatabaseHandler      $snippetHandler
      * @param RequirementValidator $requirementValidator
      * @param \PDO                 $pdo
-     * @param $rootDirectory
+     * @param $pluginDirectory
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $rootDirectory
+        $pluginDirectory
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
-        $this->rootDirectory = $rootDirectory;
+        $this->pluginDirectory = $pluginDirectory;
     }
 
     /**
@@ -212,6 +212,7 @@ class PluginInstaller
         $bootstrap->activate($context);
 
         $plugin->setActive(true);
+        $plugin->setInSafeMode(false);
         $this->em->flush($plugin);
 
         return $context;
@@ -241,7 +242,7 @@ class PluginInstaller
     {
         $initializer = new PluginInitializer(
             $this->pdo,
-            $this->rootDirectory . '/custom/plugins'
+            $this->pluginDirectory
         );
         $plugins = $initializer->initializePlugins();
 
@@ -259,18 +260,23 @@ class PluginInstaller
                 [$plugin->getName()]
             );
 
-            $description = '';
-            if (isset($info['description'])) {
-                foreach ($info['description'] as $locale => $string) {
-                    $description .= sprintf('<div lang="%s">%s</div>', $locale, $string);
+            $translations = [];
+            $translatableInfoKeys = ['label', 'description'];
+            foreach ($info as $key => $value) {
+                if (!in_array($key, $translatableInfoKeys, true)) {
+                    continue;
+                }
+
+                foreach ($value as $lang => $translation) {
+                    $translations[$lang][$key] = $translation;
                 }
             }
 
-            $info['description'] = $description;
+            $info['label'] = isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
+            $info['description'] = isset($info['description']['en']) ? $info['description']['en'] : null;
             $info['version'] = isset($info['version']) ? $info['version'] : '0.0.1';
             $info['author'] = isset($info['author']) ? $info['author'] : null;
             $info['link'] = isset($info['link']) ? $info['link'] : null;
-            $info['label'] = isset($info['label']) && isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
 
             $data = [
                 'namespace' => 'ShopwarePlugins',
@@ -285,6 +291,7 @@ class PluginInstaller
                 'capability_enable' => true,
                 'capability_secure_uninstall' => true,
                 'refresh_date' => $refreshDate,
+                'translations' => $translations ? json_encode($translations) : null,
             ];
 
             if ($currentPluginInfo) {
@@ -464,7 +471,7 @@ class PluginInstaller
      */
     private function removeFormsAndElements($pluginId)
     {
-        $sql = <<<'SQL'
+        $sql = <<<SQL
 DELETE s_core_config_forms, s_core_config_form_translations, s_core_config_elements, s_core_config_element_translations, s_core_config_values
 FROM s_core_config_forms
 LEFT JOIN s_core_config_form_translations ON s_core_config_form_translations.form_id = s_core_config_forms.id
