@@ -46,7 +46,7 @@ class sBasket
      */
     public $sSYSTEM;
     /**
-     * Database connection which used for each database operation in this class.
+     * Database connection which is used for each database operation in this class.
      * Injected over the class constructor
      *
      * @var Enlight_Components_Db_Adapter_Pdo_Mysql
