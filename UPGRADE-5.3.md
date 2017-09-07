@@ -9,6 +9,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Additions
 
 * Added new container parameter `active_plugins` which contains an array of installed and active plugins
+* Added functionality to show the backend growl messages in each corner of the screen (configurable in basic settings)
+* Added smarty block `backend/base/model/corner_position` for corner position configuration model
+* Added smarty block `backend/base/store/corner_position` for corner position configuration store
 
 ## 5.3.2
 
