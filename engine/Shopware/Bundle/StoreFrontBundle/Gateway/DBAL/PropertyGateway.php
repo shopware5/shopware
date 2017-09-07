@@ -126,6 +126,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             ->where('propertyOption.id IN (:ids)')
             ->groupBy('propertyOption.id')
             ->orderBy('propertySet.position')
+            ->orderBy('relations.position')
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addMediaTranslation($query, $context);
