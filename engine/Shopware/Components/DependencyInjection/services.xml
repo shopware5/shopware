@@ -687,6 +687,7 @@
         <service id="shopware_backend_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">
             <argument type="service" id="config" />
             <argument>false</argument>
+            <argument>false</argument>
         </service>
 
     </services>
