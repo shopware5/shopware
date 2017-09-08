@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.4
+
+[View all changes from v5.3.3...v5.3.4](https://github.com/shopware/shopware/compare/v5.3.3...v5.3.4)
+
+### Additions
+
+* Added function `is_object` to the list of allowed functions in Smarty
+
 ## 5.3.3
 
 [View all changes from v5.3.2...v5.3.3](https://github.com/shopware/shopware/compare/v5.3.2...v5.3.3)
