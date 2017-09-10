@@ -1498,9 +1498,7 @@ WHERE
     `o`.`id` = :orderId
 EOT;
 
-        $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
-
-        return $row;
+        return $this->db->fetchRow($sql, ['orderId' => $orderId]);
     }
 
     /**
@@ -1547,9 +1545,7 @@ ORDER BY
     `orderdetailsID` ASC
 EOT;
 
-        $rows = $this->db->fetchAll($sql, ['orderId' => $orderId]);
-
-        return $rows;
+        return $this->db->fetchAll($sql, ['orderId' => $orderId]);
     }
 
     /**
@@ -1642,9 +1638,7 @@ WHERE
     `b`.`orderID`=:orderId
 EOT;
 
-        $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
-
-        return $row;
+        return $this->db->fetchRow($sql, ['orderId' => $orderId]);
     }
 
     /**

@@ -443,9 +443,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         AND (`timed_delivery` <= NOW()
         OR `timed_delivery` IS NULL)';
 
-        $mailing = Shopware()->Db()->fetchRow($sql);
-
-        return $mailing;
+        return Shopware()->Db()->fetchRow($sql);
     }
 
     /**
@@ -508,9 +506,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             AND (ev.valid_from <= CURDATE() OR ev.valid_from IS NULL)
             AND ev.id=?
         ";
-        $voucher = Shopware()->Db()->fetchRow($sql, [$voucherID]);
 
-        return $voucher;
+        return Shopware()->Db()->fetchRow($sql, [$voucherID]);
     }
 
     /**
@@ -767,9 +764,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         //($license = Shopware()->License()->getLicense('sCORE')) || ($license = Shopware()->License()->getLicense('sCOMMUNITY'));
         $parts = func_get_args();
         $parts[] = $license;
-        $hash = md5(implode('|', $parts));
 
-        return $hash;
+        return md5(implode('|', $parts));
     }
 
     /**

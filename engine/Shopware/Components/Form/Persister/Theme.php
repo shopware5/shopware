@@ -25,7 +25,7 @@
 namespace Shopware\Components\Form\Persister;
 
 use Doctrine\ORM\PersistentCollection;
-use Shopware\Components\Form as Form;
+use Shopware\Components\Form;
 use Shopware\Components\Form\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Template;

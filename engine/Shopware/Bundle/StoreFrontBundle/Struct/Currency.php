@@ -31,7 +31,7 @@ use Shopware\Models\Shop\Currency as CurrencyEntity;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Currency extends Extendable implements \JsonSerializable
+class Currency extends Extendable
 {
     /**
      * @var int

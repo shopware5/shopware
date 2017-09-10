@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Option extends Extendable implements \JsonSerializable
+class Option extends Extendable
 {
     /**
      * @var int

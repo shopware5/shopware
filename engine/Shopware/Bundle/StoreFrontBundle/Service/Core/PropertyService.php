@@ -63,8 +63,6 @@ class PropertyService implements Service\PropertyServiceInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $properties = $this->productPropertyGateway->getList($products, $context);
-
-        return $properties;
+        return $this->productPropertyGateway->getList($products, $context);
     }
 }

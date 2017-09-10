@@ -24,7 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
-use Shopware\Models\Partner\Partner as Partner;
+use Shopware\Models\Partner\Partner;
 
 /**
  * Shopware Backend Controller for the Partner Module

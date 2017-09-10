@@ -69,11 +69,9 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     {
         $config = $this->Config();
 
-        $options = [
+        return [
             'cost' => $config['bcryptCost'],
         ];
-
-        return $options;
     }
 
     /**

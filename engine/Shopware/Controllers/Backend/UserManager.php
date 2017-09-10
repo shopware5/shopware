@@ -25,10 +25,10 @@
 /**
  * Backend Controller for the backend user management
  */
-use Shopware\Models\User\Privilege as Privilege;
-use Shopware\Models\User\Resource as Resource;
-use Shopware\Models\User\Role as Role;
-use Shopware\Models\User\User as User;
+use Shopware\Models\User\Privilege;
+use Shopware\Models\User\Resource;
+use Shopware\Models\User\Role;
+use Shopware\Models\User\User;
 
 class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Backend_ExtJs
 {

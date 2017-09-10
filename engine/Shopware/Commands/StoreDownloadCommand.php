@@ -266,9 +266,8 @@ class StoreDownloadCommand extends StoreCommand
     private function getPluginModel($technicalName)
     {
         $repo = $this->container->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
-        $plugin = $repo->findOneBy(['name' => $technicalName]);
 
-        return $plugin;
+        return $repo->findOneBy(['name' => $technicalName]);
     }
 
     private function checkDomain()
