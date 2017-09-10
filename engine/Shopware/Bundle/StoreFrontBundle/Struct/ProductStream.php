@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductStream extends Extendable implements \JsonSerializable
+class ProductStream extends Extendable
 {
     /**
      * @var int

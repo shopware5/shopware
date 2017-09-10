@@ -484,9 +484,8 @@ class %className% extends ModelEntity
         ];
 
         //than we implode the source code paths with a line break
-        $sourceCode = implode("\n", $paths);
 
-        return $sourceCode;
+        return implode("\n", $paths);
     }
 
     /**

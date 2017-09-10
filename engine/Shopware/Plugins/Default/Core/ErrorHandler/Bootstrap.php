@@ -291,8 +291,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());
-        $bufferedHandler = new BufferHandler($mailHandler);
 
-        return $bufferedHandler;
+        return new BufferHandler($mailHandler);
     }
 }

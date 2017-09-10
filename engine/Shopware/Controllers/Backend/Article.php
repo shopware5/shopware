@@ -1675,9 +1675,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getFreeSerialCount($esdId)
     {
         $query = $this->getRepository()->getFreeSerialsCountByEsdQuery($esdId);
-        $result = $query->getSingleScalarResult();
 
-        return $result;
+        return $query->getSingleScalarResult();
     }
 
     /**
@@ -2233,9 +2232,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->setParameter(3, $ids);
             }
         }
-        $variants = $builder->getQuery()->getResult();
 
-        return $variants;
+        return $builder->getQuery()->getResult();
     }
 
     /**

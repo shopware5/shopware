@@ -27,7 +27,7 @@ namespace Shopware\Components\Theme;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
-use Shopware\Models\Shop as Shop;
+use Shopware\Models\Shop;
 
 /**
  * The Theme\Util class is a helper class

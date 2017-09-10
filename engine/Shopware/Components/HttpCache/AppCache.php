@@ -329,9 +329,7 @@ class AppCache extends HttpCache
      */
     protected function getPurgeAllowedIPs()
     {
-        $allowedIps = $this->options['purge_allowed_ips'];
-
-        return $allowedIps;
+        return $this->options['purge_allowed_ips'];
     }
 
     /**

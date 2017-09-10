@@ -131,9 +131,8 @@ class RewriteMatcher implements MatcherInterface
           ORDER BY main DESC, subshopID = :shopId DESC
           LIMIT 1
         ';
-        $stmt = $this->connection->prepare($sql);
 
-        return $stmt;
+        return $this->connection->prepare($sql);
     }
 
     /**

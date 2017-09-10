@@ -1004,9 +1004,8 @@ class sRewriteTable
         $criteria->limit = $limit;
         $result = $repo->search($criteria);
         $suppliers = $result->getData();
-        $ids = array_column($suppliers, 'id');
 
-        return $ids;
+        return array_column($suppliers, 'id');
     }
 
     /**

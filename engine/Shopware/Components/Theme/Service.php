@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Shop as Shop;
+use Shopware\Models\Shop;
 use Shopware\Models\Theme\Settings;
 
 /**
@@ -187,9 +187,7 @@ class Service
                 ->setParameter('optionNames', $optionNames);
         }
 
-        $config = $builder->getQuery()->getArrayResult();
-
-        return $config;
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**

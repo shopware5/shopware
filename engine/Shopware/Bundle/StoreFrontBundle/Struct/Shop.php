@@ -32,7 +32,7 @@ use Shopware\Models\Shop\Shop as ShopEntity;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shop extends Extendable implements \JsonSerializable
+class Shop extends Extendable
 {
     /**
      * @var int

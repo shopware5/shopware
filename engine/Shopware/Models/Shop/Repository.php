@@ -321,9 +321,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('shop');
         $builder->where('shop.default = 1');
-        $shop = $builder->getQuery()->getOneOrNullResult();
 
-        return $shop;
+        return $builder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -337,9 +336,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('shop');
         $builder->where('shop.active = 1');
-        $shops = $builder->getQuery()->getResult($hydrationMode);
 
-        return $shops;
+        return $builder->getQuery()->getResult($hydrationMode);
     }
 
     /**
