@@ -2134,7 +2134,7 @@ class sBasket
         $propertyService = $container->get('shopware_storefront.property_service');
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $context */
         $context = $container->get('shopware_storefront.context_service');
-        /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
+        /** @var \Shopware\Components\Compatibility\LegacyStructConverterInterface $legacyStructConverter */
         $legacyStructConverter = $container->get('legacy_struct_converter');
 
         $products = $listProduct->getList($numbers, $context->getShopContext());

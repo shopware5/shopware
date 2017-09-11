@@ -36,13 +36,13 @@ use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Compatibility\LegacyStructConverterInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 class StructConverter
 {
     /**
-     * @var LegacyStructConverter
+     * @var LegacyStructConverterInterface
      */
     private $converter;
 
@@ -62,12 +62,12 @@ class StructConverter
     private $container;
 
     /**
-     * @param LegacyStructConverter       $converter
-     * @param MediaServiceInterface       $mediaService
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param Container                   $container
+     * @param LegacyStructConverterInterface $converter
+     * @param MediaServiceInterface          $mediaService
+     * @param \Enlight_Event_EventManager    $eventManager
+     * @param Container                      $container
      */
-    public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, Container $container)
+    public function __construct(LegacyStructConverterInterface $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, Container $container)
     {
         $this->converter = $converter;
         $this->mediaService = $mediaService;
