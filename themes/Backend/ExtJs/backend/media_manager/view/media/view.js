@@ -44,7 +44,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     bodyBorder: false,
     layout: 'border',
     region: 'center',
-    createInfoPanel: true,
     createDeleteButton: true,
     createMediaQuantitySelection: true,
     thumbnailSize: 70,
@@ -66,6 +65,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             type: '{s name=mediaInfo/type}Type:{/s}',
             resolution: '{s name=mediaInfo/resolution}Resolution:{/s}',
             adress: '{s name=mediaInfo/adress}Adress:{/s}',
+            thumbnails: '{s name=mediaInfo/thumbnails}Thumbnails:{/s}',
             mediaLink: '{s name=mediaInfo/mediaLink}Link to media{/s}'
         },
         formatTypes: {
@@ -298,6 +298,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      */
     createInfoPanelTemplate: function() {
         var me = this;
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<div class="media-info-pnl">',
@@ -345,10 +346,49 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                                 '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
                             '</p>',
                         '</tpl>',
+
+                        '<tpl if="thumbnails">',
+                            '<p>',
+                                '<strong>'+me.snippets.mediaInfo.thumbnails+'</strong>',
+                                '{[this.getThumbnailSizes(values.thumbnails)]}',
+                            '</p>',
+                        '</tpl>',
                     '</div>',
                 '</div>',
             '</tpl>{/literal}',
             {
+                /**
+                 * Renders a list of links to the thumbnails
+                 *
+                 * @param { Object } thumbs
+                 * @returns { string }
+                 */
+                getThumbnailSizes: function(thumbs) {
+                    var str = '';
+                    var sizes = [];
+
+                    // We extract a sort value from the size to be able to sort the list of thumbs
+                    Ext.Object.each(thumbs, function(key, val) {
+                        sizes.push({
+                            'sort': parseInt(key.split('x')[0]),
+                            'name': key,
+                            'link': val
+                        });
+                    });
+
+                    // Sorting the list of thumbnails to make it more pleasant to look at
+                    sizes.sort(function (a, b) {
+                        return a.sort > b.sort;
+                    });
+
+                    // Rendering each link
+                    Ext.Object.each(sizes, function(i, element) {
+                        str += Ext.String.format('<a href="[0]" class="link" target="_blank">[1]</a><br>', element.link, element.name);
+                    });
+
+                    return str;
+                },
+
                 /**
                  * Checks if this file type is allowed to be rendered inside of the browser
                  *

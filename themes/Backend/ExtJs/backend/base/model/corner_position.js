@@ -21,42 +21,39 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Order
+ * @package    Base
  * @subpackage Model
  * @version    $Id$
  * @author shopware AG
  */
 
 /**
- * Shopware Model - Order list backend module.
+ * Shopware Model - Global Stores and Models
  *
- * todo@all: Documentation
+ * The corner position model contains all fields for a corner position configuration.
  */
-//{block name="backend/order/model/shipping"}
-Ext.define('Shopware.apps.Order.model.Shipping', {
+//{block name="backend/base/model/corner_position"}
+Ext.define('Shopware.apps.Base.model.CornerPosition', {
+
+    /**
+     * Defines an alternate name for this class.
+     */
+    alternateClassName: 'Shopware.model.CornerPosition',
+
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.Address',
+    extend: 'Ext.data.Model',
 
     /**
-     * One or more BelongsTo associations for this model.
-     * @string
-     */
-    belongsTo: 'Shopware.apps.Order.model.Order',
-
-    /**
-     * Extends the models fields with the order id field.
+     * The fields used for this model
      * @array
      */
     fields: [
-        //{block name="backend/order/model/shipping/fields"}{/block}
-        { name: 'orderId', type: 'int' },
-        { name: 'stateId', type: 'int', useNull: true },
-        { name: 'phone', type: 'string' }
+        { name: 'position', type: 'string' },
+        { name: 'displayName', type: 'string' }
     ]
 
 });
 //{/block}
-

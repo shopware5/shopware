@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,44 +20,13 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Order
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware Model - Order list backend module.
- *
- * todo@all: Documentation
- */
-//{block name="backend/order/model/shipping"}
-Ext.define('Shopware.apps.Order.model.Shipping', {
-    /**
-     * Extends the standard Ext Model
-     * @string
-     */
-    extend:'Shopware.apps.Base.model.Address',
-
-    /**
-     * One or more BelongsTo associations for this model.
-     * @string
-     */
-    belongsTo: 'Shopware.apps.Order.model.Order',
-
-    /**
-     * Extends the models fields with the order id field.
-     * @array
-     */
-    fields: [
-        //{block name="backend/order/model/shipping/fields"}{/block}
-        { name: 'orderId', type: 'int' },
-        { name: 'stateId', type: 'int', useNull: true },
-        { name: 'phone', type: 'string' }
-    ]
-
-});
-//{/block}
-
+class Migrations_Migration951 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $sql = 'ALTER TABLE `s_order_shippingaddress` ADD `phone` VARCHAR(40) NULL DEFAULT NULL AFTER `city`;';
+        $this->addSql($sql);
+    }
+}

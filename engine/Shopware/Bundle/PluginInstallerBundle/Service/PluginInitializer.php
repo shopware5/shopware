@@ -71,12 +71,13 @@ class PluginInitializer
         $stmt = $this->connection->query('SELECT name, version, namespace FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL;');
         $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 
-        foreach ($this->activePlugins as $pluginName => &$plugin) {
-            if ($plugin['namespace'] === 'ShopwarePlugins') {
+        foreach ($this->activePlugins as $pluginName => &$pluginData) {
+            if ($pluginData['namespace'] === 'ShopwarePlugins') {
                 $shopwarePlugins[] = $pluginName;
             }
-            $plugin = $plugin['version'];
+            $pluginData = $pluginData['version'];
         }
+        unset($pluginData);
 
         foreach (new \DirectoryIterator($this->pluginDirectory) as $pluginDir) {
             if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {

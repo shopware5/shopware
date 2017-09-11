@@ -21,42 +21,26 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Order
- * @subpackage Model
+ * @package    Base
+ * @subpackage Store
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Order list backend module.
- *
- * todo@all: Documentation
- */
-//{block name="backend/order/model/shipping"}
-Ext.define('Shopware.apps.Order.model.Shipping', {
-    /**
-     * Extends the standard Ext Model
-     * @string
-     */
-    extend:'Shopware.apps.Base.model.Address',
+//{block name="backend/base/store/corner_position"}
+// {namespace name=backend/application/main}
+Ext.define('Shopware.apps.Base.store.CornerPosition', {
+    extend: 'Ext.data.Store',
 
-    /**
-     * One or more BelongsTo associations for this model.
-     * @string
-     */
-    belongsTo: 'Shopware.apps.Order.model.Order',
+    alternateClassName: 'Shopware.store.CornerPosition',
+    storeId: 'base.CornerPosition',
+    model: 'Shopware.apps.Base.model.CornerPosition',
 
-    /**
-     * Extends the models fields with the order id field.
-     * @array
-     */
-    fields: [
-        //{block name="backend/order/model/shipping/fields"}{/block}
-        { name: 'orderId', type: 'int' },
-        { name: 'stateId', type: 'int', useNull: true },
-        { name: 'phone', type: 'string' }
+    data: [
+        { position: 'top-right', displayName: '{s name="corner_position/top_right"}Top right{/s}' },
+        { position: 'bottom-right', displayName: '{s name="corner_position/bottom_right"}Bottom right{/s}' },
+        { position: 'top-left', displayName: '{s name="corner_position/top_left"}Top left{/s}' },
+        { position: 'bottom-left', displayName: '{s name="corner_position/bottom_left"}Bottom left{/s}' }
     ]
-
-});
+}).create();
 //{/block}
-
