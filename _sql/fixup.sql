@@ -60,7 +60,8 @@ ALTER TABLE s_article_configurator_groups
 ALTER TABLE s_article_configurator_groups_attributes
     RENAME TO product_configurator_group_attribute,
     ADD uuid VARCHAR(42) NOT NULL,
-    CHANGE COLUMN groupID group_id INT(11) unsigned NOT NULL AFTER uuid
+    CHANGE COLUMN groupID group_id INT(11) unsigned NOT NULL AFTER uuid,
+    ADD product_configurator_group_uuid VARCHAR(42) NOT NULL AFTER group_id
 ;
 
 ALTER TABLE s_article_configurator_option_relations
@@ -69,16 +70,17 @@ ALTER TABLE s_article_configurator_option_relations
     CHANGE article_id product_id INT(11) unsigned NOT NULL
 ;
 
-
 ALTER TABLE s_article_configurator_options
     RENAME TO product_configurator_option,
-    ADD uuid VARCHAR(42) NOT NULL AFTER id
+    ADD uuid VARCHAR(42) NOT NULL AFTER id,
+    ADD product_configurator_group_uuid VARCHAR(42) NOT NULL AFTER group_id
 ;
 
 ALTER TABLE s_article_configurator_options_attributes
     RENAME TO product_configurator_option_attribute,
     ADD uuid VARCHAR(42) NOT NULL,
-    MODIFY COLUMN optionID INT(11) unsigned NOT NULL AFTER uuid
+    MODIFY COLUMN optionID INT(11) unsigned NOT NULL AFTER uuid,
+    ADD product_configurator_option_uuid VARCHAR(42) NOT NULL AFTER optionID
 ;
 
 ALTER TABLE s_article_configurator_price_variations
@@ -597,7 +599,7 @@ ALTER TABLE s_core_shops
 
 ALTER TABLE s_core_countries
     RENAME TO area_country,
-    ADD COLUMN uuid VARCHAR(42) NULL DEFAULT NULL,
+    ADD COLUMN uuid VARCHAR(42) NOT NULL AFTER `id`,
     CHANGE `countryname` `name` varchar(255) COLLATE 'utf8mb4_unicode_ci' NULL,
     CHANGE `countryiso` `iso` varchar(255) COLLATE 'utf8mb4_unicode_ci' NULL AFTER `name`,
     CHANGE `areaID` `area_id` int(11) NULL AFTER `iso`,
@@ -609,7 +611,7 @@ ALTER TABLE s_core_countries
     CHANGE `active` `active` tinyint NULL AFTER `taxfree_vatid_checked`,
     CHANGE `display_state_in_registration` `display_state_in_registration` tinyint NOT NULL AFTER `iso3`,
     CHANGE `force_state_in_registration` `force_state_in_registration` tinyint NOT NULL AFTER `display_state_in_registration`,
-    ADD `area_uuid` varchar(42) NOT NULL
+    ADD `area_uuid` varchar(42) NOT NULL AFTER `area_id`
 ;
 
 
@@ -864,9 +866,10 @@ ALTER TABLE `s_user_addresses` CHANGE `phone` `phone_number` varchar(40) COLLATE
 ALTER TABLE `s_user_addresses` RENAME TO `customer_address`;
 
 ALTER TABLE `s_user_addresses_attributes`
+    RENAME TO `customer_address_attribute`,
     ADD `uuid` varchar(42) NOT NULL AFTER `id`,
-    ADD `address_uuid` varchar(42) NOT NULL AFTER `address_id`,
-    RENAME TO `customer_address_attribute`;
+    ADD `customer_address_uuid` varchar(42) NOT NULL AFTER `address_id`
+;
 
 
 ALTER TABLE `s_user_attributes`
@@ -1420,7 +1423,7 @@ UPDATE product_category_seo pcs SET
 
 
 UPDATE product_detail pd SET
-    pd.uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', pd.id),
+    pd.uuid = pd.order_number,
     pd.product_uuid = CONCAT('SWAG-PRODUCT-UUID-', pd.product_id)
 ;
 UPDATE product_detail SET unit_uuid = CONCAT('SWAG-UNIT-UUID-', unit_id) WHERE unit_id IS NOT NULL;
@@ -1711,7 +1714,7 @@ UPDATE shop SET category_uuid  = CONCAT('SWAG-CATEGORY-UUID-', category_id) WHER
 UPDATE shop SET locale_uuid  = CONCAT('SWAG-LOCALE-UUID-', locale_id) WHERE locale_id  IS NOT NULL;
 UPDATE shop SET currency_uuid  = CONCAT('SWAG-CURRENCY-UUID-', currency_id) WHERE currency_id  IS NOT NULL;
 UPDATE shop SET customer_group_uuid  = CONCAT('SWAG-CUSTOMER-GROUP-UUID-', customer_group_id) WHERE customer_group_id  IS NOT NULL;
-UPDATE shop SET fallback_locale_uuid  = CONCAT('SWAG-LOCALE-UUID-', fallback_id) WHERE fallback_locale_uuid  IS NOT NULL;
+UPDATE shop SET fallback_locale_uuid  = CONCAT('SWAG-LOCALE-UUID-', fallback_id) WHERE fallback_id  IS NOT NULL;
 UPDATE shop SET payment_method_uuid  = CONCAT('SWAG-PAYMENT-METHOD-UUID-', payment_method_id) WHERE payment_method_id  IS NOT NULL;
 UPDATE shop SET shipping_method_uuid  = CONCAT('SWAG-SHIPPING-METHOD-UUID-', shipping_method_id) WHERE shipping_method_id  IS NOT NULL;
 UPDATE shop SET area_country_uuid  = CONCAT('SWAG-AREA-COUNTRY-UUID-', area_country_id) WHERE area_country_id  IS NOT NULL;
@@ -1739,6 +1742,9 @@ UPDATE shipping_method_price SET uuid = CONCAT('SWAG-SHIPPING-COST-PRICE-UUID-',
 UPDATE shipping_method_price SET shipping_method_uuid = CONCAT('SWAG-SHIPPING-METHOD-UUID-', shipping_method_id) WHERE shipping_method_id IS NOT NULL;
 UPDATE category SET product_stream_uuid = CONCAT('SWAG-PRODUCT-STREAM-UUID-', product_stream_id) WHERE product_stream_id IS NOT NULL;
 UPDATE category SET media_uuid = CONCAT('SWAG-MEDIA-UUID-', media_id) WHERE media_id IS NOT NULL AND media_id > 0;
+UPDATE product_configurator_group SET uuid = CONCAT('SWAG-PRODUCT-CONFIGURATOR-GROUP-UUID-', id) WHERE id IS NOT NULL;
+UPDATE product_configurator_option SET uuid = CONCAT('SWAG-PRODUCT-CONFIGURATOR-OPTION-UUID-', id) WHERE id IS NOT NULL;
+UPDATE product_configurator_option SET product_configurator_group_uuid = CONCAT('SWAG-PRODUCT-CONFIGURATOR-GROUP-UUID-', group_id) WHERE group_id IS NOT NULL;
 UPDATE product_stream SET uuid = CONCAT('SWAG-PRODUCT-STREAM-UUID-', id) WHERE id IS NOT NULL;
 UPDATE product_stream SET listing_sorting_uuid = CONCAT('SWAG-LISTING-SORTING-UUID-', listing_sorting_id) WHERE listing_sorting_id IS NOT NULL;
 UPDATE product_stream_tab SET product_stream_uuid = CONCAT('SWAG-PRODUCT-STREAM-UUID-', product_stream_id) WHERE product_stream_id IS NOT NULL;
@@ -1775,7 +1781,7 @@ UPDATE customer_address SET area_country_uuid = CONCAT('SWAG-AREA-COUNTRY-UUID-'
 UPDATE customer_address SET area_country_state_uuid = CONCAT('SWAG-AREA-COUNTRY-STATE-UUID-', area_country_state_id) WHERE area_country_state_id IS NOT NULL;
 UPDATE customer_address SET uuid = CONCAT('SWAG-CUSTOMER-ADDRESS-UUID-', id) WHERE id IS NOT NULL;
 UPDATE customer_address_attribute SET uuid = CONCAT('SWAG-CUSTOMER-ADDRESS-ATTRIBUTE-UUID-', id) WHERE id IS NOT NULL;
-UPDATE customer_address_attribute SET address_uuid = CONCAT('SWAG-CUSTOMER-ADDRESS-UUID-', address_id) WHERE address_id IS NOT NULL;
+UPDATE customer_address_attribute SET customer_address_uuid = CONCAT('SWAG-CUSTOMER-ADDRESS-UUID-', address_id) WHERE address_id IS NOT NULL;
 UPDATE customer_attribute SET uuid = CONCAT('SWAG-CUSTOMER-ATTRIBUTE-UUID-', id) WHERE id IS NOT NULL;
 UPDATE customer_attribute SET customer_uuid = CONCAT('SWAG-CUSTOMER-UUID-', customer_id) WHERE customer_id IS NOT NULL;
 UPDATE album SET uuid = CONCAT('SWAG-ALBUM-UUID-', id);
@@ -1785,7 +1791,7 @@ UPDATE media_attribute SET uuid = CONCAT('SWAG-MEDIA-ATTRIBUTE-UUID-', id);
 UPDATE media_attribute SET media_uuid = CONCAT('SWAG-MEDIA-UUID-', media_id);
 UPDATE premium_product SET uuid = CONCAT('SWAG-PREMIUM-PRODUCT-UUID-', id) WHERE id IS NOT NULL;
 UPDATE premium_product SET shop_uuid = CONCAT('SWAG-SHOP-UUID-', shop_id) WHERE shop_id IS NOT NULL AND shop_id > 0;
-UPDATE premium_product SET product_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', (SELECT p.id FROM product_detail p WHERE p.order_number = product_order_number));
+UPDATE premium_product SET product_detail_uuid = (SELECT p.order_number FROM product_detail p WHERE p.order_number = product_order_number);
 UPDATE attribute_configuration SET uuid = CONCAT('SWAG-ATTRIBUTE-CONFIGURATION-UUID-', id) WHERE id IS NOT NULL;
 UPDATE blog SET uuid = CONCAT('SWAG-BLOG-UUID-', id) WHERE id IS NOT NULL;
 UPDATE blog SET category_uuid = CONCAT('SWAG-CATEGORY-UUID-', category_id) WHERE category_id IS NOT NULL;
@@ -1836,6 +1842,7 @@ UPDATE mail_attribute SET uuid = CONCAT('SWAG-MAIL-ATTRIBUTE-UUID-', id) WHERE i
 UPDATE mail_attribute SET mail_uuid = CONCAT('SWAG-MAIL-UUID-', mail_id) WHERE mail_id IS NOT NULL;
 UPDATE config_form_field_value SET uuid = CONCAT('SWAG-CONFIG-FORM-FIELD-VALUE-UUID-', id) WHERE id IS NOT NULL;
 UPDATE config_form_field_value SET shop_uuid = CONCAT('SWAG-SHOP-UUID-', shop_id) WHERE shop_id IS NOT NULL;
+UPDATE config_form_field_value SET config_form_field_uuid = CONCAT('SWAG-CONFIG-FORM-FIELD-UUID-', config_form_field_id) WHERE config_form_field_id IS NOT NULL;
 UPDATE area SET uuid = CONCAT('SWAG-AREA-UUID-', id) WHERE id IS NOT NULL;
 UPDATE area_country_attribute SET uuid = CONCAT('SWAG-AREA-COUNTRY-ATTRIBUTE-UUID-', id) WHERE id IS NOT NULL;
 UPDATE area_country_attribute SET area_country_uuid = CONCAT('SWAG-AREA-COUNTRY-UUID-', area_country_id) WHERE area_country_id IS NOT NULL;
@@ -1853,12 +1860,12 @@ UPDATE locale SET uuid = CONCAT('SWAG-LOCALE-UUID-', id) WHERE id IS NOT NULL;
 UPDATE product p SET p.uuid = CONCAT('SWAG-PRODUCT-UUID-', p.id);
 UPDATE product p SET p.product_manufacturer_uuid = CONCAT('SWAG-PRODUCT-MANUFACTURER-UUID-', p.manufacturer_id) WHERE product_manufacturer_uuid IS NOT NULL;
 UPDATE product p SET p.tax_uuid = CONCAT('SWAG-TAX-UUID-', p.tax_id) WHERE tax_id IS NOT NULL;
-UPDATE product p SET p.main_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', p.main_detail_id) WHERE main_detail_id IS NOT NULL;
+UPDATE product p SET p.main_detail_uuid = (SELECT sub.order_number FROM product_detail sub WHERE sub.id = p.main_detail_id LIMIT 1);
 UPDATE product p SET p.filter_group_uuid = CONCAT('SWAG-FILTER-UUID-', p.filter_group_id) WHERE filter_group_id IS NOT NULL;
 UPDATE product_also_bought_ro pabr SET pabr.product_uuid = CONCAT('SWAG-PRODUCT-UUID-',pabr.product_id) WHERE pabr.product_id  IS NOT NULL;
 UPDATE product_also_bought_ro pabr SET pabr.related_product_uuid = CONCAT('SWAG-PRODUCT-UUID-',pabr.related_product_id) WHERE related_product_id  IS NOT NULL;
 UPDATE product_attribute pa SET pa.uuid = CONCAT('SWAG-PRODUCT-ATTRIBUTE-UUID-', pa.id);
-UPDATE product_attribute pa SET pa.product_detail_uuid = CONCAT('SWAG-PRODUCT-DETAIL-UUID-', pa.product_details_id);
+UPDATE product_attribute pa SET pa.product_detail_uuid = (SELECT sub.order_number FROM product_detail sub WHERE sub.id = pa.product_details_id LIMIT 1);
 UPDATE log SET uuid = CONCAT('SWAG-LOG-UUID-', id) WHERE id IS NOT NULL;
 UPDATE payment_method SET uuid = CONCAT('SWAG-PAYMENT-METHOD-UUID-', id) WHERE id IS NOT NULL;
 UPDATE payment_method_attribute SET uuid = CONCAT('SWAG-PAYMENT-METHOD-ATTRIBUTE-UUID-', id) WHERE id IS NOT NULL;
@@ -2081,7 +2088,7 @@ ALTER TABLE `product_avoid_customer_group`
     ADD UNIQUE `product_uuid_customer_group_uuid` (`product_uuid`, `customer_group_uuid`);
 
 ALTER TABLE `customer_address_attribute`
-    ADD UNIQUE `address_uuid` (`address_uuid`);
+    ADD UNIQUE `customer_address_uuid` (`customer_address_uuid`);
 
 ALTER TABLE `product_category_seo`
     ADD INDEX `shop_uuid_product_uuid` (`shop_uuid`, `product_uuid`),
@@ -2399,7 +2406,7 @@ FOREIGN KEY (area_country_uuid) REFERENCES area_country (uuid) ON DELETE CASCADE
 
 ALTER TABLE customer_address_attribute
     ADD CONSTRAINT `fk_customer_address_attribute.customer_address_uuid`
-FOREIGN KEY (address_uuid) REFERENCES customer_address (uuid) ON DELETE CASCADE ON UPDATE CASCADE;
+FOREIGN KEY (customer_address_uuid) REFERENCES customer_address (uuid) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE customer_attribute
     ADD CONSTRAINT `fk_customer_attribute.customer_uuid`
