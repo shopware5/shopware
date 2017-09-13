@@ -55,6 +55,13 @@ class Site extends ModelEntity
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = false;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="tpl1variable", type="string", nullable=false)
@@ -208,6 +215,22 @@ class Site extends ModelEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param int $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 
     /**

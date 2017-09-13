@@ -201,6 +201,7 @@ class SitePageMenu
         );
 
         $query->andWhere('groups.active = 1')
+            ->andWhere('page.active = 1')
             ->andWhere("CONCAT('|', page.grouping, '|') LIKE CONCAT('%|', groups.key, '|%')")
             ->andWhere('(mapping.id IS NULL OR shops.shop_id IS NOT NULL)')
             ->andWhere('(mapping.id IS NULL OR mapping.active=1)')
