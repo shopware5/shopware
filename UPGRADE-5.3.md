@@ -8,13 +8,20 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ### Additions
 
+* Added filtering of model fields with possibly insecure content
 * Added new container parameter `active_plugins` which contains an array of installed and active plugins
+* Added variables `image_small`, `image_large`, `image_original`, `link_rating_tab` to product rating reminder email
+* Added SVG and WOFF files to the list of compressible mimetypes
 * Added functionality to show the backend growl messages in each corner of the screen (configurable in basic settings)
 * Added smarty block `backend/base/model/corner_position` for corner position configuration model
 * Added smarty block `backend/base/store/corner_position` for corner position configuration store
 * Added functionality to open the drop down menus of the main menu in the backend by using either mouse hover or mouse click (configurable in basic settings)
-* Updated mPDF to version 6.1.4
-* Added variables `image_small`, `image_large`, `image_original`, `link_rating_tab` to product rating reminder email
+
+### Changes
+
+* Updated mPDF to version 6.1.4 and required it via composer
+* Updated CustomerStream interface to improve usability
+* Fixed typos im mail templates
 
 ## 5.3.2
 
