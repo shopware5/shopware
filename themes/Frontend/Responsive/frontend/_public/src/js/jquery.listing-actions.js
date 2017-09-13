@@ -1396,6 +1396,9 @@
                     labelText = $label.html() + ' ' + $label.next('[data-date-range-input]').attr('data-display-value');
                 } else if ($label.find('img').length) {
                     labelText = $label.find('img').attr('alt');
+                } else if ($label.closest(this.opts.filterComponentSelector).is('[data-filter-type="radio"]')) {
+                    var activeRadioId = $label.closest(this.opts.filterComponentSelector).find('input:checked').attr('id');
+                    labelText = this.$filterForm.find('label[for="' + this.escapeDoubleQuotes(activeRadioId) + '"]').html();
                 } else if (value > 0 || valueString.length > 0) {
                     labelText = $label.html();
                 }
