@@ -488,6 +488,15 @@ class Kernel implements HttpKernelInterface
         if (!defined('_MPDF_TTFONTDATAPATH')) {
             define('_MPDF_TTFONTDATAPATH', $this->getCacheDir() . '/mpdf/ttfontdata/');
         }
+
+        // Set up custom mPDF fonts
+        if (!defined('_MPDF_SYSTEM_TTFONTS_CONFIG')) {
+            define('_MPDF_SYSTEM_TTFONTS_CONFIG', $this->getRootDir() . '/engine/Library/Mpdf/config_fonts.php');
+        }
+
+        if (!defined('_MPDF_SYSTEM_TTFONTS')) {
+            define('_MPDF_SYSTEM_TTFONTS', $this->getRootDir() . '/engine/Library/Mpdf/ttfonts/');
+        }
     }
 
     /**

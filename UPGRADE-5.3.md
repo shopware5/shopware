@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added smarty block `backend/base/model/corner_position` for corner position configuration model
 * Added smarty block `backend/base/store/corner_position` for corner position configuration store
 * Added functionality to open the drop down menus of the main menu in the backend by using either mouse hover or mouse click (configurable in basic settings)
+* Updated mPDF to version 6.1.4
 
 ## 5.3.2
 
