@@ -10,7 +10,11 @@
         <service id="oyejorge_compiler" class="Shopware\Components\Theme\LessCompiler\Oyejorge">
             <argument type="service" id="oyejorge_compiler_lib" />
         </service>
-        <service id="oyejorge_compiler_lib" class="Less_Parser" />
+        <service id="oyejorge_compiler_lib" class="Less_Parser">
+            <argument type="collection">
+                <argument key="cache_dir">%kernel.cache_dir%/less_parser/</argument>
+            </argument>
+        </service>
 
         <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js" />
 
