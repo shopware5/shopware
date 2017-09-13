@@ -391,7 +391,6 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             shipping.get('zipCode') !== billing.get('zipCode') ||
             shipping.get('city') !== billing.get('city') ||
             shipping.get('stateId') !== billing.get('stateId') ||
-            shipping.get('phone') !== billing.get('phone') ||
             shipping.get('countryId') !== billing.get('countryId')) {
 
             var helper = new Ext.dom.Helper;
