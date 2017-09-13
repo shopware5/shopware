@@ -95,7 +95,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             FROM s_core_shop_pages shopPages
               INNER JOIN s_cms_static_groups groups
                 ON groups.id = shopPages.group_id
-            WHERE shopPages.shop_id = ?
+            WHERE shopPages.shop_id = ? and shopPages.active = 1
         ';
 
         $statement = Shopware()->Db()->executeQuery($sql, [$shopId]);

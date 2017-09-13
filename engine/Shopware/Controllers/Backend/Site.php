@@ -450,6 +450,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //build the structure
         $node = [
             'id' => $idPrefix . $site->getId(),
+            'active' => $site->getActive(),
             'text' => $site->getDescription() . '(' . $site->getId() . ')',
             'helperId' => $site->getId(),
             'iconCls' => $iconCls,
