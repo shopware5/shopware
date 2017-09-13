@@ -26,6 +26,7 @@ namespace   Shopware\Models\Customer;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Security\AttributeCleanerTrait;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 
@@ -58,6 +59,12 @@ use Shopware\Models\Country\State;
  */
 class Address extends ModelEntity
 {
+    /*
+     * HTML Cleansing trait for different attributes in a class (implemented in setters)
+     * @see \Shopware\Components\Security\AttributeCleanerTrait
+     */
+    use AttributeCleanerTrait;
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field
@@ -246,7 +253,7 @@ class Address extends ModelEntity
      */
     public function setCompany($company)
     {
-        $this->company = $company;
+        $this->company = $this->cleanup($company);
     }
 
     /**
@@ -266,7 +273,7 @@ class Address extends ModelEntity
      */
     public function setDepartment($department)
     {
-        $this->department = $department;
+        $this->department = $this->cleanup($department);
     }
 
     /**
@@ -286,7 +293,7 @@ class Address extends ModelEntity
      */
     public function setSalutation($salutation)
     {
-        $this->salutation = $salutation;
+        $this->salutation = $this->cleanup($salutation);
     }
 
     /**
@@ -306,7 +313,7 @@ class Address extends ModelEntity
      */
     public function setFirstname($firstname)
     {
-        $this->firstname = $firstname;
+        $this->firstname = $this->cleanup($firstname);
     }
 
     /**
@@ -366,7 +373,7 @@ class Address extends ModelEntity
      */
     public function setZipcode($zipcode)
     {
-        $this->zipcode = $zipcode;
+        $this->zipcode = $this->cleanup($zipcode);
     }
 
     /**
@@ -386,7 +393,7 @@ class Address extends ModelEntity
      */
     public function setCity($city)
     {
-        $this->city = $city;
+        $this->city = $this->cleanup($city);
     }
 
     /**
@@ -406,7 +413,7 @@ class Address extends ModelEntity
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = $this->cleanup($phone);
     }
 
     /**
@@ -427,7 +434,7 @@ class Address extends ModelEntity
      */
     public function setVatId($vatId)
     {
-        $this->vatId = $vatId;
+        $this->vatId = $this->cleanup($vatId);
     }
 
     /**
@@ -482,7 +489,7 @@ class Address extends ModelEntity
      */
     public function setAdditionalAddressLine1($additionalAddressLine1)
     {
-        $this->additionalAddressLine1 = $additionalAddressLine1;
+        $this->additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
     }
 
     /**
@@ -502,7 +509,7 @@ class Address extends ModelEntity
      */
     public function setAdditionalAddressLine2($additionalAddressLine2)
     {
-        $this->additionalAddressLine2 = $additionalAddressLine2;
+        $this->additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
     }
 
     /**
@@ -576,6 +583,6 @@ class Address extends ModelEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = $this->cleanup($title);
     }
 }
