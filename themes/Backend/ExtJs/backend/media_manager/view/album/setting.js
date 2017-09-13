@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     alias: 'widget.mediamanager-album-setting',
     border: false,
     width: 600,
-    height: 600,
+    height: 700,
     layout: 'fit',
     autoShow: true,
 
@@ -328,6 +328,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
         });
 
         me.thumbnailView = Ext.create('Ext.view.View', {
+            cls: 'thumbnail-container',
             itemSelector: '.thumb-wrap-tiny',
             tpl: me.createThumbnailTemplate(),
             store: me.thumbnailStore,
@@ -417,12 +418,15 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      * @return [object] Ext.XTemplate
      */
     createThumbnailTemplate: function () {
+        var me = this,
+            title = me.snippets.settings.thumbSize;
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-            '<div class="thumb-wrap-tiny">',
+            '<div class="thumb-wrap-tiny" title="'+title+'">',
             '<div class="thumb"><span class="number">{index}</span></div>',
-            '<span class="x-editable">{value}</span></div>',
-            '</tpl>',
+            '<input class="x-form-field x-form-text x-editable" value="{value}" />',
+            '</div></tpl>',
             '<div class="x-clear"></div>{/literal}'
         );
     },

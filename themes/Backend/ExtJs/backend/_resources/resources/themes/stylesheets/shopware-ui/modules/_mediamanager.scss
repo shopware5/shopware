@@ -215,7 +215,7 @@
 	    width: 79px;
 	    display: block;
 	    float: left;
-	    margin: 10px;
+	    margin: 10px 10px 15px 10px;
         position: relative;
 
 	    .thumb {
@@ -254,6 +254,14 @@
 	    .x-editable {
 	        color: #6c818f;
 	        font-size: 11px;
+			border:1px solid #acbbc6;
+			border-radius:2px;
+			background-color:#fdfdfd;
+			display:block;
+			float:left;
+			width:100%;
+			cursor:pointer;
+			padding:2px;
 	    }
 
 	    // Selected mode
@@ -265,19 +273,27 @@
 	    }
 	}
 
+	.thumbnail-container {
+		height:140px;
+		overflow-y:auto;
+	}
+
 	.thumb-wrap-tiny {
-	    width: 44px;
+	    width: 90px;
 	    display: block;
 	    float: left;
 	    margin: 10px;
 
 	    .thumb {
 	        border: 1px solid #acbbc6;
-	        width: 44px;
-	        height: 44px;
+	        width: 90px;
+	        height: 90px;
+			background-color: #fdfdfd;
 	        background: theme-image($theme, 'media_manager_image_bg_tiny.png') no-repeat;
+			background-size:cover;
 	        position: relative;
-
+			margin-bottom:3px;
+			border-radius:1px;
 	        .number {
 	            @include border-radius(20px);
 	            display: block;
@@ -290,16 +306,17 @@
 	            position: absolute;
 	            top: 50%; left: 50%;
 	            margin: -10px 0 0 -10px;
-
 	        }
 	    }
 
 	    .x-editable {
-	        display: block;
-	        width: 44px;
-	        text-algin: center;
-	        color: #6c818f;
-	        font-size: 11px;
+			text-align:left;
+			width:90px;
+			height:24px;
+			cursor:pointer;
+			font-size:11px;
+			border:1px solid #cccccc;
+			border-radius:2px;
 	    }
 
 	}
