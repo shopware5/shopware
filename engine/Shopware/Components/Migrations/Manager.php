@@ -137,9 +137,8 @@ class Manager
     public function getCurrentVersion()
     {
         $sql = 'SELECT version FROM s_schema_version WHERE complete_date IS NOT NULL ORDER BY version DESC';
-        $currentVersion = (int) $this->connection->query($sql)->fetchColumn();
 
-        return $currentVersion;
+        return (int) $this->connection->query($sql)->fetchColumn();
     }
 
     /**

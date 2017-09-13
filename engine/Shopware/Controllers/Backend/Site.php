@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Site\Site as Site;
+use Shopware\Models\Site\Site;
 
 /**
  * Shopware Site Controller

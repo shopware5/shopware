@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\ProductFeed\ProductFeed as ProductFeed;
+use Shopware\Models\ProductFeed\ProductFeed;
 
 /**
  * Shopware Backend Controller for the Voucher Module

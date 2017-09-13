@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceRule extends Extendable implements \JsonSerializable
+class PriceRule extends Extendable
 {
     /**
      * @var int

@@ -233,9 +233,8 @@ class ProductNumberService implements ProductNumberServiceInterface
             ->setParameter(':productId', $productId);
 
         $statement = $query->execute();
-        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        return $selected;
+        return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -253,10 +252,7 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query->setMaxResults(1);
         $query->setParameter(':productId', $productId);
 
-        $statement = $query->execute();
-        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-
-        return $selected;
+        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -275,10 +271,7 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query->setMaxResults(1);
         $query->setParameter(':productId', $productId);
 
-        $statement = $query->execute();
-        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-
-        return $selected;
+        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
