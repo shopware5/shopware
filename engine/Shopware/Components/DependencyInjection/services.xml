@@ -605,6 +605,10 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
+        <service id="shopware.emotion.emotion_landingpage_loader" class="Shopware\Components\Emotion\LandingPageViewLoader">
+            <argument type="service" id="emotion_device_configuration"/>
+        </service>
+
         <service id="shopware.emotion.translation_importer" class="Shopware\Components\Emotion\EmotionTranslationImporter">
             <argument type="service" id="dbal_connection" />
         </service>
