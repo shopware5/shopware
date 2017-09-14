@@ -51,6 +51,10 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
         $translator = new Shopware_Components_Translation();
         $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
 
+        if (!empty($translation['name'])) {
+            $landingPage['name'] = $translation['name'];
+        }
+
         if (!empty($translation['seoTitle'])) {
             $landingPage['seo_title'] = $translation['seoTitle'];
         }
