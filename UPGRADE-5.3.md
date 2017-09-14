@@ -33,6 +33,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Updated CustomerStream interface to improve usability
 
+### Changes
+
+* Changed the pagination of the blog by adding the filters to the pagination links
+
 ## 5.3.2
 
 [View all changes from v5.3.1...v5.3.2](https://github.com/shopware/shopware/compare/v5.3.1...v5.3.2)

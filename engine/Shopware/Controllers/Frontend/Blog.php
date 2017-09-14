@@ -246,7 +246,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sBlogArticles' => $blogArticles,
         ];
 
-        $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)));
+        $filters = [
+            'sFilterDate' => urlencode($sFilterDate),
+            'sFilterAuthor' => urlencode($sFilterAuthor),
+            'sFilterTags' => urlencode($sFilterTags),
+        ];
+
+        $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId, $filters)));
     }
 
     /**
@@ -555,10 +561,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      * @param $sLimitEnd
      * @param $sPage
      * @param $categoryId
+     * @param array $filters
      *
      * @return array
      */
-    protected function getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)
+    protected function getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId, $filters = [])
     {
         // How many pages in this category?
         if ($sLimitEnd != 0) {
@@ -570,6 +577,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         // Make Array with page-structure to render in template
         $pages = [];
 
+        // Delete empty filters and add needed parameters to array
+        $userParams = array_filter($filters);
+        $userParams['sViewport'] = 'blog';
+        $userParams['sCategory'] = $categoryId;
+
         if ($numberPages > 1) {
             for ($i = 1; $i <= $numberPages; ++$i) {
                 if ($i == $sPage) {
@@ -577,18 +589,22 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 } else {
                     $pages['numbers'][$i]['markup'] = false;
                 }
+                $userParams['sPage'] = $i;
+
                 $pages['numbers'][$i]['value'] = $i;
-                $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'sCategory' => $categoryId, 'sPage' => $i]);
+                $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble($userParams);
             }
             // Previous page
             if ($sPage != 1) {
-                $pages['previous'] = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'sCategory' => $categoryId, 'sPage' => $sPage - 1]);
+                $userParams['sPage'] = $sPage - 1;
+                $pages['previous'] = $this->Front()->Router()->assemble($userParams);
             } else {
                 $pages['previous'] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages['next'] = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'sCategory' => $categoryId, 'sPage' => $sPage + 1]);
+                $userParams['sPage'] = $sPage + 1;
+                $pages['next'] = $this->Front()->Router()->assemble($userParams);
             } else {
                 $pages['next'] = null;
             }
