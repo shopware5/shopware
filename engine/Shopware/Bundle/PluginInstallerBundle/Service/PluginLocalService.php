@@ -161,12 +161,12 @@ class PluginLocalService
     }
 
     /**
-     * @param $plugins
+     * @param array       $plugins
      * @param BaseRequest $context
      *
      * @return PluginStruct[]
      */
-    private function iteratePlugins($plugins, BaseRequest $context)
+    private function iteratePlugins(array $plugins, BaseRequest $context)
     {
         $locale = substr($context->getLocale(), 0, 2);
 
@@ -195,7 +195,8 @@ class PluginLocalService
                     if (isset($item[$lang])) {
                         $changelog[] = [
                             'version' => $version,
-                            'text'    => $item[$lang]
+                            // The implode concatenates multiple entries for one language
+                            'text' => $this->parseChangeLog(trim(implode($item[$lang], ''))),
                         ];
                     }
                 }
@@ -274,5 +275,29 @@ class PluginLocalService
             ->groupBy('plugin.id');
 
         return $query;
+    }
+
+    /**
+     * Removes all but allowed tags and attributes from the content of the HTML.
+     *
+     * @param string $html
+     *
+     * @return string
+     */
+    private function parseChangeLog($html)
+    {
+        $html = strip_tags($html, '<br><i><b><strong><em><del><u><div><span><ul><li><ll><ol><p><a>');
+
+        $dom = new \DOMDocument();
+        $dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+        $xpath = new \DOMXPath($dom);
+        $nodes = $xpath->query("//@*[local-name() != 'href']");
+
+        foreach ($nodes as $node) {
+            $node->parentNode->removeAttribute($node->nodeName);
+        }
+
+        return $dom->saveHTML();
     }
 }
