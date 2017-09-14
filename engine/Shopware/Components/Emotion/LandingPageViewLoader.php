@@ -25,6 +25,7 @@
 namespace Shopware\Components\Emotion;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Translation;
 
 class LandingPageViewLoader
 {
@@ -34,11 +35,20 @@ class LandingPageViewLoader
     private $deviceConfiguration;
 
     /**
-     * @param DeviceConfiguration $deviceConfiguration
+     * @var Shopware_Components_Translation
      */
-    public function __construct(DeviceConfiguration $deviceConfiguration)
-    {
+    private $translationComponent;
+
+    /**
+     * @param DeviceConfiguration                  $deviceConfiguration
+     * @param Shopware_Components_Translation|null $translationComponent
+     */
+    public function __construct(
+        DeviceConfiguration $deviceConfiguration,
+        Shopware_Components_Translation $translationComponent = null
+    ) {
         $this->deviceConfiguration = $deviceConfiguration;
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
     /**
@@ -65,8 +75,7 @@ class LandingPageViewLoader
             );
         }
 
-        $translator = new \Shopware_Components_Translation();
-        $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
+        $translation = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
 
         if (!empty($translation['seoTitle'])) {
             $landingPage['seo_title'] = $translation['seoTitle'];

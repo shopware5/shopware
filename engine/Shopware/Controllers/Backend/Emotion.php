@@ -22,12 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Emotion\Element;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
 use Shopware\Models\Shop\Shop;
@@ -48,6 +48,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * @var null
      */
     protected $manager = null;
+
+    /**
+     * @var Shopware_Components_Translation
+     */
+    private $translation;
 
     /**
      * {@inheritdoc}
@@ -600,10 +605,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 /** @var $entity Emotion */
                 $entity = $this->getRepository()->find($emotion['id']);
 
-                $translator = new Shopware_Components_Translation();
                 /** @var \Shopware\Models\Emotion\Element $element */
                 foreach ($entity->getElements() as $element) {
-                    $translator->delete(null, 'emotionElement', $element->getId());
+                    $this->getTranslation()->delete(null, 'emotionElement', $element->getId());
                 }
 
                 // delete created previews
@@ -1062,6 +1066,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         return $this->manager;
     }
 
+    private function getTranslation()
+    {
+        if ($this->translation === null) {
+            $this->translation = $this->container->get('translation');
+        }
+
+        return $this->translation;
+    }
+
     /**
      * @param int $emotionId
      *
@@ -1366,8 +1379,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             return;
         }
 
-        $translation = new Shopware_Components_Translation();
-
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
 
@@ -1377,14 +1388,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             ->fetchAll(PDO::FETCH_COLUMN);
 
         foreach ($languageIds as $id) {
-            $data = $translation->read($id, 'emotion', $oldId);
+            $data = $this->getTranslation()->read($id, 'emotion', $oldId);
 
             if (empty($data)) {
                 continue;
             }
 
             $data['name'] = $data['name'] . ' - Copy';
-            $translation->write($id, 'emotion', $newId, $data);
+            $this->getTranslation()->write($id, 'emotion', $newId, $data);
         }
     }
 
@@ -1398,8 +1409,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         if (empty($emotions)) {
             return;
         }
-
-        $translation = new Shopware_Components_Translation();
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
@@ -1415,7 +1424,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
 
             foreach ($languageIds as $id) {
-                $translation->delete($id, 'emotion', $emotion['id']);
+                $this->getTranslation()->delete($id, 'emotion', $emotion['id']);
             }
         }
     }
@@ -1511,7 +1520,7 @@ EOD;
             'name' => $emotion->getName(),
         ];
 
-        $translator = new Shopware_Components_Translation();
+        $translator = $this->getTranslation();
         $routerCampaignTemplate = Shopware()->Config()->get('routerCampaignTemplate');
 
         /** @var Shop $shop */

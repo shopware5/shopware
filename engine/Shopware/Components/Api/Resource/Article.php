@@ -34,6 +34,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Translation;
 
 /**
  * Article API Resource
@@ -44,6 +45,19 @@ use Shopware\Models\Shop\Shop;
  */
 class Article extends Resource implements BatchInterface
 {
+    /**
+     * @var Shopware_Components_Translation
+     */
+    private $translationComponent;
+
+    /**
+     * @param Shopware_Components_Translation|null $translationComponent
+     */
+    public function __construct(Shopware_Components_Translation $translationComponent = null)
+    {
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+    }
+
     /**
      * @return \Shopware\Models\Article\Repository
      */
@@ -184,9 +198,8 @@ class Article extends Resource implements BatchInterface
             $query = $this->getManager()->createQuery('SELECT shop FROM Shopware\Models\Shop\Shop as shop');
             $shops = $query->getArrayResult();
 
-            $translationReader = new \Shopware_Components_Translation();
             foreach ($shops as $shop) {
-                $translation = $translationReader->read($shop['id'], 'article', $id);
+                $translation = $this->translationComponent->read($shop['id'], 'article', $id);
                 if (!empty($translation)) {
                     $translation['shopId'] = $shop['id'];
                     $article['translations'][$shop['id']] = $translation;
@@ -632,6 +645,8 @@ class Article extends Resource implements BatchInterface
      * @param int   $articleId
      * @param array $translations
      *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     public function writeTranslations($articleId, $translations)
@@ -646,9 +661,8 @@ class Article extends Resource implements BatchInterface
             'packUnit',
         ]);
 
-        $translationWriter = new \Shopware_Components_Translation();
         foreach ($translations as $translation) {
-            $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['shopId']);
+            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
             if (!$shop) {
                 throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
             }
@@ -662,7 +676,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $data = array_intersect_key($translation, array_flip($whitelist));
-            $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+            $this->translationComponent->write($shop->getId(), 'article', $articleId, $data);
         }
     }
 

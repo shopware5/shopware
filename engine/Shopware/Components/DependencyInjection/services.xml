@@ -167,6 +167,10 @@
             <argument>%shopware.config%</argument>
          </service>
 
+        <service class="Shopware_Components_Translation" id="translation">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
         <service id="shopware.event_manager" alias="events" />
         <service id="events" class="Shopware\Components\ContainerAwareEventManager">
             <argument type="service" id="service_container"/>
@@ -515,7 +519,6 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-
         <service id="shopware.components.last_articles_subscriber" class="Shopware\Components\LastArticlesSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
@@ -554,7 +557,9 @@
 
         <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false" />
         <service id="shopware.api.address" class="Shopware\Components\Api\Resource\Address" shared="false" />
-        <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false" />
+        <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false">
+            <argument type="service" id="translation" />
+        </service>
         <service id="shopware.api.cache" class="Shopware\Components\Api\Resource\Cache" shared="false" />
         <service id="shopware.api.category" class="Shopware\Components\Api\Resource\Category" shared="false" />
         <service id="shopware.api.country" class="Shopware\Components\Api\Resource\Country" shared="false" />
@@ -565,7 +570,9 @@
         <service id="shopware.api.order" class="Shopware\Components\Api\Resource\Order" shared="false" />
         <service id="shopware.api.propertygroup" class="Shopware\Components\Api\Resource\PropertyGroup" shared="false" />
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
-        <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
+        <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false">
+            <argument type="service" id="translation" />
+        </service>
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
 
         <service id="shopware.api.emotionpreset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
@@ -607,10 +614,12 @@
 
         <service id="shopware.emotion.emotion_landingpage_loader" class="Shopware\Components\Emotion\LandingPageViewLoader">
             <argument type="service" id="emotion_device_configuration"/>
+            <argument type="service" id="translation"/>
         </service>
 
         <service id="shopware.emotion.translation_importer" class="Shopware\Components\Emotion\EmotionTranslationImporter">
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="translation" />
         </service>
 
         <service id="shopware.emotion.preset_loader" class="Shopware\Components\Emotion\Preset\PresetLoader">
@@ -685,13 +694,7 @@
         </service>
 
         <service id="shopware.model.search_builder" class="Shopware\Components\Model\SearchBuilder">
-            <argument id="shopware_backend_searchdbal.search_term_helper" type="service"/>
-        </service>
-
-        <service id="shopware_backend_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">
-            <argument type="service" id="config" />
-            <argument>false</argument>
-            <argument>false</argument>
+            <argument id="shopware_searchdbal.search_term_helper" type="service"/>
         </service>
 
     </services>

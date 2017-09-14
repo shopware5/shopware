@@ -69,6 +69,19 @@ class Translation extends Resource implements BatchInterface
     protected $repository = null;
 
     /**
+     * @var \Shopware_Components_Translation
+     */
+    private $translationComponent;
+
+    /**
+     * @param \Shopware_Components_Translation|null $translationComponent
+     */
+    public function __construct(\Shopware_Components_Translation $translationComponent = null)
+    {
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+    }
+
+    /**
      * This methods needs to return an ID for the current resource.
      * The ID needs to be the primary ID of the resource (in most cases `id`).
      * If your resource supports other kinds of IDs, too, you should identify
@@ -96,11 +109,7 @@ class Translation extends Resource implements BatchInterface
      */
     public function getTranslationComponent()
     {
-        if ($this->translationWriter === null) {
-            $this->translationWriter = new \Shopware_Components_Translation();
-        }
-
-        return $this->translationWriter;
+        return $this->translationComponent;
     }
 
     /**
@@ -125,8 +134,8 @@ class Translation extends Resource implements BatchInterface
         $offset = 0,
         $limit = 25,
         array $criteria = [],
-        array $orderBy = [])
-    {
+        array $orderBy = []
+    ) {
         $this->checkPrivilege('read');
 
         $query = $this->getListQuery($offset, $limit, $criteria, $orderBy)->getQuery();
