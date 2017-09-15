@@ -129,7 +129,22 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 $this->forward('genericError', null, null, ['code' => $targetErrorCode]);
                 break;
             default:
-                $this->forward('index', 'campaign', 'frontend', ['emotionId' => $targetEmotionId]);
+
+                // Try to load the emotion landingpage, render default error in case it is unavailable
+                try {
+                    $result = $this->get('shopware.emotion.emotion_landingpage_loader')->load(
+                        $targetEmotionId,
+                        $this->get('shopware_storefront.context_service')->getShopContext()
+                    );
+
+                    $this->View()->loadTemplate('frontend/campaign/index.tpl');
+                    $this->View()->assign(json_decode(json_encode($result), true));
+                } catch (\Exception $ex) {
+                    $this->forward(
+                        Shopware()->Front()->Dispatcher()->getDefaultAction(),
+                        Shopware()->Front()->Dispatcher()->getDefaultControllerName()
+                    );
+                }
         }
     }
 

@@ -22,23 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
+namespace Shopware\Components\Emotion;
+
+class LandingPageViewStruct
 {
     /**
-     * Renders a shopping world as a landingpage.
-     *
-     * @throws \Enlight_Controller_Exception
+     * @var array
      */
-    public function indexAction()
-    {
-        $emotionId = $this->Request()->getParam('emotionId');
-        $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
+    public $sBreadcrumb;
 
-        $result = $this->get('shopware.emotion.emotion_landingpage_loader')->load(
-            $emotionId,
-            $shopContext
-        );
+    /**
+     * @var string
+     */
+    public $seo_title;
 
-        $this->View()->assign(json_decode(json_encode($result), true));
-    }
+    /**
+     * @var string
+     */
+    public $seo_keywords;
+
+    /**
+     * @var string
+     */
+    public $seo_description;
+
+    /**
+     * @var array
+     */
+    public $landingPage;
+
+    /**
+     * @var bool
+     */
+    public $hasEmotion;
+
+    /**
+     * @var bool
+     */
+    public $isEmotionLandingPage;
 }
