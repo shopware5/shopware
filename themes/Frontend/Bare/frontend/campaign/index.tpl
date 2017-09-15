@@ -12,6 +12,9 @@
     {/if}
 {/strip}{/block}
 
+{* In case this campaign is rendered as a pageNotFoundError, we make sure the sidebar menu is hidden by setting the campaign body class *}
+{block name="frontend_index_body_classes"}{$smarty.block.parent}{if {controllerName|lower} =='error'} is--ctl-campaign{/if}{/block}
+
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords|escapeHtml}{/if}{/block}
 
