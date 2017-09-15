@@ -683,6 +683,7 @@
                     });
 
                     $component
+                        .removeClass(me.opts.disabledCls)
                         .find('.' + me.opts.disabledCls)
                         .removeClass(me.opts.disabledCls);
                 });
