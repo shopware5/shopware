@@ -28,8 +28,8 @@ namespace Shopware\Storefront\Session;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Routing\Router;
 use Shopware\Storefront\Context\StorefrontContextServiceInterface;
-use Shopware\Storefront\DetailPage\DetailPageUrlGenerator;
-use Shopware\Storefront\ListingPage\ListingPageUrlGenerator;
+use Shopware\Storefront\Page\Detail\DetailPageUrlGenerator;
+use Shopware\Storefront\Page\Listing\ListingPageUrlGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,7 +40,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ShopSubscriber implements EventSubscriberInterface
 {
-    const SHOP_CONTEXT_PROPERTY = '_shop_context';
+    const SHOP_CONTEXT_PROPERTY = 'shop_context';
 
     /**
      * @var StorefrontContextServiceInterface

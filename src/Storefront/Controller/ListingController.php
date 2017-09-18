@@ -35,6 +35,12 @@ class ListingController extends FrontendController
      */
     public function indexAction(string $uuid, ShopContext $context, Request $request)
     {
-        return $this->render('frontend/home/index.html.twig');
+        $listingPageLoader = $this->get('shopware.storefront.page.listing.listing_page_loader');
+
+        $listingPage = $listingPageLoader->load($uuid, $request, $context);
+
+        return $this->render('frontend/listing/index.html.twig', [
+            'listing' => $listingPage
+        ]);
     }
 }

@@ -1,9 +1,15 @@
-{* Product image - uses the picture element for responsive retina images. *}
+{% extends file="frontend/listing/product-box/box-basic.tpl" %}
+
+{namespace name="frontend/listing/box_article"}
+
+{block name='frontend_listing_box_article_description'}{/block}
+
+{block name='frontend_listing_box_article_picture'}
 <a href="{$sArticle.linkDetails}"
    title="{$sArticle.articleName|escape}"
    class="product--image">
     {block name='frontend_listing_box_article_image_element'}
-        <span class="image--element">
+    <span class="image--element">
             {block name='frontend_listing_box_article_image_media'}
                 <span class="image--media">
 
@@ -16,7 +22,7 @@
                         {/if}
 
                         {block name='frontend_listing_box_article_image_picture_element'}
-                            <img srcset="{$sArticle.image.thumbnails[0].sourceSet}"
+                            <img srcset="{$sArticle.image.thumbnails[1].sourceSet}"
                                  alt="{$desc}"
                                  title="{$desc|truncate:160}" />
                         {/block}
@@ -30,3 +36,4 @@
         </span>
     {/block}
 </a>
+{/block}
