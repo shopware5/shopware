@@ -23,10 +23,13 @@ export default Shopware.ComponentFactory.register('core-product-detail', {
         };
     },
 
+    computed: {
+        productManufacturer() {
+            return this.productManufacturerService;
+        }
+    },
+
     created() {
-        this.productManufacturerService.readAll().then((response) => {
-            console.log(response);
-        });
         this.getData();
     },
 
