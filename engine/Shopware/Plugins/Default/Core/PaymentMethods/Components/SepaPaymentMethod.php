@@ -228,6 +228,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
     private function sendSepaEmail($orderNumber, $userId, $data)
     {
+        require_once Shopware()->DocPath() . 'engine/Library/Mpdf/mpdf.php';
+
         $mail = Shopware()->TemplateMail()->createMail('sORDERSEPAAUTHORIZATION', [
             'paymentInstance' => [
                 'firstName' => $data['firstname'],

@@ -24,6 +24,8 @@
 
 use Shopware\Components\NumberRangeIncrementerInterface;
 
+include_once Shopware()->DocPath() . 'engine/Library/Mpdf/mpdf.php';
+
 /**
  * Shopware document generator
  *
