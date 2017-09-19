@@ -297,9 +297,9 @@ class Enlight_Components_Cron_Manager
         $now = $now->getTimestamp();
         $interval =  $job->getInterval();
         $next = $job->getNext()->getTimestamp();
-        do {
+        while ($now >= $next) {
             $next += $interval;
-        } while ($now >= $next);
+        }
         $job->setNext($next);
         $job->setEnd($now);
 
