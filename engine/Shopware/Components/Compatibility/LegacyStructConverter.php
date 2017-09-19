@@ -40,7 +40,7 @@ use Shopware\Models\Emotion\Emotion;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class LegacyStructConverter
+class LegacyStructConverter implements LegacyStructConverterInterface
 {
     /**
      * @var \Shopware_Components_Config

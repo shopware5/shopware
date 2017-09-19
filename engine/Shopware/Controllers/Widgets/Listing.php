@@ -26,7 +26,7 @@ use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
-use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Compatibility\LegacyStructConverterInterface;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
@@ -568,7 +568,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function convertArticlesResult(ProductSearchResult $result, $categoryId)
     {
-        /** @var LegacyStructConverter $converter */
+        /** @var LegacyStructConverterInterface $converter */
         $converter = $this->get('legacy_struct_converter');
         /** @var RouterInterface $router */
         $router = $this->get('router');

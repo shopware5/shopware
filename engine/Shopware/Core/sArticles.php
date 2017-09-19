@@ -129,7 +129,7 @@ class sArticles
     private $db;
 
     /**
-     * @var \Shopware\Components\Compatibility\LegacyStructConverter
+     * @var \Shopware\Components\Compatibility\LegacyStructConverterInterface
      */
     private $legacyStructConverter;
 
