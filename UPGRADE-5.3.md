@@ -19,9 +19,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ### Changes
 
-* Updated mPDF to version 6.1.4 and required it via composer
 * Updated CustomerStream interface to improve usability
-* Fixed typos im mail templates
 
 ## 5.3.2
 
