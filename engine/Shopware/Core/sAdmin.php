@@ -2506,6 +2506,13 @@ class sAdmin
         ";
 
         $userId = $this->session->offsetGet('sUserId');
+
+        $sql = $this->eventManager->filter(
+            'Shopware_Modules_Admin_GetDispatchBasket_FilterSql',
+            $sql,
+            ['subject' => $this, 'user_id' => $userId]
+        );
+
         $sessionId = $this->session->offsetGet('sessionId');
         $basket = $this->db->fetchRow(
             $sql,
@@ -2726,6 +2733,13 @@ class sAdmin
         ";
 
         $userId = $this->session->offsetGet('sUserId');
+
+        $sql = $this->eventManager->filter(
+            'Shopware_Modules_Admin_GetPremiumDispatches_FilterSql',
+            $sql,
+            ['subject' => $this, 'user_id' => $userId]
+        );
+
         $dispatches = $this->db->fetchAssoc(
             $sql,
             [
