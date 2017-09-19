@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\CustomerAddress\Factory;
 
@@ -30,8 +8,8 @@ use Shopware\AreaCountry\Struct\AreaCountryBasicStruct;
 use Shopware\AreaCountryState\Factory\AreaCountryStateBasicFactory;
 use Shopware\AreaCountryState\Struct\AreaCountryStateBasicStruct;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\CustomerAddress\Extension\CustomerAddressExtension;
 use Shopware\CustomerAddress\Struct\CustomerAddressBasicStruct;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -39,6 +17,7 @@ use Shopware\Search\QuerySelection;
 class CustomerAddressBasicFactory extends Factory
 {
     const ROOT_NAME = 'customer_address';
+    const EXTENSION_NAMESPACE = 'customerAddress';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -61,11 +40,6 @@ class CustomerAddressBasicFactory extends Factory
     ];
 
     /**
-     * @var CustomerAddressExtension[]
-     */
-    protected $extensions = [];
-
-    /**
      * @var AreaCountryBasicFactory
      */
     protected $areaCountryFactory;
@@ -77,11 +51,11 @@ class CustomerAddressBasicFactory extends Factory
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         AreaCountryBasicFactory $areaCountryFactory,
         AreaCountryStateBasicFactory $areaCountryStateFactory
     ) {
-        parent::__construct($connection, $extensions);
+        parent::__construct($connection, $registry);
         $this->areaCountryFactory = $areaCountryFactory;
         $this->areaCountryStateFactory = $areaCountryStateFactory;
     }
@@ -122,7 +96,7 @@ class CustomerAddressBasicFactory extends Factory
             );
         }
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($customerAddress, $data, $selection, $context);
         }
 
@@ -191,5 +165,10 @@ class CustomerAddressBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

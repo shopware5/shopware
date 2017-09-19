@@ -1,37 +1,15 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\Customer\Factory;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Customer\Extension\CustomerExtension;
 use Shopware\Customer\Struct\CustomerBasicStruct;
 use Shopware\CustomerAddress\Factory\CustomerAddressBasicFactory;
 use Shopware\CustomerAddress\Struct\CustomerAddressBasicStruct;
 use Shopware\CustomerGroup\Factory\CustomerGroupBasicFactory;
 use Shopware\CustomerGroup\Struct\CustomerGroupBasicStruct;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\PaymentMethod\Factory\PaymentMethodBasicFactory;
 use Shopware\PaymentMethod\Struct\PaymentMethodBasicStruct;
@@ -41,6 +19,7 @@ use Shopware\Search\QuerySelection;
 class CustomerBasicFactory extends Factory
 {
     const ROOT_NAME = 'customer';
+    const EXTENSION_NAMESPACE = 'customer';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -76,11 +55,6 @@ class CustomerBasicFactory extends Factory
     ];
 
     /**
-     * @var CustomerExtension[]
-     */
-    protected $extensions = [];
-
-    /**
      * @var CustomerGroupBasicFactory
      */
     protected $customerGroupFactory;
@@ -97,12 +71,12 @@ class CustomerBasicFactory extends Factory
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         CustomerGroupBasicFactory $customerGroupFactory,
         CustomerAddressBasicFactory $customerAddressFactory,
         PaymentMethodBasicFactory $paymentMethodFactory
     ) {
-        parent::__construct($connection, $extensions);
+        parent::__construct($connection, $registry);
         $this->customerGroupFactory = $customerGroupFactory;
         $this->customerAddressFactory = $customerAddressFactory;
         $this->paymentMethodFactory = $paymentMethodFactory;
@@ -175,7 +149,7 @@ class CustomerBasicFactory extends Factory
             );
         }
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($customer, $data, $selection, $context);
         }
 
@@ -280,5 +254,10 @@ class CustomerBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

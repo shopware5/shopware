@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\Tax\Factory;
 
@@ -28,12 +6,12 @@ use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
-use Shopware\Tax\Extension\TaxExtension;
 use Shopware\Tax\Struct\TaxBasicStruct;
 
 class TaxBasicFactory extends Factory
 {
     const ROOT_NAME = 'tax';
+    const EXTENSION_NAMESPACE = 'tax';
 
     const FIELDS = [
        'id' => 'id',
@@ -41,11 +19,6 @@ class TaxBasicFactory extends Factory
        'tax_rate' => 'tax_rate',
        'name' => 'name',
     ];
-
-    /**
-     * @var TaxExtension[]
-     */
-    protected $extensions = [];
 
     public function hydrate(
         array $data,
@@ -58,7 +31,7 @@ class TaxBasicFactory extends Factory
         $tax->setRate((float) $data[$selection->getField('tax_rate')]);
         $tax->setName((string) $data[$selection->getField('name')]);
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($tax, $data, $selection, $context);
         }
 
@@ -102,5 +75,10 @@ class TaxBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

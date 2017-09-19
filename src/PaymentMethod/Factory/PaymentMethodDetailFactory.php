@@ -1,32 +1,11 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\PaymentMethod\Factory;
 
 use Doctrine\DBAL\Connection;
 use Shopware\AreaCountry\Factory\AreaCountryBasicFactory;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\PaymentMethod\Struct\PaymentMethodBasicStruct;
 use Shopware\PaymentMethod\Struct\PaymentMethodDetailStruct;
 use Shopware\Search\QueryBuilder;
@@ -47,11 +26,11 @@ class PaymentMethodDetailFactory extends PaymentMethodBasicFactory
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         ShopBasicFactory $shopFactory,
         AreaCountryBasicFactory $areaCountryFactory
     ) {
-        parent::__construct($connection, $extensions);
+        parent::__construct($connection, $registry);
         $this->shopFactory = $shopFactory;
         $this->areaCountryFactory = $areaCountryFactory;
     }
@@ -167,7 +146,7 @@ class PaymentMethodDetailFactory extends PaymentMethodBasicFactory
     {
         $fields = parent::getExtensionFields();
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extensionFields = $extension->getDetailFields();
             foreach ($extensionFields as $key => $field) {
                 $fields[$key] = $field;

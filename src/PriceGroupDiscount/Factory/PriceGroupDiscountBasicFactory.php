@@ -1,32 +1,9 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\PriceGroupDiscount\Factory;
 
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Factory\Factory;
-use Shopware\PriceGroupDiscount\Extension\PriceGroupDiscountExtension;
 use Shopware\PriceGroupDiscount\Struct\PriceGroupDiscountBasicStruct;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -34,6 +11,7 @@ use Shopware\Search\QuerySelection;
 class PriceGroupDiscountBasicFactory extends Factory
 {
     const ROOT_NAME = 'price_group_discount';
+    const EXTENSION_NAMESPACE = 'priceGroupDiscount';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -42,11 +20,6 @@ class PriceGroupDiscountBasicFactory extends Factory
        'percentage_discount' => 'percentage_discount',
        'product_count' => 'product_count',
     ];
-
-    /**
-     * @var PriceGroupDiscountExtension[]
-     */
-    protected $extensions = [];
 
     public function hydrate(
         array $data,
@@ -60,7 +33,7 @@ class PriceGroupDiscountBasicFactory extends Factory
         $priceGroupDiscount->setPercentageDiscount((float) $data[$selection->getField('percentage_discount')]);
         $priceGroupDiscount->setProductCount((float) $data[$selection->getField('product_count')]);
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($priceGroupDiscount, $data, $selection, $context);
         }
 
@@ -104,5 +77,10 @@ class PriceGroupDiscountBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\Shop\Factory;
 
@@ -33,6 +11,7 @@ use Shopware\Context\Struct\TranslationContext;
 use Shopware\Currency\Factory\CurrencyBasicFactory;
 use Shopware\CustomerGroup\Factory\CustomerGroupBasicFactory;
 use Shopware\CustomerGroup\Struct\CustomerGroupBasicStruct;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Locale\Factory\LocaleBasicFactory;
 use Shopware\Locale\Struct\LocaleBasicStruct;
 use Shopware\PaymentMethod\Factory\PaymentMethodBasicFactory;
@@ -90,7 +69,7 @@ class ShopDetailFactory extends ShopBasicFactory
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         LocaleBasicFactory $localeFactory,
         CategoryBasicFactory $categoryFactory,
         CustomerGroupBasicFactory $customerGroupFactory,
@@ -100,7 +79,7 @@ class ShopDetailFactory extends ShopBasicFactory
         ShopTemplateBasicFactory $shopTemplateFactory,
         CurrencyBasicFactory $currencyFactory
     ) {
-        parent::__construct($connection, $extensions, $currencyFactory, $localeFactory);
+        parent::__construct($connection, $registry, $currencyFactory, $localeFactory);
         $this->localeFactory = $localeFactory;
         $this->categoryFactory = $categoryFactory;
         $this->customerGroupFactory = $customerGroupFactory;
@@ -310,7 +289,7 @@ class ShopDetailFactory extends ShopBasicFactory
     {
         $fields = parent::getExtensionFields();
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extensionFields = $extension->getDetailFields();
             foreach ($extensionFields as $key => $field) {
                 $fields[$key] = $field;

@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\Media\Factory;
 
@@ -28,8 +6,8 @@ use Doctrine\DBAL\Connection;
 use Shopware\Album\Factory\AlbumBasicFactory;
 use Shopware\Album\Struct\AlbumBasicStruct;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
-use Shopware\Media\Extension\MediaExtension;
 use Shopware\Media\Struct\MediaBasicStruct;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -37,6 +15,7 @@ use Shopware\Search\QuerySelection;
 class MediaBasicFactory extends Factory
 {
     const ROOT_NAME = 'media';
+    const EXTENSION_NAMESPACE = 'media';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -53,21 +32,16 @@ class MediaBasicFactory extends Factory
     ];
 
     /**
-     * @var MediaExtension[]
-     */
-    protected $extensions = [];
-
-    /**
      * @var AlbumBasicFactory
      */
     protected $albumFactory;
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         AlbumBasicFactory $albumFactory
     ) {
-        parent::__construct($connection, $extensions);
+        parent::__construct($connection, $registry);
         $this->albumFactory = $albumFactory;
     }
 
@@ -95,7 +69,7 @@ class MediaBasicFactory extends Factory
             );
         }
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($media, $data, $selection, $context);
         }
 
@@ -152,5 +126,10 @@ class MediaBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

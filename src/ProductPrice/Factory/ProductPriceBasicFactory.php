@@ -1,32 +1,9 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\ProductPrice\Factory;
 
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Factory\Factory;
-use Shopware\ProductPrice\Extension\ProductPriceExtension;
 use Shopware\ProductPrice\Struct\ProductPriceBasicStruct;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -34,6 +11,7 @@ use Shopware\Search\QuerySelection;
 class ProductPriceBasicFactory extends Factory
 {
     const ROOT_NAME = 'product_price';
+    const EXTENSION_NAMESPACE = 'productPrice';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -46,11 +24,6 @@ class ProductPriceBasicFactory extends Factory
        'base_price' => 'base_price',
        'percentage' => 'percentage',
     ];
-
-    /**
-     * @var ProductPriceExtension[]
-     */
-    protected $extensions = [];
 
     public function hydrate(
         array $data,
@@ -68,7 +41,7 @@ class ProductPriceBasicFactory extends Factory
         $productPrice->setBasePrice(isset($data[$selection->getField('base_price')]) ? (float) $data[$selection->getField('base_price')] : null);
         $productPrice->setPercentage(isset($data[$selection->getField('percentage')]) ? (float) $data[$selection->getField('percentage')] : null);
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($productPrice, $data, $selection, $context);
         }
 
@@ -112,5 +85,10 @@ class ProductPriceBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

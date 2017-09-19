@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\Customer\Factory;
 
@@ -30,6 +8,7 @@ use Shopware\Customer\Struct\CustomerBasicStruct;
 use Shopware\Customer\Struct\CustomerDetailStruct;
 use Shopware\CustomerAddress\Factory\CustomerAddressBasicFactory;
 use Shopware\CustomerGroup\Factory\CustomerGroupBasicFactory;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\PaymentMethod\Factory\PaymentMethodBasicFactory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -50,13 +29,13 @@ class CustomerDetailFactory extends CustomerBasicFactory
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         CustomerAddressBasicFactory $customerAddressFactory,
         ShopBasicFactory $shopFactory,
         CustomerGroupBasicFactory $customerGroupFactory,
         PaymentMethodBasicFactory $paymentMethodFactory
     ) {
-        parent::__construct($connection, $extensions, $customerGroupFactory, $customerAddressFactory, $paymentMethodFactory);
+        parent::__construct($connection, $registry, $customerGroupFactory, $customerAddressFactory, $paymentMethodFactory);
         $this->customerAddressFactory = $customerAddressFactory;
         $this->shopFactory = $shopFactory;
     }
@@ -128,7 +107,7 @@ class CustomerDetailFactory extends CustomerBasicFactory
     {
         $fields = parent::getExtensionFields();
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extensionFields = $extension->getDetailFields();
             foreach ($extensionFields as $key => $field) {
                 $fields[$key] = $field;

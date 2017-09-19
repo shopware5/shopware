@@ -1,31 +1,8 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\CustomerGroup\Factory;
 
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\CustomerGroup\Extension\CustomerGroupExtension;
 use Shopware\CustomerGroup\Struct\CustomerGroupBasicStruct;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
@@ -34,6 +11,7 @@ use Shopware\Search\QuerySelection;
 class CustomerGroupBasicFactory extends Factory
 {
     const ROOT_NAME = 'customer_group';
+    const EXTENSION_NAMESPACE = 'customerGroup';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -45,11 +23,6 @@ class CustomerGroupBasicFactory extends Factory
        'minimum_order_amount_surcharge' => 'minimum_order_amount_surcharge',
        'name' => 'translation.name',
     ];
-
-    /**
-     * @var CustomerGroupExtension[]
-     */
-    protected $extensions = [];
 
     public function hydrate(
         array $data,
@@ -66,7 +39,7 @@ class CustomerGroupBasicFactory extends Factory
         $customerGroup->setMinimumOrderAmountSurcharge(isset($data[$selection->getField('minimum_order_amount_surcharge')]) ? (float) $data[$selection->getField('minimum_order_amount_surcharge')] : null);
         $customerGroup->setName((string) $data[$selection->getField('name')]);
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($customerGroup, $data, $selection, $context);
         }
 
@@ -110,5 +83,10 @@ class CustomerGroupBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

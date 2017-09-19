@@ -16,6 +16,8 @@ use Shopware\Search\AggregationResult;
 use Shopware\Search\Criteria;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Shopware\Search\UuidSearchResult;
+use Shopware\#classUc#\Event\#classUc#WrittenEvent;
+use Shopware\#classUc#\Writer\#classUc#Writer;
 
 class #classUc#Repository
 {
@@ -39,20 +41,30 @@ class #classUc#Repository
      */
     private $searcher;
 
+    /**
+     * @var #classUc#Writer
+     */
+    private $writer;
+
     public function __construct(
         #classUc#DetailLoader $detailLoader,
         #classUc#BasicLoader $basicLoader,
         EventDispatcherInterface $eventDispatcher,
-        #classUc#Searcher $searcher
+        #classUc#Searcher $searcher,
+        #classUc#Writer $writer
     ) {
         $this->detailLoader = $detailLoader;
         $this->basicLoader = $basicLoader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
+        $this->writer = $writer;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): #classUc#DetailCollection
     {
+        if (empty($uuids)) {
+            return new #classUc#DetailCollection();
+        }
         $collection = $this->detailLoader->load($uuids, $context);
 
         $this->eventDispatcher->dispatch(
@@ -65,6 +77,10 @@ class #classUc#Repository
 
     public function read(array $uuids, TranslationContext $context): #classUc#BasicCollection
     {
+        if (empty($uuids)) {
+            return new #classUc#BasicCollection();
+        }
+
         $collection = $this->basicLoader->load($uuids, $context);
 
         $this->eventDispatcher->dispatch(
@@ -98,5 +114,32 @@ class #classUc#Repository
         $result = $this->searcher->aggregate($criteria, $context);
 
         return $result;
+    }
+
+    public function update(array $data, TranslationContext $context): #classUc#WrittenEvent
+    {
+        $event = $this->writer->update($data, $context);
+
+        $this->eventDispatcher->dispatch($event::NAME, $event);
+
+        return $event;
+    }
+
+    public function upsert(array $data, TranslationContext $context): #classUc#WrittenEvent
+    {
+        $event = $this->writer->upsert($data, $context);
+
+        $this->eventDispatcher->dispatch($event::NAME, $event);
+
+        return $event;
+    }
+
+    public function create(array $data, TranslationContext $context): #classUc#WrittenEvent
+    {
+        $event = $this->writer->create($data, $context);
+
+        $this->eventDispatcher->dispatch($event::NAME, $event);
+
+        return $event;
     }
 }

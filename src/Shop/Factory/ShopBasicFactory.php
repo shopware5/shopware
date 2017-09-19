@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\Shop\Factory;
 
@@ -28,17 +6,18 @@ use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Currency\Factory\CurrencyBasicFactory;
 use Shopware\Currency\Struct\CurrencyBasicStruct;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Locale\Factory\LocaleBasicFactory;
 use Shopware\Locale\Struct\LocaleBasicStruct;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
-use Shopware\Shop\Extension\ShopExtension;
 use Shopware\Shop\Struct\ShopBasicStruct;
 
 class ShopBasicFactory extends Factory
 {
     const ROOT_NAME = 'shop';
+    const EXTENSION_NAMESPACE = 'shop';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -68,11 +47,6 @@ class ShopBasicFactory extends Factory
     ];
 
     /**
-     * @var ShopExtension[]
-     */
-    protected $extensions = [];
-
-    /**
      * @var CurrencyBasicFactory
      */
     protected $currencyFactory;
@@ -84,11 +58,11 @@ class ShopBasicFactory extends Factory
 
     public function __construct(
         Connection $connection,
-        array $extensions,
+        ExtensionRegistryInterface $registry,
         CurrencyBasicFactory $currencyFactory,
         LocaleBasicFactory $localeFactory
     ) {
-        parent::__construct($connection, $extensions);
+        parent::__construct($connection, $registry);
         $this->currencyFactory = $currencyFactory;
         $this->localeFactory = $localeFactory;
     }
@@ -136,7 +110,7 @@ class ShopBasicFactory extends Factory
             );
         }
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($shop, $data, $selection, $context);
         }
 
@@ -205,5 +179,10 @@ class ShopBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }

@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace Shopware\TaxAreaRule\Factory;
 
@@ -28,12 +6,12 @@ use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
-use Shopware\TaxAreaRule\Extension\TaxAreaRuleExtension;
 use Shopware\TaxAreaRule\Struct\TaxAreaRuleBasicStruct;
 
 class TaxAreaRuleBasicFactory extends Factory
 {
     const ROOT_NAME = 'tax_area_rule';
+    const EXTENSION_NAMESPACE = 'taxAreaRule';
 
     const FIELDS = [
        'uuid' => 'uuid',
@@ -46,11 +24,6 @@ class TaxAreaRuleBasicFactory extends Factory
        'active' => 'active',
        'name' => 'translation.name',
     ];
-
-    /**
-     * @var TaxAreaRuleExtension[]
-     */
-    protected $extensions = [];
 
     public function hydrate(
         array $data,
@@ -68,7 +41,7 @@ class TaxAreaRuleBasicFactory extends Factory
         $taxAreaRule->setActive((bool) $data[$selection->getField('active')]);
         $taxAreaRule->setName((string) $data[$selection->getField('name')]);
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getExtensions() as $extension) {
             $extension->hydrate($taxAreaRule, $data, $selection, $context);
         }
 
@@ -112,5 +85,10 @@ class TaxAreaRuleBasicFactory extends Factory
     protected function getRootName(): string
     {
         return self::ROOT_NAME;
+    }
+
+    protected function getExtensionNamespace(): string
+    {
+        return self::EXTENSION_NAMESPACE;
     }
 }
