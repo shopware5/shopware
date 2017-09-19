@@ -211,12 +211,18 @@
                 $form = $target.parents('form'),
                 values = {};
 
+			// First the selected option
+			values[$target.context.name] = $target.context.value;
+				
+			// then all other options/values
             $.each($form.serializeArray(), function(i, item) {
                 if (item.name === '__csrf_token') {
                     return;
                 }
-
-                values[item.name] = item.value;
+				if (item.name != $target.context.name)
+				{
+					values[item.name] = item.value;
+				}
             });
 
             event.preventDefault();

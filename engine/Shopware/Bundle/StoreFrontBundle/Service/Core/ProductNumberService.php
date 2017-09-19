@@ -96,9 +96,14 @@ class ProductNumberService implements ProductNumberServiceInterface
             throw new \RuntimeException('Product not available in current shop');
         }
 
-        $selected = null;
+		// Something selected?
         if (!empty($selection)) {
-            $selected = $this->getNumberBySelection($productId, $selection);
+			// Do while selection doesnt result in a hit, eat it up from behind
+			while (!empty($selection) && !$selected)
+			{
+				$selected = $this->getNumberBySelection($productId, $selection);
+				array_pop($selection);
+			}
         }
 
         if ($selected) {
