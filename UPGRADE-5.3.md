@@ -10,6 +10,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Added function `is_object` to the list of allowed functions in Smarty
 
+### Changes
+
+* Fix article attribute filter in API
+
 ## 5.3.3
 
 [View all changes from v5.3.2...v5.3.3](https://github.com/shopware/shopware/compare/v5.3.2...v5.3.3)
@@ -42,7 +46,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed `engine/Library/Smarty/sysplugins/smarty_internal_write_file.php` in order to prevent race condition when creating directories concurrently
 * Support namespaces for controllers. The event `Enlight_Controller_Dispatcher_ControllerPath_{module}_{controller}` now accepts a class name as return value to allow namespaces for controllers in plugins.
 * Changed representation of empty `conditions` in `s_customer_streams` to NULL instead of `{}`
-
 
 ## 5.3.0
 
