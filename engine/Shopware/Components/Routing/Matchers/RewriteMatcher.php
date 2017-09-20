@@ -128,7 +128,8 @@ class RewriteMatcher implements MatcherInterface
           SELECT subshopID as shopId, path, org_path as orgPath, main
           FROM s_core_rewrite_urls
           WHERE path LIKE :pathInfo
-          ORDER BY main DESC, subshopID = :shopId DESC
+          AND subshopID = :shopId
+          ORDER BY main DESC
           LIMIT 1
         ';
         $stmt = $this->connection->prepare($sql);
