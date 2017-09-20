@@ -100,7 +100,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getBlogCommentRepository()
     {
         if ($this->blogCommentRepository === null) {
-            $this->blogCommentRepository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Comment');
+            $this->blogCommentRepository = Shopware()->Models()->getRepository(Shopware\Models\Blog\Comment::class);
         }
 
         return $this->blogCommentRepository;
@@ -114,7 +114,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getCategoryRepository()
     {
         if ($this->categoryRepository === null) {
-            $this->categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+            $this->categoryRepository = Shopware()->Models()->getRepository(Shopware\Models\Category\Category::class);
         }
 
         return $this->categoryRepository;
@@ -128,7 +128,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getCommentConfirmRepository()
     {
         if ($this->commentConfirmRepository === null) {
-            $this->commentConfirmRepository = Shopware()->Models()->getRepository('Shopware\Models\CommentConfirm\CommentConfirm');
+            $this->commentConfirmRepository = Shopware()->Models()->getRepository(Shopware\Models\CommentConfirm\CommentConfirm::class);
         }
 
         return $this->commentConfirmRepository;
@@ -140,10 +140,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function indexAction()
     {
         $categoryId = (int) $this->Request()->getQuery('sCategory');
-        $sPage = !empty($this->Request()->sPage) ? (int) $this->Request()->sPage : 1;
-        $sFilterDate = urldecode($this->Request()->sFilterDate);
-        $sFilterAuthor = urldecode($this->Request()->sFilterAuthor);
-        $sFilterTags = urldecode($this->Request()->sFilterTags);
+        $page = (int) $this->request->getParam('sPage', 1);
+        $page = $page >= 1 ? $page : 1;
+        $filterDate = urldecode($this->Request()->sFilterDate);
+        $filterAuthor = urldecode($this->Request()->sFilterAuthor);
+        $filterTags = urldecode($this->Request()->sFilterTags);
 
         // Redirect if blog's category is not a child of the current shop's category
         $shopCategory = Shopware()->Shop()->getCategory();
@@ -157,23 +158,23 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         if (!empty($this->Request()->sPerPage)) {
             Shopware()->Session()->sPerPage = (int) $this->Request()->sPerPage;
         }
-        $sPerPage = Shopware()->Session()->sPerPage;
-        if (empty($sPerPage)) {
-            $sPerPage = (int) Shopware()->Config()->get('sARTICLESPERPAGE');
+        $perPage = (int) Shopware()->Session()->sPerPage;
+        if (empty($perPage)) {
+            $perPage = (int) Shopware()->Config()->get('sARTICLESPERPAGE');
         }
 
-        $filter = $this->createFilter($sFilterDate, $sFilterAuthor, $sFilterTags);
+        $filter = $this->createFilter($filterDate, $filterAuthor, $filterTags);
 
         // Start for Limit
-        $sLimitStart = ($sPage - 1) * $sPerPage;
-        $sLimitEnd = $sPerPage;
+        $limitStart = ($page - 1) * $perPage;
+        $limitEnd = $perPage;
 
         //get all blog articles
         $query = $this->getCategoryRepository()->getBlogCategoriesByParentQuery($categoryId);
         $blogCategories = $query->getArrayResult();
         $blogCategoryIds = $this->getBlogCategoryListIds($blogCategories);
         $blogCategoryIds[] = $categoryId;
-        $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $sLimitStart, $sLimitEnd, $filter);
+        $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $limitStart, $limitEnd, $filter);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = Shopware()->Models()->createPaginator($blogArticlesQuery);
@@ -237,8 +238,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sBreadcrumb' => $this->getCategoryBreadcrumb($categoryId),
             'sCategoryContent' => $categoryContent,
             'sNumberArticles' => $totalResult,
-            'sPage' => $sPage,
-            'sPerPage' => $sPerPage,
+            'sPage' => $page,
+            'sPerPage' => $perPage,
             'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter),
             'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
@@ -247,12 +248,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         ];
 
         $filters = [
-            'sFilterDate' => urlencode($sFilterDate),
-            'sFilterAuthor' => urlencode($sFilterAuthor),
-            'sFilterTags' => urlencode($sFilterTags),
+            'sFilterDate' => urlencode($filterDate),
+            'sFilterAuthor' => urlencode($filterAuthor),
+            'sFilterTags' => urlencode($filterTags),
         ];
 
-        $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId, $filters)));
+        $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $limitEnd, $page, $categoryId, $filters)));
     }
 
     /**
@@ -262,7 +263,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function detailAction()
     {
-        $blogArticleId = intval($this->Request()->getQuery('blogArticle'));
+        $blogArticleId = (int) $this->Request()->getQuery('blogArticle');
         if (empty($blogArticleId)) {
             $this->forward('index', 'index');
 
@@ -463,15 +464,15 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the date filter
      *
-     * @param $blogCategoryIds
-     * @param $filter | selected filters
+     * @param array $blogCategoryIds
+     * @param array $selectedFilters
      *
      * @return array
      */
-    public function getDateFilterData($blogCategoryIds, $filter)
+    public function getDateFilterData($blogCategoryIds, $selectedFilters)
     {
         //date filter query
-        $dateFilterQuery = $this->repository->getDisplayDateFilterQuery($blogCategoryIds, $filter);
+        $dateFilterQuery = $this->repository->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters);
         $dateFilterData = $dateFilterQuery->getArrayResult();
 
         return $this->addLinksToFilter($dateFilterData, 'sFilterDate', 'dateFormatDate');
@@ -538,6 +539,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $blogCommentModel = new \Shopware\Models\Blog\Comment();
+        /** @var \Shopware\Models\Blog\Blog $blog */
         $blog = $this->getRepository()->find($blogArticleId);
 
         $blogCommentModel->setBlog($blog);
@@ -557,21 +559,21 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the pager
      *
-     * @param $totalResult
-     * @param $sLimitEnd
-     * @param $sPage
-     * @param $categoryId
+     * @param int   $totalResult
+     * @param int   $limitEnd
+     * @param int   $page
+     * @param int   $categoryId
      * @param array $filters
      *
      * @return array
      */
-    protected function getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId, $filters = [])
+    protected function getPagerData($totalResult, $limitEnd, $page, $categoryId, array $filters = [])
     {
+        $numberPages = 0;
+
         // How many pages in this category?
-        if ($sLimitEnd != 0) {
-            $numberPages = ceil($totalResult / $sLimitEnd);
-        } else {
-            $numberPages = 0;
+        if ($limitEnd !== 0) {
+            $numberPages = ceil($totalResult / $limitEnd);
         }
 
         // Make Array with page-structure to render in template
@@ -584,7 +586,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         if ($numberPages > 1) {
             for ($i = 1; $i <= $numberPages; ++$i) {
-                if ($i == $sPage) {
+                if ($i === $page) {
                     $pages['numbers'][$i]['markup'] = true;
                 } else {
                     $pages['numbers'][$i]['markup'] = false;
@@ -595,15 +597,15 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble($userParams);
             }
             // Previous page
-            if ($sPage != 1) {
-                $userParams['sPage'] = $sPage - 1;
+            if ($page !== 1) {
+                $userParams['sPage'] = $page - 1;
                 $pages['previous'] = $this->Front()->Router()->assemble($userParams);
             } else {
                 $pages['previous'] = null;
             }
             // Next page
-            if ($sPage != $numberPages) {
-                $userParams['sPage'] = $sPage + 1;
+            if ($page !== $numberPages) {
+                $userParams['sPage'] = $page + 1;
                 $pages['next'] = $this->Front()->Router()->assemble($userParams);
             } else {
                 $pages['next'] = null;
@@ -616,14 +618,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Helper method to fill the data set with the right category link
      *
-     * @param $filterData
-     * @param $requestParameterName
-     * @param $requestParameterValue
-     * @param bool $addRemoveProperty | true to add a remove property to remove the selected filters
+     * @param array  $filterData
+     * @param string $requestParameterName
+     * @param string $requestParameterValue
+     * @param bool   $addRemoveProperty     | true to add a remove property to remove the selected filters
      *
      * @return mixed
      */
-    protected function addLinksToFilter($filterData, $requestParameterName, $requestParameterValue, $addRemoveProperty = true)
+    protected function addLinksToFilter(array $filterData, $requestParameterName, $requestParameterValue, $addRemoveProperty = true)
     {
         foreach ($filterData as $key => $dateData) {
             $filterData[$key]['link'] = $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
@@ -642,28 +644,28 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Helper method to create the filter array for the query
      *
-     * @param $sFilterDate
-     * @param $sFilterAuthor
-     * @param $sFilterTags
+     * @param string $filterDate
+     * @param string $filterAuthor
+     * @param string $filterTags
      *
-     * @return mixed
+     * @return array
      */
-    protected function createFilter($sFilterDate, $sFilterAuthor, $sFilterTags)
+    protected function createFilter($filterDate, $filterAuthor, $filterTags)
     {
         //date filter
         $filter = [];
-        if (!empty($sFilterDate)) {
-            $filter[] = ['property' => 'blog.displayDate', 'value' => $sFilterDate . '%'];
+        if (!empty($filterDate)) {
+            $filter[] = ['property' => 'blog.displayDate', 'value' => $filterDate . '%'];
         }
 
         //author filter
-        if (!empty($sFilterAuthor)) {
-            $filter[] = ['property' => 'author.name', 'value' => $sFilterAuthor];
+        if (!empty($filterAuthor)) {
+            $filter[] = ['property' => 'author.name', 'value' => $filterAuthor];
         }
 
         //tags filter
-        if (!empty($sFilterTags)) {
-            $filter[] = ['property' => 'tags.name', 'value' => $sFilterTags];
+        if (!empty($filterTags)) {
+            $filter[] = ['property' => 'tags.name', 'value' => $filterTags];
         }
 
         return $filter;
@@ -672,11 +674,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Helper method returns the blog category ids for the list query.
      *
-     * @param $blogCategories
+     * @param array $blogCategories
      *
      * @return array
      */
-    private function getBlogCategoryListIds($blogCategories)
+    private function getBlogCategoryListIds(array $blogCategories)
     {
         $ids = [];
         foreach ($blogCategories as $blogCategory) {
