@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed method `\Shopware\Components\SitemapXMLRepository::readCategoryUrls` to only export public category links 
 * Changed method visibility of `\Shopware_Controllers_Backend_Search::createEntitySearchQuery` from `private` to `public`
 * Changed the `I am` select option for the registration: If it is deactivated in the backend, it effects only the registration
+* Changed the update, delete and insert backlog from product number to the main detail product number by variant and price model
 
 ## 5.3.3
 
