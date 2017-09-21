@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
+use Cocur\Slugify\Slugify;
 
 /**
  * @category  Shopware
@@ -45,6 +46,11 @@ class TermHelper implements TermHelperInterface
      * @var bool
      */
     private $replaceUmlauts;
+    
+    /**
+     * @var slug
+     */
+    private $slug;
 
     /**
      * @param $config
@@ -56,6 +62,7 @@ class TermHelper implements TermHelperInterface
         $this->config = $config;
         $this->useBadWords = $useBadWords;
         $this->replaceUmlauts = $replaceUmlauts;
+        $this->slug = new Slugify();
     }
 
     /**
@@ -67,15 +74,12 @@ class TermHelper implements TermHelperInterface
      */
     public function splitTerm($string)
     {
+        // replace all characters like Umlauts or letters with diacritics
         if ($this->replaceUmlauts) {
-            $string = str_replace(
-                ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
-                ['Ue', 'ue', 'ae', 'Ae', 'oe', 'Oe', 'ss'],
-                $string
-            );
+            $string = $this->slug->slugify($string, ' ');
         }
 
-        $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
+        $string = html_entity_decode($string);
 
         // Remove not required chars from string
         $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
