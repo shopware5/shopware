@@ -9,7 +9,7 @@
         <ul class="sitemap--navigation-entry list--unstyled">
             <li>
                 <a href="{$categoryTree.link}" title="{$categoryTree.name|escape}"
-                   class="sitemap--navigation-link is--active"{if $categoryTree.external} target="{$categoryTree.externalTarget}"{/if}>{$categoryTree.name}</a>
+                   class="sitemap--navigation-link is--active"{if $categoryTree.external && $categoryTree.externalTarget} target="{$categoryTree.externalTarget}"{/if}>{$categoryTree.name}</a>
                 {if $depth>=1}
                 <ul class="sitemap--navigation-entry-inner list--unstyled">{/if}{include file="frontend/sitemap/recurse.tpl" sCategoryTree=$categoryTree.sub depth=$depth+1}{if $depth>=1}</ul>{/if}
             </li>
@@ -18,7 +18,7 @@
         {if $depth==1}<ul class="sitemap--navigation-entry list--unstyled">{/if}
         <li>
         <a href="{$categoryTree.link}" title="{$categoryTree.name|escape}"
-           class="sitemap--navigation-link"{if $categoryTree.external} target="{$categoryTree.externalTarget}"{/if}>{$categoryTree.name}</a>
+           class="sitemap--navigation-link"{if $categoryTree.external && $categoryTree.externalTarget} target="{$categoryTree.externalTarget}"{/if}>{$categoryTree.name}</a>
         </li>{if $depth==1}</ul>{/if}
     {/if}
 {/foreach}
