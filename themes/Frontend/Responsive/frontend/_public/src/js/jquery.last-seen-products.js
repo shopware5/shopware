@@ -360,6 +360,14 @@
             });
 
             return queryParams;
+        },
+
+        destroy: function() {
+            var me = this;
+
+            $.unsubscribe(me.getEventName('plugin/swAjaxVariant/onRequestData'));
+
+            me._destroy();
         }
     });
 }(jQuery));
