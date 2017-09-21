@@ -381,6 +381,10 @@ class StructHydrator
             $plugin->setProducer($producer);
         }
 
+        if (!empty($data['changelog'])) {
+            $plugin->setChangelog($data['changelog']);
+        }
+
         if (isset($data['__licence_id']) && !empty($data['__licence_id'])) {
             $licence = new LicenceStruct();
             $licence->setIconPath($plugin->getIconPath());
