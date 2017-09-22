@@ -13,6 +13,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Changes
 
 * Fix article attribute filter in API
+* Add Shopware\Models\Shop\Repository::getById() to retrieve shops regardless of active state
+* Changed the pagination of the blog by adding the filters to the pagination links
 
 ## 5.3.3
 
@@ -46,7 +48,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed `engine/Library/Smarty/sysplugins/smarty_internal_write_file.php` in order to prevent race condition when creating directories concurrently
 * Support namespaces for controllers. The event `Enlight_Controller_Dispatcher_ControllerPath_{module}_{controller}` now accepts a class name as return value to allow namespaces for controllers in plugins.
 * Changed representation of empty `conditions` in `s_customer_streams` to NULL instead of `{}`
-* Add Shopware\Models\Shop\Repository::getById() to retrieve shops regardless of active state
 
 ## 5.3.0
 
