@@ -306,7 +306,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function createEntitySearchQuery($entity)
+    public function createEntitySearchQuery($entity)
     {
         /** @var \Doctrine\ORM\QueryBuilder $query */
         $query = $this->get('models')->createQueryBuilder();
