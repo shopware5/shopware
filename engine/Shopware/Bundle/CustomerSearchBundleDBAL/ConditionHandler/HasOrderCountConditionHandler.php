@@ -27,10 +27,13 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\CustomerSearchBundle\Condition\HasOrderCountCondition;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\DynamicConditionParserTrait;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class HasOrderCountConditionHandler implements ConditionHandlerInterface
 {
+    use DynamicConditionParserTrait;
+
     public function supports(ConditionInterface $condition)
     {
         return $condition instanceof HasOrderCountCondition;
@@ -42,27 +45,16 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /* @var HasOrderCountCondition $condition */
-        switch ($condition->getOperator()) {
-            case ConditionInterface::OPERATOR_EQ:
-                $query->andWhere('customer.count_orders = :HasOrderCountCondition');
-                break;
-            case ConditionInterface::OPERATOR_NEQ:
-                $query->andWhere('customer.count_orders != :HasOrderCountCondition');
-                break;
-            case ConditionInterface::OPERATOR_LT:
-                $query->andWhere('customer.count_orders < :HasOrderCountCondition');
-                break;
-            case ConditionInterface::OPERATOR_LTE:
-                $query->andWhere('customer.count_orders <= :HasOrderCountCondition');
-                break;
-            case ConditionInterface::OPERATOR_GT:
-                $query->andWhere('customer.count_orders > :HasOrderCountCondition');
-                break;
-            default:
-                $query->andWhere('customer.count_orders >= :HasOrderCountCondition');
-        }
-
-        $query->setParameter(':HasOrderCountCondition', $condition->getMinimumOrderCount());
+        /*
+         * $this->parse method is Imported from DynamicConditionParserTrait
+         */
+        return $this->parse(
+            $query,
+            's_customer_search_index',
+            'customer',
+            'count_orders',
+            $condition->getMinimumOrderCount(),
+            $condition->getOperator() ? $condition->getOperator() : ConditionInterface::OPERATOR_GTE
+        );
     }
 }
