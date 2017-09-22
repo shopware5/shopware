@@ -8,6 +8,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added product box layout selection support for manufacturer listings
 
+### Changes
+
+* Updated mPDF to v6.1.4 and included it via composer
+
 ### Removals
 
 * Removed config option for maximum number of category pages
