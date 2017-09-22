@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             nonEditable: '{s name=message/positions/nonEditable}This article is not editable{/s}'
         },
         documents: {
-            successMessage: '{s name=message/documents/success}Internal comment has been saved successfully{/s}',
+            successMessage: '{s name=message/documents/success}Document has been created successfully{/s}',
             failureMessage: '{s name=message/documents/failure}An error has occurred while creating the order document.{/s}'
         },
         delete: {
