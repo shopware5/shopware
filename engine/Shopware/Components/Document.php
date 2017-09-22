@@ -532,7 +532,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         // "language" actually refers to a language-shop and not to a locale
-        $shop = $repository->getActiveById($this->_order->order->language);
+        $shop = $repository->getById($this->_order->order->language);
         if (!empty($this->_order->order->currencyID)) {
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
