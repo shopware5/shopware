@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Fix article attribute filter in API
 * Add Shopware\Models\Shop\Repository::getById() to retrieve shops regardless of active state
 * Changed the pagination of the blog by adding the filters to the pagination links
+* Changed visibility of `createEntitySearchQuery` from `private` to `public`
 
 ## 5.3.3
 
