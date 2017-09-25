@@ -33,7 +33,14 @@
              * @property animationSpeed
              * @type {Number}
              */
-            animationSpeed: 500
+            animationSpeed: 500,
+
+            /**
+             * Easing to be used on the scroll animation
+             * @property easing
+             * @type {String}
+             */
+            easing: 'swing'
         },
 
         /**
@@ -125,9 +132,16 @@
         scrollToPosition: function (position) {
             var me = this;
 
-            me.$container.animate({
-                scrollTop: position
-            }, me.opts.animationSpeed);
+            me.$container.animate(
+                {
+                    scrollTop: position
+                },
+                me.opts.animationSpeed,
+                me.opts.easing,
+                function() {
+                    $.publish('plugin/swScrollAnimate/onScrollEnd', [ me, position ]);
+                }
+            );
 
             $.publish('plugin/swScrollAnimate/onScrollToPosition', [ me, position ]);
         },

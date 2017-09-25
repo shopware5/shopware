@@ -98,7 +98,7 @@
 
                                         {* Rating content *}
                                         {block name="frontend_detail_tabs_rating_content"}
-                                            <div class="tab--content">
+                                            <div id="tab--product-comment" class="tab--content">
                                                 {block name="frontend_detail_tabs_rating_content_inner"}
                                                     {include file="frontend/detail/tabs/comment.tpl"}
                                                 {/block}
