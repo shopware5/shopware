@@ -64,10 +64,10 @@
         // Detail page tab menus
         .addPlugin('.product--rating-link, .link--publish-comment', 'swScrollAnimate', {
             scrollTarget: '.tab-menu--product'
-        }, ['m', 'l', 'xl'])
+        },['s','m','l','xl'])
         .addPlugin('a.link--publish-comment', 'swOffcanvasButton', {
             contentSelector: '#tab--product-comment'
-        }, ['xs', 's'])
+        }, ['xs'])
         .addPlugin('.tab-menu--product', 'swTabMenu', ['s', 'm', 'l', 'xl'])
         .addPlugin('.tab-menu--cross-selling', 'swTabMenu', ['m', 'l', 'xl'])
         .addPlugin('.tab-menu--product .tab--container', 'swOffcanvasButton', {
