@@ -510,7 +510,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $path = basename($this->_subshop['doc_template']);
 
-        $this->_template->security_policy->secure_dir[] = $frontendThemeDirectory . DIRECTORY_SEPARATOR . $path;
+        if ($this->_template->security_policy) {
+            $this->_template->security_policy->secure_dir[] = $frontendThemeDirectory . DIRECTORY_SEPARATOR . $path;
+        }
         $this->_template->setTemplateDir(['custom' => $path]);
         $this->_template->setCompileId(str_replace('/', '_', $path) . '_' . $this->_subshop['id']);
     }
