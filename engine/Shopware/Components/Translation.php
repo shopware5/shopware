@@ -36,11 +36,11 @@ class Shopware_Components_Translation
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @param Connection|null $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection = null)
     {
-        $this->connection = $connection;
+        $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
     }
 
     /**

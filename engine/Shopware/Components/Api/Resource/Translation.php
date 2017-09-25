@@ -66,6 +66,9 @@ class Translation extends Resource implements BatchInterface
     /** @var \Shopware_Components_Translation $translationWriter */
     protected $translationWriter = null;
 
+    /**
+     * @var \Shopware\Models\Translation\Translation
+     */
     protected $repository = null;
 
     /**
@@ -395,7 +398,7 @@ class Translation extends Resource implements BatchInterface
     protected function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository('Shopware\Models\Translation\Translation');
+            $this->repository = $this->getManager()->getRepository(\Shopware\Models\Translation\Translation::class);
         }
 
         return $this->repository;
