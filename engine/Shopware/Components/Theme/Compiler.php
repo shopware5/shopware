@@ -389,6 +389,7 @@ class Compiler
     {
         $config = $this->inheritance->buildConfig($template, $shop, true);
         $config['shopware-revision'] = \Shopware::REVISION;
+        $config['shopware-theme-inheritance'] = $this->inheritance->getInheritancePath($template);
 
         $collection = new ArrayCollection();
 
