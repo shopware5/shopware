@@ -118,6 +118,11 @@ class sRewriteTable
     private $shopPageService;
 
     /**
+     * @var Shopware_Components_Translation
+     */
+    private $translationComponent;
+
+    /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param Shopware_Components_Config              $config
      * @param ModelManager                            $modelManager
@@ -127,6 +132,7 @@ class sRewriteTable
      * @param SlugInterface                           $slug
      * @param ContextServiceInterface                 $contextService
      * @param ShopPageServiceInterface                $shopPageService
+     * @param Shopware_Components_Translation         $translationComponent
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -137,7 +143,8 @@ class sRewriteTable
         Shopware_Components_Modules $moduleManager = null,
         SlugInterface $slug = null,
         ContextServiceInterface $contextService = null,
-        ShopPageServiceInterface $shopPageService = null
+        ShopPageServiceInterface $shopPageService = null,
+        Shopware_Components_Translation $translationComponent = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->config = $config ?: Shopware()->Config();
@@ -148,6 +155,7 @@ class sRewriteTable
         $this->slug = $slug ?: Shopware()->Container()->get('shopware.slug');
         $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
         $this->shopPageService = $shopPageService ?: Shopware()->Container()->get('shopware_storefront.shop_page_service');
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
     /**
@@ -592,8 +600,6 @@ class sRewriteTable
             $fallbackId = $fallbackShop->getId();
         }
 
-        $translator = new Shopware_Components_Translation();
-
         $queryBuilder
             ->andWhere('emotions.isLandingPage = 1')
             ->andWhere('emotions.parentId IS NULL')
@@ -607,7 +613,7 @@ class sRewriteTable
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
 
         foreach ($campaigns as $campaign) {
-            $this->sCreateRewriteTableForSingleCampaign($translator, $languageId, $fallbackId, $campaign, $routerCampaignTemplate);
+            $this->sCreateRewriteTableForSingleCampaign($this->translationComponent, $languageId, $fallbackId, $campaign, $routerCampaignTemplate);
         }
     }
 

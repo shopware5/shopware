@@ -227,7 +227,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $fallbackId = $fallbackShop->getId();
         }
 
-        $translator = new Shopware_Components_Translation();
+        $translator = $this->container->get('translation');
 
         $builder = $emotionRepository->getCampaignsByShopId($shopId);
         $campaigns = $builder->getQuery()->getArrayResult();

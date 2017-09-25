@@ -615,7 +615,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return true;
         }
 
-        $translationReader = new Shopware_Components_Translation();
+        $translationReader = $this->container->get('translation');
         $translation = $translationReader->read($customer['languageId'], 'config_mails', $mailModel->getId());
         $mailModel->setTranslation($translation);
 

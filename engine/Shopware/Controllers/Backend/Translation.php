@@ -38,7 +38,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
     public function init()
     {
         parent::init();
-        $this->translation = new Shopware_Components_Translation();
+        $this->translation = $this->container->get('translation');
     }
 
     /**

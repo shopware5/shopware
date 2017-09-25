@@ -522,7 +522,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     protected function setTranslationComponent()
     {
-        $this->translationComponent = new Shopware_Components_Translation();
+        $this->translationComponent = Shopware()->Container()->get('translation');
     }
 
     /**
