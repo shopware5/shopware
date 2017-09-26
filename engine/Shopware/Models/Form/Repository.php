@@ -101,8 +101,9 @@ class Repository extends ModelRepository
             ->from('Shopware\Models\Form\Form', 'forms')
             ->leftJoin('forms.fields', 'fields')
             ->leftJoin('forms.attribute', 'attribute')
-            ->where('forms.id = ?1')
-            ->setParameter(1, $formId)
+            ->where('forms.id = :form_id')
+            ->andWhere('forms.active = true')
+            ->setParameter('form_id', $formId)
             ->orderBy('fields.position');
 
         if ($shopId) {

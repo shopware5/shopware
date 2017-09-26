@@ -226,6 +226,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         // prepare form data for view
         $formData = [
             'id' => (string) $form->getId(),  // intended string cast to keep compatibility
+            'active' => $form->getActive(),
             'name' => $form->getName(),
             'text' => $form->getText(),
             'text2' => $form->getText2(),
