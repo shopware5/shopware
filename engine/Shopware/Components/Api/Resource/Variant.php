@@ -838,7 +838,7 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
             }
 
-        //new unit data send? create new unit for this variant
+            //new unit data send? create new unit for this variant
         } elseif (!empty($data['unit'])) {
             $data['unit'] = $this->updateUnitReference($data['unit']);
         }
@@ -981,9 +981,13 @@ class Variant extends Resource implements BatchInterface
      */
     private function getAvailableGroup($availableGroups, array $groupData)
     {
-        /** @var $availableGroup Option */
+        //Convert string to lower case to avoid problems with case insensitivity in database
+        //vs case sensitivity in PHP
+        $groupName = mb_strtolower($groupData['name']);
+
+        /** @var $availableGroup Group */
         foreach ($availableGroups as $availableGroup) {
-            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
+            if ((mb_strtolower($availableGroup->getName()) == $groupName && $groupData['name'] !== null)
                 || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
                 return $availableGroup;
             }
@@ -999,13 +1003,17 @@ class Variant extends Resource implements BatchInterface
      * @param Collection|array $availableOptions
      * @param array            $optionData
      *
-     * @return bool
+     * @return bool|Option
      */
     private function getAvailableOption($availableOptions, array $optionData)
     {
+        //Convert string to lower case to avoid problems with case insensitivity in database
+        //vs case sensitivity in PHP
+        $optionName = mb_strtolower($optionData['name']);
+
         /** @var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
+            if ((mb_strtolower($availableOption->getName()) == $optionName && $optionData['name'] !== null)
                 || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
                 return $availableOption;
             }
