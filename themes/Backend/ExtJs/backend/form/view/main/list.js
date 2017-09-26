@@ -123,6 +123,11 @@ Ext.define('Shopware.apps.Form.view.main.List', {
                 dataIndex: 'name',
                 flex: 1
             }, {
+                header: '{s name=column_active}Active{/s}',
+                dataIndex: 'active',
+                flex: 1,
+                renderer: this.activeColumnRenderer
+            }, {
                 header: '{s name=column_email}Email address{/s}',
                 dataIndex: 'email',
                 flex: 1
@@ -198,6 +203,17 @@ Ext.define('Shopware.apps.Form.view.main.List', {
         });
 
         return pagingbar;
-    }
+    },
+
+    /**
+     * @param [object] - value
+     */
+    activeColumnRenderer: function(value) {
+        if (value) {
+            return '<div class="sprite-tick"  style="width: 25px; height: 25px">&nbsp;</div>';
+        } else {
+            return '<div class="sprite-cross" style="width: 25px; height: 25px">&nbsp;</div>';
+        }
+    },
 });
 //{/block}

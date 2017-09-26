@@ -102,6 +102,7 @@ class Repository extends ModelRepository
             ->leftJoin('forms.fields', 'fields')
             ->leftJoin('forms.attribute', 'attribute')
             ->where('forms.id = ?1')
+            ->andWhere('forms.active = true')
             ->setParameter(1, $formId)
             ->orderBy('fields.position');
 
