@@ -1,15 +1,13 @@
-import utils from 'src/core/service/util.service';
 import template from './core-product-detail.html.twig';
 import './core-product-detail.less';
 
 export default Shopware.ComponentFactory.register('core-product-detail', {
-    inject: ['productService', 'categoryService', 'productManufacturerService', 'taxService'],
+    inject: ['productRepository', 'categoryService', 'productManufacturerService', 'taxService'],
 
     data() {
         return {
             isWorking: false,
             product: {
-                manufacturer: {},
                 attribute: {},
                 mainDetail: {},
                 categories: [],
@@ -50,12 +48,25 @@ export default Shopware.ComponentFactory.register('core-product-detail', {
         getProductData() {
             const uuid = this.$route.params.uuid;
 
+            if (!uuid) {
+                this.createNewProduct();
+                return;
+            }
+
             this.isWorking = true;
-            this.productService.readByUuid(uuid).then((response) => {
-                this.notModifiedProduct = { ...response.data };
-                this.product = response.data;
+
+            this.productRepository.getByUuid(uuid).then((productProxy) => {
+                this.productProxy = productProxy;
+                this.product = productProxy.data;
                 this.isWorking = false;
             });
+        },
+
+        createNewProduct() {
+            const productProxy = this.productRepository.getNew();
+
+            this.productProxy = productProxy;
+            this.product = productProxy.data;
         },
 
         getManufacturerData() {
@@ -70,20 +81,21 @@ export default Shopware.ComponentFactory.register('core-product-detail', {
             });
         },
 
-        onSaveForm() {
+        onSave() {
             const uuid = this.$route.params.uuid;
-            const changeSet = utils.compareObjects(this.notModifiedProduct, this.product);
 
-            // Check if we're having categories and apply them to the change set
-            if (this.product.categories.length) {
-                changeSet.categories = this.product.categories;
+            if (!uuid) {
+                this.isWorking = true;
+                this.productRepository.create(this.productProxy).then((data) => {
+                    if (data.uuid) {
+                        this.$router.push({ path: `/core/product/detail/${data.uuid}` });
+                    }
+                });
+                return;
             }
 
-            console.log(changeSet);
             this.isWorking = true;
-            this.productService.updateByUuid(uuid, changeSet).then((response) => {
-                this.notModifiedProduct = { ...response.data };
-                this.product = response.data;
+            this.productRepository.updateByUuid(uuid, this.productProxy).then(() => {
                 this.isWorking = false;
             });
         }

@@ -9,6 +9,7 @@ export default function ProductService(client) {
         readAll,
         readByUuid,
         updateByUuid,
+        create,
         getReturnFormat,
         setReturnFormat
     };
@@ -46,7 +47,7 @@ export default function ProductService(client) {
      * Updates a single product. Partial updates are supported using the {@param payload}.
      *
      * @param {String} uuid - Product UUID
-     * @param {Object} payload - Changeset
+     * @param {Object} payload - change set
      * @returns {Promise}
      */
     function updateByUuid(uuid, payload) {
@@ -54,16 +55,19 @@ export default function ProductService(client) {
             return Promise.reject(new Error('"uuid" argument needs to be provided'));
         }
 
-        // We have to remap the categories at the moment
-        if (payload.categories) {
-            payload.categories = payload.categories.map((entry) => {
-                return {
-                    categoryUuid: entry
-                };
-            });
-        }
-
         return client.patch(`/product/${uuid}.json`, payload).then((response) => {
+            return response.data;
+        });
+    }
+
+    /**
+     * Creates a new product.
+     *
+     * @param {Object} payload - the data of the new product
+     * @returns {Promise}
+     */
+    function create(payload) {
+        return client.post('/product.json', payload).then((response) => {
             return response.data;
         });
     }
