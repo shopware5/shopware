@@ -126,7 +126,7 @@ class Inheritance
      *
      * @param \Shopware\Models\Shop\Template $template
      *
-     * @return array
+     * @return string[]
      */
     public function getInheritancePath(Shop\Template $template)
     {

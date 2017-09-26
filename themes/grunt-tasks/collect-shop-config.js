@@ -8,7 +8,7 @@ module.exports = (grunt) => {
         jsFiles = [],
         jsTargetFile = {},
         content = '',
-        inheritancePath = config.config['shopware-theme-inheritance'],
+        inheritancePath = config.inheritancePath,
         themesTasks = {};
 
     lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';

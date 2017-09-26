@@ -190,12 +190,15 @@ class Compiler
         $jsTarget = $this->pathResolver->getJsFilePath($shop, $timestamp);
         $jsTarget = ltrim(str_replace($this->rootDir, '', $jsTarget), '/');
 
+        $inheritancePath = $this->inheritance->getInheritancePath($shop->getTemplate());
+
         return new Configuration(
             $lessFiles,
             $js,
             $config,
             $lessTarget,
-            $jsTarget
+            $jsTarget,
+            $inheritancePath
         );
     }
 
@@ -389,7 +392,6 @@ class Compiler
     {
         $config = $this->inheritance->buildConfig($template, $shop, true);
         $config['shopware-revision'] = \Shopware::REVISION;
-        $config['shopware-theme-inheritance'] = $this->inheritance->getInheritancePath($template);
 
         $collection = new ArrayCollection();
 
