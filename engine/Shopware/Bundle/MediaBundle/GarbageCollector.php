@@ -111,7 +111,14 @@ class GarbageCollector
      */
     private function createTempTable()
     {
-        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id))');
+        $this->connection->exec('
+            CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (
+                id int auto_increment,
+                mediaId int NOT NULL,
+                PRIMARY KEY pkid (id),
+                INDEX (mediaId)
+            ) ENGINE=InnoDB
+        ');
     }
 
     /**
