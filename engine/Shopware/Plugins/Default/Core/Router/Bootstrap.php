@@ -144,6 +144,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             if ($preferBasePath && strpos($request->getPathInfo(), '/shopware.php/') === 0) {
                 $removePath = $request->getBasePath() . '/shopware.php';
                 $newPath = str_replace($removePath, $request->getBasePath(), $request->getRequestUri());
+            } else {
+                if (isset($newPath)) {
+                    $newPath .= $request->getRequestUri();
+                }
             }
 
             if (isset($newPath)) {
