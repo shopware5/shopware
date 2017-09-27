@@ -2,6 +2,7 @@
 
 namespace Shopware\PaymentMethod\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\ReferenceField;
 use Shopware\Framework\Write\Flag\Required;
@@ -28,22 +29,22 @@ class PaymentMethodCountryResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\PaymentMethod\Event\PaymentMethodCountryWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\PaymentMethod\Event\PaymentMethodCountryWrittenEvent
     {
-        $event = new \Shopware\PaymentMethod\Event\PaymentMethodCountryWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\PaymentMethod\Event\PaymentMethodCountryWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\PaymentMethod\Writer\Resource\PaymentMethodResource::class])) {
-            $event->addEvent(\Shopware\PaymentMethod\Writer\Resource\PaymentMethodResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PaymentMethod\Writer\Resource\PaymentMethodResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\AreaCountry\Writer\Resource\AreaCountryResource::class])) {
-            $event->addEvent(\Shopware\AreaCountry\Writer\Resource\AreaCountryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\AreaCountry\Writer\Resource\AreaCountryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\PaymentMethod\Writer\Resource\PaymentMethodCountryResource::class])) {
-            $event->addEvent(\Shopware\PaymentMethod\Writer\Resource\PaymentMethodCountryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PaymentMethod\Writer\Resource\PaymentMethodCountryResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

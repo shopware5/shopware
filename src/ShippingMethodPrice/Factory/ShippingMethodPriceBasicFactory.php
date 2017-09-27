@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\ShippingMethodPrice\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -20,7 +22,16 @@ class ShippingMethodPriceBasicFactory extends Factory
        'quantity_from' => 'quantity_from',
        'price' => 'price',
        'factor' => 'factor',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -33,6 +44,8 @@ class ShippingMethodPriceBasicFactory extends Factory
         $shippingMethodPrice->setQuantityFrom((float) $data[$selection->getField('quantity_from')]);
         $shippingMethodPrice->setPrice((float) $data[$selection->getField('price')]);
         $shippingMethodPrice->setFactor((float) $data[$selection->getField('factor')]);
+        $shippingMethodPrice->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $shippingMethodPrice->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
 
         /** @var $extension ShippingMethodPriceExtension */
         foreach ($this->getExtensions() as $extension) {

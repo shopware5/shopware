@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Category\Factory;
 
@@ -61,7 +61,7 @@ class CategoryDetailFactory extends CategoryBasicFactory
         $fields['productStream'] = $this->productStreamFactory->getFields();
         $fields['media'] = $this->mediaFactory->getFields();
         $fields['_sub_select_product_uuids'] = '_sub_select_product_uuids';
-        $fields['_sub_select_customerGroup_uuids'] = '_sub_select_customerGroup_uuids';
+        $fields['_sub_select_blockedCustomerGroups_uuids'] = '_sub_select_blockedCustomerGroups_uuids';
 
         return $fields;
     }
@@ -86,15 +86,14 @@ class CategoryDetailFactory extends CategoryBasicFactory
                 $this->mediaFactory->hydrate($data, new MediaBasicStruct(), $media, $context)
             );
         }
-
         if ($selection->hasField('_sub_select_product_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_product_uuids')]);
-            $category->setProductUuids(array_filter($uuids));
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_product_uuids')]);
+            $category->setProductUuids(array_values(array_filter($uuids)));
         }
 
-        if ($selection->hasField('_sub_select_customerGroup_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_customerGroup_uuids')]);
-            $category->setBlockedCustomerGroupsUuids(array_filter($uuids));
+        if ($selection->hasField('_sub_select_blockedCustomerGroups_uuids')) {
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_blockedCustomerGroups_uuids')]);
+            $category->setBlockedCustomerGroupsUuids(array_values(array_filter($uuids)));
         }
 
         return $category;
@@ -176,13 +175,13 @@ class CategoryDetailFactory extends CategoryBasicFactory
             $query->groupBy(sprintf('%s.uuid', $selection->getRootEscaped()));
         }
 
-        if ($selection->hasField('_sub_select_customerGroup_uuids')) {
+        if ($selection->hasField('_sub_select_blockedCustomerGroups_uuids')) {
             $query->addSelect('
                 (
                     SELECT GROUP_CONCAT(mapping.customer_group_uuid SEPARATOR \'|\')
                     FROM category_avoid_customer_group mapping
                     WHERE mapping.category_uuid = ' . $selection->getRootEscaped() . '.uuid
-                ) as ' . QuerySelection::escape($selection->getField('_sub_select_customerGroup_uuids'))
+                ) as ' . QuerySelection::escape($selection->getField('_sub_select_blockedCustomerGroups_uuids'))
             );
         }
     }

@@ -2,6 +2,7 @@
 
 namespace Shopware\Product\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\ReferenceField;
 use Shopware\Framework\Write\Field\UuidField;
@@ -35,26 +36,26 @@ class ProductCategorySeoResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Product\Event\ProductCategorySeoWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Product\Event\ProductCategorySeoWrittenEvent
     {
-        $event = new \Shopware\Product\Event\ProductCategorySeoWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Product\Event\ProductCategorySeoWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Category\Writer\Resource\CategoryResource::class])) {
-            $event->addEvent(\Shopware\Category\Writer\Resource\CategoryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Category\Writer\Resource\CategoryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductCategorySeoResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductCategorySeoResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductCategorySeoResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

@@ -2,6 +2,7 @@
 
 namespace Shopware\Shop\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
@@ -61,7 +62,7 @@ class ShopPageResource extends Resource
         $this->fields[self::SHOP_IDS_FIELD] = new StringField('shop_ids');
         $this->fields[self::SHOP_UUIDS_FIELD] = new LongTextField('shop_uuids');
         $this->fields['parent'] = new ReferenceField('parentUuid', 'uuid', \Shopware\Shop\Writer\Resource\ShopPageResource::class);
-        $this->fields['parentUuid'] = new FkField('parent_uuid', \Shopware\Shop\Writer\Resource\ShopPageResource::class, 'uuid');
+        $this->fields['parentUuid'] = (new FkField('parent_uuid', \Shopware\Shop\Writer\Resource\ShopPageResource::class, 'uuid'));
         $this->fields['parent'] = new SubresourceField(\Shopware\Shop\Writer\Resource\ShopPageResource::class);
     }
 
@@ -72,22 +73,22 @@ class ShopPageResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Shop\Event\ShopPageWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Shop\Event\ShopPageWrittenEvent
     {
-        $event = new \Shopware\Shop\Event\ShopPageWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Shop\Event\ShopPageWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopPageResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopPageResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopPageResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopPageResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopPageResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopPageResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopPageResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopPageResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopPageResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

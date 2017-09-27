@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
@@ -63,18 +64,18 @@ class ShoppingWorldComponentFieldResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\ShoppingWorldComponentFieldWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\ShoppingWorldComponentFieldWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\ShoppingWorldComponentFieldWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\ShoppingWorldComponentFieldWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ShoppingWorldComponentResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\SeoUrl\Loader;
 
@@ -30,9 +30,9 @@ class SeoUrlBasicLoader
             return new SeoUrlBasicCollection();
         }
 
-        $seoUrls = $this->read($uuids, $context);
+        $seoUrlsCollection = $this->read($uuids, $context);
 
-        return $seoUrls;
+        return $seoUrlsCollection;
     }
 
     private function read(array $uuids, TranslationContext $context): SeoUrlBasicCollection

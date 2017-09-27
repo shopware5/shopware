@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\PaymentMethod\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\PaymentMethod\Extension\PaymentMethodExtension;
 use Shopware\PaymentMethod\Struct\PaymentMethodBasicStruct;
@@ -34,9 +36,18 @@ class PaymentMethodBasicFactory extends Factory
        'source' => 'source',
        'mobile_inactive' => 'mobile_inactive',
        'risk_rules' => 'risk_rules',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
        'name' => 'translation.name',
        'additional_description' => 'translation.additional_description',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -63,6 +74,8 @@ class PaymentMethodBasicFactory extends Factory
         $paymentMethod->setSource(isset($data[$selection->getField('source')]) ? (int) $data[$selection->getField('source')] : null);
         $paymentMethod->setMobileInactive((bool) $data[$selection->getField('mobile_inactive')]);
         $paymentMethod->setRiskRules(isset($data[$selection->getField('risk_rules')]) ? (string) $data[$selection->getField('risk_rules')] : null);
+        $paymentMethod->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $paymentMethod->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $paymentMethod->setName((string) $data[$selection->getField('name')]);
         $paymentMethod->setAdditionalDescription((string) $data[$selection->getField('additional_description')]);
 

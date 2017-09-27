@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\SubresourceField;
@@ -42,26 +43,26 @@ class FilterResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\FilterWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\FilterWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\FilterWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\FilterWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterTranslationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterRelationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterRelationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterRelationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

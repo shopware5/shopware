@@ -2,6 +2,7 @@
 
 namespace Shopware\Holiday\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\StringField;
 use Shopware\Framework\Write\Field\SubresourceField;
@@ -38,22 +39,22 @@ class HolidayResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Holiday\Event\HolidayWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Holiday\Event\HolidayWrittenEvent
     {
-        $event = new \Shopware\Holiday\Event\HolidayWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Holiday\Event\HolidayWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Holiday\Writer\Resource\HolidayResource::class])) {
-            $event->addEvent(\Shopware\Holiday\Writer\Resource\HolidayResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Holiday\Writer\Resource\HolidayResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Holiday\Writer\Resource\HolidayTranslationResource::class])) {
-            $event->addEvent(\Shopware\Holiday\Writer\Resource\HolidayTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Holiday\Writer\Resource\HolidayTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodHolidayResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodHolidayResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodHolidayResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

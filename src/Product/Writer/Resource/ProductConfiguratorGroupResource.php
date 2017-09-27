@@ -2,6 +2,7 @@
 
 namespace Shopware\Product\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
 use Shopware\Framework\Write\Field\StringField;
@@ -39,18 +40,18 @@ class ProductConfiguratorGroupResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Product\Event\ProductConfiguratorGroupWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Product\Event\ProductConfiguratorGroupWrittenEvent
     {
-        $event = new \Shopware\Product\Event\ProductConfiguratorGroupWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Product\Event\ProductConfiguratorGroupWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductConfiguratorGroupResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductConfiguratorGroupTranslationResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorGroupTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorGroupTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

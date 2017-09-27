@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -36,7 +37,7 @@ class ShoppingWorldComponentResource extends Resource
         $this->fields[self::PLUGIN_ID_FIELD] = new IntField('plugin_id');
         $this->primaryKeyFields[self::UUID_FIELD] = new UuidField('uuid');
         $this->fields['plugin'] = new ReferenceField('pluginUuid', 'uuid', \Shopware\Framework\Write\Resource\PluginResource::class);
-        $this->fields['pluginUuid'] = new FkField('plugin_uuid', \Shopware\Framework\Write\Resource\PluginResource::class, 'uuid');
+        $this->fields['pluginUuid'] = (new FkField('plugin_uuid', \Shopware\Framework\Write\Resource\PluginResource::class, 'uuid'));
         $this->fields['fields'] = new SubresourceField(\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::class);
     }
 
@@ -49,22 +50,22 @@ class ShoppingWorldComponentResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\ShoppingWorldComponentWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\ShoppingWorldComponentWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\ShoppingWorldComponentWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\ShoppingWorldComponentWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\PluginResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\PluginResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\PluginResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ShoppingWorldComponentResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ShoppingWorldComponentFieldResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

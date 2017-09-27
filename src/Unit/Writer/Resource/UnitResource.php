@@ -2,6 +2,7 @@
 
 namespace Shopware\Unit\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\SubresourceField;
 use Shopware\Framework\Write\Field\TranslatedField;
 use Shopware\Framework\Write\Field\UuidField;
@@ -32,18 +33,18 @@ class UnitResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Unit\Event\UnitWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Unit\Event\UnitWrittenEvent
     {
-        $event = new \Shopware\Unit\Event\UnitWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Unit\Event\UnitWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Unit\Writer\Resource\UnitResource::class])) {
-            $event->addEvent(\Shopware\Unit\Writer\Resource\UnitResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Unit\Writer\Resource\UnitResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Unit\Writer\Resource\UnitTranslationResource::class])) {
-            $event->addEvent(\Shopware\Unit\Writer\Resource\UnitTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Unit\Writer\Resource\UnitTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

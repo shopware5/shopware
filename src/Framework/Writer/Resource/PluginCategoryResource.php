@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\LongTextField;
 use Shopware\Framework\Write\Field\ReferenceField;
@@ -25,7 +26,7 @@ class PluginCategoryResource extends Resource
         $this->primaryKeyFields[self::LOCALE_FIELD] = (new StringField('locale'))->setFlags(new Required());
         $this->fields[self::NAME_FIELD] = (new LongTextField('name'))->setFlags(new Required());
         $this->fields['parent'] = new ReferenceField('parentUuid', 'uuid', \Shopware\Framework\Write\Resource\PluginCategoryResource::class);
-        $this->fields['parentUuid'] = new FkField('parent_uuid', \Shopware\Framework\Write\Resource\PluginCategoryResource::class, 'uuid');
+        $this->fields['parentUuid'] = (new FkField('parent_uuid', \Shopware\Framework\Write\Resource\PluginCategoryResource::class, 'uuid'));
         $this->fields['parent'] = new SubresourceField(\Shopware\Framework\Write\Resource\PluginCategoryResource::class);
     }
 
@@ -36,22 +37,22 @@ class PluginCategoryResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\PluginCategoryWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\PluginCategoryWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\PluginCategoryWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\PluginCategoryWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\PluginCategoryResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\PluginCategoryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\PluginCategoryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\PluginCategoryResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\PluginCategoryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\PluginCategoryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\PluginCategoryResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\PluginCategoryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\PluginCategoryResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

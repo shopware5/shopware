@@ -2,6 +2,7 @@
 
 namespace Shopware\Product\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\ReferenceField;
 use Shopware\Framework\Write\Field\StringField;
@@ -40,22 +41,22 @@ class ProductLinkResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Product\Event\ProductLinkWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Product\Event\ProductLinkWrittenEvent
     {
-        $event = new \Shopware\Product\Event\ProductLinkWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Product\Event\ProductLinkWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductLinkResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductLinkResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductLinkResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductLinkTranslationResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductLinkTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductLinkTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

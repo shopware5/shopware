@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Product\Factory;
 
@@ -11,8 +11,6 @@ use Shopware\PriceGroup\Factory\PriceGroupBasicFactory;
 use Shopware\PriceGroup\Struct\PriceGroupBasicStruct;
 use Shopware\Product\Extension\ProductExtension;
 use Shopware\Product\Struct\ProductBasicStruct;
-use Shopware\ProductDetail\Factory\ProductDetailBasicFactory;
-use Shopware\ProductDetail\Struct\ProductDetailBasicStruct;
 use Shopware\ProductManufacturer\Factory\ProductManufacturerBasicFactory;
 use Shopware\ProductManufacturer\Struct\ProductManufacturerBasicStruct;
 use Shopware\Search\QueryBuilder;
@@ -41,8 +39,8 @@ class ProductBasicFactory extends Factory
        'template' => 'template',
        'configurator_set_id' => 'configurator_set_id',
        'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
        'main_detail_uuid' => 'main_detail_uuid',
+       'updated_at' => 'updated_at',
        'name' => 'translation.name',
        'keywords' => 'translation.keywords',
        'description' => 'translation.description',
@@ -54,11 +52,6 @@ class ProductBasicFactory extends Factory
      * @var ProductManufacturerBasicFactory
      */
     protected $productManufacturerFactory;
-
-    /**
-     * @var ProductDetailBasicFactory
-     */
-    protected $productDetailFactory;
 
     /**
      * @var TaxBasicFactory
@@ -84,7 +77,6 @@ class ProductBasicFactory extends Factory
         Connection $connection,
         ExtensionRegistryInterface $registry,
         ProductManufacturerBasicFactory $productManufacturerFactory,
-        ProductDetailBasicFactory $productDetailFactory,
         TaxBasicFactory $taxFactory,
         SeoUrlBasicFactory $seoUrlFactory,
         PriceGroupBasicFactory $priceGroupFactory,
@@ -92,7 +84,6 @@ class ProductBasicFactory extends Factory
     ) {
         parent::__construct($connection, $registry);
         $this->productManufacturerFactory = $productManufacturerFactory;
-        $this->productDetailFactory = $productDetailFactory;
         $this->taxFactory = $taxFactory;
         $this->seoUrlFactory = $seoUrlFactory;
         $this->priceGroupFactory = $priceGroupFactory;
@@ -117,9 +108,9 @@ class ProductBasicFactory extends Factory
         $product->setAllowNotification((bool) $data[$selection->getField('allow_notification')]);
         $product->setTemplate(isset($data[$selection->getField('template')]) ? (string) $data[$selection->getField('template')] : null);
         $product->setConfiguratorSetId(isset($data[$selection->getField('configurator_set_id')]) ? (int) $data[$selection->getField('configurator_set_id')] : null);
-        $product->setCreatedAt(new \DateTime($data[$selection->getField('created_at')]));
-        $product->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $product->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
         $product->setMainDetailUuid((string) $data[$selection->getField('main_detail_uuid')]);
+        $product->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $product->setName((string) $data[$selection->getField('name')]);
         $product->setKeywords(isset($data[$selection->getField('keywords')]) ? (string) $data[$selection->getField('keywords')] : null);
         $product->setDescription(isset($data[$selection->getField('description')]) ? (string) $data[$selection->getField('description')] : null);
@@ -129,12 +120,6 @@ class ProductBasicFactory extends Factory
         if ($productManufacturer && !empty($data[$productManufacturer->getField('uuid')])) {
             $product->setManufacturer(
                 $this->productManufacturerFactory->hydrate($data, new ProductManufacturerBasicStruct(), $productManufacturer, $context)
-            );
-        }
-        $productDetail = $selection->filter('mainDetail');
-        if ($productDetail && !empty($data[$productDetail->getField('uuid')])) {
-            $product->setMainDetail(
-                $this->productDetailFactory->hydrate($data, new ProductDetailBasicStruct(), $productDetail, $context)
             );
         }
         $tax = $selection->filter('tax');
@@ -155,10 +140,9 @@ class ProductBasicFactory extends Factory
                 $this->priceGroupFactory->hydrate($data, new PriceGroupBasicStruct(), $priceGroup, $context)
             );
         }
-
-        if ($selection->hasField('_sub_select_customerGroup_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_customerGroup_uuids')]);
-            $product->setBlockedCustomerGroupsUuids(array_filter($uuids));
+        if ($selection->hasField('_sub_select_blockedCustomerGroups_uuids')) {
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_blockedCustomerGroups_uuids')]);
+            $product->setBlockedCustomerGroupsUuids(array_values(array_filter($uuids)));
         }
 
         /** @var $extension ProductExtension */
@@ -174,11 +158,10 @@ class ProductBasicFactory extends Factory
         $fields = array_merge(self::FIELDS, parent::getFields());
 
         $fields['manufacturer'] = $this->productManufacturerFactory->getFields();
-        $fields['mainDetail'] = $this->productDetailFactory->getFields();
         $fields['tax'] = $this->taxFactory->getFields();
         $fields['canonicalUrl'] = $this->seoUrlFactory->getFields();
         $fields['priceGroup'] = $this->priceGroupFactory->getFields();
-        $fields['_sub_select_customerGroup_uuids'] = '_sub_select_customerGroup_uuids';
+        $fields['_sub_select_blockedCustomerGroups_uuids'] = '_sub_select_blockedCustomerGroups_uuids';
 
         return $fields;
     }
@@ -193,16 +176,6 @@ class ProductBasicFactory extends Factory
                 sprintf('%s.uuid = %s.product_manufacturer_uuid', $productManufacturer->getRootEscaped(), $selection->getRootEscaped())
             );
             $this->productManufacturerFactory->joinDependencies($productManufacturer, $query, $context);
-        }
-
-        if ($productDetail = $selection->filter('mainDetail')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'product_detail',
-                $productDetail->getRootEscaped(),
-                sprintf('%s.uuid = %s.main_detail_uuid', $productDetail->getRootEscaped(), $selection->getRootEscaped())
-            );
-            $this->productDetailFactory->joinDependencies($productDetail, $query, $context);
         }
 
         if ($tax = $selection->filter('tax')) {
@@ -257,13 +230,13 @@ class ProductBasicFactory extends Factory
             $query->groupBy(sprintf('%s.uuid', $selection->getRootEscaped()));
         }
 
-        if ($selection->hasField('_sub_select_customerGroup_uuids')) {
+        if ($selection->hasField('_sub_select_blockedCustomerGroups_uuids')) {
             $query->addSelect('
                 (
                     SELECT GROUP_CONCAT(mapping.customer_group_uuid SEPARATOR \'|\')
                     FROM product_avoid_customer_group mapping
                     WHERE mapping.product_uuid = ' . $selection->getRootEscaped() . '.uuid
-                ) as ' . QuerySelection::escape($selection->getField('_sub_select_customerGroup_uuids'))
+                ) as ' . QuerySelection::escape($selection->getField('_sub_select_blockedCustomerGroups_uuids'))
             );
         }
 
@@ -289,7 +262,6 @@ class ProductBasicFactory extends Factory
     {
         $fields = array_merge(self::FIELDS, $this->getExtensionFields());
         $fields['manufacturer'] = $this->productManufacturerFactory->getAllFields();
-        $fields['mainDetail'] = $this->productDetailFactory->getAllFields();
         $fields['tax'] = $this->taxFactory->getAllFields();
         $fields['canonicalUrl'] = $this->seoUrlFactory->getAllFields();
         $fields['priceGroup'] = $this->priceGroupFactory->getAllFields();

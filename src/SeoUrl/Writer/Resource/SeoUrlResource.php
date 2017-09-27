@@ -2,8 +2,8 @@
 
 namespace Shopware\SeoUrl\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
-use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\LongTextField;
 use Shopware\Framework\Write\Field\StringField;
 use Shopware\Framework\Write\Field\UuidField;
@@ -20,7 +20,6 @@ class SeoUrlResource extends Resource
     protected const PATH_INFO_FIELD = 'pathInfo';
     protected const SEO_PATH_INFO_FIELD = 'seoPathInfo';
     protected const IS_CANONICAL_FIELD = 'isCanonical';
-    protected const CREATED_AT_FIELD = 'createdAt';
 
     public function __construct()
     {
@@ -34,7 +33,6 @@ class SeoUrlResource extends Resource
         $this->fields[self::PATH_INFO_FIELD] = (new LongTextField('path_info'))->setFlags(new Required());
         $this->fields[self::SEO_PATH_INFO_FIELD] = (new LongTextField('seo_path_info'))->setFlags(new Required());
         $this->fields[self::IS_CANONICAL_FIELD] = new BoolField('is_canonical');
-        $this->fields[self::CREATED_AT_FIELD] = (new DateField('created_at'))->setFlags(new Required());
     }
 
     public function getWriteOrder(): array
@@ -44,27 +42,16 @@ class SeoUrlResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\SeoUrl\Event\SeoUrlWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\SeoUrl\Event\SeoUrlWrittenEvent
     {
-        $event = new \Shopware\SeoUrl\Event\SeoUrlWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\SeoUrl\Event\SeoUrlWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\SeoUrl\Writer\Resource\SeoUrlResource::class])) {
-            $event->addEvent(\Shopware\SeoUrl\Writer\Resource\SeoUrlResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\SeoUrl\Writer\Resource\SeoUrlResource::createWrittenEvent($updates, $context));
         }
 
         return $event;
-    }
-
-    public function getDefaults(string $type): array
-    {
-        if (self::FOR_INSERT === $type) {
-            return [
-                self::CREATED_AT_FIELD => new \DateTime(),
-            ];
-        }
-
-        throw new \InvalidArgumentException('Unable to generate default values, wrong type submitted');
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\OrderLineItem\Extension;
 
@@ -26,6 +26,11 @@ abstract class OrderLineItemExtension implements ExtensionInterface, EventSubscr
         QueryBuilder $query,
         TranslationContext $context
     ): void {
+    }
+
+    public function getDetailFields(): array
+    {
+        return [];
     }
 
     public function getBasicFields(): array

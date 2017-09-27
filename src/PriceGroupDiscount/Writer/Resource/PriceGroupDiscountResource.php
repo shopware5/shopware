@@ -2,6 +2,7 @@
 
 namespace Shopware\PriceGroupDiscount\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
 use Shopware\Framework\Write\Field\ReferenceField;
@@ -37,22 +38,22 @@ class PriceGroupDiscountResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\PriceGroupDiscount\Event\PriceGroupDiscountWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\PriceGroupDiscount\Event\PriceGroupDiscountWrittenEvent
     {
-        $event = new \Shopware\PriceGroupDiscount\Event\PriceGroupDiscountWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\PriceGroupDiscount\Event\PriceGroupDiscountWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\PriceGroup\Writer\Resource\PriceGroupResource::class])) {
-            $event->addEvent(\Shopware\PriceGroup\Writer\Resource\PriceGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PriceGroup\Writer\Resource\PriceGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class])) {
-            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\PriceGroupDiscount\Writer\Resource\PriceGroupDiscountResource::class])) {
-            $event->addEvent(\Shopware\PriceGroupDiscount\Writer\Resource\PriceGroupDiscountResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PriceGroupDiscount\Writer\Resource\PriceGroupDiscountResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

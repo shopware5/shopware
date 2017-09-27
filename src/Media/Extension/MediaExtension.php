@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Media\Extension;
 
@@ -26,6 +26,11 @@ abstract class MediaExtension implements ExtensionInterface, EventSubscriberInte
         QueryBuilder $query,
         TranslationContext $context
     ): void {
+    }
+
+    public function getDetailFields(): array
+    {
+        return [];
     }
 
     public function getBasicFields(): array

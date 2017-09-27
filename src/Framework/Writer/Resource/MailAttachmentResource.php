@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\ReferenceField;
 use Shopware\Framework\Write\Field\UuidField;
@@ -22,7 +23,7 @@ class MailAttachmentResource extends Resource
         $this->fields['media'] = new ReferenceField('mediaUuid', 'uuid', \Shopware\Media\Writer\Resource\MediaResource::class);
         $this->fields['mediaUuid'] = (new FkField('media_uuid', \Shopware\Media\Writer\Resource\MediaResource::class, 'uuid'))->setFlags(new Required());
         $this->fields['shop'] = new ReferenceField('shopUuid', 'uuid', \Shopware\Shop\Writer\Resource\ShopResource::class);
-        $this->fields['shopUuid'] = new FkField('shop_uuid', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
+        $this->fields['shopUuid'] = (new FkField('shop_uuid', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid'));
     }
 
     public function getWriteOrder(): array
@@ -35,26 +36,26 @@ class MailAttachmentResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\MailAttachmentWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\MailAttachmentWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\MailAttachmentWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\MailAttachmentWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\MailResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\MailResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\MailResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Media\Writer\Resource\MediaResource::class])) {
-            $event->addEvent(\Shopware\Media\Writer\Resource\MediaResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Media\Writer\Resource\MediaResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\MailAttachmentResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\MailAttachmentResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\MailAttachmentResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

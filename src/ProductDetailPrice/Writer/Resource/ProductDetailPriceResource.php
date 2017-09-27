@@ -2,6 +2,7 @@
 
 namespace Shopware\ProductDetailPrice\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
 use Shopware\Framework\Write\Field\IntField;
@@ -46,22 +47,22 @@ class ProductDetailPriceResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\ProductDetailPrice\Event\ProductDetailPriceWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\ProductDetailPrice\Event\ProductDetailPriceWrittenEvent
     {
-        $event = new \Shopware\ProductDetailPrice\Event\ProductDetailPriceWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\ProductDetailPrice\Event\ProductDetailPriceWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class])) {
-            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ProductDetail\Writer\Resource\ProductDetailResource::class])) {
-            $event->addEvent(\Shopware\ProductDetail\Writer\Resource\ProductDetailResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ProductDetail\Writer\Resource\ProductDetailResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ProductDetailPrice\Writer\Resource\ProductDetailPriceResource::class])) {
-            $event->addEvent(\Shopware\ProductDetailPrice\Writer\Resource\ProductDetailPriceResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ProductDetailPrice\Writer\Resource\ProductDetailPriceResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

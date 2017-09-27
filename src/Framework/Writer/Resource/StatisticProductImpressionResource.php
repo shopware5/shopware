@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
@@ -45,22 +46,22 @@ class StatisticProductImpressionResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\StatisticProductImpressionWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\StatisticProductImpressionWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\StatisticProductImpressionWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\StatisticProductImpressionWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\StatisticProductImpressionResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\StatisticProductImpressionResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\StatisticProductImpressionResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

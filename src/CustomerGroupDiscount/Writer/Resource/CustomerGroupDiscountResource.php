@@ -2,6 +2,7 @@
 
 namespace Shopware\CustomerGroupDiscount\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
 use Shopware\Framework\Write\Field\ReferenceField;
@@ -34,18 +35,18 @@ class CustomerGroupDiscountResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\CustomerGroupDiscount\Event\CustomerGroupDiscountWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\CustomerGroupDiscount\Event\CustomerGroupDiscountWrittenEvent
     {
-        $event = new \Shopware\CustomerGroupDiscount\Event\CustomerGroupDiscountWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\CustomerGroupDiscount\Event\CustomerGroupDiscountWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class])) {
-            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\CustomerGroupDiscount\Writer\Resource\CustomerGroupDiscountResource::class])) {
-            $event->addEvent(\Shopware\CustomerGroupDiscount\Writer\Resource\CustomerGroupDiscountResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\CustomerGroupDiscount\Writer\Resource\CustomerGroupDiscountResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

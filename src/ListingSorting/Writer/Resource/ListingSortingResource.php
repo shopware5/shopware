@@ -2,6 +2,7 @@
 
 namespace Shopware\ListingSorting\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -43,22 +44,22 @@ class ListingSortingResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\ListingSorting\Event\ListingSortingWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\ListingSorting\Event\ListingSortingWrittenEvent
     {
-        $event = new \Shopware\ListingSorting\Event\ListingSortingWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\ListingSorting\Event\ListingSortingWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\ListingSorting\Writer\Resource\ListingSortingResource::class])) {
-            $event->addEvent(\Shopware\ListingSorting\Writer\Resource\ListingSortingResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ListingSorting\Writer\Resource\ListingSortingResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ListingSorting\Writer\Resource\ListingSortingTranslationResource::class])) {
-            $event->addEvent(\Shopware\ListingSorting\Writer\Resource\ListingSortingTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ListingSorting\Writer\Resource\ListingSortingTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ProductStream\Writer\Resource\ProductStreamResource::class])) {
-            $event->addEvent(\Shopware\ProductStream\Writer\Resource\ProductStreamResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ProductStream\Writer\Resource\ProductStreamResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

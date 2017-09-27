@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -61,18 +62,18 @@ class AttributeConfigurationResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\AttributeConfigurationWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\AttributeConfigurationWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\AttributeConfigurationWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\AttributeConfigurationWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\AttributeConfigurationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\AttributeConfigurationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\AttributeConfigurationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\AttributeConfigurationTranslationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\AttributeConfigurationTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\AttributeConfigurationTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

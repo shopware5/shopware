@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\StringField;
 use Shopware\Framework\Write\Field\UuidField;
@@ -30,14 +31,14 @@ class StatisticAddressPoolResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\StatisticAddressPoolWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\StatisticAddressPoolWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\StatisticAddressPoolWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\StatisticAddressPoolWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\StatisticAddressPoolResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\StatisticAddressPoolResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\StatisticAddressPoolResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

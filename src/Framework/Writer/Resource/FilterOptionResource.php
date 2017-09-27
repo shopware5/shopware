@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\SubresourceField;
 use Shopware\Framework\Write\Field\TranslatedField;
@@ -37,26 +38,26 @@ class FilterOptionResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\FilterOptionWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\FilterOptionWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\FilterOptionWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\FilterOptionWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterOptionResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterOptionResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterOptionResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterOptionTranslationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterOptionTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterOptionTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterRelationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterRelationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterRelationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\FilterValueResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\FilterValueResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\FilterValueResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

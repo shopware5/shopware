@@ -33,9 +33,9 @@ use Shopware\Cart\Price\PriceDefinitionCollection;
 use Shopware\Cart\Product\ProductPriceCollection;
 use Shopware\Cart\Tax\TaxRule;
 use Shopware\Cart\Tax\TaxRuleCollection;
+use Shopware\Cart\Test\Common\Generator;
 use Shopware\CartBridge\Product\ProductPriceGateway;
 use Shopware\CustomerGroup\Struct\CustomerGroupBasicStruct;
-use Shopware\Cart\Test\Common\Generator;
 
 class ProductPriceGatewayTest extends TestCase
 {
@@ -268,7 +268,7 @@ class PriceQueryRow
         $taxName = null
     ): array {
         return [
-            'price_customer_group_key' => $customerGroupKey,
+            'customer_group_uuid' => $customerGroupKey,
             'price_from_quantity' => $from,
             'price_to_quantity' => $to,
             'price_net' => $price,

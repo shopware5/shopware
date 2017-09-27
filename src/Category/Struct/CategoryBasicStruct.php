@@ -93,12 +93,12 @@ class CategoryBasicStruct extends Struct
     protected $facetUuids;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $updatedAt;
 
@@ -106,6 +106,11 @@ class CategoryBasicStruct extends Struct
      * @var string
      */
     protected $name;
+
+    /**
+     * @var array
+     */
+    protected $pathNames;
 
     /**
      * @var string|null
@@ -312,22 +317,22 @@ class CategoryBasicStruct extends Struct
         $this->facetUuids = $facetUuids;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setCreatedAt(?\DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): void
+    public function setUpdatedAt(?\DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -340,6 +345,16 @@ class CategoryBasicStruct extends Struct
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getPathNames(): array
+    {
+        return $this->pathNames;
+    }
+
+    public function setPathNames(array $pathNames): void
+    {
+        $this->pathNames = $pathNames;
     }
 
     public function getMetaKeywords(): ?string

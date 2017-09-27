@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\ShopTemplate\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -30,7 +32,16 @@ class ShopTemplateBasicFactory extends Factory
        'plugin_uuid' => 'plugin_uuid',
        'parent_id' => 'parent_id',
        'parent_uuid' => 'parent_uuid',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -53,6 +64,8 @@ class ShopTemplateBasicFactory extends Factory
         $shopTemplate->setPluginUuid(isset($data[$selection->getField('plugin_uuid')]) ? (string) $data[$selection->getField('plugin_uuid')] : null);
         $shopTemplate->setParentId(isset($data[$selection->getField('parent_id')]) ? (int) $data[$selection->getField('parent_id')] : null);
         $shopTemplate->setParentUuid(isset($data[$selection->getField('parent_uuid')]) ? (string) $data[$selection->getField('parent_uuid')] : null);
+        $shopTemplate->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $shopTemplate->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
 
         /** @var $extension ShopTemplateExtension */
         foreach ($this->getExtensions() as $extension) {

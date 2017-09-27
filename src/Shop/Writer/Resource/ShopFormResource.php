@@ -2,6 +2,7 @@
 
 namespace Shopware\Shop\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
 use Shopware\Framework\Write\Field\StringField;
@@ -68,22 +69,22 @@ class ShopFormResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Shop\Event\ShopFormWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Shop\Event\ShopFormWrittenEvent
     {
-        $event = new \Shopware\Shop\Event\ShopFormWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Shop\Event\ShopFormWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopFormResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopFormResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopFormResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopFormTranslationResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopFormTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopFormTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopFormFieldResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopFormFieldResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopFormFieldResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

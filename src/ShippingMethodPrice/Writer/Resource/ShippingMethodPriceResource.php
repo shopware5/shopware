@@ -2,6 +2,7 @@
 
 namespace Shopware\ShippingMethodPrice\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
 use Shopware\Framework\Write\Field\ReferenceField;
@@ -36,18 +37,18 @@ class ShippingMethodPriceResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\ShippingMethodPrice\Event\ShippingMethodPriceWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\ShippingMethodPrice\Event\ShippingMethodPriceWrittenEvent
     {
-        $event = new \Shopware\ShippingMethodPrice\Event\ShippingMethodPriceWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\ShippingMethodPrice\Event\ShippingMethodPriceWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethodPrice\Writer\Resource\ShippingMethodPriceResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethodPrice\Writer\Resource\ShippingMethodPriceResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethodPrice\Writer\Resource\ShippingMethodPriceResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

@@ -22,9 +22,14 @@ class ProductManufacturerBasicStruct extends Struct
     protected $mediaUuid;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $updatedAt;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $createdAt;
 
     /**
      * @var string
@@ -81,14 +86,24 @@ class ProductManufacturerBasicStruct extends Struct
         $this->mediaUuid = $mediaUuid;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): void
+    public function setUpdatedAt(?\DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 
     public function getName(): string

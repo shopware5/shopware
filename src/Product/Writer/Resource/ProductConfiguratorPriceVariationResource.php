@@ -2,6 +2,7 @@
 
 namespace Shopware\Product\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FloatField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -35,14 +36,14 @@ class ProductConfiguratorPriceVariationResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Product\Event\ProductConfiguratorPriceVariationWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Product\Event\ProductConfiguratorPriceVariationWrittenEvent
     {
-        $event = new \Shopware\Product\Event\ProductConfiguratorPriceVariationWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Product\Event\ProductConfiguratorPriceVariationWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductConfiguratorPriceVariationResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorPriceVariationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorPriceVariationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

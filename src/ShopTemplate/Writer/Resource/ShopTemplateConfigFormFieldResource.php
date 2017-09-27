@@ -2,6 +2,7 @@
 
 namespace Shopware\ShopTemplate\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
@@ -63,26 +64,26 @@ class ShopTemplateConfigFormFieldResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\ShopTemplate\Event\ShopTemplateConfigFormFieldWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\ShopTemplate\Event\ShopTemplateConfigFormFieldWrittenEvent
     {
-        $event = new \Shopware\ShopTemplate\Event\ShopTemplateConfigFormFieldWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\ShopTemplate\Event\ShopTemplateConfigFormFieldWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\ShopTemplate\Writer\Resource\ShopTemplateResource::class])) {
-            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormResource::class])) {
-            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldResource::class])) {
-            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldValueResource::class])) {
-            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldValueResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldValueResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

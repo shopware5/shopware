@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\LongTextField;
 use Shopware\Framework\Write\Field\StringField;
@@ -43,14 +44,14 @@ class LogResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\LogWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\LogWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\LogWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\LogWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\LogResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\LogResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\LogResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

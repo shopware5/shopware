@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -46,18 +47,18 @@ class ListingFacetResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\ListingFacetWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\ListingFacetWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\ListingFacetWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\ListingFacetWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ListingFacetResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ListingFacetResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ListingFacetResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ListingFacetTranslationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ListingFacetTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ListingFacetTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

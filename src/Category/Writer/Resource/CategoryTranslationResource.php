@@ -2,6 +2,7 @@
 
 namespace Shopware\Category\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\LongTextField;
 use Shopware\Framework\Write\Field\ReferenceField;
@@ -12,6 +13,7 @@ use Shopware\Framework\Write\Resource;
 class CategoryTranslationResource extends Resource
 {
     protected const NAME_FIELD = 'name';
+    protected const PATH_NAMES_FIELD = 'pathNames';
     protected const META_KEYWORDS_FIELD = 'metaKeywords';
     protected const META_TITLE_FIELD = 'metaTitle';
     protected const META_DESCRIPTION_FIELD = 'metaDescription';
@@ -23,6 +25,7 @@ class CategoryTranslationResource extends Resource
         parent::__construct('category_translation');
 
         $this->fields[self::NAME_FIELD] = (new StringField('name'))->setFlags(new Required());
+        $this->fields[self::PATH_NAMES_FIELD] = new LongTextField('path_names');
         $this->fields[self::META_KEYWORDS_FIELD] = new LongTextField('meta_keywords');
         $this->fields[self::META_TITLE_FIELD] = new StringField('meta_title');
         $this->fields[self::META_DESCRIPTION_FIELD] = new LongTextField('meta_description');
@@ -43,22 +46,22 @@ class CategoryTranslationResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Category\Event\CategoryTranslationWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Category\Event\CategoryTranslationWrittenEvent
     {
-        $event = new \Shopware\Category\Event\CategoryTranslationWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Category\Event\CategoryTranslationWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Category\Writer\Resource\CategoryResource::class])) {
-            $event->addEvent(\Shopware\Category\Writer\Resource\CategoryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Category\Writer\Resource\CategoryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Category\Writer\Resource\CategoryTranslationResource::class])) {
-            $event->addEvent(\Shopware\Category\Writer\Resource\CategoryTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Category\Writer\Resource\CategoryTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

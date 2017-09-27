@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Category\Factory;
 
@@ -39,6 +39,7 @@ class CategoryBasicFactory extends Factory
        'created_at' => 'created_at',
        'updated_at' => 'updated_at',
        'name' => 'translation.name',
+       'path_names' => 'translation.path_names',
        'meta_keywords' => 'translation.meta_keywords',
        'meta_title' => 'translation.meta_title',
        'meta_description' => 'translation.meta_description',
@@ -68,7 +69,7 @@ class CategoryBasicFactory extends Factory
     ): CategoryBasicStruct {
         $category->setUuid((string) $data[$selection->getField('uuid')]);
         $category->setParentUuid(isset($data[$selection->getField('parent_uuid')]) ? (string) $data[$selection->getField('parent_uuid')] : null);
-        $category->setPath(array_filter(explode('|', (string) $data[$selection->getField('path')])));
+        $category->setPath(array_values(array_filter(explode('|', (string) $data[$selection->getField('path')]))));
         $category->setPosition((int) $data[$selection->getField('position')]);
         $category->setLevel((int) $data[$selection->getField('level')]);
         $category->setTemplate(isset($data[$selection->getField('template')]) ? (string) $data[$selection->getField('template')] : null);
@@ -83,9 +84,10 @@ class CategoryBasicFactory extends Factory
         $category->setHideSortings((bool) $data[$selection->getField('hide_sortings')]);
         $category->setSortingUuids(isset($data[$selection->getField('sorting_uuids')]) ? (string) $data[$selection->getField('sorting_uuids')] : null);
         $category->setFacetUuids(isset($data[$selection->getField('facet_uuids')]) ? (string) $data[$selection->getField('facet_uuids')] : null);
-        $category->setCreatedAt(new \DateTime($data[$selection->getField('created_at')]));
-        $category->setUpdatedAt(new \DateTime($data[$selection->getField('updated_at')]));
+        $category->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $category->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $category->setName((string) $data[$selection->getField('name')]);
+        $category->setPathNames(array_values(array_filter(explode('|', (string) $data[$selection->getField('path_names')]))));
         $category->setMetaKeywords(isset($data[$selection->getField('meta_keywords')]) ? (string) $data[$selection->getField('meta_keywords')] : null);
         $category->setMetaTitle(isset($data[$selection->getField('meta_title')]) ? (string) $data[$selection->getField('meta_title')] : null);
         $category->setMetaDescription(isset($data[$selection->getField('meta_description')]) ? (string) $data[$selection->getField('meta_description')] : null);

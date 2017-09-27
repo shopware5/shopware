@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Locale\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Locale\Extension\LocaleExtension;
 use Shopware\Locale\Struct\LocaleBasicStruct;
@@ -17,9 +19,18 @@ class LocaleBasicFactory extends Factory
     const FIELDS = [
        'uuid' => 'uuid',
        'code' => 'code',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
        'language' => 'translation.language',
        'territory' => 'translation.territory',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -29,6 +40,8 @@ class LocaleBasicFactory extends Factory
     ): LocaleBasicStruct {
         $locale->setUuid((string) $data[$selection->getField('uuid')]);
         $locale->setCode((string) $data[$selection->getField('code')]);
+        $locale->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $locale->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $locale->setLanguage((string) $data[$selection->getField('language')]);
         $locale->setTerritory((string) $data[$selection->getField('territory')]);
 

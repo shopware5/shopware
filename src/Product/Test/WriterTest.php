@@ -3,7 +3,7 @@
 namespace Shopware\Product\Tests;
 
 use Doctrine\DBAL\Connection;
-use Shopware\CustomerGroup\Repository\CustomerGroupRepository;
+use Ramsey\Uuid\Uuid;
 use Shopware\Framework\Write\FieldAware\FieldExtenderCollection;
 use Shopware\Framework\Write\FieldException\WriteStackException;
 use Shopware\Framework\Write\WriteContext;
@@ -37,12 +37,7 @@ class WriterTest extends KernelTestCase
         $this->connection->beginTransaction();
     }
 
-    private function getWriter(): Writer
-    {
-        return self::$kernel->getContainer()->get('shopware.framework.write.writer');
-    }
-
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
         parent::tearDown();
@@ -77,7 +72,7 @@ class WriterTest extends KernelTestCase
                         'orderNumber' => 'bar',
                         'position' => 1,
                     ],
-                ]
+                ],
             ],
             $this->createWriteContext(),
             $this->createExtender());
@@ -101,9 +96,9 @@ class WriterTest extends KernelTestCase
             'mainDetailUuid' => 'detail-1',
             'details' => [
                 [
-                    'uuid' => 'detail-1'
-                ]
-            ]
+                    'uuid' => 'detail-1',
+                ],
+            ],
         ], $this->createWriteContext(), $this->createExtender());
 
         $productCountAfter = (int) $this->connection->fetchColumn('SELECT COUNT(*) FROM product');
@@ -115,7 +110,7 @@ class WriterTest extends KernelTestCase
 
     public function test_insert_from_docs()
     {
-        $firstDetailUuid = 'swTEST' . uniqid();
+        $firstDetailUuid = Uuid::uuid4()->toString();
 
         $this->getWriter()->insert(ProductResource::class, [
             'uuid' => self::UUID,
@@ -150,10 +145,10 @@ class WriterTest extends KernelTestCase
                             'price' => (float) 999,
                             'customerGroupUuid' => StorefrontContextService::FALLBACK_CUSTOMER_GROUP,
                         ],
-                    ]
+                    ],
                 ],
                 [
-                    'number' => 'swTEST' . uniqid(),
+                    'number' => Uuid::uuid4()->toString(),
                     'inStock' => 10,
                     'position' => 0,
                     'additionaltext' => 'S / Weiß',
@@ -165,7 +160,7 @@ class WriterTest extends KernelTestCase
                     ],
                 ],
                 [
-                    'number' => 'swTEST' . uniqid(),
+                    'number' => Uuid::uuid4()->toString(),
                     'inStock' => 5,
                     'additionaltext' => 'XL / Blue',
                     'position' => 0,
@@ -174,8 +169,8 @@ class WriterTest extends KernelTestCase
                             'customerGroupUuid' => StorefrontContextService::FALLBACK_CUSTOMER_GROUP,
                             'price' => (float) 555,
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ],
         ], $this->createWriteContext(), $this->createExtender());
 
@@ -198,8 +193,6 @@ class WriterTest extends KernelTestCase
             'descriptionLong' => '<p>html</p>',
             'availableFrom' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'availableTo' => new \DateTime('2011-01-01T15:03:01.012345Z'),
-            'updatedAt' => new \DateTime('2011-01-01T15:03:01.012345Z'),
-            'createdAt' => new \DateTime('2011-01-01T15:03:01.012345Z'),
             'manufacturer' => [
                 'uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-1',
                 'link' => 'http://www.shopware.com',
@@ -218,7 +211,7 @@ class WriterTest extends KernelTestCase
                     'orderNumber' => 'bar',
                     'position' => 1,
                 ],
-            ]
+            ],
         ], $this->createWriteContext(), $this->createExtender());
 
         $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
@@ -232,8 +225,6 @@ class WriterTest extends KernelTestCase
         self::assertSame('no html', $productTranslation['description']);
         self::assertSame('<p>html</p>', $productTranslation['description_long']);
         self::assertSame('SWAG-PRODUCT-MANUFACTURER-UUID-1', $product['product_manufacturer_uuid']);
-        self::assertEquals('2011-01-01 15:03:01', $product['updated_at']);
-        self::assertEquals('2011-01-01 15:03:01', $product['created_at']);
         self::assertSame('shopware AG', $productManufacturerTranslation['name']);
         self::assertSame('http://www.shopware.com', $productManufacturer['link']);
         self::assertCount(3, $productDetails, print_r($productDetails, true));
@@ -282,12 +273,12 @@ class WriterTest extends KernelTestCase
                 'SWAG-SHOP-UUID-2' => [
                     'name' => 'bar',
                     'description' => 'foo',
-                    'keywords' => 'fiz,baz'
-                ]
+                    'keywords' => 'fiz,baz',
+                ],
             ],
             'metaTitle' => [
                 'SWAG-SHOP-UUID-2' => 'bar',
-            ]
+            ],
         ], $this->createWriteContext(), $this->createExtender());
 
 //        'POST auth/login' => [
@@ -340,7 +331,7 @@ class WriterTest extends KernelTestCase
         $this->insertEmptyProduct();
 
         $tooLongValue = '';
-        for($i = 0; $i < 512; $i++) {
+        for ($i = 0; $i < 512; ++$i) {
             $tooLongValue .= '#';
         }
 
@@ -358,6 +349,7 @@ class WriterTest extends KernelTestCase
     {
         $context = new WriteContext();
         $context->set(ShopResource::class, 'uuid', 'SWAG-SHOP-UUID-1');
+
         return $context;
     }
 
@@ -371,16 +363,21 @@ class WriterTest extends KernelTestCase
                 'product_manufacturer_uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-2',
                 'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
-                'main_detail_uuid' => 'SWT999'
+                'main_detail_uuid' => 'SWT999',
             ]);
 
         $this->connection->insert(
             'product_detail',
             [
                 'uuid' => 'SWT999',
-                'product_uuid' => self::UUID
+                'product_uuid' => self::UUID,
             ]
         );
+    }
+
+    private function getWriter(): Writer
+    {
+        return self::$kernel->getContainer()->get('shopware.framework.write.writer');
     }
 
     /**
@@ -390,6 +387,7 @@ class WriterTest extends KernelTestCase
     {
         $extender = new FieldExtenderCollection();
         $extender->addExtender(self::$kernel->getContainer()->get('shopware.framework.write.field_aware.default_extender'));
+
         return $extender;
     }
 }

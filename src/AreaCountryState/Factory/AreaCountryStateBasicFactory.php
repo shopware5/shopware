@@ -1,10 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\AreaCountryState\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\AreaCountryState\Extension\AreaCountryStateExtension;
 use Shopware\AreaCountryState\Struct\AreaCountryStateBasicStruct;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -20,8 +22,17 @@ class AreaCountryStateBasicFactory extends Factory
        'short_code' => 'short_code',
        'position' => 'position',
        'active' => 'active',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
        'name' => 'translation.name',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -34,6 +45,8 @@ class AreaCountryStateBasicFactory extends Factory
         $areaCountryState->setShortCode((string) $data[$selection->getField('short_code')]);
         $areaCountryState->setPosition((int) $data[$selection->getField('position')]);
         $areaCountryState->setActive((bool) $data[$selection->getField('active')]);
+        $areaCountryState->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $areaCountryState->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $areaCountryState->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension AreaCountryStateExtension */

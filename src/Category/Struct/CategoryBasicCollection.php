@@ -54,6 +54,17 @@ class CategoryBasicCollection extends Collection
         });
     }
 
+    public function merge(CategoryBasicCollection $collection)
+    {
+        /** @var CategoryBasicStruct $category */
+        foreach ($collection as $category) {
+            if ($this->has($this->getKey($category))) {
+                continue;
+            }
+            $this->add($category);
+        }
+    }
+
     public function getParentUuids(): array
     {
         return $this->fmap(function (CategoryBasicStruct $category) {

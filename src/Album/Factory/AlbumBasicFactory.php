@@ -1,10 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Album\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Album\Extension\AlbumExtension;
 use Shopware\Album\Struct\AlbumBasicStruct;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -24,8 +26,17 @@ class AlbumBasicFactory extends Factory
        'thumbnail_high_dpi' => 'thumbnail_high_dpi',
        'thumbnail_quality' => 'thumbnail_quality',
        'thumbnail_high_dpi_quality' => 'thumbnail_high_dpi_quality',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
        'name' => 'translation.name',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -42,6 +53,8 @@ class AlbumBasicFactory extends Factory
         $album->setThumbnailHighDpi((bool) $data[$selection->getField('thumbnail_high_dpi')]);
         $album->setThumbnailQuality(isset($data[$selection->getField('thumbnail_quality')]) ? (int) $data[$selection->getField('thumbnail_quality')] : null);
         $album->setThumbnailHighDpiQuality(isset($data[$selection->getField('thumbnail_high_dpi_quality')]) ? (int) $data[$selection->getField('thumbnail_high_dpi_quality')] : null);
+        $album->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $album->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $album->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension AlbumExtension */

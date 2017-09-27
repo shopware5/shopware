@@ -6,6 +6,7 @@ use Shopware\CustomerGroup\Struct\CustomerGroupBasicCollection;
 use Shopware\Framework\Struct\Struct;
 use Shopware\PriceGroup\Struct\PriceGroupBasicStruct;
 use Shopware\ProductDetail\Struct\ProductDetailBasicStruct;
+use Shopware\ProductListingPrice\Struct\ProductListingPriceBasicCollection;
 use Shopware\ProductManufacturer\Struct\ProductManufacturerBasicStruct;
 use Shopware\SeoUrl\Struct\SeoUrlBasicStruct;
 use Shopware\Tax\Struct\TaxBasicStruct;
@@ -73,19 +74,19 @@ class ProductBasicStruct extends Struct
     protected $configuratorSetId;
 
     /**
-     * @var \DateTime
-     */
-    protected $createdAt;
-
-    /**
      * @var \DateTime|null
      */
-    protected $updatedAt;
+    protected $createdAt;
 
     /**
      * @var string
      */
     protected $mainDetailUuid;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $updatedAt;
 
     /**
      * @var string
@@ -146,6 +147,11 @@ class ProductBasicStruct extends Struct
      * @var CustomerGroupBasicCollection
      */
     protected $blockedCustomerGroups;
+
+    /**
+     * @var ProductListingPriceBasicCollection
+     */
+    protected $listingPrices;
 
     public function getUuid(): string
     {
@@ -267,24 +273,14 @@ class ProductBasicStruct extends Struct
         $this->configuratorSetId = $configuratorSetId;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setCreatedAt(?\DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
     }
 
     public function getMainDetailUuid(): string
@@ -295,6 +291,16 @@ class ProductBasicStruct extends Struct
     public function setMainDetailUuid(string $mainDetailUuid): void
     {
         $this->mainDetailUuid = $mainDetailUuid;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     public function getName(): string
@@ -415,5 +421,15 @@ class ProductBasicStruct extends Struct
     public function setBlockedCustomerGroups(CustomerGroupBasicCollection $blockedCustomerGroups): void
     {
         $this->blockedCustomerGroups = $blockedCustomerGroups;
+    }
+
+    public function getListingPrices(): ProductListingPriceBasicCollection
+    {
+        return $this->listingPrices;
+    }
+
+    public function setListingPrices(ProductListingPriceBasicCollection $listingPrices): void
+    {
+        $this->listingPrices = $listingPrices;
     }
 }

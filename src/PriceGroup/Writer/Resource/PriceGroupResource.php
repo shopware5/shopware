@@ -2,6 +2,7 @@
 
 namespace Shopware\PriceGroup\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\SubresourceField;
 use Shopware\Framework\Write\Field\TranslatedField;
 use Shopware\Framework\Write\Field\UuidField;
@@ -32,22 +33,22 @@ class PriceGroupResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\PriceGroup\Event\PriceGroupWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\PriceGroup\Event\PriceGroupWrittenEvent
     {
-        $event = new \Shopware\PriceGroup\Event\PriceGroupWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\PriceGroup\Event\PriceGroupWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\PriceGroup\Writer\Resource\PriceGroupResource::class])) {
-            $event->addEvent(\Shopware\PriceGroup\Writer\Resource\PriceGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PriceGroup\Writer\Resource\PriceGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\PriceGroup\Writer\Resource\PriceGroupTranslationResource::class])) {
-            $event->addEvent(\Shopware\PriceGroup\Writer\Resource\PriceGroupTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PriceGroup\Writer\Resource\PriceGroupTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\PriceGroupDiscount\Writer\Resource\PriceGroupDiscountResource::class])) {
-            $event->addEvent(\Shopware\PriceGroupDiscount\Writer\Resource\PriceGroupDiscountResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\PriceGroupDiscount\Writer\Resource\PriceGroupDiscountResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

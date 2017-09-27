@@ -2,6 +2,7 @@
 
 namespace Shopware\ShippingMethod\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
@@ -70,9 +71,9 @@ class ShippingMethodResource extends Resource
         $this->fields[self::CALCULATION_SQL_FIELD] = new LongTextField('calculation_sql');
         $this->fields['orderDeliveries'] = new SubresourceField(\Shopware\OrderDelivery\Writer\Resource\OrderDeliveryResource::class);
         $this->fields['shop'] = new ReferenceField('shopUuid', 'uuid', \Shopware\Shop\Writer\Resource\ShopResource::class);
-        $this->fields['shopUuid'] = new FkField('shop_uuid', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
+        $this->fields['shopUuid'] = (new FkField('shop_uuid', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid'));
         $this->fields['customerGroup'] = new ReferenceField('customerGroupUuid', 'uuid', \Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class);
-        $this->fields['customerGroupUuid'] = new FkField('customer_group_uuid', \Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class, 'uuid');
+        $this->fields['customerGroupUuid'] = (new FkField('customer_group_uuid', \Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class, 'uuid'));
         $this->fields[self::NAME_FIELD] = new TranslatedField('name', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
         $this->fields[self::DESCRIPTION_FIELD] = new TranslatedField('description', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
         $this->fields[self::COMMENT_FIELD] = new TranslatedField('comment', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
@@ -101,54 +102,54 @@ class ShippingMethodResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\ShippingMethod\Event\ShippingMethodWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\ShippingMethod\Event\ShippingMethodWrittenEvent
     {
-        $event = new \Shopware\ShippingMethod\Event\ShippingMethodWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\ShippingMethod\Event\ShippingMethodWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\OrderDelivery\Writer\Resource\OrderDeliveryResource::class])) {
-            $event->addEvent(\Shopware\OrderDelivery\Writer\Resource\OrderDeliveryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\OrderDelivery\Writer\Resource\OrderDeliveryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class])) {
-            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodTranslationResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodCategoryResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodCategoryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodCategoryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodCountryResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodCountryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodCountryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodHolidayResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodHolidayResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodHolidayResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethod\Writer\Resource\ShippingMethodPaymentMethodResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodPaymentMethodResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethod\Writer\Resource\ShippingMethodPaymentMethodResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShippingMethodPrice\Writer\Resource\ShippingMethodPriceResource::class])) {
-            $event->addEvent(\Shopware\ShippingMethodPrice\Writer\Resource\ShippingMethodPriceResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShippingMethodPrice\Writer\Resource\ShippingMethodPriceResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Shop\Writer\Resource\ShopResource::class])) {
-            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Shop\Writer\Resource\ShopResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

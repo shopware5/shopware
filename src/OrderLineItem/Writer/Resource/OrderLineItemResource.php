@@ -2,6 +2,7 @@
 
 namespace Shopware\OrderLineItem\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
 use Shopware\Framework\Write\Field\IntField;
@@ -48,22 +49,22 @@ class OrderLineItemResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\OrderLineItem\Event\OrderLineItemWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\OrderLineItem\Event\OrderLineItemWrittenEvent
     {
-        $event = new \Shopware\OrderLineItem\Event\OrderLineItemWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\OrderLineItem\Event\OrderLineItemWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\OrderDeliveryPosition\Writer\Resource\OrderDeliveryPositionResource::class])) {
-            $event->addEvent(\Shopware\OrderDeliveryPosition\Writer\Resource\OrderDeliveryPositionResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\OrderDeliveryPosition\Writer\Resource\OrderDeliveryPositionResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Order\Writer\Resource\OrderResource::class])) {
-            $event->addEvent(\Shopware\Order\Writer\Resource\OrderResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Order\Writer\Resource\OrderResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\OrderLineItem\Writer\Resource\OrderLineItemResource::class])) {
-            $event->addEvent(\Shopware\OrderLineItem\Writer\Resource\OrderLineItemResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\OrderLineItem\Writer\Resource\OrderLineItemResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

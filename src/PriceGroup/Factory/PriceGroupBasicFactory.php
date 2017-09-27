@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\PriceGroup\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\PriceGroup\Extension\PriceGroupExtension;
 use Shopware\PriceGroup\Struct\PriceGroupBasicStruct;
@@ -16,8 +18,17 @@ class PriceGroupBasicFactory extends Factory
 
     const FIELDS = [
        'uuid' => 'uuid',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
        'name' => 'translation.name',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -26,6 +37,8 @@ class PriceGroupBasicFactory extends Factory
         TranslationContext $context
     ): PriceGroupBasicStruct {
         $priceGroup->setUuid((string) $data[$selection->getField('uuid')]);
+        $priceGroup->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $priceGroup->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $priceGroup->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension PriceGroupExtension */

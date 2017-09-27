@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\ShippingMethod\Factory;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Framework\Factory\ExtensionRegistryInterface;
 use Shopware\Framework\Factory\Factory;
 use Shopware\Search\QueryBuilder;
 use Shopware\Search\QuerySelection;
@@ -40,10 +42,19 @@ class ShippingMethodBasicFactory extends Factory
        'bind_sql' => 'bind_sql',
        'status_link' => 'status_link',
        'calculation_sql' => 'calculation_sql',
+       'created_at' => 'created_at',
+       'updated_at' => 'updated_at',
        'name' => 'translation.name',
        'description' => 'translation.description',
        'comment' => 'translation.comment',
     ];
+
+    public function __construct(
+        Connection $connection,
+        ExtensionRegistryInterface $registry
+    ) {
+        parent::__construct($connection, $registry);
+    }
 
     public function hydrate(
         array $data,
@@ -76,6 +87,8 @@ class ShippingMethodBasicFactory extends Factory
         $shippingMethod->setBindSql(isset($data[$selection->getField('bind_sql')]) ? (string) $data[$selection->getField('bind_sql')] : null);
         $shippingMethod->setStatusLink(isset($data[$selection->getField('status_link')]) ? (string) $data[$selection->getField('status_link')] : null);
         $shippingMethod->setCalculationSql(isset($data[$selection->getField('calculation_sql')]) ? (string) $data[$selection->getField('calculation_sql')] : null);
+        $shippingMethod->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
+        $shippingMethod->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
         $shippingMethod->setName((string) $data[$selection->getField('name')]);
         $shippingMethod->setDescription(isset($data[$selection->getField('description')]) ? (string) $data[$selection->getField('description')] : null);
         $shippingMethod->setComment(isset($data[$selection->getField('comment')]) ? (string) $data[$selection->getField('comment')] : null);

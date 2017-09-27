@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\Tax\Extension;
 
@@ -26,6 +26,11 @@ abstract class TaxExtension implements ExtensionInterface, EventSubscriberInterf
         QueryBuilder $query,
         TranslationContext $context
     ): void {
+    }
+
+    public function getDetailFields(): array
+    {
+        return [];
     }
 
     public function getBasicFields(): array

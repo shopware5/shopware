@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\ReferenceField;
 use Shopware\Framework\Write\Field\StringField;
@@ -37,22 +38,22 @@ class BlogTagResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\BlogTagWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\BlogTagWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\BlogTagWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\BlogTagWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\BlogResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\BlogResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\BlogResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\BlogTagResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\BlogTagResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\BlogTagResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\BlogTagTranslationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\BlogTagTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\BlogTagTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

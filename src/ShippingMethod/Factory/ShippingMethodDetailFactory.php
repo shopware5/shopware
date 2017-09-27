@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\ShippingMethod\Factory;
 
@@ -63,7 +63,7 @@ class ShippingMethodDetailFactory extends ShippingMethodBasicFactory
     {
         $fields = array_merge(parent::getFields(), $this->getExtensionFields());
         $fields['_sub_select_category_uuids'] = '_sub_select_category_uuids';
-        $fields['_sub_select_areaCountry_uuids'] = '_sub_select_areaCountry_uuids';
+        $fields['_sub_select_country_uuids'] = '_sub_select_country_uuids';
         $fields['_sub_select_holiday_uuids'] = '_sub_select_holiday_uuids';
         $fields['_sub_select_paymentMethod_uuids'] = '_sub_select_paymentMethod_uuids';
 
@@ -78,25 +78,24 @@ class ShippingMethodDetailFactory extends ShippingMethodBasicFactory
     ): ShippingMethodBasicStruct {
         /** @var ShippingMethodDetailStruct $shippingMethod */
         $shippingMethod = parent::hydrate($data, $shippingMethod, $selection, $context);
-
         if ($selection->hasField('_sub_select_category_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_category_uuids')]);
-            $shippingMethod->setCategoryUuids(array_filter($uuids));
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_category_uuids')]);
+            $shippingMethod->setCategoryUuids(array_values(array_filter($uuids)));
         }
 
-        if ($selection->hasField('_sub_select_areaCountry_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_areaCountry_uuids')]);
-            $shippingMethod->setCountryUuids(array_filter($uuids));
+        if ($selection->hasField('_sub_select_country_uuids')) {
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_country_uuids')]);
+            $shippingMethod->setCountryUuids(array_values(array_filter($uuids)));
         }
 
         if ($selection->hasField('_sub_select_holiday_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_holiday_uuids')]);
-            $shippingMethod->setHolidayUuids(array_filter($uuids));
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_holiday_uuids')]);
+            $shippingMethod->setHolidayUuids(array_values(array_filter($uuids)));
         }
 
         if ($selection->hasField('_sub_select_paymentMethod_uuids')) {
-            $uuids = explode('|', $data[$selection->getField('_sub_select_paymentMethod_uuids')]);
-            $shippingMethod->setPaymentMethodUuids(array_filter($uuids));
+            $uuids = explode('|', (string) $data[$selection->getField('_sub_select_paymentMethod_uuids')]);
+            $shippingMethod->setPaymentMethodUuids(array_values(array_filter($uuids)));
         }
 
         return $shippingMethod;
@@ -158,13 +157,13 @@ class ShippingMethodDetailFactory extends ShippingMethodBasicFactory
             $query->groupBy(sprintf('%s.uuid', $selection->getRootEscaped()));
         }
 
-        if ($selection->hasField('_sub_select_areaCountry_uuids')) {
+        if ($selection->hasField('_sub_select_country_uuids')) {
             $query->addSelect('
                 (
                     SELECT GROUP_CONCAT(mapping.area_country_uuid SEPARATOR \'|\')
                     FROM shipping_method_country mapping
                     WHERE mapping.shipping_method_uuid = ' . $selection->getRootEscaped() . '.uuid
-                ) as ' . QuerySelection::escape($selection->getField('_sub_select_areaCountry_uuids'))
+                ) as ' . QuerySelection::escape($selection->getField('_sub_select_country_uuids'))
             );
         }
 

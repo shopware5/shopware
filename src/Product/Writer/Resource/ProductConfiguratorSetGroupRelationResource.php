@@ -2,6 +2,7 @@
 
 namespace Shopware\Product\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\UuidField;
 use Shopware\Framework\Write\Flag\Required;
@@ -29,14 +30,14 @@ class ProductConfiguratorSetGroupRelationResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Product\Event\ProductConfiguratorSetGroupRelationWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Product\Event\ProductConfiguratorSetGroupRelationWrittenEvent
     {
-        $event = new \Shopware\Product\Event\ProductConfiguratorSetGroupRelationWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Product\Event\ProductConfiguratorSetGroupRelationWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Product\Writer\Resource\ProductConfiguratorSetGroupRelationResource::class])) {
-            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorSetGroupRelationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Product\Writer\Resource\ProductConfiguratorSetGroupRelationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

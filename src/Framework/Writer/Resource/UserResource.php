@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\DateField;
 use Shopware\Framework\Write\Field\FkField;
@@ -69,26 +70,26 @@ class UserResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\UserWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\UserWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\UserWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\UserWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\BlogResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\BlogResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\BlogResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Media\Writer\Resource\MediaResource::class])) {
-            $event->addEvent(\Shopware\Media\Writer\Resource\MediaResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Media\Writer\Resource\MediaResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Locale\Writer\Resource\LocaleResource::class])) {
-            $event->addEvent(\Shopware\Locale\Writer\Resource\LocaleResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Locale\Writer\Resource\LocaleResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\UserResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\UserResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\UserResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

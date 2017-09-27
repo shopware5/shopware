@@ -25,12 +25,12 @@ return [
     Shopware\Nexus\Nexus::class => ['all' => true],
     Shopware\Translation\Translation::class => ['all' => true],
     Shopware\Filesystem\Filesystem::class => ['all' => true],
-    \Shopware\Search\Search::class => ['all' => true],
-
+    Shopware\Search\Search::class => ['all' => true],
     Shopware\Album\Album::class => ['all' => true],
     Shopware\Area\Area::class => ['all' => true],
     Shopware\ProductVote\ProductVote::class => ['all' => true],
-
+    Shopware\ProductListingPrice\ProductListingPrice::class => ['all' => true],
+    Shopware\Denormalization\Denormalization::class => ['all' => true],
     Shopware\AreaCountry\AreaCountry::class => ['all' => true],
     Shopware\AreaCountryState\AreaCountryState::class => ['all' => true],
     Shopware\Category\Category::class => ['all' => true],
@@ -47,6 +47,7 @@ return [
     Shopware\PriceGroup\PriceGroup::class => ['all' => true],
     Shopware\PriceGroupDiscount\PriceGroupDiscount::class => ['all' => true],
     Shopware\Product\Product::class => ['all' => true],
+    Shopware\ProductMedia\ProductMedia::class => ['all' => true],
     Shopware\ProductDetail\ProductDetail::class => ['all' => true],
     Shopware\ProductManufacturer\ProductManufacturer::class => ['all' => true],
     Shopware\ProductDetailPrice\ProductDetailPrice::class => ['all' => true],

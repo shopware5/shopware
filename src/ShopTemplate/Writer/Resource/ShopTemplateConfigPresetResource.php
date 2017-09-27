@@ -2,6 +2,7 @@
 
 namespace Shopware\ShopTemplate\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -40,18 +41,18 @@ class ShopTemplateConfigPresetResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\ShopTemplate\Event\ShopTemplateConfigPresetWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\ShopTemplate\Event\ShopTemplateConfigPresetWrittenEvent
     {
-        $event = new \Shopware\ShopTemplate\Event\ShopTemplateConfigPresetWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\ShopTemplate\Event\ShopTemplateConfigPresetWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\ShopTemplate\Writer\Resource\ShopTemplateResource::class])) {
-            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigPresetResource::class])) {
-            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigPresetResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigPresetResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

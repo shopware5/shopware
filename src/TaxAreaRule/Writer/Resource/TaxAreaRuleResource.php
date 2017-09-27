@@ -2,6 +2,7 @@
 
 namespace Shopware\TaxAreaRule\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\FloatField;
@@ -27,11 +28,11 @@ class TaxAreaRuleResource extends Resource
         $this->fields[self::TAX_RATE_FIELD] = (new FloatField('tax_rate'))->setFlags(new Required());
         $this->fields[self::ACTIVE_FIELD] = new BoolField('active');
         $this->fields['area'] = new ReferenceField('areaUuid', 'uuid', \Shopware\Area\Writer\Resource\AreaResource::class);
-        $this->fields['areaUuid'] = new FkField('area_uuid', \Shopware\Area\Writer\Resource\AreaResource::class, 'uuid');
+        $this->fields['areaUuid'] = (new FkField('area_uuid', \Shopware\Area\Writer\Resource\AreaResource::class, 'uuid'));
         $this->fields['areaCountry'] = new ReferenceField('areaCountryUuid', 'uuid', \Shopware\AreaCountry\Writer\Resource\AreaCountryResource::class);
-        $this->fields['areaCountryUuid'] = new FkField('area_country_uuid', \Shopware\AreaCountry\Writer\Resource\AreaCountryResource::class, 'uuid');
+        $this->fields['areaCountryUuid'] = (new FkField('area_country_uuid', \Shopware\AreaCountry\Writer\Resource\AreaCountryResource::class, 'uuid'));
         $this->fields['areaCountryState'] = new ReferenceField('areaCountryStateUuid', 'uuid', \Shopware\AreaCountryState\Writer\Resource\AreaCountryStateResource::class);
-        $this->fields['areaCountryStateUuid'] = new FkField('area_country_state_uuid', \Shopware\AreaCountryState\Writer\Resource\AreaCountryStateResource::class, 'uuid');
+        $this->fields['areaCountryStateUuid'] = (new FkField('area_country_state_uuid', \Shopware\AreaCountryState\Writer\Resource\AreaCountryStateResource::class, 'uuid'));
         $this->fields['tax'] = new ReferenceField('taxUuid', 'uuid', \Shopware\Tax\Writer\Resource\TaxResource::class);
         $this->fields['taxUuid'] = (new FkField('tax_uuid', \Shopware\Tax\Writer\Resource\TaxResource::class, 'uuid'))->setFlags(new Required());
         $this->fields['customerGroup'] = new ReferenceField('customerGroupUuid', 'uuid', \Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class);
@@ -53,38 +54,38 @@ class TaxAreaRuleResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\TaxAreaRule\Event\TaxAreaRuleWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\TaxAreaRule\Event\TaxAreaRuleWrittenEvent
     {
-        $event = new \Shopware\TaxAreaRule\Event\TaxAreaRuleWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\TaxAreaRule\Event\TaxAreaRuleWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Area\Writer\Resource\AreaResource::class])) {
-            $event->addEvent(\Shopware\Area\Writer\Resource\AreaResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Area\Writer\Resource\AreaResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\AreaCountry\Writer\Resource\AreaCountryResource::class])) {
-            $event->addEvent(\Shopware\AreaCountry\Writer\Resource\AreaCountryResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\AreaCountry\Writer\Resource\AreaCountryResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\AreaCountryState\Writer\Resource\AreaCountryStateResource::class])) {
-            $event->addEvent(\Shopware\AreaCountryState\Writer\Resource\AreaCountryStateResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\AreaCountryState\Writer\Resource\AreaCountryStateResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Tax\Writer\Resource\TaxResource::class])) {
-            $event->addEvent(\Shopware\Tax\Writer\Resource\TaxResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Tax\Writer\Resource\TaxResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::class])) {
-            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\CustomerGroup\Writer\Resource\CustomerGroupResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleResource::class])) {
-            $event->addEvent(\Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleTranslationResource::class])) {
-            $event->addEvent(\Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

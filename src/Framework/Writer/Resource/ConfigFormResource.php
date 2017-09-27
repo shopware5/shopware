@@ -2,6 +2,7 @@
 
 namespace Shopware\Framework\Write\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\FkField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\LongTextField;
@@ -31,9 +32,9 @@ class ConfigFormResource extends Resource
         $this->fields[self::DESCRIPTION_FIELD] = new LongTextField('description');
         $this->fields[self::POSITION_FIELD] = new IntField('position');
         $this->fields['parent'] = new ReferenceField('parentUuid', 'uuid', \Shopware\Framework\Write\Resource\ConfigFormResource::class);
-        $this->fields['parentUuid'] = new FkField('parent_uuid', \Shopware\Framework\Write\Resource\ConfigFormResource::class, 'uuid');
+        $this->fields['parentUuid'] = (new FkField('parent_uuid', \Shopware\Framework\Write\Resource\ConfigFormResource::class, 'uuid'));
         $this->fields['plugin'] = new ReferenceField('pluginUuid', 'uuid', \Shopware\Framework\Write\Resource\PluginResource::class);
-        $this->fields['pluginUuid'] = new FkField('plugin_uuid', \Shopware\Framework\Write\Resource\PluginResource::class, 'uuid');
+        $this->fields['pluginUuid'] = (new FkField('plugin_uuid', \Shopware\Framework\Write\Resource\PluginResource::class, 'uuid'));
         $this->fields[self::LABEL_FIELD] = new TranslatedField('label', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
         $this->fields[self::DESCRIPTION_FIELD] = new TranslatedField('description', \Shopware\Shop\Writer\Resource\ShopResource::class, 'uuid');
         $this->fields['translations'] = new SubresourceField(\Shopware\Framework\Write\Resource\ConfigFormTranslationResource::class, 'languageUuid');
@@ -51,34 +52,34 @@ class ConfigFormResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\Framework\Event\ConfigFormWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\Framework\Event\ConfigFormWrittenEvent
     {
-        $event = new \Shopware\Framework\Event\ConfigFormWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\Framework\Event\ConfigFormWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ConfigFormResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\PluginResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\PluginResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\PluginResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ConfigFormResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ConfigFormTranslationResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormTranslationResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ConfigFormResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\ConfigFormFieldResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormFieldResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\ConfigFormFieldResource::createWrittenEvent($updates, $context));
         }
 
         return $event;

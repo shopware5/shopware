@@ -2,6 +2,7 @@
 
 namespace Shopware\OrderState\Writer\Resource;
 
+use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Write\Field\BoolField;
 use Shopware\Framework\Write\Field\IntField;
 use Shopware\Framework\Write\Field\StringField;
@@ -45,26 +46,26 @@ class OrderStateResource extends Resource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, array $errors = []): \Shopware\OrderState\Event\OrderStateWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): \Shopware\OrderState\Event\OrderStateWrittenEvent
     {
-        $event = new \Shopware\OrderState\Event\OrderStateWrittenEvent($updates[self::class] ?? [], $errors);
+        $event = new \Shopware\OrderState\Event\OrderStateWrittenEvent($updates[self::class] ?? [], $context, $errors);
 
         unset($updates[self::class]);
 
         if (!empty($updates[\Shopware\Framework\Write\Resource\MailResource::class])) {
-            $event->addEvent(\Shopware\Framework\Write\Resource\MailResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Framework\Write\Resource\MailResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\Order\Writer\Resource\OrderResource::class])) {
-            $event->addEvent(\Shopware\Order\Writer\Resource\OrderResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\Order\Writer\Resource\OrderResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\OrderState\Writer\Resource\OrderStateResource::class])) {
-            $event->addEvent(\Shopware\OrderState\Writer\Resource\OrderStateResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\OrderState\Writer\Resource\OrderStateResource::createWrittenEvent($updates, $context));
         }
 
         if (!empty($updates[\Shopware\OrderState\Writer\Resource\OrderStateTranslationResource::class])) {
-            $event->addEvent(\Shopware\OrderState\Writer\Resource\OrderStateTranslationResource::createWrittenEvent($updates));
+            $event->addEvent(\Shopware\OrderState\Writer\Resource\OrderStateTranslationResource::createWrittenEvent($updates, $context));
         }
 
         return $event;
