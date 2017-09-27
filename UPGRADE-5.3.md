@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Models\Shop\Repository::getById()`
 * Added service `translation`
 * Added smarty function `is_object` to the list of allowed functions
+* Added grunt task support for child themes so that their tasks are run as well by the Shopware grunt
 
 ### Changes
 

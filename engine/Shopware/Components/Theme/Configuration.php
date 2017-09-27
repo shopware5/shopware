@@ -57,19 +57,26 @@ class Configuration implements \JsonSerializable
     private $jsTarget;
 
     /**
+     * @var string[]
+     */
+    private $inheritancePath;
+
+    /**
      * @param string[] $less
      * @param string[] $js
      * @param array    $config
      * @param string   $lessTarget
      * @param string   $jsTarget
+     * @param string[] $inheritancePath
      */
-    public function __construct($less, $js, $config, $lessTarget, $jsTarget)
+    public function __construct($less, $js, $config, $lessTarget, $jsTarget, $inheritancePath = [])
     {
         $this->less = $less;
         $this->js = $js;
         $this->config = $config;
         $this->lessTarget = $lessTarget;
         $this->jsTarget = $jsTarget;
+        $this->inheritancePath = $inheritancePath;
     }
 
     /**
@@ -110,6 +117,14 @@ class Configuration implements \JsonSerializable
     public function getJsTarget()
     {
         return $this->jsTarget;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getInheritancePath()
+    {
+        return $this->inheritancePath;
     }
 
     /**
