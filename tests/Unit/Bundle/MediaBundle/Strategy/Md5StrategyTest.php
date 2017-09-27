@@ -105,6 +105,8 @@ class Md5StrategyTest extends TestCase
 
             // implicit blacklist test
             ['media/image/1430.jpg', 'media/image/g0/bf/bf/1430.jpg'],
+            ['media/image/2587091735990065295.jpg', 'media/image/g0/g0/1b/2587091735990065295.jpg'],
+            ['media/image/7700649505793529895.jpg', 'media/image/g0/g0/g0/7700649505793529895.jpg'],
         ];
     }
 

@@ -365,7 +365,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
             case 'searchField':
                 $sqlParams = [];
-                $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table
+                $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table, f.do_not_split
                         FROM ' . Shopware()->Db()->quoteTableAs($table, 'f') . '
                         LEFT JOIN s_search_tables t on f.tableID = t.id';
 

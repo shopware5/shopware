@@ -1480,7 +1480,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $localeId = $this->getOrderLocaleId($orderId);
 
-        $translationReader = new Shopware_Components_Translation();
+        $translationReader = $this->container->get('translation');
         $translations = $translationReader->read($localeId, 'documents', $typeId, true);
 
         if (empty($translations) || empty($translations['name'])) {
@@ -1633,7 +1633,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             );
 
             if (!$languageData['default']) {
-                $translator = new Shopware_Components_Translation();
+                $translator = $this->container->get('translation');
 
                 // Translate unit
                 if ($unit) {

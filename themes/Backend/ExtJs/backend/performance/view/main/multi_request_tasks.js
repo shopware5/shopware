@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         category: {
             initialText: '{s name=listing/category}Category URLs{/s}',
             progressText: '{s name=progress/category}[0] of [1] category urls{/s}',
-            requestUrl: '{url controller="Seo" action="seoArticle"}'
+            requestUrl: '{url controller="Seo" action="seoCategory"}'
         },
         emotion: {
             initialText: '{s name=listing/emotion}Emotion URLs{/s}',

@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Customer.model.QuickView', {
     configure: function() {
         return {
             controller: 'CustomerQuickView'
-        }
+        };
     }
 });
 // {/block}

@@ -502,15 +502,15 @@
 
             // Start on top or bottom if the user reached the end of the list
             switch (keyCode) {
-            case keyMap.DOWN:
-                me.selectFirstResultItem($resultItems);
-                break;
-            case keyMap.UP:
-                me.selectLastResultItem($resultItems);
-                break;
-            case keyMap.ENTER:
-                me.onPressEnter($selected);
-                break;
+                case keyMap.DOWN:
+                    me.selectFirstResultItem($resultItems);
+                    break;
+                case keyMap.UP:
+                    me.selectLastResultItem($resultItems);
+                    break;
+                case keyMap.ENTER:
+                    me.onPressEnter($selected);
+                    break;
             }
         },
 

@@ -31,23 +31,21 @@ use Shopware\Components\Theme\ConfigSet;
 class Theme extends \Shopware\Components\Theme
 {
     /**
-     * Defines the extended Theme
+     * Defines the extended Theme.
      *
      * @var string
      */
     protected $extend = 'Bare';
 
     /**
-     * Defines the human readable theme name
-     * which displayed in the backend
+     * Defines the human readable theme name which is displayed in the backend.
      *
      * @var string
      */
     protected $name = '__theme_name__';
 
     /**
-     * Allows to define a description text
-     * for the theme
+     * Allows to define a description text for the theme.
      *
      * @var string
      */
@@ -73,7 +71,7 @@ class Theme extends \Shopware\Components\Theme
     protected $injectBeforePlugins = true;
 
     /**
-     * Javascript files which will be used in the theme
+     * Javascript files which will be used in the theme.
      *
      * @var array
      */
@@ -143,7 +141,7 @@ class Theme extends \Shopware\Components\Theme
     ];
 
     /**
-     * Holds default fieldSet configuration
+     * Holds default fieldSet configuration.
      *
      * @var array
      */
@@ -155,7 +153,7 @@ class Theme extends \Shopware\Components\Theme
     ];
 
     /**
-     * Holds default theme colors
+     * Holds default theme colors.
      *
      * @var array
      */
@@ -235,7 +233,7 @@ class Theme extends \Shopware\Components\Theme
     ];
 
     /**
-     * Holds default font configuration
+     * Holds default font configuration.
      *
      * @var array
      */
@@ -276,7 +274,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to merge default theme colors with color schemes
+     * Helper function to merge default theme colors with color schemes.
      *
      * @param ArrayCollection $collection
      */
@@ -448,7 +446,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the child-tabs of ("Responsive colors")
+     * Helper function to create the child-tabs of ("Responsive colors").
      *
      * @return Form\Container\Tab
      */
@@ -473,7 +471,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("General")
+     * Helper function to create the tab ("General").
      *
      * @return Form\Container\Tab
      */
@@ -654,7 +652,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Typography")
+     * Helper function to create the tab ("Typography").
      *
      * @return Form\Container\Tab
      */
@@ -774,7 +772,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Buttons & Panels")
+     * Helper function to create the tab ("Buttons & Panels").
      *
      * @return Form\Container\Tab
      */
@@ -1012,7 +1010,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Forms")
+     * Helper function to create the tab ("Forms").
      *
      * @return Form\Container\Tab
      */
@@ -1174,7 +1172,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the tab ("Tables & Badges")
+     * Helper function to create the tab ("Tables & Badges").
      *
      * @return Form\Container\Tab
      */
@@ -1319,7 +1317,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to create the main tab ("Responsive configuration")
+     * Helper function to create the main tab ("Responsive configuration").
      *
      * @return Form\Container\Tab
      */
@@ -1499,7 +1497,6 @@ class Theme extends \Shopware\Components\Theme
                 ['attributes' => [
                     'lessCompatible' => false,
                     'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description'),
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description'),
                 ]]
             )
         );
@@ -1543,7 +1540,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to get the attribute of a checkbox field which shows a description label
+     * Helper function to get the attribute of a checkbox field which shows a description label.
      *
      * @param $snippetName
      *

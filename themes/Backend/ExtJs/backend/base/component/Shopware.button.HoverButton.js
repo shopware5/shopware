@@ -40,6 +40,8 @@ Ext.define('Shopware.button.HoverButton', {
     extend: 'Ext.button.Button',
     alias: 'widget.hoverbutton',
 
+    menuHoverEnabled: ('{config name="backendMenuOnHover"}' === '1'),
+
     /**
      * Special ExtJS 4.1 method which will be called
      * when the element is rendered.
@@ -53,7 +55,10 @@ Ext.define('Shopware.button.HoverButton', {
     afterRender: function() {
         var me = this;
         me.callParent(arguments);
-        me.getEl().on('mouseover', me.onClick, me);
+
+        if (me.menuHoverEnabled) {
+            me.getEl().on('mouseover', me.onClick, me);
+        }
     },
 
     /**
@@ -73,7 +78,7 @@ Ext.define('Shopware.button.HoverButton', {
             event.preventDefault();
         }
 
-        if(!me.disabled) {
+        if (!me.disabled) {
             me.doToggle();
             me.maybeShowMenu();
             me.fireHandler(event);

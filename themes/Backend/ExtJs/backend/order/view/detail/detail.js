@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-detail-panel',
+    alias: 'widget.order-detail-panel',
 
     /**
      * An optional extra CSS class that will be added to this component's Element.
@@ -68,15 +68,16 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name=detail/window_title}Details{/s}',
         notice: '{s name=detail/notice}Adjustments in this form, have only effect on the current order{/s}',
         shop: {
             title: '{s name=detail/shop/title}Shop configuration{/s}',
             label: '{s name=detail/shop/label}Shop{/s}'
         },
-        cancel:'{s name=detail/cancel}Cancel{/s}',
-        save:'{s name=detail/save}Save{/s}'
+        cancel: '{s name=detail/cancel}Cancel{/s}',
+        reset: '{s name=detail/reset}Reset{/s}',
+        save: '{s name=detail/save}Save{/s}'
     },
 
     /**
@@ -89,22 +90,32 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
-        me.billingForm = Ext.create('Shopware.apps.Order.view.detail.Billing', { record: me.record, countriesStore: me.countriesStore });
-        me.shippingForm = Ext.create('Shopware.apps.Order.view.detail.Shipping', { record: me.record, paymentsStore: me.paymentsStore, countriesStore: me.countriesStore });
+        me.billingForm = Ext.create('Shopware.apps.Order.view.detail.Billing', {
+            record: me.record,
+            countriesStore: me.countriesStore
+        });
+        me.shippingForm = Ext.create('Shopware.apps.Order.view.detail.Shipping', {
+            record: me.record,
+            paymentsStore: me.paymentsStore,
+            countriesStore: me.countriesStore
+        });
 
         me.items = [
             me.createNoticeContainer(),
             me.createShopContainer(),
             me.billingForm,
             me.shippingForm,
-            Ext.create('Shopware.apps.Order.view.detail.Debit', { record: me.record, paymentsStore: me.paymentsStore }),
-            Ext.create('Shopware.apps.Order.view.detail.Dispatch', { record: me.record, dispatchesStore: me.dispatchesStore })
+            Ext.create('Shopware.apps.Order.view.detail.Debit', { record: me.record, paymentsStore: me.paymentsStore}),
+            Ext.create('Shopware.apps.Order.view.detail.Dispatch', {
+                record: me.record,
+                dispatchesStore: me.dispatchesStore
+            })
         ];
-        me.dockedItems = [ me.createToolbar() ];
+        me.dockedItems = [me.createToolbar()];
 
         me.title = me.snippets.title;
         me.callParent(arguments);
@@ -114,30 +125,30 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
     /**
      * Creates the form button save and cancel
      */
-    getEditFormButtons: function() {
+    getEditFormButtons: function () {
         var me = this,
             buttons = [];
 
         buttons.push('->');
-        var cancelButton = Ext.create('Ext.button.Button', {
-            text:me.snippets.cancel,
-            scope:me,
+        var resetButton = Ext.create('Ext.button.Button', {
+            text: me.snippets.reset,
+            scope: me,
             cls: 'secondary',
-            handler:function () {
+            handler: function () {
                 me.record.reject();
                 me.loadRecord(me.record);
             }
         });
-        buttons.push(cancelButton);
+        buttons.push(resetButton);
 
         var saveButton = Ext.create('Ext.button.Button', {
-            text:me.snippets.save,
-            action:'save-order',
-            cls:'primary',
-            handler: function() {
+            text: me.snippets.save,
+            action: 'save-order',
+            cls: 'primary',
+            handler: function () {
                 me.getForm().updateRecord(me.record);
                 me.fireEvent('saveDetails', me.record, {
-                    callback: function(order) {
+                    callback: function (order) {
                         var billingId = null;
                         var shippingId = null;
 
@@ -149,8 +160,8 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
                             shippingId = me.record.getShipping().first().get('id');
                         }
 
-                        me.billingForm.attributeForm.saveAttribute(billingId, function() {
-                            me.shippingForm.attributeForm.saveAttribute(shippingId, function() {
+                        me.billingForm.attributeForm.saveAttribute(billingId, function () {
+                            me.shippingForm.attributeForm.saveAttribute(shippingId, function () {
                                 me.fireEvent('updateForms', order, me.up('window'));
                             })
                         });
@@ -159,7 +170,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
             }
         });
         /*{if {acl_is_allowed privilege=update}}*/
-            buttons.push(saveButton);
+        buttons.push(saveButton);
         /*{/if}*/
 
         return buttons;
@@ -169,7 +180,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      * Registers the custom component events.
      * @return void
      */
-    registerEvents: function() {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the "Save internal comment" button
@@ -195,7 +206,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      * Creates the notice container which is displayed on top of the detail tab panel.
      * @return {[object]}
      */
-    createNoticeContainer: function() {
+    createNoticeContainer: function () {
         var me = this;
 
         return Shopware.Notification.createBlockMessage(me.snippets.notice, 'notice');
@@ -205,7 +216,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      * Creates the field set for the shop combo box which is placed on top of the details tab panel.
      * @return Ext.form.FieldSet
      */
-    createShopContainer: function() {
+    createShopContainer: function () {
         var me = this;
 
         return Ext.create('Ext.form.FieldSet', {
@@ -213,14 +224,14 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
             layout: 'anchor',
             items: [
                 {
-                    xtype:'combobox',
+                    xtype: 'combobox',
                     queryMode: 'local',
                     labelStyle: 'font-weight: 700;',
                     margin: '0 0 10px',
-                    anchor:'97%',
-                    triggerAction:'all',
+                    anchor: '97%',
+                    triggerAction: 'all',
                     labelWidth: 155,
-                    name:'shopId',
+                    name: 'shopId',
                     fieldLabel: me.snippets.shop.label,
                     store: me.shopsStore,
                     valueField: 'id',
@@ -235,7 +246,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
     /**
      * @returns { Ext.toolbar.Toolbar }
      */
-    createToolbar: function() {
+    createToolbar: function () {
         var me = this;
         return me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',

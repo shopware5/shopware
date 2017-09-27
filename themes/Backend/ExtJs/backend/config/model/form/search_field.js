@@ -27,12 +27,10 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
 //{block name="backend/config/model/form/search_field"}
 Ext.define('Shopware.apps.Config.model.form.SearchField', {
     extend: 'Ext.data.Model',
+
     fields: [
         //{block name="backend/config/model/form/search_field/fields"}{/block}
         { name: 'id', type: 'int' },
@@ -40,7 +38,8 @@ Ext.define('Shopware.apps.Config.model.form.SearchField', {
         { name: 'field', type: 'string' },
         { name: 'relevance', type: 'int' },
         { name: 'table', type: 'string' },
-        { name: 'tableId', type: 'int' }
+        { name: 'tableId', type: 'int' },
+        { name: 'do_not_split', type: 'boolean', defaultValue: false }
     ]
 });
 //{/block}

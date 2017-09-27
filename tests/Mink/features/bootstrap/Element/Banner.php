@@ -49,7 +49,7 @@ class Banner extends MultipleElement implements HelperSelectorInterface
     public function getCssSelectors()
     {
         return [
-            'image' => '.banner--image',
+            'image' => '.banner--image .banner--image-src',
             'link' => '.banner--link',
             'mapping' => '.banner--mapping-link',
         ];

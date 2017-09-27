@@ -31,6 +31,7 @@
             <argument type="service" id="shopware_media.media_service" />
             <argument type="service" id="thumbnail_manager"/>
             <argument type="service" id="models" />
+            <argument type="service" id="shopware_media.extension_mapping" />
         </service>
 
         <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
@@ -47,6 +48,8 @@
             <factory service="shopware_media.strategy_factory" method="factory" />
             <argument>%shopware.cdn.strategy%</argument>
         </service>
+
+        <service id="shopware_media.extension_mapping" class="Shopware\Bundle\MediaBundle\MediaExtensionMappingService"/>
 
         <!-- Optimizer -->
         <service id="shopware_media.cdn_optimizer_service" class="Shopware\Bundle\MediaBundle\CdnOptimizerService">

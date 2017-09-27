@@ -30,6 +30,7 @@ use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Exception\ValidationException;
@@ -178,7 +179,10 @@ class CustomerStream extends Resource
                 $row = array_merge($row, $counts[$id]);
             }
 
-            $row['freezeUp'] = $this->updateFreezeUp($id, $row['freezeUp']);
+            if ($result = $this->updateFrozenState($id, $row['freezeUp'], $row['conditions'])) {
+                $row['freezeUp'] = $result['freezeUp'];
+                $row['static'] = $result['static'];
+            }
         }
 
         return ['data' => $data, 'total' => $total];
@@ -188,6 +192,8 @@ class CustomerStream extends Resource
     {
         $this->checkPrivilege('save');
 
+        $data = $this->prepareData($data);
+
         $stream = new CustomerStreamEntity();
         $stream->fromArray($data);
 
@@ -196,6 +202,8 @@ class CustomerStream extends Resource
             throw new ValidationException($violations);
         }
 
+        $this->validateStream($stream);
+
         $this->getManager()->persist($stream);
         $this->getManager()->flush($stream);
 
@@ -203,7 +211,7 @@ class CustomerStream extends Resource
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if (array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -218,11 +226,14 @@ class CustomerStream extends Resource
             throw new ParameterMissingException();
         }
 
+        /** @var \Shopware\Models\CustomerStream\CustomerStream $stream */
         $stream = $this->getManager()->find(CustomerStreamEntity::class, $id);
 
         if (!$stream) {
             throw new NotFoundException("Customer Stream with id $id not found");
         }
+
+        $data = $this->prepareData($data);
 
         $stream->fromArray($data);
 
@@ -231,11 +242,13 @@ class CustomerStream extends Resource
             throw new ValidationException($violations);
         }
 
-        if ($stream->getType() === CustomerStreamEntity::TYPE_DYNAMIC && $index) {
+        $this->validateStream($stream);
+
+        if (!$stream->isStatic() && $index) {
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if (array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -287,16 +300,12 @@ class CustomerStream extends Resource
     {
         $this->checkPrivilege('save');
 
-        $now = new \DateTime();
-        if ($stream->getFreezeUp() < $now) {
-            $stream->setFreezeUp(null);
-            $this->manager->flush($stream);
+        if ($result = $this->updateFrozenState($stream->getId(), $stream->getFreezeUp(), $stream->getConditions())) {
+            $stream->setStatic($result['static']);
+            $stream->setFreezeUp($result['freezeUp']);
         }
 
-        if ($stream->getFreezeUp() !== null) {
-            return;
-        }
-        if ($stream->getType() === CustomerStreamEntity::TYPE_STATIC) {
+        if ($stream->getFreezeUp() !== null || $stream->isStatic()) {
             return;
         }
 
@@ -316,6 +325,37 @@ class CustomerStream extends Resource
         $this->streamIndexer->populatePartial($stream->getId(), $criteria);
     }
 
+    /**
+     * Returns true if frozen state has changed
+     *
+     * @param $streamId
+     * @param \DateTime|null $freezeUp
+     * @param string         $conditions
+     *
+     * @return array|bool
+     */
+    public function updateFrozenState($streamId, \DateTime $freezeUp = null, $conditions)
+    {
+        $now = new \DateTime();
+        if (!$freezeUp || $freezeUp >= $now) {
+            return false;
+        }
+
+        $conditions = json_decode($conditions, true);
+        $params = [
+            'id' => $streamId,
+            'freezeUp' => null,
+            'static' => empty($conditions),
+        ];
+
+        $this->manager->getConnection()->executeUpdate(
+            'UPDATE s_customer_streams SET static = :static, freeze_up = :freezeUp WHERE id = :id',
+            $params
+        );
+
+        return $params;
+    }
+
     private function getConditions($streamId, $conditions = [])
     {
         if (!empty($conditions)) {
@@ -330,18 +370,14 @@ class CustomerStream extends Resource
         }
         $stream = $this->manager->find(CustomerStreamEntity::class, $streamId);
 
-        switch ($stream->getType()) {
-            case CustomerStreamEntity::TYPE_DYNAMIC:
-                return $this->reflectionHelper->unserialize(
-                    json_decode($stream->getConditions(), true),
-                    'Serialization error in Customer Stream'
-                );
-
-            case CustomerStreamEntity::TYPE_STATIC:
-                return [new AssignedToStreamCondition($streamId)];
+        if ($stream->isStatic() || $stream->getFreezeUp()) {
+            return [new AssignedToStreamCondition($streamId)];
         }
 
-        return [];
+        return $this->reflectionHelper->unserialize(
+            json_decode($stream->getConditions(), true),
+            'Serialization error in Customer Stream'
+        );
     }
 
     /**
@@ -371,28 +407,36 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int         $id
-     * @param string|null $freezeUp
+     * @param array $data
      *
-     * @return string|null
+     * @return array
      */
-    private function updateFreezeUp($id, $freezeUp)
+    private function prepareData(array $data)
     {
-        if (!$freezeUp) {
-            return $freezeUp;
+        $conditions = json_decode($data['conditions'], true);
+        if (empty($conditions)) {
+            $data['conditions'] = null;
         }
 
-        $now = new \DateTime();
+        return $data;
+    }
 
-        if ($freezeUp >= $now) {
-            return $freezeUp;
+    /**
+     * @param $stream \Shopware\Models\CustomerStream\CustomerStream
+     *
+     * @throws CustomValidationException
+     */
+    private function validateStream($stream)
+    {
+        if (!$stream->isStatic()) {
+            if (!$stream->getConditions()) {
+                throw new CustomValidationException('A dynamic stream has to have at least one condition');
+            }
+
+            if ($stream->getFreezeUp()) {
+                throw new CustomValidationException('A dynamic stream can not have a freezeUp time');
+            }
         }
-        $this->connection->executeUpdate(
-            'UPDATE s_customer_streams SET freeze_up = NULL WHERE id = :id',
-            [':id' => $id]
-        );
-
-        return null;
     }
 }
 

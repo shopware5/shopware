@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             nonEditable: '{s name=message/positions/nonEditable}This article is not editable{/s}'
         },
         documents: {
-            successMessage: '{s name=message/documents/success}Internal comment has been saved successfully{/s}',
+            successMessage: '{s name=message/documents/success}Document has been created successfully{/s}',
             failureMessage: '{s name=message/documents/failure}An error has occurred while creating the order document.{/s}'
         },
         delete: {
@@ -537,7 +537,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * @param [Ext.container.Container] me
      */
     onCreateDocument: function(order, config, panel) {
-        var store = Ext.create('Shopware.apps.Order.store.Configuration');
+        var me = this,
+            store = Ext.create('Shopware.apps.Order.store.Configuration');
 
         panel.setLoading(true);
 
@@ -552,6 +553,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 if ( rawData.success === true ) {
                     var data = rawData.data[0];
                     order.set(data);
+
+                    Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.documents.successMessage, me.snippets.growlMessage);
 
                     var documentStore = order['getReceiptStore'],
                         documents = order.get('documents');
@@ -570,6 +573,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         model['getDocTypeStore'] = typeStore;
                         documentStore.add(model);
                     });
+                } else {
+                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.documents.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
                 }
             }
         });
@@ -678,7 +683,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     //Check if a status mail content created and create a model with the returned data and open the mail window.
                     if (rawData && rawData.data && rawData.data.mail && rawData.data.mail.content) {
                         var mail = Ext.create('Shopware.apps.Order.model.Mail', rawData.data.mail);
-                        me.showOrderMail(mail)
+                        me.showOrderMail(mail, record)
                     }
 
                     if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
@@ -694,17 +699,28 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     },
 
     /**
-     * Creates the batch window with a special mode, so only the mail panel will be displayed.
+     * Opens the status mail window
      *
      * @param mail
      */
-    showOrderMail: function(mail) {
-        var me = this;
+    showOrderMail: function(mail, record) {
+        var me = this,
+            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
 
-        //open the order listing window
-        me.mainWindow = me.getView('mail.Window').create({
-            mail: mail
-        }).show();
+        // open the status mail window
+        documentTypeStore.load({
+            callback: function () {
+                me.mainWindow = me.getView('mail.Window').create({
+                    attached: [
+                        record.get('id')
+                    ],
+                    record: record,
+                    listStore: me.getOrderList().getStore(),
+                    documentTypeStore: documentTypeStore,
+                    mail: mail
+                }).show();
+            }
+        });
     },
 
 

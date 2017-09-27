@@ -349,8 +349,14 @@ class StructHydrator
         $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
         $plugin->setLocalUpdateAvailable(($data['update_version'] !== null));
         $plugin->setLink($data['link']);
-        $plugin->setRedirectToStore((bool) $data['redirectToStore']);
-        $plugin->setLowestPrice((float) $data['lowestPriceValue']);
+
+        if (array_key_exists('redirectToStore', $data)) {
+            $plugin->setRedirectToStore((bool) $data['redirectToStore']);
+        }
+
+        if (array_key_exists('lowestPriceValue', $data)) {
+            $plugin->setLowestPrice((float) $data['lowestPriceValue']);
+        }
 
         $plugin->setSource($data['source']);
         $plugin->setFormId($data['form_id']);
@@ -373,6 +379,10 @@ class StructHydrator
             $producer->setName($data['author']);
             $producer->setWebsite($data['link']);
             $plugin->setProducer($producer);
+        }
+
+        if (!empty($data['changelog'])) {
+            $plugin->setChangelog($data['changelog']);
         }
 
         if (isset($data['__licence_id']) && !empty($data['__licence_id'])) {

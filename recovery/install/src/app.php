@@ -503,7 +503,6 @@ $app->map('/finalize/', function () use ($app, $container) {
 $app->map('/finish/', function () use ($app, $menuHelper, $container) {
     $menuHelper->setCurrent('finish');
 
-    $domain = $_SERVER['HTTP_HOST'];
     $basepath = str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']);
 
     /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
@@ -519,10 +518,16 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
 
     $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
-    $app->render(
-        'finish.php',
-        ['shop' => ['domain' => $domain, 'basepath' => $basepath]]
-    );
+    $schema = 'http';
+    // This is for supporting Apache 2.2
+    if (array_key_exists('HTTPS', $_SERVER) && strtolower($_SERVER['HTTPS']) === 'on') {
+        $schema = 'https';
+    }
+    if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
+        $schema = $_SERVER['REQUEST_SCHEME'];
+    }
+
+    $app->render('finish.php', ['url' => $schema . '://' . $_SERVER['HTTP_HOST'] . $basepath]);
 })->name('finish')->via('GET', 'POST');
 
 $app->map('/database-import/importDatabase', function () use ($app, $container) {
@@ -546,6 +551,15 @@ $app->map('/database-import/importDatabase', function () use ($app, $container) 
 
     // how many queries should be executed per http request?
     $batchSize = 100;
+
+    /** @var Shopware\Recovery\Install\Service\DatabaseService $databaseService */
+    $databaseService = $container->offsetGet('database.service');
+
+    //For end users, we hide the error if we can not create the database or alter it.
+    try {
+        $databaseService->createDatabase($_SESSION['parameters']['c_database_schema']);
+    } catch (\Exception $e) {
+    }
 
     $preSql = <<<'EOD'
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -693,7 +707,10 @@ $app->post('/check-database-connection', function () use ($container, $app) {
 
     /** @var $databaseService DatabaseService */
     $databaseService = $container->offsetGet('database.service');
-    $databaseNames = $databaseService->getAvailableDatabaseNames();
+
+    //No need for listing the following schemas
+    $omitSchemas = ['information_schema', 'performance_schema', 'sys', 'mysql'];
+    $databaseNames = $databaseService->getSchemas($omitSchemas);
 
     $result = [];
     foreach ($databaseNames as $databaseName) {

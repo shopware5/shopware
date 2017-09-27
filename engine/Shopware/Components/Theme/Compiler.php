@@ -190,12 +190,15 @@ class Compiler
         $jsTarget = $this->pathResolver->getJsFilePath($shop, $timestamp);
         $jsTarget = ltrim(str_replace($this->rootDir, '', $jsTarget), '/');
 
+        $inheritancePath = $this->inheritance->getInheritancePath($shop->getTemplate());
+
         return new Configuration(
             $lessFiles,
             $js,
             $config,
             $lessTarget,
-            $jsTarget
+            $jsTarget,
+            $inheritancePath
         );
     }
 

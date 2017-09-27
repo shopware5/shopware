@@ -16,25 +16,18 @@
 
             {block name="frontend_address_form_fieldset_customer_type"}
                 <div class="address--customertype">
-                    {if {config name=showCompanySelectField}}
-                        {block name="frontend_address_form_fieldset_customer_type_select"}
-                            <div class="select-field">
-                                <select name="{$inputPrefix}[additional][customer_type]"
-                                        required="required"
-                                        aria-required="true"
-                                        class="is--required{if $error_flags.customer_type} has--error{/if}">
-                                    <option value="private"{if !$formData.additional.customer_type OR $formData.additional.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate' namespace='frontend/register/personal_fieldset'}{/s}</option>
-                                    <option value="business"{if $formData.company || $formData.additional.customer_type eq "business"} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness' namespace='frontend/register/personal_fieldset'}{/s}</option>
-                                    {block name="frontend_address_form_fieldset_customer_type_options"}{/block}
-                                </select>
-                            </div>
-                        {/block}
-                    {else}
-                        {block name="frontend_address_form_fieldset_customer_type_input"}
-                            {* Always register as a private customer*}
-                            <input type="hidden" name="{$inputPrefix}[additional][customer_type]" value="{if $formData.company}business{else}private{/if}" />
-                        {/block}
-                    {/if}
+                    {block name="frontend_address_form_fieldset_customer_type_select"}
+                        <div class="select-field">
+                            <select name="{$inputPrefix}[additional][customer_type]"
+                                    required="required"
+                                    aria-required="true"
+                                    class="is--required{if $error_flags.customer_type} has--error{/if}">
+                                <option value="private"{if !$formData.additional.customer_type OR $formData.additional.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate' namespace='frontend/register/personal_fieldset'}{/s}</option>
+                                <option value="business"{if $formData.company || $formData.additional.customer_type eq "business"} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness' namespace='frontend/register/personal_fieldset'}{/s}</option>
+                                {block name="frontend_address_form_fieldset_customer_type_options"}{/block}
+                            </select>
+                        </div>
+                    {/block}
                 </div>
             {/block}
 

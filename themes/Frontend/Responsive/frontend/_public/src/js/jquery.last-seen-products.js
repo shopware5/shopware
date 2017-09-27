@@ -166,7 +166,7 @@
                 products = productsJson ? JSON.parse(productsJson) : [],
                 len = Math.min(opts.productLimit, products.length);
 
-            if (len > 0) {
+            if (len > 1) {
                 me.$el.removeClass('is--hidden');
             }
 
@@ -360,6 +360,14 @@
             });
 
             return queryParams;
+        },
+
+        destroy: function() {
+            var me = this;
+
+            $.unsubscribe(me.getEventName('plugin/swAjaxVariant/onRequestData'));
+
+            me._destroy();
         }
     });
 }(jQuery));

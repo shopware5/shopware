@@ -276,6 +276,25 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @param int $id
+     *
+     * @return DetachedShop
+     */
+    public function getById($id)
+    {
+        $builder = $this->getQueryBuilder();
+        $builder->andWhere('shop.id=:shopId');
+        $builder->setParameter('shopId', $id);
+        $shop = $builder->getQuery()->getOneOrNullResult();
+
+        if ($shop !== null) {
+            $shop = $this->fixActive($shop);
+        }
+
+        return $shop;
+    }
+
+    /**
      * Returns the default shop with additional data
      *
      * @return DetachedShop
@@ -368,7 +387,7 @@ class Repository extends ModelRepository
     /**
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getActiveQueryBuilder()
+    public function getQueryBuilder()
     {
         /* @var $builder QueryBuilder */
         return $this->createQueryBuilder('shop')
@@ -399,9 +418,18 @@ class Repository extends ModelRepository
             ->leftJoin('main.template', 'mainTemplate')
             ->leftJoin('main.currencies', 'mainCurrencies')
 
-            ->where('shop.active = 1')
             ->orderBy('shop.main')
             ->addOrderBy('shop.position');
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getActiveQueryBuilder()
+    {
+        /* @var $builder QueryBuilder */
+        return $this->getQueryBuilder()
+            ->where('shop.active = 1');
     }
 
     /**

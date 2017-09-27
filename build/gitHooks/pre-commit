@@ -84,7 +84,7 @@ class PreCommitChecks
         $return = 0;
         exec(
             './themes/node_modules/eslint/bin/eslint.js ' .
-            '--ignore-path themes/.eslintignore ' . implode(' ', $fileList),
+            '-c ./themes/.eslintrc.js --ignore-path themes/.eslintignore ' . implode(' ', $fileList),
             $output,
             $return
         );
@@ -98,7 +98,7 @@ class PreCommitChecks
             }
 
             $this->writeln('Help:', 2);
-            $this->writeln('./themes/node_modules/eslint/bin/eslint.js --fix --ignore-path themes/.eslintignore ' . implode(' ', $fileList), 3);
+            $this->writeln('./themes/node_modules/eslint/bin/eslint.js --fix -c themes/.eslintrc.js --ignore-path themes/.eslintignore ' . implode(' ', $fileList), 3);
         }
     }
 
@@ -182,7 +182,7 @@ class PreCommitChecks
     private function runEsLint(array $fileList)
     {
         $this->writeln('# Checking javascript code style');
-        $this->writeln('> eslint.js --ignore-path themes/.eslintignore');
+        $this->writeln('> eslint.js -c themes/.eslintrc.js --ignore-path themes/.eslintignore');
 
         if (!$this->isESLintAvailable()) {
             $this->writeln('- eslint.js not found. Skipping javascript code style check.', 2);

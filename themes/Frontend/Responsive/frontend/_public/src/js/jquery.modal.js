@@ -299,25 +299,25 @@
             $modalBox.css('display', 'block');
 
             switch (opts.mode) {
-            case 'ajax':
-                $.ajax(content, {
-                    data: {
-                        isXHR: 1
-                    },
-                    success: function (result) {
-                        me.setContent(result);
-                        $.publish('plugin/swModal/onOpenAjax', me);
-                    }
-                });
-                me.options.src = content;
-                break;
-            case 'iframe':
-                me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
-                me.options.src = content;
-                break;
-            default:
-                me.setContent(content);
-                break;
+                case 'ajax':
+                    $.ajax(content, {
+                        data: {
+                            isXHR: 1
+                        },
+                        success: function (result) {
+                            me.setContent(result);
+                            $.publish('plugin/swModal/onOpenAjax', me);
+                        }
+                    });
+                    me.options.src = content;
+                    break;
+                case 'iframe':
+                    me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
+                    me.options.src = content;
+                    break;
+                default:
+                    me.setContent(content);
+                    break;
             }
 
             me.setTransition({
@@ -370,7 +370,7 @@
         },
 
         /**
-         * Sets the title of the modal box.
+         * Sets the transition of the modal box.
          *
          * @public
          * @method setTransition
@@ -739,7 +739,7 @@
 
             me._on(me.$target, 'click', $.proxy(me.onClick, me));
 
-            $.subscribe('plugin/swModal/onClose', $.proxy(me.onClose, me));
+            $.subscribe(me.getEventName('plugin/swModal/onClose'), $.proxy(me.onClose, me));
 
             $.publish('plugin/swModalbox/onRegisterEvents', [ me ]);
         },
@@ -780,7 +780,7 @@
         },
 
         /**
-         * This method closes the modal box when its opened, destroys
+         * This method closes the modal box when it is opened, destroys
          * the plugin and removes all registered events
          *
          * @public
@@ -793,7 +793,7 @@
                 $.modal.close();
             }
 
-            $.unsubscribe('plugin/swModal/onClose', $.proxy(me.onClose, me));
+            $.unsubscribe(me.getEventName('plugin/swModal/onClose'));
 
             me._destroy();
         }

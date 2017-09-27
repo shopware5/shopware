@@ -26,7 +26,6 @@ namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
-use Enlight_Controller_Request_Request as Request;
 use Ramsey\Uuid\Uuid;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -81,8 +80,7 @@ class CookieSubscriber implements SubscriberInterface
             'slt',
             null,
             strtotime('-1 Year'),
-            $request->getBasePath() . '/',
-            $this->getHost($request)
+            $request->getBasePath() . '/'
         );
     }
 
@@ -164,18 +162,9 @@ class CookieSubscriber implements SubscriberInterface
             'slt',
             $token,
             $expire,
-            $request->getBasePath() . '/',
-            $this->getHost($request)
+            $request->getBasePath() . '/'
         );
 
         $this->connection->update('s_user', ['login_token' => $token], ['id' => $id]);
-    }
-
-    /**
-     * @param $request
-     */
-    private function getHost(Request $request)
-    {
-        return ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost();
     }
 }

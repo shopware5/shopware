@@ -30,6 +30,7 @@ use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Media API Resource
@@ -63,7 +64,7 @@ class Media extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $filters = [['property' => 'media.id', 'expression' => '=', 'value' => $id]];
@@ -179,7 +180,7 @@ class Media extends Resource
 
         if (!empty($params['file'])) {
             $tmpFile = $this->saveAsTempMediaFile($params['file']);
-            $file = new File($tmpFile);
+            $file = new UploadedFile($tmpFile, $params['file']);
 
             try {
                 $this->getContainer()->get('shopware_media.replace_service')->replace($id, $file);
@@ -240,7 +241,7 @@ class Media extends Resource
         $name = $name . '.' . $ext;
         $path = $this->load($link, $name);
         $name = pathinfo($path, PATHINFO_FILENAME);
-        $file = new File($path);
+        $file = new UploadedFile($path, $link);
 
         $media = new MediaModel();
 
@@ -482,7 +483,7 @@ class Media extends Resource
             } else {
                 $path = $params['file'];
             }
-            $params['file'] = new File($path);
+            $params['file'] = new UploadedFile($path, $params['file']);
         }
 
         return $params;

@@ -109,7 +109,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return array
+     * @return true
      */
     public function delete($id)
     {
@@ -139,12 +139,23 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
     /**
      * Overwrites the base implementation as the cache endpoint does not involve any entity related logic
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
     public function batchDelete($data)
     {
+        if (empty($data)) {
+            $data = [
+                'config' => ['id' => 'config'],
+                'http' => ['id' => 'http'],
+                'template' => ['id' => 'template'],
+                'proxy' => ['id' => 'proxy'],
+                'doctrine-proxy' => ['id' => 'doctrine-proxy'],
+                'opcache' => ['id' => 'opcache'],
+            ];
+        }
+
         $results = [];
         foreach ($data as $key => $datum) {
             $id = $this->getIdByData($datum);
@@ -188,7 +199,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
     {
         $capabilities = $this->cacheManager->getCoreCache()->getBackend()->getCapabilities();
 
-        if ($cache == 'all') {
+        if ($cache === 'all') {
             $this->cacheManager->getCoreCache()->clean();
 
             $this->cacheManager->clearHttpCache();
@@ -257,7 +268,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
     /**
      * Returns a given cache info item
      *
-     * @param $cache
+     * @param string $cache
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *

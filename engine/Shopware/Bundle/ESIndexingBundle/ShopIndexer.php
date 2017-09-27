@@ -104,6 +104,8 @@ class ShopIndexer implements ShopIndexerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
     public function index(Shop $shop, ProgressHelperInterface $helper)
     {
@@ -111,8 +113,7 @@ class ShopIndexer implements ShopIndexerInterface
         $configuration = $this->indexFactory->createIndexConfiguration($shop);
         $shopIndex = new ShopIndex($configuration->getName(), $shop);
 
-        $this->createIndex($configuration);
-        $this->updateSettings($shopIndex);
+        $this->createIndex($configuration, $shopIndex);
         $this->updateMapping($shopIndex);
         $this->populate($shopIndex, $helper);
         $this->applyBacklog($shopIndex, $lastBacklogId);
@@ -139,48 +140,38 @@ class ShopIndexer implements ShopIndexerInterface
 
     /**
      * @param IndexConfiguration $configuration
+     * @param ShopIndex          $index
+     *
+     * @throws \RuntimeException
      */
-    private function createIndex(IndexConfiguration $configuration)
+    private function createIndex(IndexConfiguration $configuration, ShopIndex $index)
     {
         $exist = $this->client->indices()->exists(['index' => $configuration->getName()]);
         if ($exist) {
-            throw new \RuntimeException('Elasticsearch index %s already exist.');
+            throw new \RuntimeException(sprintf('ElasticSearch index %s already exist.', $configuration->getName()));
         }
 
-        $this->client->indices()->create([
-            'index' => $configuration->getName(),
-            'body' => [
-                'settings' => [
-                    'number_of_shards' => $configuration->getNumberOfShards(),
-                    'number_of_replicas' => $configuration->getNumberOfReplicas(),
-                ],
+        $mergedSettings = [
+            'settings' => [
+                'number_of_shards' => $configuration->getNumberOfShards(),
+                'number_of_replicas' => $configuration->getNumberOfReplicas(),
             ],
-        ]);
-    }
+        ];
 
-    /**
-     * @param ShopIndex $index
-     */
-    private function updateSettings(ShopIndex $index)
-    {
-        $this->client->cluster()->health(['index' => $index->getName(), 'wait_for_status' => $this->configuration['wait_for_status']]);
-        $this->client->indices()->close(['index' => $index->getName()]);
-
+        // Merge default settings with those set by plugins
         foreach ($this->settings as $setting) {
             $settings = $setting->get($index->getShop());
             if (!$settings) {
                 continue;
             }
 
-            $this->client->indices()->putSettings([
-                'index' => $index->getName(),
-                'body' => $settings,
-            ]);
+            $mergedSettings = array_replace_recursive($mergedSettings, $settings);
         }
 
-        $this->client->indices()->open(['index' => $index->getName()]);
-        $this->client->indices()->refresh(['index' => $index->getName()]);
-        $this->client->cluster()->health(['index' => $index->getName(), 'wait_for_status' => $this->configuration['wait_for_status']]);
+        $this->client->indices()->create([
+            'index' => $configuration->getName(),
+            'body' => $mergedSettings,
+        ]);
     }
 
     /**

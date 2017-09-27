@@ -25,16 +25,21 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
+use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
+use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @category  Shopware
@@ -44,6 +49,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class StoreDownloadCommand extends StoreCommand
 {
     /**
+     * @var SymfonyStyle
+     */
+    private $io;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -51,33 +61,12 @@ class StoreDownloadCommand extends StoreCommand
         $this
             ->setName('sw:store:download')
             ->setDescription('Downloads a plugin from the community store')
-            ->addArgument(
-                'technical-name',
-                InputArgument::REQUIRED,
-                'Name of the plugin to be downloaded.'
-            )
-            ->addOption(
-                'username',
-                null,
-                InputOption::VALUE_OPTIONAL
-            )
-            ->addOption(
-                'password',
-                null,
-                InputOption::VALUE_OPTIONAL
-            )
-            ->addOption(
-                'shopware-version',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Override shopware version eg. 4.2.0'
-            )
-            ->addOption(
-                'domain',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Override default shop domain.'
-            );
+            ->addArgument('technical-name', InputArgument::REQUIRED, 'Name of the plugin to be downloaded.')
+            ->addOption('username', null, InputOption::VALUE_REQUIRED)
+            ->addOption('password', null, InputOption::VALUE_REQUIRED)
+            ->addOption('shopware-version', null, InputOption::VALUE_REQUIRED, 'Override shopware version eg. 5.2.0')
+            ->addOption('domain', null, InputOption::VALUE_REQUIRED, 'Override default shop domain.')
+        ;
     }
 
     /**
@@ -91,45 +80,93 @@ class StoreDownloadCommand extends StoreCommand
         $technicalName = $input->getArgument('technical-name');
         $domain = $this->checkDomain();
         $version = $this->checkVersion();
+        $token = null;
 
-        $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
-        $context = new PluginsByTechnicalNameRequest(null, $version, [$technicalName]);
-        $plugin = $service->getPlugin($context);
+        $io = $this->io = new SymfonyStyle($input, $output);
+        $io->title('Community Store Download Command');
+
+        $plugin = $this->getFreePlugin($technicalName, $version);
+
+        if ($plugin && $plugin->getCode() !== null) {
+            if ($plugin->hasFreeDownload() === false && $plugin->hasCapabilityDummy() === false) {
+                $io->note(sprintf('You must be authenticated to download: %s', $plugin->getLabel()));
+
+                $token = $this->checkAuthentication();
+            }
+        } else {
+            $io->note('Plugin was not found. Retrying as authenticated used.');
+
+            $token = $this->checkAuthentication();
+
+            if ($token) {
+                $context = new LicenceRequest(null, $version, $domain, $token);
+
+                try {
+                    /** @var PluginStoreService $pluginStoreService */
+                    $pluginStoreService = $this->container->get(
+                        'shopware_plugininstaller.plugin_service_store_production'
+                    );
+                    $licences = $pluginStoreService->getLicences($context);
+                    $licences = array_filter(
+                        $licences,
+                        function (LicenceStruct $license) use ($technicalName) {
+                            return strtolower($license->getTechnicalName()) === strtolower($technicalName);
+                        }
+                    );
+
+                    /** @var LicenceStruct $plugin */
+                    $plugin = array_shift($licences);
+                } catch (\Exception $e) {
+                    $io->error('An error occured: ' . $e->getMessage());
+                    exit(1);
+                }
+            }
+        }
 
         if (!$plugin) {
-            $output->writeln(sprintf('Plugin %s not found', $technicalName));
+            $io->error(sprintf('Plugin %s not found', $technicalName));
 
             return;
         }
 
-        $output->writeln(sprintf('Checking system requirements for plugin %s', $plugin->getLabel()));
+        $io->section($plugin->getLabel());
+        $io->comment(sprintf('Checking system requirements for plugin %s', $plugin->getLabel()));
+
+        $plugin = $this->createPluginStruct($plugin);
 
         $this->checkLicenceManager($plugin);
         $this->checkIonCubeLoader($plugin);
 
-        $isDummy = ($plugin->hasCapabilityDummy() || $plugin->getTechnicalName() == 'SwagLicense');
+        $isDummy = ($plugin->hasCapabilityDummy() || $plugin->getTechnicalName() === 'SwagLicense');
 
-        switch (true) {
-            case $plugin->getId() && $isDummy:
-                $this->handleDummyUpdate($plugin, $domain, $version);
-                break;
+        try {
+            switch (true) {
+                case $plugin->getId() && $isDummy:
+                    $this->handleDummyUpdate($plugin, $domain, $version);
+                    break;
 
-            case $isDummy:
-                $this->handleDummyInstall($plugin, $domain, $version);
-                break;
+                case $isDummy:
+                    $this->handleDummyInstall($plugin, $domain, $version);
+                    break;
 
-            case $plugin->getId():
-                $this->handleLicenceUpdate($plugin, $domain, $version);
-                break;
+                case $plugin->getId():
+                    $this->handleLicenceUpdate($plugin, $domain, $version, $token);
+                    break;
 
-            default:
-                $this->handleLicenceInstall($plugin, $domain, $version);
-                break;
+                default:
+                    $this->handleLicenceInstall($plugin, $domain, $version, $token);
+                    break;
+            }
+        } catch (\Exception $e) {
+            $io->error('An error occured: ' . $e->getMessage());
+            exit(1);
         }
 
         try {
             $this->clearOpcodeCache();
             $this->container->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+
+            $this->io->success('Process completed successfully.');
         } catch (\Exception $e) {
         }
     }
@@ -144,12 +181,12 @@ class StoreDownloadCommand extends StoreCommand
     private function handleDummyUpdate(PluginStruct $plugin, $domain, $version)
     {
         if (!$plugin->isUpdateAvailable()) {
-            $this->output->writeln(sprintf('No update available for plugin %s', $plugin->getLabel()));
+            $this->io->text(sprintf('No update available for plugin %s', $plugin->getLabel()));
 
             return;
         }
 
-        $this->output->writeln(sprintf('Download plugin update package %s', $plugin->getLabel()));
+        $this->io->comment(sprintf('Download plugin update package %s', $plugin->getLabel()));
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, null);
 
@@ -171,7 +208,7 @@ class StoreDownloadCommand extends StoreCommand
      */
     private function handleDummyInstall(PluginStruct $plugin, $domain, $version)
     {
-        $this->output->writeln(sprintf('Download plugin install package %s', $plugin->getLabel()));
+        $this->io->comment(sprintf('Download plugin install package %s', $plugin->getLabel()));
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, null);
 
@@ -179,22 +216,22 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param string       $domain
-     * @param string       $version
+     * @param PluginStruct      $plugin
+     * @param string            $domain
+     * @param string            $version
+     * @param AccessTokenStruct $token
      *
      * @throws \Exception
      */
-    private function handleLicenceUpdate(PluginStruct $plugin, $domain, $version)
+    private function handleLicenceUpdate(PluginStruct $plugin, $domain, $version, AccessTokenStruct $token = null)
     {
         if (!$plugin->isUpdateAvailable()) {
-            $this->output->writeln(sprintf('No update available for plugin %s', $plugin->getLabel()));
+            $this->io->text(sprintf('No update available for plugin %s', $plugin->getLabel()));
 
             return;
         }
-        $token = $this->checkAuthentication();
 
-        $this->output->writeln(sprintf('Download plugin update package', $plugin->getLabel()));
+        $this->io->comment('Downloading plugin update package');
 
         $model = $this->getPluginModel($plugin->getTechnicalName());
         if ($plugin->isActive()) {
@@ -208,51 +245,21 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param string       $domain
-     * @param string       $version
+     * @param PluginStruct      $plugin
+     * @param string            $domain
+     * @param string            $version
+     * @param AccessTokenStruct $token
      *
      * @throws \Exception
      */
-    private function handleLicenceInstall(PluginStruct $plugin, $domain, $version)
+    private function handleLicenceInstall(PluginStruct $plugin, $domain, $version, AccessTokenStruct $token = null)
     {
-        $token = $this->checkAuthentication();
-
-        $this->output->writeln(sprintf('Download plugin install package', $plugin->getLabel()));
+        $this->io->comment('Downloading plugin install package');
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
 
         /* @var $service PluginLicenceService */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
-    }
-
-    /**
-     * @param AccessTokenStruct $token
-     * @param string            $domain
-     * @param string            $version
-     * @param PluginStruct      $plugin
-     *
-     * @throws \Exception
-     *
-     * @return null|\Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct
-     */
-    private function getLicence(AccessTokenStruct $token, $domain, $version, PluginStruct $plugin)
-    {
-        $request = new PluginLicenceRequest($token, $domain, $version, $plugin->getTechnicalName());
-        $licence = null;
-
-        try {
-            $licence = $this->container->get('shopware_plugininstaller.plugin_service_store_production')
-                ->getPluginLicence($request);
-        } catch (\Exception $e) {
-            $this->handleError(['message' => $e->getMessage(), 'code' => $e->getCode()]);
-        }
-
-        if (!$licence) {
-            $this->handleError(['message' => sprintf('Licence for plugin %s not found', $plugin->getLabel())]);
-        }
-
-        return $licence;
     }
 
     /**
@@ -263,12 +270,16 @@ class StoreDownloadCommand extends StoreCommand
         return extension_loaded('ionCube Loader');
     }
 
+    /**
+     * @param $technicalName
+     *
+     * @return Plugin|null
+     */
     private function getPluginModel($technicalName)
     {
-        $repo = $this->container->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
-        $plugin = $repo->findOneBy(['name' => $technicalName]);
+        $repo = $this->container->get('models')->getRepository(Plugin::class);
 
-        return $plugin;
+        return $repo->findOneBy(['name' => $technicalName]);
     }
 
     private function checkDomain()
@@ -302,14 +313,16 @@ class StoreDownloadCommand extends StoreCommand
             return;
         }
 
-        $repo = $this->container->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
+        $repo = $this->container->get('models')->getRepository(Plugin::class);
+
+        /** @var Plugin $plugin */
         $plugin = $repo->findOneBy(['name' => 'SwagLicense']);
 
         switch (true) {
             case !$plugin instanceof Plugin:
                 $this->handleError(['message' => sprintf("Plugin %s contains a licence check and the licence manager doesn't exist in your system.", $struct->getLabel())]);
                 break;
-            case $plugin->getInstalled() == null:
+            case $plugin->getInstalled() === null:
                 $this->handleError(['message' => sprintf('Plugin %s contains a licence check and the licence manager is not installed', $struct->getLabel())]);
                 break;
             case !$plugin->getActive():
@@ -349,33 +362,30 @@ class StoreDownloadCommand extends StoreCommand
         $password = $this->input->getOption('password');
 
         if ($this->input->isInteractive()) {
-            $dialog = $this->getHelper('dialog');
-
             if (empty($username)) {
-                $username = $dialog->ask(
-                    $this->output,
-                    'Please enter the username: '
-                );
+                $username = $this->io->ask('ShopwareId');
             }
 
             if (empty($password)) {
-                $password = $dialog->askHiddenResponse(
-                    $this->output,
-                    'Please enter the password: '
-                );
+                $password = $this->io->askHidden('Password');
             }
         }
 
-        if (empty($username) || empty($password)) {
-            throw new \Exception('Username and password are required');
+        try {
+            $this->io->section('Community Store Authentication');
+            $this->io->comment('Connection to store...');
+
+            /** @var StoreClient $storeClient */
+            $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+            $token = $storeClient->getAccessToken($username, $password);
+
+            $this->io->comment('Authenticated successfully.');
+        } catch (StoreException $e) {
+            $this->io->error('Login failed. Please check your credentials.');
+            exit(1);
         }
 
-        $this->output->writeln(sprintf('Connect to Store with username: %s...', $username));
-
-        return $this->container->get('shopware_plugininstaller.store_client')->getAccessToken(
-            $username,
-            $password
-        );
+        return $token;
     }
 
     /**
@@ -391,5 +401,61 @@ class StoreDownloadCommand extends StoreCommand
         if (function_exists('apcu_clear_cache')) {
             apcu_clear_cache();
         }
+    }
+
+    /**
+     * @param $plugin
+     *
+     * @return PluginStruct
+     */
+    private function createPluginStruct($plugin)
+    {
+        if ($plugin instanceof PluginStruct) {
+            return $plugin;
+        }
+
+        if ($plugin instanceof LicenceStruct) {
+            $struct = new PluginStruct($plugin->getTechnicalName());
+
+            $struct->setLabel($plugin->getLabel());
+            $struct->setLicenceCheck($plugin->isLicenseCheckEnabled());
+            $struct->setAvailableVersion($plugin->getBinaryVersion());
+
+            $localPlugin = $this->getPluginModel($plugin->getTechnicalName());
+
+            if ($localPlugin) {
+                $struct->setId($localPlugin->getId());
+
+                preg_match('/(\d\.\d\.\d)/', $localPlugin->getVersion(), $matches);
+
+                $localVersion = array_shift($matches);
+                if ($localVersion) {
+                    $updateAvailable = version_compare($plugin->getBinaryVersion(), $localVersion);
+
+                    $struct->setUpdateAvailable($updateAvailable === 1);
+                    $struct->setVersion($localVersion);
+                }
+            }
+
+            return $struct;
+        }
+
+        throw new \RuntimeException('Unknown plugin source: ' . get_class($plugin));
+    }
+
+    /**
+     * @param string $technicalName
+     * @param string $version
+     *
+     * @return PluginStruct|null
+     */
+    private function getFreePlugin($technicalName, $version)
+    {
+        $this->io->comment('Searching for plugin: ' . $technicalName);
+
+        $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
+        $context = new PluginsByTechnicalNameRequest(null, $version, [$technicalName]);
+
+        return $service->getPlugin($context);
     }
 }

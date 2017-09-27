@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle;
+namespace Shopware\Bundle\AccountBundle\Service;
 
 interface StoreFrontCustomerGreetingServiceInterface
 {

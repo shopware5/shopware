@@ -239,8 +239,8 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         $amount = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         $default = ['unassigned' => 0];
-        foreach ($streams as $name) {
-            $default[$name] = 0;
+        foreach (array_keys($streams) as $id) {
+            $default['stream_' . $id] = 0;
         }
 
         $now = new DateTime();
@@ -255,7 +255,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             $chart[$format] = array_merge(['yearMonth' => $format], $default);
 
             foreach ($streamAmount[$format] as $row) {
-                $stream = $streams[$row['stream']];
+                $stream = 'stream_' . $row['stream'];
                 $chart[$format][$stream] += (float) $row['invoice_amount_sum'];
             }
 

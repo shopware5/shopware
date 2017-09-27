@@ -26,25 +26,31 @@ namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
+use Shopware_Components_Translation;
 
 /**
  * Class EmotionTranslationImporter
  */
 class EmotionTranslationImporter
 {
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
-    /** @var \Shopware_Components_Translation */
+    /**
+     * @var Shopware_Components_Translation
+     */
     private $translator;
 
     /**
-     * @param Connection $connection
+     * @param Connection                           $connection
+     * @param Shopware_Components_Translation|null $translationComponent
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, Shopware_Components_Translation $translationComponent = null)
     {
         $this->connection = $connection;
-        $this->translator = new \Shopware_Components_Translation();
+        $this->translator = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
     /**

@@ -136,14 +136,10 @@ class SubscriptionService
 
         try {
             $secret = $this->getShopSecret();
-            if (empty($secret)) {
-                return false;
-            }
 
-            $pluginInformation = $this->getPluginInformationFromApi($secret);
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
-            return $pluginInformation;
+            return $this->getPluginInformationFromApi($secret);
         } catch (ShopSecretException $e) {
             $this->resetShopSecret();
 
@@ -156,7 +152,7 @@ class SubscriptionService
     /**
      * @param $secret
      *
-     * @return PluginInformationResultStruct
+     * @return PluginInformationResultStruct|false
      */
     private function getPluginInformationFromApi($secret)
     {
@@ -167,15 +163,17 @@ class SubscriptionService
             'plugins' => $this->getPluginsNameAndVersion(),
         ];
 
-        $header = [
-            'X-Shopware-Shop-Secret' => $secret,
-        ];
+        $header = $secret ? ['X-Shopware-Shop-Secret' => $secret] : [];
 
         $data = $this->storeClient->doPostRequest(
             '/pluginStore/environmentInformation',
             $params,
             $header
         );
+
+        if (empty($secret)) {
+            return false;
+        }
 
         $isShopUpgraded = $data['general']['isUpgraded'];
         $pluginInformationStructs = array_map(

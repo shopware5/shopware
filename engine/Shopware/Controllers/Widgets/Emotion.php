@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 /**
@@ -228,7 +230,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $offset, $limit, $sort = null)
     {
+        /** @var ContextService $context */
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        /** @var StoreFrontCriteriaFactory $factory */
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
         $criteria = $factory->createBaseCriteria([$category], $context);
 

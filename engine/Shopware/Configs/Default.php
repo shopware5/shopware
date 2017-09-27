@@ -91,7 +91,7 @@ return array_replace_recursive([
         'password' => '',
         'dbname' => 'shopware',
         'host' => 'localhost',
-        'charset' => 'utf8',
+        'charset' => 'utf8mb4',
         'adapter' => 'pdo_mysql',
     ],
     'es' => [

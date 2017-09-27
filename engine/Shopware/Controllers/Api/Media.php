@@ -23,7 +23,6 @@
  */
 
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware_Controllers_Backend_MediaManager as MediaManagerCtrl;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -151,14 +150,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 
             if ($file->getError() !== UPLOAD_ERR_OK) {
                 throw new \Exception(sprintf('Could not upload file "%s"', $file->getClientOriginalName()));
-            }
-
-            // validate extension
-            if (in_array(strtolower($fileExtension), MediaManagerCtrl::$fileUploadBlacklist)) {
-                unlink($file->getPathname());
-                throw new ApiException\CustomValidationException(
-                    sprintf('The type of the uploaded file "%s" is not supported', $file->getClientOriginalName())
-                );
             }
 
             // use custom name if provided

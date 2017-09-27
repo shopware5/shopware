@@ -117,6 +117,11 @@ class PluginInstaller
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
             $this->installResources($pluginBootstrap, $plugin);
 
+            // Makes sure the version is updated in the db after a re-installation
+            if ($this->hasInfoNewerVersion($plugin->getUpdateVersion(), $plugin->getVersion())) {
+                $plugin->setVersion($plugin->getUpdateVersion());
+            }
+
             $this->em->flush($plugin);
 
             $pluginBootstrap->install($context);
@@ -133,6 +138,9 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param bool   $removeData
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return UninstallContext
      */
@@ -292,6 +300,7 @@ class PluginInstaller
                 'capability_secure_uninstall' => true,
                 'refresh_date' => $refreshDate,
                 'translations' => $translations ? json_encode($translations) : null,
+                'changes' => $info['changelog'] ? json_encode($info['changelog']) : null,
             ];
 
             if ($currentPluginInfo) {

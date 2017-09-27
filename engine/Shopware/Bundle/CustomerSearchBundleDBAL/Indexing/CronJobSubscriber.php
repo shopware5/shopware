@@ -28,7 +28,9 @@ use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
-use Shopware\Components\CustomerStream\StreamIndexer;
+use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\CustomerStream;
+use Shopware\Components\CustomerStream\StreamIndexerInterface;
 
 class CronJobSubscriber implements SubscriberInterface
 {
@@ -38,16 +40,16 @@ class CronJobSubscriber implements SubscriberInterface
     private $connection;
 
     /**
-     * @var StreamIndexer
+     * @var StreamIndexerInterface
      */
     private $streamIndexer;
 
     /**
-     * @var SearchIndexer
+     * @var SearchIndexerInterface
      */
     private $searchIndexer;
 
-    public function __construct(Connection $connection, SearchIndexer $searchIndexer, StreamIndexer $streamIndexer)
+    public function __construct(Connection $connection, SearchIndexerInterface $searchIndexer, StreamIndexerInterface $streamIndexer)
     {
         $this->connection = $connection;
         $this->streamIndexer = $streamIndexer;
@@ -81,7 +83,22 @@ class CronJobSubscriber implements SubscriberInterface
             return true;
         }
 
+        /** @var CustomerStream $resource */
+        $resource = Manager::getResource('CustomerStream');
+
         foreach ($streams as $stream) {
+            if ($stream['freeze_up']) {
+                $stream['freeze_up'] = new \DateTime($stream['freeze_up']);
+            }
+            $result = $resource->updateFrozenState($stream['id'], $stream['freeze_up'], $stream['conditions']);
+            if ($result) {
+                $stream['static'] = $result['static'];
+            }
+
+            if ($stream['static']) {
+                continue;
+            }
+
             $this->streamIndexer->populate($stream['id'], $helper);
         }
 
@@ -94,7 +111,7 @@ class CronJobSubscriber implements SubscriberInterface
     private function fetchStreams()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(['id', 'name']);
+        $query->select(['id', 'name', 'conditions', 'freeze_up', 'static']);
         $query->from('s_customer_streams', 'streams');
 
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
