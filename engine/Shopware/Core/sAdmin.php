@@ -1134,7 +1134,7 @@ class sAdmin
         $namespace = $this->snippetManager->getNamespace('frontend/salutation');
         $register = $this->session->offsetGet('sRegister');
         foreach ($register['billing'] as $key => $value) {
-            if ($key == 'salutation') {
+            if ($key === 'salutation') {
                 $value = $namespace->get($value);
             }
 
@@ -1143,6 +1143,10 @@ class sAdmin
 
         if (array_key_exists('password', $context)) {
             unset($context['password']);
+        }
+
+        if (array_key_exists('passwordConfirmation', $context)) {
+            unset($context['passwordConfirmation']);
         }
 
         $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
