@@ -23,7 +23,7 @@
  */
 
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
-use Cocur\Slugify\Slugify;
+use Shopware\Components\Slug\SlugInterface;
 
 /**
  * @category  Shopware
@@ -48,7 +48,7 @@ class TermHelper implements TermHelperInterface
     private $replaceUmlauts;
     
     /**
-     * @var slug
+     * @var SlugInterface
      */
     private $slug;
 
@@ -62,7 +62,7 @@ class TermHelper implements TermHelperInterface
         $this->config = $config;
         $this->useBadWords = $useBadWords;
         $this->replaceUmlauts = $replaceUmlauts;
-        $this->slug = new Slugify();
+        $this->slug = Shopware()->Container()->get('shopware.slug');
     }
 
     /**
