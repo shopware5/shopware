@@ -10,18 +10,15 @@ use Shopware\Context\Struct\ShopContext;
 use Shopware\Product\Repository\ProductRepository;
 use Shopware\Product\Searcher\ProductSearchResult;
 use Shopware\Product\Struct\ProductBasicCollection;
-use Shopware\Product\Struct\ProductBasicStruct;
-use Shopware\Product\Struct\ProductDetailCollection;
 use Shopware\ProductDetailPrice\Struct\ProductDetailPriceBasicCollection;
 use Shopware\ProductDetailPrice\Struct\ProductDetailPriceBasicStruct;
+use Shopware\ProductListingPrice\Struct\ProductListingPriceBasicCollection;
 use Shopware\ProductMedia\Repository\ProductMediaRepository;
 use Shopware\ProductMedia\Searcher\ProductMediaSearchResult;
-use Shopware\ProductMedia\Struct\ProductMediaBasicStruct;
 use Shopware\Search\Criteria;
 use Shopware\Search\Query\TermsQuery;
-use Shopware\Storefront\Bridge\Product\Struct\DetailProductStruct;
-use Shopware\Storefront\Bridge\Product\Struct\ListingPriceStruct;
-use Shopware\Storefront\Bridge\Product\Struct\ListingProductStruct;
+use Shopware\Search\Sorting\FieldSorting;
+use Shopware\Storefront\Bridge\Product\Struct\ProductBasicStruct;
 
 class StorefrontProductRepository
 {
@@ -50,70 +47,23 @@ class StorefrontProductRepository
         $this->productMediaRepository = $productMediaRepository;
     }
 
-    public function readDetail(array $uuids, ShopContext $context): ProductBasicCollection
-    {
-        $products = $this->repository->readDetail($uuids, $context->getTranslationContext());
-
-        $detailProducts = new ProductDetailCollection();
-
-        foreach ($products as $product) {
-            $detailProduct = DetailProductStruct::createFrom($product);
-
-            // price
-            $calculated = $this->getCalculatedPrices($detailProduct, $context);
-            $detailProduct->getMainDetail()->setPrices($calculated);
-
-            // media
-            $cover = $product->getMedia()->filterByProductUuid($product->getUuid())
-                ->filter(function (ProductMediaBasicStruct $productMedia) {
-                    return $productMedia->getIsCover() === true;
-                })
-                ->first();
-
-            $detailProduct->setCover($cover);
-
-            $detailProducts->add($detailProduct);
-        }
-
-        return $detailProducts;
-    }
-
     public function read(array $uuids, ShopContext $context): ProductBasicCollection
     {
         $products = $this->repository->read($uuids, $context->getTranslationContext());
 
-        $criteria = new Criteria();
-        $criteria->addFilter(new TermsQuery('product_media.product_uuid', $uuids));
-        /** @var ProductMediaSearchResult $media */
-        $media = $this->productMediaRepository->search($criteria, $context->getTranslationContext());
+        $media = $this->fetchMedia($uuids, $context);
 
         $listingProducts = new ProductBasicCollection();
 
-        /** @var ProductBasicStruct $product */
-        foreach ($products as $product) {
-            $listingProduct = ListingProductStruct::createFrom($product);
+        /** @var ProductBasicStruct $base */
+        foreach ($products as $base) {
+            $product = ProductBasicStruct::createFrom($base);
 
-            $listingPrice = $this->getListingPrice($listingProduct);
-            if ($listingPrice === null) {
-                continue;
-            }
+            $this->updatePrices($product, $context);
 
-            // prices
-            $listingProduct->getMainDetail()->setPrices(
-                $this->getCalculatedPrices($listingProduct, $context)
-            );
-            $listingProduct->setListingPrice($listingPrice);
+            $product->setMedia($media->filterByProductUuid($product->getUuid()));
 
-            // media
-            $cover = $media->filterByProductUuid($product->getUuid())
-                ->filter(function (ProductMediaBasicStruct $productMedia) {
-                    return $productMedia->getIsCover() === true;
-                })
-                ->first();
-
-            $listingProduct->setCover($cover);
-
-            $listingProducts->add($listingProduct);
+            $listingProducts->add($product);
         }
 
         return $listingProducts;
@@ -131,17 +81,30 @@ class StorefrontProductRepository
         return $result;
     }
 
-    private function getCalculatedPrices(ProductBasicStruct $product, ShopContext $context): ProductDetailPriceBasicCollection
+    /**
+     * @param array       $uuids
+     * @param ShopContext $context
+     *
+     * @return ProductMediaSearchResult
+     */
+    protected function fetchMedia(array $uuids, ShopContext $context): ProductMediaSearchResult
     {
-        $productPrices = $this->filterCustomerPrices(
-            $product->getMainDetail()->getPrices(),
-            $context
-        );
+        /** @var ProductMediaSearchResult $media */
+        $criteria = new Criteria();
+        $criteria->addFilter(new TermsQuery('product_media.product_uuid', $uuids));
+        $criteria->addSorting(new FieldSorting('product_media.is_cover', FieldSorting::DESCENDING));
+        $criteria->addSorting(new FieldSorting('product_media.position'));
 
-        return $this->calculatePrices($product, $productPrices, $context);
+        return $this->productMediaRepository->search($criteria, $context->getTranslationContext());
     }
 
-    private function filterCustomerPrices(ProductDetailPriceBasicCollection $prices, ShopContext $context): ProductDetailPriceBasicCollection
+    /**
+     * @param ProductDetailPriceBasicCollection|ProductListingPriceBasicCollection $prices
+     * @param ShopContext                                                          $context
+     *
+     * @return ProductDetailPriceBasicCollection|ProductListingPriceBasicCollection
+     */
+    private function filterCustomerPrices($prices, ShopContext $context)
     {
         $current = $prices->filterByCustomerGroupUuid(
             $context->getCurrentCustomerGroup()->getUuid()
@@ -155,11 +118,15 @@ class StorefrontProductRepository
         );
     }
 
-    private function calculatePrices(
-        ProductBasicStruct $product,
-        ProductDetailPriceBasicCollection $prices,
-        ShopContext $context
-    ): ProductDetailPriceBasicCollection {
+    /**
+     * @param ProductBasicStruct                                                   $product
+     * @param ProductDetailPriceBasicCollection|ProductListingPriceBasicCollection $prices
+     * @param ShopContext                                                          $context
+     *
+     * @return ProductDetailPriceBasicCollection|ProductListingPriceBasicCollection
+     */
+    private function calculatePrices(ProductBasicStruct $product, $prices, ShopContext $context)
+    {
         $taxRules = new TaxRuleCollection([
             new PercentageTaxRule($product->getTax()->getRate(), 100),
         ]);
@@ -174,20 +141,14 @@ class StorefrontProductRepository
         return $prices;
     }
 
-    private function getListingPrice(ListingProductStruct $listingProduct): ?ListingPriceStruct
+    private function updatePrices(ProductBasicStruct $product, ShopContext $context): void
     {
-        if ($listingProduct->getMainDetail()->getPrices()->count() === 0) {
-            return null;
-        }
+        $prices = $this->filterCustomerPrices($product->getMainDetail()->getPrices(), $context);
+        $prices = $this->calculatePrices($product, $prices, $context);
+        $product->getMainDetail()->setPrices($prices);
 
-        $listingPrice = ListingPriceStruct::createFrom(
-            $listingProduct->getMainDetail()->getPrices()->last()
-        );
-
-        $listingPrice->setHasDifferentPrices(
-            $listingProduct->getMainDetail()->getPrices()->count() > 0
-        );
-
-        return $listingPrice;
+        $prices = $this->filterCustomerPrices($product->getListingPrices(), $context);
+        $prices = $this->calculatePrices($product, $prices, $context);
+        $product->setListingPrices($prices);
     }
 }
