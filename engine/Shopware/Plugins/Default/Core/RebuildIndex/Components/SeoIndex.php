@@ -33,6 +33,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * The old 'refreshIndex' method from the RouterRewrite Plugin
      *
      * This method ist used, if the SEO index needs to be build in *one* request - e.g. CronJob or Live
+     *
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function refreshSeoIndex()
     {
@@ -90,9 +92,11 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Helper function to reset the cached time. Moved here from the router engine
      *
-     * @param $resultTime
-     * @param $elementId
-     * @param $shopId
+     * @param string $resultTime
+     * @param int    $elementId
+     * @param int    $shopId
+     *
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function setCachedTime($resultTime, $elementId, $shopId)
     {
@@ -101,6 +105,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             WHERE element_id=? AND shop_id=?
         ';
         Shopware()->Db()->query($sql, [$elementId, $shopId]);
+
         $sql = '
             INSERT INTO s_core_config_values (element_id, shop_id, value)
             VALUES (?, ?, ?)
@@ -118,9 +123,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function registerShop($shopId)
     {
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
-        $shop = $repository->getActiveById($shopId);
+        $shop = $repository->getById($shopId);
 
         $shop->registerResources();
 
@@ -137,7 +142,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Count categories for the current shop
      *
-     * @param $shopId
+     * @param int $shopId
      *
      * @return mixed
      */
@@ -159,7 +164,10 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Count blog articles
      *
-     * @param $shopId
+     * @param int $shopId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
      *
      * @return int
      */
@@ -169,7 +177,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Get blog categories
         /** @var \Doctrine\ORM\Query $query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
+        $query = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
         // Get list of blogCategory ids
@@ -179,7 +187,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         // Count total number of associated blog articles
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder(
+        $builder = Shopware()->Models()->getRepository(\Shopware\Models\Blog\Blog::class)->getListQueryBuilder(
             $blogCategoryIds, null
         );
         $numResults = $builder->select('COUNT(blog)')
@@ -192,7 +200,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Count the number of articles which need an update
      *
-     * @param $shopId
+     * @param int $shopId
      *
      * @return string
      */
@@ -243,7 +251,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function countEmotions()
     {
         /** @var $repo \Shopware\Models\Emotion\Repository */
-        $repo = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $repo = Shopware()->Models()->getRepository(\Shopware\Models\Emotion\Emotion::class);
         $builder = $repo->getListingQuery();
 
         $builder
@@ -268,6 +276,10 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * we just return the number of items for the resource with the most items.
      * When setting the batchSize/limit for this resource, keep in mind, the the actual number of links generated
      * might be four times higher than the batchSize (as four resources are handled).
+     *
+     * @param int $shopId
+     *
+     * @return float|int
      */
     public function countContent($shopId)
     {
@@ -314,18 +326,21 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Get the number of supplier which friendly url will be updated
      *
-     * @param $shopId
+     * @param int $shopId
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int
      */
     public function countSuppliers($shopId)
     {
         $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
-        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+        if (null === $seoSupplierConfig || $seoSupplierConfig === false) {
             return 0;
         }
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Supplier::class);
 
         $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
 
