@@ -27,7 +27,7 @@ namespace Shopware\Framework\Struct;
 
 use ArrayIterator;
 
-abstract class Collection extends Struct implements \IteratorAggregate, \Countable
+abstract class Collection extends Struct implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * @var array
@@ -138,12 +138,32 @@ abstract class Collection extends Struct implements \IteratorAggregate, \Countab
 
     public function first()
     {
-        return array_values($this->elements)[0];
+        return array_values($this->elements)[0] ?? null;
     }
 
     public function last()
     {
-        return array_values($this->elements)[count($this->elements) - 1];
+        return array_values($this->elements)[count($this->elements) - 1] ?? null;
+    }
+
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->elements);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->elements[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->elements[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->elements[$offset]);
     }
 
     protected function doAdd($element): void
