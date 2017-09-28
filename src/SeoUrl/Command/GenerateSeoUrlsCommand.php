@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -52,7 +52,7 @@ class GenerateSeoUrlsCommand extends ContainerAwareCommand
             $context = new TranslationContext(
                 (string) $shop['uuid'],
                 (bool) $shop['is_default'],
-                $shop['fallback_locale_uuid'] ? (int) $shop['fallback_locale_uuid'] : null
+                $shop['fallback_locale_uuid'] ? (string) $shop['fallback_locale_uuid'] : null
             );
 
             $generatorRegistry->generate(

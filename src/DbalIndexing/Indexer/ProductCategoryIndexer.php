@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\DbalIndexing\Indexer;
 
@@ -100,8 +100,8 @@ class ProductCategoryIndexer implements IndexerInterface
 
         foreach ($categories as $productUuid => $mapping) {
             $categoryUuids = array_merge(
-                explode('|', $mapping['paths']),
-                explode('|', $mapping['uuids'])
+                explode('|', (string) $mapping['paths']),
+                explode('|', (string) $mapping['uuids'])
             );
 
             $categoryUuids = array_keys(array_flip(array_filter($categoryUuids)));
@@ -135,7 +135,7 @@ class ProductCategoryIndexer implements IndexerInterface
 
     private function getIndexName(?\DateTime $timestamp): string
     {
-        if (null === $timestamp) {
+        if ($timestamp === null) {
             return self::TABLE;
         }
 

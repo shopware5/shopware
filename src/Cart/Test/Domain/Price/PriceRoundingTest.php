@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -77,8 +77,7 @@ class PriceRoundingTest extends TestCase
             [-1.55555, -2, 0],
             [-1.55555, -1.6, 1],
             [-1.55555, -1.56, 2],
-            [-1.55555, -1.556, 3],
-            ['-1.55555', -1.556, 3],
+            [-1.55555, -1.556, 3]
         ];
     }
 }
