@@ -162,6 +162,11 @@ Ext.define('Shopware.form.field.ComboTree', {
             inputEl.removeCls(me.emptyCls);
         }
         me.value = value;
+        
+        if (inputEl && !Ext.isEmpty(value)){
+            me.setRawValue(value); 
+        }  
+
         me.applyEmptyText();
     },
 

@@ -83,7 +83,7 @@ class RequirementValidator
      */
     private function assertVersion($version, $required, $operator)
     {
-        if ($version == '___VERSION___') {
+        if ($version === '___VERSION___') {
             return true;
         }
 

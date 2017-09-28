@@ -31,6 +31,7 @@
 // {block name="backend/customer/view/customer_stream/condition_field"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionField', {
     extend: 'Ext.form.FieldContainer',
+    cls: 'customer-stream-condition-field',
     layout: { type: 'vbox', align: 'stretch' },
     mixins: {
         formField: 'Ext.form.field.Base'

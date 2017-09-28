@@ -432,6 +432,12 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      *
      * @param Shopware_Components_Plugin_Bootstrap $plugin
      *
+     * @throws \Exception
+     * @throws \Enlight_Config_Exception
+     * @throws \Enlight_Event_Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
      * @return bool
      */
     public function updatePlugin(Shopware_Components_Plugin_Bootstrap $plugin)

@@ -27,6 +27,7 @@ namespace   Shopware\Models\Order;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Security\AttributeCleanerTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -69,6 +70,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Order extends ModelEntity
 {
+    /*
+     * HTML Cleansing trait for different attributes in a class (implemented in setters)
+     * @see \Shopware\Components\Security\AttributeCleanerTrait
+     */
+    use AttributeCleanerTrait;
+
     /**
      * @var \Shopware\Models\Customer\Customer
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="orders")
@@ -206,6 +213,7 @@ class Order extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="order")
      */
     protected $paymentInstances;
+
     /**
      * Unique identifier field.
      *
@@ -445,6 +453,8 @@ class Order extends ModelEntity
     public function __construct()
     {
         $this->details = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->history = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
     }
 
@@ -467,7 +477,7 @@ class Order extends ModelEntity
      */
     public function setNumber($number)
     {
-        $this->number = $number;
+        $this->number = $this->cleanup($number);
 
         return $this;
     }
@@ -614,7 +624,7 @@ class Order extends ModelEntity
      */
     public function setTransactionId($transactionId)
     {
-        $this->transactionId = $transactionId;
+        $this->transactionId = $this->cleanup($transactionId);
 
         return $this;
     }
@@ -638,7 +648,7 @@ class Order extends ModelEntity
      */
     public function setComment($comment)
     {
-        $this->comment = $comment;
+        $this->comment = $this->cleanup($comment);
 
         return $this;
     }
@@ -662,7 +672,7 @@ class Order extends ModelEntity
      */
     public function setCustomerComment($customerComment)
     {
-        $this->customerComment = $customerComment;
+        $this->customerComment = $this->cleanup($customerComment);
 
         return $this;
     }
@@ -686,7 +696,7 @@ class Order extends ModelEntity
      */
     public function setInternalComment($internalComment)
     {
-        $this->internalComment = $internalComment;
+        $this->internalComment = $this->cleanup($internalComment);
 
         return $this;
     }
@@ -758,7 +768,7 @@ class Order extends ModelEntity
      */
     public function setTemporaryId($temporaryId)
     {
-        $this->temporaryId = $temporaryId;
+        $this->temporaryId = $this->cleanup($temporaryId);
 
         return $this;
     }
@@ -857,7 +867,7 @@ class Order extends ModelEntity
      */
     public function setLanguageIso($languageIso)
     {
-        $this->languageIso = $languageIso;
+        $this->languageIso = $this->cleanup($languageIso);
 
         return $this;
     }
@@ -881,7 +891,7 @@ class Order extends ModelEntity
      */
     public function setCurrency($currency)
     {
-        $this->currency = $currency;
+        $this->currency = $this->cleanup($currency);
 
         return $this;
     }
@@ -929,7 +939,7 @@ class Order extends ModelEntity
      */
     public function setRemoteAddress($remoteAddress)
     {
-        $this->remoteAddress = $remoteAddress;
+        $this->remoteAddress = $this->cleanup($remoteAddress);
 
         return $this;
     }
@@ -1189,7 +1199,7 @@ class Order extends ModelEntity
      */
     public function setPartner($partner)
     {
-        $this->partner = $partner;
+        $this->partner = $this->cleanup($partner);
     }
 
     /**
@@ -1263,7 +1273,7 @@ class Order extends ModelEntity
      */
     public function setDeviceType($deviceType)
     {
-        $this->deviceType = $deviceType;
+        $this->deviceType = $this->cleanup($deviceType);
     }
 
     /**

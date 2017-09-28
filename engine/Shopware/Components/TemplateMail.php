@@ -88,12 +88,14 @@ class Shopware_Components_TemplateMail
     }
 
     /**
+     * @throws \Exception
+     *
      * @return \Shopware_Components_Translation
      */
     public function getTranslationReader()
     {
         if (null === $this->translationReader) {
-            $this->translationReader = new Shopware_Components_Translation();
+            $this->translationReader = Shopware()->Container()->get('translation');
         }
 
         return $this->translationReader;
@@ -150,7 +152,7 @@ class Shopware_Components_TemplateMail
         if (!($mailModel instanceof \Shopware\Models\Mail\Mail)) {
             $modelName = $mailModel;
             /* @var $mailModel \Shopware\Models\Mail\Mail */
-            $mailModel = $this->getModelManager()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
+            $mailModel = $this->getModelManager()->getRepository(\Shopware\Models\Mail\Mail::class)->findOneBy(
                 ['name' => $modelName]
             );
             if (!$mailModel) {

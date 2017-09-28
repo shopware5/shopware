@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Plugin
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -29,7 +30,7 @@
  * added to the Enlight_Plugin_Bootstrap.
  *
  * @category   Enlight
- * @package    Enlight_Plugin
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -52,6 +53,19 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     }
 
     /**
+     * Magic caller
+     *
+     * @param string     $name
+     * @param array|null $args
+     *
+     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace
+     */
+    public function __call($name, $args = null)
+    {
+        return $this->get($name, true);
+    }
+
+    /**
      * Returns the application instance.
      *
      * @return Shopware
@@ -64,19 +78,21 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * The name of the plugin is used as array key.
      *
      * @param Enlight_Plugin_Bootstrap $plugin
+     *
      * @return Enlight_Plugin_PluginManager
      */
     public function registerPlugin(Enlight_Plugin_Bootstrap $plugin)
     {
         $plugin->setCollection($this);
         $this->plugins[$plugin->getName()] = $plugin;
+
         return $this;
     }
 
     /**
      * Getter method for the plugin list.
      *
-     * @return  ArrayIterator
+     * @return ArrayObject
      */
     public function getIterator()
     {
@@ -87,9 +103,10 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * Returns a plugin by name. If the plugin isn't registered, the Enlight_Plugin_PluginCollection
      * loads it automatically.
      *
-     * @param   $name
-     * @param   bool $throwException
-     * @return  \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace
+     * @param      $name
+     * @param bool $throwException
+     *
+     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace
      */
     public function get($name, $throwException = false)
     {
@@ -98,9 +115,9 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
         }
         if ($this->plugins->offsetExists($name)) {
             return $this->plugins->offsetGet($name);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -108,27 +125,18 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      *
      * @param   $name
      * @param   $throwException
-     * @throws  Enlight_Exception
-     * @return  Enlight_Plugin_PluginCollection
+     *
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Plugin_PluginCollection
      */
     public function load($name, $throwException = true)
     {
         if ($throwException && !$this->plugins->offsetExists($name)) {
             throw new Enlight_Exception('Plugin "' . $name . '" not found failure');
         }
-        return $this;
-    }
 
-    /**
-     * Magic caller
-     *
-     * @param   string     $name
-     * @param   array|null $args
-     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace
-     */
-    public function __call($name, $args = null)
-    {
-        return $this->get($name, true);
+        return $this;
     }
 
     /**
@@ -138,7 +146,8 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      */
     public function reset()
     {
-        $this->plugins->exchangeArray(array());
+        $this->plugins->exchangeArray([]);
+
         return $this;
     }
 }

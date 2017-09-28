@@ -286,7 +286,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             'acl_is_allowed'
         );
         $engine->registerPlugin(
-            Enlight_Template_Manager::PLUGIN_FUNCTION,
+            Smarty::PLUGIN_FUNCTION,
             'acl_is_allowed',
             [$this, 'isAllowed']
         );

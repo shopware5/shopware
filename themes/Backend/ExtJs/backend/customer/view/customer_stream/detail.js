@@ -41,120 +41,114 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
 
         return {
             fieldSets: [{
-                splitFields: true,
-                title: '{s name=stream_details}{/s}',
+                splitFields: false,
+                border: false,
+                padding: 0,
+                title: '',
                 fields: {
                     name: {
-                        fieldLabel: '{s name=stream_name}{/s}',
-                        allowBlank: false
+                        fieldLabel: '{s name="stream_name"}{/s}',
+                        allowBlank: false,
+                        listeners: {
+                            scope: me,
+                            blur: me.onBlurStripTags
+                        }
                     },
                     description: {
                         xtype: 'textarea',
-                        fieldLabel: '{s name=stream_description}{/s}'
+                        fieldLabel: '{s name="stream_description"}{/s}',
+                        listeners: {
+                            scope: me,
+                            blur: me.onBlurStripTags
+                        }
                     },
-                    type: me.createTypeCombo,
+                    static: me.createStaticCheckbox,
                     freezeUp: me.createFreezeUp
                 }
-            }, Ext.bind(me.createStaticFieldSet, me)]
+            }]
         };
     },
 
-    createStaticFieldSet: function() {
+    createStaticCheckbox: function() {
         var me = this;
 
-        return Ext.create('Ext.form.FieldSet', {
-            title: '{s name="static_field_set"}{/s}',
-            height: 620,
-            splitFields: false,
-            hidden: !me.withAssignment,
-            layout: { type: 'vbox', align: 'stretch' },
-            items: [me.createAssignment()]
-        });
-    },
-
-    changeAssignment: function() {
-        var me = this;
-
-        if (!me.assignmentGrid) {
-            return;
-        }
-
-        me.assignmentGrid.setDisabled(
-            (me.typeCombo.getValue() !== 'static' && me.freezeUpField.getValue() === null)
-            ||
-            me.record.get('id') === null
-        );
-    },
-
-    createTypeCombo: function() {
-        var me = this;
-
-        me.typeCombo = Ext.create('Ext.form.field.ComboBox', {
-            name: 'type',
-            displayField: 'label',
-            valueField: 'key',
-            forceSelection: true,
-            editable: false,
-            allowBlank: false,
-            fieldLabel: '{s name="type"}{/s}',
+        me.staticCheckbox = Ext.create('Ext.form.field.Checkbox', {
+            name: 'static',
+            value: false,
+            uncheckedValue: false,
+            inputValue: true,
             labelWidth: 130,
-            value: 'dynamic',
             anchor: '100%',
-            listConfig: {
-                getInnerTpl: function () {
-                    return '{literal}' +
-                        '<div class="layout-info">' +
-                            '<h1>{label}</h1>' +
-                            '<div>{description}</div>' +
-                        '</div>' +
-                        '{/literal}';
-                }
-            },
-            store: Ext.create('Ext.data.Store', {
-                fields: ['key', 'label', 'description'],
-                data: [
-                    { key: 'static', label: '{s name="static_stream"}{/s}', description: '{s name="static_stream_description"}{/s}' },
-                    { key: 'dynamic', label: '{s name="dynamic_stream"}{/s}', description: '{s name="dynamic_stream_description"}{/s}' }
-                ]
-            }),
-            queryMode: 'local',
+            fieldLabel: '{s name="static"}{/s}',
             listeners: {
-                'change': Ext.bind(me.changeAssignment, me)
+                'change': function(field, newValue) {
+                    me.fireEvent('static-changed', newValue);
+                }
             }
         });
-        return me.typeCombo;
+
+        return me.staticCheckbox;
     },
 
     createFreezeUp: function() {
         var me = this;
 
-        me.freezeUpField = Ext.create('Shopware.apps.Base.view.element.Date', {
-            submitFormat: 'Y-m-d',
-            dateCfg: { submitFormat: 'Y-m-d' },
-            name: 'freezeUp',
-            labelWidth: 130,
-            anchor: '100%',
+        me.freezeUpDate = Ext.create('Ext.form.field.Date', {
             fieldLabel: '{s name="freeze_up_label"}{/s}',
-            helpText: '{s name="freeze_up_help"}{/s}',
-            listeners: {
-                'change': Ext.bind(me.changeAssignment, me)
-            }
-        });
-
-        return me.freezeUpField;
-    },
-
-    createAssignment: function() {
-        var me = this;
-
-        me.assignmentGrid = Ext.create('Shopware.apps.Customer.view.customer_stream.Assignment', {
-            record: me.record,
+            submitFormat: 'Y-m-d',
+            name: 'freezeUpDate',
             labelWidth: 130,
-            height: 570,
-            maxHeight: 570,
+            minValue: new Date(),
+            allowBlank: true,
             disabled: true
         });
-        return me.assignmentGrid;
+
+        me.freezeUpTime = Ext.create('Ext.form.field.Time', {
+            submitFormat: 'H:i',
+            xtype: 'timefield',
+            name: 'freezeUpTime',
+            minDate: new Date(),
+            helpText: '{s name="freeze_up_help"}{/s}',
+            margin: '0 0 0 135',
+            disabled: true
+        });
+
+        me.freezeUpContainer = Ext.create('Ext.container.Container', {
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            anchor: '100%',
+            name: 'freezeUp',
+            items: [
+                me.freezeUpDate,
+                me.freezeUpTime
+            ]}
+        );
+
+        return me.freezeUpContainer;
+    },
+
+    createWarningMessageBox: function(newValue, oldValue) {
+        Ext.MessageBox.alert('{s name="stream_name_tags_stripped_notice"}{/s}', Ext.String.format('{s name="stream_name_tags_stripped"}{/s}', Ext.util.Format.htmlEncode(oldValue), newValue));
+    },
+
+    onBlurStripTags: function(comp) {
+        var me = this,
+            val = comp.getValue(),
+            html;
+
+        html = Ext.util.Format.stripTags(val);
+        html = html.replace(/"/g, '');
+
+        if (html === val) {
+            return;
+        }
+
+        comp.setRawValue(html);
+        comp.setValue(html);
+
+        me.createWarningMessageBox(html, val);
     }
 });
 // {/block}

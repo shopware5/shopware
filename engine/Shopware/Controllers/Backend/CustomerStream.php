@@ -39,9 +39,18 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function save($data)
     {
-        $data = array_merge([
-            'freezeUp' => null,
-        ], $data);
+        $data['freezeUp'] = null;
+
+        if ($data['freezeUpDate'] && $data['static']) {
+            $date = new DateTime($data['freezeUpDate']);
+            $time = '';
+
+            if ($data['freezeUpTime']) {
+                $time = new DateTime($data['freezeUpTime']);
+                $time = $time->format(' H:i:s');
+            }
+            $data['freezeUp'] = new DateTime($date->format('Y-m-d') . $time);
+        }
 
         if ($data['id']) {
             $entity = $this->getApiResource()->update($data['id'], $data);
@@ -198,12 +207,15 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $customerId = (int) $this->Request()->getParam('customerId');
         $connection = $this->container->get('dbal_connection');
 
-        $connection->executeUpdate(
-            'INSERT IGNORE INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)',
-            [':streamId' => $streamId, ':customerId' => $customerId]
-        );
-
-        $this->View()->assign('success', true);
+        try {
+            $connection->executeUpdate(
+                'INSERT INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)',
+                [':streamId' => $streamId, ':customerId' => $customerId]
+            );
+            $this->View()->assign('success', true);
+        } catch (Exception $e) {
+            $this->View()->assign('success', false);
+        }
     }
 
     public function removeCustomerFromStreamAction()

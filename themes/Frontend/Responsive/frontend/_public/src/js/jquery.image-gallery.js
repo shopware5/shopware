@@ -275,8 +275,8 @@
 
             me._on(me._$imageContainer.find(me.opts.imageSlideSelector), 'click', $.proxy(me.onClick, me));
 
-            $.subscribe('plugin/swImageSlider/onSlide', $.proxy(me.onImageUpdate, me));
-            $.subscribe('plugin/swImageSlider/onUpdateTransform', $.proxy(me.onImageUpdate, me));
+            $.subscribe(me.getEventName('plugin/swImageSlider/onSlide'), $.proxy(me.onImageUpdate, me));
+            $.subscribe(me.getEventName('plugin/swImageSlider/onUpdateTransform'), $.proxy(me.onImageUpdate, me));
 
             me._on(window, 'keydown', $.proxy(me.onKeyDown, me));
 
@@ -597,6 +597,9 @@
             if (plugin) {
                 plugin.destroy();
             }
+
+            $.unsubscribe(me.getEventName('plugin/swImageSlider/onSlide'));
+            $.unsubscribe(me.getEventName('plugin/swImageSlider/onUpdateTransform'));
 
             me.$template.remove();
             me.$template = null;

@@ -58,39 +58,48 @@ Ext.define('Shopware.apps.Base.store.Category', {
      * Enable remote filtering
      */
     remoteFilter: true,
-   /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Base.model.Category',
 
     /**
-     * Configure the data communication
+     * Define the used model for this store.
+     *
+     * @string
+     */
+    model: 'Shopware.apps.Base.model.Category',
+
+    /**
+     * Configure the data communication.
+     *
      * @object
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
-         * store operations based on
+         * store operations based on.
+         *
          * @object
          */
-        url:'{url action=getCategories}',
+        url: '{url action=getCategories}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 
+    // Filtering root category and inactive categories
     filters: [{
+        property: 'c.active',
+        value: 1
+    },{
         property: 'c.parentId',
+        expression: '>=',
         value: 1
     }]
 }).create();

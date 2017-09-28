@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
@@ -31,7 +32,7 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
  * register single or multiple controllers and load them automatically
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -39,14 +40,14 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 {
     /**
      * @var string Current directory of the controller.
-     * Will be set in the getControllerClass method or in the getControllerPath method.
+     *             Will be set in the getControllerClass method or in the getControllerPath method.
      */
     protected $curDirectory;
 
     /**
      * @var string Contains the current module.
-     * Will be set in the getControllerClass method or in the getControllerPath method.
-     * If the property is set by the getControllerPath method, the string is formatted.
+     *             Will be set in the getControllerClass method or in the getControllerPath method.
+     *             If the property is set by the getControllerPath method, the string is formatted.
      */
     protected $curModule;
 
@@ -78,31 +79,32 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $defaultModule = 'frontend';
 
     /**
-     * @var Enlight_Controller_Front Contains the instance of the front controller.
+     * @var Enlight_Controller_Front contains the instance of the front controller
      */
     protected $frontController;
 
     /**
-     * @var string Contains the path delimiter character used to format action, controller and module names.
+     * @var string contains the path delimiter character used to format action, controller and module names
      */
     protected $pathDelimiter = '_';
 
     /**
-     * @var array Contains the word delimiter characters used to format action, controller and module names.
+     * @var array contains the word delimiter characters used to format action, controller and module names
      */
-    protected $wordDelimiter = array('-', '.');
+    protected $wordDelimiter = ['-', '.'];
 
     /**
      * @var array Contains all added controller directories. Used to get the controller
-     * directory of a module
+     *            directory of a module
      */
-    protected $controllerDirectory = array();
+    protected $controllerDirectory = [];
 
     /**
      * Adds a controller directory. If no module is given, the default module will be used.
      *
      * @param      $path
      * @param null $module
+     *
      * @return Enlight_Controller_Dispatcher_Default
      */
     public function addControllerDirectory($path, $module = null)
@@ -124,11 +126,12 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      *
      * @param string|array $directory
      * @param string|null  $module
+     *
      * @return Enlight_Controller_Dispatcher_Default
      */
     public function setControllerDirectory($directory, $module = null)
     {
-        $this->controllerDirectory = array();
+        $this->controllerDirectory = [];
 
         if (is_string($directory)) {
             $this->addControllerDirectory($directory, $module);
@@ -145,7 +148,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * Returns the controller directory.
      * If more than one directory exists the function returns the controller directory of the given module.
      * If no module name is passed, the function returns the whole controller directory array.
+     *
      * @param null $module
+     *
      * @return array|null
      */
     public function getControllerDirectory($module = null)
@@ -156,14 +161,16 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $module = $this->formatModuleName($module);
         if (isset($this->controllerDirectory[$module])) {
             return $this->controllerDirectory[$module];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
      * Removes the controller directory for the given module.
+     *
      * @param $module
+     *
      * @return bool
      */
     public function removeControllerDirectory($module)
@@ -171,17 +178,21 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $module = (string) $module;
         if (isset($this->controllerDirectory[$module])) {
             unset($this->controllerDirectory[$module]);
+
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
      * Adds the given path to the module directory
+     *
      * @param $path
-     * @return Enlight_Controller_Dispatcher_Default
+     *
      * @throws Enlight_Controller_Exception
+     *
+     * @return Enlight_Controller_Dispatcher_Default
      */
     public function addModuleDirectory($path)
     {
@@ -212,7 +223,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Returns the formatted controller name. Removes all '_' .
+     *
      * @param $unFormatted
+     *
      * @return mixed
      */
     public function formatControllerName($unFormatted)
@@ -222,7 +235,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Returns the formatted action name. Removes all '_' .
+     *
      * @param $unFormatted
+     *
      * @return mixed
      */
     public function formatActionName($unFormatted)
@@ -232,7 +247,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Returns the formatted module name. Upper case the first character of the module name.
+     *
      * @param $unFormatted
+     *
      * @return string
      */
     public function formatModuleName($unFormatted)
@@ -241,43 +258,22 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     }
 
     /**
-     * Internal helper function to format action, controller and module names.
-     *
-     * @param      $unFormatted
-     * @param bool $isAction
-     * @return string
-     */
-    protected function formatName($unFormatted, $isAction = false)
-    {
-        if (!$isAction) {
-            $segments = explode($this->pathDelimiter, $unFormatted);
-        } else {
-            $segments = (array) $unFormatted;
-        }
-
-        foreach ($segments as $key => $segment) {
-            $segment = preg_replace('#[A-Z]#', ' $0', $segment);
-            $segment = str_replace($this->wordDelimiter, ' ', strtolower($segment));
-            $segment = preg_replace('/[^a-z0-9 ]/', '', $segment);
-            $segments[$key] = str_replace(' ', '', ucwords($segment));
-        }
-
-        return implode('_', $segments);
-    }
-
-    /**
      * Sets the default controller name.
+     *
      * @param $controller
+     *
      * @return Enlight_Controller_Dispatcher_Default
      */
     public function setDefaultControllerName($controller)
     {
         $this->defaultController = (string) $controller;
+
         return $this;
     }
 
     /**
      * Returns the default controller name.
+     *
      * @return string
      */
     public function getDefaultControllerName()
@@ -287,17 +283,21 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Sets the default action name.
+     *
      * @param $action
+     *
      * @return Enlight_Controller_Dispatcher_Default
      */
     public function setDefaultAction($action)
     {
         $this->defaultAction = (string) $action;
+
         return $this;
     }
 
     /**
      * Returns the default action name.
+     *
      * @return string
      */
     public function getDefaultAction()
@@ -307,17 +307,21 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Sets the default module name.
+     *
      * @param $module
+     *
      * @return Enlight_Controller_Dispatcher_Default
      */
     public function setDefaultModule($module)
     {
         $this->defaultModule = (string) $module;
+
         return $this;
     }
 
     /**
      * Returns the default module name
+     *
      * @return string
      */
     public function getDefaultModule()
@@ -327,8 +331,10 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Returns the controller class of the given request class. The class name is imploded by '_'
-     * @param   Enlight_Controller_Request_Request $request
-     * @return  array|string
+     *
+     * @param Enlight_Controller_Request_Request $request
+     *
+     * @return array|string
      */
     public function getControllerClass(Enlight_Controller_Request_Request $request)
     {
@@ -347,16 +353,18 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $moduleName = $this->formatModuleName($module);
         $controllerName = $this->formatControllerName($request->getControllerName());
 
-        $class = array('Shopware', 'Controllers', $moduleName, $controllerName);
+        $class = ['Shopware', 'Controllers', $moduleName, $controllerName];
         $class = implode('_', $class);
+
         return $class;
     }
 
     /**
      * Returns the controller path of the given request class.
      *
-     * @param   Enlight_Controller_Request_Request $request
-     * @return  string
+     * @param Enlight_Controller_Request_Request $request
+     *
+     * @return string
      */
     public function getControllerPath(Enlight_Controller_Request_Request $request)
     {
@@ -365,21 +373,24 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $moduleName = $this->formatModuleName($this->curModule);
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
-                array('subject' => $this, 'request' => $request)
+                ['subject' => $this, 'request' => $request]
                 )
         ) {
             $path = $event->getReturn();
         } else {
             $path = $this->curDirectory . $controllerName . '.php';
         }
+
         return $path;
     }
 
     /**
      * Returns the action method of the given request class.
      * If no action name is set in the request class, the default action is used.
-     * @param   Enlight_Controller_Request_Request $request
-     * @return  string
+     *
+     * @param Enlight_Controller_Request_Request $request
+     *
+     * @return string
      */
     public function getActionMethod(Enlight_Controller_Request_Request $request)
     {
@@ -390,6 +401,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         }
         $formatted = $this->formatActionName($action);
         $formatted = strtolower(substr($formatted, 0, 1)) . substr($formatted, 1) . 'Action';
+
         return $formatted;
     }
 
@@ -399,14 +411,16 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * The module and controller path is imploded by '_'
      *
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return string
      */
     public function getFullControllerName(Enlight_Controller_Request_Request $request)
     {
-        $parts = array(
+        $parts = [
             $this->formatModuleName($request->getModuleName()),
-            $this->formatControllerName($request->getControllerName())
-        );
+            $this->formatControllerName($request->getControllerName()),
+        ];
+
         return implode('_', $parts);
     }
 
@@ -416,15 +430,17 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * The module, controller and action path is imploded by '_'.
      *
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return string
      */
     public function getFullActionName(Enlight_Controller_Request_Request $request)
     {
-        $parts = array(
+        $parts = [
             $this->formatModuleName($request->getModuleName()),
             $this->formatControllerName($request->getControllerName()),
-            $this->formatActionName($request->getActionName())
-        );
+            $this->formatActionName($request->getActionName()),
+        ];
+
         return implode('_', $parts);
     }
 
@@ -434,6 +450,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * If the controller class exists, the enlight loader class checks if the controller path is readable.
      *
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return bool|string
      */
     public function isDispatchable(Enlight_Controller_Request_Request $request)
@@ -447,13 +464,14 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         }
         $path = $this->getControllerPath($request);
 
-        return Enlight_Loader::isReadable($path);
+        return class_exists($path) || Enlight_Loader::isReadable($path);
     }
 
     /**
      * Checks if a controller directory exists for the given module.
      *
      * @param $module
+     *
      * @return bool
      */
     public function isValidModule($module)
@@ -477,6 +495,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      *
      * @param Enlight_Controller_Request_Request   $request
      * @param Enlight_Controller_Response_Response $response
+     *
      * @throws Enlight_Controller_Exception|Enlight_Exception|Exception
      */
     public function dispatch(Enlight_Controller_Request_Request $request,
@@ -493,6 +512,11 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         $class = $this->getControllerClass($request);
         $path = $this->getControllerPath($request);
+
+        if (class_exists($path)) {
+            $class = $path;
+            $path = null;
+        }
 
         try {
             Shopware()->Loader()->loadClass($class, $path);
@@ -538,5 +562,31 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $content = ob_get_clean();
             $response->appendBody($content);
         }
+    }
+
+    /**
+     * Internal helper function to format action, controller and module names.
+     *
+     * @param      $unFormatted
+     * @param bool $isAction
+     *
+     * @return string
+     */
+    protected function formatName($unFormatted, $isAction = false)
+    {
+        if (!$isAction) {
+            $segments = explode($this->pathDelimiter, $unFormatted);
+        } else {
+            $segments = (array) $unFormatted;
+        }
+
+        foreach ($segments as $key => $segment) {
+            $segment = preg_replace('#[A-Z]#', ' $0', $segment);
+            $segment = str_replace($this->wordDelimiter, ' ', strtolower($segment));
+            $segment = preg_replace('/[^a-z0-9 ]/', '', $segment);
+            $segments[$key] = str_replace(' ', '', ucwords($segment));
+        }
+
+        return implode('_', $segments);
     }
 }

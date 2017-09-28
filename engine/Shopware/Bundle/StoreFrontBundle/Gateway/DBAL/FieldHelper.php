@@ -280,6 +280,7 @@ class FieldHelper
             'category.template as __category_template',
             'category.blog as __category_blog',
             'category.external as __category_external',
+            'category.external_target as __category_external_target',
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
             'category.stream_id as __category_stream_id',

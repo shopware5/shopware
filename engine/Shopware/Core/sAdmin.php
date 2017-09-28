@@ -59,6 +59,7 @@ class sAdmin
      * @deprecated
      */
     public $sSYSTEM;
+
     /**
      * Database connection which used for each database operation in this class.
      * Injected over the class constructor
@@ -153,20 +154,42 @@ class sAdmin
      */
     private $attributePersister;
 
+    /**
+     * @var Shopware_Components_Translation
+     */
+    private $translationComponent;
+
+    /**
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null          $db
+     * @param Enlight_Event_EventManager|null                       $eventManager
+     * @param Shopware_Components_Config|null                       $config
+     * @param Enlight_Components_Session_Namespace|null             $session
+     * @param Enlight_Controller_Front|null                         $front
+     * @param \Shopware\Components\Password\Manager|null            $passwordEncoder
+     * @param Shopware_Components_Snippet_Manager|null              $snippetManager
+     * @param Shopware_Components_Modules|null                      $moduleManager
+     * @param sSystem|null                                          $systemModule
+     * @param StoreFrontBundle\Service\ContextServiceInterface|null $contextService
+     * @param EmailValidatorInterface|null                          $emailValidator
+     * @param AddressServiceInterface|null                          $addressService
+     * @param NumberRangeIncrementerInterface|null                  $numberRangeIncrementer
+     * @param Shopware_Components_Translation|null                  $translationComponent
+     */
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql          $db = null,
-        Enlight_Event_EventManager                       $eventManager = null,
-        Shopware_Components_Config                       $config = null,
-        Enlight_Components_Session_Namespace             $session = null,
-        Enlight_Controller_Front                         $front = null,
-        \Shopware\Components\Password\Manager            $passwordEncoder = null,
-        Shopware_Components_Snippet_Manager              $snippetManager = null,
-        Shopware_Components_Modules                      $moduleManager = null,
-        sSystem                                          $systemModule = null,
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        Enlight_Event_EventManager $eventManager = null,
+        Shopware_Components_Config $config = null,
+        Enlight_Components_Session_Namespace $session = null,
+        Enlight_Controller_Front $front = null,
+        \Shopware\Components\Password\Manager $passwordEncoder = null,
+        Shopware_Components_Snippet_Manager $snippetManager = null,
+        Shopware_Components_Modules $moduleManager = null,
+        sSystem $systemModule = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        EmailValidatorInterface                          $emailValidator = null,
-        AddressServiceInterface                          $addressService = null,
-        NumberRangeIncrementerInterface                  $numberRangeIncrementer = null
+        EmailValidatorInterface $emailValidator = null,
+        AddressServiceInterface $addressService = null,
+        NumberRangeIncrementerInterface $numberRangeIncrementer = null,
+        Shopware_Components_Translation $translationComponent = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -188,6 +211,7 @@ class sAdmin
         $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
         $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
         $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
     /**
@@ -876,8 +900,8 @@ class sAdmin
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        $translator = new Shopware_Components_Translation();
-        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_countries');
+        $translationData = $this->translationComponent
+            ->readBatchWithFallback($languageId, $fallbackId, 'config_countries');
 
         if (!$country) {
             return $translationData;
@@ -914,8 +938,8 @@ class sAdmin
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        $translator = new Shopware_Components_Translation();
-        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_dispatch');
+        $translationData = $this->translationComponent
+            ->readBatchWithFallback($languageId, $fallbackId, 'config_dispatch');
 
         if (!$dispatch) {
             return $translationData;
@@ -951,8 +975,8 @@ class sAdmin
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        $translator = new Shopware_Components_Translation();
-        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_payment');
+        $translationData = $this->translationComponent
+            ->readBatchWithFallback($languageId, $fallbackId, 'config_payment');
 
         if (!$payment) {
             return $translationData;
@@ -987,8 +1011,8 @@ class sAdmin
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        $translator = new Shopware_Components_Translation();
-        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_country_states');
+        $translationData = $this->translationComponent
+            ->readBatchWithFallback($languageId, $fallbackId, 'config_country_states');
 
         if (empty($state)) {
             return $translationData;
@@ -1106,7 +1130,7 @@ class sAdmin
         $namespace = $this->snippetManager->getNamespace('frontend/salutation');
         $register = $this->session->offsetGet('sRegister');
         foreach ($register['billing'] as $key => $value) {
-            if ($key == 'salutation') {
+            if ($key === 'salutation') {
                 $value = $namespace->get($value);
             }
 
@@ -1115,6 +1139,10 @@ class sAdmin
 
         if (array_key_exists('password', $context)) {
             unset($context['password']);
+        }
+
+        if (array_key_exists('passwordConfirmation', $context)) {
+            unset($context['passwordConfirmation']);
         }
 
         $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
@@ -3559,7 +3587,7 @@ SQL;
             [$userId]
         );
         $additional = $additional ?: [];
-        $attributes = $this->attributeLoader->load('s_user_attributes', $userId) ?: [];
+        $attributes = $this->attributeLoader->load('s_user_attributes', $userId);
         $userData['additional']['user'] = array_merge($attributes, $additional);
 
         return $userData;
@@ -3580,7 +3608,7 @@ SQL;
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
         $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
-        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']);
         $userData['shippingaddress'] = $shipping;
 
         if (!isset($userData['shippingaddress']['firstname'])) {
@@ -3633,7 +3661,7 @@ SQL;
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Customer::class, $userId);
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
-        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
+        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']);
         $userData['billingaddress'] = $billing;
 
         return $userData;

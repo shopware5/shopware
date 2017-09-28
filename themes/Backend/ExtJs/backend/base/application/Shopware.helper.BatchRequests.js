@@ -76,7 +76,7 @@ Ext.define('Shopware.helper.BatchRequests', {
      */
     finish: function(requests, callback) {
         if (Ext.isFunction(callback)) {
-            callback();
+            Ext.callback(callback);
         }
     },
 

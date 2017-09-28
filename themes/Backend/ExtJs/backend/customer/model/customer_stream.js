@@ -44,11 +44,33 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
         { name: 'id', type: 'int', useNull: true },
         { name: 'customer_count', type: 'int' },
         { name: 'name', type: 'string' },
-        { name: 'type', type: 'string', defaultValue: 'dynamic' },
+        { name: 'static', type: 'boolean', defaultValue: false },
         { name: 'assignment', type: 'string' },
-        { name: 'freezeUp', type: 'date', useNull: true, defaultValue: null },
+        { name: 'freezeUpTime', type: 'time', useNull: true, defaultValue: null },
+        { name: 'freezeUpDate', type: 'date', useNull: true, defaultValue: null },
+        {
+            name: 'freezeUp',
+            type: 'string',
+            convert: function (value, record) {
+                if (value === null) {
+                    return null;
+                }
+
+                record.data.freezeUpTime = Ext.Date.format(value, 'H:i');
+                record.data.freezeUpDate = new Date(value);
+                return record.data.freezeUpDate;
+            },
+            useNull: true,
+            defaultValue: null
+        },
         { name: 'description', type: 'string', useNull: true },
         { name: 'conditions', type: 'string' }
-    ]
+    ],
+
+    hasConditions: function() {
+        var conditions = this.get('conditions');
+        conditions = Object.keys(Ext.JSON.decode(conditions));
+        return conditions.length > 0;
+    }
 });
 // {/block}

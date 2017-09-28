@@ -37,10 +37,12 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Upload', {
 
     config: {
         maxFileUpload: 1,
-        dropZoneText: '{s name="mediaManager/replaceWindiw/dropZone/dragAndDrop"}{/s}',
-        fileSelectText: '{s name="mediaManager/replaceWindiw/dropZone/selectMedia"}{/s}',
+        dropZoneText: '{s name="mediaManager/replaceWindow/dropZone/dragAndDrop"}{/s}',
+        fileSelectText: '{s name="mediaManager/replaceWindow/dropZone/selectMedia"}{/s}',
         fileUploadErrorMessageTitle: '{s name="mediaManager/replaceWindow/window/errorTitle"}{/s}',
-        fileUploadErrorMessage: '{s name="mediaManager/replaceWindow/window/uploadErrorOccurred"}{/s}'
+        fileUploadErrorMessage: '{s name="mediaManager/replaceWindow/window/uploadErrorOccurred"}{/s}',
+        fileUploadWrongTypeErrorMessage: '{s name="mediaManager/replaceWindow/window/errorWrongMediaType"}{/s}',
+        fileUploadExtensionError: '{s name="mediaManager/replaceWindow/window/errorExtensionBlacklisted"}{/s}'
     },
 
     /**
@@ -329,7 +331,26 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Upload', {
                 }
 
                 if (!responseText.success) {
-                    me.showMessage(me.config.fileUploadErrorMessageTitle, responseText.message);
+                    if (responseText.exception) {
+                        switch (responseText.exception['_class']) {
+                            case 'Shopware\\Bundle\\MediaBundle\\Exception\\WrongMediaTypeForReplaceException':
+                                me.showMessage(
+                                    me.config.fileUploadErrorMessageTitle,
+                                    Ext.String.format(me.config.fileUploadWrongTypeErrorMessage, responseText.exception.requiredType)
+                                );
+                                break;
+                            case 'Shopware\\Bundle\\MediaBundle\\Exception\\MediaFileExtensionIsBlacklistedException':
+                            case 'Shopware\\Bundle\\MediaBundle\\Exception\\MediaFileExtensionNotAllowedException':
+                                me.showMessage(
+                                    me.config.fileUploadErrorMessageTitle,
+                                    Ext.String.format(me.config.fileUploadExtensionError, responseText.exception.extension)
+                                );
+                                break;
+                        }
+                    } else {
+                        me.showMessage(me.config.fileUploadErrorMessageTitle, responseText.message);
+                    }
+
                     me.fireEvent('upload-error', me, me.value[me.index], me.index);
                     return;
                 }

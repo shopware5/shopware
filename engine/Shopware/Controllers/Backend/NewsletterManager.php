@@ -610,7 +610,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function listNewslettersAction()
     {
         $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', [['property' => 'mailing.date', 'direction' => 'DESC']]);
+        $sort = $this->Request()->getParam('sort', [['property' => 'mailing.date', 'direction' => 'DESC'], ['property' => 'mailing.id', 'direction' => 'DESC']]);
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
 

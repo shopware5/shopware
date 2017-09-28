@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     alias: 'widget.mediamanager-album-setting',
     border: false,
     width: 600,
-    height: 600,
+    height: 700,
     layout: 'fit',
     autoShow: true,
 
@@ -53,8 +53,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      */
     settings: null,
 
-    snippets:{
-        settings:{
+    snippets: {
+        settings: {
             cancel: '{s name="settings/cancel"}Cancel{/s}',
             save: '{s name="settings/save"}Save settings{/s}',
             albumName: '{s name="settings/albumName"}Album name{/s}',
@@ -71,26 +71,29 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             highDpiThumbsHelper: '{s name="settings/highDpiThumbsHelper"}Also generate high dpi versions of thumbnails{/s}',
             thumbQuality: '{s name="settings/thumbQuality"}Thumbnail quality{/s}',
             thumbQualitySupport: '{s name="settings/thumbQualitySupport"}Value between 1 and 100. Higher means more quality but bigger files{/s}',
-            highDpiQuality: '{s name="settings/highDpiQuality"}High dpi thumbnail quality{/s}'
+            highDpiQuality: '{s name="settings/highDpiQuality"}High dpi thumbnail quality{/s}',
+            invalidThumbnailSize: '{s name="settings/media/album/thumbnail/size/invalid"}Invalid size{/s}',
+            errorTitle: '{s name="error/title"}Error{/s}'
         }
     },
+
     /**
      * Initializes the component and sets the toolbars
-     * and the neccessary event listener
+     * and the necessary event listener
      *
      * @return void
      */
-    initComponent: function() {
+    initComponent: function () {
         var me = this,
             id = null;
 
         // Set the album as the window title
-        if(me.settings) {
+        if (me.settings) {
             me.title = me.title + ' - "' + me.settings.get('text') + '"';
-            id = ~~(1* me.settings.get('id'));
+            id = ~~(1 * me.settings.get('id'));
         }
 
-        me.items = [ me.createFormPanel() ]
+        me.items = [me.createFormPanel()];
 
         // Create buttons
         me.dockedItems = [{
@@ -101,7 +104,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             items: ['->', {
                 text: me.snippets.settings.cancel,
                 cls: 'secondary',
-                handler: function() {
+                handler: function () {
                     me.close();
                 }
             }, {
@@ -118,11 +121,11 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
 
     /**
      * Creates the main form panel for the component which
-     * features all neccessary form elements
+     * features all necessary form elements
      *
-     * @return [object] me.formPnl - generated Ext.form.Panel
+     * @return { object } me.formPnl - generated Ext.form.Panel
      */
-    createFormPanel: function() {
+    createFormPanel: function () {
         var me = this;
 
         // Name of the album
@@ -140,8 +143,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             inputValue: 1,
             listeners: {
                 scope: me,
-                change: function(value) {
-                    if(value.checked) {
+                change: function (value) {
+                    if (value.checked) {
                         me.thumbnailSelectionField.show();
                     } else {
                         me.thumbnailSelectionField.hide();
@@ -179,34 +182,34 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      * Creates a icon selection for the album which will be displayed
      * in the Ext.tree.Panel.
      *
-     * @return [object] Ext.form.RadioGroup
+     * @return { object } Ext.form.RadioGroup
      */
-    createIconSelection: function() {
+    createIconSelection: function () {
         var me = this;
         var icons = [
-            { boxLabel: '<span class="sprite-inbox-document-folder"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-folder' },
-            { boxLabel: '<span class="sprite-inbox-document-text"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-text' },
-            { boxLabel: '<span class="sprite-inbox-document-music"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-music' },
-            { boxLabel: '<span class="sprite-inbox-film"></span>', name: 'iconCls', inputValue: 'sprite-inbox-film' },
-            { boxLabel: '<span class="sprite-inbox-document-image"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-image' },
-            { boxLabel: '<span class="sprite-images-stack"></span>', name: 'iconCls', inputValue: 'sprite-images-stack' },
-            { boxLabel: '<span class="sprite-pictures"></span>', name: 'iconCls', inputValue: 'sprite-pictures' },
-            { boxLabel: '<span class="sprite-films"></span>', name: 'iconCls', inputValue: 'sprite-films' },
-            { boxLabel: '<span class="sprite-music-beam"></span>', name: 'iconCls', inputValue: 'sprite-music-beam' },
-            { boxLabel: '<span class="sprite-blue-document-pdf-text"></span>', name: 'iconCls', inputValue: 'sprite-blue-document-pdf-text' },
-            { boxLabel: '<span class="sprite-box"></span>', name: 'iconCls', inputValue: 'sprite-box' },
-            { boxLabel: '<span class="sprite-target"></span>', name: 'iconCls', inputValue: 'sprite-target' },
-            { boxLabel: '<span class="sprite-globe-green"></span>', name: 'iconCls', inputValue: 'sprite-globe-green' },
-            { boxLabel: '<span class="sprite-inbox"></span>', name: 'iconCls', inputValue: 'sprite-inbox' },
-            { boxLabel: '<span class="sprite-leaf"></span>', name: 'iconCls', inputValue: 'sprite-leaf' },
-            { boxLabel: '<span class="sprite-store"></span>', name: 'iconCls', inputValue: 'sprite-store' },
-            { boxLabel: '<span class="sprite-hard-hat"></span>', name: 'iconCls', inputValue: 'sprite-hard-hat' },
-            { boxLabel: '<span class="sprite-sd-memory-card"></span>', name: 'iconCls', inputValue: 'sprite-sd-memory-card' }
+            { boxLabel: '<span class="sprite-inbox-document-folder"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-folder'},
+            { boxLabel: '<span class="sprite-inbox-document-text"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-text'},
+            { boxLabel: '<span class="sprite-inbox-document-music"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-music'},
+            { boxLabel: '<span class="sprite-inbox-film"></span>', name: 'iconCls', inputValue: 'sprite-inbox-film'},
+            { boxLabel: '<span class="sprite-inbox-document-image"></span>', name: 'iconCls',inputValue: 'sprite-inbox-document-image'},
+            { boxLabel: '<span class="sprite-images-stack"></span>', name: 'iconCls', inputValue: 'sprite-images-stack'},
+            { boxLabel: '<span class="sprite-pictures"></span>', name: 'iconCls', inputValue: 'sprite-pictures'},
+            { boxLabel: '<span class="sprite-films"></span>', name: 'iconCls', inputValue: 'sprite-films'},
+            { boxLabel: '<span class="sprite-music-beam"></span>', name: 'iconCls', inputValue: 'sprite-music-beam'},
+            { boxLabel: '<span class="sprite-blue-document-pdf-text"></span>', name: 'iconCls', inputValue: 'sprite-blue-document-pdf-text'},
+            { boxLabel: '<span class="sprite-box"></span>', name: 'iconCls', inputValue: 'sprite-box'},
+            { boxLabel: '<span class="sprite-target"></span>', name: 'iconCls', inputValue: 'sprite-target'},
+            { boxLabel: '<span class="sprite-globe-green"></span>', name: 'iconCls', inputValue: 'sprite-globe-green'},
+            { boxLabel: '<span class="sprite-inbox"></span>', name: 'iconCls', inputValue: 'sprite-inbox'},
+            { boxLabel: '<span class="sprite-leaf"></span>', name: 'iconCls', inputValue: 'sprite-leaf'},
+            { boxLabel: '<span class="sprite-store"></span>', name: 'iconCls', inputValue: 'sprite-store'},
+            { boxLabel: '<span class="sprite-hard-hat"></span>', name: 'iconCls', inputValue: 'sprite-hard-hat'},
+            { boxLabel: '<span class="sprite-sd-memory-card"></span>', name: 'iconCls', inputValue: 'sprite-sd-memory-card'}
         ];
 
         // Iterate each icon to set it active
-        Ext.each(icons, function(item) {
-            if(item.inputValue == me.settings.get('iconCls')) {
+        Ext.each(icons, function (item) {
+            if (item.inputValue === me.settings.get('iconCls')) {
                 item.checked = true;
             }
         });
@@ -223,18 +226,61 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     },
 
     /**
+     * Validates the size of a thumbnail in the form of widthXheight
+     * Examples: 800x600, 640x480, 320x240, etc
+     *
+     * @param { string } size
+     * @throws If the width or height are invalid
+     */
+    validateThumbnailSize: function (size) {
+        var me = this,
+            width = size.substring(0, size.indexOf('x')),
+            height = size.substring(size.indexOf('x') + 1);
+        if (
+            (isNaN(width) || isNaN(height)) ||
+            (width <= 0 || height <= 0) ||
+            (width > 9999 || height > 9999)
+        ) {
+            throw Ext.String.format(
+                '[0]: "[1]"',
+                me.snippets.settings.invalidThumbnailSize,
+                Ext.String.htmlEncode(size)
+            );
+        }
+    },
+
+    /**
      * Create a new fieldset which holds off the
      * thumbnail generation and selection.
      *
-     * @return [object] Ext.form.FieldSet
+     * @return { object } Ext.form.FieldSet
      */
-    createThumbnailSelection: function() {
+    createThumbnailSelection: function () {
         var me = this;
 
         me.thumbnailField = Ext.create('Ext.form.field.Text', {
+            xtype: 'textfield',
             fieldLabel: me.snippets.settings.thumbSize,
             name: 'thumbnail-size',
-            emptyText: '120x120'
+            emptyText: '120x120',
+            validateOnBlur: false,
+            validateOnChange: false,
+            enableKeyEvents: true,
+            listeners: {
+                keydown: function (_this, e, opts) {
+                    if (_this.getErrors()) {
+                        _this.clearInvalid();
+                    }
+                }
+            },
+            validator: function (data) {
+                try {
+                    me.validateThumbnailSize(data);
+                    return true;
+                } catch (e) {
+                    return e;
+                }
+            }
         });
 
         me.thumbnailSubmit = Ext.create('Ext.button.Button', {
@@ -256,18 +302,33 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             hidden: Ext.isEmpty(me.settings.get('thumbnailSize')),
             listeners: {
                 scope: me,
-                click: function(){
+                click: function () {
                     me.fireEvent('generateThumbnails', me);
                 }
             }
         });
 
-        me.thumbnailStore = Ext.create('Ext.data.Store',{
-            fields: [ 'id', 'index', 'value' ],
-            data: me.settings.data.thumbnailSize
+        me.thumbnailStore = Ext.create('Ext.data.Store', {
+            fields: ['id', 'index', 'value'],
+            data: me.settings.data.thumbnailSize,
+            listeners: {
+                update: function (_this, data) {
+                    try {
+                        me.validateThumbnailSize(data.data.value);
+                    } catch (e) {
+                        Ext.Msg.alert(
+                            me.snippets.settings.errorTitle,
+                            e
+                        );
+                        data.data.value = data.modified.value;
+                        return false;
+                    }
+                }
+            }
         });
 
         me.thumbnailView = Ext.create('Ext.view.View', {
+            cls: 'thumbnail-container',
             itemSelector: '.thumb-wrap-tiny',
             tpl: me.createThumbnailTemplate(),
             store: me.thumbnailStore,
@@ -276,7 +337,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                 itemcontextmenu: me.onThumbnailContextMenu
             },
             plugins: [
-                Ext.create('Ext.ux.DataView.LabelEditor', { dataIndex: 'value' })
+                Ext.create('Ext.ux.DataView.LabelEditor', {
+                    dataIndex: 'value'
+                })
             ]
         });
 
@@ -289,8 +352,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             boxLabel: me.snippets.settings.highDpiThumbsHelper,
             listeners: {
                 scope: me,
-                change: function(value) {
-                    if(value.checked) {
+                change: function (value) {
+                    if (value.checked) {
                         me.highDpiQuality.show();
                     } else {
                         me.highDpiQuality.hide();
@@ -313,7 +376,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             name: 'thumbnailHighDpiQuality',
             supportText: me.snippets.settings.thumbQualitySupport,
             anchor: '100%',
-            hidden: (me.settings.get('thumbnailHighDpi')) ? false : true,
+            hidden: (!me.settings.get('thumbnailHighDpi')),
             minValue: 1,
             maxValue: 100
         });
@@ -321,7 +384,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.settings.chooseThumb,
             padding: 12,
-            hidden: (me.settings.get('createThumbnails')) ? false : true,
+            hidden: (!me.settings.get('createThumbnails')),
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
@@ -332,7 +395,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                 items: [
                     me.thumbnailField,
                     me.thumbnailSubmit,
-                    me.thumbnailGenerate,
+                    me.thumbnailGenerate
                 ]
             },
                 {
@@ -354,13 +417,16 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      *
      * @return [object] Ext.XTemplate
      */
-    createThumbnailTemplate: function() {
+    createThumbnailTemplate: function () {
+        var me = this,
+            title = me.snippets.settings.thumbSize;
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="thumb-wrap-tiny">',
-                '<div class="thumb"><span class="number">{index}</span></div>',
-                '<span class="x-editable">{value}</span></div>',
-            '</tpl>',
+            '<div class="thumb-wrap-tiny" title="'+title+'">',
+            '<div class="thumb"><span class="number">{index}</span></div>',
+            '<input class="x-form-field x-form-text x-editable" value="{value}" />',
+            '</div></tpl>',
             '<div class="x-clear"></div>{/literal}'
         );
     },
@@ -374,19 +440,21 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      * @event click
      * @return void
      */
-    onAddThumbnail: function() {
+    onAddThumbnail: function () {
         var me = this,
             size = me.thumbnailField.getValue(),
             store = me.thumbnailStore;
 
-        if (size.length > 0) {
-            store.add({
-                index: store.count(),
-                value: size
-            });
-            me.thumbnailGenerate.show();
+        if (!me.thumbnailField.isValid()) {
+            return;
         }
-        me.thumbnailField.setValue('');
+
+        store.add({
+            index: store.count(),
+            value: size
+        });
+
+        me.thumbnailGenerate.show();
     },
 
     /**
@@ -396,14 +464,14 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      * Opens a context menu.
      *
      * @event itemcontextmenu
-     * @param [object] view - View which fires the event Ext.view.View
-     * @param [object] record - clicked item Ext.data.Model
-     * @param [object] item - HTML DOM Element of the clicked item
-     * @param [integer] index - Index of the clicked item in the associated store
-     * @param [object] event - fired event Ext.EventObj
+     * @param { object } view - View which fires the event Ext.view.View
+     * @param { object } record - clicked item Ext.data.Model
+     * @param { object } item - HTML DOM Element of the clicked item
+     * @param { integer } index - Index of the clicked item in the associated store
+     * @param { object } event - fired event Ext.EventObj
      * @return void
      */
-    onThumbnailContextMenu: function(view, record, item, index, event) {
+    onThumbnailContextMenu: function (view, record, item, index, event) {
         var me = this;
         event.preventDefault(true);
 
@@ -411,13 +479,13 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             items: [{
                 text: me.snippets.settings.duplicateThumb,
                 iconCls: 'sprite-picture--arrow',
-                handler: function() {
+                handler: function () {
                     me.onDuplicateThumbnail(record);
                 }
             }, {
                 text: me.snippets.settings.deleteThumb,
                 iconCls: 'sprite-picture--minus',
-                handler: function() {
+                handler: function () {
                     me.onDeleteThumbnail(record);
                 }
             }]
@@ -434,10 +502,10 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      * Duplicates a thumbnail.
      *
      * @event click
-     * @param [object] record - Associated Ext.data.Model
+     * @param { object } record - Associated Ext.data.Model
      * @return void.
      */
-    onDuplicateThumbnail: function(record) {
+    onDuplicateThumbnail: function (record) {
         var me = this,
             store = me.thumbnailStore;
 
@@ -455,25 +523,25 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      * Deletes a thumbnail from the store.
      *
      * @event click
-     * @param [object] record - Associated Ext.data.Model
+     * @param { object } record - Associated Ext.data.Model
      * @return void.
      */
-    onDeleteThumbnail: function(record) {
+    onDeleteThumbnail: function (record) {
         var me = this,
             store = me.thumbnailStore,
             counter = 0;
 
-        if(store && store.getCount() > 0){
+        if (store && store.getCount() > 0) {
             store.remove(record);
 
             // Iterate through each entry to change the index
-            Ext.each(store.data.items, function(item) {
+            Ext.each(store.data.items, function (item) {
                 item.set('index', counter);
                 counter++;
             });
         }
 
-        if(counter === 0){
+        if (counter === 0) {
             me.thumbnailGenerate.hide();
         }
     }

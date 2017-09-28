@@ -26,6 +26,7 @@ namespace Shopware\Models\Partner;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Security\AttributeCleanerTrait;
 
 /**
  * Standard Export Model Entity
@@ -35,6 +36,12 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Partner extends ModelEntity
 {
+    /*
+     * HTML Cleansing trait for different attributes in a class (implemented in setters)
+     * @see \Shopware\Components\Security\AttributeCleanerTrait
+     */
+    use AttributeCleanerTrait;
+
     /**
      * INVERSE SIDE
      *
@@ -255,7 +262,7 @@ class Partner extends ModelEntity
      */
     public function setCompany($company)
     {
-        $this->company = $company;
+        $this->company = $this->cleanup($company);
 
         return $this;
     }
@@ -279,7 +286,7 @@ class Partner extends ModelEntity
      */
     public function setContact($contact)
     {
-        $this->contact = $contact;
+        $this->contact = $this->cleanup($contact);
 
         return $this;
     }
@@ -303,7 +310,7 @@ class Partner extends ModelEntity
      */
     public function setStreet($street)
     {
-        $this->street = $street;
+        $this->street = $this->cleanup($street);
 
         return $this;
     }
@@ -327,7 +334,7 @@ class Partner extends ModelEntity
      */
     public function setZipCode($zipCode)
     {
-        $this->zipCode = $zipCode;
+        $this->zipCode = $this->cleanup($zipCode);
 
         return $this;
     }
@@ -351,7 +358,7 @@ class Partner extends ModelEntity
      */
     public function setCity($city)
     {
-        $this->city = $city;
+        $this->city = $this->cleanup($city);
 
         return $this;
     }
@@ -375,7 +382,7 @@ class Partner extends ModelEntity
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = $this->cleanup($phone);
 
         return $this;
     }
@@ -399,7 +406,7 @@ class Partner extends ModelEntity
      */
     public function setFax($fax)
     {
-        $this->fax = $fax;
+        $this->fax = $this->cleanup($fax);
 
         return $this;
     }
@@ -423,7 +430,7 @@ class Partner extends ModelEntity
      */
     public function setCountryName($countryName)
     {
-        $this->countryName = $countryName;
+        $this->countryName = $this->cleanup($countryName);
 
         return $this;
     }
@@ -447,7 +454,7 @@ class Partner extends ModelEntity
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = $this->cleanup($email);
 
         return $this;
     }
@@ -471,7 +478,7 @@ class Partner extends ModelEntity
      */
     public function setWeb($web)
     {
-        $this->web = $web;
+        $this->web = $this->cleanup($web);
 
         return $this;
     }
@@ -495,7 +502,7 @@ class Partner extends ModelEntity
      */
     public function setProfile($profile)
     {
-        $this->profile = $profile;
+        $this->profile = $this->cleanup($profile);
 
         return $this;
     }

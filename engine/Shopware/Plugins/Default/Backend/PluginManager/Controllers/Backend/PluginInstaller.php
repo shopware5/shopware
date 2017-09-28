@@ -140,8 +140,6 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function deletePluginAction()
     {
-        $directory = $this->pluginManager->getPluginPath($this->Request()->getParam('technicalName'));
-
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         switch (true) {
@@ -151,9 +149,15 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
                 return $this->View()->assign(['success' => false, 'message' => 'Installed plugins can not be deleted']);
             default:
                 try {
+                    $directory = $this->pluginManager->getPluginPath($this->Request()->getParam('technicalName'));
                     $this->removeDirectory($directory);
+                } catch (InvalidArgumentException $e) {
+                    // empty catch intended
                 } catch (Exception $e) {
                     return $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+                } finally {
+                    $this->get('models')->remove($plugin);
+                    $this->get('models')->flush();
                 }
         }
 
@@ -257,23 +261,21 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     /**
      * @param string $path
-     *
-     * @return array
      */
     private function removeDirectory($path)
     {
+        if (!is_dir($path)) {
+            return;
+        }
         $it = new RecursiveDirectoryIterator($path);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
-        $returns = [];
         foreach ($files as $file) {
             if ($file->isDir()) {
-                $returns[] = rmdir($file->getRealPath());
+                rmdir($file->getRealPath());
             } else {
-                $returns[] = unlink($file->getRealPath());
+                unlink($file->getRealPath());
             }
         }
-        $returns[] = rmdir($path);
-
-        return $returns;
+        rmdir($path);
     }
 }

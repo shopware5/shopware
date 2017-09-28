@@ -206,6 +206,7 @@ class sCategories
             'blog' => $category->isBlog(),
             'path' => $path,
             'external' => $category->getExternalLink(),
+            'externalTarget' => $category->getExternalTarget(),
             'hideFilter' => !$category->displayFacets(),
             'hideTop' => !$category->displayInNavigation(),
             'hidetop' => !$category->displayInNavigation(),

@@ -117,6 +117,12 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
      */
     public function listingAction()
     {
+        if (strpos($this->Request()->getPathInfo(), '/newsletterListing') === 0) {
+            $this->redirect(['controller' => 'newsletter', 'action' => 'listing', 'module' => 'frontend'], ['code' => 301]);
+
+            return;
+        }
+
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();

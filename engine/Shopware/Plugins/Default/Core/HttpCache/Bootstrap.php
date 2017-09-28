@@ -537,8 +537,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 'nocache',
                 implode(', ', $newCacheTags),
                 0,
-                $this->request->getBasePath() . '/',
-                ($this->request->getHttpHost() == 'localhost') ? null : $this->request->getHttpHost()
+                $this->request->getBasePath() . '/'
             );
         }
     }

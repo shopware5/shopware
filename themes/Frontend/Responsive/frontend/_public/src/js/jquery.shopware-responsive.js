@@ -64,7 +64,10 @@
         // Detail page tab menus
         .addPlugin('.product--rating-link, .link--publish-comment', 'swScrollAnimate', {
             scrollTarget: '.tab-menu--product'
-        })
+        }, ['m', 'l', 'xl'])
+        .addPlugin('a.link--publish-comment', 'swOffcanvasButton', {
+            contentSelector: '#tab--product-comment'
+        }, ['xs', 's'])
         .addPlugin('.tab-menu--product', 'swTabMenu', ['s', 'm', 'l', 'xl'])
         .addPlugin('.tab-menu--cross-selling', 'swTabMenu', ['m', 'l', 'xl'])
         .addPlugin('.tab-menu--product .tab--container', 'swOffcanvasButton', {
@@ -215,11 +218,5 @@
 
         $.subscribe('plugin/swAddArticle/onAddArticle', cartRefresh);
         $.subscribe('plugin/swCollapseCart/onRemoveArticleFinished', cartRefresh);
-
-        $('.is--ctl-detail .reset--configuration').on('click', function () {
-            $.loadingIndicator.open({
-                closeOnClick: false
-            });
-        });
     });
 })(jQuery, window);

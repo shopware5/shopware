@@ -120,6 +120,36 @@ Ext.define('Shopware.Notification', {
     offsetTop: 50,
 
     /**
+    * Default offset from the bottom for the growl message, usally set to the height of the tool bar.
+    *
+    * @integer
+    */
+    offsetBottom: 50,
+
+    /**
+    * The position name for the growl notifications. possible values are (top-right, bottom-right, top-left, bottom-left)
+    *
+    * @string
+    */
+    growlDisplayPosition: '{if {config name="growlMessageDisplayPosition"}}{config name="growlMessageDisplayPosition"}{else}top-right{/if}',
+
+    /**
+    * If set to true the growl messages are displayed in the bottom corner and new messages are always on the top.
+    * If set to false the growl messages are displayed in the top corner and new messages are always on the bottom.
+    *
+    * @boolean
+    */
+    growlDisplayBottom: false,
+
+    /**
+     * If set to true the growl messages are displayed on the left side.
+     * If set to false the growl messages are displayed on the right side.
+     *
+     * @boolean
+     */
+    growlDisplayLeft: false,
+
+    /**
      * XTemplate for the alert message
      *
      * @array
@@ -180,6 +210,32 @@ Ext.define('Shopware.Notification', {
 
     closeText: 'Schließen',
 
+    constructor: function() {
+        var me = this;
+        switch (me.growlDisplayPosition) {
+            case 'top-right':
+                me.growlDisplayBottom = false;
+                me.growlDisplayLeft = false;
+                break;
+            case 'bottom-right':
+                me.growlDisplayBottom = true;
+                me.growlDisplayLeft = false;
+                break;
+            case 'top-left':
+                me.growlDisplayBottom = false;
+                me.growlDisplayLeft = true;
+                break;
+            case 'bottom-left':
+                me.growlDisplayBottom = true;
+                me.growlDisplayLeft = true;
+                break;
+            default:
+                me.growlDisplayBottom = false;
+                me.growlDisplayLeft = false;
+                break;
+        }
+    },
+
     /**
      * Sets the default type of the alert and block message.
      *
@@ -187,7 +243,7 @@ Ext.define('Shopware.Notification', {
      * @return [boolean]
      */
     setBaseMsgType: function(type) {
-        if(!this.validBaseMsgType(type)) {
+        if (!this.validBaseMsgType(type)) {
             return false;
         }
 
@@ -220,7 +276,7 @@ Ext.define('Shopware.Notification', {
      * @param [string] cls - CSS class which is used by the alert messages
      */
     setAlertMsgCls: function(cls) {
-      this.alertMsgCls = cls;
+        this.alertMsgCls = cls;
     },
 
     /**
@@ -238,7 +294,7 @@ Ext.define('Shopware.Notification', {
      * @param [string] cls - CSS class which is used by the block messages
      */
     setBlockMsgCls: function(cls) {
-      this.blockMsgCls = cls;
+        this.blockMsgCls = cls;
     },
 
     /**
@@ -281,7 +337,7 @@ Ext.define('Shopware.Notification', {
     createMessage: function(title, text, type, closeBtn) {
         var me = this, alertMsg, msgData;
 
-        if(!me.validBaseMsgType(type)) {
+        if (!me.validBaseMsgType(type)) {
             type = false;
         }
 
@@ -312,7 +368,7 @@ Ext.define('Shopware.Notification', {
         task.delay(this.hideDelay);
 
         // Add close event to the close button
-        if(closeBtn) {
+        if (closeBtn) {
             Ext.getBody().on('click', function(event) {
                 me.closeAlertMessage(this, me, task);
             }, alertMsg, {
@@ -392,7 +448,7 @@ Ext.define('Shopware.Notification', {
      * @return [boolean]
      */
     closeAlertMessage: function(alertMsg, scope, task) {
-        if(task && Ext.isObject(task)) {
+        if (task && Ext.isObject(task)) {
             task.cancel();
         }
         alertMsg.getEl().fadeOut({
@@ -417,7 +473,7 @@ Ext.define('Shopware.Notification', {
     createBlockMessage: function(text, type) {
         var me = this, pnl, msgData, innerPnl;
 
-        if(!me.validBaseMsgType(type)) {
+        if (!me.validBaseMsgType(type)) {
             type = me.baseMsgType;
         }
 
@@ -427,7 +483,7 @@ Ext.define('Shopware.Notification', {
         };
 
         innerPnl = Ext.create('Ext.container.Container', {
-            cls: [ me.blockMsgCls + '-inner' , type || me.baseMsgType ] ,
+            cls: [ me.blockMsgCls + '-inner', type || me.baseMsgType ],
             data: msgData,
             margin: 1,
             padding: 7,
@@ -436,7 +492,7 @@ Ext.define('Shopware.Notification', {
         });
 
         pnl = Ext.create('Ext.container.Container', {
-            cls: me.blockMsgCls  ,
+            cls: me.blockMsgCls,
             ui: 'shopware-ui',
             bodyCls: type || me.baseMsgType,
             items: [ innerPnl ]
@@ -444,6 +500,35 @@ Ext.define('Shopware.Notification', {
         innerPnl.update(msgData);
 
         return pnl;
+    },
+
+    /**
+     * Calculate the growl message position and returns the needed style for the message.
+     *
+     * @param messageWidth
+     * @param messageHeight
+     * @param componentTop
+     * @returns object style
+     */
+    createGrowlStyle: function(messageWidth, messageHeight, componentTop) {
+        var me = this;
+        var style = {
+            'opacity': 1
+        };
+
+        if (me.growlDisplayLeft) {
+            style.left = 8 + 'px';
+        } else {
+            style.left = Ext.Element.getViewportWidth() - (messageWidth + 8) + 'px';
+        }
+
+        if (me.growlDisplayBottom) {
+            style.top = (Ext.Element.getViewportHeight() - componentTop - messageHeight) + 'px';
+        } else {
+            style.top = componentTop + 'px';
+        }
+
+        return style;
     },
 
     /**
@@ -461,11 +546,16 @@ Ext.define('Shopware.Notification', {
             msgData,
             growlMsg,
             id = Ext.id(),
-            compTop = me.offsetTop;
+            compTop = me.offsetTop,
+            style;
+
+        if (me.growlDisplayBottom) {
+            compTop = me.offsetBottom;
+        }
 
         text = text || '';
 
-        if(log != false){
+        if (log != false) {
             Ext.Ajax.request({
                 url: '{url controller="Log" action="createLog"}',
                 params: {
@@ -475,7 +565,7 @@ Ext.define('Shopware.Notification', {
                     user: userName,
                     value4: ''
                 },
-                scope:this
+                scope: this
             });
         }
 
@@ -501,11 +591,10 @@ Ext.define('Shopware.Notification', {
             renderTo: Ext.getBody()
         });
         growlMsg.update(msgData);
-        growlMsg.getEl().setStyle({
-            'opacity': 1,
-            'left': Ext.Element.getViewportWidth() - 308 + 'px',
-            'top': compTop + 'px'
-        });
+
+        style = me.createGrowlStyle(growlMsg.getWidth(), growlMsg.getHeight(), compTop);
+
+        growlMsg.getEl().setStyle(style);
 
         // Fade out the growl like message after the given delay
         var task = new Ext.util.DelayedTask(function() {
@@ -559,7 +648,11 @@ Ext.define('Shopware.Notification', {
      */
     createStickyGrowlMessage: function(opts, caller, iconCls, log) {
         var me = this, msgData, growlMsg, growlContent, btnContent, closeCB, detailCB, autoClose, closeHandler,
-            target = '_blank', width = 300, id = Ext.id(), compTop = me.offsetTop;
+            target = '_blank', width = 300, id = Ext.id(), compTop = me.offsetTop, style;
+
+        if (me.growlDisplayBottom) {
+            compTop = me.offsetBottom;
+        }
 
         log = log || false;
         target = (opts.btnDetail && opts.btnDetail.target) ? opts.btnDetail.target : target;
@@ -568,7 +661,7 @@ Ext.define('Shopware.Notification', {
         detailCB = (opts.btnDetail && opts.btnDetail.callback) ? opts.btnDetail.callback : Ext.emptyFn;
         autoClose = (opts.btnDetail && opts.btnDetail.autoClose !== undefined) ? opts.btnDetail.autoClose : true;
 
-        if(log !== false || opts.log !== false) {
+        if (log !== false || opts.log !== false) {
             Ext.Ajax.request({
                 url: '{url controller="Log" action="createLog"}',
                 params: {
@@ -595,7 +688,7 @@ Ext.define('Shopware.Notification', {
             layout: {
                 type: 'vbox',
                 align: 'stretch',
-                pack:'center'
+                pack: 'center'
             }
         });
 
@@ -620,7 +713,7 @@ Ext.define('Shopware.Notification', {
                 type: 'hbox',
                 align: 'stretch'
             },
-            cls: me.growlMsgCls + ' ' + me.growlMsgCls +  '-sticky-notification',
+            cls: me.growlMsgCls + ' ' + me.growlMsgCls + '-sticky-notification',
             renderTo: document.body,
             items: [ growlContent, btnContent ]
         });
@@ -631,7 +724,7 @@ Ext.define('Shopware.Notification', {
         };
 
         // Add detail button
-        if(opts.btnDetail && (opts.btnDetail.link || opts.btnDetail.callback)) {
+        if (opts.btnDetail && (opts.btnDetail.link || opts.btnDetail.callback)) {
             btnContent.add({
                 xtype: 'button',
                 height: 22,
@@ -644,7 +737,7 @@ Ext.define('Shopware.Notification', {
 
                     detailCB.apply(opts.btnDetail.scope || me, [ growlMsg, msgData ]);
 
-                    if(autoClose) {
+                    if (autoClose) {
                         closeHandler();
                     }
                 }
@@ -660,7 +753,7 @@ Ext.define('Shopware.Notification', {
             handler: function() {
                 closeHandler();
 
-                if(Ext.isFunction(opts.onCloseButton)) {
+                if (Ext.isFunction(opts.onCloseButton)) {
                     opts.onCloseButton();
                 }
             }
@@ -670,12 +763,10 @@ Ext.define('Shopware.Notification', {
             compTop += growlEl.height + 6;
         });
 
+        style = me.createGrowlStyle(width, growlMsg.getHeight(), compTop);
+
         // Animate it
-        growlMsg.getEl().setStyle({
-            'opacity': 1,
-            'left': Ext.Element.getViewportWidth() - (width + 8) + 'px',
-            'top': compTop + 'px'
-        });
+        growlMsg.getEl().setStyle(style);
 
         me.growlMsgCollection.add(id, { el: growlMsg, height: growlContent.getHeight() + 26, sticky: true });
 
@@ -694,7 +785,7 @@ Ext.define('Shopware.Notification', {
     closeGrowlMessage: function(msg, scope, task) {
         var pos = -1;
 
-        if(task && Ext.isObject(task)) {
+        if (task && Ext.isObject(task)) {
             task.cancel();
         }
 
@@ -705,16 +796,24 @@ Ext.define('Shopware.Notification', {
         }, 210);
 
         scope.growlMsgCollection.each(function(growlMsg, i) {
-            if(growlMsg.el.id === msg.id) {
+            if (growlMsg.el.id === msg.id) {
                 pos = i;
             }
 
-            if(pos > -1 && pos !== i) {
+            if (pos > -1 && pos !== i) {
                 var top = scope.growlMsgCollection.getAt(pos).height;
-                top = top + ((scope.growlMsgCollection.items.length - 2) * 6);
-                growlMsg.el.animate({
-                    to: { top: growlMsg.el.getPosition()[1] - (top < 50 ? 50 : top) + 'px' }
-                }, 50);
+
+                if (scope.growlDisplayBottom) {
+                    top = top - (scope.growlMsgCollection.items.length - 2) * 6;
+                    growlMsg.el.animate({
+                        to: { top: growlMsg.el.getPosition()[1] + (top < 50 ? 50 : top) + 'px' }
+                    }, 50);
+                } else {
+                    top = top + (scope.growlMsgCollection.items.length - 2) * 6;
+                    growlMsg.el.animate({
+                        to: { top: growlMsg.el.getPosition()[1] - (top < 50 ? 50 : top) + 'px' }
+                    }, 50);
+                }
             }
         });
 

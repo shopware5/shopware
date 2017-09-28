@@ -424,7 +424,7 @@ abstract class Resource
                 );
                 continue;
             }
-            if ($entity->$method() == $value) {
+            if ($entity->$method() === $value) {
                 return $entity;
             }
         }

@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\RestApi\Components;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\User\User;
 
 /**
  * @category  Shopware
@@ -59,18 +60,18 @@ class StaticResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
      */
     public function resolve($username, $realm)
     {
-        $repository = $this->modelManager->getRepository('Shopware\Models\User\User');
+        $repository = $this->modelManager->getRepository(User::class);
         $user = $repository->findOneBy(['username' => $username, 'active' => true]);
 
         if (!$user) {
             return false;
         }
 
-        if ($user->getApiKey() === null) {
+        $apiKey = $user->getApiKey();
+
+        if (empty($apiKey)) {
             return false;
         }
-
-        $apiKey = $user->getApiKey();
 
         return md5($username . ':' . $realm . ':' . $apiKey);
     }

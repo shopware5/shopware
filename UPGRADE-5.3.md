@@ -2,18 +2,43 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.4
+
+[View all changes from v5.3.3...v5.3.4](https://github.com/shopware/shopware/compare/v5.3.3...v5.3.4)
+
+### Additions
+
+* Added method `Shopware\Models\Shop\Repository::getById()`
+* Added service `translation`
+* Added smarty function `is_object` to the list of allowed functions
+* Added grunt task support for child themes so that their tasks are run as well by the Shopware grunt
+
+### Changes
+
+* Changed article attribute filter in API 
+* Changed the pagination of the blog by adding the filters to the pagination links
+* Changed method `\Shopware\Components\SitemapXMLRepository::readCategoryUrls` to only export public category links 
+* Changed method visibility of `\Shopware_Controllers_Backend_Search::createEntitySearchQuery` from `private` to `public`
+* Changed the `I am` select option for the registration: If it is deactivated in the backend, it effects only the registration
+
 ## 5.3.3
 
 [View all changes from v5.3.2...v5.3.3](https://github.com/shopware/shopware/compare/v5.3.2...v5.3.3)
 
 ### Additions
 
+* Added filtering of model fields with possibly insecure content
 * Added new container parameter `active_plugins` which contains an array of installed and active plugins
+* Added variables `image_small`, `image_large`, `image_original`, `link_rating_tab` to product rating reminder email
+* Added SVG and WOFF files to the list of compressible mimetypes
 * Added functionality to show the backend growl messages in each corner of the screen (configurable in basic settings)
 * Added smarty block `backend/base/model/corner_position` for corner position configuration model
 * Added smarty block `backend/base/store/corner_position` for corner position configuration store
 * Added functionality to open the drop down menus of the main menu in the backend by using either mouse hover or mouse click (configurable in basic settings)
-* Updated mPDF to version 6.1.4
+
+### Changes
+
+* Updated CustomerStream interface to improve usability
 
 ## 5.3.2
 
@@ -28,7 +53,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed `engine/Library/Smarty/sysplugins/smarty_internal_write_file.php` in order to prevent race condition when creating directories concurrently
 * Support namespaces for controllers. The event `Enlight_Controller_Dispatcher_ControllerPath_{module}_{controller}` now accepts a class name as return value to allow namespaces for controllers in plugins.
 * Changed representation of empty `conditions` in `s_customer_streams` to NULL instead of `{}`
-
 
 ## 5.3.0
 

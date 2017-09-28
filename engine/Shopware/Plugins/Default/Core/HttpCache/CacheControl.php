@@ -463,8 +463,7 @@ class CacheControl
             'x-cache-context-hash',
             null,
             strtotime('-1 Year'),
-            $request->getBasePath() . '/',
-            ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()
+            $request->getBasePath() . '/'
         );
     }
 
@@ -488,8 +487,7 @@ class CacheControl
             'x-cache-context-hash',
             sha1($hash),
             0,
-            $request->getBasePath() . '/',
-            ($request->getHttpHost() === 'localhost') ? null : $request->getHttpHost()
+            $request->getBasePath() . '/'
         );
     }
 }

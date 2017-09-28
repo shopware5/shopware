@@ -20,7 +20,7 @@
                         data-filter-form="true"
                         data-is-in-sidebar="{if $theme.sidebarFilter}true{else}false{/if}"
                         data-listing-url="{$countCtrlUrl}"
-                        data-is-filtered="{$criteria->getUserConditions()|count}"
+                        data-is-filtered="{if $criteria}{$criteria->getUserConditions()|count}{else}0{/if}"
                         data-load-facets="{if $listingMode == 'filter_ajax_reload'}true{else}false{/if}"
                         data-instant-filter-result="{if $listingMode != 'full_page_reload'}true{else}false{/if}"
                         class="{if $listingMode != 'full_page_reload'} is--instant-filter{/if}">

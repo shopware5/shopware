@@ -83,7 +83,10 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
             throw new PresetAssetImportException('The preset data of the ' . $preset->getName() . ' preset seems to be invalid.');
         }
 
-        if (empty($presetData['syncData']['assets'])) {
+        // continue if no sync data present or we just have an assets key which is empty
+        if (empty($presetData['syncData'])
+            || (count($presetData['syncData']) === 1 && empty($presetData['syncData']['assets']))
+        ) {
             return;
         }
 
