@@ -633,6 +633,10 @@ class Detail extends ModelEntity
         //returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
+        if (!array_key_exists('articleNumber', $changeSet) && !array_key_exists('quantity', $changeSet)) {
+            return;
+        }
+
         $articleChange = $changeSet['articleNumber'];
         $quantityChange = $changeSet['quantity'];
 
