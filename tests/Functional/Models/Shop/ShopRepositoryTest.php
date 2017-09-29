@@ -219,7 +219,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
     /**
      * Tests the shop duplication bug caused by the detaching the shop entity
-     * in the obsolete Shopware\Models\Shop\Repsoitory::fixActive()
+     * in the obsolete Shopware\Models\Shop\Repository::fixActive()
      */
     public function testShopDuplication()
     {
@@ -259,20 +259,17 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         $sql = "
             INSERT IGNORE INTO `s_core_shops` (
               `id`, `main_id`, `name`, `title`, `position`,
-              `host`, `base_path`, `base_url`, `hosts`,
-              `secure`, `secure_host`, `secure_base_path`,
+              `host`, `base_path`, `base_url`, `hosts`, `secure`,
               `template_id`, `document_template_id`, `category_id`,
               `locale_id`, `currency_id`, `customer_group_id`,
               `fallback_id`, `customer_scope`, `default`, `active`
             ) VALUES (
               12, NULL, 'Testshop Active', 'Testshop Active', 0,
-              'activetest.in', NULL, NULL, '',
-              0, NULL, NULL,
+              'activetest.in', NULL, NULL, '', 0,
               11, 11, 11, 2, 1, 1, 2, 0, 0, 1
             ), (
               13, NULL, 'Testshop Inactive', 'Testshop Inactive', 0,
-              'inactivetest.in', NULL, NULL, '',
-              0, NULL, NULL,
+              'inactivetest.in', NULL, NULL, '', 0,
               11, 11, 11, 2, 1, 1, 2, 0, 0, 0
             );
         ";
