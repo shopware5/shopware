@@ -24,16 +24,16 @@ class OrderDeliveryBasicFactory extends Factory
 
     const FIELDS = [
        'uuid' => 'uuid',
-       'order_uuid' => 'order_uuid',
-       'shipping_address_uuid' => 'shipping_address_uuid',
-       'order_state_uuid' => 'order_state_uuid',
-       'tracking_code' => 'tracking_code',
-       'shipping_method_uuid' => 'shipping_method_uuid',
-       'shipping_date_earliest' => 'shipping_date_earliest',
-       'shipping_date_latest' => 'shipping_date_latest',
+       'orderUuid' => 'order_uuid',
+       'shippingAddressUuid' => 'shipping_address_uuid',
+       'orderStateUuid' => 'order_state_uuid',
+       'trackingCode' => 'tracking_code',
+       'shippingMethodUuid' => 'shipping_method_uuid',
+       'shippingDateEarliest' => 'shipping_date_earliest',
+       'shippingDateLatest' => 'shipping_date_latest',
        'payload' => 'payload',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
     ];
 
     /**
@@ -71,16 +71,16 @@ class OrderDeliveryBasicFactory extends Factory
         TranslationContext $context
     ): OrderDeliveryBasicStruct {
         $orderDelivery->setUuid((string) $data[$selection->getField('uuid')]);
-        $orderDelivery->setOrderUuid((string) $data[$selection->getField('order_uuid')]);
-        $orderDelivery->setShippingAddressUuid((string) $data[$selection->getField('shipping_address_uuid')]);
-        $orderDelivery->setOrderStateUuid((string) $data[$selection->getField('order_state_uuid')]);
-        $orderDelivery->setTrackingCode(isset($data[$selection->getField('tracking_code')]) ? (string) $data[$selection->getField('tracking_code')] : null);
-        $orderDelivery->setShippingMethodUuid((string) $data[$selection->getField('shipping_method_uuid')]);
-        $orderDelivery->setShippingDateEarliest(new \DateTime($data[$selection->getField('shipping_date_earliest')]));
-        $orderDelivery->setShippingDateLatest(new \DateTime($data[$selection->getField('shipping_date_latest')]));
+        $orderDelivery->setOrderUuid((string) $data[$selection->getField('orderUuid')]);
+        $orderDelivery->setShippingAddressUuid((string) $data[$selection->getField('shippingAddressUuid')]);
+        $orderDelivery->setOrderStateUuid((string) $data[$selection->getField('orderStateUuid')]);
+        $orderDelivery->setTrackingCode(isset($data[$selection->getField('tracking_code')]) ? (string) $data[$selection->getField('trackingCode')] : null);
+        $orderDelivery->setShippingMethodUuid((string) $data[$selection->getField('shippingMethodUuid')]);
+        $orderDelivery->setShippingDateEarliest(new \DateTime($data[$selection->getField('shippingDateEarliest')]));
+        $orderDelivery->setShippingDateLatest(new \DateTime($data[$selection->getField('shippingDateLatest')]));
         $orderDelivery->setPayload((string) $data[$selection->getField('payload')]);
-        $orderDelivery->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $orderDelivery->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $orderDelivery->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $orderDelivery->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
         $orderState = $selection->filter('state');
         if ($orderState && !empty($data[$orderState->getField('uuid')])) {
             $orderDelivery->setState(
@@ -121,50 +121,10 @@ class OrderDeliveryBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($orderState = $selection->filter('state')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'order_state',
-                $orderState->getRootEscaped(),
-                sprintf('%s.uuid = %s.order_state_uuid', $orderState->getRootEscaped(), $selection->getRootEscaped())
-            );
-            $this->orderStateFactory->joinDependencies($orderState, $query, $context);
-        }
-
-        if ($orderAddress = $selection->filter('shippingAddress')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'order_address',
-                $orderAddress->getRootEscaped(),
-                sprintf('%s.uuid = %s.shipping_address_uuid', $orderAddress->getRootEscaped(), $selection->getRootEscaped())
-            );
-            $this->orderAddressFactory->joinDependencies($orderAddress, $query, $context);
-        }
-
-        if ($shippingMethod = $selection->filter('shippingMethod')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'shipping_method',
-                $shippingMethod->getRootEscaped(),
-                sprintf('%s.uuid = %s.shipping_method_uuid', $shippingMethod->getRootEscaped(), $selection->getRootEscaped())
-            );
-            $this->shippingMethodFactory->joinDependencies($shippingMethod, $query, $context);
-        }
-
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'order_delivery_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.order_delivery_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinState($selection, $query, $context);
+        $this->joinShippingAddress($selection, $query, $context);
+        $this->joinShippingMethod($selection, $query, $context);
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -187,5 +147,78 @@ class OrderDeliveryBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinState(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($orderState = $selection->filter('state'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'order_state',
+            $orderState->getRootEscaped(),
+            sprintf('%s.uuid = %s.order_state_uuid', $orderState->getRootEscaped(), $selection->getRootEscaped())
+        );
+        $this->orderStateFactory->joinDependencies($orderState, $query, $context);
+    }
+
+    private function joinShippingAddress(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($orderAddress = $selection->filter('shippingAddress'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'order_address',
+            $orderAddress->getRootEscaped(),
+            sprintf('%s.uuid = %s.shipping_address_uuid', $orderAddress->getRootEscaped(), $selection->getRootEscaped())
+        );
+        $this->orderAddressFactory->joinDependencies($orderAddress, $query, $context);
+    }
+
+    private function joinShippingMethod(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($shippingMethod = $selection->filter('shippingMethod'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'shipping_method',
+            $shippingMethod->getRootEscaped(),
+            sprintf('%s.uuid = %s.shipping_method_uuid', $shippingMethod->getRootEscaped(), $selection->getRootEscaped())
+        );
+        $this->shippingMethodFactory->joinDependencies($shippingMethod, $query, $context);
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'order_delivery_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.order_delivery_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

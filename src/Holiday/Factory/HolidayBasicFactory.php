@@ -19,9 +19,9 @@ class HolidayBasicFactory extends Factory
     const FIELDS = [
        'uuid' => 'uuid',
        'calculation' => 'calculation',
-       'event_date' => 'event_date',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'eventDate' => 'event_date',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
        'name' => 'translation.name',
     ];
 
@@ -40,9 +40,9 @@ class HolidayBasicFactory extends Factory
     ): HolidayBasicStruct {
         $holiday->setUuid((string) $data[$selection->getField('uuid')]);
         $holiday->setCalculation((string) $data[$selection->getField('calculation')]);
-        $holiday->setEventDate(new \DateTime($data[$selection->getField('event_date')]));
-        $holiday->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $holiday->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $holiday->setEventDate(new \DateTime($data[$selection->getField('eventDate')]));
+        $holiday->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $holiday->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
         $holiday->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension HolidayExtension */
@@ -62,20 +62,7 @@ class HolidayBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'holiday_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.holiday_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -95,5 +82,27 @@ class HolidayBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'holiday_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.holiday_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

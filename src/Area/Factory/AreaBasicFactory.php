@@ -19,8 +19,8 @@ class AreaBasicFactory extends Factory
     const FIELDS = [
        'uuid' => 'uuid',
        'active' => 'active',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
        'name' => 'translation.name',
     ];
 
@@ -39,8 +39,8 @@ class AreaBasicFactory extends Factory
     ): AreaBasicStruct {
         $area->setUuid((string) $data[$selection->getField('uuid')]);
         $area->setActive((bool) $data[$selection->getField('active')]);
-        $area->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $area->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $area->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $area->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
         $area->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension AreaExtension */
@@ -60,20 +60,7 @@ class AreaBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'area_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.area_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -93,5 +80,27 @@ class AreaBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'area_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.area_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

@@ -18,12 +18,12 @@ class PriceGroupDiscountBasicFactory extends Factory
 
     const FIELDS = [
        'uuid' => 'uuid',
-       'price_group_uuid' => 'price_group_uuid',
-       'customer_group_uuid' => 'customer_group_uuid',
-       'percentage_discount' => 'percentage_discount',
-       'product_count' => 'product_count',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'priceGroupUuid' => 'price_group_uuid',
+       'customerGroupUuid' => 'customer_group_uuid',
+       'percentageDiscount' => 'percentage_discount',
+       'productCount' => 'product_count',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
     ];
 
     public function __construct(
@@ -40,12 +40,12 @@ class PriceGroupDiscountBasicFactory extends Factory
         TranslationContext $context
     ): PriceGroupDiscountBasicStruct {
         $priceGroupDiscount->setUuid((string) $data[$selection->getField('uuid')]);
-        $priceGroupDiscount->setPriceGroupUuid((string) $data[$selection->getField('price_group_uuid')]);
-        $priceGroupDiscount->setCustomerGroupUuid((string) $data[$selection->getField('customer_group_uuid')]);
-        $priceGroupDiscount->setPercentageDiscount((float) $data[$selection->getField('percentage_discount')]);
-        $priceGroupDiscount->setProductCount((float) $data[$selection->getField('product_count')]);
-        $priceGroupDiscount->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $priceGroupDiscount->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $priceGroupDiscount->setPriceGroupUuid((string) $data[$selection->getField('priceGroupUuid')]);
+        $priceGroupDiscount->setCustomerGroupUuid((string) $data[$selection->getField('customerGroupUuid')]);
+        $priceGroupDiscount->setPercentageDiscount((float) $data[$selection->getField('percentageDiscount')]);
+        $priceGroupDiscount->setProductCount((float) $data[$selection->getField('productCount')]);
+        $priceGroupDiscount->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $priceGroupDiscount->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
 
         /** @var $extension PriceGroupDiscountExtension */
         foreach ($this->getExtensions() as $extension) {
@@ -64,20 +64,7 @@ class PriceGroupDiscountBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'price_group_discount_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.price_group_discount_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -97,5 +84,27 @@ class PriceGroupDiscountBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'price_group_discount_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.price_group_discount_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

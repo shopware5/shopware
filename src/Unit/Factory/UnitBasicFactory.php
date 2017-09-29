@@ -19,9 +19,9 @@ class UnitBasicFactory extends Factory
     const FIELDS = [
        'id' => 'id',
        'uuid' => 'uuid',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
-       'short_code' => 'translation.short_code',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
+       'shortCode' => 'translation.short_code',
        'name' => 'translation.name',
     ];
 
@@ -40,9 +40,9 @@ class UnitBasicFactory extends Factory
     ): UnitBasicStruct {
         $unit->setId((int) $data[$selection->getField('id')]);
         $unit->setUuid((string) $data[$selection->getField('uuid')]);
-        $unit->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $unit->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
-        $unit->setShortCode((string) $data[$selection->getField('short_code')]);
+        $unit->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $unit->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
+        $unit->setShortCode((string) $data[$selection->getField('shortCode')]);
         $unit->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension UnitExtension */
@@ -62,20 +62,7 @@ class UnitBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'unit_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.unit_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -95,5 +82,27 @@ class UnitBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'unit_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.unit_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

@@ -18,12 +18,12 @@ class ShippingMethodPriceBasicFactory extends Factory
 
     const FIELDS = [
        'uuid' => 'uuid',
-       'shipping_method_uuid' => 'shipping_method_uuid',
-       'quantity_from' => 'quantity_from',
+       'shippingMethodUuid' => 'shipping_method_uuid',
+       'quantityFrom' => 'quantity_from',
        'price' => 'price',
        'factor' => 'factor',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
     ];
 
     public function __construct(
@@ -40,12 +40,12 @@ class ShippingMethodPriceBasicFactory extends Factory
         TranslationContext $context
     ): ShippingMethodPriceBasicStruct {
         $shippingMethodPrice->setUuid((string) $data[$selection->getField('uuid')]);
-        $shippingMethodPrice->setShippingMethodUuid((string) $data[$selection->getField('shipping_method_uuid')]);
-        $shippingMethodPrice->setQuantityFrom((float) $data[$selection->getField('quantity_from')]);
+        $shippingMethodPrice->setShippingMethodUuid((string) $data[$selection->getField('shippingMethodUuid')]);
+        $shippingMethodPrice->setQuantityFrom((float) $data[$selection->getField('quantityFrom')]);
         $shippingMethodPrice->setPrice((float) $data[$selection->getField('price')]);
         $shippingMethodPrice->setFactor((float) $data[$selection->getField('factor')]);
-        $shippingMethodPrice->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $shippingMethodPrice->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $shippingMethodPrice->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $shippingMethodPrice->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
 
         /** @var $extension ShippingMethodPriceExtension */
         foreach ($this->getExtensions() as $extension) {
@@ -64,20 +64,7 @@ class ShippingMethodPriceBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'shipping_method_price_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.shipping_method_price_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -97,5 +84,27 @@ class ShippingMethodPriceBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'shipping_method_price_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.shipping_method_price_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

@@ -24,9 +24,9 @@ class ProductStreamBasicFactory extends Factory
        'conditions' => 'conditions',
        'type' => 'type',
        'description' => 'description',
-       'listing_sorting_uuid' => 'listing_sorting_uuid',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'listingSortingUuid' => 'listing_sorting_uuid',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
     ];
 
     /**
@@ -54,9 +54,9 @@ class ProductStreamBasicFactory extends Factory
         $productStream->setConditions(isset($data[$selection->getField('conditions')]) ? (string) $data[$selection->getField('conditions')] : null);
         $productStream->setType(isset($data[$selection->getField('type')]) ? (int) $data[$selection->getField('type')] : null);
         $productStream->setDescription(isset($data[$selection->getField('description')]) ? (string) $data[$selection->getField('description')] : null);
-        $productStream->setListingSortingUuid(isset($data[$selection->getField('listing_sorting_uuid')]) ? (string) $data[$selection->getField('listing_sorting_uuid')] : null);
-        $productStream->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $productStream->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $productStream->setListingSortingUuid(isset($data[$selection->getField('listing_sorting_uuid')]) ? (string) $data[$selection->getField('listingSortingUuid')] : null);
+        $productStream->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $productStream->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
         $listingSorting = $selection->filter('sorting');
         if ($listingSorting && !empty($data[$listingSorting->getField('uuid')])) {
             $productStream->setSorting(
@@ -83,30 +83,8 @@ class ProductStreamBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($listingSorting = $selection->filter('sorting')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'listing_sorting',
-                $listingSorting->getRootEscaped(),
-                sprintf('%s.uuid = %s.listing_sorting_uuid', $listingSorting->getRootEscaped(), $selection->getRootEscaped())
-            );
-            $this->listingSortingFactory->joinDependencies($listingSorting, $query, $context);
-        }
-
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'product_stream_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.product_stream_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinSorting($selection, $query, $context);
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -127,5 +105,44 @@ class ProductStreamBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinSorting(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($listingSorting = $selection->filter('sorting'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'listing_sorting',
+            $listingSorting->getRootEscaped(),
+            sprintf('%s.uuid = %s.listing_sorting_uuid', $listingSorting->getRootEscaped(), $selection->getRootEscaped())
+        );
+        $this->listingSortingFactory->joinDependencies($listingSorting, $query, $context);
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'product_stream_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.product_stream_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

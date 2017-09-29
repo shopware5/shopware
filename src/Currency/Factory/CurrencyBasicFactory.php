@@ -18,14 +18,14 @@ class CurrencyBasicFactory extends Factory
 
     const FIELDS = [
        'uuid' => 'uuid',
-       'is_default' => 'is_default',
+       'isDefault' => 'is_default',
        'factor' => 'factor',
        'symbol' => 'symbol',
-       'symbol_position' => 'symbol_position',
+       'symbolPosition' => 'symbol_position',
        'position' => 'position',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
-       'short_name' => 'translation.short_name',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
+       'shortName' => 'translation.short_name',
        'name' => 'translation.name',
     ];
 
@@ -43,14 +43,14 @@ class CurrencyBasicFactory extends Factory
         TranslationContext $context
     ): CurrencyBasicStruct {
         $currency->setUuid((string) $data[$selection->getField('uuid')]);
-        $currency->setIsDefault((bool) $data[$selection->getField('is_default')]);
+        $currency->setIsDefault((bool) $data[$selection->getField('isDefault')]);
         $currency->setFactor((float) $data[$selection->getField('factor')]);
         $currency->setSymbol((string) $data[$selection->getField('symbol')]);
-        $currency->setSymbolPosition((int) $data[$selection->getField('symbol_position')]);
+        $currency->setSymbolPosition((int) $data[$selection->getField('symbolPosition')]);
         $currency->setPosition((int) $data[$selection->getField('position')]);
-        $currency->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $currency->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
-        $currency->setShortName((string) $data[$selection->getField('short_name')]);
+        $currency->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $currency->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
+        $currency->setShortName((string) $data[$selection->getField('shortName')]);
         $currency->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension CurrencyExtension */
@@ -70,20 +70,7 @@ class CurrencyBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'currency_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.currency_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -103,5 +90,27 @@ class CurrencyBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'currency_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.currency_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

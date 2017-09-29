@@ -19,10 +19,10 @@ class TaxBasicFactory extends Factory
     const FIELDS = [
        'id' => 'id',
        'uuid' => 'uuid',
-       'tax_rate' => 'tax_rate',
+       'rate' => 'tax_rate',
        'name' => 'name',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
     ];
 
     public function __construct(
@@ -40,10 +40,10 @@ class TaxBasicFactory extends Factory
     ): TaxBasicStruct {
         $tax->setId((int) $data[$selection->getField('id')]);
         $tax->setUuid((string) $data[$selection->getField('uuid')]);
-        $tax->setRate((float) $data[$selection->getField('tax_rate')]);
+        $tax->setRate((float) $data[$selection->getField('rate')]);
         $tax->setName((string) $data[$selection->getField('name')]);
-        $tax->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $tax->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $tax->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $tax->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
 
         /** @var $extension TaxExtension */
         foreach ($this->getExtensions() as $extension) {
@@ -62,20 +62,7 @@ class TaxBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'tax_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.tax_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -95,5 +82,27 @@ class TaxBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'tax_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.tax_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }

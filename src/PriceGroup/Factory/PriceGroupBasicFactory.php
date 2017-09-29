@@ -18,8 +18,8 @@ class PriceGroupBasicFactory extends Factory
 
     const FIELDS = [
        'uuid' => 'uuid',
-       'created_at' => 'created_at',
-       'updated_at' => 'updated_at',
+       'createdAt' => 'created_at',
+       'updatedAt' => 'updated_at',
        'name' => 'translation.name',
     ];
 
@@ -37,8 +37,8 @@ class PriceGroupBasicFactory extends Factory
         TranslationContext $context
     ): PriceGroupBasicStruct {
         $priceGroup->setUuid((string) $data[$selection->getField('uuid')]);
-        $priceGroup->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('created_at')]) : null);
-        $priceGroup->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updated_at')]) : null);
+        $priceGroup->setCreatedAt(isset($data[$selection->getField('created_at')]) ? new \DateTime($data[$selection->getField('createdAt')]) : null);
+        $priceGroup->setUpdatedAt(isset($data[$selection->getField('updated_at')]) ? new \DateTime($data[$selection->getField('updatedAt')]) : null);
         $priceGroup->setName((string) $data[$selection->getField('name')]);
 
         /** @var $extension PriceGroupExtension */
@@ -58,20 +58,7 @@ class PriceGroupBasicFactory extends Factory
 
     public function joinDependencies(QuerySelection $selection, QueryBuilder $query, TranslationContext $context): void
     {
-        if ($translation = $selection->filter('translation')) {
-            $query->leftJoin(
-                $selection->getRootEscaped(),
-                'price_group_translation',
-                $translation->getRootEscaped(),
-                sprintf(
-                    '%s.price_group_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
-                    $translation->getRootEscaped(),
-                    $selection->getRootEscaped(),
-                    $translation->getRootEscaped()
-                )
-            );
-            $query->setParameter('languageUuid', $context->getShopUuid());
-        }
+        $this->joinTranslation($selection, $query, $context);
 
         $this->joinExtensionDependencies($selection, $query, $context);
     }
@@ -91,5 +78,27 @@ class PriceGroupBasicFactory extends Factory
     protected function getExtensionNamespace(): string
     {
         return self::EXTENSION_NAMESPACE;
+    }
+
+    private function joinTranslation(
+        QuerySelection $selection,
+        QueryBuilder $query,
+        TranslationContext $context
+    ): void {
+        if (!($translation = $selection->filter('translation'))) {
+            return;
+        }
+        $query->leftJoin(
+            $selection->getRootEscaped(),
+            'price_group_translation',
+            $translation->getRootEscaped(),
+            sprintf(
+                '%s.price_group_uuid = %s.uuid AND %s.language_uuid = :languageUuid',
+                $translation->getRootEscaped(),
+                $selection->getRootEscaped(),
+                $translation->getRootEscaped()
+            )
+        );
+        $query->setParameter('languageUuid', $context->getShopUuid());
     }
 }
