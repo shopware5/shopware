@@ -1,23 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace Shopware\ProductListingPrice\Repository;
+namespace Shopware\ProductVoteAverage\Repository;
 
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\ProductListingPrice\Event\ProductListingPriceBasicLoadedEvent;
-use Shopware\ProductListingPrice\Event\ProductListingPriceWrittenEvent;
-use Shopware\ProductListingPrice\Loader\ProductListingPriceBasicLoader;
-use Shopware\ProductListingPrice\Searcher\ProductListingPriceSearcher;
-use Shopware\ProductListingPrice\Searcher\ProductListingPriceSearchResult;
-use Shopware\ProductListingPrice\Struct\ProductListingPriceBasicCollection;
+use Shopware\ProductVoteAverage\Event\ProductVoteAverageBasicLoadedEvent;
+use Shopware\ProductVoteAverage\Event\ProductVoteAverageWrittenEvent;
+use Shopware\ProductVoteAverage\Loader\ProductVoteAverageBasicLoader;
+use Shopware\ProductVoteAverage\Searcher\ProductVoteAverageSearcher;
+use Shopware\ProductVoteAverage\Searcher\ProductVoteAverageSearchResult;
+use Shopware\ProductVoteAverage\Struct\ProductVoteAverageBasicCollection;
 use Shopware\Search\AggregationResult;
 use Shopware\Search\Criteria;
 use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ProductListingPriceRepository
+class ProductVoteAverageRepository
 {
     /**
-     * @var ProductListingPriceBasicLoader
+     * @var ProductVoteAverageBasicLoader
      */
     private $basicLoader;
 
@@ -27,44 +27,44 @@ class ProductListingPriceRepository
     private $eventDispatcher;
 
     /**
-     * @var ProductListingPriceSearcher
+     * @var ProductVoteAverageSearcher
      */
     private $searcher;
 
     public function __construct(
-        ProductListingPriceBasicLoader $basicLoader,
+        ProductVoteAverageBasicLoader $basicLoader,
         EventDispatcherInterface $eventDispatcher,
-        ProductListingPriceSearcher $searcher
+        ProductVoteAverageSearcher $searcher
     ) {
         $this->basicLoader = $basicLoader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
     }
 
-    public function read(array $uuids, TranslationContext $context): ProductListingPriceBasicCollection
+    public function read(array $uuids, TranslationContext $context): ProductVoteAverageBasicCollection
     {
         if (empty($uuids)) {
-            return new ProductListingPriceBasicCollection();
+            return new ProductVoteAverageBasicCollection();
         }
 
         $collection = $this->basicLoader->load($uuids, $context);
 
         $this->eventDispatcher->dispatch(
-            ProductListingPriceBasicLoadedEvent::NAME,
-            new ProductListingPriceBasicLoadedEvent($collection, $context)
+            ProductVoteAverageBasicLoadedEvent::NAME,
+            new ProductVoteAverageBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
     }
 
-    public function search(Criteria $criteria, TranslationContext $context): ProductListingPriceSearchResult
+    public function search(Criteria $criteria, TranslationContext $context): ProductVoteAverageSearchResult
     {
-        /** @var ProductListingPriceSearchResult $result */
+        /** @var ProductVoteAverageSearchResult $result */
         $result = $this->searcher->search($criteria, $context);
 
         $this->eventDispatcher->dispatch(
-            ProductListingPriceBasicLoadedEvent::NAME,
-            new ProductListingPriceBasicLoadedEvent($result, $context)
+            ProductVoteAverageBasicLoadedEvent::NAME,
+            new ProductVoteAverageBasicLoadedEvent($result, $context)
         );
 
         return $result;

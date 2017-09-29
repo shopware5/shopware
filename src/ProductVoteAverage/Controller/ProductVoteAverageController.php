@@ -1,43 +1,43 @@
 <?php declare(strict_types=1);
 
-namespace Shopware\ProductListingPrice\Controller;
+namespace Shopware\ProductVoteAverage\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Shopware\Api\ApiContext;
 use Shopware\Api\ApiController;
-use Shopware\ProductListingPrice\Repository\ProductListingPriceRepository;
+use Shopware\ProductVoteAverage\Repository\ProductVoteAverageRepository;
 use Shopware\Search\Criteria;
 use Shopware\Search\Parser\QueryStringParser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route(service="shopware.product_listing_price_ro.api_controller", path="/api")
+ * @Route(service="shopware.product_vote_average_ro.api_controller", path="/api")
  */
-class ProductListingPriceController extends ApiController
+class ProductVoteAverageController extends ApiController
 {
     /**
-     * @var ProductListingPriceRepository
+     * @var ProductVoteAverageRepository
      */
-    private $productListingPriceRepository;
+    private $productVoteAverageRepository;
 
-    public function __construct(ProductListingPriceRepository $productListingPriceRepository)
+    public function __construct(ProductVoteAverageRepository $productVoteAverageRepository)
     {
-        $this->productListingPriceRepository = $productListingPriceRepository;
+        $this->productVoteAverageRepository = $productVoteAverageRepository;
     }
 
     public function getXmlRootKey(): string
     {
-        return 'productListingPrices';
+        return 'productVoteAverages';
     }
 
     public function getXmlChildKey(): string
     {
-        return 'productListingPrice';
+        return 'productVoteAverage';
     }
 
     /**
-     * @Route("/productListingPrice.{responseFormat}", name="api.productListingPrice.list", methods={"GET"})
+     * @Route("/productVoteAverage.{responseFormat}", name="api.productVoteAverage.list", methods={"GET"})
      *
      * @param Request    $request
      * @param ApiContext $context
@@ -64,19 +64,19 @@ class ProductListingPriceController extends ApiController
 
         $criteria->setFetchCount(true);
 
-        $productListingPrices = $this->productListingPriceRepository->search(
+        $productVoteAverages = $this->productVoteAverageRepository->search(
             $criteria,
             $context->getShopContext()->getTranslationContext()
         );
 
         return $this->createResponse(
-            ['data' => $productListingPrices, 'total' => $productListingPrices->getTotal()],
+            ['data' => $productVoteAverages, 'total' => $productVoteAverages->getTotal()],
             $context
         );
     }
 
     /**
-     * @Route("/productListingPrice/{productListingPriceUuid}.{responseFormat}", name="api.productListingPrice.detail", methods={"GET"})
+     * @Route("/productVoteAverage/{productVoteAverageUuid}.{responseFormat}", name="api.productVoteAverage.detail", methods={"GET"})
      *
      * @param Request    $request
      * @param ApiContext $context
@@ -85,12 +85,12 @@ class ProductListingPriceController extends ApiController
      */
     public function detailAction(Request $request, ApiContext $context): Response
     {
-        $uuid = $request->get('productListingPriceUuid');
-        $productListingPrices = $this->productListingPriceRepository->read(
+        $uuid = $request->get('productVoteAverageUuid');
+        $productVoteAverages = $this->productVoteAverageRepository->read(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
 
-        return $this->createResponse(['data' => $productListingPrices->get($uuid)], $context);
+        return $this->createResponse(['data' => $productVoteAverages->get($uuid)], $context);
     }
 }
