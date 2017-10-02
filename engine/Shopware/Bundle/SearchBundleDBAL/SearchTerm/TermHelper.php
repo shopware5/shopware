@@ -57,12 +57,12 @@ class TermHelper implements TermHelperInterface
      * @param bool $useBadWords
      * @param bool $replaceUmlauts
      */
-    public function __construct($config, $useBadWords = true, $replaceUmlauts = true)
+    public function __construct($config, $slug, $useBadWords = true, $replaceUmlauts = true)
     {
         $this->config = $config;
         $this->useBadWords = $useBadWords;
         $this->replaceUmlauts = $replaceUmlauts;
-        $this->slug = Shopware()->Container()->get('shopware.slug');
+        $this->slug = $slug;
     }
 
     /**
