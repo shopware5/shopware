@@ -1592,6 +1592,82 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ['sessionID = ?' => $this->session->get('sessionId')]
         );
     }
+	
+    /**
+     * Test if showing the order amount below which a minimum surcharge will be charged in the surcharge basket item.
+     *
+     * @covers \sBasket::sInsertSurcharge
+     */
+    public function testsInsertSurchargeWithMinimumOrderAmountInfo()
+    {
+        $oldMinimumOrder = $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'];
+        $oldMinimumOrderSurcharge = $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'];
+        $oldMinimumOrderSurchargeSnippet = $this->snippetManager->getNamespace('frontend/basket/internalMessages')
+                ->get('VoucherFailureNotFound');
+
+        $this->snippetManager->getNamespace('backend/static/discounts_surcharges')
+                ->set('surcharge_name', 'Surcharge for small quantities (< {sMinimumOrder} €)');
+
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        // Add one article to the basket with value lower that minimumordersurcharge
+        $randomArticle = $this->db->fetchRow(
+            'SELECT * FROM s_articles_details detail
+            INNER JOIN s_articles article
+              ON article.id = detail.articleID
+            WHERE detail.active = 1
+            LIMIT 1'
+        );
+        $this->db->insert(
+            's_order_basket',
+            [
+                'price' => 2,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => $randomArticle['ordernumber'],
+                'articleID' => $randomArticle['articleID'],
+            ]
+        );
+
+        $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'] = 5;
+        $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = 10;
+
+        // Check that we have no surcharge
+        $this->assertEmpty(
+            $this->db->fetchRow(
+                'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
+                [$this->module->sSYSTEM->sSESSION_ID]
+            )
+        );
+
+        // Add surcharge, expect success (null)
+        $this->assertNull(
+            $this->invokeMethod(
+                $this->module,
+                'sInsertSurcharge',
+                []
+            )
+        );
+
+        // Fetch the surcharge row, should have price 5
+        $surchargeRow = $this->db->fetchRow(
+            'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
+            [$this->module->sSYSTEM->sSESSION_ID]
+        );
+        $this->assertEquals(5, $surchargeRow['price']);
+        $this->assertEquals('Surcharge for small quantities (< 10 €)', $surchargeRow['articlename']);
+
+        // Housekeeping
+        $this->snippetManager->getNamespace('backend/static/discounts_surcharges')
+            ->set('surcharge_name', $oldMinimumOrderSurchargeSnippet);
+        $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = $oldMinimumOrder;
+        $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'] = $oldMinimumOrderSurcharge;
+        $this->db->delete(
+            's_order_basket',
+            ['sessionID = ?' => $this->session->get('sessionId')]
+        );
+    }	
 
     /**
      * @covers \sBasket::sInsertSurchargePercent

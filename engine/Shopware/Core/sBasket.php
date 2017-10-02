@@ -903,9 +903,9 @@ class sBasket
         }
 
         $surcharge = $minimumOrderSurcharge * $factor;
-        $surchargeName = $this->snippetManager
+        $surchargeName = str_replace('{sMinimumOrder}', $minimumOrder, $this->snippetManager
             ->getNamespace('backend/static/discounts_surcharges')
-            ->get('surcharge_name');
+            ->get('surcharge_name'));
 
         $params = [
             'sessionID' => $this->session->get('sessionId'),
