@@ -75,7 +75,7 @@
 
                 {block name='frontend_detail_index_after_data'}{/block}
 
-                {* Configurator drop down menu's *}
+                {* Configurator drop down menus *}
                 {block name="frontend_detail_index_configurator"}
                     <div class="product--configurator">
                         {if $sArticle.sConfigurator}

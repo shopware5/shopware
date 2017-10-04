@@ -20,23 +20,22 @@
             {if $sErrorFlag}
                 {if $sErrorFlag['sCaptcha']}
                     {$file = 'frontend/_includes/messages.tpl'}
-                    {$type='error'}
-                    {$content="{s name='DetailCommentInfoFillOutCaptcha'}{/s}"}
-                    {debug}
+                    {$type = 'error'}
+                    {$content = "{s name='DetailCommentInfoFillOutCaptcha'}{/s}"}
                 {else}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'error'}
-                    {$content="{s name='DetailCommentInfoFillOutFields'}{/s}"}
+                    {$content = "{s name='DetailCommentInfoFillOutFields'}{/s}"}
                 {/if}
             {else}
                 {if {config name="OptinVote"} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'success'}
-                    {$content="{s name='DetailCommentInfoSuccessOptin'}{/s}"}
+                    {$content = "{s name='DetailCommentInfoSuccessOptin'}{/s}"}
                 {else}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'success'}
-                    {$content="{s name='DetailCommentInfoSuccess'}{/s}"}
+                    {$content = "{s name='DetailCommentInfoSuccess'}{/s}"}
                 {/if}
             {/if}
 
