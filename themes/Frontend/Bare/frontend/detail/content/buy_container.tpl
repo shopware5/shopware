@@ -80,12 +80,13 @@
                     <div class="product--configurator">
                         {if $sArticle.sConfigurator}
                             {if $sArticle.sConfiguratorSettings.type == 1}
-                                {include file="frontend/detail/config_step.tpl"}
+                                {$file = 'frontend/detail/config_step.tpl'}
                             {elseif $sArticle.sConfiguratorSettings.type == 2}
-                                {include file="frontend/detail/config_variant.tpl"}
+                                {$file = 'frontend/detail/config_variant.tpl'}
                             {else}
-                                {include file="frontend/detail/config_upprice.tpl"}
+                                {$file = 'frontend/detail/config_upprice.tpl'}
                             {/if}
+                            {include file=$file}
                         {/if}
                     </div>
                 {/block}
