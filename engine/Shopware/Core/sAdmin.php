@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
@@ -2795,6 +2796,19 @@ class sAdmin
             }
             if (!empty($object[$dispatch['id']]['dispatch_description'])) {
                 $dispatch['description'] = $object[$dispatch['id']]['dispatch_description'];
+            }
+
+            $dispatch['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_premium_dispatch_attributes', $dispatch['id']);
+
+            if (!empty($dispatch['attribute'])) {
+                $languageId = $this->contextService->getShopContext()->getShop()->getId();
+                $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
+                $translationData = $this->translationComponent->readWithFallback($languageId, $fallbackId, 's_premium_dispatch_attributes', $dispatch['id']);
+
+                foreach ($translationData as $key => $attribute) {
+                    $key = str_replace(CrudService::EXT_JS_PREFIX, '', $key);
+                    $dispatch['attribute'][$key] = $attribute;
+                }
             }
         }
 
