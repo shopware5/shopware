@@ -5,6 +5,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/shopware/shopware/badges/quality-score.png?b=5.3)](https://scrutinizer-ci.com/g/shopware/shopware/?branch=5.3)
 [![Latest Stable Version](https://poser.pugx.org/shopware/shopware/v/stable)](https://packagist.org/packages/shopware/shopware)
 [![Total Downloads](https://poser.pugx.org/shopware/shopware/downloads)](https://packagist.org/packages/shopware/shopware)
+[![Gitter](https://badges.gitter.im/shopware/shopware.svg)](https://gitter.im/shopware/shopware?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
