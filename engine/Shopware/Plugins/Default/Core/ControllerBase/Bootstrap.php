@@ -179,48 +179,6 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     }
 
     /**
-     * Gets the Blog articles for the index page
-     *
-     * @return array | blog article array
-     */
-    public function getBlog()
-    {
-        $blog = null;
-
-        if (!empty(Shopware()->Config()->BlogCategory)) {
-            /** @var $repository \Shopware\Models\Blog\Repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
-            $blogArticlesQuery = $repository->getListQuery([Shopware()->Config()->BlogCategory], 0,
-                Shopware()->Config()->BlogLimit + 1);
-
-            $blogArticleData = $blogArticlesQuery->getArrayResult();
-
-            //adding thumbnails to the blog article
-            foreach ($blogArticleData as $key => $blogArticle) {
-                /* @var $mediaModel \Shopware\Models\Media\Media */
-                if (!empty($blogArticle['media'][0]['mediaId'])) {
-                    $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media',
-                        $blogArticle['media'][0]['mediaId']);
-                    if ($mediaModel != null) {
-                        $blogArticleData[$key]['preview']['thumbNails'] = array_values($mediaModel->getThumbnails());
-                        $blogArticleData[$key]['preview']['srchd'] = array_values($mediaModel->getHighDpiThumbnails());
-                    }
-                }
-
-                //adding vote average
-                $avgVoteQuery = $repository->getAverageVoteQuery($blogArticle['id']);
-                $blogArticleData[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
-
-                //adding number of comments to the blog article
-                $blogArticleData[$key]['numberOfComments'] = count($blogArticle['comments']);
-            }
-            $blog['sArticles'] = $blogArticleData;
-        }
-
-        return $blog;
-    }
-
-    /**
      * Returns capabilities
      *
      * @return array
