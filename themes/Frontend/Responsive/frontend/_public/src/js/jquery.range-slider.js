@@ -45,6 +45,10 @@
      * @returns {number}
      */
     function countDigits(value) {
+        if (value <= 0) {
+            return 1;
+        }
+
         return ~~(Math.log(Math.floor(value)) / Math.LN10 + 1);
     }
 
@@ -563,12 +567,13 @@
 
         _getPositionLog: function(value) {
             var me = this,
+                val = (value > 0) ? Math.log(value) : value,
                 minp = 0,
                 maxp = me.opts.stepCount,
-                minv = Math.log(me.opts.rangeMin),
-                maxv = Math.log(me.opts.rangeMax),
+                minv = (me.opts.rangeMin > 0) ? Math.log(me.opts.rangeMin) : me.opts.rangeMin,
+                maxv = (me.opts.rangeMax > 0) ? Math.log(me.opts.rangeMax) : me.opts.rangeMax,
                 scale = (maxv - minv) / (maxp - minp),
-                pos = minp + (Math.log(value) - minv) / scale;
+                pos = minp + (val - minv) / scale;
 
             pos = Math.round(pos * me.stepWidth);
 
@@ -608,8 +613,8 @@
 
             var minp = 0,
                 maxp = me.opts.stepCount,
-                minv = Math.log(me.opts.rangeMin),
-                maxv = Math.log(me.opts.rangeMax),
+                minv = (me.opts.rangeMin > 0) ? Math.log(me.opts.rangeMin) : me.opts.rangeMin,
+                maxv = (me.opts.rangeMax > 0) ? Math.log(me.opts.rangeMax) : me.opts.rangeMax,
                 scale = (maxv - minv) / (maxp - minp);
 
             position = position / me.stepWidth;
