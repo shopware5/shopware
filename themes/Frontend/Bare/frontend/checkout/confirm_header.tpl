@@ -6,7 +6,7 @@
 {* Product tax *}
 {block name='frontend_checkout_cart_header_tax'}
     <div class="panel--th column--tax-price block is--align-right">
-        {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
+        {if $sUserData.additional.charge_vat && !$sUserData.additional.show_gross}
             {s name='CheckoutColumnExcludeTax'}{/s}
         {elseif $sUserData.additional.charge_vat}
             {s name='CheckoutColumnTax'}{/s}

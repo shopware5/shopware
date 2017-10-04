@@ -841,11 +841,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
                 Shopware()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
                 $userData['additional']['charge_vat'] = false;
-                $userData['additional']['show_net'] = false;
+                $userData['additional']['show_gross'] = false;
                 Shopware()->Session()->sOutputNet = true;
             } else {
                 $userData['additional']['charge_vat'] = true;
-                $userData['additional']['show_net'] = !empty($system->sUSERGROUPDATA['tax']);
+                $userData['additional']['show_gross'] = !empty($system->sUSERGROUPDATA['tax']);
                 Shopware()->Session()->sOutputNet = empty($system->sUSERGROUPDATA['tax']);
             }
         }

@@ -5,7 +5,7 @@
     <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_item_tax_label'}
             <div class="column--label tax-price--label">
-                {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
+                {if $sUserData.additional.charge_vat && !$sUserData.additional.show_gross}
                     {s name='CheckoutColumnExcludeTax' namespace="frontend/checkout/confirm_header"}{/s}
                 {elseif $sUserData.additional.charge_vat}
                     {s name='CheckoutColumnTax' namespace="frontend/checkout/confirm_header"}{/s}
