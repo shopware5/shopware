@@ -361,7 +361,7 @@ More precise designations are commented inside the document.
 
         .account--close-off-canvas {
             color: #fff;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
     }
 }
@@ -469,10 +469,10 @@ More precise designations are commented inside the document.
     }
 
     .entry--all-results.is--active {
-        font-weight: 600;
+        font-weight: @font-bold-weight;
 
         .entry--all-results-number {
-            font-weight: 600;
+            font-weight: @font-bold-weight;
         }
     }
 
@@ -487,7 +487,7 @@ More precise designations are commented inside the document.
         width: 100%;
         text-align: center;
         list-style: none;
-        font-weight: normal;
+        font-weight: @font-base-weight;
     }
 
     .is--active,
@@ -554,7 +554,7 @@ More precise designations are commented inside the document.
 
     .entry--all-results {
         .unitize-padding(6, 5);
-        font-weight: normal;
+        font-weight: @font-base-weight;
     }
 
     .entry--all-results-link {
@@ -569,7 +569,7 @@ More precise designations are commented inside the document.
     }
 
     .entry--all-results-number {
-        font-weight: normal;
+        font-weight: @font-base-weight;
         color: @link-color
     }
 }
@@ -894,7 +894,7 @@ More precise designations are commented inside the document.
             }
         }
 
-        .entry--link { font-weight: normal; }
+        .entry--link { font-weight: @font-base-weight; }
         .entry--menu-left { display: none; }
 
         .cart--quantity,
@@ -1101,7 +1101,7 @@ More precise designations are commented inside the document.
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
             }
         }
 
@@ -1177,7 +1177,7 @@ More precise designations are commented inside the document.
 
     .cart--display {
         .unitize-margin(0, 25, 0, 5, 16);
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         color: @text-color;
     }
 }

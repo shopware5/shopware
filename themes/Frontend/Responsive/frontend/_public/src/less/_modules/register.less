@@ -74,7 +74,7 @@ The user can see the registration steps, advantages and required information.
         .clearfix();
         .unitize-margin(0, 0, 5, 0);
         display: block;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .register--password-description {
@@ -136,7 +136,7 @@ The user can see the registration steps, advantages and required information.
                 .unitize(right, 10);
                 position: absolute;
                 font-family: @sw-icon-fontname;
-                font-weight: normal;
+                font-weight: @font-base-weight;
                 content: @sw-icon-arrow-down;
                 color: inherit;
                 top: 50%;
@@ -214,7 +214,7 @@ The user can see the registration steps, advantages and required information.
         display: inline-block;
         text-align: center;
         color: #fff;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .is--active .icon {
@@ -240,7 +240,7 @@ The user can see the registration steps, advantages and required information.
     .is--active .text {
         color: @brand-primary;
         display: inline-block;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .steps--entry .text--inner, .steps--entry .text::after {
@@ -334,7 +334,7 @@ The user can see the registration steps, advantages and required information.
             .text {
                 .unitize-margin(0, 10, 0, 10);
                 display: inline-block;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
             }
         }
     }
