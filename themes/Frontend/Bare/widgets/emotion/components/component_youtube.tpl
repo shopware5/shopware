@@ -8,7 +8,7 @@
             {if $Data.video_start}{$options[] = 'start='|cat:$Data.video_start}{/if}
             {if $Data.video_end}{$options[] = 'end='|cat:$Data.video_end}{/if}
             {if $Data.video_info}{$options[] = 'showinfo=0'}{/if}
-            {if $Data.video_branding}{$options[] = 'modestbranding=1'}{/if}
+            {if $Data.video_branding}{$options[] = 'modestbranding=0'}{/if}
             {if $Data.video_loop}{$options[] = 'loop=1&playlist='|cat:$Data.video_id}{/if}
             {if $options|@count > 0}
                 {foreach $options as $option}
