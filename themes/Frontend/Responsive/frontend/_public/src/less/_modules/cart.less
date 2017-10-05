@@ -176,7 +176,7 @@ Shopware offers two different shopping cart element options that can be selected
     // Product title
     .content--title {
         .unitize(font-size, 16);
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         color: @text-color;
     }
 
@@ -204,7 +204,7 @@ Shopware offers two different shopping cart element options that can be selected
         text-align: left;
         margin: 0%;
         float: left;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
 
         &.quantity--label {
             .unitize(margin-top, 11);
@@ -237,7 +237,7 @@ Shopware offers two different shopping cart element options that can be selected
 
 
     .column--total-price {
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .column--product {
@@ -287,7 +287,7 @@ Shopware offers two different shopping cart element options that can be selected
             line-height: 20px;
             color: white;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             display: block;
             position: absolute;
             width: 70px;
@@ -304,7 +304,7 @@ Shopware offers two different shopping cart element options that can be selected
         .unitize-width(48);
         margin: 0 auto;
         text-align: center;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         background: @text-color;
         color: #fff;
 
@@ -376,11 +376,11 @@ Shopware offers two different shopping cart element options that can be selected
         .unitize(height, 38);
         .unitize(line-height, 36);
         max-width: 100%;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .table--shipping-costs-trigger {
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .main--actions {
@@ -398,7 +398,7 @@ Shopware offers two different shopping cart element options that can be selected
     .benefit--headline {
         .unitize(font-size, 14);
         color: @text-color-dark;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 }
 
@@ -419,7 +419,7 @@ Shopware offers two different shopping cart element options that can be selected
     }
 
     .entry--total {
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         color: @text-color-dark;
     }
 
@@ -512,13 +512,13 @@ Shopware offers two different shopping cart element options that can be selected
             background: @brand-primary;
             position: absolute;
             color: #fff;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             z-index: @zindex-cart-premium-prodict-badge;
         }
 
         .premium-product--free {
             color: @highlight-success;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             text-align: left;
         }
 
@@ -546,7 +546,7 @@ Shopware offers two different shopping cart element options that can be selected
                     .border-radius-multi(3px, 0, 0, 3px);
                     .unitize(line-height, 38);
                     .unitize-height(38);
-                    font-weight: bold;
+                    font-weight: @font-bold-weight;
                 }
 
                 &:after {
@@ -576,7 +576,7 @@ Shopware offers two different shopping cart element options that can be selected
     .modal--title {
         .unitize-padding(10, 40, 10, 20);
         .unitize(font-size, 16);
-        font-weight: 700;
+        font-weight: @font-bold-weight;
         border-bottom: 1px solid @border-color;
     }
 
@@ -615,7 +615,7 @@ Shopware offers two different shopping cart element options that can be selected
 
         .link--name {
             color: @text-color;
-            font-weight: 700;
+            font-weight: @font-bold-weight;
         }
     }
 
@@ -627,7 +627,7 @@ Shopware offers two different shopping cart element options that can be selected
     .list--price .entry--price {
         .unitize(margin-bottom, 10);
         color: @text-color;
-        font-weight: 700;
+        font-weight: @font-bold-weight;
     }
 
     .modal--actions {
@@ -688,7 +688,7 @@ Shopware offers two different shopping cart element options that can be selected
 
         .link--name {
             color: @text-color-dark;
-            font-weight: 700;
+            font-weight: @font-bold-weight;
         }
 
         .item--price-unit {
@@ -698,7 +698,7 @@ Shopware offers two different shopping cart element options that can be selected
         .price--normal {
             .unitize(font-size, 17);
             color: @text-color-dark;
-            font-weight: 700;
+            font-weight: @font-bold-weight;
         }
 
         .price--reduced {
@@ -745,7 +745,7 @@ Shopware offers two different shopping cart element options that can be selected
             border: 0 none;
         }
     }
-  
+
     .payment--method.method_last,
     .dispatch--method.method_last {
       border: 0 none;
@@ -842,7 +842,7 @@ Shopware offers two different shopping cart element options that can be selected
 
             .select-field {
                 float: left;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
             }
         }
         .column--unit-price {
@@ -994,7 +994,7 @@ Shopware offers two different shopping cart element options that can be selected
             .table--column {
                 .unitize(font-size, 16);
                 padding-bottom: 0;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
                 color: @text-color-dark;
             }
 
@@ -1064,7 +1064,7 @@ Shopware offers two different shopping cart element options that can be selected
             .select-field {
                 float: right;
                 min-width: 0;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
             }
         }
 
@@ -1089,12 +1089,12 @@ Shopware offers two different shopping cart element options that can be selected
             // Content styling
         .content--title {
             .unitize(font-size, 16);
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             color: @text-color;
         }
         .column--total-price {
             float: left;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
 
         .basket--badge {

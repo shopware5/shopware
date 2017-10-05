@@ -61,7 +61,7 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
         .clearfix();
         display: block;
         color: #fff;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         cursor: pointer;
 
         .icon--arrow-left {
@@ -74,7 +74,7 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
         .unitize(font-size, 16);
         .unitize-padding(10, 10);
         .unitize-height(42);
-        font-weight: 700;
+        font-weight: @font-bold-weight;
         display: block;
         width: 100%;
 
@@ -128,7 +128,7 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
 			.clearfix();
             .unitize(font-size, 14);
 			color: @gray-light;
-			font-weight: bold;
+			font-weight: @font-bold-weight;
 
 			&:active {
 				color: @gray;
@@ -150,7 +150,7 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
 	.unitize-margin(16, 10, 6, 10);
     .unitize(line-height, 26);
     color: @text-color-dark;
-    font-weight: 700;
+    font-weight: @font-bold-weight;
 	font-size: 1em;
 }
 .sidebar--navigation {

@@ -15,7 +15,7 @@ The footer element sizes are defined with the unitize mixin.
 
     .footer--phone-link {
         .unitize(font-size, 19);
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         color: @brand-secondary;
     }
 
@@ -32,7 +32,7 @@ The footer element sizes are defined with the unitize mixin.
         .user-select(none);
         .unitize-padding(8, 0);
         margin: 0;
-        font-weight: 700;
+        font-weight: @font-bold-weight;
         color: @brand-primary;
         cursor: pointer;
         .unitize(font-size, 16);
@@ -46,7 +46,7 @@ The footer element sizes are defined with the unitize mixin.
             .unitize(font-size, 18);
             font-family: @sw-icon-fontname;
             color: @text-color;
-            font-weight: 700;
+            font-weight: @font-bold-weight;
             content: @sw-icon-plus3;
             float: right;
         }
