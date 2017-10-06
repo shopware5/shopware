@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.ProductFeed.model.Main', {
     fields : [
         //{block name="backend/product_feed/model/main/fields"}{/block}
         { name : 'id', type : 'int' },
+        { name : 'active', type : 'boolean' },
         { name : 'name', type : 'string' },
         { name : 'fileName', type : 'string' },
         { name : 'hash', type : 'string' },

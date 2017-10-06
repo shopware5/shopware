@@ -134,6 +134,12 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                 flex:1
             },
             {
+                header: '{s name=list/column/active}Active{/s}',
+                dataIndex: 'active',
+                flex: 1,
+                renderer:me.activeColumnRenderer
+            },
+            {
                 header:'{s name=list/column/file_name}File name{/s}',
                 dataIndex:'fileName',
                 renderer:me.fileNameRenderer,
@@ -271,6 +277,17 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
         /*{else}*/
         return value;
         /*{/if}*/
-    }
+    },
+
+     /**
+      * @param [object] - value
+      */
+     activeColumnRenderer: function(value) {
+         if (value) {
+            return '<div class="sprite-tick"  style="width: 25px; height: 25px">&nbsp;</div>';
+         } else {
+            return '<div class="sprite-cross" style="width: 25px; height: 25px">&nbsp;</div>';
+         }
+     }
 });
 //{/block}
