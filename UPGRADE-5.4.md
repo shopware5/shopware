@@ -47,7 +47,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
            The method signature no longer contains the `isSecureRequest` parameter
         
     * Deprecated `forceSecure` and `sUseSSL` smarty flags
-* Removed config option `blogcategory`
+* Removed config option `blogcategory` and `bloglimit`
 
 ### Deprecations
 
