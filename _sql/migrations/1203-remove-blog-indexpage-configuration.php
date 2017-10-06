@@ -22,12 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration955 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1203 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
         $sql = <<<'EOD'
 SET @elementId = (SELECT id FROM s_core_config_elements WHERE name LIKE 'blogcategory');
+
+DELETE FROM s_core_config_element_translations WHERE element_id = @elementId;
+DELETE FROM s_core_config_values WHERE element_id = @elementId;
+DELETE FROM s_core_config_elements WHERE id = @elementId;
+EOD;
+
+        $this->addSql($sql);
+
+        $sql = <<<'EOD'
+SET @elementId = (SELECT id FROM s_core_config_elements WHERE name LIKE 'bloglimit');
 
 DELETE FROM s_core_config_element_translations WHERE element_id = @elementId;
 DELETE FROM s_core_config_values WHERE element_id = @elementId;
