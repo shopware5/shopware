@@ -71,6 +71,7 @@ class Repository extends ModelRepository
             [
                 'productFeed.id as id',
                 'productFeed.name as name',
+                'productFeed.active as active',
                 'productFeed.fileName as fileName',
                 'productFeed.countArticles as countArticles',
                 'productFeed.hash as hash',
