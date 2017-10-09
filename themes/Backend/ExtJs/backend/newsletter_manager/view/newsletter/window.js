@@ -97,6 +97,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
         var me = this;
 
         me.tabPanel = Ext.create('Ext.tab.Panel', {
+            deferredRender: false,
             items: me.getTabs()
         });
         return me.tabPanel;
