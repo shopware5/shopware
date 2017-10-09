@@ -51,7 +51,7 @@ class ValidationException extends \Enlight_Exception
     {
         $this->setViolations($violations);
 
-        parent::__construct($this->__toString());
+        parent::__construct((string) $this);
     }
 
     /**
