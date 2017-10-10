@@ -391,7 +391,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      */
     public function getRootDir()
     {
-        return realpath(__DIR__ . '/../../');
+        return dirname(dirname(__DIR__)) . '/';
     }
 
     /**
