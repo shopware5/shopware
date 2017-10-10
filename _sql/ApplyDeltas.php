@@ -8,6 +8,7 @@ $longopts = [
     'password:',
     'host:',
     'dbname:',
+    'port:',
 ];
 $deployConfig = getopt('', ['tablesuffix::', 'shoppath:', 'migrationpath:']);
 $dbConfig = getopt('', $longopts);
@@ -20,6 +21,7 @@ $password = isset($dbConfig['password']) ? $dbConfig['password'] : '';
 $connectionSettings = [
     'host=' . $dbConfig['host'],
     'dbname=' . $dbConfig['dbname'],
+    'port=' . $dbConfig['port'],
 ];
 if (!empty($dbConfig['socket'])) {
     $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
