@@ -63,6 +63,8 @@ class RebuildSeoIndexCommand extends ShopwareCommand
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -92,7 +94,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
             /** @var $repository \Shopware\Models\Shop\Repository */
-            $repository = $this->modelManager->getRepository('Shopware\Models\Shop\Shop');
+            $repository = $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class);
             $shop = $repository->getActiveById($shopId);
 
             if ($shop === null) {

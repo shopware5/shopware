@@ -45,6 +45,7 @@ class Site extends ModelEntity
      * @var \Shopware\Models\Attribute\Site
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -213,7 +214,7 @@ class Site extends ModelEntity
     /**
      * @param string $tpl1variable
      *
-     * @return string
+     * @return Site
      */
     public function setTpl1Variable($tpl1variable)
     {
@@ -233,7 +234,7 @@ class Site extends ModelEntity
     /**
      * @param string $tpl2variable
      *
-     * @return string
+     * @return Site
      */
     public function setTpl2Variable($tpl2variable)
     {
@@ -253,7 +254,7 @@ class Site extends ModelEntity
     /**
      * @param string $tpl3variable
      *
-     * @return string
+     * @return Site
      */
     public function setTpl3Variable($tpl3variable)
     {
@@ -273,7 +274,7 @@ class Site extends ModelEntity
     /**
      * @param string $tpl1path
      *
-     * @return string
+     * @return Site
      */
     public function setTpl1Path($tpl1path)
     {
@@ -293,7 +294,7 @@ class Site extends ModelEntity
     /**
      * @param string $tpl2path
      *
-     * @return string
+     * @return Site
      */
     public function setTpl2Path($tpl2path)
     {
@@ -313,7 +314,7 @@ class Site extends ModelEntity
     /**
      * @param string $tpl3path
      *
-     * @return string
+     * @return Site
      */
     public function setTpl3Path($tpl3path)
     {
@@ -333,7 +334,7 @@ class Site extends ModelEntity
     /**
      * @param string $description
      *
-     * @return string
+     * @return Site
      */
     public function setDescription($description)
     {
@@ -353,7 +354,7 @@ class Site extends ModelEntity
     /**
      * @param string $html
      *
-     * @return string
+     * @return Site
      */
     public function setHtml($html)
     {
@@ -373,7 +374,7 @@ class Site extends ModelEntity
     /**
      * @param string $grouping
      *
-     * @return string
+     * @return Site
      */
     public function setGrouping($grouping)
     {
@@ -393,7 +394,7 @@ class Site extends ModelEntity
     /**
      * @param int $position
      *
-     * @return int
+     * @return Site
      */
     public function setPosition($position)
     {
@@ -413,7 +414,7 @@ class Site extends ModelEntity
     /**
      * @param string $link
      *
-     * @return string
+     * @return Site
      */
     public function setLink($link)
     {
@@ -433,7 +434,7 @@ class Site extends ModelEntity
     /**
      * @param string $target
      *
-     * @return string
+     * @return Site
      */
     public function setTarget($target)
     {
@@ -460,10 +461,14 @@ class Site extends ModelEntity
 
     /**
      * @param \Shopware\Models\Site\Site $parent
+     *
+     * @return Site
      */
     public function setParent($parent)
     {
         $this->parent = $parent;
+
+        return $this;
     }
 
     /**
@@ -476,10 +481,14 @@ class Site extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $children
+     *
+     * @return Site
      */
     public function setChildren($children)
     {
         $this->children = $children;
+
+        return $this;
     }
 
     /**
@@ -492,10 +501,14 @@ class Site extends ModelEntity
 
     /**
      * @param int $parentId
+     *
+     * @return Site
      */
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
+
+        return $this;
     }
 
     /**
@@ -518,10 +531,14 @@ class Site extends ModelEntity
 
     /**
      * @param string $metaDescription
+     *
+     * @return Site
      */
     public function setMetaDescription($metaDescription)
     {
         $this->metaDescription = $metaDescription;
+
+        return $this;
     }
 
     /**
@@ -534,10 +551,14 @@ class Site extends ModelEntity
 
     /**
      * @param string $metaKeywords
+     *
+     * @return Site
      */
     public function setMetaKeywords($metaKeywords)
     {
         $this->metaKeywords = $metaKeywords;
+
+        return $this;
     }
 
     /**
@@ -550,10 +571,14 @@ class Site extends ModelEntity
 
     /**
      * @param string $pageTitle
+     *
+     * @return Site
      */
     public function setPageTitle($pageTitle)
     {
         $this->pageTitle = $pageTitle;
+
+        return $this;
     }
 
     /**
@@ -565,8 +590,6 @@ class Site extends ModelEntity
     }
 
     /**
-     * Set changed
-     *
      * @param \DateTime|string $changed
      *
      * @return Site
@@ -583,8 +606,6 @@ class Site extends ModelEntity
     }
 
     /**
-     * Get changed
-     *
      * @return \DateTime
      */
     public function getChanged()
@@ -624,10 +645,16 @@ class Site extends ModelEntity
     }
 
     /**
+     * Set the unexploded shop ids string (ex: |1|2|)
+     *
      * @param string $shopIds
+     *
+     * @return Site
      */
     public function setShopIds($shopIds)
     {
         $this->shopIds = $shopIds;
+
+        return $this;
     }
 }
