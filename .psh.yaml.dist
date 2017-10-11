@@ -33,13 +33,13 @@ const:
   PHP_VERSION: "7.1"
   APP_DEBUG: "1"
   APP_ENV: "dev"
+  USER_ID: "2020"
+  GROUP_ID: "2020"
+  USERKEY: "2020:2020"
 
 dynamic:
-  USERKEY: echo "$(id -u):$(id -g)"
   APP_ID: docker-compose ps -q app_server
   MYSQL_ID: docker-compose ps -q app_mysql
-  USER_ID: id -u
-  GROUP_ID: id -g
 
 environments:
   docker:

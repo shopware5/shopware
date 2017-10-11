@@ -2,8 +2,8 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-USERID=$(id -u)
-GROUP=$(id -g)
+USERID="2020"
+GROUP="2020"
 
 
 cat > $DIR/php7/createuser.sh <<DELIM
