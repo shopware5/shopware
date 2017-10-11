@@ -32,17 +32,16 @@ use Shopware\Cart\Tax\TaxRule;
 use Shopware\Cart\Tax\TaxRuleCalculator;
 use Shopware\Cart\Tax\TaxRuleCollection;
 use Shopware\Cart\Tax\TaxRuleInterface;
-use Shopware\Tax\Struct\Tax;
 
 class TaxCalculatorTest extends TestCase
 {
     /**
      * @dataProvider netPricesToGross
      *
-     * @param float                $expected
-     * @param PriceRounding        $rounding
-     * @param TaxRuleInterface|Tax $taxRule
-     * @param float                $net
+     * @param float            $expected
+     * @param PriceRounding    $rounding
+     * @param TaxRuleInterface $taxRule
+     * @param float            $net
      */
     public function testCalculateGrossPriceOfNetPrice($expected, PriceRounding $rounding, TaxRuleInterface $taxRule, $net): void
     {

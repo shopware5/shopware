@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 use Shopware\AreaCountry\Struct\AreaCountryBasicStruct;
 use Shopware\AreaCountryState\Struct\AreaCountryStateBasicStruct;
 use Shopware\Cart\Delivery\Delivery;
-use Shopware\Cart\Delivery\DeliveryCalculator;
 use Shopware\Cart\Delivery\DeliveryCollection;
 use Shopware\Cart\Delivery\DeliveryDate;
 use Shopware\Cart\Delivery\DeliveryInformation;
@@ -114,7 +113,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($item),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
-                    new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+                    new ShippingMethodBasicStruct(),
                     $location,
                     new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
@@ -165,7 +164,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($itemB),
                     ]),
                     $deliveryInformation->getInStockDeliveryDate(),
-                    new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+                    new ShippingMethodBasicStruct(),
                     $location,
                     new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
@@ -207,7 +206,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForOutOfStockDate($itemB),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05')),
-                    new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+                    new ShippingMethodBasicStruct(),
                     $location,
                     new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
@@ -247,7 +246,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($product),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+                    new ShippingMethodBasicStruct(),
                     $location,
                     new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
@@ -284,7 +283,7 @@ class StockDeliverySeparatorTest extends TestCase
                         ),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+                    new ShippingMethodBasicStruct(),
                     $location,
                     new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),
@@ -296,7 +295,7 @@ class StockDeliverySeparatorTest extends TestCase
                         ),
                     ]),
                     $product->getOutOfStockDeliveryDate(),
-                    new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+                    new ShippingMethodBasicStruct(),
                     $location,
                     new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
                 ),

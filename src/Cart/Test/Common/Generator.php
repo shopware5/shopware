@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Area\Struct\AreaBasicStruct;
 use Shopware\AreaCountry\Struct\AreaCountryBasicStruct;
 use Shopware\AreaCountryState\Struct\AreaCountryStateBasicStruct;
-use Shopware\Cart\Delivery\DeliveryCalculator;
 use Shopware\Cart\Delivery\ShippingLocation;
 use Shopware\Cart\Price\PriceDefinition;
 use Shopware\Cart\Tax\TaxDetector;
@@ -123,8 +122,8 @@ class Generator extends TestCase
             $fallbackCustomerGroup,
             $taxes,
             $priceGroupDiscounts,
-            new PaymentMethodBasicStruct(1, '', '', ''),
-            new ShippingMethodBasicStruct(1, '', DeliveryCalculator::CALCULATION_BY_WEIGHT, true, 1),
+            new PaymentMethodBasicStruct(),
+            new ShippingMethodBasicStruct(),
             ShippingLocation::createFromAddress($shipping),
             new CustomerBasicStruct()
         );
