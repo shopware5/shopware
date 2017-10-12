@@ -353,7 +353,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 }, me);
                 callback(response);
             },
-            null,
+            // Error callback
+            function(response) {
+                // If a plugin update fails it will be disabled, however the list will not reload
+                // so that the plugin is listed as activated even though it is disabled.
+
+                // Reload menu to hide disabled menu items and reload the plugin listing so that
+                // plugins are shown in the correct status of activated, disabled or not installed.
+                me.reloadMenu();
+                me.reloadLocalListing();
+
+                // Standard error handling functionality which would be executed if no error
+                // handler was specified.
+                me.displayErrorMessage(response);
+                me.hideLoadingMask();
+            },
             300000
         );
     },
