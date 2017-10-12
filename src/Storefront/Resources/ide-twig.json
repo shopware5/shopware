@@ -1,0 +1,11 @@
+{
+  "namespaces": [
+    {
+      "namespace": "Shopware",
+      "path": "views"
+    },
+    {
+      "path": "views"
+    }
+  ]
+}
