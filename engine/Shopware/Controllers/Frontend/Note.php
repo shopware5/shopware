@@ -71,14 +71,20 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
+        $notesCount = $this->addNote($this->Request()->getParam('ordernumber'));
+
         $this->Response()->setBody(json_encode(
             [
-                'success' => $this->addNote($this->Request()->getParam('ordernumber')),
-                'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes(),
+                'success' => (bool) $notesCount,
+                'notesCount' => (int) $notesCount,
             ]
         ));
     }
 
+    /**
+     * @param string $orderNumber
+     * @return int
+     */
     private function addNote($orderNumber)
     {
         if (empty($orderNumber)) {
@@ -92,8 +98,8 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
             return false;
         }
 
-        Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
+        $notesCount = Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
 
-        return true;
+        return $notesCount;
     }
 }
