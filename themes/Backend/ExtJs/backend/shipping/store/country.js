@@ -82,6 +82,9 @@ Ext.define('Shopware.apps.Shipping.store.Country', {
             type: 'json',
             root: 'data',
             totalProperty: 'total'
+        },
+        actionMethods: {
+            read: 'POST'
         }
     }
 });
