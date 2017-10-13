@@ -87,8 +87,10 @@ class Session
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('Shop');
 
-        $name = 'session-' . $shop->getId();
+        $name = $sessionOptions['namespace'] . $shop->getId();
         $sessionOptions['name'] = $name;
+
+        unset($sessionOptions['namespace']);
 
         $mainShop = $shop->getMain() ?: $shop;
         if ($mainShop->getAlwaysSecure()) {
