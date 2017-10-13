@@ -63,7 +63,7 @@ class XmlConfigDefinitionReader
         }
 
         foreach ($xpath->query('//config/description') as $description) {
-            $lang = ($description->getAttribute('lang')) ? $description->getAttribute('lang') : 'en';
+            $lang = $description->getAttribute('lang') ?: 'en';
             $form['description'][$lang] = $description->nodeValue;
         }
 
@@ -112,10 +112,10 @@ class XmlConfigDefinitionReader
     {
         $element = [];
 
-        $isRequired = ($entry->getAttribute('required')) ? XmlUtils::phpize($entry->getAttribute('required')) : false;
-        $type = ($entry->getAttribute('type')) ? $entry->getAttribute('type') : 'text';
+        $isRequired = $entry->getAttribute('required') ? XmlUtils::phpize($entry->getAttribute('required')) : false;
+        $type = $entry->getAttribute('type') ?: 'text';
 
-        $scope = ($entry->getAttribute('scope')) ? $entry->getAttribute('scope') : 'locale';
+        $scope = $entry->getAttribute('scope') ?: 'locale';
         if ($scope === 'locale') {
             $scope = 0;
         } elseif ($scope === 'shop') {
@@ -147,12 +147,12 @@ class XmlConfigDefinitionReader
         }
 
         foreach ($this->getChildren($entry, 'description') as $label) {
-            $lang = ($label->getAttribute('lang')) ? $label->getAttribute('lang') : 'en';
+            $lang = $label->getAttribute('lang') ?: 'en';
             $element['description'][$lang] = $label->nodeValue;
         }
 
         foreach ($this->getChildren($entry, 'label') as $label) {
-            $lang = ($label->getAttribute('lang')) ? $label->getAttribute('lang') : 'en';
+            $lang = $label->getAttribute('lang') ?: 'en';
             $element['label'][$lang] = $label->nodeValue;
         }
 
@@ -179,7 +179,7 @@ class XmlConfigDefinitionReader
     private function extractStoreData($options)
     {
         return array_map(function ($item) {
-            $value = $this->getChildren($item, 'value')[0]->nodeValue;
+            $value = XmlUtils::phpize($this->getChildren($item, 'value')[0]->nodeValue);
             /** @var \DOMElement $label */
             $labels = [];
             foreach ($this->getChildren($item, 'label') as $label) {
