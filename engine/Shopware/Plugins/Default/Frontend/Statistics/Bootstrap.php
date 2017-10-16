@@ -116,8 +116,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
-     * @param Enlight_Controller_Request_Request $request
-     * @param $response
+     * @param Enlight_Controller_Request_Request       $request
+     * @param Enlight_Controller_Response_ResponseHttp $response
+     *
+     * @throws \Exception
      */
     public function updateLog($request, $response)
     {
@@ -194,7 +196,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh current users
      *
+     *
      * @param \Enlight_Controller_Request_Request $request
+     *
+     * @throws \Exception
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function refreshCurrentUsers(Enlight_Controller_Request_Request $request)
     {
@@ -212,7 +218,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh visitor log
      *
+     *
      * @param Enlight_Controller_Request_Request $request
+     *
+     * @throws \Exception
      */
     public function refreshLog(Enlight_Controller_Request_Request $request)
     {
@@ -250,8 +259,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             $isNewRecord = true;
         }
 
-        $sql = 'SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?';
-        $result = Shopware()->Db()->fetchOne($sql, [$ip]);
+        $result = Shopware()->Db()->fetchOne('SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?', [$ip]);
         if (empty($result)) {
             $sql = 'INSERT INTO s_statistics_pool (`remoteaddr`, `datum`) VALUES (?, NOW())';
             Shopware()->Db()->query($sql, [$ip]);
@@ -310,7 +318,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         }
         $shopId = Shopware()->Shop()->getId();
         /** @var $repository \Shopware\Models\Tracking\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tracking\ArticleImpression::class);
         $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
         /** @var $articleImpression \Shopware\Models\Tracking\ArticleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();

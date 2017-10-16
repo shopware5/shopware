@@ -21,9 +21,27 @@
             url += '&articleId=' + encodeURI("{$sArticle.articleID}");
             {/if}
 
-            var statisticRequest = document.getElementById('refresh-statistic');
-            statisticRequest.setAttribute('src', url);
+            {* Early simple device detection for statistics, duplicated in StateManager for resizes *}
+            if (document.cookie.indexOf('x-ua-device') === -1) {
+                var i = 0,
+                    device = 'desktop',
+                    width = window.innerWidth,
+                    breakpoints = window.statisticDevices;
 
+                if (typeof width !== 'number') {
+                    width = (document.documentElement.clientWidth !== 0) ? document.documentElement.clientWidth : document.body.clientWidth;
+                }
+
+                for (; i < breakpoints.length; i++) {
+                    if (width >= ~~(breakpoints[i].enter) && width <= ~~(breakpoints[i].exit)) {
+                        device = breakpoints[i].device;
+                    }
+                }
+
+                document.cookie = 'x-ua-device=' + device + '; path=/';
+            }
+
+            document.getElementById('refresh-statistic').setAttribute('src', url);
         })(window, document);
     </script>
 {/block}
