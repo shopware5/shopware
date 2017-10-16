@@ -51,54 +51,74 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     public function loadPreviewAction()
     {
-        $conditions = $this->Request()->getParam('conditions');
-        $conditions = json_decode($conditions, true);
+        try {
+            $conditions = $this->Request()->getParam('conditions');
 
-        $sorting = $this->Request()->getParam('sort');
+            if ($conditions) {
+                $conditions = json_decode($conditions, true);
 
-        $criteria = new Criteria();
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
+                }
+            }
 
-        /** @var RepositoryInterface $streamRepo */
-        $streamRepo = $this->get('shopware_product_stream.repository');
-        $sorting = $streamRepo->unserialize($sorting);
+            $sorting = $this->Request()->getParam('sort');
 
-        foreach ($sorting as $sort) {
-            $criteria->addSorting($sort);
+            $criteria = new Criteria();
+
+            /** @var RepositoryInterface $streamRepo */
+            $streamRepo = $this->get('shopware_product_stream.repository');
+            $sorting = $streamRepo->unserialize($sorting);
+
+            foreach ($sorting as $sort) {
+                $criteria->addSorting($sort);
+            }
+
+            $conditions = $streamRepo->unserialize($conditions);
+
+            foreach ($conditions as $condition) {
+                $criteria->addCondition($condition);
+            }
+
+            $criteria->offset($this->Request()->getParam('start', 0));
+            $criteria->limit($this->Request()->getParam('limit', 20));
+
+            $context = $this->createContext(
+                $this->Request()->getParam('shopId'),
+                $this->Request()->getParam('currencyId'),
+                $this->Request()->getParam('customerGroupKey')
+            );
+
+            $criteria->addBaseCondition(
+                new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()])
+            );
+
+            $category = $context->getShop()->getCategory()->getId();
+            $criteria->addBaseCondition(
+                new CategoryCondition([$category])
+            );
+
+            $result = Shopware()->Container()->get('shopware_search.product_search')
+                ->search($criteria, $context);
+
+            $products = array_values($result->getProducts());
+
+            $success = true;
+            $error = false;
+            $data = $products;
+            $total = $result->getTotalCount();
+        } catch (\Exception $e) {
+            $success = false;
+            $error = $e->getMessage();
+            $data = [];
+            $total = 0;
         }
-
-        $conditions = $streamRepo->unserialize($conditions);
-
-        foreach ($conditions as $condition) {
-            $criteria->addCondition($condition);
-        }
-
-        $criteria->offset($this->Request()->getParam('start', 0));
-        $criteria->limit($this->Request()->getParam('limit', 20));
-
-        $context = $this->createContext(
-            $this->Request()->getParam('shopId'),
-            $this->Request()->getParam('currencyId'),
-            $this->Request()->getParam('customerGroupKey')
-        );
-
-        $criteria->addBaseCondition(
-            new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()])
-        );
-
-        $category = $context->getShop()->getCategory()->getId();
-        $criteria->addBaseCondition(
-            new CategoryCondition([$category])
-        );
-
-        $result = Shopware()->Container()->get('shopware_search.product_search')
-            ->search($criteria, $context);
-
-        $products = array_values($result->getProducts());
 
         $this->View()->assign([
-            'success' => true,
-            'data' => $products,
-            'total' => $result->getTotalCount(),
+            'success' => $success,
+            'data' => $data,
+            'total' => $total,
+            'error' => $error,
         ]);
     }
 
@@ -225,6 +245,11 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $repo = Shopware()->Container()->get('models')->getRepository('Shopware\Models\Shop\Shop');
 
         $shop = $repo->getActiveById($shopId);
+
+        if (!$shop) {
+            throw new \InvalidArgumentException('Shop not found');
+        }
+
         $shopId = $shop->getId();
 
         if (!$currencyId) {
