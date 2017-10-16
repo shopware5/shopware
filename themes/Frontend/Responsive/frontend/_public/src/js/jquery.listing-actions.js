@@ -307,10 +307,10 @@
 
             me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
             me.listingUrl = me.$filterForm.attr('data-listing-url');
-            me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
-            me.showInstantFilterResult = $.parseJSON(me.$filterForm.attr('data-instant-filter-result'));
+            me.loadFacets = me.$filterForm.attr('data-load-facets') === 'true';
+            me.showInstantFilterResult = me.$filterForm.attr('data-instant-filter-result') === 'true';
             me.isInfiniteScrolling = me.$listing.attr(me.opts.infiniteScrollingAttribute);
-            me.isFilterpanelInSidebar = $.parseJSON(me.$filterForm.attr('data-is-in-sidebar'));
+            me.isFilterpanelInSidebar = me.$filterForm.attr('data-is-in-sidebar') === 'true';
 
             me.controllerURL = window.location.href.split('?')[0];
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
