@@ -259,21 +259,21 @@
              * many parameters.
              */
             switch (args.length) {
-            case 0:
-                while (++i < len) (event = eventList[i]).callback.call(event.context);
-                return me;
-            case 1:
-                while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
-                return me;
-            case 2:
-                while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
-                return me;
-            case 3:
-                while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
-                return me;
-            default:
-                while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
-                return me;
+                case 0:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context);
+                    return me;
+                case 1:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
+                    return me;
+                case 2:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
+                    return me;
+                case 3:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
+                    return me;
+                default:
+                    while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
+                    return me;
             }
         },
 
@@ -1292,21 +1292,22 @@
         },
 
         _getCurrentDevice: function() {
-            var me = this,
-                devices = {
-                    'xs': 'mobile',
-                    's': 'mobile',
-                    'm': 'tablet',
-                    'l': 'tablet',
-                    'xl': 'desktop'
-                };
+            var i = 0,
+                width = this.getViewportWidth(),
+                device = 'desktop',
+                devices = window.statisticDevices || [];
 
-            return devices[me.getCurrentState()] || 'desktop';
+            for (; i < devices.length; i++) {
+                if (width >= ~~(devices[i].enter) && width <= ~~(devices[i].exit)) {
+                    device = devices[i].device;
+                }
+            }
+
+            return device;
         },
 
         _setDeviceCookie: function() {
-            var me = this,
-                device = me._getCurrentDevice();
+            var device = this._getCurrentDevice();
 
             document.cookie = 'x-ua-device=' + device + '; path=/';
         },
