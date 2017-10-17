@@ -52,6 +52,19 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     public function loadPreviewAction()
     {
         try {
+            /** @var RepositoryInterface $streamRepo */
+            $streamRepo = $this->get('shopware_product_stream.repository');
+            $criteria = new Criteria();
+
+            $sorting = $this->Request()->getParam('sort');
+            if($sorting) {
+                $sorting = $streamRepo->unserialize($sorting);
+
+                foreach ($sorting as $sort) {
+                    $criteria->addSorting($sort);
+                }
+            }
+
             $conditions = $this->Request()->getParam('conditions');
 
             if ($conditions) {
@@ -60,24 +73,12 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     throw new \InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
                 }
-            }
 
-            $sorting = $this->Request()->getParam('sort');
+                $conditions = $streamRepo->unserialize($conditions);
 
-            $criteria = new Criteria();
-
-            /** @var RepositoryInterface $streamRepo */
-            $streamRepo = $this->get('shopware_product_stream.repository');
-            $sorting = $streamRepo->unserialize($sorting);
-
-            foreach ($sorting as $sort) {
-                $criteria->addSorting($sort);
-            }
-
-            $conditions = $streamRepo->unserialize($conditions);
-
-            foreach ($conditions as $condition) {
-                $criteria->addCondition($condition);
+                foreach ($conditions as $condition) {
+                    $criteria->addCondition($condition);
+                }
             }
 
             $criteria->offset($this->Request()->getParam('start', 0));
@@ -122,6 +123,10 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         ]);
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function save($data)
     {
         if (isset($data['conditions'])) {
@@ -135,6 +140,10 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         return parent::save($data);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getDetail($id)
     {
         $data = parent::getDetail($id);
@@ -233,9 +242,11 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param $shopId
-     * @param int $currencyId
-     * @param int $customerGroupKey
+     * @param int $shopId
+     * @param int|null $currencyId
+     * @param int|null $customerGroupKey
+     *
+     * @throws \InvalidArgumentException if the specified shop couldn't be found
      *
      * @return ProductContext
      */
