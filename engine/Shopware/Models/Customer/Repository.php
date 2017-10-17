@@ -204,7 +204,7 @@ class Repository extends ModelRepository
             $builder->where('orders.customerId = :customerId')->setParameter('customerId', $customerId);
         }
         $builder->andWhere('orders.status NOT IN (:stati)');
-        $builder->setParameter(':stati', [-1, 4], Connection::PARAM_INT_ARRAY);
+        $builder->setParameter(':stati', [-1], Connection::PARAM_INT_ARRAY);
 
         $this->addOrderBy($builder, $orderBy);
 
