@@ -26,6 +26,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Additions
 
 * Added product sorting by stock facet
+* Added identifier for document types in order to create a unique, settable property for plugin developers and enabling risk free user editing of the name field
 
 ## 5.3.5
 

@@ -638,6 +638,22 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         return;
                     }
                     break;
+                case 'document':
+                    $exceptionMessage = $ex->getMessage();
+                    if (strpos($exceptionMessage, '1062 Duplicate entry') !== false
+                        &&
+                        strpos($exceptionMessage, 'for key \'key\'') !== false
+                    ) {
+                        $this->View()->assign([
+                            'success' => false,
+                            'message' => $this->get('snippets')->getNamespace('backend/config/view/document')->get('document/detail/key_exists'),
+                        ]);
+
+                        return;
+                    }
+
+                    // No the exception we want to handle here, rethrow. (Instead of fall through)
+                    throw $ex;
                 default:
                     throw $ex;
             }

@@ -99,6 +99,31 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 allowBlank: false,
                 translatable: true
             },{
+                name: 'key',
+                fieldLabel: '{s name=document/detail/key_label}Technical name{/s}',
+                allowBlank: false,
+                validator: function(key){
+                    var keysOfOtherElements = [];
+
+                    var elementId = me.query('fieldset [name=id]')[0].getValue();
+                    Ext.getStore('form.Document').each(function(record) {
+                        var id = record.data.id;
+                        if (record.data.id != elementId) {
+                            keysOfOtherElements.push(record.data.key);
+                        }
+                    });
+
+                    if (key === '') {
+                        return '{s name=document/detail/no_key}Please specify a unique technical name.{/s}';
+                    }
+
+                    if (keysOfOtherElements.indexOf(key) === -1) {
+                        return true;
+                    } else {
+                        return '{s name=document/detail/key_exists}The current key already exists. Please specify a unique technical name.{/s}';
+                    }
+                },
+            },{
                 name: 'numbers',
                 xtype: 'config-element-select',
                 valueField: 'name',
