@@ -637,6 +637,19 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         return;
                     }
                     break;
+                case 'document':
+                    $exceptionMessage = $ex->getMessage();
+                    if (strpos($exceptionMessage, '1062 Duplicate entry') !== false
+                        &&
+                        strpos($exceptionMessage, 'for key \'key\'') !== false
+                    ) {
+                        $this->View()->assign([
+                            'success' => false,
+                            'message' => 'Please choose a different technical name since another document with the same technical name already exists.',
+                        ]);
+
+                        return;
+                    }
                 default:
                     throw $ex;
             }

@@ -2816,6 +2816,7 @@ DROP TABLE IF EXISTS `s_core_documents`;
 CREATE TABLE IF NOT EXISTS `s_core_documents` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL UNIQUE,
   `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `numbers` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `left` int(11) NOT NULL,
@@ -2830,11 +2831,11 @@ CREATE TABLE IF NOT EXISTS `s_core_documents` (
 -- Daten für Tabelle `s_core_documents`
 --
 
-INSERT INTO `s_core_documents` (`id`, `name`, `template`, `numbers`, `left`, `right`, `top`, `bottom`, `pagebreak`) VALUES
-(1, 'Rechnung', 'index.tpl', 'doc_0', 25, 10, 20, 20, 10),
-(2, 'Lieferschein', 'index_ls.tpl', 'doc_1', 25, 10, 20, 20, 10),
-(3, 'Gutschrift', 'index_gs.tpl', 'doc_2', 25, 10, 20, 20, 10),
-(4, 'Stornorechnung', 'index_sr.tpl', 'doc_3', 25, 10, 20, 20, 10);
+INSERT INTO `s_core_documents` (`id`, `name`, `key`, `template`, `numbers`, `left`, `right`, `top`, `bottom`, `pagebreak`) VALUES
+(1, 'Rechnung', 'invoice', 'index.tpl', 'doc_0', 25, 10, 20, 20, 10),
+(2, 'Lieferschein', 'delivery_note', 'index_ls.tpl', 'doc_1', 25, 10, 20, 20, 10),
+(3, 'Gutschrift', 'credit', 'index_gs.tpl', 'doc_2', 25, 10, 20, 20, 10),
+(4, 'Stornorechnung', 'cancellation', 'index_sr.tpl', 'doc_3', 25, 10, 20, 20, 10);
 
 -- --------------------------------------------------------
 
