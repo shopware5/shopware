@@ -23,6 +23,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed the `I am` select option for the registration: If it is deactivated in the backend, it effects only the registration
 * Changed the update, delete and insert backlog from product number to the main detail product number by variant and price model
 
+### Removals
+
+* Removed the default option `touchControls: true` from the instantiation of the `swImageSlider`
+
 ## 5.3.3
 
 [View all changes from v5.3.2...v5.3.3](https://github.com/shopware/shopware/compare/v5.3.2...v5.3.3)
