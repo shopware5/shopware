@@ -312,7 +312,7 @@ class MediaService implements MediaServiceInterface
             return 'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() . '/';
         }
 
-        return $proto . $shop->getHost() . $shop->getBasePath() . '/';
+        return $proto. '://' . $shop->getHost() . $shop->getBasePath() . '/';
     }
 
     /**
