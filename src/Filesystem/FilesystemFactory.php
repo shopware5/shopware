@@ -44,7 +44,7 @@ class FilesystemFactory implements FilesystemFactoryInterface
     /**
      * @param AdapterFactoryInterface[] $adapterFactories
      */
-    public function __construct(array $adapterFactories)
+    public function __construct(iterable $adapterFactories)
     {
         $this->checkDuplicates($adapterFactories);
         $this->adapterFactories = $adapterFactories;
@@ -87,7 +87,7 @@ class FilesystemFactory implements FilesystemFactoryInterface
      *
      * @throws DuplicateFilesystemFactoryException
      */
-    private function checkDuplicates(array $adapterFactories): void
+    private function checkDuplicates(iterable $adapterFactories): void
     {
         $dupes = [];
         foreach ($adapterFactories as $adapter) {
