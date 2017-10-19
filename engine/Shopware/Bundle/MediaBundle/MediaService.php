@@ -291,6 +291,11 @@ class MediaService implements MediaServiceInterface
     {
         $request = $this->container->get('front')->Request();
 
+        $proto = 'http';
+        if ($request && $request->isSecure()) {
+            $proto = 'https';
+        }
+        
         if ($this->container->has('Shop')) {
             /** @var Shop $shop */
             $shop = $this->container->get('Shop');
@@ -307,7 +312,7 @@ class MediaService implements MediaServiceInterface
             return 'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() . '/';
         }
 
-        return ($request->isSecure() ? 'https' : 'http') . $shop->getHost() . $shop->getBasePath() . '/';
+        return $proto . $shop->getHost() . $shop->getBasePath() . '/';
     }
 
     /**
