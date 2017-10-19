@@ -3,6 +3,9 @@
     {
       "namespace": "Storefront",
       "path": "views"
-    }
+    },
+      {
+          "path": "views"
+      }
   ]
 }
