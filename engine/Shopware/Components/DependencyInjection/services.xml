@@ -206,6 +206,7 @@
 
         <service class="Shopware_Components_Translation" id="translation">
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="shopware.event_manager" alias="events" public="true"/>

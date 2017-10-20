@@ -24,6 +24,8 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Translation\ObjectTranslator;
 
 /**
  * Shopware Translation Component
@@ -35,9 +37,47 @@ class Shopware_Components_Translation
      */
     private $connection;
 
-    public function __construct(Connection $connection = null)
+    /**
+     * @var int
+     */
+    private $localeId;
+
+    /**
+     * @var int
+     */
+    private $fallbackLocaleId;
+
+    /**
+     * @param Connection|null $connection
+     * @param Container|null  $container
+     */
+    public function __construct(Connection $connection = null, Container $container = null)
     {
-        $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
+        $container = $container ?: Shopware()->Container();
+        $this->connection = $connection ?: $container->get('dbal_connection');
+
+        // Determine how to query the current language
+        if ($container->has('Auth')) {
+            $locale = $container->get('Auth')->getIdentity()->locale;
+
+            if ($locale) {
+                $this->localeId = $locale->getId();
+            }
+        } elseif ($container->has('Shop')) {
+            $locale = $container->get('Shop')->getLocale();
+
+            if ($locale) {
+                $this->localeId = $locale->getId();
+            }
+        }
+
+        if (!$this->localeId) {
+            // Fallback to default language in case no locale exists
+            $this->localeId = 1;
+        }
+
+        // Determine fallback language
+        $this->fallbackLocaleId = $this->getFallbackLocaleId($this->localeId);
     }
 
     /**
@@ -385,6 +425,149 @@ class Shopware_Components_Translation
         if ($type === 'article') {
             $this->fixArticleTranslation($language, $key, $data);
         }
+    }
+
+    /**
+     * Translates an order by translating its document types, payment and dispatch methods.
+     *
+     * @return array
+     */
+    public function translateOrders(array $orders, ?int $language, ?int $fallback): array
+    {
+        $documentTypes = [];
+        $paymentMethods = [];
+        $dispatchMethods = [];
+
+        // Extract documents, payment and dispatch methods
+        foreach ($orders as $order) {
+            $orderDocuments = $order['documents'];
+            $dispatchMethods[$order['dispatch']['id']] = $order['dispatch'];
+            $paymentMethods[$order['payment']['id']] = $order['payment'];
+            foreach ($orderDocuments as $documentIndex => $document) {
+                $documentTypes[$document['type']['id']] = $document['type'];
+            }
+        }
+
+        // Translate the objects
+        $translatedDocumentTypes = $this->translateDocuments($documentTypes, $language, $fallback);
+        $translatedDispatchMethods = $this->translateDispatchMethods($dispatchMethods, $language, $fallback);
+        $translatedPaymentMethods = $this->translatePaymentMethods($paymentMethods, $language, $fallback);
+
+        // Save the translated objects
+        foreach ($orders as &$order) {
+            $orderDocuments = $order['documents'];
+            for ($documentCounter = 0; $documentCounter < count($orderDocuments); $documentCounter += 1) {
+                $type = $orderDocuments[$documentCounter]['type'];
+                $order['documents'][$documentCounter]['type'] = $translatedDocumentTypes[$type['id']];
+            }
+
+            if ($translatedDispatchMethods[$order['dispatch']['id']]) {
+                $order['dispatch'] = $translatedDispatchMethods[$order['dispatch']['id']];
+            }
+
+            if ($translatedPaymentMethods[$order['payment']['id']]) {
+                $order['payment'] = $translatedPaymentMethods[$order['payment']['id']];
+            }
+        }
+
+        return $orders;
+    }
+
+    /**
+     * Translates dispatch methods.
+     *
+     * @return array Translated dispatch methods
+     */
+    public function translateDispatchMethods(array $dispatchMethods, ?int $language, ?int $fallback): array
+    {
+        $translator = $this->getObjectTranslator('config_dispatch', $language, $fallback);
+
+        $translatedDispatchMethods = array_map(function ($dispatchMethod) use ($translator) {
+            return $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'name');
+        }, $dispatchMethods);
+
+        return $translatedDispatchMethods;
+    }
+
+    /**
+     * Translates documents.
+     *
+     * @return array Translated documents
+     */
+    public function translateDocuments(array $documents, ?int $language, ?int $fallback): array
+    {
+        $translator = $this->getObjectTranslator('documents', $language, $fallback);
+
+        $translatedDocuments = array_map(function ($document) use ($translator) {
+            return $translator->translateObjectProperty($document, 'name');
+        }, $documents);
+
+        return $translatedDocuments;
+    }
+
+    /**
+     * Translates payment methods.
+     *
+     * @return array Translated payments
+     */
+    public function translatePaymentMethods(array $payments, ?int $language, ?int $fallback): array
+    {
+        $translator = $this->getObjectTranslator('config_payment', $language, $fallback);
+
+        $translatedPayments = array_map(function ($payment) use ($translator) {
+            $translatedPayment = $translator->translateObjectProperty($payment, 'description');
+            $translatedPayment = $translator->translateObjectProperty(
+                $translatedPayment,
+                'additionalDescription',
+                'additionaldescription'
+            );
+
+            return $translatedPayment;
+        }, $payments);
+
+        return $translatedPayments;
+    }
+
+    /**
+     * Creates an object translator for a specific type of translatable object.
+     */
+    public function getObjectTranslator(string $type, ?int $language, ?int $fallback): ObjectTranslator
+    {
+        // Check if the languages are specified and query them if not
+        if ($language === null) {
+            $language = $this->localeId;
+            $fallback = $this->fallbackLocaleId;
+        }
+
+        $fallback = $fallback ?: $this->getFallbackLocaleId($language);
+
+        return new ObjectTranslator(
+            $this,
+            $type,
+            $language ?: $this->localeId,
+            $fallback
+        );
+    }
+
+    /**
+     * Loads the id of the fallback language.
+     *
+     * @param int $currentLocaleId
+     *
+     * @return int
+     */
+    public function getFallbackLocaleId($currentLocaleId)
+    {
+        if ($currentLocaleId === 1) {
+            return 1;
+        }
+
+        $fallback = $this->connection->fetchColumn(
+            "SELECT id FROM s_core_locales WHERE locale = 'en_GB'"
+        );
+
+        // Fallback onto German if en_GB does not exist
+        return intval($fallback[0]) ?: 1;
     }
 
     /**

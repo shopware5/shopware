@@ -74,6 +74,15 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         $query = $this->repository->getListQuery();
         $results = $query->getArrayResult();
 
+        // Translate payments
+        // The standard $translationComponent->translatePayments can not be used here since the
+        // description may not be overridden. The field is edible and if the translation is
+        // shown in the edit field, there is a high chance of a user saving the translation as description.
+        $translator = $this->get('translation')->getObjectTranslator('config_payment');
+        $results = array_map(function ($payment) use ($translator) {
+            return $translator->translateObjectProperty($payment, 'description', 'translatedDescription', $payment['description']);
+        }, $results);
+
         $results = $this->formatResult($results);
 
         $this->View()->assign(['success' => true, 'data' => $results]);
@@ -262,7 +271,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             } else {
                 $result['iconCls'] = 'sprite-cross-small';
             }
-            $result['text'] = $result['description'] . ' (' . $result['id'] . ')';
+            $result['text'] = $result['translatedDescription'] . ' (' . $result['id'] . ')';
             $result['leaf'] = true;
 
             // Matches the surcharges with the countries

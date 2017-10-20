@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Config.model.form.Document', {
         { name: 'id', type: 'int' },
         { name: 'name',  type: 'string' },
         { name: 'key', type: 'string' },
+        { name: 'description', type: 'string' },
         { name: 'template',  type: 'string' },
         { name: 'numbers',  type: 'string' },
         { name: 'left',  type: 'int' },

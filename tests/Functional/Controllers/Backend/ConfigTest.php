@@ -167,6 +167,79 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
+     * Tests whether the list of pdf documents includes its translations
+     */
+    public function testIfPDFDocumentsListIncludesTranslation()
+    {
+        // set up
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        // login
+        $this->Request()->setMethod('POST');
+        $this->Request()->setPost([
+            'username' => 'demo',
+            'password' => 'demo',
+        ]);
+        $this->dispatch('backend/Login/login');
+
+        $getParams = [
+            '_repositoryClass' => 'document',
+            '_dc' => '1234567890',
+            'page' => '1',
+            'start' => '0',
+            'limit' => '20',
+        ];
+
+        $this->reset();
+
+        // Check if German values are still the same
+        $this->Request()->setMethod('GET');
+        $getString = http_build_query($getParams);
+        $response = $this->dispatch('backend/Config/getList?' . $getString);
+
+        $responseJSON = json_decode($response->getBody(), true);
+        $this->assertEquals(true, $responseJSON['success']);
+
+        foreach ($responseJSON['data'] as $documentType) {
+            $this->assertEquals($documentType['name'], $documentType['description']);
+        }
+
+        $this->reset();
+        Shopware()->Container()->reset('translation');
+
+        // Check for English translations
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user->locale = Shopware()->Models()->getRepository(
+            'Shopware\Models\Shop\Locale'
+        )->find(2);
+
+        $this->Request()->setMethod('GET');
+        $getString = http_build_query($getParams);
+        $response = $this->dispatch('backend/Config/getList?' . $getString);
+
+        $responseJSON = json_decode($response->getBody(), true);
+        $this->assertEquals(true, $responseJSON['success']);
+
+        foreach ($responseJSON['data'] as $documentType) {
+            switch ($documentType['id']) {
+                case 1:
+                    $this->assertEquals('Invoice', $documentType['description']);
+                    break;
+                case 2:
+                    $this->assertEquals('Notice of delivery', $documentType['description']);
+                    break;
+                case 3:
+                    $this->assertEquals('Credit', $documentType['description']);
+                    break;
+                case 4:
+                    $this->assertEquals('Cancellation', $documentType['description']);
+                    break;
+            }
+        }
+    }
+
+    /**
      * Tests the config tableList
      *
      * @param string $tableListName

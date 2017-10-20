@@ -337,6 +337,8 @@ class sAdmin implements \Enlight_Hook
             if (!empty($data)) {
                 $data = Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct(current($data));
             }
+
+            $data = $this->translationComponent->translatePaymentMethods([$data])[0];
         }
 
         $data = $this->eventManager->filter(
@@ -461,6 +463,9 @@ class sAdmin implements \Enlight_Hook
             $getPaymentMeans,
             ['subject' => $this]
         );
+
+        // Have all payments translated
+        $getPaymentMeans = $this->translationComponent->translatePaymentMethods($getPaymentMeans);
 
         return $getPaymentMeans;
     }
