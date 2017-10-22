@@ -2,7 +2,7 @@
 /**
  * Shopware 5
  * Copyright (c) shopware AG
- *
+ * Copyright (c) 2017 @Zwilla (precision and service)
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
@@ -92,6 +92,40 @@ class Currency extends ModelEntity
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="precision", type="integer", nullable=false)
+     */
+    private $precision;
+
+    /**
+     * Get precision
+     *
+     * @return int
+     */
+    public function getPrecision()
+    {
+        return $this->precision;
+    }
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="service", type="text", nullable=false)
+     */
+    private $service;
+
+    /**
+     * Get service
+     *
+     * @return text
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
 
     /**
      * Get id
@@ -289,6 +323,8 @@ class Currency extends ModelEntity
             'name' => $this->getName(),
             'currency' => $this->getCurrency(),
             'factor' => $this->getFactor(),
+            'precision' => $this->getPrecision(),
+            'service' => $this->getService(),
         ];
         if ($this->getSymbol()) {
             $options['symbol'] = $this->getSymbol();
