@@ -2,6 +2,7 @@
 /**
  * Shopware 5
  * Copyright (c) shopware AG
+ * Copyright (c) 2017 Zwilla (precision and service)
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -17,6 +18,7 @@
  * GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
+ * "Zwilla" is a registered trademark of zwilla research e.K.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -30,6 +32,7 @@ use Shopware\Models\Shop\Currency as CurrencyEntity;
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) 2017 (https://www.zwilla.de) - Precision and Service
  */
 class Currency extends Extendable implements \JsonSerializable
 {
@@ -64,6 +67,16 @@ class Currency extends Extendable implements \JsonSerializable
     protected $symbolPosition;
 
     /**
+     * @var integer
+     */
+    protected $precision;
+
+    /**
+     * @var string
+     */
+    protected $service;
+
+    /**
      * @param CurrencyEntity $currency
      *
      * @return Currency
@@ -78,8 +91,12 @@ class Currency extends Extendable implements \JsonSerializable
         $struct->setFactor($currency->getFactor());
         $struct->setSymbol($currency->getSymbol());
 
+        $struct->setPrecision($currency->getPrecision());
+        $struct->setService($currency->getService());
+
         return $struct;
     }
+
 
     /**
      * @param int $id
@@ -127,6 +144,22 @@ class Currency extends Extendable implements \JsonSerializable
     public function getSymbol()
     {
         return $this->symbol;
+    }
+
+    /**
+     * @param integer $precision
+     */
+    public function setPrecision($precision)
+    {
+        $this->precision = $precision;
+    }
+
+    /**
+     * @param string $service
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
     }
 
     /**
