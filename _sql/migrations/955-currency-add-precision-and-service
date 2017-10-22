@@ -1,0 +1,38 @@
+<?php
+/**
+ * Shopware 5
+ * Copyright (c) Zwilla
+ *
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Zwilla" is a registered trademark of Zwilla Research e.K.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration955 extends AbstractMigration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function up($modus)
+    {
+        $sql = <<<'SQL'
+ALTER TABLE `s_core_currencies` ADD `precision` int(11) NOT NULL DEFAULT '2';
+ALTER TABLE `s_core_currencies` ADD `service` text COLLATE utf8_unicode_ci, DEFAULT NULL;
+SQL;
+        $this->addSql($sql);
+    }
+}
+
