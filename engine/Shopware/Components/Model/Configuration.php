@@ -254,6 +254,11 @@ class Configuration extends BaseConfiguration
         } else {
             $redis->connect($options['redisHost'], $options['redisPort']);
         }
+
+        if (isset($options['redisAuth'])) {
+            $redis->auth($options['redisAuth']);
+        }
+
         $redis->select($options['redisDbIndex']);
         $cache = new RedisCache();
         $cache->setRedis($redis);
