@@ -286,6 +286,8 @@
         }
     };
 
+    window.EventEmitter = EventEmitter;
+
     /**
      * @public
      * @static
