@@ -294,7 +294,16 @@
      * @type {Object}
      */
     window.StateManager = $.extend(Object.create(EventEmitter.prototype), {
-
+        
+        /**
+         * Constructor for Shopware EventEmitter
+         *
+         * @public
+         * @class EventEmitter
+         * @constructor
+         */
+        EventEmitter: EventEmitter,
+        
         /**
          * Collection of all registered breakpoints
          *

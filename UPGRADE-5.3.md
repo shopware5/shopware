@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new service `Shopware\Components\HttpCache\CacheRouteInstaller` for creating cache routes
 * Added smarty block `frontend_index_header_meta_description_twitter` for `twitter:description` meta tag
 * Added smarty block `frontend_index_header_meta_description_og` for `og:description` meta tag
+* Added EventEmitter to StateManager constructor
 
 ### Changes
 
