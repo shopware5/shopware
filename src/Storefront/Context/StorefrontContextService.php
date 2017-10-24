@@ -122,6 +122,7 @@ class StorefrontContextService implements StorefrontContextServiceInterface
         }
 
         $context = $this->factory->create($shopScope, $customerScope, $checkoutScope);
+        $this->requestStack->getMasterRequest()->attributes->set('_currency_uuid', $context->getCurrency()->getUuid());
 
         $outputKey = $this->getCacheKey(
             ShopScope::createFromContext($context),
