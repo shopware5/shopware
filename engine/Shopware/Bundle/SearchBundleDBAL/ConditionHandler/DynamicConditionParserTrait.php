@@ -66,7 +66,11 @@ trait DynamicConditionParserTrait
             throw new \RuntimeException("Could not retrieve columns from '$table'");
         }
 
-        if (!array_key_exists($field, $columns)) {
+        $names = array_map(function (\Doctrine\DBAL\Schema\Column $column) {
+            return strtolower($column->getName());
+        }, $columns);
+
+        if (!array_key_exists(strtolower($field), $names)) {
             throw new \InvalidArgumentException("Invalid column name specified '$field'", 1);
         }
 
@@ -85,7 +89,7 @@ trait DynamicConditionParserTrait
             Condition::OPERATOR_CONTAINS,
         ];
 
-        //Normalize with strtoupper in case of non-algorithmic comparisons NOT IN, IN, STARTS WITH
+        // Normalize with strtoupper in case of non-algorithmic comparisons NOT IN, IN, STARTS WITH
         $operator = strtoupper(trim($operator));
 
         /*
