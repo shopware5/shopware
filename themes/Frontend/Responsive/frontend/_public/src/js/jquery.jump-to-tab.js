@@ -14,7 +14,11 @@
         defaults: {
             contentCls: 'has--content',
             tabDetail: '.tab-menu--product',
-            tabCrossSelling: '.tab-menu--cross-selling'
+            tabCrossSelling: '.tab-menu--cross-selling',
+            btnJumpSelectors: [
+                '.product--rating-link',
+                '.link--publish-comment'
+            ]
         },
 
         init: function () {
@@ -35,7 +39,19 @@
                 me.jumpToTab(index, $tab);
             }
         },
-
+        
+        /**
+         * Destroys the plugin by removing all events of the plugin.
+         *
+         * @public
+         * @method destroy
+         */        
+        destroy: function() {
+            var me = this;
+            me.$el.off(this.getEventName('click'), me.opts.btnJumpSelectors.join(', '));
+            me._destroy();
+        },
+        
         resizeCrossSelling: function () {
             var me = this,
                 $container;
@@ -54,7 +70,7 @@
         registerEvents: function () {
             var me = this;
 
-            me.$el.on(me.getEventName('click'), '.product--rating-link, .link--publish-comment', $.proxy(me.onJumpToTab, me));
+            me.$el.on(me.getEventName('click'), me.opts.btnJumpSelectors.join(', '), $.proxy(me.onJumpToTab, me));
 
             $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
         },
