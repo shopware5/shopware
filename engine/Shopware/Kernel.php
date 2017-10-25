@@ -59,6 +59,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -645,6 +646,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());
+        $container->addCompilerPass(new RegisterListenersPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 
