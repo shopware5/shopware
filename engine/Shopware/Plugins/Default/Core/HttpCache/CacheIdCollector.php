@@ -228,6 +228,6 @@ class CacheIdCollector
     {
         $staticSiteId = $request->getParam('sCustom');
 
-        return ['s' . $staticSiteId];
+        return ['s' . (int) $staticSiteId];
     }
 }
