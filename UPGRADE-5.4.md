@@ -11,6 +11,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Updated mPDF to v6.1.4 and included it via composer
+* Globally replaced the wrong spelled word "erhälst" with the correct "erhältst" in german translations
+
 
 ### Removals
 
