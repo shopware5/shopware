@@ -53,11 +53,9 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         $request = $args->getSubject()->Request();
-        $response = $args->getSubject()->Response();
         $view = $args->getSubject()->View();
 
-        if (!$request->isDispatched() || $response->isException()
-            || $request->getModuleName() != 'frontend'
+        if (!$request->isDispatched() || $request->getModuleName() != 'frontend'
             || !$view->hasTemplate()
         ) {
             return;
