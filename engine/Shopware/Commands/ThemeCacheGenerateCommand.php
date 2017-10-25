@@ -62,7 +62,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
         $repository = $this->container->get('models')->getRepository(Shop::class);
 
         $shopIds = $input->getOption('shopId');
-        $current = (bool)$input->getOption('current');
+        $current = (bool) $input->getOption('current');
 
         /** @var Shop[] $shopsWithThemes */
         $shopsWithThemes = $repository->getShopsWithThemes()->getResult(AbstractQuery::HYDRATE_OBJECT);
@@ -83,23 +83,24 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
         $compiler = $this->container->get('theme_compiler');
 
         foreach ($shopsWithThemes as $shop) {
-            if (!empty($current) === true) {
-                $timestamp = Shopware()->Container()->get('theme_timestamp_persistor')->getCurrentTimestamp($shop->getId());
-                $output->writeln(sprintf('Generating theme cache for shop "%s" from current timestamp %s', $shop->getName(), $timestamp));
-                $compiler->compilecurrent($shop);
-            } else {
+            if (!$current) {
                 $output->writeln(sprintf('Generating new theme cache for shop "%s" ...', $shop->getName()));
                 $compiler->compile($shop);
+                continue;
             }
+
+            $timestamp = $this->container->get('theme_timestamp_persistor')->getCurrentTimestamp($shop->getId());
+            $output->writeln(sprintf('Generating theme cache for shop "%s" from current timestamp %s', $shop->getName(), $timestamp));
+            $compiler->recompile($shop);
+        }
+
+        if ($current) {
+            return;
         }
 
         /** @var $cacheManager CacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
-        if (!empty($current) === true) {
-            return;
-        } else {
-            $output->writeln('Clearing HTTP cache ...');
-            $cacheManager->clearHttpCache();
-        }
+        $output->writeln('Clearing HTTP cache ...');
+        $cacheManager->clearHttpCache();
     }
 }
