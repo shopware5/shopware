@@ -12,9 +12,9 @@
     </parameters>
 
     <services>
-        <service id="application"     synthetic="true" />
-        <service id="PasswordEncoder" synthetic="true" />
-        <service id="db_connection"   synthetic="true" />
+        <service id="application" class="Shopware" synthetic="true" />
+        <service id="PasswordEncoder" class="Shopware\Components\Password\Manager" synthetic="true" />
+        <service id="db_connection" class="PDO" synthetic="true" />
 
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>
@@ -696,6 +696,5 @@
         <service id="shopware.model.search_builder" class="Shopware\Components\Model\SearchBuilder">
             <argument id="shopware_searchdbal.search_term_helper" type="service"/>
         </service>
-
     </services>
 </container>
