@@ -73,7 +73,7 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
 
         foreach ($sliderList as &$slider) {
             if (!empty($slider['link']) && !preg_match('/^(http|https):\/\//', $slider['link'])) {
-                $slider['link'] = $context->getBaseUrl() . $slider['link'];
+                $slider['link'] = $context->getShop()->getUrl() . $slider['link'];
             }
         }
 
