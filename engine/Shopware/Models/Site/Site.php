@@ -55,11 +55,11 @@ class Site extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active = false;
+    private $active = true;
 
     /**
      * @var string
@@ -218,7 +218,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getActive()
     {
@@ -226,7 +226,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param int $active
+     * @param bool $active
      */
     public function setActive($active)
     {
