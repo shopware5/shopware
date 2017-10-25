@@ -48,7 +48,7 @@ class Element extends ModelEntity
     private $id;
 
     /**
-     * Contains the name of the document.
+     * ID of the owning Document.
      *
      * @var int
      * @ORM\Column(name="documentID", type="integer", nullable=false)
@@ -56,7 +56,7 @@ class Element extends ModelEntity
     private $documentId = '';
 
     /**
-     * Contains the name of the document.
+     * Name of the Element
      *
      * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
@@ -64,7 +64,7 @@ class Element extends ModelEntity
     private $name = '';
 
     /**
-     * Contains the name of the document.
+     * CSS style of the Element
      *
      * @var string
      * @ORM\Column(name="style", type="string", nullable=false)
@@ -72,7 +72,7 @@ class Element extends ModelEntity
     private $style = '';
 
     /**
-     * Contains the name of the document.
+     * Value of the Element
      *
      * @var string
      * @ORM\Column(name="value", type="string", nullable=false)
@@ -80,12 +80,14 @@ class Element extends ModelEntity
     private $value = '';
 
     /**
-     * Owning Side
+     * OWNING SIDE
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="elements")
+     * The owning document
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="Elements")
      * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
      *
-     * @var \Shopware\Models\Document\Document
+     * @var Document
      */
     private $document;
 
@@ -100,11 +102,11 @@ class Element extends ModelEntity
     }
 
     /**
-     * Gets the name of the document.
+     * Gets the name of the Element
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setName($name)
     {
@@ -114,7 +116,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * Sets the documents name.
+     * Sets the Element name.
      *
      * @return string
      */
@@ -124,11 +126,11 @@ class Element extends ModelEntity
     }
 
     /**
-     * Sets the value for an element.
+     * Sets the value for the Element.
      *
      * @param string $value
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setValue($value)
     {
@@ -138,7 +140,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * Gets the value for an element.
+     * Gets the value for an Element.
      *
      * @return string
      */
@@ -148,11 +150,11 @@ class Element extends ModelEntity
     }
 
     /**
-     * Sets the style for
+     * Sets the CSS style for the Element
      *
      * @param string $style
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setStyle($style)
     {
@@ -162,6 +164,8 @@ class Element extends ModelEntity
     }
 
     /**
+     * Gets the CSS style for the Element
+     *
      * @return string
      */
     public function getStyle()
@@ -170,9 +174,11 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Document\Document $document
+     * Sets the Document for this Element
      *
-     * @return \Shopware\Models\Document\Element
+     * @param Document $document
+     *
+     * @return Element
      */
     public function setDocument($document)
     {
@@ -182,7 +188,9 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Document\Document
+     * Gets the Document for this Element
+     *
+     * @return Document
      */
     public function getDocument()
     {
