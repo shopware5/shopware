@@ -528,35 +528,37 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_positions->offsetSet($key, $position);
         }
         
-        $parameters = $this->getParameters();
-        $parameters = Shopware()->Events()->filter('DOCUMENT_ORDER_POSITIONS_PROCESSED', $parameters, ['subject' => $this, 'params' => $parameters]);
+        $parameters = Shopware()->Container()->get('events')->filter(
+            'Shopware_Models_Order_Document_Filter_Parameters',
+            $this->getParameters(),
+            ['subject' => $this]
+        );
+
         $this->setParameters($parameters);
     }
    
     /**
-     * Get class parameters
-     * @return array $parameters
+     * @return array
      */
     private function getParameters()
     {
-        $parameters['positions'] = $this->_positions;
-        $parameters['amountNetto'] = $this->_amountNetto;
-        $parameters['amount'] = $this->_amount;
-        $parameters['discount'] = $this->_discount;
-        $parameters['tax'] = $this->_tax;
-        $parameters['net'] = $this->_net;
-        $parameters['shipping'] = $this->_shipping;
-        $parameters['user'] = $this->_user;
-
-        return $parameters;
+        return [
+            'positions' => $this->_positions,
+            'amountNetto' => $this->_amountNetto,
+            'amount' => $this->_amount,
+            'discount' => $this->_discount,
+            'tax' => $this->_tax,
+            'net' => $this->_net,
+            'shipping' => $this->_shipping,
+            'user' => $this->_user,
+        ];
     }
 
     /**
-     * Set class parameters
-     * @param  $parameters
+     * @param array $parameters
      * @return void
      */
-    private function setParameters($parameters)
+    private function setParameters(array $parameters)
     {
         $this->_positions = $parameters['positions'];
         $this->_amountNetto = $parameters['amountNetto'];
