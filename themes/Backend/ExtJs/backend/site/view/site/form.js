@@ -130,20 +130,21 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 name: 'parentId',
                 xtype: 'hidden'
             },
-            {
-                fieldLabel: '{s name=formContentFieldActiveLabel}Active{/s}',
-                xtype: 'checkbox',
-                inputValue: true,
-                uncheckedValue: false,
-                name: 'active',
-                anchor:'100%'
-            },
+
             {
                 fieldLabel: '{s name=formContentFieldDescriptionLabel}Description{/s}',
                 xtype: 'textfield',
                 emptyText: '{s name=formContentFieldDescriptionEmptyText}Page name{/s}',
                 name: 'description',
                 allowBlank: false,
+                anchor:'100%'
+            },
+            {
+                fieldLabel: '{s name=formContentFieldActiveLabel}Active{/s}',
+                xtype: 'checkbox',
+                inputValue: true,
+                uncheckedValue: false,
+                name: 'active',
                 anchor:'100%'
             },
             {
