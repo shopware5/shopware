@@ -22,27 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Order\Document;
+namespace   Shopware\Models\Order\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Shopware order document type model represents a single order document.
- * <br>
- * The Shopware order document type model represents a row of the core_documents table.
- * The core_documents table has the follows indices:
- * <code>
- * </code>
+ * Shopware document model represents a document.
  *
  * @ORM\Entity
  * @ORM\Table(name="s_core_documents")
+ * @ORM\HasLifecycleCallbacks
  */
 class Type extends ModelEntity
 {
     /**
-     * @var int
+     * The id property is an identifier property which means
+     * doctrine associations can be defined over this field
      *
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -50,63 +49,88 @@ class Type extends ModelEntity
     private $id;
 
     /**
+     * Contains the name of the document.
+     *
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", nullable=false)
      */
-    private $name;
+    private $name = '';
 
     /**
+     * Contains the template-file of the document.
+     *
      * @var string
-     *
-     * @ORM\Column(name="template", type="string", length=255, nullable=false)
+     * @ORM\Column(name="template", type="string", nullable=false)
      */
-    private $template;
+    private $template = '';
 
     /**
+     * Contains the numbers of the document.
+     *
      * @var string
-     *
-     * @ORM\Column(name="numbers", type="string", length=25, nullable=false)
+     * @ORM\Column(name="numbers", type="string", nullable=false)
      */
-    private $numbers;
+    private $numbers = '';
 
     /**
-     * @var int
+     * Contains the left-value of the document.
      *
-     * @ORM\Column(name="left", type="integer", nullable=false)
+     * @var int
+     * @ORM\Column(name="`left`", type="integer", nullable=false)
      */
-    private $left;
+    private $left = 0;
 
     /**
-     * @var int
+     * Contains the right-value of the document.
      *
-     * @ORM\Column(name="right", type="integer", nullable=false)
+     * @var int
+     * @ORM\Column(name="`right`", type="integer", nullable=false)
      */
-    private $right;
+    private $right = 0;
 
     /**
-     * @var int
+     * Contains the top-value of the document.
      *
+     * @var int
      * @ORM\Column(name="top", type="integer", nullable=false)
      */
-    private $top;
+    private $top = 0;
 
     /**
-     * @var int
+     * Contains the bottom-value of the document.
      *
+     * @var int
      * @ORM\Column(name="bottom", type="integer", nullable=false)
      */
-    private $bottom;
+    private $bottom = 0;
 
     /**
-     * @var int
+     * Contains the pageBreak-value of the document.
      *
+     * @var int
      * @ORM\Column(name="pagebreak", type="integer", nullable=false)
      */
-    private $pageBreak;
+    private $pageBreak = 0;
 
     /**
-     * Get id
+     * INVERSED SIDE
+     *
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Document\Element", mappedBy="document", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="documentID")
+     */
+    private $elements;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->elements = new ArrayCollection();
+    }
+
+    /**
+     * Getter function for the unique id identifier property
      *
      * @return int
      */
@@ -116,7 +140,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Set name
+     * Gets the name of the document.
      *
      * @param string $name
      *
@@ -130,7 +154,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Get name
+     * Sets the documents name.
      *
      * @return string
      */
@@ -140,7 +164,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Set template
+     * Sets the documents template-file.
      *
      * @param string $template
      *
@@ -154,7 +178,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Get template
+     * Gets the name of the template-file.
      *
      * @return string
      */
@@ -164,7 +188,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Set numbers
+     * Sets the documents numbers.
      *
      * @param string $numbers
      *
@@ -178,7 +202,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Get numbers
+     * Gets the numbers of the document.
      *
      * @return string
      */
@@ -188,79 +212,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Set left
-     *
-     * @param int $left
-     *
-     * @return Type
-     */
-    public function setLeft($left)
-    {
-        $this->left = $left;
-
-        return $this;
-    }
-
-    /**
-     * Get left
-     *
-     * @return int
-     */
-    public function getLeft()
-    {
-        return $this->left;
-    }
-
-    /**
-     * Set right
-     *
-     * @param int $right
-     *
-     * @return Type
-     */
-    public function setRight($right)
-    {
-        $this->right = $right;
-
-        return $this;
-    }
-
-    /**
-     * Get right
-     *
-     * @return int
-     */
-    public function getRight()
-    {
-        return $this->right;
-    }
-
-    /**
-     * Set top
-     *
-     * @param int $top
-     *
-     * @return Type
-     */
-    public function setTop($top)
-    {
-        $this->top = $top;
-
-        return $this;
-    }
-
-    /**
-     * Get top
-     *
-     * @return int
-     */
-    public function getTop()
-    {
-        return $this->top;
-    }
-
-    /**
-     * Set bottom
+     * Sets the bottom-value for the document.
      *
      * @param int $bottom
      *
@@ -274,7 +226,7 @@ class Type extends ModelEntity
     }
 
     /**
-     * Get bottom
+     * Gets the bottom-value of the document.
      *
      * @return int
      */
@@ -284,7 +236,31 @@ class Type extends ModelEntity
     }
 
     /**
-     * Set pageBreak
+     * Sets the left-value for the document.
+     *
+     * @param int $left
+     *
+     * @return Type
+     */
+    public function setLeft($left)
+    {
+        $this->left = $left;
+
+        return $this;
+    }
+
+    /**
+     * Gets the left-value of the document.
+     *
+     * @return int
+     */
+    public function getLeft()
+    {
+        return $this->left;
+    }
+
+    /**
+     * Sets the pageBreak-value for the document.
      *
      * @param int $pageBreak
      *
@@ -298,12 +274,84 @@ class Type extends ModelEntity
     }
 
     /**
-     * Get pageBreak
+     * Gets the pageBreak-value of the document.
      *
      * @return int
      */
     public function getPageBreak()
     {
         return $this->pageBreak;
+    }
+
+    /**
+     * Sets the right-value for the document.
+     *
+     * @param int $right
+     *
+     * @return Type
+     */
+    public function setRight($right)
+    {
+        $this->right = $right;
+
+        return $this;
+    }
+
+    /**
+     * Gets the right-value of the document.
+     *
+     * @return int
+     */
+    public function getRight()
+    {
+        return $this->right;
+    }
+
+    /**
+     * Sets the top-value for the document.
+     *
+     * @param int $top
+     *
+     * @return Type
+     */
+    public function setTop($top)
+    {
+        $this->top = $top;
+
+        return $this;
+    }
+
+    /**
+     * Gets the top-value of the document.
+     *
+     * @return int
+     */
+    public function getTop()
+    {
+        return $this->top;
+    }
+
+    /**
+     * Sets the document elements (document boxes)
+     *
+     * @param ArrayCollection $elements
+     *
+     * @return Type
+     */
+    public function setElements($elements)
+    {
+        $this->elements = $elements;
+
+        return $this;
+    }
+
+    /**
+     * Gets the document elements (document boxes)
+     *
+     * @return ArrayCollection
+     */
+    public function getElements()
+    {
+        return $this->elements;
     }
 }

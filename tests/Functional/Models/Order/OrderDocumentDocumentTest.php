@@ -1,4 +1,6 @@
 <?php
+use Shopware\Components\Model\ModelManager;
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -71,5 +73,24 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
             // Check that document was actually created
             $this->assertNotNull($document);
         }
+    }
+
+    /**
+     * Test whether new instances of Document and Type can be persisted
+     */
+    public function testCreateNewDocumentDocument()
+    {
+        /** @var ModelManager $modelManager */
+        $modelManager = Shopware()->Container()->get('models');
+
+        $documentDocument = new Shopware\Models\Document\Document();
+        $modelManager->persist($documentDocument);
+        $modelManager->flush($documentDocument);
+        self::assertGreaterThan(0, $documentDocument->getId());
+
+        $orderDocumentType = new Shopware\Models\Order\Document\Type();
+        $modelManager->persist($orderDocumentType);
+        $modelManager->flush($orderDocumentType);
+        self::assertGreaterThan(0, $orderDocumentType->getId());
     }
 }
