@@ -49,7 +49,6 @@ use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberComp
 use Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
-use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Plugin;

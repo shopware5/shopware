@@ -39,7 +39,7 @@ class RouterCompilerPass implements CompilerPassInterface
     {
         $this->replaceArgumentWithTaggedServices($container, 'router', 'router.matcher', 1);
         $this->replaceArgumentWithTaggedServices($container, 'router', 'router.generator', 2);
-        $this->replaceArgumentWithTaggedServices($container, 'router', 'router.prefilter', 3);
-        $this->replaceArgumentWithTaggedServices($container, 'router', 'router.postfilter', 4);
+        $this->replaceArgumentWithTaggedServices($container, 'router', 'router.pre_filter', 3);
+        $this->replaceArgumentWithTaggedServices($container, 'router', 'router.post_filter', 4);
     }
 }
