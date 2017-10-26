@@ -94,23 +94,23 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
         /** @var Repository $productFeedRepository */
         $productFeedRepository = $this->container->get('models')->getRepository(ProductFeed::class);
-        if(empty($feedID)) {
-          $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
+        if (empty($feedID)) {
+            $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 
-          /** @var $feedModel ProductFeed */
-          foreach ($activeFeeds as $feedModel) {
-              if ($feedModel->getInterval() == 0) {
-                  continue;
-              }
-              $this->generate_feed($export, $feedModel);
-          }
+            /** @var $feedModel ProductFeed */
+            foreach ($activeFeeds as $feedModel) {
+                if (0 == $feedModel->getInterval()) {
+                    continue;
+                }
+                $this->generate_feed($export, $feedModel);
+            }
         } else {
-          $productFeed = $productFeedRepository->find((int) $feedID);
-          if(!empty($productFeed)) {
-            $this->generate_feed($export, $productFeed);
-          } else {
-            throw new \RuntimeException(sprintf("Unable to load feed with id ()%s)\n", $feedID));
-          }
+            $productFeed = $productFeedRepository->find((int) $feedID);
+            if (!empty($productFeed)) {
+                $this->generate_feed($export, $productFeed);
+            } else {
+                throw new \RuntimeException(sprintf("Unable to load feed with id ()%s)\n", $feedID));
+            }
         }
 
         $this->output->writeln(sprintf('Product feed cache successfully refreshed'));
@@ -118,18 +118,18 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
     private function generate_feed($export, ProductFeed $feedModel)
     {
-      $this->output->writeln(sprintf('Refreshing cache for ' . $feedModel->getName()));
+        $this->output->writeln(sprintf('Refreshing cache for ' . $feedModel->getName()));
 
-      $export->sFeedID = $feedModel->getId();
-      $export->sHash = $feedModel->getHash();
-      $export->sInitSettings();
-      $export->sSmarty = clone $this->sSmarty;
-      $export->sInitSmarty();
+        $export->sFeedID = $feedModel->getId();
+        $export->sHash = $feedModel->getHash();
+        $export->sInitSettings();
+        $export->sSmarty = clone $this->sSmarty;
+        $export->sInitSmarty();
 
-      $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
+        $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
 
-      $feedCachePath = $this->cacheDir . '/' . $fileName;
-      $handleResource = fopen($feedCachePath, 'w');
-      $export->executeExport($handleResource);
+        $feedCachePath = $this->cacheDir . '/' . $fileName;
+        $handleResource = fopen($feedCachePath, 'w');
+        $export->executeExport($handleResource);
     }
 }
