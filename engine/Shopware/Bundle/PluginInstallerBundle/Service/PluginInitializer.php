@@ -99,7 +99,7 @@ class PluginInitializer
             $pluginsAvailable[$pluginName] = compact('pluginFile', 'className', 'isActive');
         }
 
-        foreach ($pluginsAvailable as $name => $config) {
+        foreach ($pluginsAvailable as $pluginName => $config) {
             /**
              * @var string $className
              * @var string $pluginFile
