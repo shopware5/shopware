@@ -650,7 +650,7 @@
                 return;
             }
 
-            me.$parent.submit();
+            me.$searchField.parent().submit();
         },
 
         /**
