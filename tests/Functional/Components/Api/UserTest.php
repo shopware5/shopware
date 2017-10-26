@@ -265,7 +265,7 @@ class UserTest extends TestCase
     {
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => __FUNCTION__ . uniqid(rand()),
+            'username' => 'user' . uniqid(rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'roleId' => 1,
@@ -279,7 +279,7 @@ class UserTest extends TestCase
     {
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => __FUNCTION__ . uniqid(rand()),
+            'username' => 'user' . uniqid(rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'role' => 'local_admins',
@@ -293,7 +293,7 @@ class UserTest extends TestCase
     {
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => __FUNCTION__ . uniqid(rand()),
+            'username' => 'user' . uniqid(rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'role' => 'local_admins',
@@ -308,7 +308,7 @@ class UserTest extends TestCase
     {
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => __FUNCTION__ . uniqid(rand()),
+            'username' => 'user' . uniqid(rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'role' => 'local_admins',

@@ -61,7 +61,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
     {
         if (!$this->Request()->getParam('password')) {
             $passwordPlain = $this->resource->generatePassword();
-            $this->Request()->setParam('password', $passwordPlain);
+            $this->Request()->setPost('password', $passwordPlain);
         }
 
         $user = $this->resource->create($this->Request()->getPost());
