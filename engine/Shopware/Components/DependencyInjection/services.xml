@@ -418,6 +418,7 @@
 
         <service id="ErrorSubscriber" class="Shopware\Components\ErrorSubscriber">
             <tag name="shopware.event_subscriber" />
+            <argument type="service" id="corelogger"/>
         </service>
 
         <service id="config_writer" class="Shopware\Components\ConfigWriter">

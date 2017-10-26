@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Subscriber to catch possibly occurring exceptions in the controller.
@@ -45,6 +46,16 @@ class ErrorSubscriber implements SubscriberInterface
      * @var int
      */
     private $exceptionCountAtFirstEncounter = 0;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * {@inheritdoc}
@@ -77,6 +88,13 @@ class ErrorSubscriber implements SubscriberInterface
                 // Exception thrown by error handler; tell the front controller to throw it
                 $front->throwExceptions(true);
                 throw array_pop($exceptions);
+            }
+
+            if (is_array($exceptions)) {
+                $last = array_pop($exceptions);
+                if ($last instanceof \Exception) {
+                    $this->logger->critical($last->getMessage());
+                }
             }
 
             return;
