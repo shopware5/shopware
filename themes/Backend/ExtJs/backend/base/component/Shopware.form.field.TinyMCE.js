@@ -99,18 +99,17 @@ Ext.define('Shopware.form.field.TinyMCE',
     uses: [ 'Shopware.MediaManager.MediaSelection' ],
 
     /**
+     * Indicates if the TinyMCE editor is initialized
+     *
+     * @boolean
+     */
+    initialized: false,
+
+    /**
      * List of static methods, properties and attributes for this class
      * @object
      */
     statics: {
-
-        /**
-         * Indicates if the TinyMCE editor is initialized
-         *
-         * @static
-         * @boolean
-         */
-        initialized: false,
 
         /**
          * Global configuration for the TinyMCE editor.
@@ -357,7 +356,9 @@ Ext.define('Shopware.form.field.TinyMCE',
         // (e.g. in order to click the save button in the ExtJS window).
         // This solution still as some drawbacks as it image-resize-actions won't trigger a undo-step usually.
         me.tinymce.onInit.add(function(ed, evt) {
-            me.statics.initialized = true;
+            me.initialized = true;
+
+            me.setValue(ed.getContent());
 
             var dom = ed.dom,
                 doc = ed.getDoc(),
@@ -642,10 +643,13 @@ Ext.define('Shopware.form.field.TinyMCE',
      */
     setValue: function(value, editorChange) {
         var me = this;
-        me.callParent(arguments);
 
-        if(!me.statics.initialized) {
-            return false;
+        if(!me.initialized) {
+            value = me.replaceSmartyPluginWithImagePaths(value);
+            me.setRawValue(me.valueToRaw(value));
+            me.mixins.field.setValue.call(me, value);
+
+            return me;
         }
 
         if(!editorChange) {
@@ -656,6 +660,8 @@ Ext.define('Shopware.form.field.TinyMCE',
                 me.setEditorValue(me.emptyText, me);
             }
         }
+
+        me.callParent(arguments);
 
         return me;
     },
@@ -671,7 +677,7 @@ Ext.define('Shopware.form.field.TinyMCE',
         var me = this;
         me.callParent(arguments);
 
-        if(!me.statics.initialized) {
+        if(!me.initialized) {
             return false;
         }
 
@@ -688,7 +694,7 @@ Ext.define('Shopware.form.field.TinyMCE',
     setEditorValue: function(value, scope) {
         var me = scope;
 
-        if(!me.statics.initialized || !me.tinymce) {
+        if(!me.initialized || !me.tinymce) {
 
             me.on('afterrendereditor', function() {
                 me.setEditorValue(value, me);
