@@ -102,6 +102,7 @@ class Application extends BaseApplication
             $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . ' in ' . $e->getFile(), 'error'));
             $this->skipDatabase = true;
         }
+        $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
 
         if (!$this->commandsRegistered) {
             $this->registerCommands($output);

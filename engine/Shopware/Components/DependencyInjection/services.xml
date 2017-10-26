@@ -697,5 +697,6 @@
             <argument id="shopware_searchdbal.search_term_helper" type="service"/>
         </service>
 
+        <service id="event_dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     </services>
 </container>
