@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -19,31 +20,22 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Component
- * @version    $Id$
- * @author shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
-    },
+/**
+ * @category  Shopware
+ * @package   Shopware\Tests
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class Shopware_Tests_Models_Album_SettingsTest extends PHPUnit_Framework_TestCase
+{
+    public function testGetThumbnailSizeReturnValue()
+    {
+        $settings = new \Shopware\Models\Media\Settings();
+        $settings->setThumbnailSize([]);
 
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return (value === "0000-00-00") ? null : new Date(value);
-        } else {
-            return value;
-        }
+        $size = $settings->getThumbnailSize();
+
+        $this->assertEquals([], $size);
     }
-});
+}

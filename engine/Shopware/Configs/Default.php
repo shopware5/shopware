@@ -199,4 +199,8 @@ return array_replace_recursive([
         'use_trans_sid' => 0,
         'locking' => false,
     ],
+    'template_security' => [
+        'php_modifiers' => include __DIR__ . '/smarty_functions.php',
+        'php_functions' => include __DIR__ . '/smarty_functions.php',
+    ],
 ], $customConfig);

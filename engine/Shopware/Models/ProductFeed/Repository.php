@@ -148,7 +148,8 @@ class Repository extends ModelRepository
                 ->leftJoin('feeds.categories', 'categories')
                 ->leftJoin('feeds.suppliers', 'suppliers')
                 ->leftJoin('feeds.articles', 'articles')
-                ->where($builder->expr()->eq('feeds.id', '?1'))->setParameter(1, $feedId);
+                ->where('feeds.id = ?1')
+                ->setParameter(1, $feedId);
 
         return $builder;
     }

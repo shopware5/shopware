@@ -2,13 +2,52 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+# 5.2.27
+
+[View all changes from v5.2.26...v5.2.27](https://github.com/shopware/shopware/compare/v5.2.26...v5.2.27)
+
+* Added config check to disable the `Tell a friend` page if it is disabled via config.
+* Fixed id collision in `themes/Backend/ExtJs/backend/base/component/Shopware.ModuleManager.js`
+* Added guetzli media optimizer
+* Added new event `Shopware_Plugins_HttpCache_ContextCookieValue` to modify HttpCache Context-Cookie.
+* Added support for uploading media with ftps in Rest-API
+* Added `{$smarty.block.parent}` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
+* Added new block `frontend_checkout_cart_item_details_essential_features` to `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`.
+* Added new block `frontend_checkout_confirm_product_table_content` around table in `themes/Frontend/Bare/frontend/checkout/confirm.tpl`.
+* Individual voucher codes are now searchable in voucher overview
+
+# 5.2.26
+
+[View all changes from v5.2.25...v5.2.26](https://github.com/shopware/shopware/compare/v5.2.25...v5.2.26)
+
+## 5.2.25
+
+[View all changes from v5.2.24...v5.2.25](https://github.com/shopware/shopware/compare/v5.2.24...v5.2.25)
+
+* Added notify event `Shopware_Modules_Basket_AddArticle_Added` in `engine/Shopware/Core/sBasket.php`
+* The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
+* Removed duplicate block and added more precise ones in `themes/Frontend/Bare/frontend/checkout/ajax_cart.tpl`
+
+# 5.2.24
+
+[View all changes from v5.2.23...v5.2.24](https://github.com/shopware/shopware/compare/v5.2.23...v5.2.24)
+
+* Fixed custom datefield format for articles
+* Fixed styling of image slider on tablet landscape view
+
 ## 5.2.23
+
+[View all changes from v5.2.22...v5.2.23](https://github.com/shopware/shopware/compare/v5.2.22...v5.2.23)
+
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
 * Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
 * Added default `limit` of 100 in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyIndexer::populate`
 * Added a base store for `Shopware.apps.Base.model.DocType`
 
 ## 5.2.22
+
+[View all changes from v5.2.21...v5.2.22](https://github.com/shopware/shopware/compare/v5.2.21...v5.2.22)
+
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
 * Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
@@ -345,6 +384,7 @@ There must be at least one option tag and inside each option tag where must be a
     * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
 * Removed synchronizing of plugin information column `changes`
 * Allow root menu elements for plugins. Added attribute `isRootMenu` in `menu.xml` Example: `<entry isRootMenu="true">`
+* Normalized the return value of `Album\Settings` getThumbnailSize to return a empty array instead of a array with an empty string when no size is active
 
 ## 5.2.3
 

@@ -204,6 +204,10 @@ class Settings extends ModelEntity
      */
     public function getThumbnailSize()
     {
+        if (empty($this->thumbnailSize)) {
+            return [];
+        }
+
         return explode(';', $this->thumbnailSize);
     }
 

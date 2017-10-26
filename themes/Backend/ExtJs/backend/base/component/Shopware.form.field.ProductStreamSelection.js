@@ -30,7 +30,7 @@
 //{block name="backend/base/component/Shopware.form.field.ProductStreamSelection"}
 Ext.define('Shopware.form.field.ProductStreamSelection', {
 
-    extend: 'Shopware.form.field.PagingComboBox',
+    extend: 'Shopware.form.field.SingleSelection',
 
     alias: ['widget.productstreamselection', 'widget.streamselect'],
 
@@ -39,10 +39,6 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
     valueField: 'id',
 
     displayField: 'name',
-
-    pageSize: 15,
-
-    triggerAction: 'all',
 
     labelWidth: 155,
 
@@ -70,43 +66,11 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
         me.fieldLabel = me.fieldLabel || me.snippets.fields.streamFieldLabel;
         me.emptyText = me.emptyText || me.snippets.fields.streamFieldEmptyText;
 
-        me.store = me.createStore();
-
-        me.loadStore();
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        me.store = factory.createEntitySearchStore("Shopware\\Models\\ProductStream\\ProductStream");
+        me.searchStore = factory.createEntitySearchStore("Shopware\\Models\\ProductStream\\ProductStream");
 
         me.callParent(arguments);
-
-        me.on('expand', Ext.bind(me.loadStore, me));
-        me.on('blur', Ext.bind(me.checkValue, me));
-    },
-
-    /**
-     * Loads the product stream store and
-     * selects the current selected stream
-     */
-    loadStore: function() {
-        var me = this;
-
-        me.store.load({
-            callback: function() {
-                var record = me.store.getById(~~(1 * me.getValue()));
-                me.select(record);
-            }
-        });
-    },
-
-    /**
-     * The field has to return an empty string instead of null
-     * so the field can be cleared for updating the record.
-     */
-    checkValue: function() {
-        var me = this,
-            value = me.getValue(),
-            fieldValue = me.inputEl.getValue();
-
-        if (value === null || fieldValue === null || !fieldValue.length) {
-            me.setValue('');
-        }
     },
 
     /**
@@ -141,41 +105,7 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
         iconCell.insertBefore(inputCell);
 
         me.callParent(arguments);
-    },
-
-    /**
-     * Fix the position of the picker element because of the stream icon.
-     *
-     * @returns Ext.form.field.Picker
-     */
-    createPicker: function() {
-        var me = this,
-            picker = me.callParent(arguments);
-
-        Ext.apply(picker, {
-            margin: '2px 0 0 -26px'
-        });
-
-        return picker;
-    },
-
-    /**
-     * Creates the stream store which will be used for the combo box.
-     *
-     * @public
-     * @return Ext.data.Store
-     */
-    createStore: function() {
-        var me = this,
-            store = Ext.create('Shopware.store.Search', {
-                fields: ['id', 'name', 'description'],
-                pageSize: me.pageSize,
-                configure: function() {
-                    return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
-                }
-            });
-
-        return store;
     }
 });
+
 //{/block}

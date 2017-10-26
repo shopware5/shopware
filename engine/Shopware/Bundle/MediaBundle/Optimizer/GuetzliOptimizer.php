@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -19,31 +20,33 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Component
- * @version    $Id$
- * @author shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
-    },
+namespace Shopware\Bundle\MediaBundle\Optimizer;
 
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return (value === "0000-00-00") ? null : new Date(value);
-        } else {
-            return value;
-        }
+class GuetzliOptimizer extends BinaryOptimizer
+{
+    /**
+     * @inheritdoc
+     */
+    public function getCommand()
+    {
+        return 'guetzli';
     }
-});
+
+    /**
+     * @inheritdoc
+     */
+    public function getSupportedMimeTypes()
+    {
+        return ['image/jpeg', 'image/jpg'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCommandArguments($filepath)
+    {
+        return [$filepath];
+    }
+}

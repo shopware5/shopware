@@ -635,7 +635,7 @@ class LegacyStructConverter
      *
      * @return array
      */
-    public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
+    public function convertMediaStruct(StoreFrontBundle\Struct\Media $media = null)
     {
         if (!$media instanceof StoreFrontBundle\Struct\Media) {
             return [];

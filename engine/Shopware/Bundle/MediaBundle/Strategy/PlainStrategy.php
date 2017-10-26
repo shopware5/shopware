@@ -38,7 +38,7 @@ class PlainStrategy implements StrategyInterface
         $path = str_replace('//', '/', $path);
 
         // remove everything before /media/...
-        preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
+        preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
 
         if (!empty($matches)) {
             return $matches[2] . '/' . $matches[3];
@@ -60,7 +60,7 @@ class PlainStrategy implements StrategyInterface
             return '';
         }
 
-        preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
+        preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
 
         if (!empty($matches)) {
             $path = $matches[2] . '/' . $matches[3];
@@ -79,6 +79,6 @@ class PlainStrategy implements StrategyInterface
      */
     public function isEncoded($path)
     {
-        return (bool) preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
+        return (bool) preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
     }
 }

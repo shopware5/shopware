@@ -995,10 +995,8 @@ class sRewriteTable
         if ($offset !== null) {
             $criteria->offset = $offset;
         }
-        if ($limit !== null) {
-            $criteria->limit = $limit;
-        }
-
+        
+        $criteria->limit = $limit;
         $result = $repo->search($criteria);
         $suppliers = $result->getData();
         $ids = array_column($suppliers, 'id');

@@ -765,6 +765,7 @@ class sOrder
         $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', [
             'subject' => $this,
             'details' => $this->sBasketData['content'],
+            'orderId' => $orderID,
         ]);
 
         // Save Billing and Shipping-Address to retrace in future

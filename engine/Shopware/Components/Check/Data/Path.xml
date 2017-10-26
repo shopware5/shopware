@@ -24,6 +24,7 @@
     <file><name>media/music/</name></file>
     <file><name>media/pdf/</name></file>
     <file><name>media/unknown/</name></file>
+    <file><name>media/vector/</name></file>
     <file><name>media/video/</name></file>
     <file><name>media/temp/</name></file>
 </files>
