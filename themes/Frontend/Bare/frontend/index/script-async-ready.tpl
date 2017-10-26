@@ -2,7 +2,7 @@
 <script type="text/javascript">
     document.getElementById('main-script').addEventListener('load', function() {
 
-        if (!asyncCallbacks) {
+        if (typeof asyncCallbacks === 'undefined') {
             return false;
         }
 
