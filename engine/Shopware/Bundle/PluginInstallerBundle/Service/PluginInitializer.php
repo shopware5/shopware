@@ -64,6 +64,7 @@ class PluginInitializer
     {
         $plugins = [];
         $shopwarePlugins = [];
+        $pluginsAvailable = [];
 
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
@@ -94,11 +95,21 @@ class PluginInitializer
             $className = '\\' . $namespace . '\\' . $pluginName;
             $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
+            $isActive                      = in_array($pluginName, $shopwarePlugins, true);
+            $pluginsAvailable[$pluginName] = compact('pluginFile', 'className', 'isActive');
+        }
+
+        foreach ($pluginsAvailable as $name => $config) {
+            /**
+             * @var string $className
+             * @var string $pluginFile
+             * @var bool   $isActive
+             */
+            extract($config);
+
             if (!class_exists($className)) {
                 throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
             }
-
-            $isActive = in_array($pluginName, $shopwarePlugins, true);
 
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
