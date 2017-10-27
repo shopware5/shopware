@@ -175,7 +175,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         $extends = $config->getExtends();
         $currentSection = is_array($section) ? implode(':', $section) : $section;
         while ($currentSection !== null) {
-            $data = array_merge($this->readSection($name, $currentSection), $data);
+            $data = $this->readSection($name, $currentSection) + $data;
             $currentSection = isset($extends[$currentSection]) ? $extends[$currentSection] : null;
         }
 
