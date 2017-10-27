@@ -817,7 +817,7 @@ Ext.define('Shopware.form.field.TinyMCE',
         var me = this;
         me.callParent(arguments);
 
-        if(!me.tinymce) {
+        if(!me.tinymce || !me.statics.initialized) {
             return me;
         }
 
@@ -844,7 +844,7 @@ Ext.define('Shopware.form.field.TinyMCE',
         var me = this;
         me.callParent(arguments);
 
-        if(!me.tinymce) {
+        if(!me.tinymce || !me.statics.initialized) {
             return me;
         }
 
