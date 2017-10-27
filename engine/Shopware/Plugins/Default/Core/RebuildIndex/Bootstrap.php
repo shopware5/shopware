@@ -292,9 +292,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->Path() . 'Components/'
         );
 
-        $seoIndex = Enlight_Class::Instance('Shopware_Components_SeoIndex');
-
-        return $seoIndex;
+        return Enlight_Class::Instance('Shopware_Components_SeoIndex');
     }
 
     /**

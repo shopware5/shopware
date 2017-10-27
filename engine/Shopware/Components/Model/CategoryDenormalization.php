@@ -591,9 +591,7 @@ class CategoryDenormalization
             OR a.id IS NULL
         ';
 
-        $count = $this->getConnection()->exec($deleteOrphanedSql);
-
-        return $count;
+        return $this->getConnection()->exec($deleteOrphanedSql);
     }
 
     /**

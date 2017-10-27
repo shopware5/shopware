@@ -821,9 +821,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     private function getPluginModel($technicalName)
     {
         $repo = Shopware()->Models()->getRepository(Plugin::class);
-        $plugin = $repo->findOneBy(['name' => $technicalName]);
 
-        return $plugin;
+        return $repo->findOneBy(['name' => $technicalName]);
     }
 
     /**
