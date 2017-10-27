@@ -659,6 +659,16 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         } else {
             $entityName = get_class($entity);
         }
+        
+        if (Shopware()->Events()->notifyUntil(
+            'Shopware_Plugins_HttpCache_ShouldNotInvalidateCache',
+            [
+                'entity' => $entity,
+                'entityName' => $entityName
+            ]
+        )) {
+            return;
+        }
 
         $cacheIds = [];
 
