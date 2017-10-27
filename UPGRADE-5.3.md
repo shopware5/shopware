@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added grunt task support for child themes so that their tasks are run as well by the Shopware grunt
 * Added dispatch attributes to frontend
 * Added initialization check for the "disable" and "enable" form field functionality of the TinyMCE component
+* Added infinite sliding option to product slider
 
 ### Changes
 
