@@ -155,6 +155,18 @@ class Compiler
         $this->clearThemeCache($shop, $old);
     }
 
+    public function recompile(Shop\Shop $shop)
+    {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $timestamp = $this->getThemeTimestamp($shop);
+
+        $this->compileLess($timestamp, $shop->getTemplate(), $shop);
+        $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
+    }
+
     /**
      * @param Shop\Shop $shop
      *
