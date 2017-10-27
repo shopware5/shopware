@@ -90,7 +90,7 @@ class sCms
             return false;
         }
 
-        $sql = 'SELECT * FROM s_cms_static WHERE id = :pageId';
+        $sql = 'SELECT * FROM s_cms_static WHERE id = :pageId and active = 1';
         $params = ['pageId' => $staticId];
 
         if ($shopId) {
@@ -141,7 +141,7 @@ class sCms
                 p.id, p.description, p.link, p.target, p.parentID,
                 (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
                 FROM s_cms_static p
-                WHERE p.id = :parentId
+                WHERE p.id = :parentId and p.active = 1
             ';
 
             $menu['parent'] = Shopware()->Db()->fetchRow($sql, ['parentId' => $pageId]);
@@ -154,7 +154,7 @@ class sCms
             (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
             FROM s_cms_static p
             WHERE p.parentID = :parentId
-            AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', :groupKey, '|%')
+            AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', :groupKey, '|%') and p.active = 1
         ";
 
         $menu['children'] = Shopware()->Db()->fetchAll($sql, ['parentId' => $pageId, 'groupKey' => $groupKey]);
@@ -191,7 +191,7 @@ class sCms
         $siblingsSql = '
                 SELECT p.id, p.description, p.link, p.target, IF(p.id=:pageId, 1, 0) as active, p.page_title
                 FROM s_cms_static p
-                WHERE p.parentID = :parentId
+                WHERE p.parentID = :parentId AND p.active = 1
                 ' . $andWhere . '
                 ORDER BY p.position
             ';
@@ -200,7 +200,7 @@ class sCms
         $parentSql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
                 FROM s_cms_static p
-                WHERE p.id = :parentId
+                WHERE p.id = :parentId and p.active = 1
                 ' . $andWhere;
 
         $staticPage['parent'] = $this->db->fetchRow($parentSql, $parentParams);
@@ -232,7 +232,7 @@ class sCms
         $sql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
                 FROM s_cms_static p
-                WHERE p.parentID = :pageId
+                WHERE p.parentID = :pageId and p.active = 1
                 ' . $andWhere . '
                 ORDER BY p.position
             ';
