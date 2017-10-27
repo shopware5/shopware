@@ -7,10 +7,12 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added product box layout selection support for manufacturer listings
+* Added destroy method to `swJumpToTab` jQuery plugin
 
 ### Changes
 
 * Updated mPDF to v6.1.4 and included it via composer
+* Made the event selectors configurable in the `swJumpToTab` jQuery plugin
 
 ### Removals
 
