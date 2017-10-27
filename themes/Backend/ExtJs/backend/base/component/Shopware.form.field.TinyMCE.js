@@ -394,6 +394,8 @@ Ext.define('Shopware.form.field.TinyMCE',
                 }
             });
 
+            me.fixImageSelection();
+
             me.changeSniffer = window.setInterval(function() {
                 var value = me.tinymce.getContent();
                 value = me.replaceImagePathsWithSmartyPlugin(value);
@@ -406,6 +408,37 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Fire the "afterrendereditor" event
         me.fireEvent('afterrendereditor', me, me.tinymce, input.id, me.config.editor);
+    },
+
+    /**
+     * Replaces original onClick listener with bugfixed version to prevent
+     * on click console error in Webkit browsers.
+     *
+     */
+    fixImageSelection: function() {
+        var me = this;
+
+        delete me.tinymce.onClick.listeners[2];
+        me.tinymce.onClick.listeners = Ext.Array.clean(me.tinymce.onClick.listeners);
+
+        me.tinymce.onClick.add(function(editor, e) {
+            e = e.target;
+            var selection = editor.selection;
+
+            if (/^(IMG|HR)$/.test(e.nodeName)) {
+                try {
+                    selection.getSel().setBaseAndExtent(e, 0, e, 1); //Original behavior in 3.5.9; still works in Safari 10.1
+                } catch (ex) {
+                    selection.getSel().setBaseAndExtent(e, 0, e, 0); //Updated behavior for Chrome 58+ (and, I'm guessing, future versions of Safari)
+                }
+            }
+
+            if (e.nodeName === 'A' && dom.hasClass(e, 'mceItemAnchor')) {
+                selection.select(e);
+            }
+
+            editor.nodeChanged();
+        });
     },
 
     _findImagesInDOMContent: function(content) {
