@@ -39,7 +39,19 @@
                 me.jumpToTab(index, $tab);
             }
         },
-
+        
+        /**
+         * Destroys the plugin by removing all events of the plugin.
+         *
+         * @public
+         * @method destroy
+         */        
+        destroy: function() {
+            var me = this;
+            me.$el.off(this.getEventName('click'), me.opts.btnJumpSelectors.join(', '));
+            me._destroy();
+        },
+        
         resizeCrossSelling: function () {
             var me = this,
                 $container;
