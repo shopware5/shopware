@@ -98,8 +98,11 @@
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
         <service id="router" class="Shopware\Components\Routing\Router">
             <factory service="router_factory" method="factory" />
-            <argument type="service" id="service_container"/>
             <argument type="service" id="events"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
         </service>
 
         <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
@@ -696,6 +699,49 @@
 
         <service id="shopware.model.search_builder" class="Shopware\Components\Model\SearchBuilder">
             <argument id="shopware_searchdbal.search_term_helper" type="service"/>
+        </service>
+
+
+        <service id="shopware.routing.matchers.rewrite_matcher" class="Shopware\Components\Routing\Matchers\RewriteMatcher">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <tag name="router.matcher" priority="50"/>
+        </service>
+
+        <service id="shopware.routing.matchers.event_matcher" class="Shopware\Components\Routing\Matchers\EventMatcher">
+            <argument type="service" id="events"/>
+            <tag name="router.matcher" priority="40"/>
+        </service>
+
+        <service id="shopware.routing.matchers.default_matcher" class="Shopware\Components\Routing\Matchers\DefaultMatcher">
+            <argument type="service" id="dispatcher"/>
+            <tag name="router.matcher" priority="30"/>
+        </service>
+
+        <service id="shopware.routing.generators.rewrite_generator" class="Shopware\Components\Routing\Generators\RewriteGenerator">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <argument type="service" id="events"/>
+            <tag name="router.generator" priority="50"/>
+        </service>
+
+        <service id="shopware.routing.generators.default_generator" class="Shopware\Components\Routing\Generators\DefaultGenerator">
+            <argument type="service" id="dispatcher"/>
+            <tag name="router.generator" priority="40"/>
+        </service>
+
+        <service id="shopware.routing.pre_filter.default_pre_filter" class="Shopware\Components\Routing\GeneratorFilters\DefaultPreFilter">
+            <tag name="router.pre_filter" priority="50"/>
+        </service>
+        <service id="shopware.routing.pre_filter.frontend_pre_filter" class="Shopware\Components\Routing\GeneratorFilters\FrontendPreFilter">
+            <tag name="router.pre_filter" priority="40"/>
+        </service>
+
+        <service id="shopware.routing.post_filter.frontend_post_filter" class="Shopware\Components\Routing\GeneratorFilters\FrontendPostFilter">
+            <tag name="router.post_filter" priority="50"/>
+        </service>
+        <service id="shopware.routing.post_filter.default_post_filter" class="Shopware\Components\Routing\GeneratorFilters\DefaultPostFilter">
+            <tag name="router.post_filter" priority="40"/>
         </service>
 
     </services>
