@@ -603,11 +603,12 @@ class Repository extends ModelRepository
     private function getShopArrayByHostAlias($host)
     {
         $query = $this->getDbalShopsQuery();
-        $query->where('(shop.hosts LIKE :host1 OR shop.hosts LIKE :host2 OR shop.hosts LIKE :host3)');
+        $query->where('(shop.hosts LIKE :host1 OR shop.hosts LIKE :host2 OR shop.hosts LIKE :host3 OR shop.hosts LIKE :host4)');
         $query->andWhere('shop.active = 1');
         $query->setParameter('host1', "%\n" . $host . "\n%");
         $query->setParameter('host2', $host . "\n%");
         $query->setParameter('host3', "%\n" . $host);
+        $query->setParameter('host4', $host);
         $query->orderBy('shop.main_id');
         $query->addOrderBy('shop.position');
         $query->setMaxResults(1);
