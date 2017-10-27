@@ -10,6 +10,13 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Added new notify until event `Shopware_Plugins_HttpCache_ShouldNotInvalidateCache` to `engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php` to be notified when the cache for a model will be invalidated and be able to prevent it
 
+### Changes
+
+* Changed the cache ids for the listing back to a<id> instead of <id>
+
+### Removals
+
+* Removed ambiguous variant cache ids from the emotion pages (`a<variantId>`)
 
 ## 5.3.4
 
