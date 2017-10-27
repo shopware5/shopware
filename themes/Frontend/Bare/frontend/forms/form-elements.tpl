@@ -1,7 +1,8 @@
 {namespace name="frontend/forms/elements"}
+
 {block name='frontend_forms_form_elements'}
     <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url controller='ticket' action='index' id=$id}" enctype="multipart/form-data">
-    <input type="hidden" name="forceMail" value="{$forceMail|escape}">
+        <input type="hidden" name="forceMail" value="{$forceMail|escape}">
 
         {* Form Content *}
         {block name='frontend_forms_form_elements_form_content'}
@@ -60,4 +61,3 @@
         {/block}
     </form>
 {/block}
-

@@ -1,12 +1,13 @@
 {extends file='frontend/index/index.tpl'}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' prepend}
+{block name='frontend_index_start'}
     {if $sRequests.sSearchOrginal}
         {$sBreadcrumb = [['name' => "{s name="SearchResultsFor"}{/s}"]]}
     {else}
         {$sBreadcrumb = [['name' => "{s name="SearchResultsEmpty"}{/s}"]]}
     {/if}
+    {$smarty.block.parent}
 {/block}
 
 {* Main content *}

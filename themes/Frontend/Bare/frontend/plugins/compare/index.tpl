@@ -1,16 +1,18 @@
 {* Compare container *}
-{block name='frontend_index_navigation_inline' append}
+{block name='frontend_index_navigation_inline'}
+    {$smarty.block.parent}
     {include file='frontend/compare/index.tpl'}
 {/block}
 
 {* Compare result *}
-{block name='frontend_index_body_inline' append}
-<div id="compare_bigbox"></div>
+{block name='frontend_index_body_inline'}
+    {$smarty.block.parent}
+    <div id="compare_bigbox"></div>
 {/block}
 
 
 {* Compare button *}
-{block name='frontend_listing_box_article_actions_buy_now' prepend}
+{block name='frontend_listing_box_article_actions_buy_now'}
     <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}"
        rel="nofollow"
        title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}"
@@ -18,13 +20,15 @@
         {s name='ListingBoxLinkCompare'}{/s}
         <i class="icon--arrow-right"></i>
     </a>
+    {$smarty.block.parent}
 {/block}
 
 {* Compare button 2 *}
-{block name='frontend_detail_actions_notepad' prepend}
+{block name='frontend_detail_actions_notepad'}
     <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{"{s name='DetailActionLinkCompare'}{/s}"|escape}" class="action--link action--compare">
         <i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
     </a>
+    {$smarty.block.parent}
 {/block}
 
 {* Compare button note *}
@@ -33,5 +37,3 @@
         {s name='ListingBoxLinkCompare'}{/s}
     </a>
 {/block}
-
-
