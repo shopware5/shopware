@@ -637,6 +637,9 @@ class sRewriteTable
         $translation = $translator->readWithFallback($shopId, $fallbackShopId, 'emotion', $campaign['id']);
 
         $campaign = array_merge($campaign, $translation);
+        if (!isset($campaign['categoryId'])) {
+            $campaign['categoryId'] = null;
+        }
 
         $this->data->assign('campaign', $campaign);
 
