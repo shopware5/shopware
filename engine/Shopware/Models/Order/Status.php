@@ -100,7 +100,6 @@ class Status extends ModelEntity
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -151,6 +150,14 @@ class Status extends ModelEntity
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    
     /**
      * @return string
      */
