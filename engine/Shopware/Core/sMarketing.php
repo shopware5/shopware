@@ -591,7 +591,7 @@ class sMarketing
                             $getBanner['image'] = $mediaService->getUrl($getBanner['image']);
                         }
 
-                        if (!preg_match('/http/', $getBanner['link']) && $getBanner['link']) {
+                        if (strpos($getBanner['link'], 'http') === false && $getBanner['link']) {
                             $getBanner['link'] = 'http://' . $getBanner['link'];
                         }
 
@@ -626,7 +626,7 @@ class sMarketing
                         if ($getText['image']) {
                             $getText['image'] = $mediaService->getUrl($getText['image']);
                         }
-                        if (!preg_match('/http/', $getText['link']) && $getText['link']) {
+                        if (strpos($getText['link'], 'http') === false && $getText['link']) {
                             $getText['link'] = 'http://' . $getText['link'];
                         }
                         $getCampaignContainers[$campaignKey]['description'] = $getText['headline'];

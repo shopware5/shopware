@@ -229,7 +229,7 @@ class Repository extends ModelRepository
         $builder->from('Shopware\Models\Dispatch\ShippingCost', 'shippingcosts')->select(['shippingcosts']);
 
         // assure that we will get an empty result set when no dispatch ID is provided
-        if (is_null($dispatchId) || empty($dispatchId)) {
+        if ($dispatchId === null || empty($dispatchId)) {
             $dispatchId = '-1';
         }
         $builder->where('shippingcosts.dispatchId = :dispatchId')->setParameter('dispatchId', $dispatchId);

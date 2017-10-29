@@ -242,7 +242,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function seoSupplierAction()
     {
         $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
-        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+        if ($seoSupplierConfig === null || $seoSupplierConfig === false) {
             $this->View()->assign([
                 'success' => true,
             ]);

@@ -4183,7 +4183,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareNumberSyntax($syntax)
     {
-        preg_match_all('#\{(.*?)\}#msi', $syntax, $result);
+        preg_match_all('#\{(.*?)\}#ms', $syntax, $result);
         $syntax = $result[1];
 
         $properties = [];

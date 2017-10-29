@@ -42,7 +42,7 @@ class Repository extends ModelRepository
      */
     public function getOrCreateBannerStatsModel($bannerId, \DateTime $date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = new \DateTime();
         }
         $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);

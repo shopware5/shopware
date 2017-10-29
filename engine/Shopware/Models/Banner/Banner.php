@@ -200,7 +200,7 @@ class Banner extends ModelEntity
             $validFrom = null;
         }
         // if the date isn't null try to transform it to a DateTime Object.
-        if (!$validFrom instanceof \DateTime && !is_null($validFrom)) {
+        if (!$validFrom instanceof \DateTime && $validFrom !== null) {
             $validFrom = new \DateTime($validFrom);
         }
 
@@ -232,7 +232,7 @@ class Banner extends ModelEntity
             $validTo = null;
         }
         // if the date isn't null try to transform it to a DateTime Object.
-        if (!$validTo instanceof \DateTime && !is_null($validTo)) {
+        if (!$validTo instanceof \DateTime && $validTo !== null) {
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;

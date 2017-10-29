@@ -122,7 +122,7 @@ class Configuration extends BaseConfiguration
     public function setCache(CacheProvider $cache)
     {
         // Set namespace for doctrine cache provider to avoid collisions
-        $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5(
+        $namespace = $this->cacheNamespace !== null ? $this->cacheNamespace : md5(
             $this->getProxyDir() . $this->release->getRevision()
         );
         $cache->setNamespace('dc2_' . $namespace . '_');

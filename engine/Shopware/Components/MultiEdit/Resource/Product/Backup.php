@@ -571,7 +571,7 @@ class Backup
                 // Special quoting for numbers
                 $type = $this->getDataTypeForExport($value);
                 // Everything else is quoted as string - except 'null'
-                $vals[] = is_null($value) ? 'NULL' : $this->getDqlHelper()->getDb()->quote($value, $type);
+                $vals[] = $value === null ? 'NULL' : $this->getDqlHelper()->getDb()->quote($value, $type);
             }
             $output[] = '(' . implode(', ', $vals) . ')';
         }

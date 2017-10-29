@@ -766,11 +766,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         foreach ($groups as $key => $values) {
             if ($values['isCustomerGroup'] === true) {
-                array_push($newGroup[0][$values['groupkey']], $values['number']);
+                $newGroup[0][$values['groupkey']][] = $values['number'];
             } elseif ($values['streamId'] !== null) {
-                array_push($newGroup[2][$values['streamId']], $values['number']);
+                $newGroup[2][$values['streamId']][] = $values['number'];
             } else {
-                array_push($newGroup[1][$values['internalId']], $values['number']);
+                $newGroup[1][$values['internalId']][] = $values['number'];
             }
         }
 

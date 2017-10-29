@@ -2518,7 +2518,8 @@ class Article extends Resource implements BatchInterface
             if ($metaData->hasAssociation($property->getName())) {
                 continue;
             }
-            $properties[$property->getName()] = $property->getName();
+            $propertyName = $property->getName();
+            $properties[$propertyName] = $propertyName;
         }
 
         foreach ($metaData->getAssociationMappings() as $property => $mapping) {

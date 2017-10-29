@@ -104,7 +104,7 @@ class Banner extends ModelEntity
      */
     public function __construct($bannerId, $date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = new \DateTime();
         }
         $this->setDisplayDate($date);

@@ -2639,7 +2639,7 @@ class sAdmin
             [(int) $this->contextService->getShopContext()->getShop()->getId()]
         );
         // Main id is null, so we use the current shop id
-        if (is_null($mainId)) {
+        if ($mainId === null) {
             $mainId = (int) $this->contextService->getShopContext()->getShop()->getId();
         }
         $basket['basketStateId'] = (int) $stateId;
