@@ -520,7 +520,7 @@ class LegacyStructConverter
                 'attributes' => $link->getAttributes(),
             ];
 
-            if (!preg_match('/http/', $temp['link'])) {
+            if (false === strpos($temp['link'], 'http')) {
                 $temp['link'] = 'http://' . $link->getLink();
             }
 

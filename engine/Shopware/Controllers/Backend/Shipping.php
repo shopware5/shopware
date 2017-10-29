@@ -552,11 +552,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     private function convertShippingCostsDates(array $shippingCosts)
     {
         foreach ($shippingCosts as $i => $shippingCost) {
-            if (!is_null($shippingCost['bindTimeFrom'])) {
+            if (null !== $shippingCost['bindTimeFrom']) {
                 $shippingCosts[$i]['bindTimeFrom'] = gmdate('H:i', $shippingCost['bindTimeFrom']);
             }
 
-            if (!is_null($shippingCost['bindTimeTo'])) {
+            if (null !== $shippingCost['bindTimeTo']) {
                 $shippingCosts[$i]['bindTimeTo'] = gmdate('H:i', $shippingCost['bindTimeTo']);
             }
         }

@@ -698,7 +698,7 @@ class Component extends ModelEntity
 
     public function getMaxPositionValue()
     {
-        if (is_null($this->maxFieldPositionValue)) {
+        if (null === $this->maxFieldPositionValue) {
             $this->maxFieldPositionValue = 0;
 
             $positions = array_map(

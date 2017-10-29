@@ -186,7 +186,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $logFile = $this->getLogFile($files, $logFile);
 
         if (!$logFile) {
-            new RuntimeException('Log file not found.');
+            throw new RuntimeException('Log file not found.');
         }
 
         $logFilePath = $logDir . '/' . $this->getLogFile($files, $logFile);

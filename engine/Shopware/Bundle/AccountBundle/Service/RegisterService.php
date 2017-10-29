@@ -198,7 +198,7 @@ class RegisterService implements RegisterServiceInterface
             $this->modelManager->find('Shopware\Models\Shop\Shop', $shop->getId())
         );
 
-        if (is_null($customer->getGroup())) {
+        if (null === $customer->getGroup()) {
             $customer->setGroup(
                 $this->modelManager->find('Shopware\Models\Customer\Group', $shop->getCustomerGroup()->getId())
             );

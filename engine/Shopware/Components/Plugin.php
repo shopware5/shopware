@@ -232,6 +232,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     private function camelCaseToUnderscore($string)
     {
-        return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $string)), '_');
+        return strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', $string), '_'));
     }
 }

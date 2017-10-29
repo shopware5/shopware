@@ -2293,7 +2293,7 @@ class sAdmin
             $this->db->query($sql, [$groupID, 'Newsletter-Empfänger']);
         }
 
-        $email = trim(strtolower(stripslashes($email)));
+        $email = strtolower(trim(stripslashes($email)));
         if (empty($email)) {
             return [
                 'code' => 6,
@@ -2593,7 +2593,7 @@ class sAdmin
             [(int) $this->contextService->getShopContext()->getShop()->getId()]
         );
         // Main id is null, so we use the current shop id
-        if (is_null($mainId)) {
+        if (null === $mainId) {
             $mainId = (int) $this->contextService->getShopContext()->getShop()->getId();
         }
         $basket['basketStateId'] = (int) $stateId;

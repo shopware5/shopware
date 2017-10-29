@@ -195,7 +195,7 @@ class QueryBuilder extends BaseQueryBuilder
                     case is_array($where):
                         $expression = 'IN';
                         break;
-                    case is_null($where):
+                    case null === $where:
                         $expression = 'IS NULL';
                         break;
                     default:
@@ -204,7 +204,7 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            if (is_null($where)) {
+            if (null === $where) {
                 $expression = 'IS NULL';
             }
 
