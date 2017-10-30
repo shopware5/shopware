@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -32,6 +34,16 @@ use Shopware\Models\Shop\Shop;
  */
 class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
+    /**
+     * @var array
+     */
+    private $shopContext = [];
+
+    /**
+     * @var array
+     */
+    private $shop = [];
+
     /**
      * Installation of plugin
      * Create-Events to include custom code on product detail page
@@ -260,15 +272,31 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      */
     public function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
-        $sql = "SELECT * FROM `s_articles_notification` WHERE send = 0";
+        $sql = "SELECT * FROM `s_articles_notification` WHERE send = 0 ORDER BY `language` ASC";
 
         $getNotifications = Shopware()->Db()->fetchAll($sql);
 
-        Shopware()->Models()->getRepository(Shop::class)->getActiveDefault()->registerResources();
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-
         foreach ($getNotifications as $data) {
             $ordernumber = $data["ordernumber"];
+
+            if (!isset($this->shopContext[$data['language']])) {
+                $shop = Shopware()->Models()->find(Shop::class, $data['language']);
+                $shop->registerResources();
+                $this->get('shopware_storefront.context_service')->initializeContext();
+                $this->shopContext[$data['language']] = $this->get('shopware_storefront.context_service')->getContext();
+
+                $routerContext = Context::createFromShop($shop, $this->get('config'));
+
+                // subshop host is empty
+                if ($shop->getMain()) {
+                    $routerContext->setHost($shop->getMain()->getHost());
+                    $routerContext->setSecure($shop->getMain()->getAlwaysSecure() || $shop->getMain()->getSecure());
+                }
+                $this->get('router')->setContext($routerContext);
+
+                $this->shop[$data['language']] = $shop;
+            }
+
 
             $sArticle = Shopware()->Db()->fetchRow("SELECT a.id as articleID, d.ordernumber, d.instock, a.active FROM s_articles_details d, s_articles a WHERE d.articleID=a.id AND d.ordernumber=?", array($ordernumber));
 
@@ -283,20 +311,20 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $notificationActive = Shopware()->Db()->fetchOne($sql, array($sArticleID));
 
             if (intval($instock) > 0 && $notificationActive == true && !empty($sArticle["active"])) {
-                $article = $this->get('shopware_storefront.product_service')->get($ordernumber, $context);
+                $article = $this->get('shopware_storefront.product_service')->get($ordernumber, $this->shopContext[$data['language']]);
 
                 if ($article) {
                     $article = $this->get('legacy_struct_converter')->convertProductStruct($article);
                 }
 
                 $context = [
-                    'sArticleLink' => $data["shopLink"] . "?sViewport=detail&sArticle=$sArticleID",
+                    'sArticleLink' => $this->get('router')->assemble(['module' => 'frontend', 'controller' => 'detail', 'sArticle' => $sArticleID]),
                     'sOrdernumber' => $ordernumber,
                     'sData' => $job["data"],
                     'sArticle' => $article
                 ];
 
-                $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
+                $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context, $this->shop[$data['language']]);
                 $mail->addTo($data["mail"]);
                 $mail->send();
 
