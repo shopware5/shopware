@@ -58,7 +58,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
             ->setName('sw:product:feeds:refresh')
             ->setDescription('Refreshes product feed cache files.')
             ->addOption(
-                'feedid',
+                'feed-id',
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'ID of the feed to generate'
@@ -72,8 +72,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->cacheDir = $this->container->getParameter('kernel.cache_dir');
-        $this->cacheDir .= '/productexport/';
+        $this->cacheDir = $this->container->getParameter('kernel.cache_dir') . '/productexport/';
 
         if (!is_dir($this->cacheDir)) {
             if (false === @mkdir($this->cacheDir, 0777, true)) {
@@ -83,7 +82,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $this->cacheDir));
         }
 
-        $feedID = (int) $input->getOption('feedid');
+        $feedId = (int) $input->getOption('feed-id');
 
         /** @var $export sExport */
         $export = $this->container->get('modules')->Export();
@@ -97,24 +96,25 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
         /** @var Repository $productFeedRepository */
         $productFeedRepository = $this->container->get('models')->getRepository(ProductFeed::class);
-        if (empty($feedID)) {
+        if (empty($feedId)) {
             $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 
             /** @var $feedModel ProductFeed */
             foreach ($activeFeeds as $feedModel) {
-                if (0 == $feedModel->getInterval()) {
+                if (0 === $feedModel->getInterval()) {
                     continue;
                 }
                 $this->generateFeed($export, $feedModel);
             }
         } else {
             /** @var ProductFeed $productFeed */
-            $productFeed = $productFeedRepository->find((int) $feedID);
-            if (!empty($productFeed)) {
-                $this->generateFeed($export, $productFeed);
-            } else {
-                throw new \RuntimeException(sprintf("Unable to load feed with id ()%s)\n", $feedID));
+            $productFeed = $productFeedRepository->find((int) $feedId);
+            if (empty($productFeed)) {
+                throw new \RuntimeException(sprintf("Unable to load feed with id %s\n", $feedId));
+            } elseif ($productFeed->getActive() !== 1) {
+                throw new \RuntimeException(sprintf("The feed with id %s is not active\n", $feedId));
             }
+            $this->generateFeed($export, $productFeed);
         }
 
         $this->output->writeln(sprintf('Product feed cache successfully refreshed'));
