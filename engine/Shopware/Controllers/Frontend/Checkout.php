@@ -779,7 +779,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 WHERE groupkey = ?
             ', [$system->sUSERGROUP]);
 
-            if ($this->isTaxFreeDelivery($userData)) {
+            if ($this->isTaxFree($userData)) {
                 $system->sUSERGROUPDATA['tax'] = 0;
                 $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
                 Shopware()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
@@ -1522,13 +1522,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Validates if the provided customer should get a tax free delivery
+     * Validates if the provided customer should get the purchase tax free
      *
      * @param array $userData
      *
      * @return bool
      */
-    protected function isTaxFreeDelivery($userData)
+    protected function isTaxFree($userData)
     {
         if (!empty($userData['additional']['countryShipping']['taxfree'])) {
             return true;
@@ -1541,6 +1541,19 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         return !empty($userData['shippingaddress']['ustid']);
     }
 
+    /**
+     * Validates if the provided customer should get a the purchase tax free
+     *
+     * @param array $userData
+     *
+     * @return bool
+     * @deprecated Use isTaxFree instead
+     */
+    protected function isTaxFreeDelivery($userData)
+    {
+        return $this->isTaxFree($userData);
+    }
+    
     /**
      * @param $basket
      * @param Request $request
