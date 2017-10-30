@@ -9,39 +9,39 @@
  *  The component requires at least the parameters ```content``` and ```type``` to display the message correctly.
  *
  *  ```
- *     {include file="frontend/_includes/messages.tpl" type="error" content="Your content"}
+ *    {% sw_include '@Storefront/frontend/_includes/messages.html.twig' with { 'type': 'error', 'content': 'Your content' } %}
  *  ```
  *
  *  Customized icons can be passed using the icon font to the component using the parameter ```icon```:
  *  ```
- *     {include file="frontend/_includes/messages.tpl" type="error" content="Your content" icon="icon--shopware"}
+ *    {% sw_include '@Storefront/frontend/_includes/messages.html.twig' with { 'type': 'error', 'content': 'Your content', 'icon': 'icon--shopware' } %}
  *  ```
  *
  *  The border-radius can be modified using the parameter ```borderRadius```. The default behavior contains a
  *  border radius for the message:
  *  ```
- *     {include file="frontend/_includes/messages.tpl" type="error" content="Your content" borderRadius=true}
+ *    {% sw_include '@Storefront/frontend/_includes/messages.html.twig' with { 'type': 'error', 'content': 'Your content', 'borderRadius': true } %}
  *  ```
  *
  * If you need to display a bunch of messages (for example error messages in the registration), you can pass an array
  * of messages to the template using the parameter ```list```:
  *
  * ```
- *    {include file="frontend/_includes/messages.tpl" type="error" list=$error_messages}
+ *    {% sw_include '@Storefront/frontend/_includes/messages.html.twig' with { 'type': 'error', 'list': errorMessages } %}
  * ```
  *
  * The template also supportes bold texts for the content or list entires, which could be modified using the parameter
  * ```bold```. By default the parameter is set to ```true```.
  *
  * ```
- *    {include file="frontend/_includes/messages.tpl" type="error" content="Your content" bold=false}
+ *    {% sw_include '@Storefront/frontend/_includes/messages.html.twig' with { 'type': 'error', 'content': 'Your content', 'bold': false } %}
  * ```
  *
  * If you need to insert the message into the DOM but don't want to display it, you can use the parameter ```visible```
  * to hide the message on startup. By default the parameter is set to ```true```.
  *
  * ```
- *    {include file="frontend/_includes/messages.tpl" type="error" content="Your content" visible=false}
+ *    {% sw_include '@Storefront/frontend/_includes/messages.html.twig' with { 'type': 'error', 'content': 'Your content', 'visible': false } %}
  * ```
  #}
 
