@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Config
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -29,7 +30,7 @@
  * update and create columns.
  *
  * @category   Enlight
- * @package    Enlight_Config
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -100,6 +101,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
 
     /**
      * Database adapter which performs all operations on the database
+     *
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
@@ -107,8 +109,9 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * Sets the options of an array.
      *
-     * @param       array $options
-     * @return      Enlight_Config_Adapter
+     * @param array $options
+     *
+     * @return Enlight_Config_Adapter
      */
     public function setOptions(array $options)
     {
@@ -135,47 +138,51 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
                     break;
             }
         }
+
         return parent::setOptions($options);
     }
 
     /**
      * @param null $name
+     *
      * @return Enlight_Components_Table
      */
     public function getTable($name = null)
     {
         if ($name !== null) {
-            return new Enlight_Components_Table(array(
+            return new Enlight_Components_Table([
                'name' => $name,
-               'db' => $this->_db)
+               'db' => $this->_db, ]
             );
         }
         if (!$this->_table instanceof Enlight_Components_Table) {
-            $this->_table = new Enlight_Components_Table(array(
+            $this->_table = new Enlight_Components_Table([
                 'name' => $this->_table,
-                'db' => $this->_db)
+                'db' => $this->_db, ]
             );
         }
+
         return $this->_table;
     }
 
     /**
      * Reads a section from the data store.
      *
-     * @param      Enlight_Config $config
-     * @return     Enlight_Config_Adapter_DbTable
+     * @param Enlight_Config $config
+     *
+     * @return Enlight_Config_Adapter_DbTable
      */
     public function read(Enlight_Config $config)
     {
         $name = $this->_namePrefix . $config->getName() . $this->_nameSuffix;
         $section = $config->getSection();
 
-        $data = array();
+        $data = [];
 
         $extends = $config->getExtends();
         $currentSection = is_array($section) ? implode(':', $section) : $section;
         while ($currentSection !== null) {
-            $data = $this->readSection($name, $currentSection) + $data;
+            $data += $this->readSection($name, $currentSection);
             $currentSection = isset($extends[$currentSection]) ? $extends[$currentSection] : null;
         }
 
@@ -185,58 +192,15 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     }
 
     /**
-     * @param $name
-     * @param $section
-     * @return array
-     */
-    protected function readSection($name, $section)
-    {
-        $dbTable = $this->getTable($this->_namespaceColumn === null ? $name : null);
-
-        $select = $dbTable->select()->from($dbTable->info('name'), array(
-            $this->_nameColumn, $this->_valueColumn
-        ));
-
-        if ($this->_namespaceColumn !== null) {
-            $select->where($this->_namespaceColumn . '=?', $name);
-        }
-
-        if ($section !== null && $this->_sectionColumn !== null) {
-            if (is_array($this->_sectionColumn)) {
-                $section = explode(':', $section);
-                foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (!empty($section[$key])) {
-                        $select->where($sectionColumn . '=?', $section[$key]);
-                    }
-                }
-            } elseif ($this->_sectionColumn !== null) {
-                $select->where($this->_sectionColumn . '=?', $section);
-            }
-        }
-
-        if ($this->_valueColumn !== '*') {
-            $data = $dbTable->getAdapter()->fetchPairs($select);
-        } else {
-            $data = $dbTable->getAdapter()->fetchAssoc($select);
-        }
-
-        if ($this->_automaticSerialization) {
-            foreach ($data as $key => $value) {
-                $data[$key] = unserialize($value);
-            }
-        }
-        return $data;
-    }
-
-    /**
      * Saves the data changes in the data store.
      *
-     * @param      Enlight_Config $config
-     * @param      array          $fields
-     * @param      bool           $update If false, existing rows are not updated
-     * @param      bool           $force If true, existing dirty columns are updated
-     * @param      bool           $allowReset If true, updating existing columns with existing value will reset dirty flag
-     * @return     Enlight_Config_Adapter_DbTable
+     * @param Enlight_Config $config
+     * @param array          $fields
+     * @param bool           $update     If false, existing rows are not updated
+     * @param bool           $force      If true, existing dirty columns are updated
+     * @param bool           $allowReset If true, updating existing columns with existing value will reset dirty flag
+     *
+     * @return Enlight_Config_Adapter_DbTable
      */
     public function write(Enlight_Config $config, $fields = null, $update = true, $force = false, $allowReset = false)
     {
@@ -257,9 +221,9 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             return $this;
         }
 
-        $where = array();
-        $updateData = array();
-        $insertData = array();
+        $where = [];
+        $updateData = [];
+        $insertData = [];
 
         if ($this->_namespaceColumn !== null) {
             $insertData[$this->_namespaceColumn] = $name;
@@ -333,10 +297,11 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * Removes the data from the data store.
      *
-     * @param      Enlight_Config $config
-     * @param      array $fields
-     * @param      bool $deleteDirty
-     * @return     Enlight_Config_Adapter_DbTable
+     * @param Enlight_Config $config
+     * @param array          $fields
+     * @param bool           $deleteDirty
+     *
+     * @return Enlight_Config_Adapter_DbTable
      */
     public function delete(Enlight_Config $config, $fields = null, $deleteDirty = false)
     {
@@ -353,8 +318,8 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             return $this;
         }
 
-        $where = array();
-        $insertData = array();
+        $where = [];
+        $insertData = [];
 
         if ($this->_namespaceColumn !== null) {
             $insertData[$this->_namespaceColumn] = $name;
@@ -383,5 +348,51 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         $dbTable->delete($where);
 
         return $this;
+    }
+
+    /**
+     * @param $name
+     * @param $section
+     *
+     * @return array
+     */
+    protected function readSection($name, $section)
+    {
+        $dbTable = $this->getTable($this->_namespaceColumn === null ? $name : null);
+
+        $select = $dbTable->select()->from($dbTable->info('name'), [
+            $this->_nameColumn, $this->_valueColumn,
+        ]);
+
+        if ($this->_namespaceColumn !== null) {
+            $select->where($this->_namespaceColumn . '=?', $name);
+        }
+
+        if ($section !== null && $this->_sectionColumn !== null) {
+            if (is_array($this->_sectionColumn)) {
+                $section = explode(':', $section);
+                foreach ($this->_sectionColumn as $key => $sectionColumn) {
+                    if (!empty($section[$key])) {
+                        $select->where($sectionColumn . '=?', $section[$key]);
+                    }
+                }
+            } elseif ($this->_sectionColumn !== null) {
+                $select->where($this->_sectionColumn . '=?', $section);
+            }
+        }
+
+        if ($this->_valueColumn !== '*') {
+            $data = $dbTable->getAdapter()->fetchPairs($select);
+        } else {
+            $data = $dbTable->getAdapter()->fetchAssoc($select);
+        }
+
+        if ($this->_automaticSerialization) {
+            foreach ($data as $key => $value) {
+                $data[$key] = unserialize($value);
+            }
+        }
+
+        return $data;
     }
 }
