@@ -1542,7 +1542,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Validates if the provided customer should get a the order tax free
+     * Validates if the provided customer should get the order tax free
      *
      * @param array $userData
      *
