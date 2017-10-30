@@ -22,11 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Constraint;
+namespace Shopware\Components\Auth\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 
-class UserName extends Constraint
+class UserEmail extends Constraint
 {
     /**
      * @var int
@@ -46,6 +46,6 @@ class UserName extends Constraint
      */
     public function validatedBy()
     {
-        return 'UserNameValidator';
+        return 'UserEmailValidator';
     }
 }

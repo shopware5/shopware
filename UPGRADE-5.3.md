@@ -16,6 +16,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added translation for article `shippingtime` field
 * Added feed-id parameter to sw:product:feeds:refresh to refresh only a specific product feed 
 * Added sw:product:feeds:list command to show all product feeds
+* Added new API endpoint /users which allows to manage the backend users. For more information, look [here](https://developers.shopware.com/developers-guide/rest-api/api-resource-user/) 
+* Added generatePassword method to engine/Shopware/Components/Random.php which allows to generate cryptographically secure passwords
+* Added UserName and UserEmail validator in /engine/Shopware/Components/Auth
 
 ### Changes
 

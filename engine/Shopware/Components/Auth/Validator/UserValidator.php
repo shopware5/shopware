@@ -22,11 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service\Validator;
+namespace Shopware\Components\Auth\Validator;
 
-use Shopware\Bundle\AccountBundle\Constraint\UserEmail;
-use Shopware\Bundle\AccountBundle\Constraint\UserName;
 use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Auth\Constraint\UserEmail;
+use Shopware\Components\Auth\Constraint\UserName;
 use Shopware\Models\User\User;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -70,7 +70,7 @@ class UserValidator implements UserValidatorInterface
         $this->validateField('username', $user->getUsername(), [
             new UserName([
                 'userId' => $user->getId(),
-            ])
+            ]),
         ]);
         $this->validateField('name', $user->getName(), [new NotBlank()]);
         $this->validateField('role', $user->getRole(), [new NotBlank()]);

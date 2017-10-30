@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Constraint;
+namespace Shopware\Components\Auth\Constraint;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Validator\UserNameValidatorInterface;

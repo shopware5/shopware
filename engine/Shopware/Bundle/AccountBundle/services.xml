@@ -118,21 +118,5 @@
             <argument id="dbal_connection" type="service"/>
             <argument id="config" type="service"/>
         </service>
-        <service id="shopware_account.user_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\UserValidator">
-            <argument type="service" id="validator" />
-        </service>
-
-        <service id="shopware_account.constraint.user_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\UserEmailValidator">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="validator.email" />
-            <tag name="validator.constraint_validator" alias="UserEmailValidator" />
-        </service>
-        <service id="shopware_account.constraint.user_name_validator" class="Shopware\Bundle\AccountBundle\Constraint\UserNameValidator">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="validator.user_name" />
-            <tag name="validator.constraint_validator" alias="UserNameValidator" />
-        </service>
     </services>
 </container>

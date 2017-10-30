@@ -39,6 +39,12 @@ class UserTest extends TestCase
      */
     protected $resource;
 
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->resource->setAcl($this->getAclMockAllowEverything());
+    }
+
     /**
      * @return User
      */
@@ -52,6 +58,8 @@ class UserTest extends TestCase
      */
     public function testCreateWithNonUniqueEmailShouldThrowException()
     {
+        $this->resource->setRole('create');
+
         $testData = [
             'email' => 'demo@example.com',
             'username' => 'username' . uniqid(),
@@ -65,6 +73,8 @@ class UserTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
+        $this->resource->setRole('create');
+
         $date = new \DateTime();
 
         $date->modify('-10 days');
@@ -122,6 +132,8 @@ class UserTest extends TestCase
      */
     public function testGetOneShouldBeSuccessful($id)
     {
+        $this->resource->setRole('read');
+
         $user = $this->resource->getOne($id);
         $this->assertGreaterThan(0, $user['id']);
     }
@@ -131,6 +143,8 @@ class UserTest extends TestCase
      */
     public function testGetOneShouldBeAbleToReturnObject($id)
     {
+        $this->resource->setRole('read');
+
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $user = $this->resource->getOne($id);
 
@@ -143,6 +157,8 @@ class UserTest extends TestCase
      */
     public function testGetListShouldBeSuccessful()
     {
+        $this->resource->setRole('read');
+
         $result = $this->resource->getList();
 
         $this->assertArrayHasKey('data', $result);
@@ -157,6 +173,8 @@ class UserTest extends TestCase
      */
     public function testGetListShouldBeAbleToReturnObjects()
     {
+        $this->resource->setRole('read');
+
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
 
@@ -174,6 +192,8 @@ class UserTest extends TestCase
      */
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
+        $this->resource->setRole('create');
+
         $testData = [
             'email' => 'invalid',
             'username' => 'username' . uniqid(rand()),
@@ -189,6 +209,8 @@ class UserTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
+        $this->resource->setRole('update');
+
         $testData = [
             'username' => 'updated' . uniqid(rand()),
             'name' => 'Max Mustermann Update',
@@ -211,6 +233,8 @@ class UserTest extends TestCase
      */
     public function testUpdateWithInvalidDataShouldThrowValidationException($id)
     {
+        $this->resource->setRole('update');
+
         $testData = [
             'email' => 'invalid',
         ];
@@ -223,6 +247,8 @@ class UserTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->resource->setRole('update');
+
         $this->resource->update(9999999, []);
     }
 
@@ -231,6 +257,8 @@ class UserTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->resource->setRole('update');
+
         $this->resource->update('', []);
     }
 
@@ -239,6 +267,8 @@ class UserTest extends TestCase
      */
     public function testDeleteShouldBeSuccessful($id)
     {
+        $this->resource->setRole('delete');
+
         $user = $this->resource->delete($id);
 
         $this->assertInstanceOf('\Shopware\Models\User\User', $user);
@@ -250,6 +280,9 @@ class UserTest extends TestCase
      */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        // TODO!!!
+        $this->resource->setRole('delete');
+
         $this->resource->delete(9999999);
     }
 
@@ -258,11 +291,17 @@ class UserTest extends TestCase
      */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        // TODO!!!
+
+        $this->resource->setRole('delete');
+
         $this->resource->delete('');
     }
 
     public function testCreateWithUserRoleId()
     {
+        $this->resource->setRole('create');
+
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
             'username' => 'user' . uniqid(rand()),
@@ -277,6 +316,8 @@ class UserTest extends TestCase
 
     public function testCreateWithUserRoleName()
     {
+        $this->resource->setRole('create');
+
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
             'username' => 'user' . uniqid(rand()),
@@ -291,6 +332,8 @@ class UserTest extends TestCase
 
     public function testCreateWithLocaleId()
     {
+        $this->resource->setRole('create');
+
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
             'username' => 'user' . uniqid(rand()),
@@ -306,6 +349,8 @@ class UserTest extends TestCase
 
     public function testCreateWithLocaleName()
     {
+        $this->resource->setRole('create');
+
         $data = [
             'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
             'username' => 'user' . uniqid(rand()),
@@ -317,5 +362,38 @@ class UserTest extends TestCase
 
         $user = $this->resource->create($data);
         $this->assertEquals(2, $user->getLocaleId());
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
+    {
+        $this->resource->setRole('read');
+        $this->resource->getOne('');
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
+    {
+        $this->resource->setRole('read');
+        $this->resource->getOne(9999999);
+    }
+
+    protected function getAclMockAllowEverything()
+    {
+        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
+
+        $aclMock->expects($this->any())
+            ->method('has')
+            ->willReturn(true);
+
+        $aclMock->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+
+        return $aclMock;
     }
 }

@@ -24,9 +24,12 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Shopware\Bundle\AccountBundle\Service\Validator\UserValidator;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Auth\Validator\UserValidator;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Config\Element;
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\User\Role;
 use Shopware\Models\User\User as UserModel;
 
 /**
@@ -43,7 +46,7 @@ class User extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\User\User');
+        return $this->getManager()->getRepository(UserModel::class);
     }
 
     /**
@@ -51,7 +54,7 @@ class User extends Resource
      */
     public function getRoleRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\User\Role');
+        return $this->getManager()->getRepository(Role::class);
     }
 
     /**
@@ -60,11 +63,11 @@ class User extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return array|\Shopware\Models\User\User
+     * @return array|UserModel
      */
     public function getOne($id)
     {
-        $this->checkPrivilege('read');
+        $this->checkPrivilege('read', 'usermanager');
 
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
@@ -72,16 +75,25 @@ class User extends Resource
 
         $builder = $this->getRepository()->createQueryBuilder('user');
         $builder->select(['users', 'attribute'])
-            ->from('Shopware\Models\User\User', 'users')
+            ->from(UserModel::class, 'users')
             ->leftJoin('users.attribute', 'attribute')
             ->where('users.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user \Shopware\Models\User\User */
+        /** @var $user UserModel */
         $user = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$user) {
-            throw new ApiException\NotFoundException("User by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
+        }
+
+        if (is_array($user)) {
+            unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+        } else {
+            $user->setApiKey('');
+            $user->setSessionId('');
+            $user->setPassword('');
+            $user->setEncoder('');
         }
 
         return $user;
@@ -99,7 +111,7 @@ class User extends Resource
      */
     public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
-        $this->checkPrivilege('read');
+        $this->checkPrivilege('read', 'usermanager');
 
         /** @var QueryBuilder $builder */
         $builder = $this->getRepository()->createQueryBuilder('user')
@@ -117,6 +129,13 @@ class User extends Resource
 
         $users = $paginator->getIterator()->getArrayCopy();
 
+        if (!$this->hasPrivilege('create', 'usermanager') &&
+            !$this->hasPrivilege('update', 'usermanager')) {
+            foreach ($users as &$user) {
+                unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+            }
+        }
+
         return [
             'total' => $paginator->count(),
             'data' => $users,
@@ -129,11 +148,11 @@ class User extends Resource
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
-     * @return \Shopware\Models\User\User
+     * @return UserModel
      */
     public function create(array $params)
     {
-        $this->checkPrivilege('create');
+        $this->checkPrivilege('create', 'usermanager');
 
         // create models
         $user = new UserModel();
@@ -141,7 +160,7 @@ class User extends Resource
         $user->fromArray($params);
 
         /** @var UserValidator $userValidator */
-        $userValidator = $this->getContainer()->get('shopware_account.user_validator');
+        $userValidator = $this->getContainer()->get('shopware.auth.validator.user_validator');
         $userValidator->validate($user);
 
         $this->getManager()->persist($user);
@@ -159,11 +178,11 @@ class User extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
-     * @return \Shopware\Models\User\User
+     * @return UserModel
      */
     public function update($id, array $params)
     {
-        $this->checkPrivilege('update');
+        $this->checkPrivilege('update', 'usermanager');
 
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
@@ -175,24 +194,24 @@ class User extends Resource
             'userAttribute',
             'role',
         ])
-            ->from('Shopware\Models\User\User', 'user')
+            ->from(UserModel::class, 'user')
             ->leftJoin('user.attribute', 'userAttribute')
             ->leftJoin('user.role', 'role')
             ->where('user.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user \Shopware\Models\User\User */
+        /** @var $user UserModel */
         $user = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
         if (!$user) {
-            throw new ApiException\NotFoundException("User with id $id not found");
+            throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
         }
 
         $params = $this->prepareAssociatedData($params, $user);
         $user->fromArray($params);
 
         /** @var UserValidator $userValidator */
-        $userValidator = $this->getContainer()->get('shopware_account.user_validator');
+        $userValidator = $this->getContainer()->get('shopware.auth.validator.user_validator');
         $userValidator->validate($user);
 
         $this->getManager()->persist($user);
@@ -207,21 +226,21 @@ class User extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return \Shopware\Models\User\User
+     * @return UserModel
      */
     public function delete($id)
     {
-        $this->checkPrivilege('delete');
+        $this->checkPrivilege('delete', 'usermanager');
 
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $user \Shopware\Models\User\User */
+        /** @var $user UserModel */
         $user = $this->getRepository()->find($id);
 
         if (!$user) {
-            throw new ApiException\NotFoundException("User by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
         }
 
         $this->getManager()->remove($user);
@@ -231,57 +250,61 @@ class User extends Resource
     }
 
     /**
-     * @see https://gist.github.com/tylerhall/521810
+     * @param string      $privilege
+     * @param string|null $resource
      *
-     * @param int   $length
-     * @param array $availableSets
-     *
-     * @return string
-     *
-     * Generates a strong password of N length containing at least one lower case letter,
-     * one uppercase letter, one digit, and one special character. The remaining characters
-     * in the password are chosen at random from those four sets.
-     *
-     * The available characters in each set are user friendly - there are no ambiguous
-     * characters such as i, l, 1, o, 0, etc. This makes it much easier for users to manually
-     * type or speak their passwords.
+     * @throws ApiException\PrivilegeException
      */
-    public function generatePassword($length = 9, $availableSets = ['l', 'u', 'd', 's'])
+    public function checkPrivilege($privilege, $resource = null)
     {
-        $sets = [];
-        if (in_array('l', $availableSets)) {
-            $sets[] = 'abcdefghjkmnpqrstuvwxyz';
-        }
-        if (in_array('u', $availableSets)) {
-            $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
-        }
-        if (in_array('d', $availableSets)) {
-            $sets[] = '23456789';
-        }
-        if (in_array('s', $availableSets)) {
-            $sets[] = '!@#$%&*?';
+        if (!$this->getRole() || !$this->getAcl()) {
+            throw new ApiException\PrivilegeException('Unable to get role or acl');
         }
 
-        $all = '';
-        $password = '';
-
-        foreach ($sets as $set) {
-            $password .= $set[array_rand(str_split($set))];
-            $all .= $set;
+        if (!$resource) {
+            $calledClass = get_called_class();
+            $calledClass = explode('\\', $calledClass);
+            $resource = strtolower(end($calledClass));
         }
 
-        $all = str_split($all);
-        for ($i = 0; $i < $length - count($sets); ++$i) {
-            $password .= $all[array_rand($all)];
+        if (!$this->getAcl()->has($resource)) {
+            $message = sprintf('No resource "%s" found', $resource);
+            throw new ApiException\PrivilegeException($message);
         }
-        $password = str_shuffle($password);
 
-        return $password;
+        $role = $this->getRole();
+
+        if (!$this->getAcl()->isAllowed($role, $resource, $privilege)) {
+            $message = sprintf(
+                'Role "%s" is not allowed to "%s" on resource "%s"',
+                is_string($role) ? $role : $role->getRoleId(),
+                $privilege,
+                is_string($resource) ? $resource : $resource->getResourceId()
+            );
+            throw new ApiException\PrivilegeException($message);
+        }
     }
 
     /**
-     * @param array                      $data
-     * @param \Shopware\Models\User\User $user
+     * @param string      $privilege
+     * @param string|null $resource
+     *
+     * @return bool
+     */
+    public function hasPrivilege($privilege, $resource = null)
+    {
+        try {
+            $this->checkPrivilege($privilege, $resource);
+        } catch (ApiException\PrivilegeException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array     $data
+     * @param UserModel $user
      *
      * @throws ApiException\CustomValidationException
      *
@@ -291,13 +314,13 @@ class User extends Resource
     {
         // check if a role id or role name is passed and load the role model or set the role parameter to null.
         if (!empty($data['roleId'])) {
-            $data['role'] = $this->getManager()->find('Shopware\Models\User\Role', $data['roleId']);
+            $data['role'] = $this->getManager()->find(Role::class, $data['roleId']);
 
             if (empty($data['role'])) {
                 throw new ApiException\CustomValidationException(sprintf('Role by id %s not found', $data['roleId']));
             }
         } elseif (isset($data['role']) && ($data['role'] >= 0)) {
-            $role = $this->getManager()->getRepository('Shopware\Models\User\Role')->findOneBy(['name' => $data['role']]);
+            $role = $this->getManager()->getRepository(Role::class)->findOneBy(['name' => $data['role']]);
 
             if (!$role) {
                 throw new ApiException\CustomValidationException(sprintf('Role by name %s not found', $data['role']));
@@ -332,17 +355,17 @@ class User extends Resource
         }
 
         if (empty($data['email']) && empty($user->getEmail())) {
-            throw new ApiException\CustomValidationException('An E-Mail is required');
+            throw new ApiException\CustomValidationException('An e-mail is required');
         }
         if (empty($data['username']) && empty($user->getUsername())) {
-            throw new ApiException\CustomValidationException('A Username is required');
+            throw new ApiException\CustomValidationException('A username is required');
         }
         if (empty($data['name']) && empty($user->getName())) {
-            throw new ApiException\CustomValidationException('A Name is required');
+            throw new ApiException\CustomValidationException('A name is required');
         }
 
         if (!isset($data['localeId'])) {
-            $data['localeId'] = 1;    // de_DE
+            $data['localeId'] = 2; // en_GB
         }
 
         /** @var \Shopware\Components\Password\Manager $passwordEncoderRegistry */
@@ -363,9 +386,15 @@ class User extends Resource
      */
     private function isLocaleId($id)
     {
-        $localeIds = [1, 2];
+        $elementRepository = Shopware()->Models()->getRepository(Element::class);
+        $element = $elementRepository->findOneByName('backendLocales');
+        if (!$element) {
+            return false;
+        }
 
-        return in_array($id, $localeIds);
+        $locales = $element->getValue();
+
+        return in_array($id, $locales);
     }
 
     /**
@@ -375,16 +404,19 @@ class User extends Resource
      */
     private function getLocaleIdFromLocale($locale)
     {
-        $locales = [
-            'de_de' => 1,
-            'en_gb' => 2,
-        ];
-        $locale = strtolower($locale);
+        $localeRepository = Shopware()->Models()->getRepository(Locale::class);
 
-        if (!isset($locales[$locale])) {
+        /** @var \Shopware\Models\Shop\Locale $locale */
+        $locale = $localeRepository->findOneByLocale($locale);
+        if (!$locale) {
             return null;
         }
 
-        return $locales[$locale];
+        $localeId = $locale->getId();
+        if (!$this->isLocaleId($localeId)) {
+            return null;
+        }
+
+        return $localeId;
     }
 }

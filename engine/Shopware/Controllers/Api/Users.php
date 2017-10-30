@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Random;
+
 class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
 {
     /**
@@ -41,14 +44,29 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit = $this->Request()->getParam('limit', 1000);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 1000);
+        $offset = (int) $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
         $this->View()->assign($result);
+        $this->View()->assign('success', true);
+    }
+
+    /**
+     * Get one user
+     *
+     * GET /api/users/{id}
+     */
+    public function getAction()
+    {
+        $id = (int) $this->Request()->getParam('id');
+
+        $user = $this->resource->getOne($id);
+
+        $this->View()->assign('data', $user);
         $this->View()->assign('success', true);
     }
 
@@ -60,8 +78,12 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
     public function postAction()
     {
         if (!$this->Request()->getParam('password')) {
-            $passwordPlain = $this->resource->generatePassword();
+            $passwordPlain = Random::generatePassword();
             $this->Request()->setPost('password', $passwordPlain);
+        }
+
+        if ($this->Request()->getParam('apiKey') && strlen($this->Request()->getParam('apiKey')) < 40) {
+            throw new CustomValidationException('apiKey is too short. The minimal length is 40.');
         }
 
         $user = $this->resource->create($this->Request()->getPost());
@@ -86,7 +108,12 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      */
     public function putAction()
     {
-        $id = $this->Request()->getParam('id');
+        $id = (int) $this->Request()->getParam('id');
+
+        if ($this->Request()->getParam('apiKey') && strlen($this->Request()->getParam('apiKey')) < 40) {
+            throw new CustomValidationException('apiKey is too short. The minimal length is 40.');
+        }
+
         $params = $this->Request()->getPost();
 
         $user = $this->resource->update($id, $params);
@@ -107,7 +134,22 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      */
     public function deleteAction()
     {
-        $id = $this->Request()->getParam('id');
+        $id = (int) $this->Request()->getParam('id');
+
+        $container = $this->container;
+
+        if (!$container->initialized('Auth')) {
+            return $this->View()->assign(['success' => false, 'errorMsg' => 'Auth not initialized.']);
+        }
+
+        $currentUser = (int) $container->get('Auth')->getIdentity()->id;
+
+        if ($currentUser === $id) {
+            return $this->View()->assign([
+                'success' => false,
+                'errorMsg' => 'For safety reasons, it is prohibited for a user to delete itself.',
+            ]);
+        }
 
         $this->resource->delete($id);
 

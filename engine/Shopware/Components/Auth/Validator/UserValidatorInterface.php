@@ -22,30 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Constraint;
+namespace Shopware\Components\Auth\Validator;
 
-use Symfony\Component\Validator\Constraint;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Models\User\User;
 
-class UserEmail extends Constraint
+/**
+ * Interface UserValidatorInterface
+ */
+interface UserValidatorInterface
 {
     /**
-     * @var int
+     * @param User $user
+     *
+     * @throws ValidationException
      */
-    protected $userId;
+    public function validate(User $user);
 
     /**
-     * @return int
+     * @param User $user
+     *
+     * @return bool
      */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return string
-     */
-    public function validatedBy()
-    {
-        return 'UserEmailValidator';
-    }
+    public function isValid(User $user);
 }
