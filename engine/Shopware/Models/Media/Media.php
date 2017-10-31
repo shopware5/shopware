@@ -1249,7 +1249,7 @@ class Media extends ModelEntity
     private function removeSpecialCharacters($name)
     {
         $name = iconv('utf-8', 'ascii//translit', $name);
-        $name = preg_replace('#[^A-z0-9\-_]#', '-', $name);
+        $name = preg_replace('#[^A-Za-z0-9\-_]#', '-', $name);
         $name = preg_replace('#-{2,}#', '-', $name);
         $name = trim($name, '-');
 
