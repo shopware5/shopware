@@ -211,7 +211,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return $this->forward('cart');
         }
 
-        $this->session['sOrderVariables'] = new ArrayObject($this->View()->getAssign(), ArrayObject::ARRAY_AS_PROPS);
+        $viewVariables = $this->View()->getAssign();
+        unset($viewVariables['theme']);
+        $this->session['sOrderVariables'] = new ArrayObject($viewVariables, ArrayObject::ARRAY_AS_PROPS);
 
         $agbChecked = $this->Request()->getParam('sAGB');
         if (!empty($agbChecked)) {
