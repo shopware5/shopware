@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Additions
 
 * Added new notify until event `Shopware_Plugins_HttpCache_ShouldNotInvalidateCache` to `engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php` to be notified when the cache for a model will be invalidated and be able to prevent it
+* Added new service `Shopware\Components\HttpCache\CacheRouteInstaller` for creating cache routes
 
 ### Changes
 
@@ -87,7 +88,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ### Additions
 
-* Added command option `--current` to theme:cache:generate to compile from current asset timestamp and skip cache clear
 * Added config element `displayOnlySubShopVotes` to display only shop assigned article votes
 * Added parameter `displayProgressOnSingleDelete` to `Shopware.grid.Panel` to hide progress window on single delete action
 * Added parameter `expression` in `Shopware.listing.FilterPanel` to allow define own query expressions

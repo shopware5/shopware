@@ -512,6 +512,10 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="shopware.http_cache.route_installer" class="Shopware\Components\HttpCache\CacheRouteInstaller">
+            <argument type="service" id="config_writer"/>
+        </service>
+
         <service id="basket_persister" class="Shopware\Components\BasketSignature\BasketPersister">
             <argument type="service" id="dbal_connection" />
         </service>
