@@ -159,6 +159,7 @@ return array_replace_recursive([
         'save_handler' => 'db',
         'use_trans_sid' => 0,
         'locking' => true,
+        'namespace' => 'session-',
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
