@@ -172,6 +172,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $shipping
         );
 
+        /*
+         * Remove sensitive data before writing to the session
+         */
+        unset($data['register']['personal']['password']);
+        unset($data['register']['personal']['passwordConfirmation']);
+        unset($data['register']['billing']['password']);
+
         $this->writeSession($data, $customer);
 
         if ($customer->getAccountMode() == Customer::ACCOUNT_MODE_CUSTOMER) {
