@@ -60,6 +60,10 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             ->getUserDetailQuery($id)
             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+        if (!$this->_isAllowed('create') && !$this->_isAllowed('update')) {
+            unset($data['apiKey'], $data['sessionId']);
+        }
+
         unset($data['password']); // Do not send password hash to client
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
     }
