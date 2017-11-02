@@ -138,7 +138,7 @@ class CustomerEmailValidator extends ConstraintValidator
         $builder->andWhere('accountmode != ' . Customer::ACCOUNT_MODE_FAST_LOGIN);
         $builder->setParameter('email', $value);
 
-        if ($this->hasCustomerScope($shop)) {
+        if ($shop->hasCustomerScope()) {
             $builder->andWhere('subshopID = :shopId');
             $builder->setParameter('shopId', $shop->getParentId());
         }
@@ -159,23 +159,5 @@ class CustomerEmailValidator extends ConstraintValidator
     private function getSnippet(array $snippet)
     {
         return $this->snippets->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
-    }
-		
-		/**
-     * Check customer scope on parent shop since the flag is not saved for a language shop
-     *
-     * @param Shop $shop
-     * @return bool
-     */
-    private function hasCustomerScope(Shop $shop)
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $builder
-            ->select('customer_scope')
-            ->from('s_core_shops')
-            ->andWhere('id = :id')
-            ->setParameter('id', $shop->getParentId());
-
-        return $builder->execute()->fetchColumn();
     }
 }

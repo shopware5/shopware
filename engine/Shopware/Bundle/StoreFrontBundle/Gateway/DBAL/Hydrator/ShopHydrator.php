@@ -100,7 +100,7 @@ class ShopHydrator extends Hydrator
         $shop->setParentId((int) $parent['__shop_id']);
         $shop->setHost($parent['__shop_host']);
         $shop->setPath($parent['__shop_base_path']);
-        $shop->setCustomerScope((bool) $data['__shop_customer_scope']);
+        $shop->setCustomerScope((bool) $parent['__shop_customer_scope']);
         $shop->setUrl($data['__shop_base_url'] ?: $parent['__shop_base_url']);
         $shop->setSecure((bool) $parent['__shop_secure']);
         $shop->setSecureHost($parent['__shop_secure_host']);
