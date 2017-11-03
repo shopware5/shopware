@@ -853,11 +853,6 @@ class sAdmin
             );
             $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sUSERGROUPDATA ?: [];
 
-            if ($this->sSYSTEM->sUSERGROUPDATA['mode']) {
-                $this->sSYSTEM->sUSERGROUP = 'EK';
-            } else {
-                $this->sSYSTEM->sUSERGROUP = $getUser['customergroup'];
-            }
             $this->sSYSTEM->sUSERGROUP = $getUser['customergroup'];
 
             $this->session->offsetSet('sUserGroup', $this->sSYSTEM->sUSERGROUP);
