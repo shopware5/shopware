@@ -143,6 +143,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 GROUP BY articleID
                 LIMIT 2
             ';
+            
+            // Filter sql, e.g. to check suppliernumber additionally.
+            $sql = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Search_SearchFuzzyCheck_FilterSql', $sql, ['search' => $search]);
+            
             $articles = $this->get('db')->fetchAll($sql, [$search]);
             if ($articles[0]['configurator_set_id']) {
                 $number = $articles[0]['ordernumber'];
