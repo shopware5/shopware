@@ -544,9 +544,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     private function createDestinationFromVersion(Version $version)
     {
         $filename = 'update_' . $version->sha1 . '.zip';
-        $destination = Shopware()->DocPath('files') . $filename;
 
-        return $destination;
+        return Shopware()->DocPath('files') . $filename;
     }
 
     /**

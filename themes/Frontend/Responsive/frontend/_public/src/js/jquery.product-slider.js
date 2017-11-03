@@ -82,6 +82,14 @@
              * @type {Number}
              */
             itemsPerSlide: 1,
+            
+            /**
+            * Turn infinite sliding on and off.
+            *
+            * @property infiniteSlide
+            * @type {Boolean}
+            */
+            infiniteSlide: true,
 
             /**
              * Turn automatic sliding on and off.
@@ -320,7 +328,7 @@
             }
 
             if (me.opts.initOnEvent !== null) {
-                $.subscribe(me.opts.initOnEvent, function() {
+                $.subscribe(me.getEventName(me.opts.initOnEvent), function() {
                     if (!me.initialized) {
                         me.initSlider();
                         me.registerEvents();
@@ -435,8 +443,8 @@
 
             me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
 
-            $.subscribe('plugin/swTabMenu/onChangeTab', $.proxy(me.update, me));
-            $.subscribe('plugin/swCollapsePanel/onOpenPanel', $.proxy(me.update, me));
+            $.subscribe(me.getEventName('plugin/swTabMenu/onChangeTab'), $.proxy(me.update, me));
+            $.subscribe(me.getEventName('plugin/swCollapsePanel/onOpenPanel'), $.proxy(me.update, me));
 
             $.publish('plugin/swProductSlider/onRegisterEvents', [ me ]);
         },
@@ -820,6 +828,10 @@
          */
         initInfiniteSlide: function () {
             var me = this;
+            
+            if (!me.opts.infiniteSlide) {
+                return;
+            }
 
             me.cloneItems(0, me.itemsPerPage + me.itemsPerSlide);
 
@@ -1080,6 +1092,13 @@
          */
         destroy: function () {
             var me = this;
+
+            if (me.opts.initOnEvent !== null) {
+                $.unsubscribe(me.getEventName(me.opts.initOnEvent));
+            }
+
+            $.unsubscribe(me.getEventName('plugin/swTabMenu/onChangeTab'));
+            $.unsubscribe(me.getEventName('plugin/swCollapsePanel/onOpenPanel'));
 
             if (me.$arrowPrev) me.$arrowPrev.remove();
             if (me.$arrowNext) me.$arrowNext.remove();

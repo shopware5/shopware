@@ -65,7 +65,7 @@
                                         {/block}
                                     {else}
                                         {block name="frontend_sitemap_navigation_defaultpages"}
-                                            <a href="{$categoryTree.link}" title="{$categoryTree.name|escape}" class="sitemap--navigation-head-link is--active"{if $categoryTree.external} target="{$categoryTree.externalTarget}"{/if}>
+                                            <a href="{$categoryTree.link}" title="{$categoryTree.name|escape}" class="sitemap--navigation-head-link is--active"{if $categoryTree.external && $categoryTree.externalTarget} target="{$categoryTree.externalTarget}"{/if}>
                                                 {$categoryTree.name}
                                             </a>
                                         {/block}

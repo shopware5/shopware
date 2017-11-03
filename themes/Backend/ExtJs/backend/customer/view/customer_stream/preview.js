@@ -77,9 +77,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
     initComponent: function () {
         var me = this;
 
-        /* {if {acl_is_allowed privilege=delete}} */
-        me.selModel = me.getGridSelModel();
-        /* {/if} */
         me.columns = me.getColumns();
 
         me.dockedItems = [ me.getPagingBar() ];
@@ -287,11 +284,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                 return names.join('<br>');
             }
         }
-        /* {if {acl_is_allowed privilege=detail}} */
         , {
             xtype: 'actioncolumn',
             width: 60,
             items: [
+                /* {if {acl_is_allowed privilege=detail}} */
                 {
                     iconCls: 'sprite-pencil',
                     action: 'editCustomer',
@@ -299,6 +296,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                         me.fireEvent('edit', record);
                     }
                 },
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=delete}} */
                 {
                     action: 'delete',
                     iconCls: 'sprite-cross',
@@ -312,28 +311,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
                         me.fireEvent('delete', record);
                     }
                 }
+                /* {/if} */
             ]
         }
-        /* {/if} */
+
         ];
-    },
-
-    /**
-     * Creates the grid selection model for checkboxes
-     *
-     * @return [Ext.selection.CheckboxModel] grid selection model
-     */
-    getGridSelModel: function () {
-        var me = this;
-
-        return Ext.create('Ext.selection.CheckboxModel', {
-            listeners: {
-                // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange: function (sm, selections) {
-                    me.fireEvent('selection-changed', selections);
-                }
-            }
-        });
     },
 
     /**
@@ -345,11 +327,41 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
     getPagingBar: function () {
         var me = this;
 
-        return Ext.create('Ext.toolbar.Paging', {
+        var comboStore = Ext.create('Ext.data.Store', {
+            fields: [ 'value', 'display' ],
+            data: [
+                { value: 10, display: '10 {s name="items"}{/s}' },
+                { value: 20, display: '20 {s name="items"}{/s}' },
+                { value: 50, display: '50 {s name="items"}{/s}' },
+                { value: 100, display: '100 {s name="items"}{/s}' },
+                { value: 200, display: '200 {s name="items"}{/s}' }
+            ]
+        });
+
+        var combo = Ext.create('Ext.form.field.ComboBox', {
+            store: comboStore,
+            valueField: 'value',
+            displayField: 'display',
+            fieldLabel: '{s name="items_per_page"}{/s}',
+            labelStyle: 'margin-top: 2px',
+            width: 220,
+            labelWidth: 110,
+            listeners: {
+                scope: me,
+                change: Ext.bind(me.onPerPageChange, me)
+            }
+        });
+
+        var toolbar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
             dock: 'bottom',
             displayInfo: true
         });
+
+        toolbar.add([{ xtype: 'tbspacer' }, combo]);
+        combo.setValue(toolbar.store.pageSize);
+
+        return toolbar;
     },
 
     /**
@@ -360,6 +372,13 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
      */
     dateColumn: function (value) {
         return !value ? value : Ext.util.Format.date(value);
+    },
+
+    onPerPageChange: function(comp, newValue) {
+        var me = this;
+
+        me.store.pageSize = newValue;
+        me.store.load();
     }
 });
 // {/block}

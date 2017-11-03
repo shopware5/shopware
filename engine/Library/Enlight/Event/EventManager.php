@@ -99,6 +99,10 @@ class Enlight_Event_EventManager extends Enlight_Class
     {
         $eventName = strtolower($handler->getName());
 
+        if (!isset($this->listeners[$eventName])) {
+            $this->listeners[$eventName] = [];
+        }
+
         $list =& $this->listeners[$eventName];
 
         if ($handler->getPosition()) {

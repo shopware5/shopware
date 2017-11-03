@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Doctrine\DBAL\Connection as Connection;
+use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware

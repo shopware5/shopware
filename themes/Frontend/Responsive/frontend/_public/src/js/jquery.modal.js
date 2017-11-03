@@ -739,7 +739,7 @@
 
             me._on(me.$target, 'click', $.proxy(me.onClick, me));
 
-            $.subscribe('plugin/swModal/onClose', $.proxy(me.onClose, me));
+            $.subscribe(me.getEventName('plugin/swModal/onClose'), $.proxy(me.onClose, me));
 
             $.publish('plugin/swModalbox/onRegisterEvents', [ me ]);
         },
@@ -793,7 +793,7 @@
                 $.modal.close();
             }
 
-            $.unsubscribe('plugin/swModal/onClose', $.proxy(me.onClose, me));
+            $.unsubscribe(me.getEventName('plugin/swModal/onClose'));
 
             me._destroy();
         }

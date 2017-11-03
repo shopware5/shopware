@@ -244,6 +244,29 @@ class CustomerTest extends TestCase
     }
 
     /**
+     * @expectedException \Shopware\Components\Api\Exception\ValidationException
+     * @expectedExceptionMessageRegExp "salutation: The value you selected is not a valid choice."
+     */
+    public function testCreateWithInvalidDataShouldThrowValidationExceptionWithCorrectToStringMessage()
+    {
+        $testData = [
+            'active' => true,
+            'email' => true,
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'email' => 'max@mustermann.de',
+            'salutation' => 'max',
+            'billing' => [
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'country' => 2,
+            ],
+        ];
+
+        $this->resource->create($testData);
+    }
+
+    /**
      * @depends testCreateShouldBeSuccessful
      */
     public function testUpdateShouldBeSuccessful($id)

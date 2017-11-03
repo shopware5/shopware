@@ -55,7 +55,12 @@
         init: function () {
             var me = this,
                 $el = me.$el,
-                opts = me.opts;
+                opts = me.opts,
+                selector = $el.find(opts.contentSelector);
+
+            if (selector.length === 0) {
+                selector = $(opts.contentSelector);
+            }
 
             me.applyDataAttributes();
 
@@ -63,7 +68,7 @@
 
             $el.swOffcanvasMenu({
                 'direction': 'fromRight',
-                'offCanvasSelector': $el.find(opts.contentSelector),
+                'offCanvasSelector': selector,
                 'fullscreen': opts.fullscreen,
                 'closeButtonSelector': opts.closeButtonSelector
             });

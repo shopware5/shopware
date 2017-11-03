@@ -434,7 +434,8 @@ class InstallCommand extends Command
 
         $databaseService = new DatabaseService($pdo);
 
-        $databaseNames = $databaseService->getAvailableDatabaseNames();
+        $omitSchemas = ['information_schema', 'mysql', 'sys', 'performance_schema'];
+        $databaseNames = $databaseService->getSchemas($omitSchemas);
 
         $defaultChoice = null;
         if ($connectionInfo->databaseName) {

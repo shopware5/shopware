@@ -31,14 +31,14 @@
  * todo@all: Documentation
  */
 Ext.apply(Ext.form.VTypes, {
-    password : function(val, field) {
+    password: function (val, field) {
         if (field.initialPassField) {
             var pwd = Ext.getCmp(field.initialPassField);
             return (val == pwd.getValue());
         }
         return true;
     },
-    passwordText : '{s name=password_match}The inserted passwords are not equal{/s}'
+    passwordText: '{s name=password_match}The inserted passwords are not equal{/s}'
 });
 
 Ext.apply(Ext.form.field.VTypes, {
@@ -71,7 +71,7 @@ Ext.apply(Ext.form.field.VTypes, {
      * @returns { String|Boolean } Returns the string with a ajax validation war triggered,
      *          Otherwise a boolean value
      */
-    remote:function (val, field) {
+    remote: function (val, field) {
         if (!field.validationUrl) {
             return true;
         }
@@ -82,12 +82,13 @@ Ext.apply(Ext.form.field.VTypes, {
         }
 
         // Is the field rendered?
-        if(!field.rendered) {
+        if (!field.rendered) {
             return true;
         }
 
-        if(!field.hasOwnProperty('hasBlurListener')) {
-            field.on('blur', this.onFireRemoteValidation, this);
+        if (!field.hasOwnProperty('hasBlurListener')) {
+            field.on('change', this.onFireRemoteValidation, this, { delay: 300 });
+            this.onFireRemoteValidation(field);
             field.hasBlurListener = true;
         }
 
@@ -95,6 +96,7 @@ Ext.apply(Ext.form.field.VTypes, {
         // just return true to indicate that the
         return (field.hasOwnProperty('oldValid')) ? field.oldValid : true;
     },
+
     /**
      * Date Range Check - Checks if an start date is not after a given end date and vice versa
      *
@@ -121,8 +123,7 @@ Ext.apply(Ext.form.field.VTypes, {
      * @param val Date
      * @param field
      */
-    daterange:function(val, field)
-    {
+    daterange: function (val, field) {
         var date = field.parseDate(val);
 
         if (!date) {
@@ -156,20 +157,20 @@ Ext.apply(Ext.form.field.VTypes, {
      * @param { Object } field - Ext.form.field.* component which triggers the event
      * @returns { Boolean } Truthy if the validation was sucessful, otherwise falsy.
      */
-    onFireRemoteValidation: function(field) {
+    onFireRemoteValidation: function (field) {
         var parameters, val = field.getValue();
 
-        if(Ext.isDefined(field.oldValid)) {
-            if(val == field.oldValue) {
+        if (Ext.isDefined(field.oldValid)) {
+            if (val == field.oldValue) {
                 return field.oldValid;
             }
         }
         field.oldValue = val;
 
-        if (!field.validationRequestParams){
+        if (!field.validationRequestParams) {
             parameters = {
-                value:val,
-                param:field.validationRequestParam
+                value: val,
+                param: field.validationRequestParam
             };
         } else {
             parameters = field.validationRequestParams;
@@ -178,9 +179,10 @@ Ext.apply(Ext.form.field.VTypes, {
 
         Ext.Ajax.request({
             async: false,
-            url:field.validationUrl,
+            url: field.validationUrl,
             params: parameters,
-            success:function (response) {
+            success: function (response) {
+                var oldValid = field.oldValid;
 
                 if (!response.responseText) {
                     //field is invalid setting the custom error message
@@ -188,14 +190,16 @@ Ext.apply(Ext.form.field.VTypes, {
                     field.vtypeText = field.validationErrorMsg;
 
                     field.oldValid = false;
-                }
-                else {
+                } else {
                     field.clearInvalid();
-
                     field.oldValid = true;
                 }
+
+                if (oldValid !== field.oldValid) {
+                    field.fireEvent('validitychange', field, field.oldValid);
+                }
             },
-            failure:function (response) {
+            failure: function (response) {
                 Shopware.Msg.createGrowlMessage('', field.validationErrorMsg, '', 'growl', false);
                 return false;
             }

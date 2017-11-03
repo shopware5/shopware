@@ -32,7 +32,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        if ($this->Request()->getActionName() == 'refreshStatistic') {
+        if ($this->Request()->getActionName() === 'refreshStatistic') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
     }

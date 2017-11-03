@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = (grunt) => {
     var shopId = grunt.option('shopId') || 1,
         file = '../web/cache/config_' + shopId + '.json',
@@ -5,7 +7,9 @@ module.exports = (grunt) => {
         lessTargetFile = {},
         jsFiles = [],
         jsTargetFile = {},
-        content = '';
+        content = '',
+        inheritancePath = config.inheritancePath,
+        themesTasks = {};
 
     lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';
 
@@ -30,9 +34,21 @@ module.exports = (grunt) => {
 
     grunt.file.write('../web/cache/all.less', content);
 
+    inheritancePath.forEach(function (item) {
+        var folderPath = path.join(__dirname, '../Frontend', item);
+
+        if (!grunt.file.exists(folderPath, 'Gruntfile.js')) {
+            return;
+        }
+
+        themesTasks[item] = {};
+        themesTasks[item][folderPath] = 'default';
+    });
+
     return {
         jsTargetFile,
         lessTargetFile,
-        jsFiles
+        jsFiles,
+        themesTasks
     };
 };

@@ -26,6 +26,7 @@ namespace   Shopware\Models\Customer;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Security\AttributeCleanerTrait;
 
 /**
  * @deprecated Since 5.2 removed in 5.4 use \Shopware\Models\Customer\Address
@@ -48,6 +49,12 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Shipping extends ModelEntity
 {
+    /*
+     * HTML Cleansing trait for different attributes in a class
+     * @see \Shopware\Components\Security\AttributeCleanerTrait
+     */
+    use AttributeCleanerTrait;
+
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
@@ -233,7 +240,7 @@ class Shipping extends ModelEntity
      */
     public function setDepartment($department)
     {
-        $this->department = $department;
+        $this->department = $this->cleanup($department);
 
         return $this;
     }
@@ -257,7 +264,7 @@ class Shipping extends ModelEntity
      */
     public function setSalutation($salutation)
     {
-        $this->salutation = $salutation;
+        $this->salutation = $this->cleanup($salutation);
 
         return $this;
     }
@@ -281,7 +288,7 @@ class Shipping extends ModelEntity
      */
     public function setFirstName($firstName)
     {
-        $this->firstName = $firstName;
+        $this->firstName = $this->cleanup($firstName);
 
         return $this;
     }
@@ -305,7 +312,7 @@ class Shipping extends ModelEntity
      */
     public function setLastName($lastName)
     {
-        $this->lastName = $lastName;
+        $this->lastName = $this->cleanup($lastName);
 
         return $this;
     }
@@ -329,7 +336,7 @@ class Shipping extends ModelEntity
      */
     public function setStreet($street)
     {
-        $this->street = $street;
+        $this->street = $this->cleanup($street);
 
         return $this;
     }
@@ -353,7 +360,7 @@ class Shipping extends ModelEntity
      */
     public function setZipCode($zipCode)
     {
-        $this->zipCode = $zipCode;
+        $this->zipCode = $this->cleanup($zipCode);
 
         return $this;
     }
@@ -377,7 +384,7 @@ class Shipping extends ModelEntity
      */
     public function setCity($city)
     {
-        $this->city = $city;
+        $this->city = $this->cleanup($city);
 
         return $this;
     }
@@ -483,7 +490,7 @@ class Shipping extends ModelEntity
      */
     public function setAdditionalAddressLine2($additionalAddressLine2)
     {
-        $this->additionalAddressLine2 = $additionalAddressLine2;
+        $this->additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
     }
 
     /**
@@ -503,7 +510,7 @@ class Shipping extends ModelEntity
      */
     public function setAdditionalAddressLine1($additionalAddressLine1)
     {
-        $this->additionalAddressLine1 = $additionalAddressLine1;
+        $this->additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
     }
 
     /**
@@ -559,6 +566,6 @@ class Shipping extends ModelEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = $this->cleanup($title);
     }
 }

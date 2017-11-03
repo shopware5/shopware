@@ -80,7 +80,30 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $addresses = $this->addressRepository->getListArray($this->get('session')->get('sUserId'));
+        $addresses = $this->addressRepository->getListArray(
+            $this->container->get('session')->get('sUserId')
+        );
+
+        // Create a list of ids of occuring countries and states
+        $countryIds = array_unique(array_filter(array_column($addresses, 'countryId')));
+        $stateIds = array_unique(array_filter(array_column($addresses, 'stateId')));
+
+        $countryRepository = $this->container->get('shopware_storefront.country_gateway');
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+
+        $countries = $countryRepository->getCountries($countryIds, $context);
+        $states = $countryRepository->getStates($stateIds, $context);
+
+        // Apply translations for countries and states to address array, converting them from structs to arrays in the process
+        foreach ($addresses as &$address) {
+            if (array_key_exists($address['countryId'], $countries)) {
+                $address['country'] = json_decode(json_encode($countries[$address['countryId']]), true);
+            }
+            if (array_key_exists($address['stateId'], $states)) {
+                $address['state'] = json_decode(json_encode($states[$address['stateId']]), true);
+            }
+        }
+        unset($address);
 
         $this->View()->assign('error', $this->Request()->getParam('error'));
         $this->View()->assign('success', $this->Request()->getParam('success'));
@@ -414,7 +437,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                     continue;
                 }
 
-                if ($key == 'checkoutShippingAddressId') {
+                if ($key === 'checkoutShippingAddressId') {
                     $this->refreshSession($address);
                 }
 

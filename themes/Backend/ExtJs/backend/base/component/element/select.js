@@ -117,12 +117,39 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
      * @return Ext.data.Store|null
      */
     getStoreById: function(storeId) {
+        // Try to find any previously-loaded config select store for the given storeId
+        var configSelectStoreId = 'Shopware.apps.Base.view.element.Select.store.' + storeId;
+        // If filters are defined on this element, we need to use a different store for that filter combination
+        // The filter gets applied in `initComponent()` above.
+        if (this.filter) {
+            configSelectStoreId += '.filter.' + JSON.stringify(this.filter);
+        }
+        var store = Ext.data.StoreManager.lookup(configSelectStoreId);
+
+        if (store) {
+            return store;
+        }
+
         try {
-            return Ext.create(storeId, {
-                pageSize: 1000,
-                autoLoad: true
+            store = Ext.create(storeId, {
+                storeId: configSelectStoreId,
+                pageSize: 1000
             });
+            // Override the load() method so the store is only ever loaded once
+            Ext.override(store, {
+                load: function () {
+                    if (!this.loadCalled) {
+                        this.loadCalled = true;
+                        this.callParent(arguments);
+                    } else {
+                        this.fireEvent('load', this)
+                    }
+                }
+            });
+
+            return store;
         } catch (e) {
+            // Store class was not found - no such store exists
             return null;
         }
     }

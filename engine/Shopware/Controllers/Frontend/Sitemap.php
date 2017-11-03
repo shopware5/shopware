@@ -110,6 +110,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
                 ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->andWhere('sites.active = true')
                 ->getQuery()
                 ->getArrayResult();
 
@@ -227,7 +228,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $fallbackId = $fallbackShop->getId();
         }
 
-        $translator = new Shopware_Components_Translation();
+        $translator = $this->container->get('translation');
 
         $builder = $emotionRepository->getCampaignsByShopId($shopId);
         $campaigns = $builder->getQuery()->getArrayResult();

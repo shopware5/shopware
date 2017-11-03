@@ -131,7 +131,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
-            $this->View()->assign(['succees' => false, 'message' => $e->getMessage()]);
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+            return;
         }
 
         $this->View()->assign('success', true);
@@ -820,9 +821,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     private function getPluginModel($technicalName)
     {
         $repo = Shopware()->Models()->getRepository(Plugin::class);
-        $plugin = $repo->findOneBy(['name' => $technicalName]);
 
-        return $plugin;
+        return $repo->findOneBy(['name' => $technicalName]);
     }
 
     /**

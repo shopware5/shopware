@@ -155,6 +155,18 @@ class Compiler
         $this->clearThemeCache($shop, $old);
     }
 
+    public function recompile(Shop\Shop $shop)
+    {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $timestamp = $this->getThemeTimestamp($shop);
+
+        $this->compileLess($timestamp, $shop->getTemplate(), $shop);
+        $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
+    }
+
     /**
      * @param Shop\Shop $shop
      *
@@ -190,12 +202,15 @@ class Compiler
         $jsTarget = $this->pathResolver->getJsFilePath($shop, $timestamp);
         $jsTarget = ltrim(str_replace($this->rootDir, '', $jsTarget), '/');
 
+        $inheritancePath = $this->inheritance->getInheritancePath($shop->getTemplate());
+
         return new Configuration(
             $lessFiles,
             $js,
             $config,
             $lessTarget,
-            $jsTarget
+            $jsTarget,
+            $inheritancePath
         );
     }
 

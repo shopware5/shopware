@@ -97,7 +97,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 $position['link_rating_tab'] = $this->get('router')->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
-                    'action' => 'rating',
+                    'jumpTab' => 'rating',
                 ]);
 
                 if (!isset($shopPositionImages[$shopId][$position['articleordernumber']]['source'])) {

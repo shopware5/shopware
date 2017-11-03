@@ -47,6 +47,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         align: 'stretch'
     },
 
+    hasConditions: false,
+
     bodyPadding: '10 0 0',
 
     initComponent: function() {
@@ -58,6 +60,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         });
 
         me.items = [];
+
+        me.on('remove', Ext.bind(me.onRemoveChildComponent, me));
 
         me.callParent(arguments);
     },
@@ -98,8 +102,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     },
 
     createConditionContainer: function(configuration) {
-        var me = this;
-
         var panel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionField', {
             flex: 1,
             name: configuration.conditionClass,
@@ -129,8 +131,14 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         var me = this,
             container = me.createConditionContainer(configuration);
 
+        if (me.emptyMessageContainer) {
+            me.remove(me.emptyMessageContainer);
+        }
+
         if (!me.conditionExists(me.items.items, configuration)) {
             me.add(container);
+            me.hasConditions = true;
+            me.fireEvent('condition-panel-change');
         }
     },
 
@@ -152,11 +160,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     setValue: function(value) {
         var me = this;
 
-        me.removeAll();
         if (!value) {
             return;
         }
 
+        me.removeAll();
         value = Ext.JSON.decode(value);
 
         var containers = [];
@@ -167,13 +175,16 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
 
             handler.load(conditionClass, items, function(configuration) {
                 if (!me.conditionExists(containers, configuration)) {
+                    me.hasConditions = true;
                     var container = me.createConditionContainer(configuration);
                     containers.push(container);
                 }
             });
         }
+
         me.add(containers);
         me.getForm().setValues(value);
+        me.fireEvent('condition-panel-change');
     },
 
     getSubmitData: function() {
@@ -182,6 +193,10 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             itemValues = { };
 
         Ext.each(me.items.items, function(panel) {
+            if (panel.hasCls('customer-stream-empty-message')) {
+                return;
+            }
+
             itemValues = Ext.apply(itemValues, panel.conditionField.getSubmitData());
         });
 
@@ -202,6 +217,37 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         });
 
         return handler;
+    },
+
+    createEmptyMessage: function() {
+        var me = this;
+        me.emptyMessageContainer = Ext.create('Ext.panel.Panel', {
+            padding: 15,
+            cls: 'customer-stream-empty-message',
+            bodyStyle: 'border: 1px solid #a4b5c0; padding: 15px; background: #fff; border-radius: 3px',
+            items: [{
+                xtype: 'container',
+                style: 'color: #475c6a; line-height: 1.6',
+                html: '{s name="empty_message"}{/s}'
+            }]
+        });
+
+        return me.emptyMessageContainer;
+    },
+
+    onRemoveChildComponent: function(panel, comp) {
+        var me = this;
+
+        if (me.items.length > 0) {
+            return;
+        }
+
+        if (comp.cls === 'customer-stream-empty-message') {
+            return;
+        }
+
+        me.hasConditions = false;
+        me.fireEvent('condition-panel-change');
     }
 });
 // {/block}

@@ -34,6 +34,7 @@ Ext.define('Shopware.apps.Site.model.Nodes', {
         //{block name="backend/site/model/nodes/fields"}{/block}
         { name: 'key', type: 'string' },
         { name: 'id', type: 'string', convert: function(v, r) { return r.data.key || v; } },
+        { name: 'active', type: 'boolean', defaultValue: true },
         { name: 'description', type: 'string' },
         { name: 'name', type: 'string' },
         { name: 'text', convert: function(v, r) { return r.data.name ? r.data.name : v; } },

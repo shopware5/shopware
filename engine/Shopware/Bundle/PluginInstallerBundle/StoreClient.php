@@ -30,6 +30,7 @@ use Shopware\Bundle\PluginInstallerBundle\Exception\DomainVerificationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\LicenceException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\OrderException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\SbpServerException;
+use Shopware\Bundle\PluginInstallerBundle\Exception\ShopNotFoundException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
@@ -407,7 +408,7 @@ class StoreClient
             throw $requestException;
         }
 
-        $httpCode = $data['error'];
+        $httpCode = array_key_exists('error', $data) ? $data['error'] : 0;
         $sbpCode = $data['code'];
 
         switch ($sbpCode) {
@@ -501,11 +502,15 @@ class StoreClient
                 throw new DomainVerificationException($sbpCode, 'domain_in_use', $httpCode, $requestException);
             case 'ShopSecretsException-2':
                 throw new ShopSecretException($sbpCode, 'shop_secret_invalid', $httpCode, $requestException);
+            case 'UserShopsException-0':
+                throw new ShopNotFoundException($sbpCode, 'shop_not_found', $httpCode, $requestException);
         }
+
+        $reason = array_key_exists('reason', $data) ? $data['reason'] : sprintf('Unknown error occurred. (%s)', $sbpCode);
 
         throw new StoreException(
             $sbpCode,
-            $data['reason'],
+            $reason,
             $httpCode,
             $requestException
         );

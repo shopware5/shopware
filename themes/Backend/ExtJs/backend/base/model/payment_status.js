@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Base.model.PaymentStatus', {
         no_credit_approved: '{s name=no_credit_approved}No credit approved{/s}',
         the_credit_has_been_preliminarily_accepted: '{s name=the_credit_has_been_preliminarily_accepted}The credit has been preliminarily accepted{/s}',
         the_credit_has_been_accepted: '{s name=the_credit_has_been_accepted}The credit has been accepted{/s}',
-        the_payment_has_been_ordered_by_hanseatic_bank: '{s name=the_payment_has_been_ordered_by_hanseatic_bank}The payment has been ordered by Hanseatic Bank.{/s}',
+        the_payment_has_been_ordered: '{s name=the_payment_has_been_ordered}The payment has been ordered.{/s}',
         a_time_extension_has_been_registered: '{s name=a_time_extension_has_been_registered}A time extension has been registered{/s}',
         the_process_has_been_cancelled: '{s name=the_process_has_been_cancelled}The process has been cancelled.{/s}'
     },

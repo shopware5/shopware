@@ -242,21 +242,31 @@ More precise designations are commented inside the document.
 
     .navigation--logout {
         display: block;
-        .unitize(padding-left, 23);
     }
 
     .navigation--link.navigation--personalized  {
         .unitize(padding-top, 9);
+        .unitize(padding-left, 23);
         .unitize(padding-bottom, 9);
+        .unitize(line-height, 20);
+        position: relative;
+        color: @text-color;
+        font-weight: @font-base-weight;
+
+        &:before,
+        &::before {
+            .unitize(width, 16);
+            .unitize(height, 16);
+            .unitize(left, 2);
+            content: @sw-icon-logout;
+            font-family: @sw-icon-fontname;
+            position: absolute;
+        }
 
         [class^="icon--"] {
             .unitize-margin(0, 5, 0, 0);
             display: inline-block;
         }
-
-        .unitize(line-height, 20);
-        color: @text-color;
-        font-weight: @font-base-weight;
 
         .icon--logout {
             position: relative;
@@ -289,7 +299,6 @@ More precise designations are commented inside the document.
 
     .navigation--logout {
         display: block;
-        .unitize(padding-left, 23);
     }
 
     .navigation--signin {
@@ -313,12 +322,13 @@ More precise designations are commented inside the document.
 
     .navigation--link.link--logout.navigation--personalized {
         .unitize(line-height, 20);
+        .unitize(padding-left, 33);
         color: @text-color;
         font-weight: @font-base-weight;
 
-        .icon--logout {
-            position: relative;
-            .unitize(top, 10);
+        &:before,
+        &::before {
+            .unitize(left, 10);
         }
 
         &:hover {
@@ -979,7 +989,11 @@ More precise designations are commented inside the document.
                 }
 
                 .link--logout {
-                    .unitize-padding(10, 0, 0, 0);
+                    .unitize-padding(10, 0, 0, 23);
+
+                    &:before {
+                        .unitize(left, 2);
+                    }
                 }
             }
         }

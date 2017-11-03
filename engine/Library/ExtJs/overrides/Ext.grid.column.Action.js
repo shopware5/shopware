@@ -35,7 +35,6 @@ Ext.override(Ext.grid.column.Action, {
         var me = this,
             cfg = Ext.apply({}, config),
             items = cfg.items || [me],
-            l = items.length,
             i,
             item;
 
@@ -52,8 +51,8 @@ Ext.override(Ext.grid.column.Action, {
             v = Ext.isFunction(cfg.renderer) ? cfg.renderer.apply(this, arguments)||'' : '';
 
             meta.tdCls += ' ' + Ext.baseCSSPrefix + 'action-col-cell';
-            for (i = 0; i < l; i++) {
-                item = items[i];
+            for (i = 0; i < me.items.length; i++) {
+                item = me.items[i];
                 item.disable = Ext.Function.bind(me.disableAction, me, [i]);
                 item.enable = Ext.Function.bind(me.enableAction, me, [i]);
 

@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Media extends Extendable implements \JsonSerializable
+class Media extends Extendable
 {
     const TYPE_IMAGE = 'IMAGE';
 

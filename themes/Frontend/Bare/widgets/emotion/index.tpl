@@ -99,39 +99,47 @@
 
                                     {block name="widgets/emotion/index/inner-element"}
 
+                                        {$file = ''}
+
                                         {if $template == 'component_article'}
-                                            {include file="widgets/emotion/components/component_article.tpl"}
+                                            {$file = 'widgets/emotion/components/component_article.tpl'}
 
                                         {elseif $template == 'component_article_slider'}
-                                            {include file="widgets/emotion/components/component_article_slider.tpl"}
+                                            {$file = 'widgets/emotion/components/component_article_slider.tpl'}
 
                                         {elseif $template == 'component_banner'}
-                                            {include file="widgets/emotion/components/component_banner.tpl"}
+                                            {$file = 'widgets/emotion/components/component_banner.tpl'}
 
                                         {elseif $template == 'component_banner_slider'}
-                                            {include file="widgets/emotion/components/component_banner_slider.tpl"}
+                                            {$file = 'widgets/emotion/components/component_banner_slider.tpl'}
 
                                         {elseif $template == 'component_blog'}
-                                            {include file="widgets/emotion/components/component_blog.tpl"}
+                                            {$file = 'widgets/emotion/components/component_blog.tpl'}
 
                                         {elseif $template == 'component_category_teaser'}
-                                            {include file="widgets/emotion/components/component_category_teaser.tpl"}
+                                            {$file = 'widgets/emotion/components/component_category_teaser.tpl'}
 
                                         {elseif $template == 'component_html'}
-                                            {include file="widgets/emotion/components/component_html.tpl"}
+                                            {$file = 'widgets/emotion/components/component_html.tpl'}
 
                                         {elseif $template == 'component_iframe'}
-                                            {include file="widgets/emotion/components/component_iframe.tpl"}
+                                            {$file = 'widgets/emotion/components/component_iframe.tpl'}
 
                                         {elseif $template == 'component_manufacturer_slider'}
-                                            {include file="widgets/emotion/components/component_manufacturer_slider.tpl"}
+                                            {$file = 'widgets/emotion/components/component_manufacturer_slider.tpl'}
 
                                         {elseif $template == 'component_youtube'}
-                                            {include file="widgets/emotion/components/component_youtube.tpl"}
+                                            {$file = 'widgets/emotion/components/component_youtube.tpl'}
 
                                         {elseif "widgets/emotion/components/{$template}.tpl"|template_exists}
-                                            {include file="widgets/emotion/components/{$template}.tpl"}
+                                            {$file = "widgets/emotion/components/{$template}.tpl"}
+
                                         {/if}
+
+                                        {if $file != ''}
+                                            {include file=$file}
+                                        {/if}
+
                                     {/block}
                                 </div>
                                 {/strip}

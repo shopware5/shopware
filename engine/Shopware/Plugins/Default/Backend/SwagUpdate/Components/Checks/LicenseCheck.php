@@ -168,9 +168,6 @@ class LicenseCheck implements CheckInterface
             ->andWhere('license.module IN (:modules)')
             ->setParameter(':modules', $licenseKeys, Connection::PARAM_INT_ARRAY);
 
-        $statement = $queryBuilder->execute();
-        $licenseData = $statement->fetchAll();
-
-        return $licenseData;
+        return $queryBuilder->execute()->fetchAll();
     }
 }

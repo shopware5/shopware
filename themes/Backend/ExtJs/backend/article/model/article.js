@@ -101,6 +101,7 @@ Ext.define('Shopware.apps.Article.model.Article', {
         }
     ],
     associations: [
+        //{block name="backend/article/model/article/associations"}{/block}
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Detail', name: 'getMainDetail', associationKey: 'mainDetail' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Category', name: 'getCategory', associationKey: 'categories' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.SeoCategory', name: 'getSeoCategories', associationKey: 'seoCategories' },

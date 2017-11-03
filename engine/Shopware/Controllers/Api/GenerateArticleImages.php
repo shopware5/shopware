@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Exception as ApiException;
+
 class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controllers_Api_Rest
 {
     /**
@@ -42,13 +44,26 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
-        if ($useNumberAsId) {
-            $id = $this->resource->getIdFromNumber($id);
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
         }
 
-        $this->resource->generateVariantImages($id);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $id = $useNumberAsId ? $this->resource->getIdFromNumber($id) : (int) $id;
+
+        if (!$useNumberAsId && $id <= 0) {
+            throw new ApiException\CustomValidationException('Invalid article id');
+        }
+
+        /** @var $article \Shopware\Models\Article\Article */
+        $article = $this->resource->getRepository()->find($id);
+
+        if (!$article) {
+            throw new ApiException\NotFoundException("Article with id \"$id\" was not found");
+        }
+
+        $this->resource->generateImages($article, (bool) $this->Request()->getParam('force', 0));
 
         $this->View()->assign(['success' => true]);
     }

@@ -144,9 +144,8 @@ class ProductService implements Service\ProductServiceInterface
     public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
-        $products = $this->createFromListProducts($listProducts, $context);
 
-        return $products;
+        return $this->createFromListProducts($listProducts, $context);
     }
 
     /**
