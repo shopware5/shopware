@@ -2,19 +2,19 @@
 
 namespace Shopware\Storefront\Page\Search;
 
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Query\MatchQuery;
+use Shopware\Api\Search\Query\NestedQuery;
+use Shopware\Api\Search\Query\TermQuery;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Config\CachedConfigService;
-use Shopware\Search\Criteria;
-use Shopware\Search\Query\MatchQuery;
-use Shopware\Search\Query\NestedQuery;
-use Shopware\Search\Query\TermQuery;
 use Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class SearchPageLoader
 {
     /**
-     * @var CachedConfigService $configService
+     * @var CachedConfigService
      */
     private $configService;
 
@@ -66,14 +66,8 @@ class SearchPageLoader
      */
     private function createCriteria(string $searchTerm, Request $request, bool $isAndSearchLogicEnabled): Criteria
     {
-        $limit = 20;
-        if ($request->get('limit')) {
-            $limit = (int)$request->get('limit');
-        }
-        $page = 1;
-        if ($request->get('page')) {
-            $page = (int)$request->get('page');
-        }
+        $limit = $request->query->getInt('limit', 20);
+        $page = $request->query->getInt('page', 1);
 
         $criteria = new Criteria();
         $criteria->setOffset(($page - 1) * $limit);

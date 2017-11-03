@@ -2,25 +2,27 @@
 
 namespace Shopware\ShippingMethodPrice\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Shopware\ShippingMethodPrice\Event\ShippingMethodPriceBasicLoadedEvent;
 use Shopware\ShippingMethodPrice\Event\ShippingMethodPriceWrittenEvent;
-use Shopware\ShippingMethodPrice\Loader\ShippingMethodPriceBasicLoader;
-use Shopware\ShippingMethodPrice\Searcher\ShippingMethodPriceSearcher;
 use Shopware\ShippingMethodPrice\Searcher\ShippingMethodPriceSearchResult;
 use Shopware\ShippingMethodPrice\Struct\ShippingMethodPriceBasicCollection;
-use Shopware\ShippingMethodPrice\Writer\ShippingMethodPriceWriter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ShippingMethodPriceRepository
+class ShippingMethodPriceRepository implements RepositoryInterface
 {
     /**
-     * @var ShippingMethodPriceBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class ShippingMethodPriceRepository
     private $eventDispatcher;
 
     /**
-     * @var ShippingMethodPriceSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var ShippingMethodPriceWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        ShippingMethodPriceBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ShippingMethodPriceSearcher $searcher,
-        ShippingMethodPriceWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): ShippingMethodPriceBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): ShippingMethodPriceBasicCollection
     {
         if (empty($uuids)) {
             return new ShippingMethodPriceBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var ShippingMethodPriceBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ShippingMethodPriceBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class ShippingMethodPriceRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): ShippingMethodPriceBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ShippingMethodPriceSearchResult
@@ -90,11 +98,17 @@ class ShippingMethodPriceRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'shipping_method_price';
+    }
+
     public function update(array $data, TranslationContext $context): ShippingMethodPriceWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class ShippingMethodPriceRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class ShippingMethodPriceRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

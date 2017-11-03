@@ -5,30 +5,32 @@ namespace Shopware\Album\Repository;
 use Shopware\Album\Event\AlbumBasicLoadedEvent;
 use Shopware\Album\Event\AlbumDetailLoadedEvent;
 use Shopware\Album\Event\AlbumWrittenEvent;
-use Shopware\Album\Loader\AlbumBasicLoader;
-use Shopware\Album\Loader\AlbumDetailLoader;
-use Shopware\Album\Searcher\AlbumSearcher;
 use Shopware\Album\Searcher\AlbumSearchResult;
 use Shopware\Album\Struct\AlbumBasicCollection;
 use Shopware\Album\Struct\AlbumDetailCollection;
-use Shopware\Album\Writer\AlbumWriter;
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class AlbumRepository
+class AlbumRepository implements RepositoryInterface
 {
     /**
-     * @var AlbumDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var AlbumBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class AlbumRepository
     private $eventDispatcher;
 
     /**
-     * @var AlbumSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var AlbumWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        AlbumDetailLoader $detailLoader,
-        AlbumBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        AlbumSearcher $searcher,
-        AlbumWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): AlbumBasicCollection
+    {
+        if (empty($uuids)) {
+            return new AlbumBasicCollection();
+        }
+
+        /** @var AlbumBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            AlbumBasicLoadedEvent::NAME,
+            new AlbumBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): AlbumDetailCollection
@@ -64,27 +83,13 @@ class AlbumRepository
         if (empty($uuids)) {
             return new AlbumDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var AlbumDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             AlbumDetailLoadedEvent::NAME,
             new AlbumDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): AlbumBasicCollection
-    {
-        if (empty($uuids)) {
-            return new AlbumBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            AlbumBasicLoadedEvent::NAME,
-            new AlbumBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class AlbumRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'album';
+    }
+
     public function update(array $data, TranslationContext $context): AlbumWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class AlbumRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class AlbumRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

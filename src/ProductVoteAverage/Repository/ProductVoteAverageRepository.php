@@ -2,23 +2,27 @@
 
 namespace Shopware\ProductVoteAverage\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\ProductVoteAverage\Event\ProductVoteAverageBasicLoadedEvent;
-use Shopware\ProductVoteAverage\Loader\ProductVoteAverageBasicLoader;
-use Shopware\ProductVoteAverage\Searcher\ProductVoteAverageSearcher;
+use Shopware\ProductVoteAverage\Event\ProductVoteAverageWrittenEvent;
 use Shopware\ProductVoteAverage\Searcher\ProductVoteAverageSearchResult;
 use Shopware\ProductVoteAverage\Struct\ProductVoteAverageBasicCollection;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ProductVoteAverageRepository
+class ProductVoteAverageRepository implements RepositoryInterface
 {
     /**
-     * @var ProductVoteAverageBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -26,27 +30,35 @@ class ProductVoteAverageRepository
     private $eventDispatcher;
 
     /**
-     * @var ProductVoteAverageSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
+    /**
+     * @var WriterInterface
+     */
+    private $writer;
+
     public function __construct(
-        ProductVoteAverageBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ProductVoteAverageSearcher $searcher
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
+        $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): ProductVoteAverageBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): ProductVoteAverageBasicCollection
     {
         if (empty($uuids)) {
             return new ProductVoteAverageBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var ProductVoteAverageBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ProductVoteAverageBasicLoadedEvent::NAME,
@@ -54,6 +66,11 @@ class ProductVoteAverageRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): ProductVoteAverageBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ProductVoteAverageSearchResult
@@ -79,5 +96,40 @@ class ProductVoteAverageRepository
         $result = $this->searcher->aggregate($criteria, $context);
 
         return $result;
+    }
+
+    public function getEntityName(): string
+    {
+        return 'product_vote_average_ro';
+    }
+
+    public function update(array $data, TranslationContext $context): ProductVoteAverageWrittenEvent
+    {
+        $event = $this->writer->update($data, $context);
+
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
+
+        return $event;
+    }
+
+    public function upsert(array $data, TranslationContext $context): ProductVoteAverageWrittenEvent
+    {
+        $event = $this->writer->upsert($data, $context);
+
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
+
+        return $event;
+    }
+
+    public function create(array $data, TranslationContext $context): ProductVoteAverageWrittenEvent
+    {
+        $event = $this->writer->create($data, $context);
+
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
+
+        return $event;
     }
 }

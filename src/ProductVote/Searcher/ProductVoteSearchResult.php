@@ -2,23 +2,11 @@
 
 namespace Shopware\ProductVote\Searcher;
 
+use Shopware\Api\Search\SearchResultInterface;
+use Shopware\Api\Search\SearchResultTrait;
 use Shopware\ProductVote\Struct\ProductVoteBasicCollection;
-use Shopware\Search\SearchResultInterface;
 
 class ProductVoteSearchResult extends ProductVoteBasicCollection implements SearchResultInterface
 {
-    /**
-     * @var int
-     */
-    protected $total = 0;
-
-    public function getTotal(): int
-    {
-        return $this->total;
-    }
-
-    public function setTotal(int $total): void
-    {
-        $this->total = $total;
-    }
+    use SearchResultTrait;
 }

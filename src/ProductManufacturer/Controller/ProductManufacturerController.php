@@ -3,11 +3,11 @@
 namespace Shopware\ProductManufacturer\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
 use Shopware\ProductManufacturer\Repository\ProductManufacturerRepository;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,7 +76,7 @@ class ProductManufacturerController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('productManufacturerUuid');
-        $productManufacturers = $this->productManufacturerRepository->read(
+        $productManufacturers = $this->productManufacturerRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
@@ -98,8 +98,8 @@ class ProductManufacturerController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productManufacturers = $this->productManufacturerRepository->read(
-            $createEvent->getProductManufacturerUuids(),
+        $productManufacturers = $this->productManufacturerRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class ProductManufacturerController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productManufacturers = $this->productManufacturerRepository->read(
-            $createEvent->getProductManufacturerUuids(),
+        $productManufacturers = $this->productManufacturerRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class ProductManufacturerController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productManufacturers = $this->productManufacturerRepository->read(
-            $createEvent->getProductManufacturerUuids(),
+        $productManufacturers = $this->productManufacturerRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -190,7 +190,7 @@ class ProductManufacturerController extends ApiController
             return $this->createResponse(['errors' => $error], $context, 400);
         }
 
-        $productManufacturers = $this->productManufacturerRepository->read(
+        $productManufacturers = $this->productManufacturerRepository->readBasic(
             [$payload['uuid']],
             $context->getShopContext()->getTranslationContext()
         );

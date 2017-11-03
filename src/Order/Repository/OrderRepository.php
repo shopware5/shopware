@@ -2,33 +2,35 @@
 
 namespace Shopware\Order\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Order\Event\OrderBasicLoadedEvent;
 use Shopware\Order\Event\OrderDetailLoadedEvent;
 use Shopware\Order\Event\OrderWrittenEvent;
-use Shopware\Order\Loader\OrderBasicLoader;
-use Shopware\Order\Loader\OrderDetailLoader;
-use Shopware\Order\Searcher\OrderSearcher;
 use Shopware\Order\Searcher\OrderSearchResult;
 use Shopware\Order\Struct\OrderBasicCollection;
 use Shopware\Order\Struct\OrderDetailCollection;
-use Shopware\Order\Writer\OrderWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class OrderRepository
+class OrderRepository implements RepositoryInterface
 {
     /**
-     * @var OrderDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var OrderBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class OrderRepository
     private $eventDispatcher;
 
     /**
-     * @var OrderSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var OrderWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        OrderDetailLoader $detailLoader,
-        OrderBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        OrderSearcher $searcher,
-        OrderWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): OrderBasicCollection
+    {
+        if (empty($uuids)) {
+            return new OrderBasicCollection();
+        }
+
+        /** @var OrderBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            OrderBasicLoadedEvent::NAME,
+            new OrderBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): OrderDetailCollection
@@ -64,27 +83,13 @@ class OrderRepository
         if (empty($uuids)) {
             return new OrderDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var OrderDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             OrderDetailLoadedEvent::NAME,
             new OrderDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): OrderBasicCollection
-    {
-        if (empty($uuids)) {
-            return new OrderBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            OrderBasicLoadedEvent::NAME,
-            new OrderBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class OrderRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'order';
+    }
+
     public function update(array $data, TranslationContext $context): OrderWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class OrderRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class OrderRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

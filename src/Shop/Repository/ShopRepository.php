@@ -2,33 +2,35 @@
 
 namespace Shopware\Shop\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Shopware\Shop\Event\ShopBasicLoadedEvent;
 use Shopware\Shop\Event\ShopDetailLoadedEvent;
 use Shopware\Shop\Event\ShopWrittenEvent;
-use Shopware\Shop\Loader\ShopBasicLoader;
-use Shopware\Shop\Loader\ShopDetailLoader;
-use Shopware\Shop\Searcher\ShopSearcher;
 use Shopware\Shop\Searcher\ShopSearchResult;
 use Shopware\Shop\Struct\ShopBasicCollection;
 use Shopware\Shop\Struct\ShopDetailCollection;
-use Shopware\Shop\Writer\ShopWriter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ShopRepository
+class ShopRepository implements RepositoryInterface
 {
     /**
-     * @var ShopDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var ShopBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class ShopRepository
     private $eventDispatcher;
 
     /**
-     * @var ShopSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var ShopWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        ShopDetailLoader $detailLoader,
-        ShopBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ShopSearcher $searcher,
-        ShopWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): ShopBasicCollection
+    {
+        if (empty($uuids)) {
+            return new ShopBasicCollection();
+        }
+
+        /** @var ShopBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            ShopBasicLoadedEvent::NAME,
+            new ShopBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): ShopDetailCollection
@@ -64,27 +83,13 @@ class ShopRepository
         if (empty($uuids)) {
             return new ShopDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var ShopDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ShopDetailLoadedEvent::NAME,
             new ShopDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): ShopBasicCollection
-    {
-        if (empty($uuids)) {
-            return new ShopBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            ShopBasicLoadedEvent::NAME,
-            new ShopBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class ShopRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'shop';
+    }
+
     public function update(array $data, TranslationContext $context): ShopWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class ShopRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class ShopRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

@@ -2,25 +2,27 @@
 
 namespace Shopware\ProductStream\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\ProductStream\Event\ProductStreamBasicLoadedEvent;
 use Shopware\ProductStream\Event\ProductStreamWrittenEvent;
-use Shopware\ProductStream\Loader\ProductStreamBasicLoader;
-use Shopware\ProductStream\Searcher\ProductStreamSearcher;
 use Shopware\ProductStream\Searcher\ProductStreamSearchResult;
 use Shopware\ProductStream\Struct\ProductStreamBasicCollection;
-use Shopware\ProductStream\Writer\ProductStreamWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ProductStreamRepository
+class ProductStreamRepository implements RepositoryInterface
 {
     /**
-     * @var ProductStreamBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class ProductStreamRepository
     private $eventDispatcher;
 
     /**
-     * @var ProductStreamSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var ProductStreamWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        ProductStreamBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ProductStreamSearcher $searcher,
-        ProductStreamWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): ProductStreamBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): ProductStreamBasicCollection
     {
         if (empty($uuids)) {
             return new ProductStreamBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var ProductStreamBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ProductStreamBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class ProductStreamRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): ProductStreamBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ProductStreamSearchResult
@@ -90,11 +98,17 @@ class ProductStreamRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'product_stream';
+    }
+
     public function update(array $data, TranslationContext $context): ProductStreamWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class ProductStreamRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class ProductStreamRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

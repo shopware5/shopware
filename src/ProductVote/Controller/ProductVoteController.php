@@ -3,11 +3,11 @@
 namespace Shopware\ProductVote\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
 use Shopware\ProductVote\Repository\ProductVoteRepository;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,7 +76,7 @@ class ProductVoteController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('productVoteUuid');
-        $productVotes = $this->productVoteRepository->read(
+        $productVotes = $this->productVoteRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
@@ -98,8 +98,8 @@ class ProductVoteController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productVotes = $this->productVoteRepository->read(
-            $createEvent->getProductVoteUuids(),
+        $productVotes = $this->productVoteRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class ProductVoteController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productVotes = $this->productVoteRepository->read(
-            $createEvent->getProductVoteUuids(),
+        $productVotes = $this->productVoteRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class ProductVoteController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productVotes = $this->productVoteRepository->read(
-            $createEvent->getProductVoteUuids(),
+        $productVotes = $this->productVoteRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -190,7 +190,7 @@ class ProductVoteController extends ApiController
             return $this->createResponse(['errors' => $error], $context, 400);
         }
 
-        $productVotes = $this->productVoteRepository->read(
+        $productVotes = $this->productVoteRepository->readBasic(
             [$payload['uuid']],
             $context->getShopContext()->getTranslationContext()
         );

@@ -3,15 +3,15 @@
 namespace Shopware\PaymentMethod\Searcher;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\SqlParser;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\Searcher;
+use Shopware\Api\Search\SearchResultInterface;
+use Shopware\Api\Search\UuidSearchResult;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\PaymentMethod\Factory\PaymentMethodDetailFactory;
-use Shopware\PaymentMethod\Loader\PaymentMethodBasicLoader;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\SqlParser;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\Searcher;
-use Shopware\Search\SearchResultInterface;
-use Shopware\Search\UuidSearchResult;
+use Shopware\PaymentMethod\Reader\PaymentMethodBasicReader;
 
 class PaymentMethodSearcher extends Searcher
 {
@@ -21,15 +21,15 @@ class PaymentMethodSearcher extends Searcher
     private $factory;
 
     /**
-     * @var PaymentMethodBasicLoader
+     * @var PaymentMethodBasicReader
      */
-    private $loader;
+    private $reader;
 
-    public function __construct(Connection $connection, SqlParser $parser, PaymentMethodDetailFactory $factory, PaymentMethodBasicLoader $loader)
+    public function __construct(Connection $connection, SqlParser $parser, PaymentMethodDetailFactory $factory, PaymentMethodBasicReader $reader)
     {
         parent::__construct($connection, $parser);
         $this->factory = $factory;
-        $this->loader = $loader;
+        $this->reader = $reader;
     }
 
     protected function createQuery(Criteria $criteria, TranslationContext $context): QueryBuilder
@@ -37,13 +37,15 @@ class PaymentMethodSearcher extends Searcher
         return $this->factory->createSearchQuery($criteria, $context);
     }
 
-    protected function load(UuidSearchResult $uuidResult, TranslationContext $context): SearchResultInterface
+    protected function load(UuidSearchResult $uuidResult, Criteria $criteria, TranslationContext $context): SearchResultInterface
     {
-        $collection = $this->loader->load($uuidResult->getUuids(), $context);
+        $collection = $this->reader->readBasic($uuidResult->getUuids(), $context);
 
         $result = new PaymentMethodSearchResult($collection->getElements());
 
         $result->setTotal($uuidResult->getTotal());
+        $result->setCriteria($criteria);
+        $result->setContext($context);
 
         return $result;
     }

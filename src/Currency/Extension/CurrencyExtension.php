@@ -2,24 +2,22 @@
 
 namespace Shopware\Currency\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\Currency\Event\CurrencyBasicLoadedEvent;
 use Shopware\Currency\Event\CurrencyDetailLoadedEvent;
-use Shopware\Currency\Event\CurrencyWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Currency\Struct\CurrencyBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class CurrencyExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class CurrencyExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             CurrencyBasicLoadedEvent::NAME => 'currencyBasicLoaded',
             CurrencyDetailLoadedEvent::NAME => 'currencyDetailLoaded',
-            
         ];
     }
 
@@ -28,7 +26,6 @@ abstract class CurrencyExtension implements ExtensionInterface, EventSubscriberI
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -46,15 +43,14 @@ abstract class CurrencyExtension implements ExtensionInterface, EventSubscriberI
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function currencyBasicLoaded(CurrencyBasicLoadedEvent $event): void
-    { }
+    {
+    }
 
     public function currencyDetailLoaded(CurrencyDetailLoadedEvent $event): void
-    { }
-
-    
-
+    {
+    }
 }

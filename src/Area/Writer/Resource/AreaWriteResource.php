@@ -2,15 +2,15 @@
 
 namespace Shopware\Area\Writer\Resource;
 
+use Shopware\Api\Write\Field\BoolField;
+use Shopware\Api\Write\Field\SubresourceField;
+use Shopware\Api\Write\Field\TranslatedField;
+use Shopware\Api\Write\Field\UuidField;
+use Shopware\Api\Write\Flag\Required;
+use Shopware\Api\Write\WriteResource;
 use Shopware\Area\Event\AreaWrittenEvent;
 use Shopware\AreaCountry\Writer\Resource\AreaCountryWriteResource;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Write\Field\BoolField;
-use Shopware\Framework\Write\Field\SubresourceField;
-use Shopware\Framework\Write\Field\TranslatedField;
-use Shopware\Framework\Write\Field\UuidField;
-use Shopware\Framework\Write\Flag\Required;
-use Shopware\Framework\Write\WriteResource;
 use Shopware\Shop\Writer\Resource\ShopWriteResource;
 use Shopware\TaxAreaRule\Writer\Resource\TaxAreaRuleWriteResource;
 
@@ -53,6 +53,10 @@ class AreaWriteResource extends WriteResource
          * @var string[]      $identifiers
          */
         foreach ($updates as $class => $identifiers) {
+            if (!array_key_exists($class, $updates) || count($updates[$class]) === 0) {
+                continue;
+            }
+
             $event->addEvent($class::createWrittenEvent($updates, $context));
         }
 

@@ -25,10 +25,10 @@
 namespace Shopware\SeoUrl\Generator;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Query\TermQuery;
+use Shopware\Api\Search\Query\TermsQuery;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\Criteria;
-use Shopware\Search\Query\TermQuery;
-use Shopware\Search\Query\TermsQuery;
 use Shopware\SeoUrl\Repository\SeoUrlRepository;
 use Shopware\SeoUrl\Struct\SeoUrlBasicCollection;
 use Shopware\SeoUrl\Struct\SeoUrlBasicStruct;
@@ -81,7 +81,7 @@ class SeoUrlGeneratorRegistry
 
     public function generate(string $shopUuid, TranslationContext $context, bool $force): void
     {
-        $shop = $this->shopRepository->read([$shopUuid], $context)->get($shopUuid);
+        $shop = $this->shopRepository->readBasic([$shopUuid], $context)->get($shopUuid);
 
         foreach ($this->generators as $generator) {
             $this->connection->transactional(

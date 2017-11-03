@@ -3,11 +3,11 @@
 namespace Shopware\Media\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
 use Shopware\Media\Repository\MediaRepository;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,7 +76,7 @@ class MediaController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('mediaUuid');
-        $media = $this->mediaRepository->read(
+        $media = $this->mediaRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
@@ -98,8 +98,8 @@ class MediaController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $media = $this->mediaRepository->read(
-            $createEvent->getMediaUuids(),
+        $media = $this->mediaRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class MediaController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $media = $this->mediaRepository->read(
-            $createEvent->getMediaUuids(),
+        $media = $this->mediaRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class MediaController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $media = $this->mediaRepository->read(
-            $createEvent->getMediaUuids(),
+        $media = $this->mediaRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -190,7 +190,7 @@ class MediaController extends ApiController
             return $this->createResponse(['errors' => $error], $context, 400);
         }
 
-        $media = $this->mediaRepository->read(
+        $media = $this->mediaRepository->readBasic(
             [$payload['uuid']],
             $context->getShopContext()->getTranslationContext()
         );

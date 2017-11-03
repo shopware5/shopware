@@ -3,10 +3,10 @@
 namespace Shopware\Unit\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Shopware\Unit\Repository\UnitRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +76,7 @@ class UnitController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('unitUuid');
-        $units = $this->unitRepository->read(
+        $units = $this->unitRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
@@ -98,8 +98,8 @@ class UnitController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $units = $this->unitRepository->read(
-            $createEvent->getUnitUuids(),
+        $units = $this->unitRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class UnitController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $units = $this->unitRepository->read(
-            $createEvent->getUnitUuids(),
+        $units = $this->unitRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class UnitController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $units = $this->unitRepository->read(
-            $createEvent->getUnitUuids(),
+        $units = $this->unitRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -190,7 +190,7 @@ class UnitController extends ApiController
             return $this->createResponse(['errors' => $error], $context, 400);
         }
 
-        $units = $this->unitRepository->read(
+        $units = $this->unitRepository->readBasic(
             [$payload['uuid']],
             $context->getShopContext()->getTranslationContext()
         );

@@ -3,11 +3,11 @@
 namespace Shopware\ProductVoteAverage\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
 use Shopware\ProductVoteAverage\Repository\ProductVoteAverageRepository;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,12 +76,143 @@ class ProductVoteAverageController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('productVoteAverageUuid');
-        $productVoteAverages = $this->productVoteAverageRepository->read(
+        $productVoteAverages = $this->productVoteAverageRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
 
         return $this->createResponse(['data' => $productVoteAverages->get($uuid)], $context);
+    }
+
+    /**
+     * @Route("/productVoteAverage.{responseFormat}", name="api.productVoteAverage.create", methods={"POST"})
+     *
+     * @param ApiContext $context
+     *
+     * @return Response
+     */
+    public function createAction(ApiContext $context): Response
+    {
+        $createEvent = $this->productVoteAverageRepository->create(
+            $context->getPayload(),
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        $productVoteAverages = $this->productVoteAverageRepository->readBasic(
+            $createEvent->getUuids(),
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        $response = [
+            'data' => $productVoteAverages,
+            'errors' => $createEvent->getErrors(),
+        ];
+
+        return $this->createResponse($response, $context);
+    }
+
+    /**
+     * @Route("/productVoteAverage.{responseFormat}", name="api.productVoteAverage.upsert", methods={"PUT"})
+     *
+     * @param ApiContext $context
+     *
+     * @return Response
+     */
+    public function upsertAction(ApiContext $context): Response
+    {
+        $createEvent = $this->productVoteAverageRepository->upsert(
+            $context->getPayload(),
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        $productVoteAverages = $this->productVoteAverageRepository->readBasic(
+            $createEvent->getUuids(),
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        $response = [
+            'data' => $productVoteAverages,
+            'errors' => $createEvent->getErrors(),
+        ];
+
+        return $this->createResponse($response, $context);
+    }
+
+    /**
+     * @Route("/productVoteAverage.{responseFormat}", name="api.productVoteAverage.update", methods={"PATCH"})
+     *
+     * @param ApiContext $context
+     *
+     * @return Response
+     */
+    public function updateAction(ApiContext $context): Response
+    {
+        $createEvent = $this->productVoteAverageRepository->update(
+            $context->getPayload(),
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        $productVoteAverages = $this->productVoteAverageRepository->readBasic(
+            $createEvent->getUuids(),
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        $response = [
+            'data' => $productVoteAverages,
+            'errors' => $createEvent->getErrors(),
+        ];
+
+        return $this->createResponse($response, $context);
+    }
+
+    /**
+     * @Route("/productVoteAverage/{productVoteAverageUuid}.{responseFormat}", name="api.productVoteAverage.single_update", methods={"PATCH"})
+     *
+     * @param Request    $request
+     * @param ApiContext $context
+     *
+     * @return Response
+     */
+    public function singleUpdateAction(Request $request, ApiContext $context): Response
+    {
+        $payload = $context->getPayload();
+        $payload['uuid'] = $request->get('productVoteAverageUuid');
+
+        $updateEvent = $this->productVoteAverageRepository->update(
+            [$payload],
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        if ($updateEvent->hasErrors()) {
+            $errors = $updateEvent->getErrors();
+            $error = array_shift($errors);
+
+            return $this->createResponse(['errors' => $error], $context, 400);
+        }
+
+        $productVoteAverages = $this->productVoteAverageRepository->readBasic(
+            [$payload['uuid']],
+            $context->getShopContext()->getTranslationContext()
+        );
+
+        return $this->createResponse(
+            ['data' => $productVoteAverages->get($payload['uuid'])],
+            $context
+        );
+    }
+
+    /**
+     * @Route("/productVoteAverage.{responseFormat}", name="api.productVoteAverage.delete", methods={"DELETE"})
+     *
+     * @param ApiContext $context
+     *
+     * @return Response
+     */
+    public function deleteAction(ApiContext $context): Response
+    {
+        $result = ['data' => []];
+
+        return $this->createResponse($result, $context);
     }
 
     protected function getXmlRootKey(): string

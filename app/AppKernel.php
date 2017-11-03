@@ -55,6 +55,7 @@ class AppKernel extends Kernel
 
             // shopware
             new \Shopware\Framework\Framework(),
+            new \Shopware\Rest\Rest(),
             new \Shopware\Api\Api(),
             new \Shopware\Cart\Cart(),
             new \Shopware\CartBridge\CartBridge(),
@@ -62,7 +63,6 @@ class AppKernel extends Kernel
             new \Shopware\Administration\Administration(),
             new \Shopware\Translation\Translation(),
             new \Shopware\Filesystem\Filesystem(),
-            new \Shopware\Search\Search(),
             new \Shopware\Album\Album(),
             new \Shopware\Area\Area(),
             new \Shopware\ProductVote\ProductVote(),

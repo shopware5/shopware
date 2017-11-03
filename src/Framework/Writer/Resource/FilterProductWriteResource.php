@@ -2,12 +2,12 @@
 
 namespace Shopware\Framework\Writer\Resource;
 
+use Shopware\Api\Write\Field\FkField;
+use Shopware\Api\Write\Field\ReferenceField;
+use Shopware\Api\Write\Flag\Required;
+use Shopware\Api\Write\WriteResource;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Event\FilterProductWrittenEvent;
-use Shopware\Framework\Write\Field\FkField;
-use Shopware\Framework\Write\Field\ReferenceField;
-use Shopware\Framework\Write\Flag\Required;
-use Shopware\Framework\Write\WriteResource;
 use Shopware\Product\Writer\Resource\ProductWriteResource;
 
 class FilterProductWriteResource extends WriteResource
@@ -42,6 +42,10 @@ class FilterProductWriteResource extends WriteResource
          * @var string[]      $identifiers
          */
         foreach ($updates as $class => $identifiers) {
+            if (!array_key_exists($class, $updates) || count($updates[$class]) === 0) {
+                continue;
+            }
+
             $event->addEvent($class::createWrittenEvent($updates, $context));
         }
 

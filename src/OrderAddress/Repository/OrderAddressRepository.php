@@ -2,25 +2,27 @@
 
 namespace Shopware\OrderAddress\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\OrderAddress\Event\OrderAddressBasicLoadedEvent;
 use Shopware\OrderAddress\Event\OrderAddressWrittenEvent;
-use Shopware\OrderAddress\Loader\OrderAddressBasicLoader;
-use Shopware\OrderAddress\Searcher\OrderAddressSearcher;
 use Shopware\OrderAddress\Searcher\OrderAddressSearchResult;
 use Shopware\OrderAddress\Struct\OrderAddressBasicCollection;
-use Shopware\OrderAddress\Writer\OrderAddressWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class OrderAddressRepository
+class OrderAddressRepository implements RepositoryInterface
 {
     /**
-     * @var OrderAddressBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class OrderAddressRepository
     private $eventDispatcher;
 
     /**
-     * @var OrderAddressSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var OrderAddressWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        OrderAddressBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        OrderAddressSearcher $searcher,
-        OrderAddressWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): OrderAddressBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): OrderAddressBasicCollection
     {
         if (empty($uuids)) {
             return new OrderAddressBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var OrderAddressBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             OrderAddressBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class OrderAddressRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): OrderAddressBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): OrderAddressSearchResult
@@ -90,11 +98,17 @@ class OrderAddressRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'order_address';
+    }
+
     public function update(array $data, TranslationContext $context): OrderAddressWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class OrderAddressRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class OrderAddressRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

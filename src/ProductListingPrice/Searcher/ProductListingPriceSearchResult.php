@@ -2,23 +2,11 @@
 
 namespace Shopware\ProductListingPrice\Searcher;
 
+use Shopware\Api\Search\SearchResultInterface;
+use Shopware\Api\Search\SearchResultTrait;
 use Shopware\ProductListingPrice\Struct\ProductListingPriceBasicCollection;
-use Shopware\Search\SearchResultInterface;
 
 class ProductListingPriceSearchResult extends ProductListingPriceBasicCollection implements SearchResultInterface
 {
-    /**
-     * @var int
-     */
-    protected $total = 0;
-
-    public function getTotal(): int
-    {
-        return $this->total;
-    }
-
-    public function setTotal(int $total): void
-    {
-        $this->total = $total;
-    }
+    use SearchResultTrait;
 }

@@ -4,24 +4,28 @@ namespace Shopware\#classUc#\Repository;
 
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\#classUc#\Event\#classUc#BasicLoadedEvent;
-use Shopware\#classUc#\Loader\#classUc#BasicLoader;
+use Shopware\#classUc#\Reader\#classUc#BasicReader;
 use Shopware\#classUc#\Searcher\#classUc#Searcher;
 use Shopware\#classUc#\Searcher\#classUc#SearchResult;
 use Shopware\#classUc#\Struct\#classUc#BasicCollection;
 use Shopware\#classUc#\Writer\#classUc#WriteResource;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Shopware\Search\UuidSearchResult;
+use Shopware\Api\Search\UuidSearchResult;
 use Shopware\#classUc#\Event\#classUc#WrittenEvent;
-use Shopware\#classUc#\Writer\#classUc#Writer;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Write\WriterInterface;
 
-class #classUc#Repository
+class #classUc#Repository implements RepositoryInterface
 {
     /**
-     * @var #classUc#BasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -29,19 +33,20 @@ class #classUc#Repository
     private $eventDispatcher;
 
     /**
-     * @var #classUc#Searcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     #constructor#
 
-    public function read(array $uuids, TranslationContext $context): #classUc#BasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): #classUc#BasicCollection
     {
         if (empty($uuids)) {
             return new #classUc#BasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var #classUc#BasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             #classUc#BasicLoadedEvent::NAME,
@@ -49,6 +54,11 @@ class #classUc#Repository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): #classUc#BasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): #classUc#SearchResult
@@ -74,6 +84,11 @@ class #classUc#Repository
         $result = $this->searcher->aggregate($criteria, $context);
 
         return $result;
+    }
+
+    public function getEntityName(): string
+    {
+        return '#table#';
     }
 
     #writeMethods#

@@ -2,22 +2,22 @@
 
 namespace Shopware\Shop\Writer\Resource;
 
+use Shopware\Api\Write\Field\BoolField;
+use Shopware\Api\Write\Field\FkField;
+use Shopware\Api\Write\Field\IntField;
+use Shopware\Api\Write\Field\LongTextField;
+use Shopware\Api\Write\Field\ReferenceField;
+use Shopware\Api\Write\Field\StringField;
+use Shopware\Api\Write\Field\SubresourceField;
+use Shopware\Api\Write\Field\UuidField;
+use Shopware\Api\Write\Flag\Required;
+use Shopware\Api\Write\WriteResource;
 use Shopware\AreaCountry\Writer\Resource\AreaCountryWriteResource;
 use Shopware\Category\Writer\Resource\CategoryWriteResource;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Currency\Writer\Resource\CurrencyWriteResource;
 use Shopware\Customer\Writer\Resource\CustomerWriteResource;
 use Shopware\CustomerGroup\Writer\Resource\CustomerGroupWriteResource;
-use Shopware\Framework\Write\Field\BoolField;
-use Shopware\Framework\Write\Field\FkField;
-use Shopware\Framework\Write\Field\IntField;
-use Shopware\Framework\Write\Field\LongTextField;
-use Shopware\Framework\Write\Field\ReferenceField;
-use Shopware\Framework\Write\Field\StringField;
-use Shopware\Framework\Write\Field\SubresourceField;
-use Shopware\Framework\Write\Field\UuidField;
-use Shopware\Framework\Write\Flag\Required;
-use Shopware\Framework\Write\WriteResource;
 use Shopware\Framework\Writer\Resource\ConfigFormFieldValueWriteResource;
 use Shopware\Framework\Writer\Resource\MailAttachmentWriteResource;
 use Shopware\Framework\Writer\Resource\PremiumProductWriteResource;
@@ -32,7 +32,6 @@ use Shopware\PaymentMethod\Writer\Resource\PaymentMethodWriteResource;
 use Shopware\Product\Writer\Resource\ProductCategorySeoWriteResource;
 use Shopware\ProductVote\Writer\Resource\ProductVoteWriteResource;
 use Shopware\ShippingMethod\Writer\Resource\ShippingMethodWriteResource;
-use Shopware\Shop\Event\ShopWrittenEvent;
 use Shopware\ShopTemplate\Writer\Resource\ShopTemplateConfigFormFieldValueWriteResource;
 use Shopware\ShopTemplate\Writer\Resource\ShopTemplateWriteResource;
 
@@ -151,6 +150,10 @@ class ShopWriteResource extends WriteResource
          * @var string[]      $identifiers
          */
         foreach ($updates as $class => $identifiers) {
+            if (!array_key_exists($class, $updates) || count($updates[$class]) === 0) {
+                continue;
+            }
+
             $event->addEvent($class::createWrittenEvent($updates, $context));
         }
 

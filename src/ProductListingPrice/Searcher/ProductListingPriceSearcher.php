@@ -3,15 +3,15 @@
 namespace Shopware\ProductListingPrice\Searcher;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\SqlParser;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\Searcher;
+use Shopware\Api\Search\SearchResultInterface;
+use Shopware\Api\Search\UuidSearchResult;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\ProductListingPrice\Factory\ProductListingPriceBasicFactory;
-use Shopware\ProductListingPrice\Loader\ProductListingPriceBasicLoader;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\SqlParser;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\Searcher;
-use Shopware\Search\SearchResultInterface;
-use Shopware\Search\UuidSearchResult;
+use Shopware\ProductListingPrice\Reader\ProductListingPriceBasicReader;
 
 class ProductListingPriceSearcher extends Searcher
 {
@@ -21,15 +21,15 @@ class ProductListingPriceSearcher extends Searcher
     private $factory;
 
     /**
-     * @var ProductListingPriceBasicLoader
+     * @var ProductListingPriceBasicReader
      */
-    private $loader;
+    private $reader;
 
-    public function __construct(Connection $connection, SqlParser $parser, ProductListingPriceBasicFactory $factory, ProductListingPriceBasicLoader $loader)
+    public function __construct(Connection $connection, SqlParser $parser, ProductListingPriceBasicFactory $factory, ProductListingPriceBasicReader $reader)
     {
         parent::__construct($connection, $parser);
         $this->factory = $factory;
-        $this->loader = $loader;
+        $this->reader = $reader;
     }
 
     protected function createQuery(Criteria $criteria, TranslationContext $context): QueryBuilder
@@ -37,13 +37,15 @@ class ProductListingPriceSearcher extends Searcher
         return $this->factory->createSearchQuery($criteria, $context);
     }
 
-    protected function load(UuidSearchResult $uuidResult, TranslationContext $context): SearchResultInterface
+    protected function load(UuidSearchResult $uuidResult, Criteria $criteria, TranslationContext $context): SearchResultInterface
     {
-        $collection = $this->loader->load($uuidResult->getUuids(), $context);
+        $collection = $this->reader->readBasic($uuidResult->getUuids(), $context);
 
         $result = new ProductListingPriceSearchResult($collection->getElements());
 
         $result->setTotal($uuidResult->getTotal());
+        $result->setCriteria($criteria);
+        $result->setContext($context);
 
         return $result;
     }

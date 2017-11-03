@@ -3,10 +3,10 @@
 namespace Shopware\Shop\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Shopware\Shop\Repository\ShopRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,8 +98,8 @@ class ShopController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $shops = $this->shopRepository->read(
-            $createEvent->getShopUuids(),
+        $shops = $this->shopRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class ShopController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $shops = $this->shopRepository->read(
-            $createEvent->getShopUuids(),
+        $shops = $this->shopRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class ShopController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $shops = $this->shopRepository->read(
-            $createEvent->getShopUuids(),
+        $shops = $this->shopRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 

@@ -2,9 +2,9 @@
 
 namespace Shopware\Storefront\Page\Listing;
 
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Query\TermQuery;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Search\Criteria;
-use Shopware\Search\Query\TermQuery;
 use Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,9 +15,8 @@ class ListingPageLoader
      */
     private $productRepository;
 
-    public function __construct(
-        StorefrontProductRepository $productRepository
-    ) {
+    public function __construct(StorefrontProductRepository $productRepository)
+    {
         $this->productRepository = $productRepository;
     }
 
@@ -38,31 +37,20 @@ class ListingPageLoader
         return $listingPageStruct;
     }
 
-    /**
-     * @param string  $categoryUuid
-     * @param Request $request
-     *
-     * @return Criteria
-     */
     private function createCriteria(
         string $categoryUuid,
         Request $request,
         ShopContext $context
     ): Criteria {
-        $limit = 20;
-        if ($request->get('limit')) {
-            $limit = (int) $request->get('limit');
-        }
-        $page = 1;
-        if ($request->get('page')) {
-            $page = (int) $request->get('page');
-        }
+        $limit = $request->query->getInt('limit', 20);
+        $page = $request->query->getInt('page', 1);
 
         $criteria = new Criteria();
         $criteria->setOffset(($page - 1) * $limit);
         $criteria->setLimit($limit);
         $criteria->addFilter(new TermQuery('product.active', 1));
         $criteria->addFilter(new TermQuery('product.categoryTree.uuid', $categoryUuid));
+        $criteria->setFetchCount(true);
 
         return $criteria;
     }

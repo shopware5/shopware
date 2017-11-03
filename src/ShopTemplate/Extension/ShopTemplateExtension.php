@@ -2,22 +2,20 @@
 
 namespace Shopware\ShopTemplate\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\ShopTemplate\Event\ShopTemplateBasicLoadedEvent;
-use Shopware\ShopTemplate\Event\ShopTemplateWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\ShopTemplate\Struct\ShopTemplateBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class ShopTemplateExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class ShopTemplateExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             ShopTemplateBasicLoadedEvent::NAME => 'shopTemplateBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class ShopTemplateExtension implements ExtensionInterface, EventSubscri
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class ShopTemplateExtension implements ExtensionInterface, EventSubscri
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function shopTemplateBasicLoaded(ShopTemplateBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

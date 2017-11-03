@@ -2,24 +2,22 @@
 
 namespace Shopware\Category\Extension;
 
-use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Category\Event\CategoryBasicLoadedEvent;
 use Shopware\Category\Event\CategoryDetailLoadedEvent;
-use Shopware\Category\Event\CategoryWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Category\Struct\CategoryBasicStruct;
+use Shopware\Context\Struct\TranslationContext;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class CategoryExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class CategoryExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             CategoryBasicLoadedEvent::NAME => 'categoryBasicLoaded',
             CategoryDetailLoadedEvent::NAME => 'categoryDetailLoaded',
-            
         ];
     }
 
@@ -28,7 +26,6 @@ abstract class CategoryExtension implements ExtensionInterface, EventSubscriberI
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -46,15 +43,14 @@ abstract class CategoryExtension implements ExtensionInterface, EventSubscriberI
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function categoryBasicLoaded(CategoryBasicLoadedEvent $event): void
-    { }
+    {
+    }
 
     public function categoryDetailLoaded(CategoryDetailLoadedEvent $event): void
-    { }
-
-    
-
+    {
+    }
 }

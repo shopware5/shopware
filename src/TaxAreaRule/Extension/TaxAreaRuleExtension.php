@@ -2,22 +2,20 @@
 
 namespace Shopware\TaxAreaRule\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\TaxAreaRule\Event\TaxAreaRuleBasicLoadedEvent;
-use Shopware\TaxAreaRule\Event\TaxAreaRuleWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\TaxAreaRule\Struct\TaxAreaRuleBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class TaxAreaRuleExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class TaxAreaRuleExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             TaxAreaRuleBasicLoadedEvent::NAME => 'taxAreaRuleBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class TaxAreaRuleExtension implements ExtensionInterface, EventSubscrib
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class TaxAreaRuleExtension implements ExtensionInterface, EventSubscrib
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function taxAreaRuleBasicLoaded(TaxAreaRuleBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

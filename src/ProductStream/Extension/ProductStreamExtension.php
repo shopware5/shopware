@@ -2,22 +2,20 @@
 
 namespace Shopware\ProductStream\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\ProductStream\Event\ProductStreamBasicLoadedEvent;
-use Shopware\ProductStream\Event\ProductStreamWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\ProductStream\Struct\ProductStreamBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class ProductStreamExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class ProductStreamExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             ProductStreamBasicLoadedEvent::NAME => 'productStreamBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class ProductStreamExtension implements ExtensionInterface, EventSubscr
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class ProductStreamExtension implements ExtensionInterface, EventSubscr
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function productStreamBasicLoaded(ProductStreamBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

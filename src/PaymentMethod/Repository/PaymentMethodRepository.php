@@ -2,33 +2,35 @@
 
 namespace Shopware\PaymentMethod\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\PaymentMethod\Event\PaymentMethodBasicLoadedEvent;
 use Shopware\PaymentMethod\Event\PaymentMethodDetailLoadedEvent;
 use Shopware\PaymentMethod\Event\PaymentMethodWrittenEvent;
-use Shopware\PaymentMethod\Loader\PaymentMethodBasicLoader;
-use Shopware\PaymentMethod\Loader\PaymentMethodDetailLoader;
-use Shopware\PaymentMethod\Searcher\PaymentMethodSearcher;
 use Shopware\PaymentMethod\Searcher\PaymentMethodSearchResult;
 use Shopware\PaymentMethod\Struct\PaymentMethodBasicCollection;
 use Shopware\PaymentMethod\Struct\PaymentMethodDetailCollection;
-use Shopware\PaymentMethod\Writer\PaymentMethodWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class PaymentMethodRepository
+class PaymentMethodRepository implements RepositoryInterface
 {
     /**
-     * @var PaymentMethodDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var PaymentMethodBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class PaymentMethodRepository
     private $eventDispatcher;
 
     /**
-     * @var PaymentMethodSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var PaymentMethodWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        PaymentMethodDetailLoader $detailLoader,
-        PaymentMethodBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        PaymentMethodSearcher $searcher,
-        PaymentMethodWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): PaymentMethodBasicCollection
+    {
+        if (empty($uuids)) {
+            return new PaymentMethodBasicCollection();
+        }
+
+        /** @var PaymentMethodBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            PaymentMethodBasicLoadedEvent::NAME,
+            new PaymentMethodBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): PaymentMethodDetailCollection
@@ -64,27 +83,13 @@ class PaymentMethodRepository
         if (empty($uuids)) {
             return new PaymentMethodDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var PaymentMethodDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             PaymentMethodDetailLoadedEvent::NAME,
             new PaymentMethodDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): PaymentMethodBasicCollection
-    {
-        if (empty($uuids)) {
-            return new PaymentMethodBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            PaymentMethodBasicLoadedEvent::NAME,
-            new PaymentMethodBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class PaymentMethodRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'payment_method';
+    }
+
     public function update(array $data, TranslationContext $context): PaymentMethodWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class PaymentMethodRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class PaymentMethodRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

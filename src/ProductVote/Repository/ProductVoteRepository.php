@@ -2,25 +2,27 @@
 
 namespace Shopware\ProductVote\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\ProductVote\Event\ProductVoteBasicLoadedEvent;
 use Shopware\ProductVote\Event\ProductVoteWrittenEvent;
-use Shopware\ProductVote\Loader\ProductVoteBasicLoader;
-use Shopware\ProductVote\Searcher\ProductVoteSearcher;
 use Shopware\ProductVote\Searcher\ProductVoteSearchResult;
 use Shopware\ProductVote\Struct\ProductVoteBasicCollection;
-use Shopware\ProductVote\Writer\ProductVoteWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ProductVoteRepository
+class ProductVoteRepository implements RepositoryInterface
 {
     /**
-     * @var ProductVoteBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class ProductVoteRepository
     private $eventDispatcher;
 
     /**
-     * @var ProductVoteSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var ProductVoteWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        ProductVoteBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ProductVoteSearcher $searcher,
-        ProductVoteWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): ProductVoteBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): ProductVoteBasicCollection
     {
         if (empty($uuids)) {
             return new ProductVoteBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var ProductVoteBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ProductVoteBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class ProductVoteRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): ProductVoteBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ProductVoteSearchResult
@@ -90,11 +98,17 @@ class ProductVoteRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'product_vote';
+    }
+
     public function update(array $data, TranslationContext $context): ProductVoteWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class ProductVoteRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class ProductVoteRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

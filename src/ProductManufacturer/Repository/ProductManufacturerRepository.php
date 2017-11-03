@@ -2,25 +2,27 @@
 
 namespace Shopware\ProductManufacturer\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\ProductManufacturer\Event\ProductManufacturerBasicLoadedEvent;
 use Shopware\ProductManufacturer\Event\ProductManufacturerWrittenEvent;
-use Shopware\ProductManufacturer\Loader\ProductManufacturerBasicLoader;
-use Shopware\ProductManufacturer\Searcher\ProductManufacturerSearcher;
 use Shopware\ProductManufacturer\Searcher\ProductManufacturerSearchResult;
 use Shopware\ProductManufacturer\Struct\ProductManufacturerBasicCollection;
-use Shopware\ProductManufacturer\Writer\ProductManufacturerWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ProductManufacturerRepository
+class ProductManufacturerRepository implements RepositoryInterface
 {
     /**
-     * @var ProductManufacturerBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class ProductManufacturerRepository
     private $eventDispatcher;
 
     /**
-     * @var ProductManufacturerSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var ProductManufacturerWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        ProductManufacturerBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ProductManufacturerSearcher $searcher,
-        ProductManufacturerWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): ProductManufacturerBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): ProductManufacturerBasicCollection
     {
         if (empty($uuids)) {
             return new ProductManufacturerBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var ProductManufacturerBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ProductManufacturerBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class ProductManufacturerRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): ProductManufacturerBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ProductManufacturerSearchResult
@@ -90,11 +98,17 @@ class ProductManufacturerRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'product_manufacturer';
+    }
+
     public function update(array $data, TranslationContext $context): ProductManufacturerWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class ProductManufacturerRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class ProductManufacturerRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

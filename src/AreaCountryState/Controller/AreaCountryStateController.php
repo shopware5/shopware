@@ -3,11 +3,11 @@
 namespace Shopware\AreaCountryState\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
 use Shopware\AreaCountryState\Repository\AreaCountryStateRepository;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,7 +76,7 @@ class AreaCountryStateController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('areaCountryStateUuid');
-        $areaCountryStates = $this->areaCountryStateRepository->read(
+        $areaCountryStates = $this->areaCountryStateRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
@@ -98,8 +98,8 @@ class AreaCountryStateController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $areaCountryStates = $this->areaCountryStateRepository->read(
-            $createEvent->getAreaCountryStateUuids(),
+        $areaCountryStates = $this->areaCountryStateRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class AreaCountryStateController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $areaCountryStates = $this->areaCountryStateRepository->read(
-            $createEvent->getAreaCountryStateUuids(),
+        $areaCountryStates = $this->areaCountryStateRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class AreaCountryStateController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $areaCountryStates = $this->areaCountryStateRepository->read(
-            $createEvent->getAreaCountryStateUuids(),
+        $areaCountryStates = $this->areaCountryStateRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -190,7 +190,7 @@ class AreaCountryStateController extends ApiController
             return $this->createResponse(['errors' => $error], $context, 400);
         }
 
-        $areaCountryStates = $this->areaCountryStateRepository->read(
+        $areaCountryStates = $this->areaCountryStateRepository->readBasic(
             [$payload['uuid']],
             $context->getShopContext()->getTranslationContext()
         );

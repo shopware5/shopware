@@ -2,33 +2,35 @@
 
 namespace Shopware\Customer\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Customer\Event\CustomerBasicLoadedEvent;
 use Shopware\Customer\Event\CustomerDetailLoadedEvent;
 use Shopware\Customer\Event\CustomerWrittenEvent;
-use Shopware\Customer\Loader\CustomerBasicLoader;
-use Shopware\Customer\Loader\CustomerDetailLoader;
-use Shopware\Customer\Searcher\CustomerSearcher;
 use Shopware\Customer\Searcher\CustomerSearchResult;
 use Shopware\Customer\Struct\CustomerBasicCollection;
 use Shopware\Customer\Struct\CustomerDetailCollection;
-use Shopware\Customer\Writer\CustomerWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class CustomerRepository
+class CustomerRepository implements RepositoryInterface
 {
     /**
-     * @var CustomerDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var CustomerBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class CustomerRepository
     private $eventDispatcher;
 
     /**
-     * @var CustomerSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var CustomerWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        CustomerDetailLoader $detailLoader,
-        CustomerBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        CustomerSearcher $searcher,
-        CustomerWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): CustomerBasicCollection
+    {
+        if (empty($uuids)) {
+            return new CustomerBasicCollection();
+        }
+
+        /** @var CustomerBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            CustomerBasicLoadedEvent::NAME,
+            new CustomerBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): CustomerDetailCollection
@@ -64,27 +83,13 @@ class CustomerRepository
         if (empty($uuids)) {
             return new CustomerDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var CustomerDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             CustomerDetailLoadedEvent::NAME,
             new CustomerDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): CustomerBasicCollection
-    {
-        if (empty($uuids)) {
-            return new CustomerBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            CustomerBasicLoadedEvent::NAME,
-            new CustomerBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class CustomerRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'customer';
+    }
+
     public function update(array $data, TranslationContext $context): CustomerWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class CustomerRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class CustomerRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

@@ -3,13 +3,13 @@
 namespace Shopware\PriceGroupDiscount\Factory;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Api\Read\ExtensionRegistryInterface;
+use Shopware\Api\Read\Factory;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionRegistryInterface;
-use Shopware\Framework\Factory\Factory;
 use Shopware\PriceGroupDiscount\Extension\PriceGroupDiscountExtension;
 use Shopware\PriceGroupDiscount\Struct\PriceGroupDiscountBasicStruct;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
 
 class PriceGroupDiscountBasicFactory extends Factory
 {

@@ -3,11 +3,11 @@
 namespace Shopware\ProductStream\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
 use Shopware\ProductStream\Repository\ProductStreamRepository;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,7 +76,7 @@ class ProductStreamController extends ApiController
     public function detailAction(Request $request, ApiContext $context): Response
     {
         $uuid = $request->get('productStreamUuid');
-        $productStreams = $this->productStreamRepository->read(
+        $productStreams = $this->productStreamRepository->readBasic(
             [$uuid],
             $context->getShopContext()->getTranslationContext()
         );
@@ -98,8 +98,8 @@ class ProductStreamController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productStreams = $this->productStreamRepository->read(
-            $createEvent->getProductStreamUuids(),
+        $productStreams = $this->productStreamRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class ProductStreamController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productStreams = $this->productStreamRepository->read(
-            $createEvent->getProductStreamUuids(),
+        $productStreams = $this->productStreamRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class ProductStreamController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $productStreams = $this->productStreamRepository->read(
-            $createEvent->getProductStreamUuids(),
+        $productStreams = $this->productStreamRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -190,7 +190,7 @@ class ProductStreamController extends ApiController
             return $this->createResponse(['errors' => $error], $context, 400);
         }
 
-        $productStreams = $this->productStreamRepository->read(
+        $productStreams = $this->productStreamRepository->readBasic(
             [$payload['uuid']],
             $context->getShopContext()->getTranslationContext()
         );

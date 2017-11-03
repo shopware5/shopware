@@ -2,25 +2,27 @@
 
 namespace Shopware\SeoUrl\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Shopware\SeoUrl\Event\SeoUrlBasicLoadedEvent;
 use Shopware\SeoUrl\Event\SeoUrlWrittenEvent;
-use Shopware\SeoUrl\Loader\SeoUrlBasicLoader;
-use Shopware\SeoUrl\Searcher\SeoUrlSearcher;
 use Shopware\SeoUrl\Searcher\SeoUrlSearchResult;
 use Shopware\SeoUrl\Struct\SeoUrlBasicCollection;
-use Shopware\SeoUrl\Writer\SeoUrlWriter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SeoUrlRepository
+class SeoUrlRepository implements RepositoryInterface
 {
     /**
-     * @var SeoUrlBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class SeoUrlRepository
     private $eventDispatcher;
 
     /**
-     * @var SeoUrlSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var SeoUrlWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        SeoUrlBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        SeoUrlSearcher $searcher,
-        SeoUrlWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): SeoUrlBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): SeoUrlBasicCollection
     {
         if (empty($uuids)) {
             return new SeoUrlBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var SeoUrlBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             SeoUrlBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class SeoUrlRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): SeoUrlBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): SeoUrlSearchResult
@@ -90,11 +98,17 @@ class SeoUrlRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'seo_url';
+    }
+
     public function update(array $data, TranslationContext $context): SeoUrlWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class SeoUrlRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class SeoUrlRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

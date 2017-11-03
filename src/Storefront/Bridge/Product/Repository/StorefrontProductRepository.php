@@ -2,6 +2,9 @@
 
 namespace Shopware\Storefront\Bridge\Product\Repository;
 
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Query\TermsQuery;
+use Shopware\Api\Search\Sorting\FieldSorting;
 use Shopware\Cart\Price\PriceCalculator;
 use Shopware\Cart\Price\PriceDefinition;
 use Shopware\Cart\Tax\PercentageTaxRule;
@@ -15,9 +18,6 @@ use Shopware\ProductDetailPrice\Struct\ProductDetailPriceBasicStruct;
 use Shopware\ProductListingPrice\Struct\ProductListingPriceBasicCollection;
 use Shopware\ProductMedia\Repository\ProductMediaRepository;
 use Shopware\ProductMedia\Searcher\ProductMediaSearchResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\Query\TermsQuery;
-use Shopware\Search\Sorting\FieldSorting;
 use Shopware\Storefront\Bridge\Product\Struct\ProductBasicStruct;
 
 class StorefrontProductRepository
@@ -49,13 +49,12 @@ class StorefrontProductRepository
 
     public function read(array $uuids, ShopContext $context): ProductBasicCollection
     {
-        $products = $this->repository->read($uuids, $context->getTranslationContext());
+        $products = $this->repository->readBasic($uuids, $context->getTranslationContext());
 
         $media = $this->fetchMedia($uuids, $context);
 
         $listingProducts = new ProductBasicCollection();
 
-        /** @var ProductBasicStruct $base */
         foreach ($products as $base) {
             $product = ProductBasicStruct::createFrom($base);
 

@@ -2,16 +2,16 @@
 
 namespace Shopware\ProductListingPrice\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\ProductListingPrice\Event\ProductListingPriceBasicLoadedEvent;
 use Shopware\ProductListingPrice\Event\ProductListingPriceWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\ProductListingPrice\Struct\ProductListingPriceBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class ProductListingPriceExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class ProductListingPriceExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -26,7 +26,6 @@ abstract class ProductListingPriceExtension implements ExtensionInterface, Event
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,12 +43,14 @@ abstract class ProductListingPriceExtension implements ExtensionInterface, Event
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function productListingPriceBasicLoaded(ProductListingPriceBasicLoadedEvent $event): void
-    { }
+    {
+    }
 
     public function productListingPriceWritten(ProductListingPriceWrittenEvent $event): void
-{ }
+    {
+    }
 }

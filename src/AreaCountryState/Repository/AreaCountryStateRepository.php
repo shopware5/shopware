@@ -2,25 +2,27 @@
 
 namespace Shopware\AreaCountryState\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\AreaCountryState\Event\AreaCountryStateBasicLoadedEvent;
 use Shopware\AreaCountryState\Event\AreaCountryStateWrittenEvent;
-use Shopware\AreaCountryState\Loader\AreaCountryStateBasicLoader;
-use Shopware\AreaCountryState\Searcher\AreaCountryStateSearcher;
 use Shopware\AreaCountryState\Searcher\AreaCountryStateSearchResult;
 use Shopware\AreaCountryState\Struct\AreaCountryStateBasicCollection;
-use Shopware\AreaCountryState\Writer\AreaCountryStateWriter;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class AreaCountryStateRepository
+class AreaCountryStateRepository implements RepositoryInterface
 {
     /**
-     * @var AreaCountryStateBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class AreaCountryStateRepository
     private $eventDispatcher;
 
     /**
-     * @var AreaCountryStateSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var AreaCountryStateWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        AreaCountryStateBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        AreaCountryStateSearcher $searcher,
-        AreaCountryStateWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): AreaCountryStateBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): AreaCountryStateBasicCollection
     {
         if (empty($uuids)) {
             return new AreaCountryStateBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var AreaCountryStateBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             AreaCountryStateBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class AreaCountryStateRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): AreaCountryStateBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): AreaCountryStateSearchResult
@@ -90,11 +98,17 @@ class AreaCountryStateRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'area_country_state';
+    }
+
     public function update(array $data, TranslationContext $context): AreaCountryStateWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class AreaCountryStateRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class AreaCountryStateRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

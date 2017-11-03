@@ -2,33 +2,35 @@
 
 namespace Shopware\Category\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Category\Event\CategoryBasicLoadedEvent;
 use Shopware\Category\Event\CategoryDetailLoadedEvent;
 use Shopware\Category\Event\CategoryWrittenEvent;
-use Shopware\Category\Loader\CategoryBasicLoader;
-use Shopware\Category\Loader\CategoryDetailLoader;
-use Shopware\Category\Searcher\CategorySearcher;
 use Shopware\Category\Searcher\CategorySearchResult;
 use Shopware\Category\Struct\CategoryBasicCollection;
 use Shopware\Category\Struct\CategoryDetailCollection;
-use Shopware\Category\Writer\CategoryWriter;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class CategoryRepository
+class CategoryRepository implements RepositoryInterface
 {
     /**
-     * @var CategoryDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var CategoryBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class CategoryRepository
     private $eventDispatcher;
 
     /**
-     * @var CategorySearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var CategoryWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        CategoryDetailLoader $detailLoader,
-        CategoryBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        CategorySearcher $searcher,
-        CategoryWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): CategoryBasicCollection
+    {
+        if (empty($uuids)) {
+            return new CategoryBasicCollection();
+        }
+
+        /** @var CategoryBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            CategoryBasicLoadedEvent::NAME,
+            new CategoryBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): CategoryDetailCollection
@@ -64,27 +83,13 @@ class CategoryRepository
         if (empty($uuids)) {
             return new CategoryDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var CategoryDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             CategoryDetailLoadedEvent::NAME,
             new CategoryDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): CategoryBasicCollection
-    {
-        if (empty($uuids)) {
-            return new CategoryBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            CategoryBasicLoadedEvent::NAME,
-            new CategoryBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class CategoryRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'category';
+    }
+
     public function update(array $data, TranslationContext $context): CategoryWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class CategoryRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class CategoryRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

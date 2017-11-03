@@ -283,6 +283,18 @@
         <service id="shopware.framework.plugin-widgets-notes.resource" class="Shopware\Framework\Writer\Resource\PluginWidgetsNotesWriteResource">
             <tag name="shopware.framework.write.resource"/> 
         </service>
+        <service id="shopware.framework.search-fields.resource" class="Shopware\Framework\Writer\Resource\SearchFieldsWriteResource">
+            <tag name="shopware.framework.write.resource"/> 
+        </service>
+        <service id="shopware.framework.search-index.resource" class="Shopware\Framework\Writer\Resource\SearchIndexWriteResource">
+            <tag name="shopware.framework.write.resource"/> 
+        </service>
+        <service id="shopware.framework.search-keywords.resource" class="Shopware\Framework\Writer\Resource\SearchKeywordsWriteResource">
+            <tag name="shopware.framework.write.resource"/> 
+        </service>
+        <service id="shopware.framework.search-tables.resource" class="Shopware\Framework\Writer\Resource\SearchTablesWriteResource">
+            <tag name="shopware.framework.write.resource"/> 
+        </service>
         <service id="shopware.framework.user-billingaddress.resource" class="Shopware\Framework\Writer\Resource\UserBillingaddressWriteResource">
             <tag name="shopware.framework.write.resource"/> 
         </service>

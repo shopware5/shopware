@@ -24,12 +24,12 @@
 
 namespace Shopware\Storefront\Navigation;
 
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Query\TermQuery;
+use Shopware\Api\Search\Query\TermsQuery;
 use Shopware\Category\Repository\CategoryRepository;
 use Shopware\Category\Searcher\CategorySearchResult;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Search\Criteria;
-use Shopware\Search\Query\TermQuery;
-use Shopware\Search\Query\TermsQuery;
 
 class NavigationService
 {
@@ -45,7 +45,7 @@ class NavigationService
 
     public function load(string $categoryUuid, ShopContext $context): Navigation
     {
-        $activeCategory = $this->repository->read([$categoryUuid], $context->getTranslationContext())
+        $activeCategory = $this->repository->readBasic([$categoryUuid], $context->getTranslationContext())
             ->get($categoryUuid);
 
         $systemCategory = $context->getShop()->getCategory();

@@ -3,10 +3,10 @@
 namespace Shopware\ShippingMethod\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Shopware\ShippingMethod\Repository\ShippingMethodRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,8 +98,8 @@ class ShippingMethodController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $shippingMethods = $this->shippingMethodRepository->read(
-            $createEvent->getShippingMethodUuids(),
+        $shippingMethods = $this->shippingMethodRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class ShippingMethodController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $shippingMethods = $this->shippingMethodRepository->read(
-            $createEvent->getShippingMethodUuids(),
+        $shippingMethods = $this->shippingMethodRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class ShippingMethodController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $shippingMethods = $this->shippingMethodRepository->read(
-            $createEvent->getShippingMethodUuids(),
+        $shippingMethods = $this->shippingMethodRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 

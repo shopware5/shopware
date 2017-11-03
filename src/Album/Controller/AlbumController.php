@@ -4,10 +4,10 @@ namespace Shopware\Album\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Shopware\Album\Repository\AlbumRepository;
-use Shopware\Api\ApiContext;
-use Shopware\Api\ApiController;
-use Shopware\Search\Criteria;
-use Shopware\Search\Parser\QueryStringParser;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Parser\QueryStringParser;
+use Shopware\Rest\ApiContext;
+use Shopware\Rest\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -98,8 +98,8 @@ class AlbumController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $album = $this->albumRepository->read(
-            $createEvent->getAlbumUuids(),
+        $album = $this->albumRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -125,8 +125,8 @@ class AlbumController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $album = $this->albumRepository->read(
-            $createEvent->getAlbumUuids(),
+        $album = $this->albumRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -152,8 +152,8 @@ class AlbumController extends ApiController
             $context->getShopContext()->getTranslationContext()
         );
 
-        $album = $this->albumRepository->read(
-            $createEvent->getAlbumUuids(),
+        $album = $this->albumRepository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 

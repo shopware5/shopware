@@ -119,10 +119,15 @@ class ProductDetailBasicCollection extends Collection
     {
         $collection = new ProductDetailPriceBasicCollection();
         foreach ($this->elements as $element) {
-            $collection->fill($element->getPrices()->getIterator()->getArrayCopy());
+            $collection->fill($element->getPrices()->getElements());
         }
 
         return $collection;
+    }
+
+    public function current(): ProductDetailBasicStruct
+    {
+        return parent::current();
     }
 
     protected function getKey(ProductDetailBasicStruct $element): string

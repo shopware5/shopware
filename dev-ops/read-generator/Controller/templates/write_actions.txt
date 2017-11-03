@@ -10,8 +10,8 @@
             $context->getShopContext()->getTranslationContext()
         );
 
-        $#plural# = $this->#classLc#Repository->read(
-            $createEvent->get#classUc#Uuids(),
+        $#plural# = $this->#classLc#Repository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -35,8 +35,8 @@
             $context->getShopContext()->getTranslationContext()
         );
 
-        $#plural# = $this->#classLc#Repository->read(
-            $createEvent->get#classUc#Uuids(),
+        $#plural# = $this->#classLc#Repository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 
@@ -60,8 +60,8 @@
             $context->getShopContext()->getTranslationContext()
         );
 
-        $#plural# = $this->#classLc#Repository->read(
-            $createEvent->get#classUc#Uuids(),
+        $#plural# = $this->#classLc#Repository->readBasic(
+            $createEvent->getUuids(),
             $context->getShopContext()->getTranslationContext()
         );
 

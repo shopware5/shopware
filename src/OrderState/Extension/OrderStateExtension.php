@@ -2,22 +2,20 @@
 
 namespace Shopware\OrderState\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\OrderState\Event\OrderStateBasicLoadedEvent;
-use Shopware\OrderState\Event\OrderStateWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\OrderState\Struct\OrderStateBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class OrderStateExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class OrderStateExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             OrderStateBasicLoadedEvent::NAME => 'orderStateBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class OrderStateExtension implements ExtensionInterface, EventSubscribe
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class OrderStateExtension implements ExtensionInterface, EventSubscribe
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function orderStateBasicLoaded(OrderStateBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

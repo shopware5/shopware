@@ -2,22 +2,20 @@
 
 namespace Shopware\CustomerAddress\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\CustomerAddress\Event\CustomerAddressBasicLoadedEvent;
-use Shopware\CustomerAddress\Event\CustomerAddressWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\CustomerAddress\Struct\CustomerAddressBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class CustomerAddressExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class CustomerAddressExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             CustomerAddressBasicLoadedEvent::NAME => 'customerAddressBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class CustomerAddressExtension implements ExtensionInterface, EventSubs
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class CustomerAddressExtension implements ExtensionInterface, EventSubs
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function customerAddressBasicLoaded(CustomerAddressBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

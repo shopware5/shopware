@@ -2,22 +2,20 @@
 
 namespace Shopware\Media\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\Media\Event\MediaBasicLoadedEvent;
-use Shopware\Media\Event\MediaWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Media\Struct\MediaBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class MediaExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class MediaExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             MediaBasicLoadedEvent::NAME => 'mediaBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class MediaExtension implements ExtensionInterface, EventSubscriberInte
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class MediaExtension implements ExtensionInterface, EventSubscriberInte
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function mediaBasicLoaded(MediaBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

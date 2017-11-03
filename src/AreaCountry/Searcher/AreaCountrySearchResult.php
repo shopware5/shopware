@@ -2,23 +2,11 @@
 
 namespace Shopware\AreaCountry\Searcher;
 
+use Shopware\Api\Search\SearchResultInterface;
+use Shopware\Api\Search\SearchResultTrait;
 use Shopware\AreaCountry\Struct\AreaCountryBasicCollection;
-use Shopware\Search\SearchResultInterface;
 
 class AreaCountrySearchResult extends AreaCountryBasicCollection implements SearchResultInterface
 {
-    /**
-     * @var int
-     */
-    protected $total = 0;
-
-    public function getTotal(): int
-    {
-        return $this->total;
-    }
-
-    public function setTotal(int $total): void
-    {
-        $this->total = $total;
-    }
+    use SearchResultTrait;
 }

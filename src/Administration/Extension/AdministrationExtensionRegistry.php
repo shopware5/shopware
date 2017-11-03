@@ -2,9 +2,9 @@
 
 namespace Shopware\Administration\Extension;
 
-use Shopware\Framework\Factory\ExtensionInterface;
-use Shopware\Framework\Factory\ExtensionRegistry;
-use Shopware\Framework\Factory\ExtensionRegistryInterface;
+use Shopware\Api\Read\ExtensionRegistry;
+use Shopware\Api\Read\ExtensionRegistryInterface;
+use Shopware\Api\Read\FactoryExtensionInterface;
 
 class AdministrationExtensionRegistry implements ExtensionRegistryInterface
 {
@@ -27,7 +27,7 @@ class AdministrationExtensionRegistry implements ExtensionRegistryInterface
     /**
      * @param string $bundle
      *
-     * @return ExtensionInterface[]
+     * @return FactoryExtensionInterface[]
      */
     public function getExtensions(string $bundle): array
     {

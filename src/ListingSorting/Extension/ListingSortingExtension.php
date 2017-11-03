@@ -2,22 +2,20 @@
 
 namespace Shopware\ListingSorting\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\ListingSorting\Event\ListingSortingBasicLoadedEvent;
-use Shopware\ListingSorting\Event\ListingSortingWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\ListingSorting\Struct\ListingSortingBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class ListingSortingExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class ListingSortingExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             ListingSortingBasicLoadedEvent::NAME => 'listingSortingBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class ListingSortingExtension implements ExtensionInterface, EventSubsc
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class ListingSortingExtension implements ExtensionInterface, EventSubsc
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function listingSortingBasicLoaded(ListingSortingBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

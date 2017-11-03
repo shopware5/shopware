@@ -2,25 +2,27 @@
 
 namespace Shopware\ProductDetailPrice\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\ProductDetailPrice\Event\ProductDetailPriceBasicLoadedEvent;
 use Shopware\ProductDetailPrice\Event\ProductDetailPriceWrittenEvent;
-use Shopware\ProductDetailPrice\Loader\ProductDetailPriceBasicLoader;
-use Shopware\ProductDetailPrice\Searcher\ProductDetailPriceSearcher;
 use Shopware\ProductDetailPrice\Searcher\ProductDetailPriceSearchResult;
 use Shopware\ProductDetailPrice\Struct\ProductDetailPriceBasicCollection;
-use Shopware\ProductDetailPrice\Writer\ProductDetailPriceWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ProductDetailPriceRepository
+class ProductDetailPriceRepository implements RepositoryInterface
 {
     /**
-     * @var ProductDetailPriceBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class ProductDetailPriceRepository
     private $eventDispatcher;
 
     /**
-     * @var ProductDetailPriceSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var ProductDetailPriceWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        ProductDetailPriceBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        ProductDetailPriceSearcher $searcher,
-        ProductDetailPriceWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): ProductDetailPriceBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): ProductDetailPriceBasicCollection
     {
         if (empty($uuids)) {
             return new ProductDetailPriceBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var ProductDetailPriceBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             ProductDetailPriceBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class ProductDetailPriceRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): ProductDetailPriceBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): ProductDetailPriceSearchResult
@@ -90,11 +98,17 @@ class ProductDetailPriceRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'product_detail_price';
+    }
+
     public function update(array $data, TranslationContext $context): ProductDetailPriceWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class ProductDetailPriceRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class ProductDetailPriceRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

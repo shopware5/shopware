@@ -2,13 +2,13 @@
 
 namespace Shopware\Framework\Writer\Resource;
 
+use Shopware\Api\Write\Field\IntField;
+use Shopware\Api\Write\Field\LongTextField;
+use Shopware\Api\Write\Field\StringField;
+use Shopware\Api\Write\Flag\Required;
+use Shopware\Api\Write\WriteResource;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Framework\Event\BillingTemplateWrittenEvent;
-use Shopware\Framework\Write\Field\IntField;
-use Shopware\Framework\Write\Field\LongTextField;
-use Shopware\Framework\Write\Field\StringField;
-use Shopware\Framework\Write\Flag\Required;
-use Shopware\Framework\Write\WriteResource;
 
 class BillingTemplateWriteResource extends WriteResource
 {
@@ -53,6 +53,10 @@ class BillingTemplateWriteResource extends WriteResource
          * @var string[]      $identifiers
          */
         foreach ($updates as $class => $identifiers) {
+            if (!array_key_exists($class, $updates) || count($updates[$class]) === 0) {
+                continue;
+            }
+
             $event->addEvent($class::createWrittenEvent($updates, $context));
         }
 

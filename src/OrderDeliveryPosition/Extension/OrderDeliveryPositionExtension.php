@@ -2,22 +2,20 @@
 
 namespace Shopware\OrderDeliveryPosition\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\OrderDeliveryPosition\Event\OrderDeliveryPositionBasicLoadedEvent;
-use Shopware\OrderDeliveryPosition\Event\OrderDeliveryPositionWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\OrderDeliveryPosition\Struct\OrderDeliveryPositionBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class OrderDeliveryPositionExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class OrderDeliveryPositionExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             OrderDeliveryPositionBasicLoadedEvent::NAME => 'orderDeliveryPositionBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class OrderDeliveryPositionExtension implements ExtensionInterface, Eve
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class OrderDeliveryPositionExtension implements ExtensionInterface, Eve
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function orderDeliveryPositionBasicLoaded(OrderDeliveryPositionBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

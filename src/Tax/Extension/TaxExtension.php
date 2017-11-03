@@ -2,22 +2,20 @@
 
 namespace Shopware\Tax\Extension;
 
+use Shopware\Api\Read\FactoryExtensionInterface;
+use Shopware\Api\Search\QueryBuilder;
+use Shopware\Api\Search\QuerySelection;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Framework\Factory\ExtensionInterface;
 use Shopware\Tax\Event\TaxBasicLoadedEvent;
-use Shopware\Tax\Event\TaxWrittenEvent;
-use Shopware\Search\QueryBuilder;
-use Shopware\Search\QuerySelection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Tax\Struct\TaxBasicStruct;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class TaxExtension implements ExtensionInterface, EventSubscriberInterface
+abstract class TaxExtension implements FactoryExtensionInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
             TaxBasicLoadedEvent::NAME => 'taxBasicLoaded',
-            
         ];
     }
 
@@ -26,7 +24,6 @@ abstract class TaxExtension implements ExtensionInterface, EventSubscriberInterf
         QueryBuilder $query,
         TranslationContext $context
     ): void {
-
     }
 
     public function getDetailFields(): array
@@ -44,11 +41,10 @@ abstract class TaxExtension implements ExtensionInterface, EventSubscriberInterf
         array $data,
         QuerySelection $selection,
         TranslationContext $translation
-    ): void
-    { }
+    ): void {
+    }
 
     public function taxBasicLoaded(TaxBasicLoadedEvent $event): void
-    { }
-
-    
+    {
+    }
 }

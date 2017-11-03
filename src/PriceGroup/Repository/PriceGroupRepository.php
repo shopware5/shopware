@@ -2,33 +2,35 @@
 
 namespace Shopware\PriceGroup\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\PriceGroup\Event\PriceGroupBasicLoadedEvent;
 use Shopware\PriceGroup\Event\PriceGroupDetailLoadedEvent;
 use Shopware\PriceGroup\Event\PriceGroupWrittenEvent;
-use Shopware\PriceGroup\Loader\PriceGroupBasicLoader;
-use Shopware\PriceGroup\Loader\PriceGroupDetailLoader;
-use Shopware\PriceGroup\Searcher\PriceGroupSearcher;
 use Shopware\PriceGroup\Searcher\PriceGroupSearchResult;
 use Shopware\PriceGroup\Struct\PriceGroupBasicCollection;
 use Shopware\PriceGroup\Struct\PriceGroupDetailCollection;
-use Shopware\PriceGroup\Writer\PriceGroupWriter;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class PriceGroupRepository
+class PriceGroupRepository implements RepositoryInterface
 {
     /**
-     * @var PriceGroupDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var PriceGroupBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class PriceGroupRepository
     private $eventDispatcher;
 
     /**
-     * @var PriceGroupSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var PriceGroupWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        PriceGroupDetailLoader $detailLoader,
-        PriceGroupBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        PriceGroupSearcher $searcher,
-        PriceGroupWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): PriceGroupBasicCollection
+    {
+        if (empty($uuids)) {
+            return new PriceGroupBasicCollection();
+        }
+
+        /** @var PriceGroupBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            PriceGroupBasicLoadedEvent::NAME,
+            new PriceGroupBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): PriceGroupDetailCollection
@@ -64,27 +83,13 @@ class PriceGroupRepository
         if (empty($uuids)) {
             return new PriceGroupDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var PriceGroupDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             PriceGroupDetailLoadedEvent::NAME,
             new PriceGroupDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): PriceGroupBasicCollection
-    {
-        if (empty($uuids)) {
-            return new PriceGroupBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            PriceGroupBasicLoadedEvent::NAME,
-            new PriceGroupBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class PriceGroupRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'price_group';
+    }
+
     public function update(array $data, TranslationContext $context): PriceGroupWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class PriceGroupRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class PriceGroupRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

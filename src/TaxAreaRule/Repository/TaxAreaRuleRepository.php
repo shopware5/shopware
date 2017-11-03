@@ -2,25 +2,27 @@
 
 namespace Shopware\TaxAreaRule\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Shopware\TaxAreaRule\Event\TaxAreaRuleBasicLoadedEvent;
 use Shopware\TaxAreaRule\Event\TaxAreaRuleWrittenEvent;
-use Shopware\TaxAreaRule\Loader\TaxAreaRuleBasicLoader;
-use Shopware\TaxAreaRule\Searcher\TaxAreaRuleSearcher;
 use Shopware\TaxAreaRule\Searcher\TaxAreaRuleSearchResult;
 use Shopware\TaxAreaRule\Struct\TaxAreaRuleBasicCollection;
-use Shopware\TaxAreaRule\Writer\TaxAreaRuleWriter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class TaxAreaRuleRepository
+class TaxAreaRuleRepository implements RepositoryInterface
 {
     /**
-     * @var TaxAreaRuleBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -28,34 +30,35 @@ class TaxAreaRuleRepository
     private $eventDispatcher;
 
     /**
-     * @var TaxAreaRuleSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var TaxAreaRuleWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        TaxAreaRuleBasicLoader $basicLoader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        TaxAreaRuleSearcher $searcher,
-        TaxAreaRuleWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->basicLoader = $basicLoader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
     }
 
-    public function read(array $uuids, TranslationContext $context): TaxAreaRuleBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): TaxAreaRuleBasicCollection
     {
         if (empty($uuids)) {
             return new TaxAreaRuleBasicCollection();
         }
 
-        $collection = $this->basicLoader->load($uuids, $context);
+        /** @var TaxAreaRuleBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             TaxAreaRuleBasicLoadedEvent::NAME,
@@ -63,6 +66,11 @@ class TaxAreaRuleRepository
         );
 
         return $collection;
+    }
+
+    public function readDetail(array $uuids, TranslationContext $context): TaxAreaRuleBasicCollection
+    {
+        return $this->readBasic($uuids, $context);
     }
 
     public function search(Criteria $criteria, TranslationContext $context): TaxAreaRuleSearchResult
@@ -90,11 +98,17 @@ class TaxAreaRuleRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'tax_area_rule';
+    }
+
     public function update(array $data, TranslationContext $context): TaxAreaRuleWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -103,7 +117,8 @@ class TaxAreaRuleRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -112,7 +127,8 @@ class TaxAreaRuleRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

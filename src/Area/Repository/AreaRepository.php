@@ -2,33 +2,35 @@
 
 namespace Shopware\Area\Repository;
 
+use Shopware\Api\Read\BasicReaderInterface;
+use Shopware\Api\Read\DetailReaderInterface;
+use Shopware\Api\RepositoryInterface;
+use Shopware\Api\Search\AggregationResult;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\SearcherInterface;
+use Shopware\Api\Search\UuidSearchResult;
+use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Write\WriterInterface;
 use Shopware\Area\Event\AreaBasicLoadedEvent;
 use Shopware\Area\Event\AreaDetailLoadedEvent;
 use Shopware\Area\Event\AreaWrittenEvent;
-use Shopware\Area\Loader\AreaBasicLoader;
-use Shopware\Area\Loader\AreaDetailLoader;
-use Shopware\Area\Searcher\AreaSearcher;
 use Shopware\Area\Searcher\AreaSearchResult;
 use Shopware\Area\Struct\AreaBasicCollection;
 use Shopware\Area\Struct\AreaDetailCollection;
-use Shopware\Area\Writer\AreaWriter;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\Search\AggregationResult;
-use Shopware\Search\Criteria;
-use Shopware\Search\UuidSearchResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class AreaRepository
+class AreaRepository implements RepositoryInterface
 {
     /**
-     * @var AreaDetailLoader
+     * @var DetailReaderInterface
      */
-    protected $detailLoader;
+    protected $detailReader;
 
     /**
-     * @var AreaBasicLoader
+     * @var BasicReaderInterface
      */
-    private $basicLoader;
+    private $basicReader;
 
     /**
      * @var EventDispatcherInterface
@@ -36,27 +38,44 @@ class AreaRepository
     private $eventDispatcher;
 
     /**
-     * @var AreaSearcher
+     * @var SearcherInterface
      */
     private $searcher;
 
     /**
-     * @var AreaWriter
+     * @var WriterInterface
      */
     private $writer;
 
     public function __construct(
-        AreaDetailLoader $detailLoader,
-        AreaBasicLoader $basicLoader,
+        DetailReaderInterface $detailReader,
+        BasicReaderInterface $basicReader,
         EventDispatcherInterface $eventDispatcher,
-        AreaSearcher $searcher,
-        AreaWriter $writer
+        SearcherInterface $searcher,
+        WriterInterface $writer
     ) {
-        $this->detailLoader = $detailLoader;
-        $this->basicLoader = $basicLoader;
+        $this->detailReader = $detailReader;
+        $this->basicReader = $basicReader;
         $this->eventDispatcher = $eventDispatcher;
         $this->searcher = $searcher;
         $this->writer = $writer;
+    }
+
+    public function readBasic(array $uuids, TranslationContext $context): AreaBasicCollection
+    {
+        if (empty($uuids)) {
+            return new AreaBasicCollection();
+        }
+
+        /** @var AreaBasicCollection $collection */
+        $collection = $this->basicReader->readBasic($uuids, $context);
+
+        $this->eventDispatcher->dispatch(
+            AreaBasicLoadedEvent::NAME,
+            new AreaBasicLoadedEvent($collection, $context)
+        );
+
+        return $collection;
     }
 
     public function readDetail(array $uuids, TranslationContext $context): AreaDetailCollection
@@ -64,27 +83,13 @@ class AreaRepository
         if (empty($uuids)) {
             return new AreaDetailCollection();
         }
-        $collection = $this->detailLoader->load($uuids, $context);
+
+        /** @var AreaDetailCollection $collection */
+        $collection = $this->detailReader->readDetail($uuids, $context);
 
         $this->eventDispatcher->dispatch(
             AreaDetailLoadedEvent::NAME,
             new AreaDetailLoadedEvent($collection, $context)
-        );
-
-        return $collection;
-    }
-
-    public function read(array $uuids, TranslationContext $context): AreaBasicCollection
-    {
-        if (empty($uuids)) {
-            return new AreaBasicCollection();
-        }
-
-        $collection = $this->basicLoader->load($uuids, $context);
-
-        $this->eventDispatcher->dispatch(
-            AreaBasicLoadedEvent::NAME,
-            new AreaBasicLoadedEvent($collection, $context)
         );
 
         return $collection;
@@ -115,11 +120,17 @@ class AreaRepository
         return $result;
     }
 
+    public function getEntityName(): string
+    {
+        return 'area';
+    }
+
     public function update(array $data, TranslationContext $context): AreaWrittenEvent
     {
         $event = $this->writer->update($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -128,7 +139,8 @@ class AreaRepository
     {
         $event = $this->writer->upsert($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }
@@ -137,7 +149,8 @@ class AreaRepository
     {
         $event = $this->writer->create($data, $context);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $container = new GenericWrittenEvent($event, $context);
+        $this->eventDispatcher->dispatch($container::NAME, $container);
 
         return $event;
     }

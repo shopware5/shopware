@@ -2,23 +2,11 @@
 
 namespace Shopware\ProductMedia\Searcher;
 
+use Shopware\Api\Search\SearchResultInterface;
+use Shopware\Api\Search\SearchResultTrait;
 use Shopware\ProductMedia\Struct\ProductMediaBasicCollection;
-use Shopware\Search\SearchResultInterface;
 
 class ProductMediaSearchResult extends ProductMediaBasicCollection implements SearchResultInterface
 {
-    /**
-     * @var int
-     */
-    protected $total = 0;
-
-    public function getTotal(): int
-    {
-        return $this->total;
-    }
-
-    public function setTotal(int $total): void
-    {
-        $this->total = $total;
-    }
+    use SearchResultTrait;
 }
