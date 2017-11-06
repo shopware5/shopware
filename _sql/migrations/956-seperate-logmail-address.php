@@ -37,7 +37,7 @@ SQL;
       INSERT IGNORE INTO `s_core_config_elements`
                 (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
                 VALUES
-                (@formID, 'logMailAddress', 's:0:"";', 'Seperate Mail-Adresse für Fehlermeldungen', 'Wenn dieses Feld leer ist, wird die Shopbetreiber Mail-Adresse verwendet', 'text', 0, 0, 0, NULL)
+                (@formID, 'logMailAddress', 's:0:"";', 'Alternative E-Mail-Adresse für Fehlermeldungen', 'Wenn dieses Feld leer ist, wird die Shopbetreiber E-Mail-Adresse verwendet', 'text', 0, 0, 0, NULL)
 SQL;
         $this->addSql($sql);
         $this->addSql('SET @elementID = (SELECT id FROM s_core_config_elements WHERE name = "logMailAddress")');
@@ -46,7 +46,7 @@ SQL;
                 INSERT IGNORE INTO `s_core_config_element_translations`
                 (`element_id`, `locale_id`, `label`, `description`)
                 VALUES
-                (@elementID, @localeID, 'Alternative e-mail address for errors', 'If this field is empty, the shop e-mail address will be used');
+                (@elementID, @localeID, 'Alternative email address for errors', 'If this field is empty, the shop owners email address will be used');
 EOD;
         $this->addSql($sql);
     }
