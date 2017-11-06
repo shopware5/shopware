@@ -272,6 +272,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      */
     public static function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
+        $modelManager = Shopware()->Container()->get('models');
+
         $sql = 'SELECT * FROM `s_articles_notification` WHERE send = 0';
 
         $getNotifications = Shopware()->Db()->fetchAll($sql);
@@ -290,14 +292,18 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             $sql = 'SELECT notification from s_articles WHERE ID = ?';
 
-            $notificationActive = Shopware()->Db()->fetchOne($sql, [$sArticleID]);
+            $notificationActive = (bool) Shopware()->Db()->fetchOne($sql, [$sArticleID]);
 
-            if (intval($instock) > 0 && $notificationActive == true && !empty($sArticle['active'])) {
+            if ((int) $instock > 0 && $notificationActive === true && !empty($sArticle['active'])) {
                 $context = [
                     'sArticleLink' => $data['shopLink'] . "?sViewport=detail&sArticle=$sArticleID",
                     'sOrdernumber' => $ordernumber,
                     'sData' => $job['data'],
                 ];
+
+                /* @var $shop \Shopware\Models\Shop\Shop */
+                $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($data['language']);
+                $shop->registerResources();
 
                 $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
                 $mail->addTo($data['mail']);
