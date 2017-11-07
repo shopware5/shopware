@@ -44,6 +44,7 @@ class sRewriteTable
      * @var sSystem
      */
     public $sSYSTEM;
+
     /**
      * @var string|null
      */
@@ -133,6 +134,8 @@ class sRewriteTable
      * @param ContextServiceInterface                 $contextService
      * @param ShopPageServiceInterface                $shopPageService
      * @param Shopware_Components_Translation         $translationComponent
+     *
+     * @throws \Exception
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -159,7 +162,7 @@ class sRewriteTable
     }
 
     /**
-     * Getter function for retriving last ID from sCreateRewriteTableArticles()
+     * Getter function for retrieving last ID from sCreateRewriteTableArticles()
      *
      * @return string|null
      */
@@ -190,6 +193,8 @@ class sRewriteTable
 
     /**
      * Sets up the environment for seo url calculation
+     *
+     * @throws \SmartyException
      */
     public function baseSetup()
     {
@@ -197,14 +202,14 @@ class sRewriteTable
         @set_time_limit(0);
 
         $keys = isset($this->template->registered_plugins['function']) ? array_keys($this->template->registered_plugins['function']) : [];
-        if (!(in_array('sCategoryPath', $keys))) {
+        if (!in_array('sCategoryPath', $keys)) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
                 [$this, 'sSmartyCategoryPath']
             );
         }
 
-        if (!(in_array('createSupplierPath', $keys))) {
+        if (!in_array('createSupplierPath', $keys)) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'createSupplierPath',
                 [$this, 'createSupplierPath']
@@ -222,6 +227,11 @@ class sRewriteTable
      * Main method for re-creating the rewrite table. Triggers all other (more specific) methods
      *
      * @param string $lastUpdate
+     *
+     * @throws \Exception
+     * @throws \SmartyException
+     * @throws \Enlight_Event_Exception
+     * @throws \Zend_Db_Adapter_Exception
      *
      * @return string
      */
@@ -245,6 +255,8 @@ class sRewriteTable
 
     /**
      * Cleanup the rewrite table from non-existing resources.
+     *
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function sCreateRewriteTableCleanup()
     {
@@ -348,7 +360,7 @@ class sRewriteTable
         }
 
         $parentId = Shopware()->Shop()->getCategory()->getId();
-        $categories = $this->modelManager->getRepository('Shopware\Models\Category\Category')
+        $categories = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
             ->getActiveChildrenList($parentId);
 
         if (isset($offset, $limit)) {
@@ -383,6 +395,9 @@ class sRewriteTable
      * @param string $lastUpdate
      * @param int    $limit
      * @param int    $offset
+     *
+     * @throws \Enlight_Event_Exception
+     * @throws \Zend_Db_Adapter_Exception
      *
      * @return string
      */
@@ -504,12 +519,12 @@ class sRewriteTable
      * Create rewrite rules for blog articles
      * Used in multiple locations
      *
-     * @param null $offset
-     * @param null $limit
+     * @param int|null $offset
+     * @param int|null $limit
      */
     public function sCreateRewriteTableBlog($offset = null, $limit = null)
     {
-        $query = $this->modelManager->getRepository('Shopware\Models\Category\Category')
+        $query = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
             ->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
@@ -520,7 +535,7 @@ class sRewriteTable
         }
 
         /** @var $repository \Shopware\Models\Blog\Repository */
-        $blogArticlesQuery = $this->modelManager->getRepository('Shopware\Models\Blog\Blog')
+        $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $blogArticles = $blogArticlesQuery->getArrayResult();
@@ -539,9 +554,11 @@ class sRewriteTable
     /**
      * @deprecated since 5.2 will be removed in 5.3, use \sRewriteTable::createManufacturerUrls
      *
-     * @param null                 $offset
-     * @param null                 $limit
+     * @param int|null             $offset
+     * @param int|null             $limit
      * @param ShopContextInterface $context
+     *
+     * @throws \Exception
      */
     public function sCreateRewriteTableSuppliers($offset = null, $limit = null, ShopContextInterface $context = null)
     {
@@ -582,13 +599,15 @@ class sRewriteTable
     /**
      * Create emotion rewrite rules
      *
-     * @param null $offset
-     * @param null $limit
+     * @param int|null $offset
+     * @param int|null $limit
+     *
+     * @throws \Exception
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
         /** @var $repo \Shopware\Models\Emotion\Repository */
-        $repo = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion');
+        $repo = $this->modelManager->getRepository(\Shopware\Models\Emotion\Emotion::class);
         $queryBuilder = $repo->getListQueryBuilder();
 
         $languageId = Shopware()->Shop()->getId();
@@ -648,17 +667,18 @@ class sRewriteTable
     }
 
     /**
-     * Create CMS rewrite rules
-     * Used in multiple locations
+     * Create CMS rewrite rules, used in multiple locations
      *
-     * @param int                  $offset
-     * @param int                  $limit
-     * @param ShopContextInterface $context
+     * @param int                       $offset
+     * @param int                       $limit
+     * @param ShopContextInterface|null $context
+     *
+     * @throws \Exception
      */
     public function sCreateRewriteTableContent($offset = null, $limit = null, ShopContextInterface $context = null)
     {
         //form urls
-        $this->insertFormUrls($offset, $limit);
+        $this->insertFormUrls($offset, $limit, $context);
 
         //static pages urls
         $this->insertStaticPageUrls($offset, $limit, $context);
@@ -667,8 +687,8 @@ class sRewriteTable
     /**
      * Updates / create a single rewrite URL
      *
-     * @param $org_path
-     * @param $path
+     * @param string $org_path
+     * @param string $path
      *
      * @return false|null False on empty args, null otherwise
      */
@@ -680,19 +700,23 @@ class sRewriteTable
             return false;
         }
 
+        $shopId = Shopware()->Shop()->getId();
+
         $update = $this->getPreparedUpdate();
         $update->execute([
             $org_path,
             $path,
-            Shopware()->Shop()->getId(),
+            $shopId,
         ]);
 
         $insert = $this->getPreparedInsert();
         $insert->execute([
             $org_path,
             $path,
-            Shopware()->Shop()->getId(),
+            $shopId,
         ]);
+
+        return null;
     }
 
     /**
@@ -707,7 +731,7 @@ class sRewriteTable
     {
         $parts = [];
         if (!empty($params['supplierID'])) {
-            $parts[] = $this->modelManager->getRepository('Shopware\Models\Article\Supplier')
+            $parts[] = $this->modelManager->getRepository(\Shopware\Models\Article\Supplier::class)
                 ->find($params['supplierID'])->getName();
         }
         if (empty($params['separator'])) {
@@ -761,7 +785,7 @@ class sRewriteTable
      */
     public function sCategoryPath($categoryId)
     {
-        $parts = $this->modelManager->getRepository('Shopware\Models\Category\Category')
+        $parts = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
             ->getPathById($categoryId, 'name');
         $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
         $parts = array_slice($parts, $level);
@@ -782,7 +806,7 @@ class sRewriteTable
      *
      * @param array $articles
      *
-     * @return mixed
+     * @return array
      */
     public function mapArticleTranslationObjectData($articles)
     {
@@ -827,7 +851,7 @@ class sRewriteTable
     /**
      * Getter function of the prepared insert PDOStatement
      *
-     * @return null|PDOStatement
+     * @return PDOStatement
      */
     protected function getPreparedInsert()
     {
@@ -884,39 +908,61 @@ class sRewriteTable
     /**
      * Generates and inserts the form seo urls
      *
-     * @param $offset
-     * @param $limit
+     * @param int                  $offset
+     * @param int                  $limit
+     * @param ShopContextInterface $context
+     *
+     * @throws \Exception
      */
-    private function insertFormUrls($offset, $limit)
+    private function insertFormUrls($offset, $limit, ShopContextInterface $context = null)
     {
-        $formListData = $this->modelManager->getRepository('Shopware\Models\Form\Form')
-            ->getListQuery([], [], $offset, $limit)->getArrayResult();
+        $context = $this->createFallbackContext($context);
+        $shopId = $context->getShop()->getId();
+
+        $formListData = $this->modelManager->getRepository(\Shopware\Models\Form\Form::class)
+            ->getListQueryBuilder([], [])
+            ->andWhere('(form.shopIds LIKE :shopId OR form.shopIds IS NULL)')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('shopId', '%|' . $shopId . '|%')
+            ->getQuery()->getArrayResult();
 
         foreach ($formListData as $form) {
-            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
             $this->data->assign('form', $form);
+
+            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
             $path = $this->template->fetch('string:' . $this->config->get('seoFormRouteTemplate'), $this->data);
             $path = $this->sCleanupPath($path);
-            $this->sInsertUrl($org_path, $path);
+
+            // Find out if some other form has a URL specific for this subshop
+            $hasSpecificSubShopPath = $this->hasSpecificShopPath($org_path, $path, $shopId);
+
+            // If our current form is specific for this subshop OR if we are for all shops and no other form is specific, write URL
+            if (!empty($form['shopIds']) ||
+                (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
+                $this->sInsertUrl($org_path, $path);
+            }
         }
     }
 
     /**
      * Generates and inserts static page urls
      *
-     * @param $offset
-     * @param $limit
+     * @param int                  $offset
+     * @param int                  $limit
      * @param ShopContextInterface $context
      *
      * @throws Exception
      * @throws SmartyException
+     * @throws \Zend_Db_Statement_Exception
      */
     private function insertStaticPageUrls($offset, $limit, ShopContextInterface $context = null)
     {
         $context = $this->createFallbackContext($context);
+        $shopId = $context->getShop()->getId();
 
-        $sitesData = $this->modelManager->getRepository('Shopware\Models\Site\Site')
-            ->getSitesWithoutLinkQuery($context->getShop()->getId(), $offset, $limit)
+        $sitesData = $this->modelManager->getRepository(\Shopware\Models\Site\Site::class)
+            ->getSitesWithoutLinkQuery($shopId, $offset, $limit)
             ->getArrayResult();
 
         $pages = $this->shopPageService->getList(array_column($sitesData, 'id'), $context);
@@ -928,12 +974,20 @@ class sRewriteTable
             $this->data->assign('site', $site);
             $path = $this->template->fetch('string:' . $this->config->get('seoCustomSiteRouteTemplate'), $this->data);
             $path = $this->sCleanupPath($path);
-            $this->sInsertUrl($org_path, $path);
+
+            // Find out if some other site has a URL specific for this subshop
+            $hasSpecificSubShopPath = $this->hasSpecificShopPath($org_path, $path, $shopId);
+
+            // If our current site is specific for this subshop OR if we are for all shops and no other site is specific, write URL
+            if (!empty($form['shopIds']) ||
+                (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
+                $this->sInsertUrl($org_path, $path);
+            }
         }
     }
 
     /**
-     * map article core translation including fallback fields for given article
+     * Map article core translation including fallback fields for given article
      *
      * @param array $article
      * @param array $objectData
@@ -963,7 +1017,7 @@ class sRewriteTable
     }
 
     /**
-     * map article attribute translation including fallback fields for given article
+     * Map article attribute translation including fallback fields for given article
      *
      * @param array $article
      * @param array $translations
@@ -986,8 +1040,10 @@ class sRewriteTable
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int|null $offset
+     * @param int|null $limit
+     *
+     * @throws \Exception
      *
      * @return array
      */
@@ -1009,7 +1065,9 @@ class sRewriteTable
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface|null $context
+     *
+     * @throws \Exception
      *
      * @return ShopContextInterface
      */
@@ -1027,5 +1085,85 @@ class sRewriteTable
         }
 
         return $this->contextService->createShopContext(1);
+    }
+
+    /**
+     * Determines if there are any rewrite rules for other elements and this shop. This can happen if one e.g. form or site
+     * is for all shops, another form with the same name for one specific subshop.
+     *
+     * @param string $org_path
+     * @param string $path
+     * @param int    $shopId
+     *
+     * @throws \Zend_Db_Statement_Exception
+     *
+     * @return bool
+     */
+    private function hasSpecificShopPath($org_path, $path, $shopId)
+    {
+        $statement = $this->db
+            ->executeQuery('SELECT `org_path` FROM `s_core_rewrite_urls` WHERE `path`=? AND `main`=1 AND `subshopId`=? AND `org_path`!=?',
+            [$path, $shopId, $org_path]);
+
+        if ($statement->rowCount() === 0) {
+            return false;
+        }
+
+        $currentOrgPath = $statement->fetchColumn();
+        $matches = [];
+
+        // Check if the current url points to a form
+        if (preg_match('/^sViewport=ticket&sFid=(\d+)$/', $currentOrgPath, $matches) === 1) {
+            return $this->checkSpecificShopForm($matches);
+        }
+
+        // Check if the current url points to a site
+        if (preg_match('/^sViewport=custom&sCustom=(\d+)$/', $currentOrgPath, $matches) === 1) {
+            return $this->checkSpecificShopSite($matches);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $matches
+     *
+     * @return bool
+     */
+    private function checkSpecificShopForm(array $matches)
+    {
+        // First match is the whole org_path
+        $formId = (int) array_pop($matches);
+
+        $formRepository = $this->modelManager->getRepository(\Shopware\Models\Form\Form::class);
+        $form = $formRepository->find($formId);
+
+        if (!$form) {
+            return false;
+        }
+
+        // Finally, check if the current form is specific for this subshop or not
+        return !empty($form->getShopIds());
+    }
+
+    /**
+     * @param array $matches
+     *
+     * @return bool
+     */
+    private function checkSpecificShopSite(array $matches)
+    {
+        // First match is the whole org_path
+        $siteId = (int) array_pop($matches);
+
+        $siteRepository = $this->modelManager->getRepository(\Shopware\Models\Site\Site::class);
+        $site = $siteRepository->find($siteId);
+
+        if (!$site) {
+            return false;
+        }
+
+        // Finally, check if the current site is specific for this subshop or not
+        return !empty($site->getShopIds());
     }
 }
