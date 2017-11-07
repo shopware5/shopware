@@ -474,7 +474,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             if ($filter['property'] === 'free') {
                 $builder->andWhere(
                     $builder->expr()->orX(
-                        'detail.number LIKE :free',
+                        'details.number LIKE :free',
                         'articles.name LIKE :free'
                     )
                 );
