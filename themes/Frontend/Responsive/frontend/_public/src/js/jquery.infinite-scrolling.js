@@ -478,7 +478,7 @@
             me.closeLoadingIndicator();
 
             // update add article plugin to enable off canvas cart support for the new articles
-            StateManager.updatePlugin(me.opts.addArticleSelector, 'swAddArticle');
+            StateManager.addPlugin(me.opts.addArticleSelector, 'swAddArticle');
 
             // enable loading for further pages
             me.isLoading = false;
@@ -503,6 +503,9 @@
             picturefill();
 
             me.closeLoadingIndicator();
+
+            // update add article plugin to enable off canvas cart support for the new articles
+            StateManager.addPlugin(me.opts.addArticleSelector, 'swAddArticle');
 
             // enable loading for further pages
             me.isLoading = false;

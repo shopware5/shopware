@@ -272,7 +272,12 @@
             /**
              * selector for the parent of the loading indicator in if the filters in sidebar mode
              */
-            sidebarLoadingIndicatorParentSelector: '.content-main--inner'
+            sidebarLoadingIndicatorParentSelector: '.content-main--inner',
+
+            /**
+             * selector for the jquery.add-article plugin to enable support for the off canvas cart
+             */
+            addArticleSelector: '*[data-add-article="true"]'
         },
 
         /**
@@ -1021,7 +1026,6 @@
                 me.sendListingRequest(params, loadFacets, loadProducts, function (response) {
                     me.disableLoading(loadingIndicator, loadProducts, response, function () {
                         me.updateListing(response);
-
                         // publish finish event to update filter panels
                         $.publish('plugin/swListingActions/onGetFilterResultFinished', [me, response, params]);
                     });
@@ -1134,6 +1138,8 @@
 
             $.publish('plugin/swListingActions/updateListing', [this, html]);
 
+            StateManager.updatePlugin(this.opts.addArticleSelector, 'swAddArticle');
+
             if (this.isInfiniteScrolling) {
                 pages = Math.ceil(response.totalCount / this.$perPageInput.val());
 
@@ -1141,7 +1147,6 @@
                 this.$listing.attr('data-pages', pages);
                 this.$listing.data('plugin_swInfiniteScrolling').destroy();
                 StateManager.addPlugin(this.opts.listingSelector, 'swInfiniteScrolling');
-                StateManager.addPlugin('*[data-add-article="true"]', 'swAddArticle');
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [this, html, pages]);
             } else {
                 this.updatePagination(response);
