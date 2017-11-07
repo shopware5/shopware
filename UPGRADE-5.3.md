@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added smarty block `frontend_index_header_meta_description_twitter` for `twitter:description` meta tag
 * Added smarty block `frontend_index_header_meta_description_og` for `og:description` meta tag
 * Added EventEmitter to StateManager constructor
+* Added translation for article `shippingtime` field
 
 ### Changes
 

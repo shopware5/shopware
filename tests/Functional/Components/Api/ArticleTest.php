@@ -986,7 +986,7 @@ class ArticleTest extends TestCase
         $this->assertEquals(1, $result['total']);
         $this->assertEquals($id, $result['data'][0]['id'], $id);
 
-         // Filter with attribute of other (non-main) variant => no result
+        // Filter with attribute of other (non-main) variant => no result
         $result = $this->resource->getList(0, 1, [
             'id' => $id,
             'attribute.attr3' => 'Freitext3',
@@ -1852,6 +1852,7 @@ class ArticleTest extends TestCase
                 'name' => 'English-Name',
                 'description' => 'English-Description',
                 'descriptionLong' => 'English-DescriptionLong',
+                'shippingTime' => 'English-ShippingTime',
                 'keywords' => 'English-Keywords',
                 'packUnit' => 'English-PackUnit',
             ],
@@ -1872,6 +1873,7 @@ class ArticleTest extends TestCase
         $this->assertEquals($definedTranslation['name'], $savedTranslation['name']);
         $this->assertEquals($definedTranslation['description'], $savedTranslation['description']);
         $this->assertEquals($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
+        $this->assertEquals($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
         $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 

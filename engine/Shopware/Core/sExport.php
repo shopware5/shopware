@@ -519,8 +519,9 @@ class sExport
     }
 
     /**
-     * @param string $hash
+     * @param string      $hash
      * @param null|string $imageSize
+     *
      * @return null|string
      */
     public function sGetImageLink($hash, $imageSize = null)
@@ -619,6 +620,7 @@ class sExport
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'name',
                     'txtzusatztxt' => 'additionaltext',
                 ];
@@ -1814,6 +1816,7 @@ class sExport
      *
      * @param string $url
      * @param string $adapterType
+     *
      * @return string
      */
     private function fixShopHost($url, $adapterType)
