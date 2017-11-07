@@ -111,35 +111,1134 @@ UPDATE s_core_countries_states SET `name` = 'Wisconsin' WHERE id = 68;
 UPDATE s_core_countries_states SET `name` = 'Wyoming' WHERE id = 69;
 
 -- s_core_config_mails --
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Order shipped in parts', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:\"%d-%m-%Y\"} has changed. The new status is as follows: {$sOrder.status_description}.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL11';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear{if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:\" %d-%m-%Y\"} has changed. The new status is as follows: {$sOrder.status_description}.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL1';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe status of your order {$sOrder.ordernumber} has changed!\nThe current status of your order is as follows: {$sOrder.status_description}.\n\nYou can check the current status of your order on our website under \"My account\" - \"My orders\" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL8';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order at {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear{if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:\" %d-%m-%Y\"} has changed. The new status is as follows: {$sOrder.status_description}.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL2';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe order status of your order {$sOrder.ordernumber} has changed!\nThe order now has the following status: {$sOrder.status_description}.\n\nYou can check the current status of your order on our website under \"My account\" - \"My orders\" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL4';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Status change', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe status of your order {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:\" %d.%m.%Y\"}\nhas changed. The new status is as follows: \"{$sOrder.status_description}\".\n\n\nInformation on your order:\n==================================\n{foreach item=details key=position from=$sOrderDetails}\n{$position+1|fill:3} {$details.articleordernumber|fill:10:\" \":\"...\"} {$details.name|fill:30} {$details.quantity} x {$details.price|string_format:\"%.2f\"} {$sConfig.sCURRENCY}\n{/foreach}\n\nShipping costs: {$sOrder.invoice_shipping} {$sConfig.sCURRENCY}\nNet total: {$sOrder.invoice_amount_net|string_format:\"%.2f\"} {$sConfig.sCURRENCY}\nTotal amount incl. VAT: {$sOrder.invoice_amount|string_format:\"%.2f\"} {$sConfig.sCURRENCY}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL3';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe order status of your order {$sOrder.ordernumber} has changed!\nYour order now has the following status: {$sOrder.status_description}.\n\nYou can check the current status of your order on our website under \"My account\" - \"My orders\" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.\n\nBest regards,\nYour team of {config name=shopName}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL6';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:\"%d.%m.%Y\"} has changed. The new status is as follows: {$sOrder.status_description}.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL5';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your registration has been successful', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {salutation} {firstname} {lastname},\n\nthank you for your registration with our Shop.\n\nYou will gain access via the email address {sMAIL}\nand the password you have chosen.\n\nYou can have your password sent to you by email anytime.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sREGISTERCONFIRMATION';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with the demoshop', content = '{include file=\"string:{config name=emailheaderplain}\"}\n\nHello {$billingaddress.firstname} {$billingaddress.lastname},\n\nThank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.\nInformation on your order:\n\nPos. Art.No.              Quantities         Price        Total\n{foreach item=details key=position from=$sOrderDetails}\n{$position+1|fill:4} {$details.ordernumber|fill:20} {$details.quantity|fill:6} {$details.price|padding:8} EUR {$details.amount|padding:8} EUR\n{$details.articlename|wordwrap:49|indent:5}\n{/foreach}\n\nShipping costs: {$sShippingCosts}\nTotal net: {$sAmountNet}\n{if !$sNet}\nTotal gross: {$sAmount}\n{/if}\n\nSelected payment type: {$additional.payment.description}\n{$additional.payment.additionaldescription}\n{if $additional.payment.name == \"debit\"}\nYour bank connection:\nAccount number: {$sPaymentTable.account}\nBIN:{$sPaymentTable.bankcode}\nWe will withdraw the money from your bank account within the next days.\n{/if}\n{if $additional.payment.name == \"prepayment\"}\n\nOur bank connection:\nAccount: ###\nBIN: ###\n{/if}\n\n{if $sComment}\nYour comment:\n{$sComment}\n{/if}\n\nBilling address:\n{$billingaddress.company}\n{$billingaddress.firstname} {$billingaddress.lastname}\n{$billingaddress.street}\n{if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}\n{$billingaddress.phone}\n{$additional.country.countryname}\n\nShipping address:\n{$shippingaddress.company}\n{$shippingaddress.firstname} {$shippingaddress.lastname}\n{$shippingaddress.street}\n{if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}\n{$additional.countryShipping.countryname}{if $billingaddress.ustid}\n\n\nYour VAT-ID: {$billingaddress.ustid}\nIn case of a successful order and if you are based in one of the EU countries, you will receive your goods exempt from turnover tax.{/if}\n\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDER';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = '{sName} recommends you {sArticle}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\n{sName} has found an interesting product for you on {sShop} that you should have a look at:\n\n{sArticle}\n{sLink}\n\n{sComment}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sTELLAFRIEND';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Forgot password - Your access data for {sShop}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nYour access data for {sShopURL} is as follows:\nUser: {sMail}\nPassword: {sPassword}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sPASSWORD';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Attention - no free serial numbers for {sArticleName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nThere is no additional free serial numbers available for the article {sArticleName}. Please provide new serial numbers immediately or deactivate the article. Please assign a serial number to the customer {sMail} manually.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sNOSERIALS';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your voucher', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {customer},\n\n{user} has followed your recommendation and just ordered at {config name=shopName}.\nThis is why we give you a X € voucher, which you can redeem with your next order.\n\nYour voucher code is as follows: XXX\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sVOUCHER';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your merchant account has been unlocked', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nyour merchant account {config name=shopName} has been unlocked.\n\nFrom now on, we will charge you the net purchase price.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sCUSTOMERGROUPHACCEPTED';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your trader account has not been accepted', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear customer,\n\nthank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.\n\nIn case of further questions please do not hesitate to contact us via telephone, fax or email.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sCUSTOMERGROUPHREJECTED';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your aborted order process - Send us your feedback and get a voucher!', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear customer,\n\nYou have recently aborted an order process on {sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.\n\nPlease tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.\n\nThank you for your feedback.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sCANCELEDQUESTION';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your aborted order process - Voucher code enclosed', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nDear customer,\n\nYou have recently aborted an order process on {sShop} - today, we would like to give you a 5,00 Euro-voucher - and therefore make it easier for you to decide for an order with Demoshop.de.\n\nYour voucher is valid for two months and can be redeemed by entering the code \"{$sVouchercode}\".\n\nWe would be pleased to accept your order!\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sCANCELEDVOUCHER';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Happy Birthday from {$sConfig.sSHOPNAME}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {if $sUser.salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.firstname} {$sUser.lastname}, we wish you a happy birthday.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sBIRTHDAY';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Stock level of {$sData.count} article{if $sData.count>1}s{/if} under minimum stock ', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\nthe following articles have undershot the minimum stock:\nOrder number Name of article Stock/Minimum stock\n{foreach from=$sJob.articles item=sArticle key=key}\n{$sArticle.ordernumber} {$sArticle.name} {$sArticle.instock}/{$sArticle.stockmin}\n{/foreach}\n\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sARTICLESTOCK';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Thank you for your newsletter subscription', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nthank you for your newsletter subscription at {config name=shopName}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sNEWSLETTERCONFIRMATION';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Please confirm your newsletter subscription', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nthank you for signing up for our regularly published newsletter.\n\nPlease confirm your subscription by clicking the following link: {$sConfirmLink}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sOPTINNEWSLETTER';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Please confirm your article evaluation', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nthank you for evaluating the article{$sArticle.articleName}.\n\nPlease confirm the evaluation by clicking the following link: {$sConfirmLink}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sOPTINVOTE';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your article is available again', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nyour article with the order number {$sOrdernumber} is available again.\n\n{$sArticleLink}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sARTICLEAVAILABLE';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Please confirm your e-mail notification', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\n\nthank you for signing up for the automatic email notification for the article {$sArticleName}.\nPlease confirm the notification by clicking the following link:\n\n{$sConfirmLink}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sACCEPTNOTIFICATION';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Evaluate article', content = '{include file=\"string:{config name=emailheaderplain}\"}\n\nHello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nYou bought some products in our store a few days ago, we would really appreciate it if you would rate these products.\n\nRating products helps us to improve our service and provide your opinion about these products to other customers.\n\nHere you can find the links for rating the products you bought.\n\n{foreach from=$sArticles item=sArticle key=key}\n{if !$sArticle.modus}\n{$sArticle.articleordernumber} - {$sArticle.name}: {$sArticle.link}\n{/if}\n{/foreach}\n\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sARTICLECOMMENT';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'SEPA direct debit mandate', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {$paymentInstance.firstName} {$paymentInstance.lastName}, attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSEPAAUTHORIZATION';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = 'Your order with {config name=shopName}', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello {if $sUser.billing_salutation eq \"mr\"}Mr{elseif $sUser.billing_salutation eq \"ms\"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},\n\nThe order status of your order {$sOrder.ordernumber} has changed!\nYour order now has the following status: {$sOrder.status_description}.\n\nYou can check the current status of your order on our website under \"My account\" - \"My orders\" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.\n\nBest regards,\nYour team of {config name=shopName}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sORDERSTATEMAIL7';
-UPDATE s_core_config_mails SET ishtml = 0, attachment = '', subject = '', content = '{include file=\"string:{config name=emailheaderplain}\"}\r\n\r\nHello,\r\n\r\nthere has been a request to reset you Password in the Shop {sShopURL}.\r\n\r\nPlease confirm the link below to specify a new password.\r\n\r\n{sUrlReset}\r\n\r\nThis link is valid for the next 2 hours. After that you have to request a new confirmation link.\r\n\r\nIf you do not want to reset your password, please ignore this email. No changes will be made.\r\n\r\n{config name=address}\r\n\r\n{include file=\"string:{config name=emailfooterplain}\"}', contentHTML = '' WHERE name = 'sCONFIRMPASSWORDCHANGE';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your registration at {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello {$salutation} {$firstname} {$lastname},
+
+thank you for your registration with our Shop.
+
+You will gain access via the email address {$sMAIL}
+and the password you have chosen.
+
+You can have your password sent to you by email anytime.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello {$salutation} {$firstname} {$lastname},<br/>
+        <br/>
+        thank you for your registration with our Shop.<br/>
+        <br/>
+        You will gain access via the email address <strong>{$sMAIL}</strong><br/>
+        and the password you have chosen.<br/>
+        <br/>
+        You can have your password sent to you by email anytime.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sREGISTERCONFIRMATION';
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with the {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello {if $billingaddress.salutation eq "mr"}Mr{elseif $billingaddress.salutation eq "ms"}Mrs{/if} {$billingaddress.firstname} {$billingaddress.lastname},
+
+Thank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.
+Information on your order:
+
+Pos. Art.No.              Quantities         Price        Total
+{foreach item=details key=position from=$sOrderDetails}
+{$position+1|fill:4} {$details.ordernumber|fill:20} {$details.quantity|fill:6} {$details.price|padding:8} EUR {$details.amount|padding:8} EUR
+{$details.articlename|wordwrap:49|indent:5}
+{/foreach}
+
+Shipping costs: {$sShippingCosts}
+Net total: {$sAmountNet}
+{if !$sNet}
+{foreach $sTaxRates as $rate => $value}
+plus {$rate}% VAT {$value|currency}
+{/foreach}
+Total gross: {$sAmount}
+{/if}
+
+Selected payment type: {$additional.payment.description}
+{$additional.payment.additionaldescription}
+{if $additional.payment.name == "debit"}
+Your bank connection:
+Account number: {$sPaymentTable.account}
+BIN:{$sPaymentTable.bankcode}
+Bank name: {$sPaymentTable.bankname}
+Bank holder: {$sPaymentTable.bankholder}
+
+We will withdraw the money from your bank account within the next days.
+{/if}
+{if $additional.payment.name == "prepayment"}
+
+Our bank connection:
+Account: ###
+BIN: ###
+{/if}
+
+
+Selected shipping type: {$sDispatch.name}
+{$sDispatch.description}
+
+{if $sComment}
+Your comment:
+{$sComment}
+{/if}
+
+Billing address:
+{$billingaddress.company}
+{$billingaddress.firstname} {$billingaddress.lastname}
+{$billingaddress.street} {$billingaddress.streetnumber}
+{if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}
+{$billingaddress.phone}
+{$additional.country.countryname}
+
+Shipping address:
+{$shippingaddress.company}
+{$shippingaddress.firstname} {$shippingaddress.lastname}
+{$shippingaddress.street} {$shippingaddress.streetnumber}
+{if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}
+{$additional.countryShipping.countryname}
+
+{if $billingaddress.ustid}
+Your VAT-ID: {$billingaddress.ustid}
+In case of a successful order and if you are based in one of the EU countries, you will receive your goods exempt from turnover tax.{/if}
+
+If you have any questions, do not hesitate to contact us.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>Hello {if $billingaddress.salutation eq "mr"}Mr{elseif $billingaddress.salutation eq "ms"}Mrs{/if} {$billingaddress.firstname} {$billingaddress.lastname},<br/>
+        <br/>
+        Thank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.<br/>
+        <br/>
+        <strong>Information on your order:</strong></p><br/>
+    <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
+        <tr>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Article</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Pos.</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Art.No.</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Quantities</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Price</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Total</strong></td>
+        </tr>
+
+        {foreach item=details key=position from=$sOrderDetails}
+        <tr>
+            <td rowspan="2" style="border-bottom:1px solid #cccccc;">{if $details.image.src.0 && $details.modus == 0}<img style="height: 57px;" height="57" src="{$details.image.src.0}" alt="{$details.articlename}" />{else} {/if}</td>
+            <td>{$position+1|fill:4} </td>
+            <td>{$details.ordernumber|fill:20}</td>
+            <td>{$details.quantity|fill:6}</td>
+            <td>{$details.price|padding:8}{$sCurrency}</td>
+            <td>{$details.amount|padding:8} {$sCurrency}</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="border-bottom:1px solid #cccccc;">{$details.articlename|wordwrap:80|indent:4}</td>
+        </tr>
+        {/foreach}
+        
+    </table>
+
+    <p>
+        <br/>
+        <br/>
+        Shipping costs: {$sShippingCosts}<br/>
+        Net total: {$sAmountNet}<br/>
+        {if !$sNet}
+        {foreach $sTaxRates as $rate => $value}
+        plus {$rate}% VAT {$value|currency}<br/>
+        {/foreach}
+        <strong>Total gross: {$sAmount}</strong><br/>
+        {/if}
+        <br/>
+        <br/>
+        <strong>Selected payment type:</strong> {$additional.payment.description}<br/>
+        {$additional.payment.additionaldescription}
+        {if $additional.payment.name == "debit"}
+        Your bank connection:<br/>
+        Account number: {$sPaymentTable.account}<br/>
+        BIN: {$sPaymentTable.bankcode}<br/>
+        Bank name: {$sPaymentTable.bankname}<br/>
+        Bank holder: {$sPaymentTable.bankholder}<br/>
+        <br/>
+        We will withdraw the money from your bank account within the next days.<br/>
+        {/if}
+        <br/>
+        <br/>
+        {if $additional.payment.name == "prepayment"}
+        Our bank connection:<br/>
+        Account: ###<br/>
+        BIN: ###<br/>
+        {/if}
+        <br/>
+        <br/>
+        <strong>Selected shipping type:</strong> {$sDispatch.name}<br/>
+        {$sDispatch.description}<br/>
+        <br/>
+    </p>
+    <p>
+        {if $sComment}
+        <strong>Your comment:</strong><br/>
+        {$sComment}<br/>
+        {/if}
+        <br/>
+        <br/>
+        <strong>Billing address:</strong><br/>
+        {$billingaddress.company}<br/>
+        {$billingaddress.firstname} {$billingaddress.lastname}<br/>
+        {$billingaddress.street} {$billingaddress.streetnumber}<br/>
+        {if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}<br/>
+        {$billingaddress.phone}<br/>
+        {$additional.country.countryname}<br/>
+        <br/>
+        <br/>
+        <strong>Shipping address:</strong><br/>
+        {$shippingaddress.company}<br/>
+        {$shippingaddress.firstname} {$shippingaddress.lastname}<br/>
+        {$shippingaddress.street} {$shippingaddress.streetnumber}<br/>
+        {if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}<br/>
+        {$additional.countryShipping.countryname}<br/>
+        <br/>
+        {if $billingaddress.ustid}
+        Your VAT-ID: {$billingaddress.ustid}<br/>
+        In case of a successful order and if you are based in one of the EU countries, you will receive your goods exempt from turnover tax.<br/>
+        {/if}
+        <br/>
+        <br/>
+        If you have any questions, do not hesitate to contact us.<br/>
+        {include file="string:{config name=emailfooterhtml}"}
+    </p>
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sORDER';
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '{$sName} recommends you {$sArticle}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+{$sName} has found an interesting product for you on {$sShop} that you should have a look at:
+
+{$sArticle}
+{$sLink}
+
+{$sComment}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+		{$sName} has found an interesting product for you on {$sShop} that you should have a look at:<br/>
+        <br/>
+        <strong><a href="{$sLink}">{$sArticle}</a></strong><br/>
+        <br/>
+    </p>
+    {if $sComment}
+        <div style="border: 2px solid black; border-radius: 5px; padding: 5px;"><p>{$sComment}</p></div><br/>
+    {/if}
+    
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sTELLAFRIEND';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Attention - no free serial numbers for {$sArticleName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+there is no additional free serial numbers available for the article 
+
+{$sArticleName}.
+
+Please provide new serial numbers immediately or deactivate the article.
+Please assign a serial number to the customer {$sMail} manually.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        there is no additional free serial numbers available for the article<br/>
+        <br/>
+    </p>
+    <strong>{$sArticleName}</strong><br/>
+    <p>
+        Please provide new serial numbers immediately or deactivate the article.<br/>
+        Please assign a serial number to the customer {$sMail} manually.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sNOSERIALS';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your voucher',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello {$customer},
+
+{$user} has followed your recommendation and just ordered at {$sShop}.
+This is why we give you a X € voucher, which you can redeem with your next order.
+
+Your voucher code is as follows: XXX
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello {$customer},<br/>
+        <br/>
+        {$user} has followed your recommendation and just ordered at {$sShop}.<br/>
+        This is why we give you a X € voucher, which you can redeem with your next order.<br/>
+        <br/>
+        <strong>Your voucher code is as follows: XXX</strong><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sVOUCHER';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your merchant account has been unlocked',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+your merchant account at {$sShop} has been unlocked.
+
+From now on, we will charge you the net purchase price.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        your merchant account at {$sShop} has been unlocked.<br/>
+        <br/>
+        From now on, we will charge you the net purchase price.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sCUSTOMERGROUPHACCEPTED';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your trader account has not been accepted',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear customer,
+
+thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.
+
+In case of further questions please do not hesitate to contact us via telephone, fax or email.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear customer,<br/>
+		<br/>
+        thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.<br/>
+        <br/>
+        In case of further questions please do not hesitate to contact us via telephone, fax or email.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sCUSTOMERGROUPHREJECTED';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your aborted order process - Send us your feedback and get a voucher!',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear customer,
+
+You have recently aborted an order process on {$sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.
+
+Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.
+
+Thank you for your feedback.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear customer,<br/>
+        <br/>
+        You have recently aborted an order process on {$sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.<br/>
+        <br/>
+        Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.<br/>
+        <br/>
+        Thank you for your feedback.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sCANCELEDQUESTION';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your aborted order process - Voucher code enclosed',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear customer,
+
+You have recently aborted an order process on {$sShop} - today, we would like to give you a {$sVouchervalue} {if $sVoucherpercental == "1"}%{else}€{/if}-voucher - and therefore make it easier for you to decide for an order with {$sShop}.
+
+Your voucher is valid for two months and can be redeemed by entering the code "{$sVouchercode}".
+
+We would be pleased to accept your order!
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+         Dear customer,<br/>
+         <br/>
+         You have recently aborted an order process on {$sShop} - today, we would like to give you a 5{$sVouchervalue} {if $sVoucherpercental == "1"}%{else}€{/if}-voucher - and therefore make it easier for you to decide for an order with {$sShop}.<br/>
+         <br/>
+         Your voucher is valid for two months and can be redeemed by entering the code "<strong>{$sVouchercode}</strong>".<br/>
+         <br/>
+         We would be pleased to accept your order!<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sCANCELEDVOUCHER';
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL9';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL10';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '1st reminder for your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+this is your first reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+Please pay your invoice as fast as possible!
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        this is your first reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        Please pay your invoice as fast as possible!<br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL13';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Encashment of your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+You have now received 3 reminders for your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You will receive shortly post from an encashment company!
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        You have now received 3 reminders for your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You will receive shortly post from an encashment company!<br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL16';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '3rd reminder for your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+this is your third and last reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+Please pay your invoice as fast as possible!
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        this is your third and last reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        Please pay your invoice as fast as possible!<br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL15';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '2nd reminder for your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+this is your second reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+Please pay your invoice as fast as possible!
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        this is your second reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        Please pay your invoice as fast as possible!<br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL14';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is completely paid',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL12';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL17';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL18';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is delayed',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL19';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL20';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Stock level of {$sData.count} article{if $sData.count>1}s{/if} under minimum stock ',`content` = '
+Hello,
+
+the following articles have undershot the minimum stock:
+
+Order number Name of article Stock/Minimum stock
+{foreach from=$sJob.articles item=sArticle key=key}
+{$sArticle.ordernumber} {$sArticle.name} {$sArticle.instock}/{$sArticle.stockmin}
+{/foreach}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        the following articles have undershot the minimum stock:<br/>
+        <br/>
+    </p>
+    <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
+        <tr>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Order number</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Name of article</strong></td>
+            <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Stock/Minimum stock</strong></td>
+        </tr>
+    
+        {foreach from=$sJob.articles item=sArticle key=key}
+            <tr>
+              <td>{$sArticle.ordernumber}</td>
+              <td>{$sArticle.name}</td>
+              <td>{$sArticle.instock}/{$sArticle.stockmin}</td>
+            </tr>
+        {/foreach}
+    </table>
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sARTICLESTOCK';
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Thank you for your newsletter subscription',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for your newsletter subscription at {config name=shopName}.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for your newsletter subscription at {config name=shopName}.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sNEWSLETTERCONFIRMATION';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your newsletter subscription',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for signing up for our regularly published newsletter.
+
+Please confirm your subscription by clicking the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for signing up for our regularly published newsletter.<br/>
+        <br/>
+        Please confirm your subscription by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sOPTINNEWSLETTER';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your article evaluation',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for evaluating the article {$sArticle.articleName}.
+
+Please confirm the evaluation by clicking the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for evaluating the article {$sArticle.articleName}.<br/>
+        <br/>
+        Please confirm the evaluation by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your article is available again',`content` = '
+Hello,
+
+your article with the order number {$sOrdernumber} is available again.
+
+{$sArticleLink}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        your article with the order number {$sOrdernumber} is available again.<br/>
+        <br/>
+        <a href="{$sArticleLink}">{$sOrdernumber}</a><br/>
+    </p>
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sARTICLEAVAILABLE';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your e-mail notification',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for signing up for the automatic email notification for the article {$sArticleName}.
+
+Please confirm the notification by clicking the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for signing up for the automatic email notification for the article {$sArticleName}.<br/>
+        <br/>
+        Please confirm the notification by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sACCEPTNOTIFICATION';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'SEPA direct debit mandate',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello {$paymentInstance.firstName} {$paymentInstance.lastName},
+
+attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello {$paymentInstance.firstName} {$paymentInstance.lastName},<br/>
+        <br/>
+        attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 1 WHERE `s_core_config_mails`.`name` = 'sORDERSEPAAUTHORIZATION';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Password change - Password reset',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+there has been a request to reset you Password in the Shop {$sShop}.
+
+Please confirm the link below to specify a new password.
+
+{$sUrlReset}
+
+This link is valid for the next 2 hours. After that you have to request a new confirmation link.
+
+If you do not want to reset your password, please ignore this email. No changes will be made.
+
+{config name=address}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        there has been a request to reset your password in the shop {$sShop}.
+        Please confirm the link below to specify a new password.<br/>
+        <br/>
+        <a href="{$sUrlReset}">reset password</a><br/>
+        <br/>
+        This link is valid for the next 2 hours. After that you have to request a new confirmation link.
+        If you do not want to reset your password, please ignore this email. No changes will be made.<br/>
+        <br/>
+        {config name=address}<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sCONFIRMPASSWORDCHANGE';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is in process',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL1';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order at {config name=shopName} is completed',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL2';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new payment status is as follows: {$sOrder.cleared_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL11';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is ready for delivery',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL5';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+
+Information on your order:
+==================================
+{foreach item=details key=position from=$sOrderDetails}
+{$position+1|fill:3} {$details.articleordernumber|fill:10:" ":"..."} {$details.name|fill:30} {$details.quantity} x {$details.price|string_format:"%.2f"} {$sOrder.currency}
+{/foreach}
+
+Shipping costs: {$sOrder.invoice_shipping|string_format:"%.2f"} {$sOrder.currency}
+Net total: {$sOrder.invoice_amount_net|string_format:"%.2f"} {$sOrder.currency}
+Total amount incl. VAT: {$sOrder.invoice_amount|string_format:"%.2f"} {$sOrder.currency}
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        <strong>Information on your order:</strong></p><br/>
+        <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
+            <tr>
+                <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Article</strong></td>
+                <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Pos.</strong></td>
+                <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Art.No.</strong></td>
+                <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Quantities</strong></td>
+                <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Price</strong></td>
+            </tr>
+            {foreach item=details key=position from=$sOrderDetails}
+            <tr>
+                <td>{$details.name|wordwrap:80|indent:4}</td>
+                <td>{$position+1|fill:4} </td>
+                <td>{$details.ordernumber|fill:20}</td>
+                <td>{$details.quantity|fill:6}</td>
+                <td>{$details.price|padding:8} {$sOrder.currency}</td>
+            </tr>
+            {/foreach}
+        </table>
+    <p>
+        <br/>
+        Shipping costs: {$sOrder.invoice_shipping|string_format:"%.2f"} {$sOrder.currency}<br/>
+        Net total: {$sOrder.invoice_amount_net|string_format:"%.2f"} {$sOrder.currency}<br/>
+        Total amount incl. VAT: {$sOrder.invoice_amount|string_format:"%.2f"} {$sOrder.currency}<br/>
+        <br/>
+    
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL3';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL8';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is cancelled',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL4';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is partially delivered',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL6';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is delivered',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
+The new status is as follows: {$sOrder.status_description}.
+
+You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        <br/>
+        the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
+        <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
+        <br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3 WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL7';
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Happy Birthday from {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation} {$sUser.lastname},
+
+we wish you all the best for your birthday.
+
+For your personal anniversary we thought of something special and send you your own birthday code you can easily redeem in your next order.
+
+Your personal birthday code is: {$sVoucher.code}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+	<p>Dear {$sUser.salutation} {$sUser.lastname},</p>
+	<p><strong>we wish you all the best for your birthday. </strong>. For your personal anniversary we thought of something special and send you your own birthday code you can easily redeem in your next order in our <a href="{$sShopURL}" title="{$sShop}">online hop</a>.</p>
+	<p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong></p>
+
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sBIRTHDAY';
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Evaluate article',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+
+You bought some products in our store a few days ago, we would really appreciate it if you would rate these products.
+Rating products helps us to improve our service and provide your opinion about these products to other customers.
+
+Here you can find the links for rating the products you bought.
+
+{foreach from=$sArticles item=sArticle key=key}
+{if !$sArticle.modus}
+{$sArticle.articleordernumber} - {$sArticle.name}: {$sArticle.link}
+{/if}
+{/foreach}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+    <br/>
+    You bought some products in our store a few days ago, we would really appreciate it if you would rate these products.<br/>
+    Rating products helps us to improve our service and provide your opinion about these products to other customers.<br/>
+    <br/>
+    Here you can find the links for rating the products you bought.<br/>
+    <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
+        {foreach from=$sArticles item=sArticle key=key}
+        {if !$sArticle.modus}
+            <tr>
+                <td>{$sArticle.articleordernumber}</td>
+                <td>{$sArticle.name}</td>
+                <td>
+                    <a href="{$sArticle.link}">link</a>
+                </td>
+            </tr>
+        {/if}
+        {/foreach}
+    </table>
+    <br/><br/>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sARTICLECOMMENT';
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Documents for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.
+
+We wish you a nice day.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.<br/>
+        <br/>
+        We wish you a nice day.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2 WHERE `s_core_config_mails`.`name` = 'sORDERDOCUMENTS';
 
 -- s_cms_static_groups --
 UPDATE s_cms_static_groups SET `name` = 'German left pane and service/support top' WHERE id = 1;
