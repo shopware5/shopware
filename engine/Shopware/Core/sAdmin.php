@@ -2250,7 +2250,7 @@ class sAdmin
             $errorFlag = [];
             $config = Shopware()->Container()->get('config');
 
-            if ($this->shouldVerifyCaptcha($config)) {
+            if ($this->shouldVerifyCaptcha($config) && $this->front->Request()->getParam('voteConfirmed', false) == false) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 
