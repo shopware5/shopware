@@ -20,7 +20,7 @@
         init: function () {
             var me = this,
                 param = decodeURI((RegExp('(?:action|jumpTab)=(.+?)(&|$)').exec(location.search) || [null, null])[1]);
-            
+
             me.applyDataAttributes();
 
             me.$htmlBody = $('body, html');
@@ -56,7 +56,7 @@
         registerEvents: function () {
             var me = this;
 
-            me.$el.on(me.getEventName('click'), '.product--rating-link, .link--publish-comment', $.proxy(me.onJumpToTab, me));
+            me.$el.on(me.getEventName('touchstart click'), '.product--rating-link, .link--publish-comment', $.proxy(me.onJumpToTab, me));
 
             $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
         },
