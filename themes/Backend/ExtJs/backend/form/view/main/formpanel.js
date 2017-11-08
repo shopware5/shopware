@@ -132,6 +132,13 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             allowBlank: false,
             supportText : linkToForm
         }, {
+            fieldLabel: '{s name=label_active}Active{/s}',
+            xtype: 'checkbox',
+            inputValue: true,
+            uncheckedValue: false,
+            name: 'active'
+        },
+        {
             fieldLabel:'{s name=label_email}Email{/s}',
             name: 'email',
             vtype: 'remote',
