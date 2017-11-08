@@ -66,6 +66,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'custom_search.facet.classes.ImmediateDeliveryFacet',
         'custom_search.facet.classes.ManufacturerFacet',
         'custom_search.facet.classes.PriceFacet',
+        'custom_search.facet.classes.VariantFacet',
         'custom_search.facet.classes.PropertyFacet',
         'custom_search.facet.classes.ShippingFreeFacet',
         'custom_search.facet.classes.VoteAverageFacet',

@@ -121,6 +121,15 @@
             <tag name="facet_handler_dbal"/>
         </service>
 
+        <service class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\VariantFacetHandler" id="shopware_bundle.search_bundle_dbal_facet_handler.variant_facet_handler">
+            <argument type="service" id="shopware_storefront.configurator_options_gateway"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal"/>
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+
         <!-- Condition handler -->
         <service id="shopware_searchdbal.vote_average_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VoteAverageConditionHandler">
             <argument type="service" id="config" />
@@ -267,6 +276,11 @@
             <argument id="query_alias_mapper" type="service"/>
             <argument id="shopware_searchdbal.variant_helper" type="service"/>
             <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VariantConditionHandler" id="shopware_bundle.search_bundle_dbal_condition_handler.variant_condition_handler">
+            <argument id="shopware_searchdbal.search_price_helper_dbal" type="service"/>
+            <tag name="condition_handler_dbal"/>
         </service>
 
         <service id="shopware_searchdbal.height_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler" >

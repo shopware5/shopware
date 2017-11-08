@@ -31,6 +31,7 @@
             <argument type="service" id="shopware_storefront.vote_service"/>
             <argument type="service" id="shopware_storefront.category_service" />
             <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.additional_text_service"/>
         </service>
 
         <service id="shopware_storefront.base_product_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\BaseProductFactoryService">
@@ -196,6 +197,15 @@
             <argument type="service" id="shopware_storefront.configurator_hydrator_dbal"/>
             <argument type="service" id="shopware_storefront.media_gateway" />
         </service>
+
+        <service class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway" id="shopware_storefront.configurator_options_gateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_storefront.configurator_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.media_gateway" type="service"/>
+        </service>
+
+
 
         <service id="shopware_storefront.graduated_prices_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway">
             <argument type="service" id="dbal_connection"/>

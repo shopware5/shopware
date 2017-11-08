@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -143,21 +144,33 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     {
         $query = $this->createQueryBuilder();
 
-        $query->from('s_articles', 'product')
-            ->innerJoin(
+        $query->from('s_articles', 'product');
+
+        if ($this->hasVariantCondition($criteria)) {
+            $query->innerJoin(
+                'product',
+                's_articles_details',
+                'variant',
+                'variant.articleID = product.id
+                 AND variant.active = 1
+                 AND product.active = 1'
+            );
+        } else {
+            $query->innerJoin(
                 'product',
                 's_articles_details',
                 'variant',
                 'variant.id = product.main_detail_id
                  AND variant.active = 1
                  AND product.active = 1'
-            )
-            ->innerJoin(
-                'variant',
-                's_articles_attributes',
-                'productAttribute',
-                'productAttribute.articledetailsID = variant.id'
             );
+        }
+        $query->innerJoin(
+            'variant',
+            's_articles_attributes',
+            'productAttribute',
+            'productAttribute.articledetailsID = variant.id'
+        );
 
         $this->addConditions($criteria, $query, $context);
 
@@ -286,5 +299,16 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
                 );
             }
         }
+    }
+
+    private function hasVariantCondition(Criteria $criteria)
+    {
+        foreach ($criteria->getConditions() as $condition) {
+            if ($condition instanceof VariantCondition) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

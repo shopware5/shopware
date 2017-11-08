@@ -38,6 +38,11 @@
             <tag name="criteria_request_handler"/>
         </service>
 
+        <service class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\VariantCriteriaRequestHandler" id="shopware_bundle_search.criteria_request_handler.variant_criteria_request_handler">
+            <argument id="dbal_connection" type="service"/>
+            <tag name="criteria_request_handler"/>
+        </service>
+
         <service id="shopware_search.store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >
             <argument type="service" id="config" />
             <argument type="service" id="events" />

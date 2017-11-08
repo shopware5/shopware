@@ -81,6 +81,11 @@ class ListProductService implements Service\ListProductServiceInterface
     private $config;
 
     /**
+     * @var Service\AdditionalTextServiceInterface
+     */
+    private $additionalTextService;
+
+    /**
      * @param Gateway\ListProductGatewayInterface      $productGateway
      * @param Service\GraduatedPricesServiceInterface  $graduatedPricesService
      * @param Service\CheapestPriceServiceInterface    $cheapestPriceService
@@ -90,6 +95,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\VoteServiceInterface             $voteService
      * @param Service\CategoryServiceInterface         $categoryService
      * @param \Shopware_Components_Config              $config
+     * @param Service\AdditionalTextServiceInterface   $additionalTextService
      */
     public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
@@ -100,7 +106,8 @@ class ListProductService implements Service\ListProductServiceInterface
         Service\MarketingServiceInterface $marketingService,
         Service\VoteServiceInterface $voteService,
         Service\CategoryServiceInterface $categoryService,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        Service\AdditionalTextServiceInterface $additionalTextService
     ) {
         $this->productGateway = $productGateway;
         $this->graduatedPricesService = $graduatedPricesService;
@@ -111,6 +118,7 @@ class ListProductService implements Service\ListProductServiceInterface
         $this->voteService = $voteService;
         $this->categoryService = $categoryService;
         $this->config = $config;
+        $this->additionalTextService = $additionalTextService;
     }
 
     /**
@@ -143,6 +151,9 @@ class ListProductService implements Service\ListProductServiceInterface
         $voteAverages = $this->voteService->getAverages($products, $context);
 
         $categories = $this->categoryService->getProductsCategories($products, $context);
+
+        //todo@dr display only text of filtered options
+        $this->additionalTextService->buildAdditionalTextLists($products, $context);
 
         $result = [];
         foreach ($numbers as $number) {
