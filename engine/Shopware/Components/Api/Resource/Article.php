@@ -1931,7 +1931,7 @@ class Article extends Resource implements BatchInterface
         );
         $translation = $this->getSingleTranslation(
             'article',
-            $shop->getId(),
+            $shop,
             $data['id']
         );
 
@@ -2033,7 +2033,7 @@ class Article extends Resource implements BatchInterface
         foreach ($values as &$value) {
             $translation = $this->getSingleTranslation(
                 'propertyvalue',
-                $shop->getId(),
+                $shop,
                 $value['id']
             );
             if (empty($translation)) {
@@ -2066,7 +2066,7 @@ class Article extends Resource implements BatchInterface
         }
         $translation = $this->getSingleTranslation(
             'supplier',
-            $shop->getId(),
+            $shop,
             $supplier['id']
         );
 
@@ -2096,7 +2096,7 @@ class Article extends Resource implements BatchInterface
 
         $translation = $this->getSingleTranslation(
             'propertygroup',
-            $shop->getId(),
+            $shop,
             $groupData['id']
         );
 
@@ -2129,7 +2129,7 @@ class Article extends Resource implements BatchInterface
         foreach ($details as &$variant) {
             $translation = $this->getSingleTranslation(
                 'variant',
-                $shop->getId(),
+                $shop,
                 $variant['id']
             );
             if (empty($translation)) {
@@ -2156,7 +2156,7 @@ class Article extends Resource implements BatchInterface
                 foreach ($variant['images'] as &$image) {
                     $translation = $this->getSingleTranslation(
                         'articleimage',
-                        $shop->getId(),
+                        $shop,
                         $image['parentId']
                     );
                     if (empty($translation)) {
@@ -2182,12 +2182,36 @@ class Article extends Resource implements BatchInterface
      */
     protected function mergeTranslation($data, $translation)
     {
+        $attributeTranslation = $this->extractAttributeFields($translation);
         $data = array_merge(
             $data,
-            array_intersect_key($translation, $data)
+            array_intersect_key($translation, $data),
+            array_intersect_key($attributeTranslation, $data)
         );
 
         return $data;
+    }
+
+    /**
+     * Helper to extract attribute translations fields and convert them
+     * into the correct lowerCamelCase format.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function extractAttributeFields($data)
+    {
+        $result = [];
+        foreach ($data as $field => $value) {
+            if (strpos($field, '__attribute_') === 0) {
+                $key = str_replace('__attribute_', '', $field);
+                $key = lcfirst(implode('', array_map('ucfirst', explode('_', $key))));
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -2204,7 +2228,7 @@ class Article extends Resource implements BatchInterface
         foreach ($association as &$item) {
             $translation = $this->getSingleTranslation(
                 $type,
-                $shop->getId(),
+                $shop,
                 $item['id']
             );
             if (empty($translation)) {
@@ -2220,18 +2244,27 @@ class Article extends Resource implements BatchInterface
      * Helper function to get a single translation.
      *
      * @param $type
-     * @param $shopId
+     * @param Shop $shop
      * @param $key
      *
      * @return array
      */
-    protected function getSingleTranslation($type, $shopId, $key)
+    protected function getSingleTranslation($type, Shop $shop, $key)
     {
         $translation = $this->getTranslationResource()->getList(0, 1, [
             ['property' => 'translation.type', 'value' => $type],
             ['property' => 'translation.key', 'value' => $key],
-            ['property' => 'translation.shopId', 'value' => $shopId],
+            ['property' => 'translation.shopId', 'value' => $shop->getId()],
         ]);
+
+        if ($shop->getId() !== $shop->getFallback()->getId()) {
+            $fallbackTranslation = $this->getTranslationResource()->getList(0, 1, [
+                ['property' => 'translation.type', 'value' => $type],
+                ['property' => 'translation.key', 'value' => $key],
+                ['property' => 'translation.shopId', 'value' => $shop->getFallback()->getId()],
+            ]);
+            $translation['data'] = array_replace_recursive($fallbackTranslation['data'], $translation['data']);
+        }
 
         return $translation['data'][0];
     }
