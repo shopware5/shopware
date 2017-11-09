@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Changed the cache ids for the listing back to a<id> instead of <id>
 * Changed the captcha validation with double-opt-in
+* Changed the `createValueListFacetResult` method of `ProductAttributeFacetHandler` to display translations of attribute values in facet list
 
 ### Removals
 
