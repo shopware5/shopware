@@ -28,12 +28,12 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ResponseTextException;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Price\Group;
 use Shopware\Tests\Mink\Element\CartPosition;
 use Shopware\Tests\Mink\Element\CheckoutAddressBox;
 use Shopware\Tests\Mink\Element\CheckoutAddressBoxModal;
 use Shopware\Tests\Mink\Element\MultipleElement;
 use Shopware\Tests\Mink\Page\CheckoutCart;
+use Shopware\Tests\Mink\Page\CheckoutConfirm;
 
 class CheckoutContext extends SubContext
 {
@@ -864,8 +864,9 @@ EOD;
     /**
      * @Given I checkout using GET
      */
-    public function iRequestUsingGet($path = '/checkout/finish')
+    public function iCheckoutUsingGet($path = '/checkout/finish')
     {
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
         $page->checkoutUsingGet($path);
     }
