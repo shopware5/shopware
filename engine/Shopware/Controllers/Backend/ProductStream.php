@@ -57,7 +57,8 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $criteria = new Criteria();
 
             $sorting = $this->Request()->getParam('sort');
-            if($sorting) {
+
+            if (null !== $sorting) {
                 $sorting = $streamRepo->unserialize($sorting);
 
                 foreach ($sorting as $sort) {
@@ -67,7 +68,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
             $conditions = $this->Request()->getParam('conditions');
 
-            if ($conditions) {
+            if (null !== $conditions) {
                 $conditions = json_decode($conditions, true);
 
                 if (json_last_error() !== JSON_ERROR_NONE) {
@@ -76,7 +77,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
                 $conditions = $streamRepo->unserialize($conditions);
 
-                foreach ($conditions as $condition) {
+                foreach ($conditions as $condition) { /* @var $condition \Shopware\Bundle\SearchBundle\ConditionInterface */
                     $criteria->addCondition($condition);
                 }
             }
@@ -125,6 +126,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     /**
      * @param array $data
+     *
      * @return array
      */
     public function save($data)
@@ -142,6 +144,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     /**
      * @param int $id
+     *
      * @return array
      */
     public function getDetail($id)
@@ -242,7 +245,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param int $shopId
+     * @param int      $shopId
      * @param int|null $currencyId
      * @param int|null $customerGroupKey
      *

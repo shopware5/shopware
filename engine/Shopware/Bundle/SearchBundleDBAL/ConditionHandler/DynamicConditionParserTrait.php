@@ -102,6 +102,8 @@ trait DynamicConditionParserTrait
             );
         }
 
+        //Identify each field placeholder value with the table alias and the field name
+        $boundParamName = sprintf(':%s_%s', $tableAlias, $field);
         $field = sprintf('%s.%s', $tableAlias, $field);
 
         switch (true) {
@@ -110,8 +112,8 @@ trait DynamicConditionParserTrait
                     $query->andWhere($query->expr()->isNull($field));
                     break;
                 }
-                $query->andWhere($query->expr()->eq($field, ':value'));
-                $query->setParameter(':value', $value);
+                $query->andWhere($query->expr()->eq($field, $boundParamName));
+                $query->setParameter($boundParamName, $value);
                 break;
 
             case $operator === Condition::OPERATOR_NEQ:
@@ -119,43 +121,43 @@ trait DynamicConditionParserTrait
                     $query->andWhere($query->expr()->isNotNull($field));
                     break;
                 }
-                $query->andWhere($query->expr()->neq($field, ':value'));
-                $query->setParameter(':value', $value);
+                $query->andWhere($query->expr()->neq($field, $boundParamName));
+                $query->setParameter($boundParamName, $value);
                 break;
 
             case $operator === Condition::OPERATOR_LT:
-                $query->andWhere($query->expr()->lt($field, ':value'));
-                $query->setParameter(':value', $value);
+                $query->andWhere($query->expr()->lt($field, $boundParamName));
+                $query->setParameter($boundParamName, $value);
                 break;
 
             case $operator === Condition::OPERATOR_LTE:
-                $query->andWhere($query->expr()->lte($field, ':value'));
-                $query->setParameter(':value', $value);
+                $query->andWhere($query->expr()->lte($field, $boundParamName));
+                $query->setParameter($boundParamName, $value);
                 break;
 
             case $operator === Condition::OPERATOR_GT:
-                $query->andWhere($query->expr()->gt($field, ':value'));
-                $query->setParameter(':value', $value);
+                $query->andWhere($query->expr()->gt($field, $boundParamName));
+                $query->setParameter($boundParamName, $value);
                 break;
 
             case $operator === Condition::OPERATOR_GTE:
-                $query->andWhere($query->expr()->gte($field, ':value'));
-                $query->setParameter(':value', $value);
+                $query->andWhere($query->expr()->gte($field, $boundParamName));
+                $query->setParameter($boundParamName, $value);
                 break;
 
             case $operator === Condition::OPERATOR_NOT_IN:
-                $query->andWhere($query->expr()->notIn($field, ':value'));
+                $query->andWhere($query->expr()->notIn($field, $boundParamName));
                 $query->setParameter(
-                    ':value',
+                    $boundParamName,
                     !is_array($value) ? [(string) $value] : $value,
                     Connection::PARAM_STR_ARRAY
                 );
                 break;
 
             case $operator === Condition::OPERATOR_IN:
-                $query->andWhere($query->expr()->in($field, ':value'));
+                $query->andWhere($query->expr()->in($field, $boundParamName));
                 $query->setParameter(
-                    ':value',
+                    $boundParamName,
                     !is_array($value) ? [(string) $value] : $value,
                     Connection::PARAM_STR_ARRAY
                 );
@@ -167,29 +169,29 @@ trait DynamicConditionParserTrait
                 }
 
                 if (isset($value['min'])) {
-                    $query->andWhere($query->expr()->gte($field, ':value' . 'Min'))
-                        ->setParameter(':value' . 'Min', $value['min']);
+                    $query->andWhere($query->expr()->gte($field, $boundParamName . 'Min'))
+                        ->setParameter($boundParamName . 'Min', $value['min']);
                 }
 
                 if (isset($value['max'])) {
-                    $query->andWhere($query->expr()->lte($field, ':value' . 'Max'))
-                        ->setParameter(':value' . 'Max', $value['max']);
+                    $query->andWhere($query->expr()->lte($field, $boundParamName . 'Max'))
+                        ->setParameter($boundParamName . 'Max', $value['max']);
                 }
                 break;
 
             case $operator === Condition::OPERATOR_STARTS_WITH:
-                $query->andWhere($query->expr()->like($field, ':value'));
-                $query->setParameter(':value', $value . '%');
+                $query->andWhere($query->expr()->like($field, $boundParamName));
+                $query->setParameter($boundParamName, $value . '%');
                 break;
 
             case $operator === Condition::OPERATOR_ENDS_WITH:
-                $query->andWhere($query->expr()->like($field, ':value'));
-                $query->setParameter(':value', '%' . $value);
+                $query->andWhere($query->expr()->like($field, $boundParamName));
+                $query->setParameter($boundParamName, '%' . $value);
                 break;
 
             case $operator === Condition::OPERATOR_CONTAINS:
-                $query->andWhere($query->expr()->like($field, ':value'));
-                $query->setParameter(':value', '%' . $value . '%');
+                $query->andWhere($query->expr()->like($field, $boundParamName));
+                $query->setParameter($boundParamName, '%' . $value . '%');
                 break;
 
             default:
