@@ -681,6 +681,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
             case Shopware\Models\Article\Article::class:
                 $cacheIds[] = 'a' . $entity->getId();
+                foreach ($entity->getCategories() as $category) {
+                    $cacheIds[] = 'c' . $category->getId();
+                }
                 break;
             case Shopware\Models\Article\Detail::class:
                 $cacheIds[] = 'a' . $entity->getArticleId();
