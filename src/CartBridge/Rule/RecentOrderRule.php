@@ -24,7 +24,7 @@
 
 namespace Shopware\CartBridge\Rule;
 
-use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
 use Shopware\Cart\Rule\Match;
 use Shopware\CartBridge\Rule\Data\RecentOrderRuleData;
 use Shopware\Context\Struct\ShopContext;

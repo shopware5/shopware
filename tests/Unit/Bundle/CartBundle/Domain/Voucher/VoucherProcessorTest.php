@@ -26,27 +26,27 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Voucher;
 
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Cart\Struct\CartContainer;
 use Shopware\Cart\Cart\ProcessorCart;
-use Shopware\Cart\Delivery\DeliveryCollection;
+use Shopware\Cart\Delivery\Struct\DeliveryCollection;
 use Shopware\Cart\Error\ErrorCollection;
 use Shopware\Cart\Error\VoucherNotFoundError;
 use Shopware\Cart\LineItem\CalculatedLineItemCollection;
 use Shopware\Cart\LineItem\LineItem;
 use Shopware\Cart\LineItem\LineItemCollection;
 use Shopware\Cart\Price\PercentagePriceCalculator;
-use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\Struct\Price;
 use Shopware\Cart\Price\PriceCalculator;
-use Shopware\Cart\Price\PriceDefinition;
-use Shopware\Cart\Product\ProductProcessor;
+use Shopware\Cart\Price\Struct\PriceDefinition;
+use Shopware\CartBridge\Product\ProductProcessor;
 use Shopware\Cart\Rule\Container\AndRule;
-use Shopware\Cart\Tax\CalculatedTaxCollection;
+use Shopware\Cart\Tax\Struct\CalculatedTaxCollection;
 use Shopware\Cart\Tax\PercentageTaxRuleBuilder;
-use Shopware\Cart\Tax\TaxRuleCollection;
-use Shopware\Cart\Voucher\AbsoluteVoucherData;
-use Shopware\Cart\Voucher\CalculatedVoucher;
-use Shopware\Cart\Voucher\PercentageVoucherData;
-use Shopware\Cart\Voucher\VoucherProcessor;
+use Shopware\Cart\Tax\Struct\TaxRuleCollection;
+use Shopware\CartBridge\Voucher\AbsoluteVoucherData;
+use Shopware\CartBridge\Voucher\Struct\CalculatedVoucher;
+use Shopware\CartBridge\Voucher\PercentageVoucherData;
+use Shopware\CartBridge\Voucher\VoucherProcessor;
 use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
@@ -231,7 +231,8 @@ class VoucherProcessorTest extends TestCase
             'test' => new PercentageVoucherData('test', new AndRule(), 10),
         ]);
         $processor->process($cartContainer, $processorCart, $data, $this->createMock(ShopContext::class));
-        $this->assertSame(1, $processorCart->getCalculatedLineItems()->filterInstance(CalculatedVoucher::class)->count());
+        $this->assertSame(1, $processorCart->getCalculatedLineItems()->filterInstance(
+            \Shopware\CartBridge\Voucher\Struct\CalculatedVoucher::class)->count());
 
         /** @var CalculatedVoucher $voucher */
         $voucher = $processorCart->getCalculatedLineItems()->get('voucher');
@@ -289,6 +290,7 @@ class VoucherProcessorTest extends TestCase
         ]);
         $processor->process($cartContainer, $processorCart, $data, $this->createMock(ShopContext::class));
 
-        $this->assertSame(1, $processorCart->getCalculatedLineItems()->filterInstance(CalculatedVoucher::class)->count());
+        $this->assertSame(1, $processorCart->getCalculatedLineItems()->filterInstance(
+            \Shopware\CartBridge\Voucher\Struct\CalculatedVoucher::class)->count());
     }
 }

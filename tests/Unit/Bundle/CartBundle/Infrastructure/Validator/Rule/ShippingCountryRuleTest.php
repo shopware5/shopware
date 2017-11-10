@@ -25,8 +25,8 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Cart\Cart\CalculatedCart;
-use Shopware\Cart\Delivery\ShippingLocation;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
+use Shopware\Cart\Delivery\Struct\ShippingLocation;
 use Shopware\Cart\Rule\Exception\UnsupportedOperatorException;
 use Shopware\CartBridge\Rule\ShippingCountryRule;
 use Shopware\Framework\Struct\StructCollection;

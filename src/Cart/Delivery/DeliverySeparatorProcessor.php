@@ -25,7 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Cart\Delivery;
 
-use Shopware\Cart\Cart\CartContainer;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
+use Shopware\Cart\Cart\Struct\CartContainer;
 use Shopware\Cart\Cart\CartProcessorInterface;
 use Shopware\Cart\Cart\ProcessorCart;
 use Shopware\Cart\LineItem\DeliverableLineItemInterface;
@@ -46,11 +47,11 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
 
     public function process(
         CartContainer $cartContainer,
-        ProcessorCart $processorCart,
+        CalculatedCart $calculatedCart,
         StructCollection $dataCollection,
         ShopContext $context
     ): void {
-        $items = $processorCart
+        $items = $calculatedCart
             ->getCalculatedLineItems()
             ->filterInstance(DeliverableLineItemInterface::class);
 
@@ -62,15 +63,10 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
             return;
         }
 
-        $deliveries = $this->stockDeliverySeparator->addItemsToDeliveries(
-            $processorCart->getDeliveries(),
+        $this->stockDeliverySeparator->addItemsToDeliveries(
+            $calculatedCart->getDeliveries(),
             $items,
             $context
         );
-
-        $deliveries->sortDeliveries();
-
-        $processorCart->getDeliveries()->clear();
-        $processorCart->getDeliveries()->fill($deliveries->getElements());
     }
 }

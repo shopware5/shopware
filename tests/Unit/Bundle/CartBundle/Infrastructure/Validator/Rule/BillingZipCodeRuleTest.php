@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
 use Shopware\CartBridge\Rule\BillingZipCodeRule;
 use Shopware\Address\Struct\Address;
 use Shopware\Framework\Struct\StructCollection;

@@ -25,16 +25,16 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
 use Shopware\Cart\LineItem\CalculatedLineItemCollection;
 use Shopware\Cart\LineItem\LineItem;
-use Shopware\Cart\Price\Price;
+use Shopware\Cart\Price\Struct\Price;
 use Shopware\Cart\Rule\Container\AndRule;
 use Shopware\Cart\Rule\Rule;
-use Shopware\Cart\Tax\CalculatedTaxCollection;
-use Shopware\Cart\Tax\TaxRuleCollection;
-use Shopware\Cart\Voucher\CalculatedVoucher;
-use Shopware\Cart\Voucher\VoucherProcessor;
+use Shopware\Cart\Tax\Struct\CalculatedTaxCollection;
+use Shopware\Cart\Tax\Struct\TaxRuleCollection;
+use Shopware\CartBridge\Voucher\Struct\CalculatedVoucher;
+use Shopware\CartBridge\Voucher\VoucherProcessor;
 use Shopware\CartBridge\Rule\GoodsCountRule;
 use Shopware\Framework\Struct\StructCollection;
 use Shopware\Context\Struct\ShopContext;

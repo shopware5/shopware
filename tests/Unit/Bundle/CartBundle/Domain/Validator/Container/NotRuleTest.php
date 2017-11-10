@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Cart\Cart\CalculatedCart;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
 use Shopware\Cart\Rule\Container\NotRule;
 use Shopware\Cart\Rule\Match;
 use Shopware\Framework\Struct\StructCollection;
