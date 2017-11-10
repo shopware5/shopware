@@ -96,10 +96,10 @@ class SnippetsValidateCommand extends ShopwareCommand
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
         foreach ($pluginDirectories as $key => $pluginBasePath) {
             if ($key === 'ShopwarePlugins') {
-                $invalidPaths = array_merge($this->getInvalidPaths($validator, $pluginBasePath));
+                $invalidPaths = array_merge($invalidPaths, $this->getInvalidPaths($validator, $pluginBasePath));
             } else {
                 foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
-                    $invalidPaths = array_merge($this->getInvalidPaths($validator, $pluginBasePath . $namespace));
+                    $invalidPaths = array_merge($invalidPaths, $this->getInvalidPaths($validator, $pluginBasePath . $namespace));
                 }
             }
         }
