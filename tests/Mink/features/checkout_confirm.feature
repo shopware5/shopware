@@ -3,8 +3,8 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
 
     Background:
         Given the cart contains the following products:
-            | number  | name              | quantity | itemPrice | sum    |
-            | SW10084 | Back-Set 3 teilig | 15       | 14,99     | 224,85 |
+            | articleId | number  | name              | quantity | itemPrice | sum    |
+            | 83        | SW10084 | Back-Set 3 teilig | 15       | 14,99     | 224,85 |
         And   I proceed to order confirmation with email "test@example.com" and password "shopware"
 
     @payment @delivery

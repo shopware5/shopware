@@ -24,8 +24,8 @@ Feature: forms
     @captchaInactive
     Scenario: I can raise a request regarding a quotation
         Given the cart contains the following products:
-            | number  | name                                  | quantity |
-            | SW10206 | Staffelung, Mindest- / Maximalabnahme | 3        |
+            | articleId | number  | name                                  | quantity |
+            | 207       | SW10206 | Staffelung, Mindest- / Maximalabnahme | 3        |
         And   I follow "Angebot anfordern"
         Then  I should be on the page "Form"
         And   I should see "Anfrage-Formular"

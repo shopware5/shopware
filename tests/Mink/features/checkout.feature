@@ -5,8 +5,8 @@ Feature: Checkout articles
         Given I am on the page "Account"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
         And   the cart contains the following products:
-            | number  | name                    | quantity |
-            | SW10167 | Sonnenbrille Speed Eyes | 3        |
+            | articleId   | number  | name                    | quantity |
+            | 167         | SW10167 | Sonnenbrille Speed Eyes | 3        |
 
     @onlypostallowed
     Scenario: I can't checkout using the HTTP GET method

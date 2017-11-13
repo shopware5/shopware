@@ -183,6 +183,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
             'noCacheControllers' => "frontend/index price\n",
         ]);
 
+        $this->Request()->setMethod('POST');
         $this->Request()->setHeader('Surrogate-Capability', 'ESI/1.0');
 
         $response = $this->dispatch('/checkout/ajaxAddArticleCart?sAdd=SW10178');
@@ -197,6 +198,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
             'noCacheControllers' => "frontend/index price\n",
         ]);
 
+        $this->Request()->setMethod('POST');
         $this->Request()->setHeader('Surrogate-Capability', 'ESI/1.0');
 
         $response = $this->dispatch('/checkout/ajaxAddArticleCart?sAdd=SW10178');
