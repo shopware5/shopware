@@ -267,14 +267,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
     createGridView: function() {
         var me = this,
-            stateConnections = [ 'xl' ];
-
-        /**
-         * All viewports are initially connected when the emotion has no elements.
-         */
-        if (me.emotion.getElements().getCount() === 0) {
             stateConnections = [ 'xs', 's', 'm', 'l', 'xl' ];
-        }
 
         return me.grid = Ext.create('Shopware.apps.Emotion.view.detail.Grid', {
             emotion: me.emotion,

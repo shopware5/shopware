@@ -432,6 +432,12 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
                 } else {
                     element.render(me.hiddenElements.getEl());
                 }
+
+                me.viewportStore.each(function(viewport) {
+                    if (!element.getVisible(viewport.get('alias')) && me.stateConnections.indexOf(viewport.get('alias')) !== -1) {
+                        delete me.stateConnections[me.stateConnections.indexOf(viewport.get('alias'))];
+                    }
+                });
             }
         });
 
