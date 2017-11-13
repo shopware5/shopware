@@ -107,6 +107,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added shop selection to emotions, to limit emotion to a specific shop
 * Added new block `frontend_account_order_item_status_value_custom` to `Bare/frontend/account/order_item.tpl`
 * Added filter event `Legacy_Struct_Converter_Convert_Product_Price` to LegacyStructConverter
+* Added option to allow multiple documents of the same type for orders in `engine/Shopware/Components/Document.php`
 
 ### Changes
 

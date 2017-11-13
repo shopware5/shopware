@@ -75,6 +75,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     public $_valuesAssigend = false;
 
     /**
+     * Does this document support the creation of multiple documents of the same type instead of overwriting
+     * existing ones?
+     *
+     * @var bool
+     */
+    public $_allowMultipleDocuments = false;
+
+    /**
      * Subshop-Configuration
      *
      * @var array
@@ -196,6 +204,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             if (empty($document->_subshop['id'])) {
                 throw new Enlight_Exception("Could not load template path for order $orderID");
+            }
+            if (!empty($config['_allowMultipleDocuments'])) {
+                $document->_allowMultipleDocuments = $config['_allowMultipleDocuments'];
             }
         } else {
             $document->_subshop = Shopware()->Db()->fetchRow("
@@ -640,8 +651,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         SELECT id , docID , hash FROM s_order_documents WHERE userID = ? AND orderID = ? AND `type` = ?
         ', [$this->_order->userID, $this->_order->id, $typID]);
 
-        if (!empty($checkForExistingDocument['id'])) {
-            // Document already exist. Update date and amount!
+        if (!$this->_allowMultipleDocuments && !empty($checkForExistingDocument['id'])) {
+            // Document already exist, and multiple documents are not allowed. Update date and amount!
             $update = '
             UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
