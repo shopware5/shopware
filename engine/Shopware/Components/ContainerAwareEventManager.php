@@ -164,6 +164,16 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->containerListeners = [];
+
+        return parent::reset();
+    }
+
+    /**
      * Lazily loads listeners for this event from the dependency injection
      * container.
      *
