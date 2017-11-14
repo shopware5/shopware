@@ -860,4 +860,13 @@ EOD;
 EOD;
         $dbal->query($sql);
     }
+
+    /**
+     * @Given I checkout using GET
+     */
+    public function iRequestUsingGet($path = '/checkout/finish')
+    {
+        $page = $this->getPage('CheckoutConfirm');
+        $page->checkoutUsingGet($path);
+    }
 }

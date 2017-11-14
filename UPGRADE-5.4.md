@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Updated mPDF to v6.1.4 and included it via composer
 * Made the event selectors configurable in the `swJumpToTab` jQuery plugin
+* Changed `checkout/finish` route to POST to be more HTTP compliant
 
 ### Removals
 

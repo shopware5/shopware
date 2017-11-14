@@ -277,7 +277,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             ';
 
             $order = Shopware()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId]);
-            if (!empty($order)) {
+
+            if (empty($order)) {
+                if ($this->Request()->isGet()) {
+                    return $this->forward('confirm');
+                }
+            } else {
                 $this->View()->assign($order);
                 $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
@@ -370,6 +375,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         if (!empty($this->session['sNewsletter'])) {
             $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
+        }
+
+        if ($this->Request()->isGet()) {
+            return $this->forward('confirm');
         }
 
         $this->saveOrder();

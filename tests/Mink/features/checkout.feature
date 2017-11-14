@@ -8,6 +8,14 @@ Feature: Checkout articles
             | number  | name                    | quantity |
             | SW10167 | Sonnenbrille Speed Eyes | 3        |
 
+    @onlypostallowed
+    Scenario: I can't checkout using the HTTP GET method
+        Given I proceed to order confirmation
+        And   I checkout using GET
+        Then  I should be on "/checkout/finish"
+        And   I should see "AGB und Widerrufsbelehrung"
+        And   I should not see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
+
     Scenario: I can put articles to the basket, check all prices and pay via C.O.D. service
         Given the cart should contain 1 articles with a value of "38,47 €"
         And   the aggregations should look like this:
