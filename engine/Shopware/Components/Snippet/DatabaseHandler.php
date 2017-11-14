@@ -135,9 +135,12 @@ class DatabaseHandler
                     $locale = $localeRepository->findOneBy(['locale' => $index]);
                 }
 
-                $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
+                // Only write entry if locale was found
+                if ($locale) {
+                    $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
 
-                $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
+                    $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
+                }
             }
 
             $this->printNotice('<info></info>');
