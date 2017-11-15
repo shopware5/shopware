@@ -406,6 +406,7 @@
         </service>
 
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
+        <service id="validator.user_name" class="Shopware\Components\Validator\UserNameValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
             <argument type="service" id="shopware_search.product_number_search" />
@@ -755,5 +756,22 @@
             <tag name="router.post_filter" priority="40"/>
         </service>
 
+        <service id="shopware.auth.validator.user_validator" class="Shopware\Components\Auth\Validator\UserValidator">
+            <argument type="service" id="validator"/>
+        </service>
+
+        <service id="shopware.auth.constraint.user_email_validator" class="Shopware\Components\Auth\Constraint\UserEmailValidator">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="validator.email"/>
+            <tag name="validator.constraint_validator" alias="UserEmailValidator" />
+        </service>
+
+        <service id="shopware.auth.constraint.user_name_validator" class="Shopware\Components\Auth\Constraint\UserNameValidator">
+            <argument type="service" id="snippets"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="validator.user_name"/>
+            <tag name="validator.constraint_validator" alias="UserNameValidator"/>
+        </service>
     </services>
 </container>
