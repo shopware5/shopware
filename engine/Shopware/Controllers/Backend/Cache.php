@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
 
         if ($cache['config'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
-            $this->cacheManager->clearTemplateCache();
+            $this->cacheManager->clearConfigCache();
         }
         if ($cache['search'] == 'on') {
             $this->cacheManager->clearSearchCache();
