@@ -123,6 +123,7 @@ return array_replace_recursive([
         'Local' => $this->AppPath('Plugins_Local'),
         'Community' => $this->AppPath('Plugins_Community'),
         'ShopwarePlugins' => $this->DocPath('custom_plugins'),
+        'ProjectPlugins' => $this->DocPath('custom_project'),
     ],
     'template' => [
         'compileCheck' => true,

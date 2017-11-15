@@ -128,6 +128,8 @@ class DownloadService
     /**
      * @param MetaRequest $request
      *
+     * @throws \Exception
+     *
      * @return MetaStruct
      */
     public function getMetaInformation(MetaRequest $request)
@@ -164,6 +166,8 @@ class DownloadService
 
     /**
      * @param DownloadRequest $request
+     *
+     * @throws \Exception
      *
      * @return bool
      */

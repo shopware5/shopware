@@ -72,30 +72,30 @@ class PluginInstaller
     private $pdo;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $pluginDirectory;
+    private $pluginDirectories;
 
     /**
      * @param ModelManager         $em
      * @param DatabaseHandler      $snippetHandler
      * @param RequirementValidator $requirementValidator
      * @param \PDO                 $pdo
-     * @param $pluginDirectory
+     * @param string|string[]      $pluginDirectories
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $pluginDirectory
+        $pluginDirectories
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
-        $this->pluginDirectory = $pluginDirectory;
+        $this->pluginDirectories = (array) $pluginDirectories;
     }
 
     /**
@@ -139,6 +139,7 @@ class PluginInstaller
      * @param Plugin $plugin
      * @param bool   $removeData
      *
+     * @throws \Exception
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -210,6 +211,9 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return ActivateContext
      */
     public function activatePlugin(Plugin $plugin)
@@ -229,6 +233,9 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return DeactivateContext
      */
     public function deactivatePlugin(Plugin $plugin)
@@ -245,12 +252,14 @@ class PluginInstaller
 
     /**
      * @param \DateTimeInterface $refreshDate
+     *
+     * @throws \RuntimeException
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
         $initializer = new PluginInitializer(
             $this->pdo,
-            $this->pluginDirectory
+            $this->pluginDirectories
         );
         $plugins = $initializer->initializePlugins();
 
@@ -332,6 +341,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      *
+     * @throws \Exception
+     *
      * @return string
      */
     public function getPluginPath(Plugin $plugin)
@@ -354,6 +365,8 @@ class PluginInstaller
     /**
      * @param PluginBootstrap $bootstrap
      * @param Plugin          $plugin
+     *
+     * @throws \Exception
      */
     private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
     {
@@ -385,6 +398,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param string $file
+     *
+     * @throws \Exception
      */
     private function installForm(Plugin $plugin, $file)
     {
@@ -398,6 +413,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param string $file
+     *
+     * @throws \InvalidArgumentException
      */
     private function installMenu(Plugin $plugin, $file)
     {
@@ -411,6 +428,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param string $file
+     *
+     * @throws \InvalidArgumentException
      */
     private function installCronjob(Plugin $plugin, $file)
     {
@@ -435,6 +454,8 @@ class PluginInstaller
     /**
      * @param string $pluginName
      *
+     * @throws \Exception
+     *
      * @return PluginBootstrap
      */
     private function getPluginByName($pluginName)
@@ -452,6 +473,8 @@ class PluginInstaller
 
     /**
      * @param int $pluginId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function removeEmotionComponents($pluginId)
     {
@@ -477,6 +500,8 @@ class PluginInstaller
 
     /**
      * @param int $pluginId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function removeFormsAndElements($pluginId)
     {

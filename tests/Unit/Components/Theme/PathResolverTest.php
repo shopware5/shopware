@@ -41,7 +41,6 @@ class PathResolverTest extends TestCase
         $this->pathResolver = new PathResolver(
             '/my/root/dir',
             ['/my/root/dir/templates'],
-            $this->createTemplateManagerMock(),
             '/my/root/dir/template',
             '/my/root/dir/web/cache'
         );
@@ -63,14 +62,6 @@ class PathResolverTest extends TestCase
 
         $expected = '/my/root/dir/web/cache/' . $filenameHash . '.js';
         $this->assertEquals($expected, $this->pathResolver->getJsFilePath($shopMock, $timestamp));
-    }
-
-    /**
-     * @return \Enlight_Template_Manager
-     */
-    private function createTemplateManagerMock()
-    {
-        return $this->createMock(\Enlight_Template_Manager::class);
     }
 
     /**

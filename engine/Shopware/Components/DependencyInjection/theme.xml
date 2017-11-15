@@ -29,7 +29,6 @@
         <service id="theme_path_resolver" class="Shopware\Components\Theme\PathResolver">
             <argument>%shopware.app.rootdir%</argument>
             <argument>%shopware.plugin_directories%</argument>
-            <argument type="service" id="template" />
             <argument>%shopware.template.templatedir%</argument>
             <argument>%shopware.web.cachedir%</argument>
         </service>

@@ -61,22 +61,15 @@ class PathResolver
     private $pluginDirectories;
 
     /**
-     * @var \Enlight_Template_Manager
+     * @param string $rootDir
+     * @param array  $pluginDirectories
+     * @param string $templateDir
+     * @param string $cacheDir
      */
-    private $templateManager;
-
-    /**
-     * @param string                    $rootDir
-     * @param array                     $pluginDirectories
-     * @param \Enlight_Template_Manager $templateManager
-     * @param string                    $templateDir
-     * @param string                    $cacheDir
-     */
-    public function __construct($rootDir, array $pluginDirectories, \Enlight_Template_Manager $templateManager, $templateDir, $cacheDir)
+    public function __construct($rootDir, array $pluginDirectories, $templateDir, $cacheDir)
     {
         $this->rootDir = $rootDir;
         $this->pluginDirectories = $pluginDirectories;
-        $this->templateManager = $templateManager;
         $this->templateDir = $templateDir;
         $this->cacheDir = $cacheDir;
     }
@@ -102,12 +95,11 @@ class PathResolver
             return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $template['template'];
         }
 
-        // @TODO: Erweitern um weiteren Plugin-Namespace
-        if ($template['plugin_namespace'] === 'ShopwarePlugins') {
+        if (in_array($template['plugin_namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
             return implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    $this->pluginDirectories['ShopwarePlugins'] . '/' . $template['plugin_name'] . '/Resources',
+                    $this->pluginDirectories[$template['plugin_namespace']] . '/' . $template['plugin_name'] . '/Resources',
                     'Themes',
                     'Frontend',
                     $template['template'],
@@ -141,8 +133,7 @@ class PathResolver
             return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
         }
 
-        // @TODO: Erweitern um weiteren Plugin-Namespace
-        return $this->pluginDirectories['ShopwarePlugins'] . '/' . $plugin->getName() . '/Resources';
+        return $this->pluginDirectories[$plugin->getNamespace()] . '/' . $plugin->getName() . '/Resources';
     }
 
     /**
