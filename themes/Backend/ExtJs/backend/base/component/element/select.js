@@ -133,7 +133,8 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
         try {
             store = Ext.create(storeId, {
                 storeId: configSelectStoreId,
-                pageSize: 1000
+                pageSize: 1000,
+                autoLoad: true
             });
             // Override the load() method so the store is only ever loaded once
             Ext.override(store, {
