@@ -1039,7 +1039,7 @@ class sBasket
      * Fetch count of products in basket
      * Used in multiple locations
      *
-     * @return array Number
+     * @return int
      */
     public function sCountBasket()
     {
