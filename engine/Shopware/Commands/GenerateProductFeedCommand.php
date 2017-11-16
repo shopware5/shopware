@@ -59,7 +59,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
             ->setDescription('Refreshes product feed cache files.')
             ->addOption(
                 'feed-id',
-                null,
+                'i',
                 InputOption::VALUE_OPTIONAL,
                 'ID of the feed to generate'
             )
