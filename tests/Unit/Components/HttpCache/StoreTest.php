@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\HttpCache;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\HttpCache\Store;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @category  Shopware
@@ -34,31 +34,126 @@ use Shopware\Components\HttpCache\Store;
  */
 class StoreTest extends TestCase
 {
+    public function setUp()
+    {
+        $this->httpCacheStore = new \Shopware\Components\HttpCache\Store(
+            'test',
+            [],
+            true,
+            [          //Set of parameters that must be ignored in the url
+                'foo',
+                '_foo',
+                '__foo',
+            ]
+        );
+    }
+
     public function provideUrls()
     {
         return [
-            ['http://example.com', 'http://example.com'],
-            ['http://example.com?a=a', 'http://example.com?a=a'],
-            ['http://example.com?z=a&a=a', 'http://example.com?a=a&z=a'],
-            ['http://example.com?z=a&z=b', 'http://example.com?z=b'], // duplicate parameters
-            ['http://example.com?Z=a&z=a', 'http://example.com?Z=a&z=a'], // case sensitive
-            ['http://example.com/?colors[]=red&cars[]=Saab&cars[]=Audi&colors[]=red&colors[]=blue', 'http://example.com/?cars%5B0%5D=Saab&cars%5B1%5D=Audi&colors%5B0%5D=red&colors%5B1%5D=red&colors%5B2%5D=blue'],
+            [
+                'original' => 'http://example.com/',
+                'compare' => 'http://example.com',
+            ],
+            [
+                'original' => 'http://example.com?a=a&a=1',
+                'compare' => 'http://example.com/?a=a',
+            ],
+            [
+                'original' => 'http://example.com?z=a&a=a',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com?Z=a&z=a',
+                'compare' => 'http://example.com/?Z=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/?cars[0]=Saab&cars[1]=Audi&colors[0]=red&colors[1]=red&colors[2]=blue&foo=1',
+                'compare' => 'http://example.com/?cars[0]=Saab&cars[1]=Audi&colors[0]=red&colors[1]=red&colors[2]=blue',
+            ],
+
+            [
+                'original' => 'http://example.com?foo',
+                'compare' => 'http://example.com',
+            ],
+            [
+                'original' => 'http://example.com?foo=bar',
+                'compare' => 'http://example.com',
+            ],
+            [
+                'original' => 'http://example.com?_foo=bar',
+                'compare' => 'http://example.com',
+            ],
+            [
+                'original' => 'http://example.com?__foo=bar',
+                'compare' => 'http://example.com',
+            ],
+            [
+                'original' => 'http://example.com?foo&z=a&a=a',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com?foo=bar&z=a&a=a',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com?_foo=bar&z=a&a=a',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com?__foo=bar&z=a&a=a',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com?z=a&foo=bar&a=a',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com?z=a&a=a&foo=bar',
+                'compare' => 'http://example.com/?a=a&z=a',
+            ],
         ];
     }
 
     /**
      * @dataProvider provideUrls
      *
-     * @param string $url
-     * @param string $expected
+     * @param string $originalURL
+     * @param string $expectedURL
+     *
+     * @see Shopware\Components\HttpCache\Store::generateCacheKey
      */
-    public function testSortQueryParams($url, $expected)
+    public function testGenerateCacheKey($originalURL, $expectedURL)
     {
-        $object = $this->createPartialMock(Store::class, []);
-        $class = new \ReflectionClass($object);
-        $method = $class->getMethod('sortQueryStringParameters');
+        $originalRequest = Request::create($originalURL);
+        $class = new \ReflectionClass($this->httpCacheStore);
+        $method = $class->getMethod('generateCacheKey');
         $method->setAccessible(true);
 
-        $this->assertSame($expected, $method->invokeArgs($object, [$url]));
+        $this->assertSame(
+            'md' . hash('sha256', $expectedURL),
+            $method->invokeArgs($this->httpCacheStore, [$originalRequest])
+        );
+    }
+
+    /**
+     * @dataProvider provideUrls
+     *
+     * @param string $originalURL
+     * @param string $expectedURL
+     *
+     * @see Shopware\Components\HttpCache\Store::verifyIgnoredParameters
+     */
+    public function testVerifyIgnoredParameters($originalURL, $expectedURL)
+    {
+        $originalRequest = Request::create($originalURL);
+        $class = new \ReflectionClass($this->httpCacheStore);
+        $method = $class->getMethod('verifyIgnoredParameters');
+        $method->setAccessible(true);
+
+        $this->assertSame(
+            $expectedURL,
+            $method->invokeArgs($this->httpCacheStore, [$originalRequest])
+        );
     }
 }
