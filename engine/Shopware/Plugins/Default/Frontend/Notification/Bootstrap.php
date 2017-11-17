@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Routing\Context;
+
 /**
  * Shopware Notification Plugin
  *
@@ -293,17 +295,24 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $sql = 'SELECT notification from s_articles WHERE ID = ?';
 
             $notificationActive = (bool) Shopware()->Db()->fetchOne($sql, [$sArticleID]);
-
             if ((int) $instock > 0 && $notificationActive === true && !empty($sArticle['active'])) {
-                $context = [
-                    'sArticleLink' => $data['shopLink'] . "?sViewport=detail&sArticle=$sArticleID",
-                    'sOrdernumber' => $ordernumber,
-                    'sData' => $job['data'],
-                ];
-
                 /* @var $shop \Shopware\Models\Shop\Shop */
                 $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($data['language']);
                 $shop->registerResources();
+
+                $shopContext = Context::createFromShop($shop, Shopware()->Container()->get('config'));
+                Shopware()->Container()->get('router')->setContext($shopContext);
+
+                $link = Shopware()->Front()->Router()->assemble([
+                    'sViewport' => 'detail',
+                    'sArticle' => $sArticleID,
+                ]);
+
+                $context = [
+                    'sArticleLink' => $link,
+                    'sOrdernumber' => $ordernumber,
+                    'sData' => $job['data'],
+                ];
 
                 $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
                 $mail->addTo($data['mail']);

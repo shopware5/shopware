@@ -100,87 +100,88 @@ Sie können Ihr Kennwort jederzeit nachträglich ändern.
                 Sie erhalten Zugriff über Ihre E-Mail-Adresse <strong>{$sMAIL}</strong><br/>
                 und dem von Ihnen gewählten Kennwort.<br/>
                 <br/>
-                Sie können Ihr Kennwort jederzeit nachträglich ändern.<br/>
+                Sie können Ihr Kennwort jederzeit nachträglich ändern.
             </p>
             {include file="string:{config name=emailfooterhtml}"}
         </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:14:{s:5:"sMAIL";s:14:"xy@example.org";s:7:"sConfig";a:0:{}s:6:"street";s:15:"Musterstraße 1";s:7:"zipcode";s:5:"12345";s:4:"city";s:11:"Musterstadt";s:7:"country";s:1:"2";s:5:"state";N;s:13:"customer_type";s:7:"private";s:10:"salutation";s:4:"Herr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:11:"accountmode";s:1:"0";s:5:"email";s:14:"xy@example.org";s:10:"additional";a:1:{s:13:"customer_type";s:7:"private";}}' WHERE `s_core_config_mails`.`name` = 'sREGISTERCONFIRMATION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Ihre Anmeldung in unserem Shop%';
 EOD;
 
         $sql .= <<<'EOD'
-        UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Ihre Bestellung im {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+        UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Ihre Bestellung im {config name=shopName}',
+        `content` = '{include file="string:{config name=emailheaderplain}"}
         
-        Hallo {$billingaddress.salutation|salutation} {$billingaddress.firstname} {$billingaddress.lastname},
+Hallo {$billingaddress.salutation|salutation} {$billingaddress.firstname} {$billingaddress.lastname},
+
+vielen Dank für Ihre Bestellung im {config name=shopName} (Nummer: {$sOrderNumber}) am {$sOrderDay} um {$sOrderTime}.
+Informationen zu Ihrer Bestellung:
+
+Pos.  Art.Nr.               Beschreibung                                      Menge       Preis       Summe
+{foreach item=details key=position from=$sOrderDetails}
+{{$position+1}|fill:4}  {$details.ordernumber|fill:20}  {$details.articlename|fill:49}  {$details.quantity|fill:6}  {$details.price|padding:8} EUR  {$details.amount|padding:8} EUR
+{/foreach}
+
+Versandkosten: {$sShippingCosts}
+Gesamtkosten Netto: {$sAmountNet}
+{if !$sNet}
+{foreach $sTaxRates as $rate => $value}
+zzgl. {$rate}% MwSt. {$value|currency|unescape:"htmlall"}
+{/foreach}
+Gesamtkosten Brutto: {$sAmount}
+{/if}
+
+Gewählte Zahlungsart: {$additional.payment.description}
+{$additional.payment.additionaldescription}
+{if $additional.payment.name == "debit"}
+Ihre Bankverbindung:
+Kontonr: {$sPaymentTable.account}
+BLZ: {$sPaymentTable.bankcode}
+Institut: {$sPaymentTable.bankname}
+Kontoinhaber: {$sPaymentTable.bankholder}
+
+Wir ziehen den Betrag in den nächsten Tagen von Ihrem Konto ein.
+{/if}
+{if $additional.payment.name == "prepayment"}
+
+Unsere Bankverbindung:
+Konto: ###
+BLZ: ###
+{/if}
+
+
+Gewählte Versandart: {$sDispatch.name}
+{$sDispatch.description}
+
+{if $sComment}
+Ihr Kommentar:
+{$sComment}
+{/if}
+
+Rechnungsadresse:
+{$billingaddress.company}
+{$billingaddress.firstname} {$billingaddress.lastname}
+{$billingaddress.street} {$billingaddress.streetnumber}
+{if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}\n
+{$additional.country.countryname}
+
+Lieferadresse:
+{$shippingaddress.company}
+{$shippingaddress.firstname} {$shippingaddress.lastname}
+{$shippingaddress.street} {$shippingaddress.streetnumber}
+{if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}\n
+{$additional.countryShipping.countryname}
+
+{if $billingaddress.ustid}
+Ihre Umsatzsteuer-ID: {$billingaddress.ustid}
+Bei erfolgreicher Prüfung und sofern Sie aus dem EU-Ausland
+bestellen, erhalten Sie Ihre Ware umsatzsteuerbefreit.
+{/if}
+
+
+Für Rückfragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+
+{include file="string:{config name=emailfooterplain}"}',
         
-        vielen Dank für Ihre Bestellung im {config name=shopName} (Nummer: {$sOrderNumber}) am {$sOrderDay} um {$sOrderTime}.
-        Informationen zu Ihrer Bestellung:
-        
-        Pos. Art.Nr.              Menge         Preis        Summe
-        {foreach item=details key=position from=$sOrderDetails}
-        {$position+1|fill:4} {$details.ordernumber|fill:20} {$details.quantity|fill:6} {$details.price|padding:8} EUR {$details.amount|padding:8} EUR
-        {$details.articlename|wordwrap:49|indent:5}
-        {/foreach}
-        
-        Versandkosten: {$sShippingCosts}
-        Gesamtkosten Netto: {$sAmountNet}
-        {if !$sNet}
-        {foreach $sTaxRates as $rate => $value}
-        zzgl. {$rate}% MwSt. {$value|currency}
-        {/foreach}
-        Gesamtkosten Brutto: {$sAmount}
-        {/if}
-        
-        Gewählte Zahlungsart: {$additional.payment.description}
-        {$additional.payment.additionaldescription}
-        {if $additional.payment.name == "debit"}
-        Ihre Bankverbindung:
-        Kontonr: {$sPaymentTable.account}
-        BLZ: {$sPaymentTable.bankcode}
-        Institut: {$sPaymentTable.bankname}
-        Kontoinhaber: {$sPaymentTable.bankholder}
-        
-        Wir ziehen den Betrag in den nächsten Tagen von Ihrem Konto ein.
-        {/if}
-        {if $additional.payment.name == "prepayment"}
-        
-        Unsere Bankverbindung:
-        Konto: ###
-        BLZ: ###
-        {/if}
-        
-        
-        Gewählte Versandart: {$sDispatch.name}
-        {$sDispatch.description}
-        
-        {if $sComment}
-        Ihr Kommentar:
-        {$sComment}
-        {/if}
-        
-        Rechnungsadresse:
-        {$billingaddress.company}
-        {$billingaddress.firstname} {$billingaddress.lastname}
-        {$billingaddress.street} {$billingaddress.streetnumber}
-        {if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}
-        {$billingaddress.phone}
-        {$additional.country.countryname}
-        
-        Lieferadresse:
-        {$shippingaddress.company}
-        {$shippingaddress.firstname} {$shippingaddress.lastname}
-        {$shippingaddress.street} {$shippingaddress.streetnumber}
-        {if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}
-        {$additional.countryShipping.countryname}
-        
-        {if $billingaddress.ustid}
-        Ihre Umsatzsteuer-ID: {$billingaddress.ustid}
-        Bei erfolgreicher Prüfung und sofern Sie aus dem EU-Ausland
-        bestellen, erhalten Sie Ihre Ware umsatzsteuerbefreit.
-        {/if}
-        
-        
-        Für Rückfragen stehen wir Ihnen jederzeit gerne zur Verfügung.
-        
-        {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+        `contentHTML` = '<div style="font-family:arial; font-size:12px;">
             {include file="string:{config name=emailheaderhtml}"}
             <br/><br/>
             <p>Hallo {$billingaddress.salutation|salutation} {$billingaddress.firstname} {$billingaddress.lastname},<br/>
@@ -190,28 +191,28 @@ EOD;
                 <strong>Informationen zu Ihrer Bestellung:</strong></p><br/>
             <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
                 <tr>
-                    <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Artikel</strong></td>
                     <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Pos.</strong></td>
-                    <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Art-Nr.</strong></td>
+                    <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Artikel</strong></td>
+                    <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Bezeichnung</td>
                     <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Menge</strong></td>
                     <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Preis</strong></td>
                     <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;"><strong>Summe</strong></td>
                 </tr>
-        
+
                 {foreach item=details key=position from=$sOrderDetails}
                 <tr>
-                    <td rowspan="2" style="border-bottom:1px solid #cccccc;">{if $details.image.src.0 && $details.modus == 0}<img style="height: 57px;" height="57" src="{$details.image.src.0}" alt="{$details.articlename}" />{else} {/if}</td>
-                    <td>{$position+1|fill:4} </td>
-                    <td>{$details.ordernumber|fill:20}</td>
-                    <td>{$details.quantity|fill:6}</td>
-                    <td>{$details.price|padding:8}{$sCurrency}</td>
-                    <td>{$details.amount|padding:8} {$sCurrency}</td>
-                </tr>
-                <tr>
-                    <td colspan="5" style="border-bottom:1px solid #cccccc;">{$details.articlename|wordwrap:80|indent:4}</td>
+                    <td style="border-bottom:1px solid #cccccc;">{$position+1|fill:4} </td>
+                    <td style="border-bottom:1px solid #cccccc;">{if $details.image.src.0 && $details.modus == 0}<img style="height: 57px;" height="57" src="{$details.image.src.0}" alt="{$details.articlename}" />{else} {/if}</td>
+                    <td style="border-bottom:1px solid #cccccc;">
+                      {$details.articlename|wordwrap:80|indent:4}<br>
+                      Artikel-Nr: {$details.ordernumber|fill:20}
+                    </td>
+                    <td style="border-bottom:1px solid #cccccc;">{$details.quantity|fill:6}</td>
+                    <td style="border-bottom:1px solid #cccccc;">{$details.price|padding:8}{$sCurrency}</td>
+                    <td style="border-bottom:1px solid #cccccc;">{$details.amount|padding:8} {$sCurrency}</td>
                 </tr>
                 {/foreach}
-        
+
             </table>
         
             <p>
@@ -249,7 +250,6 @@ EOD;
                 <br/>
                 <strong>Gewählte Versandart:</strong> {$sDispatch.name}<br/>
                 {$sDispatch.description}<br/>
-                <br/>
             </p>
             <p>
                 {if $sComment}
@@ -263,7 +263,6 @@ EOD;
                 {$billingaddress.firstname} {$billingaddress.lastname}<br/>
                 {$billingaddress.street} {$billingaddress.streetnumber}<br/>
                 {if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}<br/>
-                {$billingaddress.phone}<br/>
                 {$additional.country.countryname}<br/>
                 <br/>
                 <br/>
@@ -313,7 +312,6 @@ Hallo,
 		{$sName} hat für Sie bei {$sShop} ein interessantes Produkt gefunden, das Sie sich anschauen sollten:<br/>
         <br/>
         <strong><a href="{$sLink}">{$sArticle}</a></strong><br/>
-        <br/>
     </p>
     {if $sComment}
         <div style="border: 2px solid black; border-radius: 5px; padding: 5px;"><p>{$sComment}</p></div><br/>
@@ -343,12 +341,11 @@ Außerdem weise dem Kunden {$sMail} bitte manuell eine Seriennummer zu.
         Hallo,<br/>
         <br/>
         es sind keine weiteren freien Seriennummern für den Artikel<br/>
-        <br/>
     </p>
     <strong>{$sArticleName}</strong><br/>
     <p>
         verfügbar. Bitte stelle umgehend neue Seriennummern ein oder deaktiviere den Artikel.<br/>
-        Außerdem weise dem Kunden {$sMail} bitte manuell eine Seriennummer zu.<br/>
+        Außerdem weise dem Kunden {$sMail} bitte manuell eine Seriennummer zu.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:2:{s:12:"sArticleName";s:20:"ESD Download Artikel";s:5:"sMail";s:23:"max.mustermann@mail.com";}' WHERE `s_core_config_mails`.`name` = 'sNOSERIALS' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%keine weiteren freien Seriennummern%';
@@ -373,7 +370,7 @@ Ihr Gutschein-Code lautet: XXX
         {$user} ist Ihrer Empfehlung gefolgt und hat soeben bei {$sShop} bestellt.<br/>
         Wir schenken Ihnen deshalb einen X € Gutschein, den Sie bei Ihrer nächsten Bestellung einlösen können.<br/>
         <br/>
-        <strong>Ihr Gutschein-Code lautet: XXX</strong><br/>
+        <strong>Ihr Gutschein-Code lautet: XXX</strong>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:2:{s:8:"customer";s:11:"Peter Meyer";s:4:"user";s:11:"Hans Maiser";}'
@@ -386,7 +383,6 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hallo,
 
 Ihr Händleraccount bei {$sShop} wurde freigeschaltet.
-
 Ab sofort kaufen Sie zum Netto-EK bei uns ein.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
@@ -396,8 +392,7 @@ Ab sofort kaufen Sie zum Netto-EK bei uns ein.
         Hallo,<br/>
         <br/>
         Ihr Händleraccount bei {$sShop} wurde freigeschaltet.<br/>
-        <br/>
-        Ab sofort kaufen Sie zum Netto-EK bei uns ein.<br/>
+        Ab sofort kaufen Sie zum Netto-EK bei uns ein.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = NULL
@@ -410,7 +405,6 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Sehr geehrter Kunde,
 
 vielen Dank für Ihr Interesse an unseren Fachhandelspreisen. Leider liegt uns aber noch kein Gewerbenachweis vor bzw. leider können wir Sie nicht als Fachhändler anerkennen.
-
 Bei Rückfragen aller Art können Sie uns gerne telefonisch, per Fax oder per Mail diesbezüglich erreichen.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
@@ -420,8 +414,7 @@ Bei Rückfragen aller Art können Sie uns gerne telefonisch, per Fax oder per Ma
         Sehr geehrter Kunde,<br/>
 		<br/>
         vielen Dank für Ihr Interesse an unseren Fachhandelspreisen. Leider liegt uns aber noch kein Gewerbenachweis vor bzw. leider können wir Sie nicht als Fachhändler anerkennen.<br/>
-        <br/>
-        Bei Rückfragen aller Art können Sie uns gerne telefonisch, per Fax oder per Mail diesbezüglich erreichen.<br/>
+        Bei Rückfragen aller Art können Sie uns gerne telefonisch, per Fax oder per Mail diesbezüglich erreichen.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = NULL WHERE `s_core_config_mails`.`name` = 'sCUSTOMERGROUPHREJECTED' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Leider liegt uns aber noch kein Gewerbenachweis vor%';
@@ -432,10 +425,7 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 
 Lieber Kunde,
  
-Sie haben vor kurzem Ihre Bestellung auf {$sShop} nicht bis zum Ende durchgeführt - wir sind stets bemüht unseren Kunden das Einkaufen in unserem Shop so angenehm wie möglich zu machen und würden deshalb gerne wissen, woran Ihr Einkauf bei uns gescheitert ist.
- 
-Bitte lassen Sie uns doch den Grund für Ihren Bestellabbruch zukommen, Ihren Aufwand entschädigen wir Ihnen in jedem Fall mit einem 5,00 € Gutschein.
- 
+Sie haben vor kurzem Ihre Bestellung auf {$sShop} nicht bis zum Ende durchgeführt - wir sind stets bemüht unseren Kunden das Einkaufen in unserem Shop so angenehm wie möglich zu machen und würden deshalb gerne wissen, woran Ihr Einkauf bei uns gescheitert ist. Bitte lassen Sie uns doch den Grund für Ihren Bestellabbruch zukommen, Ihren Aufwand entschädigen wir Ihnen in jedem Fall mit einem 5,00 € Gutschein.
 Vielen Dank für Ihre Unterstützung.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
@@ -447,8 +437,7 @@ Vielen Dank für Ihre Unterstützung.
         Sie haben vor kurzem Ihre Bestellung auf {$sShop} nicht bis zum Ende durchgeführt - wir sind stets bemüht unseren Kunden das Einkaufen in unserem Shop so angenehm wie möglich zu machen und würden deshalb gerne wissen, woran Ihr Einkauf bei uns gescheitert ist.<br/>
         <br/>
         Bitte lassen Sie uns doch den Grund für Ihren Bestellabbruch zukommen, Ihren Aufwand entschädigen wir Ihnen in jedem Fall mit einem 5,00 € Gutschein.<br/>
-        <br/>
-        Vielen Dank für Ihre Unterstützung.<br/>
+        Vielen Dank für Ihre Unterstützung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = NULL WHERE `s_core_config_mails`.`name` = 'sCANCELEDQUESTION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Ihren Bestellabbruch zukommen%';
@@ -475,7 +464,7 @@ Wir würden uns freuen, Ihre Bestellung entgegen nehmen zu dürfen.
          <br/>
         Ihr Gutschein ist 2 Monate gültig und kann mit dem Code "<strong>{$sVouchercode}</strong>" eingelöst werden.<br/>
          <br/>
-         Wir würden uns freuen, Ihre Bestellung entgegen nehmen zu dürfen.<br/>
+         Wir würden uns freuen, Ihre Bestellung entgegen nehmen zu dürfen.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:5:{s:12:"sVouchercode";s:8:"23A7BCA4";s:13:"sVouchervalue";i:15;s:15:"sVouchervalidto";N;s:17:"sVouchervalidfrom";N;s:17:"sVoucherpercental";i:0;}' 
@@ -502,7 +491,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:1:"9";s:9:"clearedID";s:1:"9";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:18:"partially_invoiced";s:19:"cleared_description";s:30:"Teilweise in Rechnung gestellt";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL9' AND `s_core_config_mails`.`dirty` = 0 AND `subject` LIKE '%Statusänderung zur Bestellung bei%';
@@ -527,7 +516,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"10";s:9:"clearedID";s:2:"10";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:19:"completely_invoiced";s:19:"cleared_description";s:29:"Komplett in Rechnung gestellt";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL10' AND `s_core_config_mails`.`dirty` = 0 AND `subject` LIKE '%Statusänderung zur Bestellung bei%';
@@ -556,7 +545,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         <br/>
         <strong>Bitte begleichen Sie schnellstmöglich Ihre Rechnung!</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"13";s:9:"clearedID";s:2:"13";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:12:"1st_reminder";s:19:"cleared_description";s:10:"1. Mahnung";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL13' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -585,7 +574,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         <br/>
         <strong>Sie werden in Kürze Post von einem Inkasso Unternehmen erhalten!</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"16";s:9:"clearedID";s:2:"16";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:10:"encashment";s:19:"cleared_description";s:7:"Inkasso";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL16' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -614,7 +603,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         <br/>
         <strong>Bitte begleichen Sie schnellstmöglich Ihre Rechnung!</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"15";s:9:"clearedID";s:2:"15";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:12:"3rd_reminder";s:19:"cleared_description";s:10:"3. Mahnung";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL15' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -643,7 +632,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         <br/>
         <strong>Bitte begleichen Sie schnellstmöglich Ihre Rechnung!</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"14";s:9:"clearedID";s:2:"14";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:12:"2nd_reminder";s:19:"cleared_description";s:10:"2. Mahnung";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL14' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -668,7 +657,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:15:"completely_paid";s:19:"cleared_description";s:16:"Komplett bezahlt";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL12' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -693,7 +682,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL17' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -718,7 +707,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"18";s:9:"clearedID";s:2:"18";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:8:"reserved";s:19:"cleared_description";s:10:"Reserviert";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL18' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -743,7 +732,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"19";s:9:"clearedID";s:2:"19";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:7:"delayed";s:19:"cleared_description";s:10:"Verzoegert";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL19' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -768,7 +757,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"20";s:9:"clearedID";s:2:"20";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:12:"re_crediting";s:19:"cleared_description";s:16:"Wiedergutschrift";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL20' AND `s_core_config_mails`.`dirty` = 0 AND `content` = '';
@@ -780,15 +769,14 @@ Hallo,
 
 folgende Artikel haben den Mindestbestand unterschritten:
 
-Bestellnummer Artikelname Bestand/Mindestbestand
+Bestellnummer     Artikelname    Bestand/Mindestbestand
 {foreach from=$sJob.articles item=sArticle key=key}
-{$sArticle.ordernumber} {$sArticle.name} {$sArticle.instock}/{$sArticle.stockmin}
+{$sArticle.ordernumber}       {$sArticle.name}        {$sArticle.instock}/{$sArticle.stockmin}
 {/foreach}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     <p>
         Hallo,<br/>
         <br/>
         folgende Artikel haben den Mindestbestand unterschritten:<br/>
-        <br/>
     </p>
     <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
         <tr>
@@ -821,7 +809,7 @@ vielen Dank für Ihre Newsletter-Anmeldung bei {config name=shopName}.
     <p>
         Hallo,<br/>
         <br/>
-        vielen Dank für Ihre Newsletter-Anmeldung bei {config name=shopName}.<br/>
+        vielen Dank für Ihre Newsletter-Anmeldung bei {config name=shopName}.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:9:{s:27:"sUser.subscribeToNewsletter";s:1:"1";s:16:"sUser.newsletter";s:0:"";s:16:"sUser.salutation";s:0:"";s:15:"sUser.firstname";s:0:"";s:14:"sUser.lastname";s:0:"";s:12:"sUser.street";s:0:"";s:13:"sUser.zipcode";s:0:"";s:10:"sUser.city";s:0:"";s:15:"sUser.Speichern";s:0:"";}' WHERE `s_core_config_mails`.`name` = 'sNEWSLETTERCONFIRMATION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Ihre Newsletter-Anmeldung bei%';
@@ -848,7 +836,7 @@ Bitte bestätigen Sie die Anmeldung über den nachfolgenden Link:
         <br/>
         Bitte bestätigen Sie die Anmeldung über den nachfolgenden Link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Bestätigen</a><br/>
+        <a href="{$sConfirmLink}">Bestätigen</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:10:{s:12:"sConfirmLink";s:0:"";s:27:"sUser.subscribeToNewsletter";s:1:"1";s:16:"sUser.newsletter";s:0:"";s:16:"sUser.salutation";s:0:"";s:15:"sUser.firstname";s:0:"";s:14:"sUser.lastname";s:0:"";s:12:"sUser.street";s:0:"";s:13:"sUser.zipcode";s:0:"";s:10:"sUser.city";s:0:"";s:15:"sUser.Speichern";s:0:"";}' WHERE `s_core_config_mails`.`name` = 'sOPTINNEWSLETTER' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Ihre Anmeldung zu unserem%';
@@ -860,7 +848,6 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hallo,
 
 vielen Dank für die Bewertung des Artikels {$sArticle.articleName}.
-
 Bitte bestätigen Sie die Bewertung über den nachfolgenden Link:
 
 {$sConfirmLink}
@@ -872,13 +859,12 @@ Bitte bestätigen Sie die Bewertung über den nachfolgenden Link:
         Hallo,<br/>
         <br/>
         vielen Dank für die Bewertung des Artikels {$sArticle.articleName}.<br/>
-        <br/>
         Bitte bestätigen Sie die Bewertung über nach den nachfolgenden Link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Bestätigen</a><br/>
+        <a href="{$sConfirmLink}">Artikelbewertung bestätigen</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:2:{s:12:"sConfirmLink";s:0:"";s:8:"sArticle";a:1:{s:11:"articleName";s:16:"Sonnenbrille Red";}}' WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%nach den nachfolgenden Link%';
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:2:{s:12:"sConfirmLink";s:130:"http://shopware.demo/craft-tradition/men/business-bags/165/die-zeit-5?action=rating&sConfirmation=6avE5xLF22DTp8gNPaZ8KRUfJhflnvU9";s:8:"sArticle";a:1:{s:11:"articleName";s:24:"DIE ZEIT 5 Cowhide mokka";}}' WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%nach den nachfolgenden Link%';
 EOD;
 
         $sql .= <<<'EOD'
@@ -898,10 +884,10 @@ Ihr Artikel mit der Bestellnummer {$sOrdernumber} ist jetzt wieder verfügbar.
         <br/>
         Ihr Artikel mit der Bestellnummer {$sOrdernumber} ist jetzt wieder verfügbar.<br/>
         <br/>
-        <a href="{$sArticleLink}">{$sOrdernumber}</a><br/>
+        <a href="{$sArticleLink}">{$sOrdernumber}</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:3:{s:12:"sArticleLink";s:58:"http://demoshop/shopware.php?sViewport=detail&sArticle=272";s:12:"sOrdernumber";s:7:"SW10239";s:5:"sData";N;}' 
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:3:{s:12:"sArticleLink";s:67:"http://shopware.demo/genusswelten/koestlichkeiten/272/spachtelmasse";s:12:"sOrdernumber";s:7:"SW10239";s:5:"sData";N;}' 
 WHERE `s_core_config_mails`.`name` = 'sARTICLEAVAILABLE' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Ihr Artikel mit der Bestellnummer%';
 EOD;
 
@@ -911,7 +897,6 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hallo,
 
 vielen Dank, dass Sie sich für die automatische E-Mail Benachrichtigung für den Artikel {$sArticleName} eingetragen haben.
-
 Bitte bestätigen Sie die Benachrichtigung über den nachfolgenden Link:
 
 {$sConfirmLink}
@@ -923,13 +908,12 @@ Bitte bestätigen Sie die Benachrichtigung über den nachfolgenden Link:
         Hallo,<br/>
         <br/>
         vielen Dank, dass Sie sich für die automatische E-Mail Benachrichtigung für den Artikel {$sArticleName} eingetragen haben.<br/>
-        <br/>
         Bitte bestätigen Sie die Benachrichtigung über den nachfolgenden Link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Bestätigen</a><br/>
+        <a href="{$sConfirmLink}">Bestätigen</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:2:{s:12:"sConfirmLink";s:0:"";s:12:"sArticleName";s:8:"Notebook";}' WHERE `s_core_config_mails`.`name` = 'sACCEPTNOTIFICATION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%die automatische E-Mail Benachrichtigung%';
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:2:{s:12:"sConfirmLink";s:174:"http://shopware.demo/craft-tradition/men/business-bags/165/die-zeit-5?action=notifyConfirm&sNotificationConfirmation=j48FnwtKhMycfizOyYe0CtB0UKzgoeYG&sNotify=1&number=SW10165";s:12:"sArticleName";s:24:"DIE ZEIT 5 Cowhide mokka";}' WHERE `s_core_config_mails`.`name` = 'sACCEPTNOTIFICATION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%die automatische E-Mail Benachrichtigung%';
 EOD;
 
         $sql .= <<<'EOD'
@@ -945,7 +929,7 @@ im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance
     <p>
     	Hallo {$paymentInstance.firstName} {$paymentInstance.lastName},<br/>
     	<br/>
-    	im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.<br/>
+    	im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 1,`context` = 'a:1:{s:15:"paymentInstance";a:3:{s:9:"firstName";s:3:"Max";s:8:"lastName";s:10:"Mustermann";s:11:"orderNumber";s:5:"20003";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSEPAAUTHORIZATION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%im Anhang finden Sie ein Lastschriftmandat%';
@@ -962,8 +946,6 @@ im Shop {$sShop} wurde eine Anfrage gestellt, um Ihr Passwort zurück zu setzen.
 
 Dieser Link ist nur für die nächsten 2 Stunden gültig. Danach muss das Zurücksetzen des Passwortes erneut beantragt werden. Falls Sie Ihr Passwort nicht zurücksetzen möchten, ignorieren Sie diese E-Mail - es wird dann keine Änderung vorgenommen.
 
-{config name=address}
-
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
@@ -976,12 +958,10 @@ Dieser Link ist nur für die nächsten 2 Stunden gültig. Danach muss das Zurüc
         <a href="{$sUrlReset}">Passwort zurücksetzen</a><br/>
         <br/>
         Dieser Link ist nur für die nächsten 2 Stunden gültig. Danach muss das Zurücksetzen des Passwortes erneut beantragt werden.
-        Falls Sie Ihr Passwort nicht zurücksetzen möchten, ignorieren Sie diese E-Mail - es wird dann keine Änderung vorgenommen.<br/>
-        <br/>
-        {config name=address}<br/>
+        Falls Sie Ihr Passwort nicht zurücksetzen möchten, ignorieren Sie diese E-Mail - es wird dann keine Änderung vorgenommen.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:4:{s:9:"sUrlReset";s:0:"";s:4:"sUrl";s:0:"";s:4:"sKey";s:0:"";s:4:"user";a:21:{s:11:"accountmode";s:1:"0";s:6:"active";s:1:"1";s:9:"affiliate";s:1:"0";s:8:"birthday";N;s:15:"confirmationkey";s:0:"";s:13:"customergroup";s:2:"EK";s:14:"customernumber";s:5:"20001";s:5:"email";s:16:"test@example.com";s:12:"failedlogins";s:1:"0";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2012-01-04 14:12:05";s:8:"language";s:1:"1";s:15:"internalcomment";s:0:"";s:11:"lockeduntil";N;s:9:"subshopID";s:1:"1";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:10:"newsletter";s:1:"0";s:10:"attributes";b:0;}}' WHERE `s_core_config_mails`.`name` = 'sCONFIRMPASSWORDCHANGE' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%wurde eine Anfrage gestellt, um Ihr Passwort%';
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:4:{s:9:"sUrlReset";s:80:"http://shopware.demo/account/resetPassword/hash/pdiR4nNSvvTYHQGxC0K2PxLk5QtQilXm";s:4:"sUrl";s:0:"";s:4:"sKey";s:0:"";s:4:"user";a:21:{s:11:"accountmode";s:1:"0";s:6:"active";s:1:"1";s:9:"affiliate";s:1:"0";s:8:"birthday";N;s:15:"confirmationkey";s:0:"";s:13:"customergroup";s:2:"EK";s:14:"customernumber";s:5:"20001";s:5:"email";s:16:"test@example.com";s:12:"failedlogins";s:1:"0";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2012-01-04 14:12:05";s:8:"language";s:1:"1";s:15:"internalcomment";s:0:"";s:11:"lockeduntil";N;s:9:"subshopID";s:1:"1";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:10:"newsletter";s:1:"0";s:10:"attributes";b:0;}}' WHERE `s_core_config_mails`.`name` = 'sCONFIRMPASSWORDCHANGE' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%wurde eine Anfrage gestellt, um Ihr Passwort%';
 EOD;
 
         $sql .= <<<'EOD'
@@ -1003,7 +983,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"1";s:8:"statusID";s:1:"1";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:10:"in_process";s:18:"status_description";s:23:"In Bearbeitung (Wartet)";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL1' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Der Status Ihrer Bestellung mit der Bestellnummer%';
@@ -1028,7 +1008,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:9:"completed";s:18:"status_description";s:22:"Komplett abgeschlossen";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL2' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Der Status Ihrer Bestellung mit der Bestellnummer%';
@@ -1053,7 +1033,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Zahlungsstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Zahlungsstatus: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"11";s:9:"clearedID";s:2:"11";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:14:"partially_paid";s:19:"cleared_description";s:17:"Teilweise bezahlt";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL11' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Der Status Ihrer Bestellung mit der Bestellnummer%';
@@ -1078,7 +1058,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"5";s:8:"statusID";s:1:"5";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:18:"ready_for_delivery";s:18:"status_description";s:20:"Zur Lieferung bereit";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL5' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Der Status Ihrer Bestellung mit der Bestellnummer%';
@@ -1096,7 +1076,7 @@ Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.
 Informationen zu Ihrer Bestellung:
 ==================================
 {foreach item=details key=position from=$sOrderDetails}
-{$position+1|fill:3} {$details.articleordernumber|fill:10:" ":"..."} {$details.name|fill:30} {$details.quantity} x {$details.price|string_format:"%.2f"} {$sOrder.currency}
+{$position+1|fill:3}      {$details.articleordernumber}     {$details.name|fill:30}     {$details.quantity} x {$details.price|string_format:"%.2f"} {$sOrder.currency}
 {/foreach}
 
 Versandkosten: {$sOrder.invoice_shipping|string_format:"%.2f"} {$sOrder.currency}
@@ -1139,7 +1119,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         Netto-Gesamt: {$sOrder.invoice_amount_net|string_format:"%.2f"} {$sOrder.currency}<br/>
         Gesamtbetrag inkl. MwSt.: {$sOrder.invoice_amount|string_format:"%.2f"} {$sOrder.currency}<br/>
     	<br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"3";s:8:"statusID";s:1:"3";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:19:"partially_completed";s:18:"status_description";s:23:"Teilweise abgeschlossen";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL3' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Informationen zu Ihrer Bestellung%';
@@ -1164,7 +1144,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"8";s:8:"statusID";s:1:"8";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:22:"clarification_required";s:18:"status_description";s:18:"Klärung notwendig";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL8' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%der Bestellstatus für Ihre Bestellung%';
@@ -1189,7 +1169,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"4";s:8:"statusID";s:1:"4";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:18:"cancelled_rejected";s:18:"status_description";s:21:"Storniert / Abgelehnt";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL4' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%der Bestellstatus für Ihre Bestellung%';
@@ -1214,7 +1194,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"6";s:8:"statusID";s:1:"6";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:19:"partially_delivered";s:18:"status_description";s:22:"Teilweise ausgeliefert";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' 
@@ -1240,7 +1220,7 @@ Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Web
         der Bestellstatus für Ihre Bestellung {$sOrder.ordernumber} vom {$sOrder.ordertime|date_format:"%d.%m.%Y"} hat sich geändert!<br/>
         <strong>Die Bestellung hat jetzt den Bestellstatus: {$sOrder.status_description}.</strong><br/>
         <br/>
-        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.<br/>
+        Den aktuellen Status Ihrer Bestellung können Sie auch jederzeit auf unserer Webseite im  Bereich "Mein Konto" - "Meine Bestellungen" abrufen. Sollten Sie allerdings den Kauf ohne Registrierung, also ohne Anlage eines Kundenkontos, gewählt haben, steht Ihnen diese Möglichkeit nicht zur Verfügung.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"3";s:10:"customerID";s:1:"3";s:14:"invoice_amount";s:5:"31.85";s:18:"invoice_amount_net";s:5:"26.77";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-08-07 14:09:26";s:6:"status";s:1:"7";s:8:"statusID";s:1:"7";s:7:"cleared";s:2:"17";s:9:"clearedID";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:4:"open";s:19:"cleared_description";s:5:"Offen";s:11:"status_name";s:20:"completely_delivered";s:18:"status_description";s:21:"Komplett ausgeliefert";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"208";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"152";s:18:"articleordernumber";s:9:"SW10152.1";s:5:"price";s:5:"29.95";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"29.95";s:4:"name";s:31:"WINDSTOPPER MÜTZE WARM Schwarz";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"209";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20005";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:9:"Musterman";s:14:"billing_street";s:15:"Musterstraße 1";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:5:"12345";s:12:"billing_city";s:11:"Musterstadt";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"59";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:9:"Musterman";s:15:"shipping_street";s:15:"Musterstraße 1";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:5:"12345";s:13:"shipping_city";s:11:"Musterstadt";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"3";s:8:"password";s:60:"$2y$10$AzjwzOob83DJ2LG6yxXcBeghK9ciBB1zsK3UeBZADZCl10pTQN62W";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:14:"xy@example.org";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-08-07";s:9:"lastlogin";s:19:"2017-08-07 14:09:26";s:9:"sessionID";s:26:"hkkhfl82i1jejfvd2f0ucr6om4";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"5";s:27:"default_shipping_address_id";s:1:"5";s:5:"title";N;s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:9:"Musterman";s:8:"birthday";N;s:11:"login_token";s:38:"1239c089-6b2f-4461-9134-c02026970bff.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL7' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%der Bestellstatus für Ihre Bestellung%';
@@ -1254,16 +1234,17 @@ Sehr geehrte{if $sUser.salutation eq "mr"}r Herr{elseif $sUser.billing_salutatio
 Alles Gute zum Geburtstag. Zu Ihrem persönlichen Jubiläum haben wir uns etwas Besonderes ausgedacht, wir senden Ihnen hiermit einen Geburtstagscode, den Sie bei Ihrer nächsten Bestellung ganz einfach einlösen können.
  
 Ihr persönlicher Geburtstags-Code lautet: {$sVoucher.code}
+Dieser Code ist gültig vom {$sVoucher.valid_from} bis zum {$sVoucher.valid_to}.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
 	<p>Sehr geehrte{if $sUser.salutation eq "mr"}r Herr{elseif $sUser.billing_salutation eq "ms"} Frau{/if} {$sUser.firstname} {$sUser.lastname},</p>
  	<p><strong>Alles Gute zum Geburtstag</strong>. Zu Ihrem persönlichen Jubiläum haben wir uns etwas Besonderes ausgedacht, wir senden Ihnen hiermit einen Geburtstagscode, den Sie bei Ihrer nächsten Bestellung in unserem <a href="{$sShopURL}" title="{$sShop}">Online-Shop</a> ganz einfach einlösen können.</p>
- 	<p><strong>Ihr persönlicher Geburtstags-Code lautet: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong></p>
+ 	<p><strong>Ihr persönlicher Geburtstags-Code lautet: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong></br>Dieser Code ist gültig vom {$sVoucher.valid_from} bis zum {$sVoucher.valid_to}.</p>
  
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:3:{s:5:"sUser";a:28:{s:6:"userID";s:1:"1";s:7:"company";s:11:"Muster GmbH";s:10:"department";N;s:10:"salutation";s:2:"mr";s:14:"customernumber";s:5:"20001";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:6:"street";s:13:"Musterstr. 55";s:7:"zipcode";s:5:"55555";s:4:"city";s:12:"Musterhausen";s:5:"phone";s:14:"05555 / 555555";s:9:"countryID";s:1:"2";s:5:"ustid";N;s:5:"text1";N;s:5:"text2";N;s:5:"text3";N;s:5:"text4";N;s:5:"text5";N;s:5:"text6";N;s:5:"email";s:16:"test@example.com";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2012-01-04 14:12:05";s:10:"newsletter";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";}s:8:"sVoucher";a:6:{s:13:"vouchercodeID";s:3:"201";s:4:"code";s:8:"0B818118";s:5:"value";s:1:"5";s:9:"percental";s:1:"0";s:8:"valid_to";N;s:10:"valid_from";N;}s:5:"sData";N;}' 
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:3:{s:5:"sUser";a:28:{s:6:"userID";s:1:"1";s:7:"company";s:11:"Muster GmbH";s:10:"department";N;s:10:"salutation";s:2:"mr";s:14:"customernumber";s:5:"20001";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:6:"street";s:13:"Musterstr. 55";s:7:"zipcode";s:5:"55555";s:4:"city";s:12:"Musterhausen";s:5:"phone";s:14:"05555 / 555555";s:9:"countryID";s:1:"2";s:5:"ustid";N;s:5:"text1";N;s:5:"text2";N;s:5:"text3";N;s:5:"text4";N;s:5:"text5";N;s:5:"text6";N;s:5:"email";s:16:"test@example.com";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2012-01-04 14:12:05";s:10:"newsletter";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";}s:8:"sVoucher";a:6:{s:13:"vouchercodeID";s:3:"201";s:4:"code";s:8:"0B818118";s:5:"value";s:1:"5";s:9:"percental";s:1:"0";s:8:"valid_to";s:10:"2017-12-31";s:10:"valid_from";s:10:"2017-10-22";}s:5:"sData";N;}' 
 WHERE `s_core_config_mails`.`name` = 'sBIRTHDAY' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Ihnen alles Gute zum Geburtstag.%';
 EOD;
 
@@ -1277,9 +1258,10 @@ So helfen Sie uns, unseren Service weiter zu steigern und Sie können auf diesem
 
 Hier finden Sie die Links zum Bewerten der von Ihnen gekauften Produkte.
 
+Bestellnummer     Artikelname     Bewertungslink
 {foreach from=$sArticles item=sArticle key=key}
 {if !$sArticle.modus}
-{$sArticle.articleordernumber} {$sArticle.name} {$sArticle.link}
+{$sArticle.articleordernumber}      {$sArticle.name}      {$sArticle.link}
 {/if}
 {/foreach}
 
@@ -1293,12 +1275,24 @@ Hier finden Sie die Links zum Bewerten der von Ihnen gekauften Produkte.
     <br/>
     Hier finden Sie die Links zum Bewerten der von Ihnen gekauften Produkte.<br/>
     <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
+        <tr>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Artikel</td>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Bestellnummer</td>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Artikelname</td>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Bewertungslink</td>
+        </tr>
         {foreach from=$sArticles item=sArticle key=key}
         {if !$sArticle.modus}
             <tr>
-                <td>{$sArticle.articleordernumber}</td>
-                <td>{$sArticle.name}</td>
-                <td>
+                <td style="border-bottom:1px solid #cccccc;">
+                  {if $sArticle.image_small && $sArticle.modus == 0}
+                    <img style="height: 57px;" height="57" src="{$sArticle.image_small}" alt="{$sArticle.articlename}" />
+                  {else}
+                  {/if}
+                </td>
+                <td style="border-bottom:1px solid #cccccc;">{$sArticle.articleordernumber}</td>
+                <td style="border-bottom:1px solid #cccccc;">{$sArticle.name}</td>
+                <td style="border-bottom:1px solid #cccccc;">
                     <a href="{$sArticle.link}">Link</a>
                 </td>
             </tr>
@@ -1307,7 +1301,7 @@ Hier finden Sie die Links zum Bewerten der von Ihnen gekauften Produkte.
     </table>
     <br/><br/>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:4:{s:7:"sConfig";a:0:{}s:6:"sOrder";a:38:{s:2:"id";s:2:"59";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"1";s:10:"customerID";s:1:"1";s:14:"invoice_amount";s:6:"271.85";s:18:"invoice_amount_net";s:6:"228.45";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-09 11:41:41";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"2017-10-09 00:00:00";s:12:"cleared_date";s:19:"2017-10-09 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:19:"cleared_description";s:16:"Komplett bezahlt";s:18:"status_description";s:22:"Komplett abgeschlossen";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";}s:5:"sUser";a:76:{s:7:"orderID";s:2:"59";s:15:"billing_company";s:11:"Muster GmbH";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20001";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:10:"Mustermann";s:14:"billing_street";s:13:"Musterstr. 55";s:15:"billing_zipcode";s:5:"55555";s:12:"billing_city";s:12:"Musterhausen";s:5:"phone";s:14:"05555 / 555555";s:13:"billing_phone";s:14:"05555 / 555555";s:17:"billing_countryID";s:1:"2";s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:16:"shipping_company";s:11:"shopware AG";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:10:"Mustermann";s:15:"shipping_street";s:20:"Mustermannstraße 92";s:16:"shipping_zipcode";s:5:"48624";s:13:"shipping_city";s:12:"Schöppingen";s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"1";s:8:"password";s:0:"";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:16:"test@example.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2017-10-09 11:41:41";s:9:"sessionID";s:26:"sh860bhb7plloqm4teo8s99tq0";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"1";s:27:"default_shipping_address_id";s:1:"3";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:8:"birthday";N;s:11:"login_token";s:38:"0626e2f8-db4a-41b3-b103-e9cece25f51a.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sArticles";a:1:{i:212;a:25:{s:14:"orderdetailsID";s:3:"212";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"134";s:18:"articleordernumber";s:7:"SW10134";s:5:"price";s:5:"49.99";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"49.99";s:4:"name";s:22:"Balmoral Flatcap Tweed";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:3:"esd";s:1:"0";s:9:"subshopID";s:1:"1";s:8:"language";s:1:"1";s:4:"link";s:0:"";s:15:"link_rating_tab";s:0:"";s:11:"image_large";s:0:"";s:11:"image_small";s:0:"";s:14:"image_original";s:0:"";}}}' WHERE `s_core_config_mails`.`name` = 'sARTICLECOMMENT' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Sie haben bei uns vor einigen Tagen Artikel gekauft%';
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:4:{s:7:"sConfig";a:0:{}s:6:"sOrder";a:38:{s:2:"id";s:2:"59";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:12:"order_number";s:5:"20003";s:6:"userID";s:1:"1";s:10:"customerID";s:1:"1";s:14:"invoice_amount";s:6:"271.85";s:18:"invoice_amount_net";s:6:"228.45";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-09 11:41:41";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"2017-10-09 00:00:00";s:12:"cleared_date";s:19:"2017-10-09 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:19:"cleared_description";s:16:"Komplett bezahlt";s:18:"status_description";s:22:"Komplett abgeschlossen";s:19:"payment_description";s:8:"Vorkasse";s:20:"dispatch_description";s:16:"Standard Versand";s:20:"currency_description";s:4:"Euro";}s:5:"sUser";a:76:{s:7:"orderID";s:2:"59";s:15:"billing_company";s:11:"Muster GmbH";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20001";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:10:"Mustermann";s:14:"billing_street";s:13:"Musterstr. 55";s:15:"billing_zipcode";s:5:"55555";s:12:"billing_city";s:12:"Musterhausen";s:5:"phone";s:14:"05555 / 555555";s:13:"billing_phone";s:14:"05555 / 555555";s:17:"billing_countryID";s:1:"2";s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:16:"shipping_company";s:11:"shopware AG";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:10:"Mustermann";s:15:"shipping_street";s:20:"Mustermannstraße 92";s:16:"shipping_zipcode";s:5:"48624";s:13:"shipping_city";s:12:"Schöppingen";s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"1";s:8:"password";s:0:"";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:16:"test@example.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2017-10-09 11:41:41";s:9:"sessionID";s:26:"sh860bhb7plloqm4teo8s99tq0";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"1";s:27:"default_shipping_address_id";s:1:"3";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:8:"birthday";N;s:11:"login_token";s:38:"0626e2f8-db4a-41b3-b103-e9cece25f51a.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sArticles";a:1:{i:212;a:25:{s:14:"orderdetailsID";s:3:"212";s:7:"orderID";s:2:"59";s:11:"ordernumber";s:5:"20003";s:9:"articleID";s:3:"134";s:18:"articleordernumber";s:7:"SW10134";s:5:"price";s:5:"49.99";s:8:"quantity";s:1:"1";s:7:"invoice";s:5:"49.99";s:4:"name";s:22:"Balmoral Flatcap Tweed";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:3:"esd";s:1:"0";s:9:"subshopID";s:1:"1";s:8:"language";s:1:"1";s:4:"link";s:67:"http://shopware.demo/craft-tradition/women/wallets/166/die-zeit-100";s:15:"link_rating_tab";s:82:"http://shopware.demo/craft-tradition/women/wallets/166/die-zeit-100?jumpTab=rating";s:11:"image_large";s:61:"http://shopware.demo/media/image/9c/be/74/SW10166_600x600.jpg";s:11:"image_small";s:61:"http://shopware.demo/media/image/a9/e7/18/SW10166_200x200.jpg";s:14:"image_original";s:53:"http://shopware.demo/media/image/a6/86/36/SW10166.jpg";}}}' WHERE `s_core_config_mails`.`name` = 'sARTICLECOMMENT' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%Sie haben bei uns vor einigen Tagen Artikel gekauft%';
 EOD;
 
         $sql .= <<<'EOD'
@@ -1317,17 +1311,13 @@ Hallo {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
 
 vielen Dank für Ihre Bestellung bei {config name=shopName}. Im Anhang finden Sie Dokumente zu Ihrer Bestellung als PDF.
 
-Wir wünschen Ihnen noch einen schönen Tag.
-
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
         Hallo {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},<br/>
         <br/>
-        vielen Dank für Ihre Bestellung bei {config name=shopName}. Im Anhang finden Sie Dokumente zu Ihrer Bestellung als PDF.<br/>
-        <br/>
-        Wir wünschen Ihnen noch einen schönen Tag.<br/>
+        vielen Dank für Ihre Bestellung bei {config name=shopName}. Im Anhang finden Sie Dokumente zu Ihrer Bestellung als PDF.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,`context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"57";s:11:"ordernumber";s:5:"20002";s:12:"order_number";s:5:"20002";s:6:"userID";s:1:"1";s:10:"customerID";s:1:"1";s:14:"invoice_amount";s:6:"201.86";s:18:"invoice_amount_net";s:6:"169.63";s:16:"invoice_shipping";s:1:"0";s:20:"invoice_shipping_net";s:1:"0";s:9:"ordertime";s:19:"2012-08-31 08:51:46";s:6:"status";s:1:"7";s:8:"statusID";s:1:"7";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"4";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:15:"completely_paid";s:19:"cleared_description";s:0:"";s:11:"status_name";s:20:"completely_delivered";s:18:"status_description";s:0:"";s:19:"payment_description";s:0:"";s:20:"dispatch_description";s:0:"";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";s:0:"";s:10:"attribute3";s:0:"";s:10:"attribute4";s:0:"";s:10:"attribute5";s:0:"";s:10:"attribute6";s:0:"";}}s:13:"sOrderDetails";a:1:{i:0;a:20:{s:14:"orderdetailsID";s:3:"204";s:7:"orderID";s:2:"57";s:11:"ordernumber";s:5:"20002";s:9:"articleID";s:3:"197";s:18:"articleordernumber";s:7:"SW10196";s:5:"price";s:5:"34.99";s:8:"quantity";s:1:"2";s:7:"invoice";s:5:"69.98";s:4:"name";s:7:"Artikel";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"1";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"1";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";s:0:"";s:10:"attribute3";s:0:"";s:10:"attribute4";s:0:"";s:10:"attribute5";s:0:"";s:10:"attribute6";s:0:"";}}}s:5:"sUser";a:82:{s:15:"billing_company";s:11:"shopware AG";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20001";s:17:"billing_firstname";s:3:"Max";s:16:"billing_lastname";s:10:"Mustermann";s:14:"billing_street";s:20:"Mustermannstraße 92";s:32:"billing_additional_address_line1";N;s:32:"billing_additional_address_line2";N;s:15:"billing_zipcode";s:5:"48624";s:12:"billing_city";s:12:"Schöppingen";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";s:1:"3";s:15:"billing_country";s:11:"Deutschland";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:11:"deutschland";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"57";s:16:"shipping_company";s:11:"shopware AG";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:3:"Max";s:17:"shipping_lastname";s:10:"Mustermann";s:15:"shipping_street";s:20:"Mustermannstraße 92";s:33:"shipping_additional_address_line1";N;s:33:"shipping_additional_address_line2";N;s:16:"shipping_zipcode";s:5:"48624";s:13:"shipping_city";s:12:"Schöppingen";s:16:"shipping_stateID";s:1:"3";s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:11:"Deutschland";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:11:"deutschland";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"1";s:8:"password";s:0:"";s:7:"encoder";s:3:"md5";s:5:"email";s:16:"test@example.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2011-11-23";s:9:"lastlogin";s:19:"2012-01-04 14:12:05";s:9:"sessionID";s:26:"uiorqd755gaar8dn89ukp178c7";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"1";s:27:"default_shipping_address_id";s:1:"3";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:3:"Max";s:8:"lastname";s:10:"Mustermann";s:8:"birthday";N;s:11:"login_token";N;s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:16:"Standard Versand";s:11:"description";s:0:"";}}'
@@ -1341,10 +1331,7 @@ UPDATE `s_core_config_mails` SET `content`='{include file="string:{config name=e
 Hello {$salutation} {$firstname} {$lastname},
 
 thank you for your registration with our Shop.
-
-You will gain access via the email address {$sMAIL}
-and the password you have chosen.
-
+You will gain access via the email address {$sMAIL} and the password you have chosen.
 You can change your password at any time.
 
 {include file="string:{config name=emailfooterplain}"}', contentHTML='<div style="font-family:arial; font-size:12px;">
@@ -1354,11 +1341,8 @@ You can change your password at any time.
         Hello {$salutation} {$firstname} {$lastname},<br/>
         <br/>
         thank you for your registration with our Shop.<br/>
-        <br/>
-        You will gain access via the email address <strong>{$sMAIL}</strong><br/>
-        and the password you have chosen.<br/>
-        <br/>
-        You can change your password anytime.<br/>
+        You will gain access via the email address <strong>{$sMAIL}</strong> and the password you have chosen.<br/>
+        You can change your password anytime.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>', `ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -1367,24 +1351,24 @@ WHERE `name`="sREGISTERCONFIRMATION" AND `dirty` = 0 AND `content` LIKE '%thank 
 EOD;
 
         $sql .= <<<'EOD'
-        UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with the {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
+        UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order at the {config name=shopName}',
+`content` = '{include file="string:{config name=emailheaderplain}"}
 
 Hello {if $billingaddress.salutation eq "mr"}Mr{elseif $billingaddress.salutation eq "ms"}Mrs{/if} {$billingaddress.firstname} {$billingaddress.lastname},
 
 Thank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.
 Information on your order:
 
-Pos. Art.No.              Quantities         Price        Total
+Pos.  Art.No.               Description                                      Quantities       Price       Total
 {foreach item=details key=position from=$sOrderDetails}
-{$position+1|fill:4} {$details.ordernumber|fill:20} {$details.quantity|fill:6} {$details.price|padding:8} EUR {$details.amount|padding:8} EUR
-{$details.articlename|wordwrap:49|indent:5}
+{{$position+1}|fill:4}  {$details.ordernumber|fill:20}  {$details.articlename|fill:49}  {$details.quantity|fill:6}  {$details.price|padding:8} EUR  {$details.amount|padding:8} EUR
 {/foreach}
 
 Shipping costs: {$sShippingCosts}
 Net total: {$sAmountNet}
 {if !$sNet}
 {foreach $sTaxRates as $rate => $value}
-plus {$rate}% VAT {$value|currency}
+plus {$rate}% VAT {$value|currency|unescape:"htmlall"}
 {/foreach}
 Total gross: {$sAmount}
 {/if}
@@ -1421,14 +1405,13 @@ Billing address:
 {$billingaddress.firstname} {$billingaddress.lastname}
 {$billingaddress.street} {$billingaddress.streetnumber}
 {if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}
-{$billingaddress.phone}
 {$additional.country.countryname}
 
 Shipping address:
 {$shippingaddress.company}
 {$shippingaddress.firstname} {$shippingaddress.lastname}
 {$shippingaddress.street} {$shippingaddress.streetnumber}
-{if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}
+{if {config name=showZipBeforeCity}}{$shippingaddress.zipcode} {$shippingaddress.city}{else}{$shippingaddress.city} {$shippingaddress.zipcode}{/if}\n
 {$additional.countryShipping.countryname}
 
 {if $billingaddress.ustid}
@@ -1437,7 +1420,9 @@ In case of a successful order and if you are based in one of the EU countries, y
 
 If you have any questions, do not hesitate to contact us.
 
-{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+{include file="string:{config name=emailfooterplain}"}',
+
+`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>Hello {if $billingaddress.salutation eq "mr"}Mr{elseif $billingaddress.salutation eq "ms"}Mrs{/if} {$billingaddress.firstname} {$billingaddress.lastname},<br/>
@@ -1505,9 +1490,9 @@ If you have any questions, do not hesitate to contact us.
         <br/>
         <br/>
         <strong>Selected shipping type:</strong> {$sDispatch.name}<br/>
-        {$sDispatch.description}<br/>
-        <br/>
+        {$sDispatch.description}
     </p>
+    <br/>
     <p>
         {if $sComment}
         <strong>Your comment:</strong><br/>
@@ -1520,7 +1505,6 @@ If you have any questions, do not hesitate to contact us.
         {$billingaddress.firstname} {$billingaddress.lastname}<br/>
         {$billingaddress.street} {$billingaddress.streetnumber}<br/>
         {if {config name=showZipBeforeCity}}{$billingaddress.zipcode} {$billingaddress.city}{else}{$billingaddress.city} {$billingaddress.zipcode}{/if}<br/>
-        {$billingaddress.phone}<br/>
         {$additional.country.countryname}<br/>
         <br/>
         <br/>
@@ -1573,7 +1557,6 @@ Hello,
 		{$sName} has found an interesting product for you on {$sShop} that you should have a look at:<br/>
         <br/>
         <strong><a href="{$sLink}">{$sArticle}</a></strong><br/>
-        <br/>
     </p>
     {if $sComment}
         <div style="border: 2px solid black; border-radius: 5px; padding: 5px;"><p>{$sComment}</p></div><br/>
@@ -1604,12 +1587,11 @@ Please assign a serial number to the customer {$sMail} manually.
         Hello,<br/>
         <br/>
         there is no additional free serial numbers available for the article<br/>
-        <br/>
     </p>
     <strong>{$sArticleName}</strong><br/>
     <p>
         Please provide new serial numbers immediately or deactivate the article.<br/>
-        Please assign a serial number to the customer {$sMail} manually.<br/>
+        Please assign a serial number to the customer {$sMail} manually.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -1636,7 +1618,7 @@ Your voucher code is as follows: XXX
         {$user} has followed your recommendation and just ordered at {$sShop}.<br/>
         This is why we give you a X € voucher, which you can redeem with your next order.<br/>
         <br/>
-        <strong>Your voucher code is as follows: XXX</strong><br/>
+        <strong>Your voucher code is as follows: XXX</strong>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -1650,7 +1632,6 @@ EOD;
 Hello,
 
 your merchant account at {$sShop} has been unlocked.
-
 From now on, we will charge you the net purchase price.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
@@ -1660,8 +1641,7 @@ From now on, we will charge you the net purchase price.
         Hello,<br/>
         <br/>
         your merchant account at {$sShop} has been unlocked.<br/>
-        <br/>
-        From now on, we will charge you the net purchase price.<br/>
+        From now on, we will charge you the net purchase price.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2, `context` = NULL
@@ -1674,7 +1654,6 @@ EOD;
 Dear customer,
 
 thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.
-
 In case of further questions please do not hesitate to contact us via telephone, fax or email.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
@@ -1684,8 +1663,7 @@ In case of further questions please do not hesitate to contact us via telephone,
         Dear customer,<br/>
 		<br/>
         thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.<br/>
-        <br/>
-        In case of further questions please do not hesitate to contact us via telephone, fax or email.<br/>
+        In case of further questions please do not hesitate to contact us via telephone, fax or email.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -1699,9 +1677,7 @@ EOD;
 Dear customer,
 
 You have recently aborted an order process on {$sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.
-
 Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.
-
 Thank you for your feedback.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
@@ -1711,10 +1687,8 @@ Thank you for your feedback.
         Dear customer,<br/>
         <br/>
         You have recently aborted an order process on {$sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.<br/>
-        <br/>
         Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.<br/>
-        <br/>
-        Thank you for your feedback.<br/>
+        Thank you for your feedback.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -1743,7 +1717,7 @@ We would be pleased to accept your order!
          <br/>
          Your voucher is valid for two months and can be redeemed by entering the code "<strong>{$sVouchercode}</strong>".<br/>
          <br/>
-         We would be pleased to accept your order!<br/>
+         We would be pleased to accept your order!
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -1770,7 +1744,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1797,7 +1771,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1828,7 +1802,7 @@ You can check the current status of your order on our website under "My account"
         <br/>
         Please pay your invoice as fast as possible!<br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1859,7 +1833,7 @@ You can check the current status of your order on our website under "My account"
         <br/>
         You will receive shortly post from an encashment company!<br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1890,7 +1864,7 @@ You can check the current status of your order on our website under "My account"
         <br/>
         Please pay your invoice as fast as possible!<br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1921,7 +1895,7 @@ You can check the current status of your order on our website under "My account"
         <br/>
         Please pay your invoice as fast as possible!<br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1948,7 +1922,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -1975,7 +1949,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2002,7 +1976,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2029,7 +2003,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2056,7 +2030,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2070,15 +2044,14 @@ Hello,
 
 the following articles have undershot the minimum stock:
 
-Order number Name of article Stock/Minimum stock
+Order number     Name of article    Stock/Minimum stock
 {foreach from=$sJob.articles item=sArticle key=key}
-{$sArticle.ordernumber} {$sArticle.name} {$sArticle.instock}/{$sArticle.stockmin}
+{$sArticle.ordernumber}       {$sArticle.name}        {$sArticle.instock}/{$sArticle.stockmin}
 {/foreach}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     <p>
         Hello,<br/>
         <br/>
         the following articles have undershot the minimum stock:<br/>
-        <br/>
     </p>
     <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
         <tr>
@@ -2115,7 +2088,7 @@ thank you for your newsletter subscription at {config name=shopName}.
     <p>
         Hello,<br/>
         <br/>
-        thank you for your newsletter subscription at {config name=shopName}.<br/>
+        thank you for your newsletter subscription at {config name=shopName}.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -2144,7 +2117,7 @@ Please confirm your subscription by clicking the following link:
         <br/>
         Please confirm your subscription by clicking the following link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Confirm</a><br/>
+        <a href="{$sConfirmLink}">Confirm</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -2158,7 +2131,6 @@ EOD;
 Hello,
 
 thank you for evaluating the article {$sArticle.articleName}.
-
 Please confirm the evaluation by clicking the following link:
 
 {$sConfirmLink}
@@ -2169,14 +2141,13 @@ Please confirm the evaluation by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for evaluating the article {$sArticle.articleName}.<br/>
-        <br/>
         Please confirm the evaluation by clicking the following link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Confirm</a><br/>
+        <a href="{$sConfirmLink}">Confirm</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
-`context` = 'a:2:{s:12:"sConfirmLink";s:130:"http://sw53.internal/craft-tradition/men/business-bags/165/die-zeit-5?action=rating&sConfirmation=6avE5xLF22DTp8gNPaZ8KRUfJhflnvU9";s:8:"sArticle";a:1:{s:11:"articleName";s:24:"DIE ZEIT 5 Cowhide mokka";}}'
+`context` = 'a:2:{s:12:"sConfirmLink";s:130:"http://shopware.demo/craft-tradition/men/business-bags/165/die-zeit-5?action=rating&sConfirmation=6avE5xLF22DTp8gNPaZ8KRUfJhflnvU9";s:8:"sArticle";a:1:{s:11:"articleName";s:24:"DIE ZEIT 5 Cowhide mokka";}}'
 WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE' AND `dirty` = 0 AND `content` LIKE '%Please confirm the evaluation by clicking the following link:%';
 EOD;
 
@@ -2187,7 +2158,9 @@ Hello,
 
 your article with the order number {$sOrdernumber} is available again.
 
-{$sArticleLink}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+{$sArticleLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
@@ -2195,10 +2168,11 @@ your article with the order number {$sOrdernumber} is available again.
         <br/>
         your article with the order number {$sOrdernumber} is available again.<br/>
         <br/>
-        <a href="{$sArticleLink}">{$sOrdernumber}</a><br/>
+        <a href="{$sArticleLink}">{$sOrdernumber}</a>
     </p>
+    {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
-`context` = 'a:3:{s:12:"sArticleLink";s:63:"http://shopware.demo/shopware.php?sViewport=detail&sArticle=165";s:12:"sOrdernumber";s:7:"SW10165";s:5:"sData";N;}'
+`context` = 'a:3:{s:12:"sArticleLink";s:67:"http://shopware.demo/genusswelten/koestlichkeiten/272/spachtelmasse";s:12:"sOrdernumber";s:7:"SW10239";s:5:"sData";N;}'
 WHERE `s_core_config_mails`.`name` = 'sARTICLEAVAILABLE' AND `dirty` = 0 AND `content` LIKE '%your article with the order number {$sOrdernumber} is available again.%';
 EOD;
 
@@ -2208,7 +2182,6 @@ EOD;
 Hello,
 
 thank you for signing up for the automatic email notification for the article {$sArticleName}.
-
 Please confirm the notification by clicking the following link:
 
 {$sConfirmLink}
@@ -2220,10 +2193,9 @@ Please confirm the notification by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for signing up for the automatic email notification for the article {$sArticleName}.<br/>
-        <br/>
         Please confirm the notification by clicking the following link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Confirm</a><br/>
+        <a href="{$sConfirmLink}">Confirm</a>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -2244,7 +2216,7 @@ attached you will find the direct debit mandate form for your order {$paymentIns
     <p>
         Hello {$paymentInstance.firstName} {$paymentInstance.lastName},<br/>
         <br/>
-        attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.<br/>
+        attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 1,
@@ -2265,8 +2237,6 @@ Please confirm the link below to specify a new password.
 This link is valid for the next 2 hours. After that you have to request a new confirmation link.
 If you do not want to reset your password, please ignore this email. No changes will be made.
 
-{config name=address}
-
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
@@ -2279,9 +2249,7 @@ If you do not want to reset your password, please ignore this email. No changes 
         <a href="{$sUrlReset}">reset password</a><br/>
         <br/>
         This link is valid for the next 2 hours. After that you have to request a new confirmation link.<br/>
-        If you do not want to reset your password, please ignore this email. No changes will be made.<br/>
-        <br/>
-        {config name=address}<br/>
+        If you do not want to reset your password, please ignore this email. No changes will be made.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -2308,7 +2276,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2335,7 +2303,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2362,7 +2330,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2389,7 +2357,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2409,7 +2377,7 @@ The new status is as follows: {$sOrder.status_description}.
 Information on your order:
 ==================================
 {foreach item=details key=position from=$sOrderDetails}
-{$position+1|fill:3} {$details.articleordernumber|fill:10:" ":"..."} {$details.name|fill:30} {$details.quantity} x {$details.price|string_format:"%.2f"} {$sOrder.currency}
+{$position+1|fill:3}      {$details.articleordernumber}     {$details.name|fill:30}     {$details.quantity} x {$details.price|string_format:"%.2f"} {$sOrder.currency}
 {/foreach}
 
 Shipping costs: {$sOrder.invoice_shipping|string_format:"%.2f"} {$sOrder.currency}
@@ -2453,7 +2421,7 @@ You can check the current status of your order on our website under "My account"
         Total amount incl. VAT: {$sOrder.invoice_amount|string_format:"%.2f"} {$sOrder.currency}<br/>
         <br/>
     
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2480,7 +2448,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2507,7 +2475,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2534,7 +2502,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2561,7 +2529,7 @@ You can check the current status of your order on our website under "My account"
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
         <br/>
-        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.<br/>
+        You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 3,
@@ -2579,13 +2547,14 @@ we wish you all the best for your birthday.
 For your personal anniversary we thought of something special and send you your own birthday code you can easily redeem in your next order.
 
 Your personal birthday code is: {$sVoucher.code}
+This code is valid from {$sVoucher.valid_from} to {$sVoucher.valid_to}. 
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
 	<p>Dear {if $sUser.salutation eq "mr"}Mr{elseif $sUser.salutation eq "ms"}Mrs{/if} {$sUser.lastname},</p>
 	<p><strong>we wish you all the best for your birthday. </strong>. For your personal anniversary we thought of something special and send you your own birthday code you can easily redeem in your next order in our <a href="{$sShopURL}" title="{$sShop}">online hop</a>.</p>
-	<p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong></p>
+	<p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong></br>This code is valid from {$sVoucher.valid_from} to {$sVoucher.valid_to}.</p>
 
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
@@ -2603,9 +2572,10 @@ Rating products helps us to improve our service and provide your opinion about t
 
 Here you can find the links for rating the products you bought.
 
+Art.No     Description     Rating link
 {foreach from=$sArticles item=sArticle key=key}
 {if !$sArticle.modus}
-{$sArticle.articleordernumber} - {$sArticle.name}: {$sArticle.link}
+{$sArticle.articleordernumber}      {$sArticle.name}      {$sArticle.link}
 {/if}
 {/foreach}
 
@@ -2619,13 +2589,25 @@ Here you can find the links for rating the products you bought.
     <br/>
     Here you can find the links for rating the products you bought.<br/>
     <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
+        <tr>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Article</td>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Art.No</td>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Description</td>
+          <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Rating link</td>
+        </tr>
         {foreach from=$sArticles item=sArticle key=key}
         {if !$sArticle.modus}
             <tr>
-                <td>{$sArticle.articleordernumber}</td>
-                <td>{$sArticle.name}</td>
-                <td>
-                    <a href="{$sArticle.link}">link</a>
+                <td style="border-bottom:1px solid #cccccc;">
+                  {if $sArticle.image_small && $sArticle.modus == 0}
+                    <img style="height: 57px;" height="57" src="{$sArticle.image_small}" alt="{$sArticle.articlename}" />
+                  {else}
+                  {/if}
+                </td>
+                <td style="border-bottom:1px solid #cccccc;">{$sArticle.articleordernumber}</td>
+                <td style="border-bottom:1px solid #cccccc;">{$sArticle.name}</td>
+                <td style="border-bottom:1px solid #cccccc;">
+                    <a href="{$sArticle.link}">Link</a>
                 </td>
             </tr>
         {/if}
@@ -2645,22 +2627,24 @@ Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
 
 thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.
 
-We wish you a nice day.
-
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
         Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},<br/>
         <br/>
-        thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.<br/>
-        <br/>
-        We wish you a nice day.<br/>
+        thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
 `context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:12:"order_number";s:5:"20006";s:6:"userID";s:1:"4";s:10:"customerID";s:1:"4";s:14:"invoice_amount";s:5:"701.4";s:18:"invoice_amount_net";s:6:"589.42";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-29 10:00:08";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:15:"completely_paid";s:19:"cleared_description";s:15:"Completely paid";s:11:"status_name";s:9:"completed";s:18:"status_description";s:9:"Completed";s:19:"payment_description";s:18:"Payment in advance";s:20:"dispatch_description";s:17:"Standard delivery";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"222";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:3:"166";s:18:"articleordernumber";s:7:"SW10166";s:5:"price";s:5:"69.95";s:8:"quantity";s:2:"10";s:7:"invoice";s:5:"699.5";s:4:"name";s:12:"DIE ZEIT 100";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"223";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20006";s:17:"billing_firstname";s:4:"John";s:16:"billing_lastname";s:3:"Doe";s:14:"billing_street";s:16:"Examplestreet 11";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:4:"1234";s:12:"billing_city";s:11:"Examplecity";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:7:"Germany";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:7:"germany";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"66";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:4:"John";s:17:"shipping_lastname";s:3:"Doe";s:15:"shipping_street";s:16:"Examplestreet 11";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:4:"1234";s:13:"shipping_city";s:11:"Examplecity";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:7:"Germany";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:7:"germany";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"4";s:8:"password";s:60:"$2y$10$qcu486mGUDZ/qbUSJDi78uYwatm24dzQ/dCO79PVVP0MbGHJ0LLgq";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:12:"xyz@mail.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-10-30";s:9:"lastlogin";s:19:"2017-10-30 12:02:18";s:9:"sessionID";s:26:"mpmqj6qoro0pg3ua9u5hprh646";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"6";s:27:"default_shipping_address_id";s:1:"6";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:8:"birthday";s:10:"2017-10-30";s:11:"login_token";s:38:"1f6f51a1-54c1-4db8-8b4f-fbe957f8b856.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:17:"Standard delivery";s:11:"description";s:0:"";}}'
 WHERE `s_core_config_mails`.`name` = 'sORDERDOCUMENTS' AND `dirty` = 0 AND `content` LIKE '%In the attachments of this E-Mail you will find the documents for your order in PDF format.%';    
+EOD;
+
+        // Move sORDERSEPAAUTHORIZATION to system mails
+        $sql .= <<<'EOD'
+        UPDATE `s_core_config_mails` SET `s_core_config_mails`.`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sORDERSEPAAUTHORIZATION';
 EOD;
 
         $this->addSql($sql);
