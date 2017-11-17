@@ -144,6 +144,8 @@ class Kernel implements HttpKernelInterface
     /**
      * @param string $environment
      * @param bool   $debug
+     *
+     * @throws \Exception
      */
     public function __construct($environment, $debug)
     {
@@ -229,6 +231,8 @@ class Kernel implements HttpKernelInterface
     /**
      * @param EnlightResponse $response
      *
+     * @throws \InvalidArgumentException
+     *
      * @return SymfonyResponse
      */
     public function transformEnlightResponseToSymfonyResponse(EnlightResponse $response)
@@ -271,6 +275,8 @@ class Kernel implements HttpKernelInterface
      * Boots the shopware and symfony di container
      *
      * @param bool $skipDatabase
+     *
+     * @throws \Exception
      */
     public function boot($skipDatabase = false)
     {
@@ -451,7 +457,10 @@ class Kernel implements HttpKernelInterface
     {
         $initializer = new PluginInitializer(
             $this->connection,
-            $this->config['plugin_directories']['ShopwarePlugins']
+            [
+                $this->config['plugin_directories']['ShopwarePlugins'],
+                $this->config['plugin_directories']['ProjectPlugins'],
+            ]
         );
 
         $this->plugins = $initializer->initializePlugins();
@@ -466,6 +475,8 @@ class Kernel implements HttpKernelInterface
      * the Shopware_Application.
      * The shopware configuration is required before the shopware application booted,
      * to pass the configuration to the Symfony di container.
+     *
+     * @throws \Exception
      */
     protected function initializeConfig()
     {
@@ -513,6 +524,9 @@ class Kernel implements HttpKernelInterface
      *
      * The cached version of the service container is used when fresh, otherwise the
      * container is built.
+     *
+     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function initializeContainer()
     {
@@ -527,7 +541,7 @@ class Kernel implements HttpKernelInterface
             $container = $this->buildContainer();
             $container->compile();
 
-            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
+            $this->dumpContainer($cache, $container, $class, Container::class);
         }
 
         require_once $cache->getPath();
@@ -552,6 +566,8 @@ class Kernel implements HttpKernelInterface
      * @param ContainerBuilder $container The service container
      * @param string           $class     The name of the class to generate
      * @param string           $baseClass The name of the container's base class
+     *
+     * @throws \RuntimeException
      */
     protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, $class, $baseClass)
     {
@@ -570,6 +586,7 @@ class Kernel implements HttpKernelInterface
     /**
      * Builds the service container.
      *
+     * @throws \Exception
      * @throws \RuntimeException
      *
      * @return ContainerBuilder The compiled service container
@@ -605,6 +622,8 @@ class Kernel implements HttpKernelInterface
      * Prepares the ContainerBuilder before it is compiled.
      *
      * @param ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @throws \Exception
      */
     protected function prepareContainer(ContainerBuilder $container)
     {
@@ -666,7 +685,7 @@ class Kernel implements HttpKernelInterface
      *
      * @param \Shopware\Components\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string                                                                                                     $alias
-     * @param array|string                                                                                               $options
+     * @param array                                                                                                      $options
      */
     protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {

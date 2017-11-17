@@ -34,17 +34,17 @@ class Configuration implements \JsonSerializable
     /**
      * @var string[]
      */
-    private $less = [];
+    private $less;
 
     /**
      * @var string[]
      */
-    private $js = [];
+    private $js;
 
     /**
      * @var array
      */
-    private $config = [];
+    private $config;
 
     /**
      * @var string

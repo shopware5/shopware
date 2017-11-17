@@ -56,7 +56,7 @@ class DownloadService
     /**
      * @var string
      */
-    private $rootDir;
+    private $downloadsDir;
 
     /**
      * @param string      $rootDir
@@ -73,7 +73,7 @@ class DownloadService
         $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
-        $this->rootDir = $rootDir;
+        $this->downloadsDir = $rootDir;
     }
 
     /**
@@ -128,6 +128,8 @@ class DownloadService
     /**
      * @param MetaRequest $request
      *
+     * @throws \Exception
+     *
      * @return MetaStruct
      */
     public function getMetaInformation(MetaRequest $request)
@@ -165,6 +167,8 @@ class DownloadService
     /**
      * @param DownloadRequest $request
      *
+     * @throws \Exception
+     *
      * @return bool
      */
     public function download(DownloadRequest $request)
@@ -198,7 +202,7 @@ class DownloadService
     {
         $name = 'plugin_' . md5(uniqid()) . '.zip';
 
-        $file = $this->rootDir . '/files/downloads/' . $name;
+        $file = rtrim($this->downloadsDir, '/') . DIRECTORY_SEPARATOR . $name;
 
         file_put_contents($file, $content);
 

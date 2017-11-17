@@ -50,6 +50,7 @@ class Installer
      * @var array The config options provided in the global config.php file
      */
     protected $snippetConfig;
+
     /**
      * @var ModelManager
      */
@@ -85,6 +86,15 @@ class Installer
      */
     private $service;
 
+    /**
+     * @param ModelManager    $entityManager
+     * @param Configurator    $configurator
+     * @param PathResolver    $pathResolver
+     * @param Util            $util
+     * @param DatabaseHandler $snippetWriter
+     * @param Service         $service
+     * @param array           $snippetConfig
+     */
     public function __construct(
         ModelManager $entityManager,
         Configurator $configurator,
@@ -92,14 +102,14 @@ class Installer
         Util $util,
         DatabaseHandler $snippetWriter,
         Service $service,
-        $snippetConfig = []
+        array $snippetConfig = []
     ) {
         $this->configurator = $configurator;
         $this->entityManager = $entityManager;
         $this->pathResolver = $pathResolver;
         $this->snippetWriter = $snippetWriter;
         $this->util = $util;
-        $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
+        $this->repository = $entityManager->getRepository(\Shopware\Models\Shop\Template::class);
         $this->service = $service;
         $this->snippetConfig = $snippetConfig;
     }
@@ -110,6 +120,10 @@ class Installer
      *
      * The synchronization are processed in the synchronizeThemes and
      * synchronizeTemplates function.
+     *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function synchronize()
     {
@@ -126,26 +140,28 @@ class Installer
      *
      * After the inheritance is build, the installer uses
      * the Theme\Configurator to synchronize the theme configurations.
+     *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     private function synchronizeThemes()
     {
-        //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
-        $directories = new \DirectoryIterator(
-            $this->pathResolver->getFrontendThemeDirectory()
-        );
+        // Creates a directory iterator for the default theme directory (engine/Shopware/Themes)
+        $directories = new \DirectoryIterator($this->pathResolver->getFrontendThemeDirectory());
 
-        //synchronize the default themes which are stored in the engine/Shopware/Themes directory.
+        // Synchronize the default themes which are stored in the engine/Shopware/Themes directory.
         $themes = $this->synchronizeThemeDirectories($directories);
 
-        //to prevent inconsistent data, themes that were removed from the file system have to be removed.
+        // To prevent inconsistent data, themes that were removed from the file system have to be removed.
         $this->removeDeletedThemes();
 
-        //before the inheritance can be built, the plugin themes have to be initialized.
+        // Before the inheritance can be built, the plugin themes have to be initialized.
         $pluginThemes = $this->synchronizePluginThemes();
 
         $themes = array_merge($themes, $pluginThemes);
 
-        //builds the theme inheritance
+        // Builds the theme inheritance
         $this->setParents($themes);
 
         /** @var $theme Theme */
@@ -161,6 +177,9 @@ class Installer
      * @param \DirectoryIterator             $directories
      * @param \Shopware\Models\Plugin\Plugin $plugin
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
      * @return Theme[]
      */
     private function synchronizeThemeDirectories(\DirectoryIterator $directories, Plugin $plugin = null)
@@ -173,9 +192,9 @@ class Installer
 
         /** @var $directory \DirectoryIterator */
         foreach ($directories as $directory) {
-            //check valid directory
+            // Check valid directory
 
-            if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() == '_cache') {
+            if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {
                 continue;
             }
 
@@ -223,6 +242,9 @@ class Installer
      * synchronizeThemes function to build the theme inheritance
      * and the theme configuration.
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
      * @return Theme[]
      */
     private function synchronizePluginThemes()
@@ -235,12 +257,12 @@ class Installer
         foreach ($plugins as $plugin) {
             $path = $this->pathResolver->getPluginPath($plugin);
 
-            //check if plugin contains themes
+            // Check if plugin contains themes
             if (!file_exists($path . DIRECTORY_SEPARATOR . 'Themes')) {
                 continue;
             }
 
-            //check if plugin contains themes
+            // Check if plugin contains themes
             if (!file_exists($path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend')) {
                 continue;
             }
@@ -249,7 +271,7 @@ class Installer
                 $path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend'
             );
 
-            //the synchronizeThemeDirectories function create for each theme directory a shop template.
+            // The synchronizeThemeDirectories function create for each theme directory a shop template.
             $pluginThemes = $this->synchronizeThemeDirectories($directories, $plugin);
 
             if (empty($pluginThemes)) {
@@ -270,6 +292,8 @@ class Installer
      * into the database.
      *
      * The theme snippet namespace are prefixed with themes/theme-name
+     *
+     * @param Shop\Template $template
      */
     private function synchronizeSnippets(Shop\Template $template)
     {
@@ -315,6 +339,9 @@ class Installer
 
     /**
      * Removes the database entries for themes which file no more exist.
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     private function removeDeletedThemes()
     {
@@ -331,6 +358,7 @@ class Installer
                 $this->entityManager->remove($theme);
             }
         }
+
         $this->entityManager->flush();
     }
 

@@ -198,7 +198,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->request = $this->action->Request();
         $this->aclResource = strtolower($this->request->getControllerName());
 
-        if ($this->request->getModuleName() != 'backend'
+        if ($this->request->getModuleName() !== 'backend'
           || in_array($this->aclResource, ['error'])) {
             return;
         }
@@ -267,6 +267,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Register acl plugin
      *
      * @param Zend_Auth $auth
+     *
+     * @throws \Exception
+     * @throws \SmartyException
      */
     public function registerAclPlugin($auth)
     {
@@ -381,6 +384,10 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Enlight_Event_EventArgs $args
      *
+     * @throws \Exception
+     * @throws \SmartyException
+     * @throws \Enlight_Exception
+     *
      * @return \Zend_Auth
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
@@ -413,6 +420,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * Init backend locales
+     *
+     * @throws \Exception
      */
     protected function initLocale()
     {
@@ -436,6 +445,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * Loads current user's locale or, if none exists, the default fallback
+     *
+     * @throws \Exception
      *
      * @return \Shopware\Models\Shop\Locale
      */
@@ -465,13 +476,15 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Filters and transforms the session options array
      * so it complies with the format expected by Enlight_Components_Session
      *
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     *
      * @return array
      */
     private function getSessionOptions()
     {
         $options = Shopware()->Container()->getParameter('shopware.backendsession');
 
-        if (!isset($options['cookie_path']) && $this->request !== null) {
+        if ($this->request !== null && !isset($options['cookie_path'])) {
             $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/') . '/backend/';
         }
         if (empty($options['gc_maxlifetime'])) {
@@ -485,6 +498,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * @param Container $container
+     *
+     * @throws \InvalidArgumentException
      *
      * @return \SessionHandlerInterface|null
      */

@@ -68,6 +68,9 @@ class LessCollector
      * @param Shop\Template $template
      * @param Shop\Shop     $shop
      *
+     * @throws \Exception
+     * @throws \Enlight_Event_Exception
+     *
      * @return LessDefinition[]
      */
     public function collectLessDefinitions(Shop\Template $template, Shop\Shop $shop)
@@ -114,14 +117,14 @@ class LessCollector
     }
 
     /**
-     * @param $inheritance
+     * @param array $inheritance
      *
      * @return LessDefinition[]
      */
-    private function collectInheritanceLess($inheritance)
+    private function collectInheritanceLess(array $inheritance)
     {
         $definitions = [];
-        //use array_reverse to compile the bare themes first.
+        // Use array_reverse to compile the bare themes first.
         foreach (array_reverse($inheritance) as $shopTemplate) {
             $definition = new LessDefinition();
 
@@ -140,11 +143,13 @@ class LessCollector
     }
 
     /**
-     * @param $inheritance
+     * @param array $inheritance
+     *
+     * @throws \Exception
      *
      * @return LessDefinition[]
      */
-    private function collectInheritanceCss($inheritance)
+    private function collectInheritanceCss(array $inheritance)
     {
         $files = [];
         foreach (array_reverse($inheritance) as $template) {

@@ -40,7 +40,7 @@ class Theme
     /**
      * Defines the parent theme
      *
-     * @var null
+     * @var string|null
      */
     protected $extend = null;
 
@@ -56,21 +56,21 @@ class Theme
      * Allows to define a description text
      * for the theme
      *
-     * @var null
+     * @var string|null
      */
     protected $description = null;
 
     /**
      * Name of the theme author.
      *
-     * @var null
+     * @var string|null
      */
     protected $author = null;
 
     /**
      * License of the theme source code.
      *
-     * @var null
+     * @var string|null
      */
     protected $license = null;
 
@@ -132,21 +132,33 @@ class Theme
         return $this->extend;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string|null
+     */
     final public function getAuthor()
     {
         return $this->author;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLicense()
     {
         return $this->license;
@@ -237,6 +249,8 @@ class Theme
      *
      *      $collection->add($set);
      *   }
+     *
+     * @param ArrayCollection $collection
      */
     public function createConfigSets(ArrayCollection $collection)
     {
@@ -253,8 +267,8 @@ class Theme
     /**
      * Creates a ext js tab panel.
      *
-     * @param $name
-     * @param array $options
+     * @param string $name
+     * @param array  $options
      *
      * @return Form\Container\TabContainer
      */
@@ -269,9 +283,9 @@ class Theme
     /**
      * Creates a ext js form field.
      *
-     * @param $name
-     * @param $title
-     * @param array $options
+     * @param string $name
+     * @param string $title
+     * @param array  $options
      *
      * @return Form\Container\FieldSet
      */
@@ -287,9 +301,9 @@ class Theme
      * Creates a ext js container which can be used as tab panel element or
      * as normal container.
      *
-     * @param $name
-     * @param $title
-     * @param array $options
+     * @param string $name
+     * @param string $title
+     * @param array  $options
      *
      * @return Form\Container\Tab
      */
@@ -304,10 +318,10 @@ class Theme
     /**
      * Creates a ext js text field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Text
      */
@@ -324,10 +338,10 @@ class Theme
     /**
      * Creates a ext js number field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Number
      */
@@ -344,10 +358,10 @@ class Theme
     /**
      * Creates a ext js check box field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Boolean
      */
@@ -364,10 +378,10 @@ class Theme
     /**
      * Creates a custom shopware color picker field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Color
      */
@@ -384,10 +398,10 @@ class Theme
     /**
      * Creates a ext js date field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Date
      */
@@ -404,10 +418,10 @@ class Theme
     /**
      * Creates a ext js text field with auto suffix `em`
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Em
      */
@@ -424,10 +438,10 @@ class Theme
     /**
      * Creates a single media selection field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Media
      */
@@ -444,10 +458,10 @@ class Theme
     /**
      * Creates a text field with an auto suffix `%`
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Percent
      */
@@ -464,10 +478,10 @@ class Theme
     /**
      * Creates a text field with an auto suffix `px
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\Pixel
      */
@@ -484,10 +498,10 @@ class Theme
     /**
      * Creates a ext js combo box field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array[] $store   [['text' => 'displayText', 'value'  => 10], ...]
+     * @param string  $name
+     * @param string  $label
+     * @param mixed   $defaultValue
+     * @param array[] $store        [['text' => 'displayText', 'value'  => 10], ...]
      * @param array   $options
      *
      * @return Form\Field\Selection
@@ -505,10 +519,10 @@ class Theme
     /**
      * Creates a ext js text area field.
      *
-     * @param $name
-     * @param $label
-     * @param $defaultValue
-     * @param array $options
+     * @param string $name
+     * @param string $label
+     * @param mixed  $defaultValue
+     * @param array  $options
      *
      * @return Form\Field\TextArea
      */

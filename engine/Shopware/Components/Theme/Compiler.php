@@ -41,8 +41,6 @@ use Shopware\Models\Shop;
 class Compiler
 {
     /**
-     * Root directory
-     *
      * @var string
      */
     private $rootDir;
@@ -138,6 +136,8 @@ class Compiler
      * The function is called when the template cache is cleared.
      *
      * @param Shop\Shop $shop
+     *
+     * @throws \Exception
      */
     public function compile(Shop\Shop $shop)
     {
@@ -208,7 +208,7 @@ class Compiler
      * compresses the theme and plugin javascript and css files
      * into one file.
      *
-     * @param $timestamp
+     * @param int           $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop     $shop
      *
@@ -221,6 +221,16 @@ class Compiler
         }
 
         $file = $this->pathResolver->getCssFilePath($shop, $timestamp);
+
+        $dir = dirname($file);
+        if (!is_dir($dir)) {
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'web', $dir));
+        }
+
         $file = new \SplFileObject($file, 'a');
         if (!$file->flock(LOCK_EX)) {
             return;
@@ -252,9 +262,11 @@ class Compiler
     /**
      * Compiles the javascript files for the passed shop template.
      *
-     * @param $timestamp
+     * @param string        $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop     $shop
+     *
+     * @throws \Exception
      */
     public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
@@ -301,7 +313,7 @@ class Compiler
 
     /**
      * @param Shop\Shop $shop
-     * @param $timestamp
+     * @param int       $timestamp
      */
     public function createThemeTimestamp(Shop\Shop $shop, $timestamp)
     {
@@ -313,7 +325,7 @@ class Compiler
      * Removes all assets and timestamp files
      *
      * @param Shop\Shop $shop
-     * @param $timestamp
+     * @param int       $timestamp
      */
     public function clearThemeCache(Shop\Shop $shop, $timestamp)
     {
@@ -335,10 +347,12 @@ class Compiler
      *
      * @param Shop\Shop      $shop
      * @param LessDefinition $definition
+     *
+     * @throws \Enlight_Event_Exception
      */
     private function compileLessDefinition(Shop\Shop $shop, LessDefinition $definition)
     {
-        //set unique import directory for less @import commands
+        // Set unique import directory for less @import commands
         if ($definition->getImportDirectory()) {
             $this->compiler->setImportDirectories(
                 [
@@ -347,7 +361,7 @@ class Compiler
             );
         }
 
-        //allows to add own configurations for the current compile step.
+        // Allows to add own configurations for the current compile step.
         if ($definition->getConfig()) {
             $this->compiler->setVariables($definition->getConfig());
         }
@@ -359,14 +373,14 @@ class Compiler
             ]
         );
 
-        //needs to iterate files, to generate source map if configured.
+        // Need to iterate files, to generate source map if configured.
         foreach ($definition->getFiles() as $file) {
             if (!file_exists($file)) {
                 continue;
             }
 
-            //creates the url for the compiler, this url will be prepend to each relative path.
-            //the url is additionally used for the source map generation.
+            // Creates the url for the compiler, this url will be prepend to each relative path.
+            // The url is additionally used for the source map generation.
             $url = $this->formatPathToUrl($file);
 
             $this->compiler->compile($file, $url);
@@ -416,6 +430,8 @@ class Compiler
      *
      * @param Shop\Shop $shop
      *
+     * @throws \Enlight_Event_Exception
+     *
      * @return array
      */
     private function getCompilerConfiguration(Shop\Shop $shop)
@@ -453,16 +469,16 @@ class Compiler
      * This urls are used for the less compiler, to create the source map
      * and to prepend this url for each relative path.
      *
-     * @param $path
+     * @param string $path
      *
      * @return string
      */
     private function formatPathToUrl($path)
     {
-        $path = str_replace($this->rootDir, '', $path);
-        $path = '../..' . $path;
+        // Path normalizing
+        $path = str_replace([$this->rootDir, '//'], ['', '/'], $path);
 
-        return $path;
+        return '../../' . ltrim($path, '/');
     }
 
     /**

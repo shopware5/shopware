@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function preDispatch()
     {
-        if (strtolower($this->Request()->getActionName()) == 'index' && $this->checkStoreApi()) {
+        if (strtolower($this->Request()->getActionName()) === 'index' && $this->checkStoreApi()) {
             $this->getCategoryService()->synchronize();
         }
         parent::preDispatch();
@@ -88,13 +88,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     public function rangeDownloadAction()
     {
         $url = $this->Request()->getParam('uri');
-        $offset = $this->Request()->getParam('offset');
+        $offset = (int) $this->Request()->getParam('offset');
         $size = $this->Request()->getParam('size');
         $sha1 = $this->Request()->getParam('sha1');
         $name = $this->Request()->getParam('fileName', 'download.zip');
 
-        $destination = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
-        if ($offset == 0) {
+        $downloadsDir = $this->container->getParameter('shopware.app.downloadsdir');
+        $destination = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $name;
+        if ($offset === 0) {
             unlink($destination);
         }
 
@@ -131,7 +132,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
-            $this->View()->assign(['succees' => false, 'message' => $e->getMessage()]);
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
 
         $this->View()->assign('success', true);
@@ -196,7 +197,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $pluginInformationStructs = $pluginLicenseService->getExpiringLicenses();
                 $pluginInformation = new PluginInformationResultStruct($pluginInformationStructs);
             } catch (\Exception $e) {
-                $this->View()->assign(['succes' => false, 'message' => $e->getMessage()]);
+                $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
                 return;
             }
@@ -758,7 +759,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $customSorting = [];
         foreach ($this->Request()->getParam('sort', []) as $sortData) {
-            if ($sortData['property'] == 'groupingState') {
+            if ($sortData['property'] === 'groupingState') {
                 continue;
             }
             $sortData['property'] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $sortData['property']));
@@ -769,6 +770,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
+     * @throws \Exception
+     *
      * @return null|AccessTokenStruct
      */
     private function getAccessToken()
@@ -789,6 +792,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
+     * @throws \Exception
+     *
      * @return string
      */
     private function getLocale()
@@ -797,6 +802,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
+     * @throws \Exception
+     *
      * @return string
      */
     private function getDomain()
@@ -906,9 +913,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param BasketStruct $basket
-     * @param $positions
+     * @param array        $positions
+     *
+     * @throws \Exception
      */
-    private function loadBasketPlugins(BasketStruct $basket, $positions)
+    private function loadBasketPlugins(BasketStruct $basket, array $positions)
     {
         $context = new PluginsByTechnicalNameRequest(
             $this->getLocale(),
@@ -932,7 +941,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
     }
 
-    private function getTechnicalNameOfOrderNumber($orderNumber, $positions)
+    /**
+     * @param string $orderNumber
+     * @param array  $positions
+     */
+    private function getTechnicalNameOfOrderNumber($orderNumber, array $positions)
     {
         foreach ($positions as $requestPosition) {
             if ($requestPosition['orderNumber'] != $orderNumber) {
@@ -945,6 +958,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         return null;
     }
 
+    /**
+     * @param Exception $e
+     *
+     * @throws \Exception
+     */
     private function handleException(Exception $e)
     {
         if (!($e instanceof StoreException)) {
@@ -958,7 +976,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => false,
             'message' => $message,
-            'authentication' => ($e instanceof AuthenticationException),
+            'authentication' => $e instanceof AuthenticationException,
         ]);
     }
 

@@ -94,6 +94,8 @@ class Inheritance
     /**
      * @param Shop\Template $template
      *
+     * @throws \Exception
+     *
      * @return array
      */
     public function buildInheritances(Shop\Template $template)
@@ -156,6 +158,8 @@ class Inheritance
      * @param \Shopware\Models\Shop\Shop     $shop
      * @param bool                           $lessCompatible
      *
+     * @throws \Enlight_Event_Exception
+     *
      * @return array
      */
     public function buildConfig(Shop\Template $template, Shop\Shop $shop, $lessCompatible = true)
@@ -195,6 +199,8 @@ class Inheritance
      *
      * @param \Shopware\Models\Shop\Template $template
      *
+     * @throws \Enlight_Event_Exception
+     *
      * @return array
      */
     public function getTemplateDirectories(Shop\Template $template)
@@ -221,6 +227,8 @@ class Inheritance
      * This allows the developers to implement own smarty plugins.
      *
      * @param \Shopware\Models\Shop\Template $template
+     *
+     * @throws \Enlight_Event_Exception
      *
      * @return array
      */
@@ -350,13 +358,13 @@ class Inheritance
      * This fields are defined as class property within this class and can be extended
      * over a shopware event.
      *
-     * @param $templateId
-     * @param $templates
+     * @param int     $templateId
+     * @param array   $templates
      * @param array[] $configs
      *
      * @return array
      */
-    private function buildConfigRecursive($templateId, $templates, $configs, $lessCompatible = true)
+    private function buildConfigRecursive($templateId, array $templates, $configs, $lessCompatible = true)
     {
         $template = $templates[$templateId];
 
@@ -444,7 +452,7 @@ class Inheritance
             'element.type',
         ]);
 
-        $builder->from('Shopware\Models\Shop\TemplateConfig\Element', 'element')
+        $builder->from(\Shopware\Models\Shop\TemplateConfig\Element::class, 'element')
             ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
             ->where('element.templateId = :templateId');
 
