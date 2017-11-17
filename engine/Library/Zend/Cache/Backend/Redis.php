@@ -60,7 +60,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                 'dbindex' => self::DEFAULT_DBINDEX,
             ),
         ),
-        'key_prefix' => '',
+        'key_prefix' => Shopware::REVISION,
     );
 
     /**
