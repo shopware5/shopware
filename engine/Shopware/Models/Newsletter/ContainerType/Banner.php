@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware text model represents a banner container type.
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity()
  * @ORM\Table(name="s_campaigns_banner")
  */
 class Banner extends ModelEntity
@@ -172,7 +172,7 @@ class Banner extends ModelEntity
     {
         $this->container = $container;
         $container->setType('ctBanner');
-//        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'banner');
+        //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'banner');
     }
 
     /**

@@ -143,9 +143,8 @@ class AdminCreateCommand extends ShopwareCommand
         $em = $this->container->get('models');
 
         $roleRepository = $em->getRepository('Shopware\Models\User\Role');
-        $adminRole = $roleRepository->findOneBy(['name' => 'local_admins']);
 
-        return $adminRole;
+        return $roleRepository->findOneBy(['name' => 'local_admins']);
     }
 
     /**

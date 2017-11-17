@@ -31,7 +31,7 @@ use Shopware\Models\Category\Category as CategoryEntity;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Category extends Extendable implements \JsonSerializable
+class Category extends Extendable
 {
     /**
      * @var int

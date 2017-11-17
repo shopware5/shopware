@@ -78,9 +78,7 @@ class Download
             return false;
         }
 
-        $result = (bool) call_user_func($this->haltCallback);
-
-        return $result;
+        return (bool) call_user_func($this->haltCallback);
     }
 
     /**

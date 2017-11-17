@@ -259,8 +259,7 @@ class SubscriptionService
             ->where('plugin.active = 1');
 
         $builderExecute = $queryBuilder->execute();
-        $plugins = $builderExecute->fetchAll();
 
-        return $plugins;
+        return $builderExecute->fetchAll();
     }
 }

@@ -620,6 +620,7 @@ class sExport
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'name',
                     'txtzusatztxt' => 'additionaltext',
                 ];

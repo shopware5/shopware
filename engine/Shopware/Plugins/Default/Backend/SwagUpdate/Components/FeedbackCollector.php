@@ -66,9 +66,8 @@ class FeedbackCollector
     public function sendData()
     {
         $data = $this->gatherData();
-        $result = $this->submitData($data);
 
-        return $result;
+        return $this->submitData($data);
     }
 
     /**

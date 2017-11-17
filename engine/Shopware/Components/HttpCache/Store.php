@@ -47,15 +47,28 @@ class Store extends BaseStore
     private $lookupOptimization;
 
     /**
+     * @var array
+     */
+    private $ignoredUrlParameters;
+
+    /**
      * @param string   $root
      * @param string[] $cacheCookies
+     * @param bool     $lookupOptimization
+     * @param array    $ignoredUrlParameters
      */
-    public function __construct($root, array $cacheCookies, $lookupOptimization)
-    {
+    public function __construct(
+        $root,
+        array $cacheCookies,
+        $lookupOptimization,
+        array $ignoredUrlParameters
+    ) {
         $this->cacheCookies = $cacheCookies;
 
         parent::__construct($root);
+
         $this->lookupOptimization = $lookupOptimization;
+        $this->ignoredUrlParameters = $ignoredUrlParameters;
     }
 
     /**
@@ -205,7 +218,7 @@ class Store extends BaseStore
      */
     protected function generateCacheKey(Request $request)
     {
-        $uri = $this->sortQueryStringParameters($request->getUri());
+        $uri = $this->verifyIgnoredParameters($request);
 
         foreach ($this->cacheCookies as $cookieName) {
             if ($request->cookies->has($cookieName)) {
@@ -217,27 +230,68 @@ class Store extends BaseStore
     }
 
     /**
-     * @param string $url
+     * Verify the URL parameters for a better cache hit rate
+     * Removes ignored URL parameters set in the Shopware configuration.
+     *
+     * @param Request $request
      *
      * @return string
      */
-    private function sortQueryStringParameters($url)
+    private function verifyIgnoredParameters(Request $request)
     {
-        $pos = strpos($url, '?');
-        if ($pos === false) {
-            return $url;
+        $requestParams = $request->query->all();
+
+        if (count($requestParams) === 0) {
+            return rtrim($request->getUri(), '/');
         }
 
-        $urlPath = substr($url, 0, $pos + 1);
-        $queryString = substr($url, $pos + 1);
+        $parsed = parse_url($request->getUri());
+        $query = [];
 
-        $queryParts = [];
-        parse_str($queryString, $queryParts);
-        ksort($queryParts, SORT_STRING);
+        parse_str($parsed['query'], $query);
 
-        $queryString = http_build_query($queryParts);
+        $params = array_diff_key(
+            $query,
+            array_flip($this->ignoredUrlParameters)
+        );
 
-        return $urlPath . $queryString;
+        /**
+         * Sort query parameters
+         */
+        $stringParams = $this->sortQueryParameters($params);
+
+        $path = $request->getPathInfo();
+
+        /**
+         * Normalize URL to consistently return the same path even when variables are present
+         */
+        $uri = sprintf(
+            '%s%s%s',
+            $request->getSchemeAndHttpHost(),
+            $path === '/' ? '/' : rtrim($path, '/') . '/',
+            empty($stringParams) ? '' : "?$stringParams"
+        );
+
+        return rtrim($uri, '/');
+    }
+
+    /**
+     * Sort query parameters taking in account also the values of said parameters.
+     *
+     * @param array $params
+     *
+     * @return string
+     */
+    private function sortQueryParameters($params)
+    {
+        $sParams = urldecode(http_build_query($params));
+        $query = explode('&', $sParams);
+
+        usort($query, function ($val1, $val2) {
+            return strcmp($val1, $val2);
+        });
+
+        return implode('&', $query);
     }
 
     /**

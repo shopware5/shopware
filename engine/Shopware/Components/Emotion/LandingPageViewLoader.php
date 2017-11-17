@@ -77,6 +77,10 @@ class LandingPageViewLoader
 
         $translation = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
 
+        if (!empty($translation['name'])) {
+            $landingPage['name'] = $translation['name'];
+        }
+
         if (!empty($translation['seoTitle'])) {
             $landingPage['seo_title'] = $translation['seoTitle'];
         }

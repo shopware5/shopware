@@ -95,11 +95,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                     padding: '0 0 0 8',
                     ui: 'shopware-ui',
                     listeners: {
-                        change: function(field, value) {
+                        validitychange: function(field, isValid) {
                             var button = Ext.getCmp('sendMail');
-                            if(button !== null) {
-                                button.setDisabled(!field.isValid());
-                            }
+                            button.setDisabled(!(isValid && field.getValue() !== ''));
                         }
                     },
                     fieldLabel: '{s name=testMailAddress}Mail address{/s}' // re-use the column-snippet
@@ -149,7 +147,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                 relative_urls: false
             }
         });
-        return me.tinyMce
+
+        return me.tinyMce;
     }
 
 });

@@ -121,8 +121,6 @@ class Cache
      */
     private function createCacheCore($frontendOptions = [])
     {
-        $frontend = new Zend_Cache_Core($frontendOptions);
-
-        return $frontend;
+        return new Zend_Cache_Core($frontendOptions);
     }
 }

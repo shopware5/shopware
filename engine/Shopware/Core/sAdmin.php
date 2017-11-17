@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
@@ -852,11 +853,6 @@ class sAdmin
             );
             $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sUSERGROUPDATA ?: [];
 
-            if ($this->sSYSTEM->sUSERGROUPDATA['mode']) {
-                $this->sSYSTEM->sUSERGROUP = 'EK';
-            } else {
-                $this->sSYSTEM->sUSERGROUP = $getUser['customergroup'];
-            }
             $this->sSYSTEM->sUSERGROUP = $getUser['customergroup'];
 
             $this->session->offsetSet('sUserGroup', $this->sSYSTEM->sUSERGROUP);
@@ -2250,7 +2246,7 @@ class sAdmin
             $errorFlag = [];
             $config = Shopware()->Container()->get('config');
 
-            if ($this->shouldVerifyCaptcha($config)) {
+            if ($this->shouldVerifyCaptcha($config) && $this->front->Request()->getParam('voteConfirmed', false) == false) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 
@@ -2791,6 +2787,19 @@ class sAdmin
             }
             if (!empty($object[$dispatch['id']]['dispatch_description'])) {
                 $dispatch['description'] = $object[$dispatch['id']]['dispatch_description'];
+            }
+
+            $dispatch['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_premium_dispatch_attributes', $dispatch['id']);
+
+            if (!empty($dispatch['attribute'])) {
+                $languageId = $this->contextService->getShopContext()->getShop()->getId();
+                $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
+                $translationData = $this->translationComponent->readWithFallback($languageId, $fallbackId, 's_premium_dispatch_attributes', $dispatch['id']);
+
+                foreach ($translationData as $key => $attribute) {
+                    $key = str_replace(CrudService::EXT_JS_PREFIX, '', $key);
+                    $dispatch['attribute'][$key] = $attribute;
+                }
             }
         }
 

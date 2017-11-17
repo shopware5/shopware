@@ -46,9 +46,10 @@ class RewriteGenerator implements GeneratorListInterface
      */
     private $queryAliasMapper;
 
-/**
- * @var \Enlight_Event_EventManager
- */private $eventManager;
+    /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
 
     /**
      * @param Connection                  $connection
@@ -93,7 +94,7 @@ class RewriteGenerator implements GeneratorListInterface
         // Remove globals
         unset($query['module'], $query['controller']);
         // Remove action, if action is a part of the seo url
-        if (isset($orgQuery['sAction']) || isset($query['action']) && $query['action'] == 'index') {
+        if (isset($orgQuery['sAction']) || (isset($query['action']) && $query['action'] === 'index')) {
             unset($query['action']);
         }
         if (!empty($query)) {
@@ -136,7 +137,7 @@ class RewriteGenerator implements GeneratorListInterface
                 }
                 $query = array_diff_key($list[$key], $orgQueryList[$key]);
                 unset($query['module'], $query['controller']);
-                if (isset($orgQueryList[$key]['sAction']) || isset($query['action']) && $query['action'] == 'index') {
+                if (isset($orgQueryList[$key]['sAction']) || (isset($query['action']) && $query['action'] === 'index')) {
                     unset($query['action']);
                 }
                 if (!empty($query)) {
@@ -153,9 +154,7 @@ class RewriteGenerator implements GeneratorListInterface
      */
     protected function getAssembleQuery()
     {
-        $sql = 'SELECT org_path, path FROM s_core_rewrite_urls WHERE subshopID=:shopId AND org_path IN (:orgPath) AND main=1 ORDER BY id DESC';
-
-        return $sql;
+        return 'SELECT org_path, path FROM s_core_rewrite_urls WHERE subshopID=:shopId AND org_path IN (:orgPath) AND main=1 ORDER BY id DESC';
     }
 
     /**
@@ -171,7 +170,7 @@ class RewriteGenerator implements GeneratorListInterface
                 $orgQuery['sArticle'] = $query['sArticle'];
                 break;
             case 'blog':
-                if (isset($query['action']) && $query['action'] != 'index') {
+                if (isset($query['action']) && $query['action'] !== 'index') {
                     $orgQuery['sAction'] = $query['action'];
                     $orgQuery['sCategory'] = $query['sCategory'];
                     $orgQuery['blogArticle'] = $query['blogArticle'];
@@ -209,7 +208,7 @@ class RewriteGenerator implements GeneratorListInterface
                 }
                 break;
             case 'listing':
-                if (isset($query['action']) && $query['action'] == 'manufacturer') {
+                if (isset($query['action']) && $query['action'] === 'manufacturer') {
                     $orgQuery['sAction'] = $query['action'];
                     $orgQuery['sSupplier'] = $query['sSupplier'];
                 }
@@ -238,7 +237,7 @@ class RewriteGenerator implements GeneratorListInterface
      */
     private function preAssemble($params, Context $context)
     {
-        if (isset($params['module']) && $params['module'] != 'frontend') {
+        if (isset($params['module']) && $params['module'] !== 'frontend') {
             return false;
         }
 

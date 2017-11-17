@@ -32,17 +32,27 @@
 
             {if $sStatus.code != 0}
                 <div class="newsletter--error-messages">
+
+                    {$file = 'frontend/_includes/messages.tpl'}
+
                     {if $sStatus.code === 7}
-                        {include file="frontend/_includes/messages.tpl" type='error' content="{s namespace="widgets/captcha/custom_captcha" name="invalidCaptchaMessage"}{/s}"}
-                    {elseif $sStatus.code==3}
-                        {include file="frontend/_includes/messages.tpl" type='success' content=$sStatus.message}
-                    {elseif $sStatus.code==5}
-                        {include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
-                    {elseif $sStatus.code==2}
-                        {include file="frontend/_includes/messages.tpl" type='warning' content=$sStatus.message}
+                        {$type = 'error'}
+                        {$content = "{s namespace="widgets/captcha/custom_captcha" name="invalidCaptchaMessage"}{/s}"}
+                    {elseif $sStatus.code == 3}
+                        {$type = 'success'}
+                        {$content = $sStatus.message}
+                    {elseif $sStatus.code == 5}
+                        {$type = 'error'}
+                        {$content = $sStatus.message}
+                    {elseif $sStatus.code == 2}
+                        {$type = 'warning'}
+                        {$content = $sStatus.message}
                     {elseif $sStatus.code != 0}
-                        {include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
+                        {$type = 'error'}
+                        {$content = $sStatus.message}
                     {/if}
+
+                    {include file=$file type=$type content=$content}
                 </div>
             {/if}
         {/block}

@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Extendable implements ProductContextInterface, \JsonSerializable
+class ShopContext extends Extendable implements ProductContextInterface
 {
     /**
      * @var Group
@@ -92,17 +92,17 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     protected $customerStreamIds;
 
     /**
-     * @param string $baseUrl
-     * @param Shop $shop
-     * @param Currency $currency
-     * @param Group $currentCustomerGroup
-     * @param Group $fallbackCustomerGroup
-     * @param Tax[] $taxRules
+     * @param string       $baseUrl
+     * @param Shop         $shop
+     * @param Currency     $currency
+     * @param Group        $currentCustomerGroup
+     * @param Group        $fallbackCustomerGroup
+     * @param Tax[]        $taxRules
      * @param PriceGroup[] $priceGroups
-     * @param Area|null $area
+     * @param Area|null    $area
      * @param Country|null $country
-     * @param State|null $state
-     * @param int[] $customerStreamIds
+     * @param State|null   $state
+     * @param int[]        $customerStreamIds
      */
     public function __construct(
         $baseUrl,
@@ -224,7 +224,6 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     {
         return $this->customerStreamIds;
     }
-
 
     /**
      * {@inheritdoc}

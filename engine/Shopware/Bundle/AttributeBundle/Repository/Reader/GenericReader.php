@@ -71,7 +71,8 @@ class GenericReader implements ReaderInterface
 
         $identifiers = array_map('strtolower', $identifiers);
         $data = array_change_key_case($data, CASE_LOWER);
-        $identifierField = array_pop(explode('.', $this->getIdentifierField()));
+        $identifierFields = explode('.', $this->getIdentifierField());
+        $identifierField = array_pop($identifierFields);
 
         foreach ($identifiers as $id) {
             if (!isset($data[$id])) {
