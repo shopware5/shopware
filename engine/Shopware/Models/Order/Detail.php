@@ -754,7 +754,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getTaxRate()
     {
