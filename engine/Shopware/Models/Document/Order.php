@@ -24,6 +24,25 @@
 
 /**
  * Order model for document generation
+ * @property int id;
+ * @property array order;
+ * @property ArrayObject positions;
+ * @property int userID;
+ * @property array user;
+ * @property array billing;
+ * @property array shipping;
+ * @property array payment;
+ * @property array paymentInstances;
+ * @property array dispatch;
+ * @property bool net;
+ * @property bool summaryNet;
+ * @property float amountNetto;
+ * @property float amount;
+ * @property array tax;
+ * @property array currency;
+ * @property float shippingCosts;
+ * @property bool shippingCostsAsPosition;
+ * @property mixed discount;
  */
 class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
 {
