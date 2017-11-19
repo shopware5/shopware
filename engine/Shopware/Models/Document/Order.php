@@ -24,7 +24,7 @@
 
 /**
  * Order model for document generation
- * int id;
+ * @property int id;
  * @property array order;
  * @property ArrayObject positions;
  * @property int userID;
