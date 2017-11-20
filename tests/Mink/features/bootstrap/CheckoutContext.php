@@ -25,15 +25,17 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Doctrine\DBAL\Connection;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\UnexpectedPageException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Tests\Mink\Element\CartPosition;
 use Shopware\Tests\Mink\Element\CheckoutAddressBox;
 use Shopware\Tests\Mink\Element\CheckoutAddressBoxModal;
 use Shopware\Tests\Mink\Element\MultipleElement;
 use Shopware\Tests\Mink\Page\CheckoutCart;
-use Shopware\Tests\Mink\Page\CheckoutConfirm;
+use Shopware\Tests\Mink\Page\Detail;
 
 class CheckoutContext extends SubContext
 {
@@ -59,6 +61,21 @@ class CheckoutContext extends SubContext
     public function iAddTheArticleToMyBasket($article)
     {
         $this->getPage('CheckoutCart')->addArticle($article);
+    }
+
+    /**
+     * @When /^I add the article "(?P<articleNr>[^"]*)" to my basket over HTTP GET$/
+     */
+    public function iAddTheArticleToMyBasketOverHttpGet($article)
+    {
+        try {
+            /** @var CheckoutCart $page */
+            $page = $this->getPage('CheckoutCart');
+            $page->resetCart();
+            $page->fillCartWithProducts([['number' => $article, 'quantity' => 1]]);
+            $page->open();
+        } catch (UnexpectedPageException $unexpectedPageException) {
+        }
     }
 
     /**
@@ -151,15 +168,22 @@ class CheckoutContext extends SubContext
 
     /**
      * @Given /^the cart contains the following products:$/
+     *
+     * @param TableNode $items
      */
     public function theCartContainsTheFollowingProducts(TableNode $items)
     {
-        /** @var CheckoutCart $page */
-        $page = $this->getPage('CheckoutCart');
-        $page->resetCart();
-        $page->fillCartWithProducts($items->getHash());
-        $page->open();
-        $this->theCartShouldContainTheFollowingProducts($items);
+        /** @var Detail $detailPage */
+        $detailPage = $this->getPage('Detail');
+
+        foreach ($items->getIterator() as $row) {
+            $detailPage->open(['articleId' => $row['articleId'], 'number' => $row['number']]);
+            $detailPage->addToBasket($row['quantity']);
+        }
+
+        if ($this->getDriver() instanceof Selenium2Driver) {
+            $detailPage->toBasket();
+        }
     }
 
     /**
@@ -863,6 +887,8 @@ EOD;
 
     /**
      * @Given I checkout using GET
+     *
+     * @param string $path
      */
     public function iCheckoutUsingGet($path = '/checkout/finish')
     {

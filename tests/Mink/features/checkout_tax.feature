@@ -5,8 +5,8 @@ Feature: Check that cart value for tax is calculated correctly
       Given   I am on the page "Account"
       And     I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
       And     the cart contains the following products:
-          | number  | name                    | quantity |
-          | SW10170 | Sonnenbrille "Red"      | 1        |
+          | articleId | number  | name                    | quantity |
+          | 170       | SW10170 | Sonnenbrille "Red"      | 1        |
   @taxation
   Scenario Outline: I can change the shipping country to a country with different taxation
       Given I proceed to order confirmation
