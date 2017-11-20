@@ -334,6 +334,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 sortable: false,
                 flex: 1,
                 renderer: me.priceColumnRenderer,
+                renderer: function(val) {
+                    val = window.parseFloat(val);
+                    return Ext.Number.toFixed(val, window.parseInt('{s name=detail/price/precision}2{/s}'));
+                },
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
