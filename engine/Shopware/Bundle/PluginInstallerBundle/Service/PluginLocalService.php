@@ -224,7 +224,7 @@ class PluginLocalService
         $path = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
         $path .= '/plugin.png';
 
-        $relativePath = str_replace($rootDir, '', $path);
+        $relativePath = str_replace([$rootDir, DIRECTORY_SEPARATOR], ['','/'], $path);
         $front = Shopware()->Container()->get('front');
 
         if (file_exists($path) && $front && $front->Request()) {
