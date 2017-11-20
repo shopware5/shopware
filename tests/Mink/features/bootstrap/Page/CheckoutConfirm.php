@@ -239,6 +239,6 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
      */
     public function checkoutUsingGet($path)
     {
-        $this->getDriver()->visit($this->makeSurePathIsAbsolute($path));
+        $this->getDriver()->visit($path);
     }
 }
