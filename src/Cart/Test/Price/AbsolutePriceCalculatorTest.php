@@ -25,42 +25,41 @@
 namespace Shopware\Cart\Test\Price;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Cart\Price\PercentagePriceCalculator;
+use Shopware\Cart\Price\AbsolutePriceCalculator;
+use Shopware\Cart\Price\PriceCalculator;
+use Shopware\Cart\Price\PriceRounding;
 use Shopware\Cart\Price\Struct\DerivedPrice;
 use Shopware\Cart\Price\Struct\Price;
-use Shopware\Cart\Price\PriceCalculator;
-
-use Shopware\Cart\Price\PriceRounding;
 use Shopware\Cart\Price\Struct\PriceCollection;
+use Shopware\Cart\Price\Struct\PriceDefinition;
+use Shopware\Cart\Tax\PercentageTaxRuleBuilder;
+use Shopware\Cart\Tax\PercentageTaxRuleCalculator;
 use Shopware\Cart\Tax\Struct\CalculatedTax;
 use Shopware\Cart\Tax\Struct\CalculatedTaxCollection;
 use Shopware\Cart\Tax\Struct\PercentageTaxRule;
-use Shopware\Cart\Tax\PercentageTaxRuleBuilder;
-use Shopware\Cart\Tax\PercentageTaxRuleCalculator;
-use Shopware\Cart\Tax\TaxCalculator;
 use Shopware\Cart\Tax\Struct\TaxRule;
-use Shopware\Cart\Tax\TaxRuleCalculator;
 use Shopware\Cart\Tax\Struct\TaxRuleCollection;
+use Shopware\Cart\Tax\TaxCalculator;
+use Shopware\Cart\Tax\TaxRuleCalculator;
 use Shopware\Cart\Test\Common\Generator;
 
-class PercentagePriceCalculatorTest extends TestCase
+class AbsolutePriceCalculatorTest extends TestCase
 {
     /**
-     * @dataProvider calculatePercentagePriceOfGrossPricesProvider
+     * @dataProvider calculateAbsolutePriceOfGrossPricesProvider
      *
      * @param float           $percentage
      * @param DerivedPrice    $expected
      * @param PriceCollection $prices
      */
-    public function testCalculatePercentagePriceOfGrossPrices(
-        $percentage,
+    public function testCalculateAbsolutePriceOfGrossPrices(
+        PriceDefinition $price,
         DerivedPrice $expected,
         PriceCollection $prices
     ): void {
         $rounding = new PriceRounding(2);
 
-        $calculator = new PercentagePriceCalculator(
-            new PriceRounding(2),
+        $calculator = new AbsolutePriceCalculator(
             new PriceCalculator(
                 new TaxCalculator(
                     new PriceRounding(2),
@@ -75,22 +74,29 @@ class PercentagePriceCalculatorTest extends TestCase
             new PercentageTaxRuleBuilder()
         );
 
-        $price = $calculator->calculate(
-            $percentage,
+        $calculatedPrice = $calculator->calculate(
+            $price,
             $prices,
             Generator::createContext()
         );
-        static::assertEquals($expected, $price);
-        static::assertEquals($expected->getCalculatedTaxes(), $price->getCalculatedTaxes());
-        static::assertEquals($expected->getTaxRules(), $price->getTaxRules());
-        static::assertEquals($expected->getTotalPrice(), $price->getTotalPrice());
-        static::assertEquals($expected->getUnitPrice(), $price->getUnitPrice());
-        static::assertEquals($expected->getQuantity(), $price->getQuantity());
+        static::assertEquals($expected, $calculatedPrice);
+        static::assertEquals($expected->getCalculatedTaxes(), $calculatedPrice->getCalculatedTaxes());
+        static::assertEquals($expected->getTaxRules(), $calculatedPrice->getTaxRules());
+        static::assertEquals($expected->getTotalPrice(), $calculatedPrice->getTotalPrice());
+        static::assertEquals($expected->getUnitPrice(), $calculatedPrice->getUnitPrice());
+        static::assertEquals($expected->getQuantity(), $calculatedPrice->getQuantity());
+        static::assertEquals($expected->getCalculationBasePrices(), $calculatedPrice->getCalculationBasePrices());
     }
 
-    public function calculatePercentagePriceOfGrossPricesProvider(): array
+    public function calculateAbsolutePriceOfGrossPricesProvider(): array
     {
         $highTax = new TaxRuleCollection([new TaxRule(19)]);
+
+        $taxRules = new TaxRuleCollection([
+            new PercentageTaxRule(19, 50),
+            new PercentageTaxRule(7, 50),
+        ]);
+
         //prices of cart line items
         $prices = new PriceCollection([
             new Price(30.00, 30.00, new CalculatedTaxCollection([new CalculatedTax(4.79, 19, 30.00)]), $highTax),
@@ -99,20 +105,21 @@ class PercentagePriceCalculatorTest extends TestCase
 
         return [
             [
-                //10% discount
-                -10,
+                new PriceDefinition(
+                    -6,
+                    $taxRules,
+                    1,
+                    true
+                ),
                 //expected calculated "discount" price
                 new DerivedPrice(
-                    -6.0,
-                    -6.0,
+                    -6,
+                    -6,
                     new CalculatedTaxCollection([
-                        new CalculatedTax(-0.48, 19, -3.0),
-                        new CalculatedTax(-0.20, 7, -3.0),
+                        new CalculatedTax(-0.48, 19, -3),
+                        new CalculatedTax(-0.20, 7, -3),
                     ]),
-                    new TaxRuleCollection([
-                        new PercentageTaxRule(19, 50),
-                        new PercentageTaxRule(7, 50),
-                    ]),
+                    $taxRules,
                     1,
                     $prices
                 ),
