@@ -337,7 +337,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
-                    decimalPrecision: 2
+                    decimalPrecision: '{s name=detail/price/precision}2{/s}'
                 }
             } ,{
                 header: me.snippets.columns.pseudoPrice.header,
