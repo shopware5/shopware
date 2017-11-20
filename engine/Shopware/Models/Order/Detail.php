@@ -746,7 +746,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param string $taxRate
+     * @param float $taxRate
      */
     public function setTaxRate($taxRate)
     {
