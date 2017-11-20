@@ -256,7 +256,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 dataIndex: 'price',
                 editor: {
                     xtype: 'numberfield',
-                    decimalPrecision: 2,
+                    decimalPrecision: '{s name=detail/price/precision}2{/s}',
                     minValue: 0
                 }
             }, {
