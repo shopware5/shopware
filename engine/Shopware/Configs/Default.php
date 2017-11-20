@@ -35,7 +35,9 @@ if (!is_array($customConfig)) {
 }
 
 return array_replace_recursive([
-    'custom' => [],
+    'custom' => [
+        'sharedPath' => ''
+    ],
     'trustedproxies' => [],
     'cdn' => [
         'backend' => 'local',

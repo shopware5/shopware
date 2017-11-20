@@ -67,6 +67,15 @@ function smarty_function_flink($params, $template)
             $file = substr($file, strlen($docPath));
         }
 
+        // remove shared directory from file
+        $config = Shopware()->Container()->get('kernel')->getConfig();
+        $sharedPath = $config['custom']['sharedPath'];
+        if (!empty($sharedPath)) {
+            if (strpos($file, $sharedPath) === 0) {
+                $file = substr($file, strlen($sharedPath));
+            }
+        }
+
         // make sure we have the right separator for the web context
         if (DIRECTORY_SEPARATOR !== '/') {
             $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
