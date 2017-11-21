@@ -57,7 +57,7 @@ class PluginInstallerTest extends TestCase
             'refresh_date' => $dateTime,
             'translations' => '{"en":{"label":"TestPlugin"}}',
             'changes' => null,
-            'added' => $dateTime
+            'added' => $dateTime,
         ];
 
         $connection = $this->createMock(Connection::class);
