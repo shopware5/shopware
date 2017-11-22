@@ -254,9 +254,13 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 xtype: 'numbercolumn',
                 header: me.snippets.grid.columns.price,
                 dataIndex: 'price',
+                renderer: function(val) {
+                    val = window.parseFloat(val);
+                    return Ext.Number.toFixed(val, window.parseInt('{config name="price_precision"}'));
+                },
                 editor: {
                     xtype: 'numberfield',
-                    decimalPrecision: 2,
+                    decimalPrecision: '{config name="price_precision"}',
                     minValue: 0
                 }
             }, {
