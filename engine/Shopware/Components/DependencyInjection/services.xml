@@ -451,6 +451,14 @@
             <argument type="service" id="corelogger"/>
         </service>
 
+        <service id="AddLinkHeaderSubscriber" class="Shopware\Components\AddLinkHeaderSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="web_link_manager" class="Shopware\Components\WebLinkManager">
+            <argument type="service" id="front"/>
+        </service>
+
         <service id="config_writer" class="Shopware\Components\ConfigWriter">
             <argument type="service" id="dbal_connection" />
         </service>
