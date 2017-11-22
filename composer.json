@@ -64,7 +64,8 @@
         "setasign/fpdf": "1.8.1",
         "setasign/fpdi": "1.6.1",
         "ocramius/proxy-manager": "^1.0",
-        "mpdf/mpdf": "v6.1.4"
+        "mpdf/mpdf": "v6.1.4",
+        "symfony/web-link": "^3.3"
     },
     "suggest": {
         "ext-apcu": "*",
