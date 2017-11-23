@@ -65,6 +65,7 @@
             <argument type="service" id="shopware.escaper" />
             <argument>%shopware.template%</argument>
             <argument>%shopware.template_security%</argument>
+            <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
