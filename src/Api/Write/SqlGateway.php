@@ -40,28 +40,6 @@ class SqlGateway
     }
 
     /**
-     * @param string $uuid
-     *
-     * @return bool
-     */
-    public function exists(string $tableName, array $pkData): bool
-    {
-        $qb = $this->connection
-            ->createQueryBuilder()
-            ->select('COUNT(*)')
-            ->from(QuerySelection::escape($tableName));
-
-        foreach ($pkData as $pkDatum => $pkValue) {
-            $qb->andWhere($pkDatum . '= :' . $pkDatum);
-            $qb->setParameter($pkDatum, $pkValue);
-        }
-
-        return (bool) $qb
-            ->execute()
-            ->fetchColumn();
-    }
-
-    /**
      * @param array $data
      */
     public function insert(string $tableName, array $data): void

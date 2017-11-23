@@ -70,7 +70,17 @@ class SqlResourceWriter implements ResourceWriterInterface
             ...$resource->getWriteOrder()
         );
 
-        $resource->extract($rawData, $exceptionStack, $queryQueue, $this->sqlGateway, $writeContext, $extender);
+        foreach ($rawData as $row) {
+            $resource->collectPrimaryKeys($row, $exceptionStack, $queryQueue, $writeContext, $extender);
+        }
+
+        $this->determineQueryTypes($writeContext);
+        $queryQueue = new WriteQueryQueue();
+        $exceptionStack = new FieldExceptionStack();
+
+        foreach ($rawData as $row) {
+            $resource->extract($row, $exceptionStack, $queryQueue, $writeContext, $extender);
+        }
 
         $exceptionStack->tryToThrow();
         $writeIdentifiers = $this->getWriteIdentifiers($queryQueue);
@@ -92,7 +102,17 @@ class SqlResourceWriter implements ResourceWriterInterface
             ...$resource->getWriteOrder()
         );
 
-        $resource->extract($rawData, $exceptionStack, $queryQueue, $this->sqlGateway, $writeContext, $extender);
+        foreach ($rawData as $row) {
+            $resource->collectPrimaryKeys($row, $exceptionStack, $queryQueue, $writeContext, $extender);
+        }
+
+        $this->determineQueryTypes($writeContext);
+        $queryQueue = new WriteQueryQueue();
+        $exceptionStack = new FieldExceptionStack();
+
+        foreach ($rawData as $row) {
+            $resource->extract($row, $exceptionStack, $queryQueue, $writeContext, $extender);
+        }
 
         $exceptionStack->tryToThrow();
         $writeIdentifiers = $this->getWriteIdentifiers($queryQueue);
@@ -115,7 +135,17 @@ class SqlResourceWriter implements ResourceWriterInterface
             ...$resource->getWriteOrder()
         );
 
-        $resource->extract($rawData, $exceptionStack, $queryQueue, $this->sqlGateway, $writeContext, $extender);
+        foreach ($rawData as $row) {
+            $resource->collectPrimaryKeys($row, $exceptionStack, $queryQueue, $writeContext, $extender);
+        }
+
+        $this->determineQueryTypes($writeContext);
+        $queryQueue = new WriteQueryQueue();
+        $exceptionStack = new FieldExceptionStack();
+
+        foreach ($rawData as $row) {
+            $resource->extract($row, $exceptionStack, $queryQueue, $writeContext, $extender);
+        }
 
         $exceptionStack->tryToThrow();
         $writeIdentifiers = $this->getWriteIdentifiers($queryQueue);
@@ -161,5 +191,30 @@ class SqlResourceWriter implements ResourceWriterInterface
         }
 
         return $changedIdentifiers;
+    }
+
+    private function determineQueryTypes(WriteContext $writeContext)
+    {
+        $pkMapping = $writeContext->getPrimaryKeyMapping();
+
+        foreach ($pkMapping as $table => $definition) {
+            $query = $this->connection->createQueryBuilder();
+
+            $query->addSelect(array_keys($definition['columns']));
+            $query->from($table);
+
+            $counter = 0;
+            foreach ($definition['rows'] as $key) {
+                $where = [];
+                foreach ($key as $column => $value) {
+                    $where[] = $column . ' = :key' . $counter;
+                    $query->setParameter('key' . $counter, $value);
+                    $counter++;
+                }
+                $query->orWhere(implode(' AND ', $where));
+            }
+            $existingPrimaries = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+            $writeContext->setExistingPrimaries($table, $existingPrimaries);
+        }
     }
 }

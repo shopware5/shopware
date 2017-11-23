@@ -102,6 +102,27 @@ class ReferenceField extends Field implements PathAware, FieldExtenderCollection
         $this->foreignClassName = $foreignClassName;
     }
 
+    public function collectPrimaryKeys(string $type, string $key, $value = null): \Generator
+    {
+        if (!is_array($value)) {
+            throw new MalformatDataException($this->path, 'Expected array');
+        }
+
+        $referencedResource = $this->resourceRegistry
+            ->get($this->foreignClassName);
+
+        $referencedResource->collectPrimaryKeys(
+            $value,
+            $this->exceptionStack,
+            $this->queryQueue,
+            $this->writeContext,
+            $this->fieldExtenderCollection,
+            $this->path . '/' . $key
+        );
+
+        yield $this->localFieldName => $this->writeContext->get($this->foreignClassName, $this->foreignFieldName);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -118,7 +139,6 @@ class ReferenceField extends Field implements PathAware, FieldExtenderCollection
             $value,
             $this->exceptionStack,
             $this->queryQueue,
-            $this->sqlGateway,
             $this->writeContext,
             $this->fieldExtenderCollection,
             $this->path . '/' . $key

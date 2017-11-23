@@ -33,13 +33,6 @@ abstract class Field
      */
     private $flags = [];
 
-    /**
-     * @param string $type
-     * @param string $key
-     * @param null   $value
-     *
-     * @return \Generator
-     */
     abstract public function __invoke(string $type, string $key, $value = null): \Generator;
 
     /**

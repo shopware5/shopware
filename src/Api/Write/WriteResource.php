@@ -29,6 +29,10 @@ use Shopware\Api\Write\DataStack\ExceptionNoStackItemFound;
 use Shopware\Api\Write\DataStack\KeyValuePair;
 use Shopware\Api\Write\Field\DateField;
 use Shopware\Api\Write\Field\Field;
+use Shopware\Api\Write\Field\FkField;
+use Shopware\Api\Write\Field\ReferenceField;
+use Shopware\Api\Write\Field\SubresourceField;
+use Shopware\Api\Write\Field\UuidField;
 use Shopware\Api\Write\FieldAware\ExceptionStackAware;
 use Shopware\Api\Write\FieldAware\FieldExtender;
 use Shopware\Api\Write\FieldAware\FieldExtenderCollection;
@@ -75,11 +79,38 @@ abstract class WriteResource
 
     abstract public function getWriteOrder(): array;
 
+    public function collectPrimaryKeys(
+        array $rawData,
+        FieldExceptionStack $exceptionStack,
+        WriteQueryQueue $queryQueue,
+        WriteContext $writeContext,
+        FieldExtenderCollection $extenderCollection,
+        string $path = ''
+    ) {
+        $extenderCollection = clone $extenderCollection;
+
+        $this->extendExtender($exceptionStack, $queryQueue, $writeContext, $extenderCollection, $path);
+
+        $queryQueue->updateOrder(get_class($this), ...$this->getWriteOrder());
+
+        $pkData = $this->mapPrimaryKeys($this->primaryKeyFields, $rawData, self::FOR_INSERT, $exceptionStack, $extenderCollection);
+
+        $writeContext->addPrimaryKeyMapping($this->tableName, $pkData);
+
+        $fields = array_filter(
+            $this->fields,
+            function(Field $field) {
+                return $field instanceof SubresourceField || $field instanceof FkField || $field instanceof ReferenceField;
+            }
+        );
+
+        $this->mapPrimaryKeys($fields, $rawData, self::FOR_INSERT, $exceptionStack, $extenderCollection);
+    }
+
     public function extract(
         array $rawData,
         FieldExceptionStack $exceptionStack,
         WriteQueryQueue $queryQueue,
-        SqlGateway $sqlGateway,
         WriteContext $writeContext,
         FieldExtenderCollection $extenderCollection,
         string $path = ''
@@ -92,7 +123,7 @@ abstract class WriteResource
 
         $pkData = $this->map($this->primaryKeyFields, $rawData, self::FOR_INSERT, $exceptionStack, $extenderCollection);
 
-        $type = $this->determineType($sqlGateway, $pkData);
+        $type = $this->determineQueryType($writeContext, $pkData);
 
         $rawData = $this->integrateDefaults($rawData, $type);
 
@@ -147,6 +178,58 @@ abstract class WriteResource
 
             try {
                 foreach ($field($type, $kvPair->getKey(), $kvPair->getValue()) as $fieldKey => $fieldValue) {
+                    $stack->update($fieldKey, $fieldValue);
+                }
+            } catch (WriteFieldException $e) {
+                $exceptionStack->add($e);
+            }
+        }
+
+        return $stack->getResultAsArray();
+    }
+
+    /**
+     * @param array               $fields
+     * @param array               $rawData
+     * @param string              $type
+     * @param FieldExceptionStack $exceptionStack
+     * @param FieldExtender       $fieldExtender
+     *
+     * @return array
+     */
+    protected function mapPrimaryKeys(
+        array $fields,
+        array $rawData,
+        string $type,
+        FieldExceptionStack $exceptionStack,
+        FieldExtender $fieldExtender
+    ): array {
+        $stack = new DataStack($rawData);
+
+        /** @var UuidField|SubresourceField|FkField|ReferenceField $field */
+        foreach ($fields as $key => $field) {
+            try {
+                $kvPair = $stack->pop($key);
+            } catch (ExceptionNoStackItemFound $e) {
+                if (!$field->is(Required::class) || $type === self::FOR_UPDATE) {
+                    continue;
+                }
+
+                $kvPair = new KeyValuePair($key, null, true);
+            }
+
+            $kvPair = $this->convertValue($field, $kvPair);
+
+            $fieldExtender->extend($field);
+
+            try {
+                if ($field instanceof SubresourceField || $field instanceof ReferenceField) {
+                    $values = $field->collectPrimaryKeys($type, $kvPair->getKey(), $kvPair->getValue());
+                } else {
+                    $values = $field($type, $kvPair->getKey(), $kvPair->getValue());
+                }
+
+                foreach ($values as $fieldKey => $fieldValue) {
                     $stack->update($fieldKey, $fieldValue);
                 }
             } catch (WriteFieldException $e) {
@@ -249,20 +332,16 @@ abstract class WriteResource
     }
 
     /**
-     * @param SqlGateway $sqlGateway
-     * @param array      $pkData
+     * @param WriteContext  $context
+     * @param array         $pkData
      *
      * @return string
      */
-    private function determineType(SqlGateway $sqlGateway, array $pkData): string
+    private function determineQueryType(WriteContext $writeContext, array $pkData): string
     {
-        $type = self::FOR_UPDATE;
+        $exists = $writeContext->primaryKeyExists($this->tableName, $pkData);
 
-        if (!$sqlGateway->exists($this->tableName, $pkData)) {
-            $type = self::FOR_INSERT;
-        }
-
-        return $type;
+        return $exists ? self::FOR_UPDATE : self::FOR_INSERT;
     }
 
     /**
