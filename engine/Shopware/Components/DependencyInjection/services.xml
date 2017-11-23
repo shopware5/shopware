@@ -47,6 +47,7 @@
             <argument type="service" id="snippet_resource"/>
             <argument type="service" id="shopware.escaper" />
             <argument>%shopware.template%</argument>
+            <argument>%shopware.template_security%</argument>
             <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
