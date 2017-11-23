@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Routing\Context;
+
 /**
  * Shopware Notification Plugin
  *
@@ -272,6 +274,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      */
     public static function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
+        $modelManager = Shopware()->Container()->get('models');
+
         $sql = 'SELECT * FROM `s_articles_notification` WHERE send = 0';
 
         $getNotifications = Shopware()->Db()->fetchAll($sql);
@@ -290,11 +294,22 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             $sql = 'SELECT notification from s_articles WHERE ID = ?';
 
-            $notificationActive = Shopware()->Db()->fetchOne($sql, [$sArticleID]);
+            $notificationActive = (bool) Shopware()->Db()->fetchOne($sql, [$sArticleID]);
+            if ((int) $instock > 0 && $notificationActive === true && !empty($sArticle['active'])) {
+                /* @var $shop \Shopware\Models\Shop\Shop */
+                $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($data['language']);
+                $shop->registerResources();
 
-            if (intval($instock) > 0 && $notificationActive == true && !empty($sArticle['active'])) {
+                $shopContext = Context::createFromShop($shop, Shopware()->Container()->get('config'));
+                Shopware()->Container()->get('router')->setContext($shopContext);
+
+                $link = Shopware()->Front()->Router()->assemble([
+                    'sViewport' => 'detail',
+                    'sArticle' => $sArticleID,
+                ]);
+
                 $context = [
-                    'sArticleLink' => $data['shopLink'] . "?sViewport=detail&sArticle=$sArticleID",
+                    'sArticleLink' => $link,
                     'sOrdernumber' => $ordernumber,
                     'sData' => $job['data'],
                 ];

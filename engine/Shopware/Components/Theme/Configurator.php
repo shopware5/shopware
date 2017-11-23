@@ -26,10 +26,10 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Components\Form as Form;
-use Shopware\Components\Model as Model;
+use Shopware\Components\Form;
+use Shopware\Components\Model;
 use Shopware\Components\Theme;
-use Shopware\Models\Shop as Shop;
+use Shopware\Models\Shop;
 
 /**
  * The Theme\Configurator class is used

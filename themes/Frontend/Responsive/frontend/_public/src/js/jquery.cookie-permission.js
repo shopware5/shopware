@@ -171,7 +171,8 @@
          * @public
          * @method onAcceptButtonClick
          */
-        onAcceptButtonClick: function() {
+        onAcceptButtonClick: function(event) {
+            event.preventDefault();
             var me = this;
 
             me.storage.setItem(me.storageKey, 'true');

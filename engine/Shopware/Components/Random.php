@@ -174,4 +174,64 @@ abstract class Random
 
         return static::getString($length, $charlist);
     }
+
+    /**
+     * @see https://gist.github.com/tylerhall/521810
+     * Generates a strong password of N length containing at least one lower case letter,
+     * one uppercase letter, one digit, and one special character. The remaining characters
+     * in the password are chosen at random from those four sets.
+     *
+     * The available characters in each set are user friendly - there are no ambiguous
+     * characters such as i, l, 1, o, 0, etc. This makes it much easier for users to manually
+     * type or speak their passwords.
+     *
+     * @param int   $length
+     * @param array $availableSets
+     *
+     * @return string
+     */
+    public static function generatePassword($length = 15, $availableSets = ['l', 'u', 'd', 's'])
+    {
+        $sets = [];
+        if (in_array('l', $availableSets)) {
+            $sets[] = 'abcdefghjkmnpqrstuvwxyz';
+        }
+        if (in_array('u', $availableSets)) {
+            $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+        }
+        if (in_array('d', $availableSets)) {
+            $sets[] = '23456789';
+        }
+        if (in_array('s', $availableSets)) {
+            $sets[] = '!@#$%&*?';
+        }
+
+        $pool = '';
+        $password = '';
+
+        foreach ($sets as $set) {
+            $password .= self::getRandomArrayElement(str_split($set));
+            $pool .= $set;
+        }
+
+        $pool = str_split($pool);
+        for ($i = 0; $i < $length - count($sets); ++$i) {
+            $password .= self::getRandomArrayElement($pool);
+        }
+        $password = str_shuffle($password);
+
+        return $password;
+    }
+
+    /**
+     * Return a random element from an array
+     *
+     * @param $array
+     *
+     * @return mixed
+     */
+    public static function getRandomArrayElement($array)
+    {
+        return $array[self::getInteger(0, count($array) - 1)];
+    }
 }

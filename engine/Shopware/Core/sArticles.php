@@ -1650,6 +1650,7 @@ class sArticles
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'articleName',
                     'txtzusatztxt' => 'additionaltext',
                     'txtkeywords' => 'keywords',
@@ -1741,6 +1742,7 @@ class sArticles
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'articleName',
                     'txtzusatztxt' => 'additionaltext',
                     'txtkeywords' => 'keywords',
@@ -1748,7 +1750,7 @@ class sArticles
                 ];
                 break;
             case 'variant':
-                $map = ['txtzusatztxt' => 'additionaltext', 'txtpackunit' => 'packunit'];
+                $map = ['txtshippingtime' => 'shippingtime', 'txtzusatztxt' => 'additionaltext', 'txtpackunit' => 'packunit'];
                 break;
             case 'link':
                 $map = ['linkname' => 'description'];
@@ -2173,9 +2175,8 @@ class sArticles
         );
 
         $queryPrams = http_build_query($params, null, '&');
-        $listingLink = $this->config->get('sBASEFILE') . '?' . $queryPrams;
 
-        return $listingLink;
+        return $this->config->get('sBASEFILE') . '?' . $queryPrams;
     }
 
     /**

@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Blog\Blog as Blog;
-use Shopware\Models\Blog\Media as Media;
-use Shopware\Models\Blog\Tag as Tag;
+use Shopware\Models\Blog\Blog;
+use Shopware\Models\Blog\Media;
+use Shopware\Models\Blog\Tag;
 
 /**
  * Shopware Backend Controller for the Blog Module

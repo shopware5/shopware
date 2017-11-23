@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Price extends Extendable implements \JsonSerializable
+class Price extends Extendable
 {
     /**
      * Contains the calculated gross or net price.

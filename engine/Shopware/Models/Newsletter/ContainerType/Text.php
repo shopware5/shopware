@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware text model represents a text container type.
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity()
  * @ORM\Table(name="s_campaigns_html")
  */
 class Text extends ModelEntity
@@ -125,7 +125,7 @@ class Text extends ModelEntity
     {
         $this->container = $container;
         $container->setType($type);
-//        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
+        //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
     }
 
     /**

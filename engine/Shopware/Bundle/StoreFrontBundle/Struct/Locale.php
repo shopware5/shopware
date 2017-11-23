@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Locale extends Extendable implements \JsonSerializable
+class Locale extends Extendable
 {
     /**
      * @var int

@@ -98,8 +98,11 @@
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
         <service id="router" class="Shopware\Components\Routing\Router">
             <factory service="router_factory" method="factory" />
-            <argument type="service" id="service_container"/>
             <argument type="service" id="events"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
         </service>
 
         <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
@@ -403,6 +406,7 @@
         </service>
 
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
+        <service id="validator.user_name" class="Shopware\Components\Validator\UserNameValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
             <argument type="service" id="shopware_search.product_number_search" />
@@ -418,6 +422,7 @@
 
         <service id="ErrorSubscriber" class="Shopware\Components\ErrorSubscriber">
             <tag name="shopware.event_subscriber" />
+            <argument type="service" id="corelogger"/>
         </service>
 
         <service id="config_writer" class="Shopware\Components\ConfigWriter">
@@ -506,6 +511,10 @@
 
         <service id="shopware.plugin_payment_installer" class="Shopware\Components\Plugin\PaymentInstaller">
             <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware.http_cache.route_installer" class="Shopware\Components\HttpCache\CacheRouteInstaller">
+            <argument type="service" id="config_writer"/>
         </service>
 
         <service id="basket_persister" class="Shopware\Components\BasketSignature\BasketPersister">
@@ -694,8 +703,75 @@
         </service>
 
         <service id="shopware.model.search_builder" class="Shopware\Components\Model\SearchBuilder">
-            <argument id="shopware_searchdbal.search_term_helper" type="service"/>
+            <argument id="shopware_backend_searchdbal.search_term_helper" type="service"/>
         </service>
 
+        <service id="shopware_backend_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">
+            <argument type="service" id="config" />
+            <argument>false</argument>
+            <argument>false</argument>
+            <argument>false</argument>
+        </service>
+
+
+        <service id="shopware.routing.matchers.rewrite_matcher" class="Shopware\Components\Routing\Matchers\RewriteMatcher">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <tag name="router.matcher" priority="50"/>
+        </service>
+
+        <service id="shopware.routing.matchers.event_matcher" class="Shopware\Components\Routing\Matchers\EventMatcher">
+            <argument type="service" id="events"/>
+            <tag name="router.matcher" priority="40"/>
+        </service>
+
+        <service id="shopware.routing.matchers.default_matcher" class="Shopware\Components\Routing\Matchers\DefaultMatcher">
+            <argument type="service" id="dispatcher"/>
+            <tag name="router.matcher" priority="30"/>
+        </service>
+
+        <service id="shopware.routing.generators.rewrite_generator" class="Shopware\Components\Routing\Generators\RewriteGenerator">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <argument type="service" id="events"/>
+            <tag name="router.generator" priority="50"/>
+        </service>
+
+        <service id="shopware.routing.generators.default_generator" class="Shopware\Components\Routing\Generators\DefaultGenerator">
+            <argument type="service" id="dispatcher"/>
+            <tag name="router.generator" priority="40"/>
+        </service>
+
+        <service id="shopware.routing.pre_filter.default_pre_filter" class="Shopware\Components\Routing\GeneratorFilters\DefaultPreFilter">
+            <tag name="router.pre_filter" priority="50"/>
+        </service>
+        <service id="shopware.routing.pre_filter.frontend_pre_filter" class="Shopware\Components\Routing\GeneratorFilters\FrontendPreFilter">
+            <tag name="router.pre_filter" priority="40"/>
+        </service>
+
+        <service id="shopware.routing.post_filter.frontend_post_filter" class="Shopware\Components\Routing\GeneratorFilters\FrontendPostFilter">
+            <tag name="router.post_filter" priority="50"/>
+        </service>
+        <service id="shopware.routing.post_filter.default_post_filter" class="Shopware\Components\Routing\GeneratorFilters\DefaultPostFilter">
+            <tag name="router.post_filter" priority="40"/>
+        </service>
+
+        <service id="shopware.auth.validator.user_validator" class="Shopware\Components\Auth\Validator\UserValidator">
+            <argument type="service" id="validator"/>
+        </service>
+
+        <service id="shopware.auth.constraint.user_email_validator" class="Shopware\Components\Auth\Constraint\UserEmailValidator">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="validator.email"/>
+            <tag name="validator.constraint_validator" alias="UserEmailValidator" />
+        </service>
+
+        <service id="shopware.auth.constraint.user_name_validator" class="Shopware\Components\Auth\Constraint\UserNameValidator">
+            <argument type="service" id="snippets"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="validator.user_name"/>
+            <tag name="validator.constraint_validator" alias="UserNameValidator"/>
+        </service>
     </services>
 </container>

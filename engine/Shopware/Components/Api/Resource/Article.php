@@ -657,6 +657,7 @@ class Article extends Resource implements BatchInterface
             'name',
             'description',
             'descriptionLong',
+            'shippingTime',
             'keywords',
             'packUnit',
         ]);

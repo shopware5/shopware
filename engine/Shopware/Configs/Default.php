@@ -152,6 +152,43 @@ return array_replace_recursive([
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir() . '/html',
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
+/*
+ * The "ignored_url_parameters" configuration will spare your Shopware system from recaching a page when any
+ * of the parameters listed here is matched. This allows the caching system to be more efficient regarding  performance.
+ *
+ * Uncomment the following parameters to enable recommended suggestions.
+ * NOTE: The following set of parameters will be added as default in Shopware 5.4
+ */
+        'ignored_url_parameters' => [
+/*
+           'pk_campaign',    //Piwik
+           'piwik_campaign',
+           'pk_kwd',
+           'piwik_kwd',
+           'pk_keyword',
+           'pixelId',        //Yahoo
+           'kwid',
+           'kw',
+           'adid',
+           'chl',
+           'dv',
+           'nk',
+           'pa',
+           'camid',
+           'adgid',
+           'utm_term',       //Google
+           'utm_source',
+           'utm_medium',
+           'utm_campaign',
+           'utm_content',
+           'gclid',
+           'cx',
+           'ie',
+           'cof',
+           'siteurl',
+           '_ga',
+*/
+        ],
     ],
     'session' => [
         'cookie_lifetime' => 0,

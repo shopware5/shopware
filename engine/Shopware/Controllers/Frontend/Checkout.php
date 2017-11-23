@@ -1579,6 +1579,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return false;
         }
 
+        if (empty($userData['shippingaddress']['ustid']) &&
+            !empty($userData['billingaddress']['ustid']) &&
+            !empty($userData['additional']['country']['taxfree_ustid'])) {
+            return true;
+        }
+
         return !empty($userData['shippingaddress']['ustid']);
     }
 

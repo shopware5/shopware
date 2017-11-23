@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Manufacturer extends Extendable implements \JsonSerializable
+class Manufacturer extends Extendable
 {
     /**
      * Unique identifier of the manufacturer

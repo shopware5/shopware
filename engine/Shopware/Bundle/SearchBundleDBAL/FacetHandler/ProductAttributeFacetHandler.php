@@ -183,7 +183,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         $items = array_map(function ($row) use ($actives, $facet) {
             $viewName = $row[$facet->getField()];
-            $translation = $this->extractTranslations($row, $facet->getField());
+            $translation = $this->extractTranslations($row, '__attribute_' . $facet->getField());
             if ($translation !== null) {
                 $viewName = $translation;
             }
