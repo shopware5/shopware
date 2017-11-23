@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
-use Shopware\Components\Form as Form;
+use Shopware\Components\Form;
 
 /**
  * Interface Persister

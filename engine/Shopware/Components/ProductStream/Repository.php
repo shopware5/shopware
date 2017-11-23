@@ -133,9 +133,7 @@ SQL;
         $stmt = $this->conn->prepare($query);
         $stmt->execute(['productStreamId' => $productStreamId]);
 
-        $result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-
-        return $result;
+        return $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**

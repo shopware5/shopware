@@ -101,6 +101,8 @@ class Form extends Page implements HelperSelectorInterface
             Helper::throwException($message);
         }
 
+        $this->getSession()->wait(5000);
+
         /** @var NodeElement[] $elements */
         $elements = Helper::findElements($this, ['captchaPlaceholder']);
         if (empty($elements['captchaPlaceholder']->getText())) {

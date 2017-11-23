@@ -118,7 +118,6 @@ class SnippetsToSqlCommand extends ShopwareCommand
         $pluginBasePath = $pluginDirectories['Default'];
 
         foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
-            /** @var $pluginDir \SplFileInfo */
             foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
                 if ($pluginDir->isDot() || !$pluginDir->isDir()) {
                     continue;
@@ -139,9 +138,7 @@ class SnippetsToSqlCommand extends ShopwareCommand
      */
     protected function exportPlugins(InputInterface $input, OutputInterface $output, QueryHandler $queryLoader)
     {
-        $pluginRepository = $this->container->get('shopware.model_manager')->getRepository(
-            'Shopware\Models\Plugin\Plugin'
-        );
+        $pluginRepository = $this->container->get('shopware.model_manager')->getRepository(Plugin::class);
 
         /** @var Plugin[] $plugins */
         $plugins = $pluginRepository->findBy(['active' => true]);
@@ -149,7 +146,12 @@ class SnippetsToSqlCommand extends ShopwareCommand
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
         foreach ($plugins as $plugin) {
-            $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+            if ($plugin->getSource()) {
+                $directory = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace();
+            } else {
+                $directory = $pluginDirectories[$plugin->getNamespace()];
+            }
+            $pluginPath = $directory . DIRECTORY_SEPARATOR . $plugin->getName();
 
             $output->writeln('<info>Importing snippets for ' . $plugin->getName() . ' plugin</info>');
             $this->exportPluginSnippets($queryLoader, $pluginPath, $input->getArgument('file'));
@@ -179,7 +181,8 @@ class SnippetsToSqlCommand extends ShopwareCommand
         $queries = array_merge(
             $queryLoader->loadToQuery($path . '/Snippets/'),
             $queryLoader->loadToQuery($path . '/snippets/'),
-            $queryLoader->loadToQuery($path . '/Resources/snippet/')
+            $queryLoader->loadToQuery($path . '/Resources/snippet/'),
+            $queryLoader->loadToQuery($path . '/Resources/snippets/')
         );
 
         file_put_contents($file, implode(PHP_EOL, $queries), FILE_APPEND);

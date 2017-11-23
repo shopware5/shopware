@@ -47,6 +47,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     public function indexAction()
     {
         $this->View()->voteConfirmed = $this->isConfirmed();
+        $this->Request()->setParam('voteConfirmed', $this->View()->voteConfirmed);
         $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (isset($this->Request()->sUnsubscribe)) {

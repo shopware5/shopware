@@ -84,7 +84,7 @@ class SnippetsToDbCommand extends ShopwareCommand
 
         // Import plugin snippets
         if ($input->getOption('include-plugins')) {
-            $pluginRepository = $this->container->get('shopware.model_manager')->getRepository('Shopware\Models\Plugin\Plugin');
+            $pluginRepository = $this->container->get('shopware.model_manager')->getRepository(Plugin::class);
 
             /** @var Plugin[] $plugins */
             $plugins = $pluginRepository->findBy(['active' => true]);
@@ -95,14 +95,17 @@ class SnippetsToDbCommand extends ShopwareCommand
                 if (array_key_exists($plugin->getSource(), $pluginDirectories)) {
                     $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . '/' . $plugin->getName();
 
-                    $output->writeln('<info>Importing snippets for ' . $plugin->getName() . ' plugin</info>');
                     $databaseLoader->loadToDatabase($pluginPath . '/Snippets/', $force);
                     $databaseLoader->loadToDatabase($pluginPath . '/snippets/', $force);
                     $databaseLoader->loadToDatabase($pluginPath . '/Resources/snippet/', $force);
+
+                    $output->writeln('<info>Importing snippets for ' . $plugin->getName() . ' plugin</info>');
                 }
 
                 if ($plugin = $this->getPlugin($plugin->getName())) {
                     $databaseLoader->loadToDatabase($plugin->getPath() . '/Resources/snippets/', $force);
+
+                    $output->writeln('<info>Importing snippets for ' . $plugin->getName() . ' plugin</info>');
                 }
             }
             $output->writeln('<info>Plugin snippets processed correctly</info>');

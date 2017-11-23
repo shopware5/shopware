@@ -36,9 +36,8 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
         /** @var $repository \Shopware\Models\Emotion\Repository */
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
-        $emotion = $query->getQuery()->getArrayResult();
 
-        return $emotion;
+        return $query->getQuery()->getArrayResult();
     }
 
     public function indexAction()

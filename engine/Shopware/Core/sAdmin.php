@@ -853,11 +853,6 @@ class sAdmin
             );
             $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sUSERGROUPDATA ?: [];
 
-            if ($this->sSYSTEM->sUSERGROUPDATA['mode']) {
-                $this->sSYSTEM->sUSERGROUP = 'EK';
-            } else {
-                $this->sSYSTEM->sUSERGROUP = $getUser['customergroup'];
-            }
             $this->sSYSTEM->sUSERGROUP = $getUser['customergroup'];
 
             $this->session->offsetSet('sUserGroup', $this->sSYSTEM->sUSERGROUP);
@@ -2255,7 +2250,7 @@ class sAdmin
             $errorFlag = [];
             $config = Shopware()->Container()->get('config');
 
-            if ($this->shouldVerifyCaptcha($config)) {
+            if ($this->shouldVerifyCaptcha($config) && $this->front->Request()->getParam('voteConfirmed', false) == false) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 

@@ -28,8 +28,7 @@ use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Theme;
-use Shopware\Models\Shop as Shop;
+use Shopware\Models\Shop;
 
 /**
  * The Theme\Inheritance class is used to

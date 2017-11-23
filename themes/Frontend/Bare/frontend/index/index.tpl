@@ -167,6 +167,12 @@
                 asyncCallbacks.push(callback);
             };
 
+            var statisticDevices = [
+                { device: 'mobile', enter: 0, exit: 767 },
+                { device: 'tablet', enter: 768, exit: 1259 },
+                { device: 'desktop', enter: 1260, exit: 5160 }
+            ];
+
             var controller = controller || {ldelim}
                 'vat_check_enabled': '{config name='vatcheckendabled'}',
                 'vat_check_required': '{config name='vatcheckrequired'}',

@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\Sorting\RandomSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService;
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config as ShopwareConfig;
@@ -59,19 +59,19 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     private $shopwareConfig;
 
     /**
-     * @var AdditionalTextService
+     * @var AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
     /**
      * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
      * @param ShopwareConfig                     $shopwareConfig
-     * @param AdditionalTextService              $additionalTextService
+     * @param AdditionalTextServiceInterface     $additionalTextService
      */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
         ShopwareConfig $shopwareConfig,
-        AdditionalTextService $additionalTextService
+        AdditionalTextServiceInterface $additionalTextService
     ) {
         $this->criteriaFactory = $criteriaFactory;
 

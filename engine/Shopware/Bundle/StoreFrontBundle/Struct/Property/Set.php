@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Set extends Extendable implements \JsonSerializable
+class Set extends Extendable
 {
     /**
      * Constant for the alphanumeric sort configuration of the category filters

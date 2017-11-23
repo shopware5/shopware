@@ -1039,7 +1039,7 @@ class sBasket
      * Fetch count of products in basket
      * Used in multiple locations
      *
-     * @return array Number
+     * @return int
      */
     public function sCountBasket()
     {
@@ -2476,9 +2476,7 @@ class sBasket
             ['subject' => $this]
         );
 
-        $getArticles = $this->db->fetchAll($sql, [$this->session->get('sessionId')]);
-
-        return $getArticles;
+        return $this->db->fetchAll($sql, [$this->session->get('sessionId')]);
     }
 
     /**

@@ -217,6 +217,8 @@ class ShopIndexer implements ShopIndexerInterface
             $last = array_pop($backlogs);
             $lastId = $last->getId();
         }
+
+        $this->backlogReader->setLastBacklogId($lastId);
     }
 
     /**

@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceDiscount extends Extendable implements \JsonSerializable
+class PriceDiscount extends Extendable
 {
     /**
      * @var int

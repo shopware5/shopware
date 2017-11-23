@@ -138,7 +138,7 @@
                     window.controller = window.snippets = window.themeConfig = window.lastSeenProductsConfig = window.csrfConfig = null;
                     $(me.opts.footerJavascriptInlineSelector).replaceWith($response.filter(me.opts.footerJavascriptInlineSelector));
 
-                    StateManager.addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
+                    StateManager.addPlugin('*[data-image-slider="true"]', 'swImageSlider')
                         .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')
                         .addPlugin('*[data-image-gallery="true"]', 'swImageGallery')
                         .addPlugin('*[data-add-article="true"]', 'swAddArticle')
