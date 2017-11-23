@@ -66,13 +66,15 @@ class Enlight_Template_Manager extends Smarty
      */
     public function __construct($options = null)
     {
+        $cacheOptions = Shopware()->Container()->getParameter('shopware.cache');
+        
         // self pointer needed by some other class methods
         $this->smarty = $this;
 
         $this->start_time = microtime(true);
 
-        $this->_file_perms = 0666 & ~umask();
-        $this->_dir_perms = 0777 & ~umask();
+        $this->_file_perms = $cacheOptions['backendOptions']['cache_file_perm'];
+        $this->_dir_perms = $cacheOptions['backendOptions']['hashed_directory_perm'];
 
         // set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
