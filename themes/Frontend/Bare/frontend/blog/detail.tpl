@@ -14,10 +14,12 @@
 
                 {* Rich snippets *}
                 {block name='frontend_blog_detail_rich_snippets'}
-                    {if $sArticle.author.name}
-                        <meta itemprop="author" content="{$sArticle.author.name}">
-                    {/if}
-
+                    <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="{{config name=sShopname}|escapeHtml}">
+                        <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                            <meta itemprop="url" content="{link file=$theme.desktopLogo fullPath}">
+                        </div>
+                    </div>
                     <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
                 {/block}
 
@@ -27,7 +29,7 @@
 
                         {* Article name *}
                         {block name='frontend_blog_detail_title'}
-                            <h1 class="blog--detail-headline" itemprop="name">{$sArticle.title}</h1>
+                            <h1 class="blog--detail-headline" itemprop="headline">{$sArticle.title}</h1>
                         {/block}
 
                         {* Metadata *}
@@ -37,13 +39,13 @@
                                 {* Author *}
                                 {block name='frontend_blog_detail_author'}
                                     {if $sArticle.author.name}
-                                        <span class="blog--metadata-author blog--metadata is--first">{s name="BlogInfoFrom"}{/s}: {$sArticle.author.name}</span>
+                                        <span class="blog--metadata-author blog--metadata is--first" itemprop="author" itemscope itemtype="https://schema.org/Person">{s name="BlogInfoFrom"}{/s}: <span itemprop="name">{$sArticle.author.name}</span></span>
                                     {/if}
                                 {/block}
 
                                 {* Date *}
                                 {block name='frontend_blog_detail_date'}
-                                    <span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}" itemprop="dateCreated">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+                                    <span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}" itemprop="datePublished" content="{$sArticle.displayDate->format(DateTime::ATOM)|escapeHtml}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
                                 {/block}
 
                                 {* Category *}
