@@ -87,9 +87,10 @@ class Container extends BaseContainer
      */
     public function has($name)
     {
+        $fallbackName = $this->getFormattedId($name);
         $name = $this->getNormalizedId($name);
 
-        return isset($this->services[$name]) || $this->doLoad($name);
+        return isset($this->services[$name]) || $this->doLoad($name, $fallbackName);
     }
 
     /**
@@ -112,9 +113,19 @@ class Container extends BaseContainer
      *
      * @return string
      */
+    public function getFormattedId($id)
+    {
+        return strtolower($id);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return string
+     */
     public function getNormalizedId($id)
     {
-        $id = strtolower($id);
+        $id = $this->getFormattedId($id);
 
         if (isset($this->aliases[$id])) {
             $id = $this->aliases[$id];
@@ -137,13 +148,14 @@ class Container extends BaseContainer
      */
     public function get($name, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
+        $fallbackName = $this->getFormattedId($name);
         $name = $this->getNormalizedId($name);
 
         if (isset($this->services[$name])) {
             return $this->services[$name];
         }
 
-        return $this->doLoad($name, $invalidBehavior);
+        return $this->doLoad($name, $fallbackName, $invalidBehavior);
     }
 
     /**
@@ -158,13 +170,14 @@ class Container extends BaseContainer
      */
     public function load($name)
     {
+        $fallbackName = $this->getFormattedId($name);
         $name = $this->getNormalizedId($name);
 
         if (isset($this->services[$name])) {
             return true;
         }
 
-        return $this->doLoad($name) !== null;
+        return $this->doLoad($name, $fallbackName) !== null;
     }
 
     /**
@@ -192,13 +205,14 @@ class Container extends BaseContainer
 
     /**
      * @param string $id              already normalized
+     * @param string $fallbackName    already normalized, to fire Events for the original servicename
      * @param int    $invalidBehavior
      *
      * @throws ServiceCircularReferenceException
      *
      * @return mixed
      */
-    private function doLoad($id, $invalidBehavior = self::NULL_ON_INVALID_REFERENCE)
+    private function doLoad($id, $fallbackName = null, $invalidBehavior = self::NULL_ON_INVALID_REFERENCE)
     {
         $eventManager = parent::get('events');
 
@@ -224,6 +238,13 @@ class Container extends BaseContainer
                 $eventManager->notify(
                     'Enlight_Bootstrap_AfterInitResource_' . $id, ['subject' => $this]
                 );
+
+                if(!empty($fallbackName) )
+                {
+                    $eventManager->notify(
+                        'Enlight_Bootstrap_AfterInitResource_' . $fallbackName, ['subject' => $this]
+                    );
+                }
             }
         }
 
