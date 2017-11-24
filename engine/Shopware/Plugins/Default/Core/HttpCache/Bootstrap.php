@@ -284,7 +284,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return $proxyUrl;
         }
 
-        // if proxy url is not set fall back to host detection
+        // If proxy url is not set fall back to host detection
         if ($request !== null && $request->getHttpHost()) {
             return $request->getScheme() . '://'
                    . $request->getHttpHost()
@@ -293,7 +293,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         /** @var ModelManager $em */
         $em = $this->get('models');
-        $repository = $em->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $em->getRepository(\Shopware\Models\Shop\Shop::class);
 
         /** @var Shopware\Models\Shop\Shop $shop */
         $shop = $repository->findOneBy(['default' => true]);
@@ -316,6 +316,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * Do http caching jobs
      *
      * @param Enlight_Controller_ActionEventArgs $args
+     *
+     * @throws \Enlight_Exception
      */
     public function onPreDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
@@ -339,6 +341,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * On post dispatch we try to find affected articleIds displayed during this request
      *
      * @param \Enlight_Controller_ActionEventArgs $args
+     *
+     * @throws \Exception
+     * @throws \SmartyException
+     * @throws \Enlight_Event_Exception
      */
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
@@ -354,7 +360,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return;
         }
 
-        if ($this->request->getModuleName() != 'frontend' && $this->request->getModuleName() != 'widgets') {
+        if (!in_array($this->request->getModuleName(), ['frontend', 'widgets'], true)) {
             return;
         }
 
@@ -382,6 +388,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @param Shopware_Components_Cron_CronJob $job
      *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     *
      * @return string
      */
     public function onClearHttpCache(\Shopware_Components_Cron_CronJob $job)
@@ -402,6 +412,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * </code>
      *
      * @param \Enlight_Event_EventArgs $args
+     *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function onClearCache(\Enlight_Event_EventArgs $args)
     {
@@ -424,6 +438,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * </code>
      *
      * @param \Enlight_Event_EventArgs $args
+     *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function onInvalidateCacheId(\Enlight_Event_EventArgs $args)
     {
@@ -440,6 +458,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * Sets the shopware cache headers
+     *
+     * @throws \Enlight_Event_Exception
      */
     public function setCacheHeaders()
     {
@@ -479,7 +499,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * This methods sets the nocache-cookie if actions in the shop are triggerd
+     * This methods sets the nocache-cookie if actions in the shop are triggered
      */
     public function setNoCacheCookie()
     {
@@ -547,6 +567,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * Register the action plugin override
+     *
+     * @throws \SmartyException
      */
     public function registerEsiRenderer()
     {
@@ -613,9 +635,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * Helper function to flag the request with cacheIds
      * to invalidate the caching.
      *
-     * @param array $cacheIds
+     * @param string[] $cacheIds
+     *
+     * @throws \Enlight_Event_Exception
      */
-    public function setCacheIdHeader($cacheIds = [])
+    public function setCacheIdHeader(array $cacheIds = [])
     {
         $cacheIds = $this->Application()->Events()->filter(
             'Shopware_Plugins_HttpCache_GetCacheIds',
@@ -627,14 +651,17 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return;
         }
 
-        $cacheIds = ';' . implode(';', $cacheIds) . ';';
-        $this->response->setHeader('x-shopware-cache-id', $cacheIds);
+        $this->response->setHeader('x-shopware-cache-id', ';' . implode(';', $cacheIds) . ';');
     }
 
     /**
      * Execute cache invalidation after Doctrine flush
      *
      * @param EventArgs $eventArgs
+     *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function postFlush(EventArgs $eventArgs)
     {
@@ -648,7 +675,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Cache invalidation based on model events
      *
+     *
      * @param Enlight_Event_EventArgs $eventArgs
+     *
+     * @throws \Exception
      */
     public function onPostPersist(Enlight_Event_EventArgs $eventArgs)
     {
@@ -662,12 +692,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         } else {
             $entityName = get_class($entity);
         }
-        
+
         if (Shopware()->Events()->notifyUntil(
             'Shopware_Plugins_HttpCache_ShouldNotInvalidateCache',
             [
                 'entity' => $entity,
-                'entityName' => $entityName
+                'entityName' => $entityName,
             ]
         )) {
             return;
@@ -714,8 +744,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Helper function to enable the http cache for a single shopware controller.
      *
-     * @param int   $cacheTime
-     * @param array $cacheIds
+     * @param int      $cacheTime
+     * @param string[] $cacheIds
+     *
+     * @throws \Enlight_Event_Exception
      */
     public function enableControllerCache($cacheTime = 3600, $cacheIds = [])
     {
@@ -731,6 +763,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->response->setHeader('Cache-Control', 'private', true);
     }
 
+    /**
+     * @param Enlight_Controller_Response_ResponseHttp $response
+     *
+     * @return null|string
+     */
     private function getResponseCookie(Response $response)
     {
         $cookies = $response->getCookies();
@@ -746,6 +783,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Clears the cache
      *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     *
      * @return bool
      */
     private function clearCache()
@@ -760,6 +801,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * the $cacheId in the x-shopware-invalidates http-header
      *
      * @param string $cacheId
+     *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      *
      * @return bool
      */
@@ -778,6 +823,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @param string $cacheId If set, only pages including these cacheIds will be invalidated
      *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     *
      * @return bool True will be returned, if *all* operations succeeded
      */
     private function invalidate($cacheId = null)
@@ -787,11 +836,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
         }
 
+        // First we try to clear the cache directly
         if ($this->get('service_container')->has('httpCache')) {
             return $this->invalidateWithStore($cacheId);
         }
 
-        // if no explicit proxy was configured + no host is configured
+        // If we can't clear the cache directly, we fire a BAN-Request to do the job
         $proxyUrl = $this->getProxyUrl($this->request);
         if ($proxyUrl !== null) {
             return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
@@ -801,17 +851,17 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * @param string $urls    Comma separated URLs
+     * @param string $urlString Comma separated URLs
      * @param string $cacheId
      *
      * @return bool
      */
-    private function invalidateWithBANRequest($urls, $cacheId)
+    private function invalidateWithBANRequest($urlString, $cacheId)
     {
-        // expand + trim proxies (comma separated)
+        // Expand + trim proxies (comma separated)
         $urls = array_map(
             'trim',
-            explode(',', $urls)
+            explode(',', $urlString)
         );
 
         $success = true;
@@ -843,7 +893,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * @param string $cacheId
+     * @param null|string $cacheId
      *
      * @return bool
      */
@@ -879,6 +929,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @param Request $request A Request instance
      *
+     * @throws \Exception
+     *
      * @return bool true if one surrogate has ESI/1.0 capability, false otherwise
      */
     private function hasSurrogateEsiCapability(Request $request)
@@ -895,6 +947,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @param Request  $request
      * @param Response $response
+     *
+     * @throws \Enlight_Event_Exception
      */
     private function addContextCookie(Request $request, Response $response)
     {
