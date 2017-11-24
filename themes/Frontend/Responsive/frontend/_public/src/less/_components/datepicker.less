@@ -278,7 +278,7 @@ The datepicker is based on the jQuery Plugin [flatpickr](https://github.com/chml
     .unitize(top, 10);
     font-size: 135%;
     line-height: inherit;
-    font-weight: 300;
+    font-weight: @font-light-weight;
     color: inherit;
     position: absolute;
     width: 75%;
@@ -290,7 +290,7 @@ The datepicker is based on the jQuery Plugin [flatpickr](https://github.com/chml
 .flatpickr-current-month span.cur-month {
     .unitize(margin-right, 10);
     font-family: inherit;
-    font-weight: 700;
+    font-weight: @font-bold-weight;
     color: inherit;
     display: inline-block;
     padding: 0;
@@ -320,7 +320,7 @@ The datepicker is based on the jQuery Plugin [flatpickr](https://github.com/chml
     display: inline;
     font-size: inherit;
     font-family: inherit;
-    font-weight: 300;
+    font-weight: @font-light-weight;
     line-height: inherit;
     height: initial;
     border: 0;
@@ -376,7 +376,7 @@ The datepicker is based on the jQuery Plugin [flatpickr](https://github.com/chml
     box-sizing: border-box;
     color: @text-color;
     cursor: pointer;
-    font-weight: 400;
+    font-weight: @font-base-weight;
     width: 14.2857143%;
     flex-basis: 14.2857143%;
     display: inline-block;
@@ -501,7 +501,7 @@ span.flatpickr-weekday {
     display: block;
     float: left;
     width: 14.28%;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
     padding-top: 3.333333333333333px;
 }
 
@@ -608,12 +608,12 @@ span.flatpickr-weekday {
 }
 
 .flatpickr-time input.flatpickr-hour {
-    font-weight: bold;
+    font-weight: @font-bold-weight;
 }
 
 .flatpickr-time input.flatpickr-minute,
 .flatpickr-time input.flatpickr-second {
-    font-weight: 400;
+    font-weight: @font-base-weight;
 }
 
 .flatpickr-time input:focus {
@@ -629,7 +629,7 @@ span.flatpickr-weekday {
     float: left;
     line-height: inherit;
     color: @text-color;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
     width: 2%;
 }
 
@@ -638,7 +638,7 @@ span.flatpickr-weekday {
     width: 18%;
     cursor: pointer;
     text-align: center;
-    font-weight: 400;
+    font-weight: @font-base-weight;
 }
 
 .flatpickr-time .flatpickr-am-pm:hover,

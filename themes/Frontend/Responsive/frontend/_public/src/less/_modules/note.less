@@ -57,7 +57,7 @@ The styling also contains the viewport specific styles inside media queries.
     .unitize-margin(0, 0, 5, 95);
     .unitize(font-size, 18);
     display: block;
-    font-weight: 700;
+    font-weight: @font-bold-weight;
     color: @text-color-dark;
 
     &:hover {
@@ -124,7 +124,7 @@ The styling also contains the viewport specific styles inside media queries.
     .unitize(font-size, 18);
     .unitize-margin(15, 0, 0, 95);
     color: @text-color-dark;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
 }
 
 .note--delete {
@@ -141,7 +141,7 @@ The styling also contains the viewport specific styles inside media queries.
     position: absolute;
     border: 1px solid @btn-default-border-color;
     text-align: center;
-    font-weight: normal;
+    font-weight: @font-base-weight;
     color: @text-color;
 
     &:hover {

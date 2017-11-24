@@ -53,7 +53,7 @@ Styling options: `has--border` and `has--shadow`
     background: @panel-header-bg;
     display: block;
     margin: 0;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
     color: @panel-header-color;
     border-bottom: 1px solid @panel-border;
 
@@ -85,7 +85,7 @@ Styling options: `has--border` and `has--shadow`
     .unitize-margin(0, 20);
     .unitize(font-size, 16);
     display: block;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
     color: @text-color-dark;
 
     &.is--underline {
@@ -254,7 +254,7 @@ Styling options: `has--border` and `has--shadow`
 }
 
 .panel--th {
-    font-weight: bold;
+    font-weight: @font-bold-weight;
     color: @text-color-dark;
 }
 
@@ -313,7 +313,7 @@ Styling options: `has--border` and `has--shadow`
         .border-radius();
 		.linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
         display: inline-block;
-        font-weight: normal;
+        font-weight: @font-base-weight;
         text-align: center;
 		border: 1px solid @btn-default-border-color;
 		color: @btn-default-text-color;
@@ -328,7 +328,7 @@ Styling options: `has--border` and `has--shadow`
 			.linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
 			color: @btn-primary-text-color;
 			border: 0 none;
-			font-weight: bold;
+			font-weight: @font-bold-weight;
 			cursor: default;
         }
 

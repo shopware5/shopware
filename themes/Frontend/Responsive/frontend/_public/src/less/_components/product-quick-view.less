@@ -33,7 +33,7 @@ The product quick-view is an element during the checkout process in Shopware 5 t
         .unitize(font-size, 18);
         color: @brand-secondary-dark;
         display: block;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
 
         &:hover {
             color: @brand-primary;
@@ -43,7 +43,7 @@ The product quick-view is an element during the checkout process in Shopware 5 t
     .quick-view--supplier {
         .unitize(font-size, 14);
         .unitize-padding(10, 0, 5, 0);
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 
     .quick-view--description-title {
@@ -52,7 +52,7 @@ The product quick-view is an element during the checkout process in Shopware 5 t
         .unitize(margin-top, 15);
         color: @brand-secondary-dark;
         border-bottom: 1px solid @border-color;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         clear: both;
     }
 
