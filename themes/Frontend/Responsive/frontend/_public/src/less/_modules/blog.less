@@ -33,7 +33,7 @@ More precise designations are commented inside the document.
         .secondary-gradient();
         display: block;
         color: #fff;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
 
         &:hover {
             color: #fff;
@@ -53,7 +53,7 @@ More precise designations are commented inside the document.
         .unitize(font-size, 16);
         .unitize(line-height, 26);
         .unitize-margin(16, 10, 6, 10);
-        font-weight: 700;
+        font-weight: @font-bold-weight;
         color: @text-color-dark;
     }
 
@@ -94,7 +94,7 @@ More precise designations are commented inside the document.
         .collapse--header {
             .unitize-padding(10, 20, 10, 20, 16);
             .unitize(margin-bottom, 5);
-            font-weight: normal;
+            font-weight: @font-base-weight;
             color: @text-color;
 
             &:hover {
@@ -104,7 +104,7 @@ More precise designations are commented inside the document.
 
         .is--active {
             color: #fff;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
 
             &:hover {
                 color: #fff;
@@ -462,7 +462,7 @@ More precise designations are commented inside the document.
                 border-color: @border-color;
                 border-width: 0 0 1px 0;
                 display: block;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
                 background: none;
                 box-shadow: none;
                 cursor: default;

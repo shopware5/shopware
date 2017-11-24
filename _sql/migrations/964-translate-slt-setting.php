@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,8 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-//{block name="backend/form/store/shop"}
-Ext.define('Shopware.apps.Form.store.Shop', {
-    extend: 'Shopware.apps.Base.store.ShopLanguage'
-});
-//{/block}
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration964 extends AbstractMigration
+{
+    public function up($modus)
+    {
+        $sql = <<<'EOD'
+SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'useSltCookie' LIMIT 1);
+INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementId, 2, 'Create Shopware Login Cookie', 'A cookie is stored, where the user can be identified again. This cookie is only used for setting the current customer group and the active Customer Streams');
+EOD;
+        $this->addSql($sql);
+    }
+}

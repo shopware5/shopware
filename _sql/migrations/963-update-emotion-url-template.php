@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,8 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-//{block name="backend/form/store/shop"}
-Ext.define('Shopware.apps.Form.store.Shop', {
-    extend: 'Shopware.apps.Base.store.ShopLanguage'
-});
-//{/block}
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration963 extends AbstractMigration
+{
+    public function up($modus)
+    {
+        $template = serialize('{$campaign.name}');
+        $this->addSql('SET @id = (SELECT `id` FROM `s_core_config_elements` WHERE `name`="routercampaigntemplate");');
+        $this->addSql(sprintf("UPDATE `s_core_config_elements` SET `value`='%s' WHERE `id`=@id AND md5(`value`)='bbd170aeaa1f52b8c372b32d8c853e9e'", $template));
+        $this->addSql(sprintf("UPDATE `s_core_config_values` SET `value`='%s' WHERE `element_id`=@id AND md5(`value`)='bbd170aeaa1f52b8c372b32d8c853e9e'", $template));
+        // 'bbd170aeaa1f52b8c372b32d8c853e9e' = md5('s:64:"{sCategoryPath categoryID=$campaign.categoryId}/{$campaign.name}";')
+    }
+}
