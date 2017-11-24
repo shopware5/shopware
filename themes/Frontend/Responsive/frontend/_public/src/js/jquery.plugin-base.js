@@ -46,6 +46,16 @@
     }
 
     /**
+     * Replaces uppercase characters with a dash and its lowercase character.
+     *
+     * @param {String} key
+     * @returns {String}
+     */
+    function normaliseKey(key) {
+        return key.replace(/([A-Z])/g, '-$1').toLowerCase();
+    }
+
+    /**
      * Constructor method of the PluginBase class. This method will try to
      * call the ```init```-method, where you can place your custom initialization of the plugin.
      *
@@ -305,7 +315,12 @@
                 attr = me.$el.attr('data-' + key);
 
                 if (typeof attr === 'undefined') {
-                    return true;
+                    var normalisedKey = normaliseKey(key);
+                    attr = me.$el.attr('data-' + normalisedKey);
+
+                    if (typeof attr === 'undefined') {
+                        return true;
+                    }
                 }
 
                 me.opts[key] = shouldDeserialize !== false ? deserializeValue(attr) : attr;
