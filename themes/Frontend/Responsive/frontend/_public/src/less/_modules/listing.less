@@ -32,7 +32,7 @@ It contains the viewport specific styles inside media queries.
         .content--title {
             .unitize(font-size, 18);
             .unitize-margin(10, 0, 15, 0);
-            font-weight: 700;
+            font-weight: @font-bold-weight;
             color: @text-color-dark;
         }
     }
@@ -118,7 +118,7 @@ It contains the viewport specific styles inside media queries.
         .secondary-gradient();
         display: block;
         color: #fff;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
 
         &:hover {
             color: #fff;
@@ -477,7 +477,7 @@ It contains the viewport specific styles inside media queries.
         .sort--label {
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
 
         .sort--select {
@@ -491,7 +491,7 @@ It contains the viewport specific styles inside media queries.
         .per-page--label {
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
     }
 
@@ -501,7 +501,7 @@ It contains the viewport specific styles inside media queries.
 
         .paging--label {
             .unitize-margin(0, 10, 0, 0);
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
 
         .paging--display {

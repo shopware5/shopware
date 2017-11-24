@@ -118,7 +118,7 @@ class Status extends ModelEntity
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
-    private $description;
+    private $description = '';
 
     /**
      * @var int

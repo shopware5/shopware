@@ -55,8 +55,9 @@ class CacheControl
     private $eventManager;
 
     /**
-     * @param Session         $session
-     * @param HttpCacheConfig $config
+     * @param Session                     $session
+     * @param HttpCacheConfig             $config
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(Session $session, HttpCacheConfig $config, \Enlight_Event_EventManager $eventManager)
     {
@@ -98,7 +99,7 @@ class CacheControl
      *
      * @param Request  $request
      * @param Response $response
-     * @param $shopId
+     * @param int      $shopId
      *
      * @return bool
      */
@@ -123,11 +124,10 @@ class CacheControl
         }
 
         $controller = $this->getControllerRoute($request);
-        if ($controller === 'widgets/checkout' && (!empty($this->session->offsetGet('sBasketQuantity')) || !empty($this->session->offsetGet('sNotesQuantity')))) {
-            return true;
-        }
 
-        return false;
+        return $controller === 'widgets/checkout' &&
+            (!empty($this->session->offsetGet('sBasketQuantity')) ||
+            !empty($this->session->offsetGet('sNotesQuantity')));
     }
 
     /**
@@ -179,7 +179,7 @@ class CacheControl
      * @param Request              $request
      * @param ShopContextInterface $context
      *
-     * @return \string[]
+     * @return string[]
      */
     public function getTagsForNoCacheCookie(Request $request, ShopContextInterface $context)
     {
@@ -198,8 +198,8 @@ class CacheControl
             $tags[] = 'slt';
         }
 
-        if (strtolower($request->getModuleName()) === 'frontend' && !empty($this->session->Admin)) {
-            // set admin-cookie if admin session is present
+        if (!empty($this->session->Admin) && strtolower($request->getModuleName()) === 'frontend') {
+            // Set admin-cookie if admin session is present
             $tags[] = 'admin';
         }
 
@@ -257,6 +257,7 @@ class CacheControl
      * Defines if the provided route should add the nocache parameter for the generated esi url
      *
      * @param Request $request
+     * @param string  $targetName
      *
      * @return bool
      */
@@ -269,13 +270,20 @@ class CacheControl
         return isset($autoNoCacheControls) && isset($tags[$targetName]) && !empty(array_intersect($autoNoCacheControls, $tags[$targetName]));
     }
 
+    /**
+     * @param Request              $request
+     * @param ShopContextInterface $context
+     * @param Response             $response
+     *
+     * @throws \Enlight_Event_Exception
+     */
     public function setContextCacheKey(Request $request, ShopContextInterface $context, Response $response)
     {
         $session = $this->session;
 
         $customerGroup = $session->offsetGet('sUserGroup');
 
-        //not logged in => reset global context cookie
+        // Not logged in => reset global context cookie
         if (!$customerGroup) {
             $this->resetCookies($request, $response);
 
@@ -307,6 +315,11 @@ class CacheControl
         return null;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
     private function getActionRoute(Request $request)
     {
         return implode('/', [
@@ -316,6 +329,11 @@ class CacheControl
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
     private function getControllerRoute(Request $request)
     {
         return implode('/', [
@@ -336,14 +354,14 @@ class CacheControl
 
         $cookieTags = $this->getNoCacheTagsFromCookie($request);
 
-        //has cookie tag?
+        // Has cookie tag?
         return !empty(array_intersect($routeTags, $cookieTags));
     }
 
     /**
-     * Returns an array with cachable controllernames.
+     * Returns an array with cachable controller names.
      *
-     * Array-Key is controllername
+     * Array-Key is controller name
      * Array-Value is ttl
      *
      * <code>
@@ -375,9 +393,9 @@ class CacheControl
     }
 
     /**
-     * Returns an mapping array with nocache-tags to controllernames
+     * Returns an mapping array with nocache-tags to controller names
      *
-     * Array-Key is controllername
+     * Array-Key is controller name
      * Array-Value is cache tag
      *
      * <code>
@@ -437,7 +455,7 @@ class CacheControl
     }
 
     /**
-     * Validates if the provided request is a cacheable route which should not be cached if a specify tag is set
+     * Validates if the provided request is a cachable route which should not be cached if a specify tag is set
      * and the request contains the nocache parameter as get parameter
      *
      * @param Request $request
@@ -471,6 +489,8 @@ class CacheControl
      * @param Request              $request
      * @param ShopContextInterface $context
      * @param Response             $response
+     *
+     * @throws \Enlight_Event_Exception
      */
     private function setContextCookie(Request $request, ShopContextInterface $context, Response $response)
     {

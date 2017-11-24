@@ -309,7 +309,7 @@ class PluginInstaller
                 'capability_secure_uninstall' => true,
                 'refresh_date' => $refreshDate,
                 'translations' => $translations ? json_encode($translations) : null,
-                'changes' => $info['changelog'] ? json_encode($info['changelog']) : null,
+                'changes' => isset($info['changelog']) ? json_encode($info['changelog']) : null,
             ];
 
             if ($currentPluginInfo) {
