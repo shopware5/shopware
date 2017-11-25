@@ -151,6 +151,8 @@ class SitePageMenu
             }
 
             $site['childrenCount'] = count($site['subPages']);
+            
+            $site['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $id);
 
             $result[$id] = $site;
         }
