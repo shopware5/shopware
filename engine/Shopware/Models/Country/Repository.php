@@ -277,4 +277,37 @@ class Repository extends ModelRepository
                 ->where('states.countryId = ?1')
                 ->setParameter(1, $countryId);
     }
+
+    /**
+     * Returns an instance of \Doctrine\ORM\Query object which selects a
+     * list of countries for the passed area id.
+     *
+     * @param $stateId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getStateAttributesQuery($stateId)
+    {
+        $builder = $this->getStateAttributesQueryBuilder($stateId);
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getShopsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $stateId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getStateAttributesQueryBuilder($stateId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        return $builder->select(['attribute'])
+                         ->from('Shopware\Models\Attribute\CountryState', 'attribute')
+                         ->where('attribute.countryStateId = ?1')
+                         ->setParameter(1, $stateId);
+    }
 }
