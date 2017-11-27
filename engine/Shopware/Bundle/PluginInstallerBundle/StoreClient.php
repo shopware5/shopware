@@ -388,27 +388,18 @@ class StoreClient
      *
      * @param RequestException $requestException
      *
-     * @throws Exception
-     * @throws SbpServerException
-     * @throws AuthenticationException
-     * @throws AccountException
-     * @throws OrderException
-     * @throws LicenceException
-     * @throws StoreException
-     * @throws DomainVerificationException
-     *
      * @return Exception
      */
     private function handleRequestException(RequestException $requestException)
     {
         if (!$requestException->getBody()) {
-            throw $requestException;
+            return $requestException;
         }
 
         $data = json_decode($requestException->getBody(), true);
 
         if (!isset($data['code'])) {
-            throw $requestException;
+            return $requestException;
         }
 
         $httpCode = array_key_exists('error', $data) ? $data['error'] : 0;
