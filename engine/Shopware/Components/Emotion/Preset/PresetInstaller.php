@@ -52,7 +52,7 @@ class PresetInstaller
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $presetMetaData
      */
     public function installOrUpdate(array $presetMetaData)
     {
@@ -85,7 +85,7 @@ class PresetInstaller
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $presetNames
      */
     public function uninstall(array $presetNames)
     {

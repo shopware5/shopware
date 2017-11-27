@@ -25,7 +25,6 @@
 namespace Shopware\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\NoResultException;
 use RuntimeException;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;

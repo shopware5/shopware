@@ -452,7 +452,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return Article
      */
     public function getArticle()
     {
@@ -462,7 +462,7 @@ class Template extends ModelEntity
     /**
      * @param $article
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return Template
      */
     public function setArticle($article)
     {
@@ -472,7 +472,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Template
+     * @return Template
      */
     public function getAttribute()
     {
@@ -482,7 +482,7 @@ class Template extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Template|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Template
+     * @return Template
      */
     public function setAttribute($attribute)
     {
