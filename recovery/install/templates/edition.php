@@ -20,9 +20,9 @@
         <?= $t->t('edition_cm') ?>
     </label>
 
-    <div id="license"<?= ($parameters["c_edition"] === 'cm') ? "" : " class=\"is--hidden\"" ?>>
-        <label for="c_license" class="label--license"><?= $t->t("edition_license") ?></label>
-        <textarea class="license--agreement" id="c_license" name="c_license" rows="3"><?= $parameters["c_license"] ?></textarea>
+    <div id="license"<?= ($parameters['c_edition'] === 'cm') ? '' : ' class="is--hidden"' ?>>
+        <label for="c_license" class="label--license"><?= $t->t('edition_license') ?></label>
+        <textarea class="license--agreement" id="c_license" name="c_license" rows="3"><?= $parameters['c_license'] ?></textarea>
     </div>
 
     <div class="actions clearfix">

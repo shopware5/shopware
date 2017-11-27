@@ -10,7 +10,7 @@
 
 <form action="<?= $menuHelper->getCurrentUrl() ?>" method="post">
     <p>
-        <?= $t->t("configuration_sconfig_text"); ?>
+        <?= $t->t('configuration_sconfig_text'); ?>
     </p>
 
     <p>

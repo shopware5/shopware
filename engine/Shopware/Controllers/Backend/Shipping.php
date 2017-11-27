@@ -346,7 +346,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
     /**
      * Get all countries who are selected for this dispatch id
-
      */
     public function getHolidaysAction()
     {

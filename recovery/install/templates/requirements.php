@@ -12,14 +12,14 @@
 <?php if (!$error): ?>
     <div class="alert alert-success">
         <span class="icon-checkmark huge"></span>
-        <?= $t->t("requirements_success") ?><?php if (!$ioncube): ?>*<?php endif ?>
+        <?= $t->t('requirements_success') ?><?php if (!$ioncube): ?>*<?php endif ?>
     </div>
 <?php endif ?>
 <?php if (!$ioncube && !$error): ?>
-    <?= $t->t("requirements_ioncube") ?>
+    <?= $t->t('requirements_ioncube') ?>
 <?php endif ?>
 
-<h4 class="<?php if (!$pathError): ?>success<?php endif ?><?php if ($pathError): ?>error<?php endif ?>"><?= $t->t('requirements_header_files') ?> <small><a href="#permissions" data-shown="<?= $t->t("requirements_hide_all") ?>" data-hidden="<?= $t->t("requirements_show_all") ?>"><?= $t->t("requirements_show_all") ?></a></small></h4>
+<h4 class="<?php if (!$pathError): ?>success<?php endif ?><?php if ($pathError): ?>error<?php endif ?>"><?= $t->t('requirements_header_files') ?> <small><a href="#permissions" data-shown="<?= $t->t('requirements_hide_all') ?>" data-hidden="<?= $t->t('requirements_show_all') ?>"><?= $t->t('requirements_show_all') ?></a></small></h4>
 
 <div id="permissions" class="<?php if (!$pathError): ?>is--hidden<?php endif ?> <?php if ($pathError): ?> hide-successful<?php endif ?>" <?php if ($pathError): ?>data-hide-successful="true"<?php endif ?>>
     <p>
@@ -37,7 +37,7 @@
     </table>
 </div>
 
-<h4 class="<?php if (!$systemError): ?>success<?php endif ?><?php if ($systemError): ?>error<?php endif ?>"><?= $t->t('requirements_header_system') ?> <small><a href="#systemchecks" data-shown="<?= $t->t("requirements_hide_all") ?>" data-hidden="<?= $t->t("requirements_show_all") ?>"><?= $t->t("requirements_show_all") ?></a></small></h4>
+<h4 class="<?php if (!$systemError): ?>success<?php endif ?><?php if ($systemError): ?>error<?php endif ?>"><?= $t->t('requirements_header_system') ?> <small><a href="#systemchecks" data-shown="<?= $t->t('requirements_hide_all') ?>" data-hidden="<?= $t->t('requirements_show_all') ?>"><?= $t->t('requirements_show_all') ?></a></small></h4>
 
 <div id="systemchecks" class="<?php if (!$systemError): ?>is--hidden<?php endif ?> <?php if ($systemError): ?>hide-successful<?php endif ?>" <?php if ($systemError): ?>data-hide-successful="true"<?php endif ?>>
     <p>

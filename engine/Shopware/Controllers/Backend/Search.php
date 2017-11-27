@@ -232,6 +232,48 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
+     * @param $entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function createEntitySearchQuery($entity)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $query */
+        $query = $this->get('models')->createQueryBuilder();
+        $query->select('entity')
+            ->from($entity, 'entity');
+
+        switch ($entity) {
+            case 'Shopware\Models\Article\Article':
+                $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
+                    ->innerJoin('entity.mainDetail', 'mainDetail')
+                    ->leftJoin('entity.details', 'details');
+                break;
+
+            case 'Shopware\Models\Property\Value':
+                if ($groupId = $this->Request()->getParam('groupId')) {
+                    $query->andWhere('entity.optionId = :optionId')
+                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
+                }
+                break;
+
+            case 'Shopware\Models\Property\Option':
+                if ($setId = $this->Request()->getParam('setId')) {
+                    $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
+                        ->setParameter(':setId', $setId);
+                }
+                break;
+            case 'Shopware\Models\Category\Category':
+                $query->andWhere('entity.parent IS NOT NULL')
+                    ->addOrderBy('entity.parentId')
+                    ->addOrderBy('entity.position');
+                break;
+        }
+
+        return $query;
+    }
+
+    /**
      * @param $builder \Doctrine\ORM\QueryBuilder
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
@@ -297,48 +339,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         return $fields;
-    }
-
-    /**
-     * @param $entity
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function createEntitySearchQuery($entity)
-    {
-        /** @var \Doctrine\ORM\QueryBuilder $query */
-        $query = $this->get('models')->createQueryBuilder();
-        $query->select('entity')
-            ->from($entity, 'entity');
-
-        switch ($entity) {
-            case 'Shopware\Models\Article\Article':
-                $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
-                    ->innerJoin('entity.mainDetail', 'mainDetail')
-                    ->leftJoin('entity.details', 'details');
-                break;
-
-            case 'Shopware\Models\Property\Value':
-                if ($groupId = $this->Request()->getParam('groupId')) {
-                    $query->andWhere('entity.optionId = :optionId')
-                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
-                }
-                break;
-
-            case 'Shopware\Models\Property\Option':
-                if ($setId = $this->Request()->getParam('setId')) {
-                    $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
-                        ->setParameter(':setId', $setId);
-                }
-                break;
-            case 'Shopware\Models\Category\Category':
-                $query->andWhere('entity.parent IS NOT NULL')
-                    ->addOrderBy('entity.parentId')
-                    ->addOrderBy('entity.position');
-                break;
-        }
-
-        return $query;
     }
 
     /**

@@ -870,6 +870,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function translateMessage($name, $default = null)
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/canceled_order/controller/main');
+
         return $namespace->get($name, $default);
     }
 }

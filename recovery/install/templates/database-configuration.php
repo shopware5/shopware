@@ -34,18 +34,18 @@
 
     <p>
         <input type="checkbox" id="c_advanced" class="toggle" data-href="#advanced-settings" />
-        <label for="c_advanced" class="toggle width-auto"><?= $t->t("database-configuration_advanced_settings") ?></label>
+        <label for="c_advanced" class="toggle width-auto"><?= $t->t('database-configuration_advanced_settings') ?></label>
     </p>
 
     <div class="is--hidden" id="advanced-settings">
         <p>
-            <label for="c_database_port"><?= $t->t("database-configuration_field_port") ?></label>
-            <input type="text" value="<?= isset($parameters["c_database_port"]) ? $parameters["c_database_port"] : '3306' ?>" name="c_database_port" id="c_database_port" required="required" />
+            <label for="c_database_port"><?= $t->t('database-configuration_field_port') ?></label>
+            <input type="text" value="<?= isset($parameters['c_database_port']) ? $parameters['c_database_port'] : '3306' ?>" name="c_database_port" id="c_database_port" required="required" />
         </p>
 
         <p>
-            <label for="c_database_socket"><?= $t->t("database-configuration_field_socket") ?></label>
-            <input type="text" value="<?= isset($parameters["c_database_socket"]) ? $parameters["c_database_socket"] : '' ?>" name="c_database_socket" id="c_database_socket" />
+            <label for="c_database_socket"><?= $t->t('database-configuration_field_socket') ?></label>
+            <input type="text" value="<?= isset($parameters['c_database_socket']) ? $parameters['c_database_socket'] : '' ?>" name="c_database_socket" id="c_database_socket" />
         </p>
     </div>
 

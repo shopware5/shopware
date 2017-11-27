@@ -56,7 +56,7 @@ class Requirements
     public function toArray()
     {
         $result = [
-            'hasIoncube'  => false,
+            'hasIoncube' => false,
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
@@ -74,9 +74,9 @@ class Requirements
             $check['group'] = (string) $requirement->group;
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
-            $check['version']  = (string) $requirement->version;
-            $check['check']   = (bool) (string) $requirement->result;
-            $check['error']    = (bool) $requirement->error;
+            $check['version'] = (string) $requirement->version;
+            $check['check'] = (bool) (string) $requirement->result;
+            $check['error'] = (bool) $requirement->error;
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
