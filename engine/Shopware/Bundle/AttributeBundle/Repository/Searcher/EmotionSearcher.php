@@ -25,11 +25,10 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Customer\Customer;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class EmotionSearcher extends GenericSearcher
@@ -38,6 +37,7 @@ class EmotionSearcher extends GenericSearcher
     {
         $query = parent::createQuery($criteria);
         $query->andWhere('entity.previewId IS NULL');
+
         return $query;
     }
 }

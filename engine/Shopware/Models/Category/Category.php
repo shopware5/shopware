@@ -418,7 +418,7 @@ class Category extends ModelEntity
      *
      * @return Category
      */
-    public function setParent(Category $parent = null)
+    public function setParent(self $parent = null)
     {
         $this->parent = $parent;
 
@@ -1102,7 +1102,7 @@ class Category extends ModelEntity
      *
      * @return bool
      */
-    protected function isChildOfInternal(Category $category, Category $searched)
+    protected function isChildOfInternal(self $category, self $searched)
     {
         if ($category->getParent() && $category->getParent()->getId() === $searched->getId()) {
             return true;

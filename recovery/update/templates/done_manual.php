@@ -1,4 +1,4 @@
-<?php $app->render('_header.php', ['tab' => 'done']) ?>
+<?php $app->render('_header.php', ['tab' => 'done']); ?>
 
 <h2><?= $language['done_title']; ?></h2>
 
@@ -16,4 +16,4 @@
     <?= $language['done_delete']; ?>
 </div>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>
