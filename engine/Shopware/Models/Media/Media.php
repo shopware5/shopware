@@ -503,14 +503,14 @@ class Media extends ModelEntity
         $size = $this->fileSize;
 
         if ($size < 1024) {
-            $filesize = $size . ' bytes';
+            $size .= ' bytes';
         } elseif ($size >= 1024 && $size < 1048576) {
-            $filesize = round($size / 1024, 2) . ' KB';
+            $size = round($size / 1024, 2) . ' KB';
         } elseif ($size >= 1048576) {
-            $filesize = round($size / 1048576, 2) . ' MB';
+            $size = round($size / 1048576, 2) . ' MB';
         }
 
-        return $filesize;
+        return $size;
     }
 
     /**

@@ -888,7 +888,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * Get current stock from a certain product defined by $ordernumber
      * Support for multidimensional variants
      *
-     * @param unknown_type $ordernumber
+     * @param string $ordernumber
      *
      * @return array with article id / current basket quantity / instock / laststock
      */
@@ -985,7 +985,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * Returns tax rates for all basket positions
      *
-     * @param unknown_type $basket array returned from this->getBasket
+     * @param array $basket array returned from this->getBasket
      *
      * @return array
      */

@@ -45,6 +45,7 @@ class Newsletter extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Address", mappedBy="lastNewsletter")
      */
     protected $addresses;
+
     /**
      * Autoincrement ID
      *
@@ -444,6 +445,8 @@ class Newsletter extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $containers
+     *
+     * @return ModelEntity
      */
     public function setContainers($containers)
     {
@@ -465,22 +468,6 @@ class Newsletter extends ModelEntity
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
-
-    /**
-     * @return \Shopware\Models\Newsletter\Address
-     */
-    public function getAlreadySendTo()
-    {
-        return $this->alreadySendTo;
     }
 
     /**

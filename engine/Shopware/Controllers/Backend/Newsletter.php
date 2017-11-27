@@ -716,9 +716,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     /**
      * Removes the unneeded metadata in the alternative view.
      *
-     * @param unknown_type $source
+     * @param string $source
      *
-     * @return unknown
+     * @return string
      */
     public function altFilter($source)
     {

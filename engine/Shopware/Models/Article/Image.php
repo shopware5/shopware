@@ -165,7 +165,8 @@ class Image extends ModelEntity
     /**
      * The parent category
      *
-     * @var Category
+     * @var Image
+     *
      * @ORM\ManyToOne(targetEntity="Image", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */

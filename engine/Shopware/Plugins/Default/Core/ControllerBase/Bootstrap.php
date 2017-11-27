@@ -181,7 +181,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Gets the Blog articles for the index page
      *
-     * @return array | blog article array
+     * @return array blog article array
      */
     public function getBlog()
     {

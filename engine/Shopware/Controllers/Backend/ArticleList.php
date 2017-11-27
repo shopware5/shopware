@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
 /**
  * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
@@ -587,7 +588,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         foreach ($result as $item) {
             $number = $item['Detail_number'];
 
-            $product = new \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct(
+            $product = new ListProduct(
                 $item['Article_id'],
                 $item['Detail_id'],
                 $item['Detail_number']
@@ -621,9 +622,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products
+     * @param ListProduct[] $products
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     * @return ListProduct[]
      */
     private function getAdditionalTexts($products)
     {

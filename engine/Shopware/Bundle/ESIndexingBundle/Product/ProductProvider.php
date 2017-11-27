@@ -242,7 +242,7 @@ class ProductProvider implements ProductProviderInterface
      * @param ListProduct[]        $products
      * @param ShopContextInterface $context
      *
-     * @return \array[]
+     * @return array[]
      */
     private function getProperties($products, ShopContextInterface $context)
     {

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -40,9 +41,9 @@ interface BlogServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface::getList()
      *
      * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Blog[] indexed by the blog id
+     * @return Blog[] indexed by the blog id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 }

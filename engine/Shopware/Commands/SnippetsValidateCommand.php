@@ -86,7 +86,7 @@ class SnippetsValidateCommand extends ShopwareCommand
      *
      * @throws \Exception
      *
-     * @return \string[]
+     * @return string[]
      */
     protected function validatePlugins(SnippetValidator $validator)
     {

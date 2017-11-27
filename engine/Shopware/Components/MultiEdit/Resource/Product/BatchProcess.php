@@ -53,6 +53,11 @@ class BatchProcess
     protected $configResource;
 
     /**
+     * @var Queue
+     */
+    protected $queueResource;
+
+    /**
      * @param $dqlHelper DqlHelper
      * @param $filter Filter
      * @param $queue Queue

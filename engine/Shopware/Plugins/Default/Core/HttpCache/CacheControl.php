@@ -217,7 +217,7 @@ class CacheControl
      * @param Request              $request
      * @param ShopContextInterface $context
      *
-     * @return \string[]
+     * @return string[]
      */
     public function getRemovableCacheTags(Request $request, ShopContextInterface $context)
     {

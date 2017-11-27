@@ -24,6 +24,7 @@
 
 namespace Shopware\Plugin\Debug\Components;
 
+use Exception;
 use Shopware\Components\Logger;
 
 /**

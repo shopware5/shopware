@@ -48,6 +48,7 @@ class Queue extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\MultiEdit\QueueArticle", mappedBy="queue", cascade={"persist"},  fetch="EXTRA_LAZY")
      */
     protected $articleDetails;
+
     /**
      * Unique identifier
      *
@@ -103,12 +104,14 @@ class Queue extends ModelEntity
 
     /**
      * Class constructor.
+     *
+     * @param string $resource
      */
     public function __construct($resource)
     {
         $this->resource = $resource;
 
-        $this->details = new ArrayCollection();
+        $this->articleDetails = new ArrayCollection();
     }
 
     /**

@@ -1041,7 +1041,7 @@ class Repository extends ModelRepository
      */
     public function getConfiguratorDependenciesQueryBuilder($configuratorSetId)
     {
-        $builder = $this->getEntityManager()->createQueryBuilder($configuratorSetId);
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['dependencies', 'dependencyParent', 'dependencyChild'])
                 ->from('Shopware\Models\Article\Configurator\Dependency', 'dependencies')
                 ->leftJoin('dependencies.parentOption', 'dependencyParent')

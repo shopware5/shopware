@@ -26,6 +26,7 @@ namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Template;
 
 /**
  * @ORM\Table(name="s_core_templates_config_set")
@@ -68,6 +69,7 @@ class Set extends ModelEntity
 
     /**
      * @var Template
+     *
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
      *      inversedBy="configSets"

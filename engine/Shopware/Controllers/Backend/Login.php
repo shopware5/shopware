@@ -118,7 +118,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * @return Shopware_Plugins_Backend_Locale_Bootstrap
+     * @return Shopware_Plugins_Backend_Auth_Bootstrap
      */
     public function getPlugin()
     {

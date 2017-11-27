@@ -58,6 +58,7 @@ class Address extends LazyFetchModelEntity
      * @var \Shopware\Models\Newsletter\Group
      */
     protected $newsletterGroup;
+
     /**
      * Autoincrement ID
      *
@@ -177,22 +178,6 @@ class Address extends LazyFetchModelEntity
     public function getIsCustomer()
     {
         return $this->isCustomer;
-    }
-
-    /**
-     * @param int $lastMailingId
-     */
-    public function setLastMailingId($lastMailingId)
-    {
-        $this->lastMailingId = $lastMailingId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastMailingId()
-    {
-        return $this->lastMailingId;
     }
 
     /**

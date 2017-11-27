@@ -82,6 +82,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig)
     {
+        parent::__construct();
+
         $this->snippetConfig = $snippetConfig;
         $this->modelManager = $modelManager;
         $this->pluginDirectories = $pluginDirectories;

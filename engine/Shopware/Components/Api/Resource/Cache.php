@@ -55,13 +55,13 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
     /**
      * Sets the Container.
      *
-     * @param Container $container
+     * @param Container $Container
      */
-    public function setContainer(Container $container = null)
+    public function setContainer(Container $Container = null)
     {
-        if ($container) {
-            $this->request = $container->get('front')->Request();
-            $this->cacheManager = $container->get('shopware.cache_manager');
+        if ($Container) {
+            $this->request = $Container->get('front')->Request();
+            $this->cacheManager = $Container->get('shopware.cache_manager');
         }
     }
 

@@ -78,6 +78,8 @@ class StoreListCommand extends StoreCommand
             return;
         }
 
+        $result = [];
+
         /** @var $licence LicenceStruct */
         foreach ($licences as $licence) {
             $result[] = [

@@ -67,7 +67,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
                 unset($result['checks'][$key]);
             }
         }
-        $this->View()->assign(['success' => true, 'data' => array_merge($result['checks'])]);
+        $this->View()->assign(['success' => true, 'data' => $result['checks']]);
     }
 
     /**

@@ -176,6 +176,13 @@ class Queue
         // In most cases the filter query will be the bottleneck
         $i = 0;
         foreach ($results as $detailId) {
+            $detail = $entityManager->getReference('Shopware\Models\Article\Detail', $detailId);
+
+            $model = new QueueArticle();
+            $model->setQueue($queue);
+            $model->setDetail($detail);
+            $entityManager->persist($model);
+
             // Flush after 20 entities
             if (($i++ % 20) == 0) {
                 $entityManager->flush($model);
@@ -183,14 +190,10 @@ class Queue
 
                 $queue = $entityManager->getReference('\Shopware\Models\MultiEdit\Queue', $queueId);
             }
-
-            $detail = $entityManager->getReference('Shopware\Models\Article\Detail', $detailId);
-
-            $model = new QueueArticle();
-            $model->setQueue($queue);
-            $model->setDetail($detail);
-            $entityManager->persist($model);
         }
+
+        $entityManager->flush();
+        $entityManager->clear();
 
         $done = ($offset + $limit) >= $totalCount;
 

@@ -236,6 +236,7 @@ class Backup
         // Get list of datasql files
         $dataFiles = $this->getDirectoryList($dir . '/', ['datasql']);
 
+        $numFiles = 0;
         if (!empty($dataFiles)) {
             $tables = [];
 

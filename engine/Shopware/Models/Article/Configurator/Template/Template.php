@@ -27,6 +27,7 @@ namespace Shopware\Models\Article\Configurator\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Article;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -451,7 +452,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return \Shopware\Models\Article\Configurator\Template\Template
      */
     public function getArticle()
     {
@@ -461,7 +462,7 @@ class Template extends ModelEntity
     /**
      * @param $article
      *
-     * @return \Shopware\Models\Article\Article
+     * @return \Shopware\Models\Article\Configurator\Template\Template
      */
     public function setArticle($article)
     {
@@ -575,7 +576,7 @@ class Template extends ModelEntity
      *
      * @param float $purchasePrice
      *
-     * @return Article
+     * @return \Shopware\Models\Article\Configurator\Template\Template
      */
     public function setPurchasePrice($purchasePrice)
     {

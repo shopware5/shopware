@@ -130,7 +130,7 @@ class Filter
         }
 
         $builder->andWhere($dql);
-        if ($orderByInfo) {
+        if (isset($orderByInfo)) {
             $direction = isset($orderBy['direction']) ? $orderBy['direction'] : 'DESC';
             $field = $orderByInfo['field'];
             $builder->orderBy(strtolower($orderByInfo['entity']) . '.' . $field, $direction);

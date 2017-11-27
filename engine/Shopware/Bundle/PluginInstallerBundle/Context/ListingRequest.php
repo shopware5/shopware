@@ -90,7 +90,7 @@ class ListingRequest extends BaseRequest
     }
 
     /**
-     * @return \array[]
+     * @return array[]
      */
     public function getConditions()
     {
@@ -98,7 +98,7 @@ class ListingRequest extends BaseRequest
     }
 
     /**
-     * @return \array[]
+     * @return array[]
      */
     public function getSortings()
     {

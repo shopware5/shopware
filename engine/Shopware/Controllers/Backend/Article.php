@@ -3636,7 +3636,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * assigned category and shop model.
      *
      * @param $data
-     * @param Shopware\Models\Article\ $article
+     * @param Article $article
      *
      * @return array
      */

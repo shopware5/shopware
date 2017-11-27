@@ -47,6 +47,8 @@ class ProductSearchResult extends ProductNumberSearchResult
      */
     public function __construct($products, $totalCount, $facets)
     {
+        parent::__construct($products, $totalCount, $facets);
+
         $this->products = $products;
         $this->totalCount = $totalCount;
         $this->facets = $facets;

@@ -81,7 +81,8 @@ class OpenSSLVerifier
         } elseif ($ok == 0) {
             return false;
         }
-        while ($errors[] = openssl_error_string());
+
+        $errors = $this->getErrors();
         throw new \RuntimeException(sprintf("Error during private key read: \n%s", implode("\n", $errors)));
     }
 
@@ -97,11 +98,25 @@ class OpenSSLVerifier
         $publicKey = trim(file_get_contents($this->publicKeyPath));
 
         if (false === $this->keyResource = openssl_pkey_get_public($publicKey)) {
-            while ($errors[] = openssl_error_string()) {
-            }
+            $errors = $this->getErrors();
+
             throw new \RuntimeException(sprintf("Error during public key read: \n%s", implode("\n", $errors)));
         }
 
         return $this->keyResource;
+    }
+
+    /**
+     * @return array
+     */
+    private function getErrors()
+    {
+        $errors = [];
+
+        while ($error = openssl_error_string()) {
+            $error[] = $errors;
+        }
+
+        return $errors;
     }
 }

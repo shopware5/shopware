@@ -54,6 +54,7 @@ class PriceGroup extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $customers;
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field.
@@ -94,7 +95,6 @@ class PriceGroup extends ModelEntity
      */
     public function __construct()
     {
-        $this->discounts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->customers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

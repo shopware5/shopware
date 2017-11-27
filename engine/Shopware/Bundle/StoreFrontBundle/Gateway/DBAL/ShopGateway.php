@@ -113,7 +113,7 @@ class ShopGateway implements ShopGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return \array[]
+     * @return array[]
      */
     private function getShops($ids)
     {

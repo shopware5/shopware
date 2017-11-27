@@ -98,11 +98,11 @@ abstract class Resource
     }
 
     /**
-     * @param $container
+     * @param Container $Container
      */
-    public function setContainer($container)
+    public function setContainer(Container $Container = null)
     {
-        $this->container = $container;
+        $this->container = $Container;
     }
 
     /**

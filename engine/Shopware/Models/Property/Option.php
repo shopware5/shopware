@@ -77,7 +77,8 @@ class Option extends ModelEntity
     /**
      * ManyToMany to Group (Inverse Side)
      *
-     * @var Group[]Doctrine\Common\Collections\ArrayCollection
+     * @var Group[]|\Doctrine\Common\Collections\ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="s_filter_relations",
      *      joinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")},

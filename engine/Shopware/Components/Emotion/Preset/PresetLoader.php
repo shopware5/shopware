@@ -26,6 +26,7 @@ namespace Shopware\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
+use RuntimeException;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Library\Component;
@@ -57,7 +58,7 @@ class PresetLoader implements PresetLoaderInterface
         $preset = $this->modelManager->getRepository(Preset::class)->find($presetId);
 
         if (!$preset) {
-            throw new NoResultException('The preset with id ' . $presetId . ' could not be found.');
+            throw new RuntimeException('The preset with id ' . $presetId . ' could not be found.');
         }
 
         $presetData = json_decode($preset->getPresetData(), true);

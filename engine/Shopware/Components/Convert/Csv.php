@@ -143,6 +143,7 @@ class Shopware_Components_Convert_Csv
             unset($lines[0]);
         }
 
+        $array = [];
         foreach ($lines as $line) {
             $tmp = [];
             if (empty($this->sSettings['fieldmark'])) {

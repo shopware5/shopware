@@ -710,8 +710,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     /**
      * Read xml row action
      *
-     * @param unknown_type $xml
-     * @param array        $keys
+     * @param SimpleXMLElement $xml
+     * @param array            $keys
      *
      * @return array
      */

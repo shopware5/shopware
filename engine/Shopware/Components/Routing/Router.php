@@ -75,6 +75,8 @@ class Router extends EnlightRouter implements RouterInterface
         array $preFilters = [],
         array $postFilters = []
     ) {
+        parent::__construct();
+
         $this->context = $context;
         $this->matchers = $matchers;
         $this->generators = $generators;

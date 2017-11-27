@@ -94,6 +94,8 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      */
     public function __construct($filename, $delimiter = self::DEFAULT_DELIMITER, $header = null)
     {
+        parent::__construct();
+
         if (($this->_handler = fopen($filename, 'r')) === false) {
             throw new Exception("The file '$filename' cannot be opened");
         }

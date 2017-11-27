@@ -258,7 +258,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \int[]
+     * @return int[]
      */
     public function getPayments()
     {
@@ -266,7 +266,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \int[] $payments
+     * @param int[] $payments
      */
     public function setPayments($payments)
     {
@@ -274,7 +274,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \int[]
+     * @return int[]
      */
     public function getDispatches()
     {
@@ -282,7 +282,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \int[] $dispatches
+     * @param int[] $dispatches
      */
     public function setDispatches($dispatches)
     {
@@ -290,7 +290,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getDevices()
     {
@@ -298,7 +298,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \string[] $devices
+     * @param string[] $devices
      */
     public function setDevices($devices)
     {
@@ -306,7 +306,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \int[]
+     * @return int[]
      */
     public function getShops()
     {
@@ -314,7 +314,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \int[] $shops
+     * @param int[] $shops
      */
     public function setShops($shops)
     {
@@ -322,7 +322,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getWeekdays()
     {
@@ -330,7 +330,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \string[] $weekdays
+     * @param string[] $weekdays
      */
     public function setWeekdays($weekdays)
     {
