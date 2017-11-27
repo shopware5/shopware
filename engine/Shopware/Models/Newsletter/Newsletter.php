@@ -471,6 +471,22 @@ class Newsletter extends ModelEntity
     }
 
     /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @return \Shopware\Models\Newsletter\Address
+     */
+    public function getAlreadySendTo()
+    {
+        return $this->alreadySendTo;
+    }
+
+    /**
      * @return \DateTime|null
      */
     public function getTimedDelivery()

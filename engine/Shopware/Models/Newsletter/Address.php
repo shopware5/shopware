@@ -181,6 +181,22 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
+     * @param int $lastMailingId
+     */
+    public function setLastMailingId($lastMailingId)
+    {
+        $this->lastMailingId = $lastMailingId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastMailingId()
+    {
+        return $this->lastMailingId;
+    }
+
+    /**
      * @param int $lastReadId
      */
     public function setLastReadId($lastReadId)
