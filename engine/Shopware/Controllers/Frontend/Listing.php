@@ -247,11 +247,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     /**
      * @param array $categoryContent
-     * @param bool  $hasEmotion
-     *
-     * @throws \Enlight_Controller_Exception
+     * @param bool $hasEmotion
      *
      * @return array|bool
+     * @throws \Enlight_Controller_Exception
      */
     private function getRedirectLocation($categoryContent, $hasEmotion)
     {

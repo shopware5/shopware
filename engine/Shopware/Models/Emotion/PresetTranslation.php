@@ -21,17 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Models\Emotion;
 
-use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Emotion Model - Preset translation
  *
  * @category   Shopware
- *
+ * @package    Shopware\Models
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -40,16 +39,9 @@ use Shopware\Components\Model\ModelEntity;
 class PresetTranslation extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Emotion\Preset
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Preset", inversedBy="translations")
-     * @ORM\JoinColumn(name="presetID", referencedColumnName="id")
-     */
-    protected $preset;
-    /**
      * Unique identifier field for the shopware emotion translation.
      *
-     * @var int
+     * @var integer $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -60,7 +52,7 @@ class PresetTranslation extends ModelEntity
     /**
      * Contains the name of the emotion preset.
      *
-     * @var string
+     * @var string $label
      *
      * @ORM\Column(name="label", type="string", length=255, nullable=false)
      */
@@ -69,7 +61,7 @@ class PresetTranslation extends ModelEntity
     /**
      * Contains the name of the emotion preset.
      *
-     * @var string
+     * @var string $description
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
@@ -78,11 +70,19 @@ class PresetTranslation extends ModelEntity
     /**
      * Contains the name of the locale, e.g. `en_GB`.
      *
-     * @var string
+     * @var string $locale
      *
      * @ORM\Column(name="locale", type="string", length=15, nullable=false)
      */
     private $locale;
+
+    /**
+     * @var \Shopware\Models\Emotion\Preset $preset
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Preset", inversedBy="translations")
+     * @ORM\JoinColumn(name="presetID", referencedColumnName="id")
+     */
+    protected $preset;
 
     /**
      * Clone function for this model.

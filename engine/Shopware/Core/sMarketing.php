@@ -563,8 +563,8 @@ class sMarketing
         if (!$getCampaigns) {
             return false;
         }
-        // Fetch all positions
-        $sql = "
+            // Fetch all positions
+            $sql = "
             SELECT id, type, description, value FROM s_campaigns_containers
             WHERE promotionID=$id
             ORDER BY position

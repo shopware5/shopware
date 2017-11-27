@@ -30,6 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 
 /**
  * @category  Shopware

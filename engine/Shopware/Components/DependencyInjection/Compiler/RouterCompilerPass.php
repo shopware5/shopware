@@ -21,15 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Components\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
  * @category  Shopware
- *
+ * @package   Shopware\Components\DependencyInjection\Compiler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RouterCompilerPass implements CompilerPassInterface

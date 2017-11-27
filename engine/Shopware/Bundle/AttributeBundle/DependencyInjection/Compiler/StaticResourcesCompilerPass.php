@@ -29,6 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class StaticResourcesCompilerPass implements CompilerPassInterface
 {
+
     /**
      * You can modify the container here before it is dumped to PHP code.
      *

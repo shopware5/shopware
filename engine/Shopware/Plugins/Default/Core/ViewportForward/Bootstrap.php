@@ -72,7 +72,6 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
             case 'login':
             case 'logout':
                 $request->setActionName($request->getParam('sViewport'));
-                // no break
             case 'admin':
                 $request->setControllerName('account')->setDispatched(false);
                 break;

@@ -134,8 +134,8 @@ class Application extends BaseApplication
     {
         $exitCode = parent::doRunCommand($command, $input, $output);
 
-        /** @var \Enlight_Event_EventManager $eventManager */
-        $eventManager = $this->kernel->getContainer()->get('events');
+       /** @var \Enlight_Event_EventManager $eventManager */
+       $eventManager = $this->kernel->getContainer()->get('events');
 
         $eventManager->notify('Shopware_Command_After_Run', [
            'exitCode' => $exitCode,

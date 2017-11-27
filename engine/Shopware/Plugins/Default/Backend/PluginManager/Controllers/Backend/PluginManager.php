@@ -132,7 +132,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
-
             return;
         }
 

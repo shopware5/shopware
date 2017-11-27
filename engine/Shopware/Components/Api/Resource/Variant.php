@@ -838,7 +838,7 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
             }
 
-            //new unit data send? create new unit for this variant
+        //new unit data send? create new unit for this variant
         } elseif (!empty($data['unit'])) {
             $data['unit'] = $this->updateUnitReference($data['unit']);
         }

@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class Address extends Extendable
 {

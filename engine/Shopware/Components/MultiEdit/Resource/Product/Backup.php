@@ -380,7 +380,7 @@ class Backup
         // use float as type
         if ((float) $value != (int) $value) {
             return \Zend_Db::FLOAT_TYPE;
-            // Else encode it as int
+        // Else encode it as int
         }
 
         return \Zend_Db::INT_TYPE;
