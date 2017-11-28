@@ -1,5 +1,6 @@
 /* global Shopware */
-const ModuleFactory = Shopware.ModuleFactory;
+import ModuleFactory from 'src/core/factory/module.factory';
+
 const register = ModuleFactory.registerModule;
 
 // We're clearing the modules registry to register the same module multiple times throughout the test suite
@@ -167,7 +168,7 @@ describe('core/factory/module.factory.js', () => {
         expect(modules.has('foo.bar')).to.equal(true);
     });
 
-    it('should be possible to get all registerd module routes', () => {
+    it('should be possible to get all registered module routes', () => {
         register({
             id: 'foo.bar',
             routes: {
