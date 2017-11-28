@@ -739,14 +739,15 @@ class sBasket
         }
         // Check if the basket's value is above the voucher's
         if ($basketValue < $voucherDetails['minimumcharge']) {
-            $sErrorMessages[] = str_replace(
-                '{sMinimumCharge}',
-                $voucherDetails['minimumcharge'],
-                $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureMinimumCharge',
-                    'The minimum charge for this voucher is {sMinimumCharge}'
-                )
+            $snippet = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                'VoucherFailureMinimumCharge',
+                'The minimum charge for this voucher is {$sMinimumCharge|currency}'
             );
+            $smarty = Shopware()->Container()->get('template');
+            $template = $smarty->createTemplate(sprintf('string:%s', $snippet));
+            $template->assign('sMinimumCharge', $voucherDetails['minimumcharge']);
+
+            $sErrorMessages[] = $template->fetch();
 
             return ['sErrorFlag' => true, 'sErrorMessages' => $sErrorMessages];
         }
@@ -1931,7 +1932,7 @@ class sBasket
         $sErrorMessages = [];
 
         if (!empty($voucherDetails['subshopID'])) {
-            if ($this->contextService->getShopContext()->getShop()->getId() != $voucherDetails['subshopID']) {
+            if ($this->contextService->getShopContext()->getShop()->getId() !== (int) $voucherDetails['subshopID']) {
                 $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureNotFound',
                     'Voucher could not be found or is not valid anymore'
