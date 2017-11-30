@@ -1756,7 +1756,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function createDocument($orderId, $documentType)
     {
-        $renderer = 'pdf'; // html / pdf
+        $renderer = strtolower($this->Request()->getParam('renderer', 'pdf')); // html / pdf
+        if (!in_array($renderer, ['html', 'pdf']) {
+            $renderer = 'pdf';
+        }
 
         $deliveryDate = $this->Request()->getParam('deliveryDate');
         if (!empty($deliveryDate)) {
