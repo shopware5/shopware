@@ -295,7 +295,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             valueField: 'id',
             emptyText: me.snippets.selectOption,
             mode: 'local',
-            forceSelect: true,
             validateOnChange: true,
             validateOnBlur: true,
             snippets: me.snippets,
