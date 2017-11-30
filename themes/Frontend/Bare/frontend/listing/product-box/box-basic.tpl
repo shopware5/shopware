@@ -39,8 +39,6 @@
                                class="product--title"
                                title="{$sArticle.articleName|escapeHtml}">
                                 {$sArticle.articleName|truncate:50|escapeHtml}
-                                -
-                                {$sArticle.additionaltext}
                             </a>
                         {/block}
 

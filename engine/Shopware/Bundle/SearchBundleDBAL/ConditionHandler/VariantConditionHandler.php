@@ -72,16 +72,11 @@ class VariantConditionHandler implements ConditionHandlerInterface
         $query->addState('option_' . $tableKey);
 
         $where = [];
-        $split = true;
-
         /** @var VariantCondition $condition */
         foreach ($condition->getOptionIds() as $valueId) {
             $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
             $where[] = $tableKey . '.option_id = ' . $valueKey;
             $query->setParameter($valueKey, $valueId);
-            //            if ($valueId === 91) {
-//                $split = false;
-//            }
         }
 
         $where = implode(' OR ', $where);
@@ -95,11 +90,6 @@ class VariantConditionHandler implements ConditionHandlerInterface
             'variant.id = ' . $tableKey . '.article_id
              AND (' . $where . ')'
         );
-
-        // todo@dr add flag for configurator groups => "split"
-        //        if ($split === false) {
-        //            return;
-        //        }
 
         if (!$query->hasState('variant_group_by')) {
             $query->resetQueryPart('groupBy');
