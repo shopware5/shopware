@@ -239,7 +239,7 @@ class SitemapXMLRepository
         foreach ($sites as &$site) {
             $site['urlParams'] = [
                 'sViewport' => 'custom',
-                'sCustom' => $site['id']
+                'sCustom' => $site['id'],
             ];
             $site['changed'] = new \DateTime($site['changed']);
             $site['show'] = $this->filterLink($site['link'], $site['urlParams']);
@@ -251,25 +251,27 @@ class SitemapXMLRepository
     /**
      * Helper function to read all static pages of a shop from the database
      *
-     * @param integer $shopId
-     * @return array
+     * @param int $shopId
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array
      */
     private function getSitesByShopId($shopId)
     {
-        $sql = "
+        $sql = '
             SELECT groups.key
             FROM s_core_shop_pages shopPages
               INNER JOIN s_cms_static_groups groups
                 ON groups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
-        ";
+        ';
 
-        $statement = $this->connection->executeQuery($sql, array($shopId));
+        $statement = $this->connection->executeQuery($sql, [$shopId]);
 
         $keys = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        $sites = array();
+        $sites = [];
         foreach ($keys as $key) {
             $builder = $this->connection->createQueryBuilder();
             $current = $builder->from('s_cms_static', 'sites')
