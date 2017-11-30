@@ -29,6 +29,8 @@
  */
 class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Components_Test_Controller_TestCase
 {
+    const SITEMENU_ITEM_NAME = 'THIRD LEVEL ITEM';
+
     /**
      * Test case method
      */
@@ -53,5 +55,35 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
         $crawler = $crawler->filter('url');
 
         $this->assertGreaterThanOrEqual(40, count($crawler));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testMultipleChildrenCms()
+    {
+        $this->createThirdLevelStaticPage();
+
+        $response = $this->dispatch('/SitemapXml');
+        $content = $response->getBody();
+        $this->assertContains(strtolower(Shopware()->Container()->get('shopware.slug')->slugify(self::SITEMENU_ITEM_NAME)), $content);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createThirdLevelStaticPage()
+    {
+        $duplicatePage = Shopware()->Container()->get('dbal_connection')->fetchAssoc('SELECT * FROM s_cms_static WHERE id = ?', [
+            52
+        ]);
+        $duplicatePage['id'] = null;
+        $duplicatePage['parentID'] = 52;
+        $duplicatePage['description'] = self::SITEMENU_ITEM_NAME;
+
+        Shopware()->Container()->get('dbal_connection')->insert('s_cms_static', $duplicatePage);
+
+        Shopware()->Modules()->RewriteTable()->baseSetup();
+        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableContent();
     }
 }
