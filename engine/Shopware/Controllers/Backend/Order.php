@@ -1789,7 +1789,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'forceTaxCheck' => $this->Request()->getParam('forceTaxCheck', false),
             ]
         );
-        $document->render();
+        $document->render($renderer);
 
         if ($renderer === 'html') {
             exit;
