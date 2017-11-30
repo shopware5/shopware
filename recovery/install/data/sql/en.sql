@@ -113,7 +113,7 @@ UPDATE s_core_countries_states SET `name` = 'Wyoming' WHERE id = 69;
 -- s_core_config_mails --
 UPDATE `s_core_config_mails` SET `subject` = 'Your registration by {config name=shopName}', `content`='{include file="string:{config name=emailheaderplain}"}
 
-Hello {$salutation} {$firstname} {$lastname},
+Dear {$salutation|salutation} {$lastname},
 
 thank you for your registration with our Shop.
 You will gain access via the email address {$sMAIL} and the password you have chosen.
@@ -123,7 +123,7 @@ You can change your password at any time.
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Hello {$salutation} {$firstname} {$lastname},<br/>
+        Dear {$salutation|salutation} {$firstname} {$lastname},<br/>
         <br/>
         thank you for your registration with our Shop.<br/>
         You will gain access via the email address <strong>{$sMAIL}</strong> and the password you have chosen.<br/>
@@ -139,7 +139,7 @@ WHERE `name`="sREGISTERCONFIRMATION";
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order at the {config name=shopName}',
   `content` = '{include file="string:{config name=emailheaderplain}"}
 
-Hello {if $billingaddress.salutation eq "mr"}Mr{elseif $billingaddress.salutation eq "ms"}Mrs{/if} {$billingaddress.firstname} {$billingaddress.lastname},
+Dear {$billingaddress.salutation|salutation} {$billingaddress.lastname},
 
 Thank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.
 Information on your order:
@@ -210,7 +210,7 @@ If you have any questions, do not hesitate to contact us.
   `contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
-    <p>Hello {if $billingaddress.salutation eq "mr"}Mr{elseif $billingaddress.salutation eq "ms"}Mrs{/if} {$billingaddress.firstname} {$billingaddress.lastname},<br/>
+    <p>Dear {$billingaddress.salutation|salutation} {$billingaddress.lastname},<br/>
         <br/>
         Thank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.<br/>
         <br/>
@@ -436,7 +436,7 @@ WHERE `s_core_config_mails`.`name` = 'sCUSTOMERGROUPHACCEPTED';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your trader account has not been accepted',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear customer,
+Hello,
 
 thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.
 In case of further questions please do not hesitate to contact us via telephone, fax or email.
@@ -445,7 +445,7 @@ In case of further questions please do not hesitate to contact us via telephone,
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear customer,<br/>
+        Hello,<br/>
 		<br/>
         thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.<br/>
         In case of further questions please do not hesitate to contact us via telephone, fax or email.
@@ -458,7 +458,7 @@ WHERE `s_core_config_mails`.`name` = 'sCUSTOMERGROUPHREJECTED';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your aborted order process - Send us your feedback and get a voucher!',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear customer,
+Hello,
 
 You have recently aborted an order process on {$sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.
 Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.
@@ -468,7 +468,7 @@ Thank you for your feedback.
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear customer,<br/>
+        Hello,<br/>
         <br/>
         You have recently aborted an order process on {$sShop} - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.<br/>
         Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher.<br/>
@@ -482,7 +482,7 @@ WHERE `s_core_config_mails`.`name` = 'sCANCELEDQUESTION';
 
         UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your aborted order process - Voucher code enclosed',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear customer,
+Hello,
 
 You have recently aborted an order process on {$sShop} - today, we would like to give you a {if $sVoucherpercental == "1"}{$sVouchervalue} %{else}{$sVouchervalue|currency|unescape:"htmlall"}{/if}-voucher - and therefore make it easier for you to decide for an order with {$sShop}. Your voucher is valid for two months and can be redeemed by entering the code "{$sVouchercode}". We would be pleased to accept your order!
 
@@ -490,7 +490,7 @@ You have recently aborted an order process on {$sShop} - today, we would like to
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-         Dear customer,<br/>
+         Hello,<br/>
          <br/>
          You have recently aborted an order process on {$sShop} - today, we would like to give you a {if $sVoucherpercental == "1"}{$sVouchervalue} %{else}{$sVouchervalue|currency}{/if}-voucher - and therefore make it easier for you to decide for an order with {$sShop}. Your voucher is valid for two months and can be redeemed by entering the code "<strong>{$sVouchercode}</strong>". We would be pleased to accept your order!
     </p>
@@ -503,7 +503,7 @@ WHERE `s_core_config_mails`.`name` = 'sCANCELEDVOUCHER';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -514,7 +514,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -530,7 +530,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL9';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -541,7 +541,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -557,7 +557,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL10';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '1st reminder for your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 this is your first reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -570,7 +570,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         this is your first reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -588,7 +588,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL13';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Encashment of your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 You have now received 3 reminders for your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -601,7 +601,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         You have now received 3 reminders for your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -619,7 +619,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL16';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '3rd reminder for your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 this is your third and last reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -632,7 +632,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         this is your third and last reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -650,7 +650,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL15';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '2nd reminder for your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 this is your second reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -663,7 +663,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         this is your second reminder of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"}!<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -681,7 +681,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL14';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is completely paid',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -692,7 +692,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -708,7 +708,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL12';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -719,7 +719,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -735,7 +735,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL17';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -746,7 +746,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -762,7 +762,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL18';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is delayed',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -773,7 +773,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -789,7 +789,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL19';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -800,7 +800,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -882,7 +882,6 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hello,
 
 thank you for signing up for our regularly published newsletter.
-
 Please confirm your subscription by clicking the following link:
 
 {$sConfirmLink}
@@ -894,7 +893,6 @@ Please confirm your subscription by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for signing up for our regularly published newsletter.<br/>
-        <br/>
         Please confirm your subscription by clicking the following link:<br/>
         <br/>
         <a href="{$sConfirmLink}">Confirm</a>
@@ -957,7 +955,7 @@ WHERE `s_core_config_mails`.`name` = 'sARTICLEAVAILABLE';
 
 
 
-UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your e-mail notification',`content` = '{include file="string:{config name=emailheaderplain}"}
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your email notification',`content` = '{include file="string:{config name=emailheaderplain}"}
 
 Hello,
 
@@ -986,7 +984,7 @@ WHERE `s_core_config_mails`.`name` = 'sACCEPTNOTIFICATION';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'SEPA direct debit mandate',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Hello {$paymentInstance.firstName} {$paymentInstance.lastName},
+Hello,
 
 attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.
 
@@ -994,7 +992,7 @@ attached you will find the direct debit mandate form for your order {$paymentIns
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Hello {$paymentInstance.firstName} {$paymentInstance.lastName},<br/>
+        Hello,<br/>
         <br/>
         attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.
     </p>
@@ -1007,7 +1005,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSEPAAUTHORIZATION';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Password change - Password reset',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Hello,
+Dear {$user.salutation|salutation} {$user.lastname},
 
 there has been a request to reset you Password in the Shop {$sShop}.
 Please confirm the link below to specify a new password.
@@ -1021,7 +1019,7 @@ If you do not want to reset your password, please ignore this email. No changes 
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Hello,<br/>
+        Dear {$user.salutation|salutation} {$user.lastname},<br/>
         <br/>
         there has been a request to reset your password in the shop {$sShop}.<br/>
         Please confirm the link below to specify a new password.<br/>
@@ -1040,7 +1038,7 @@ WHERE `s_core_config_mails`.`name` = 'sCONFIRMPASSWORDCHANGE';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is in process',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1051,7 +1049,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1067,7 +1065,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL1';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order at {config name=shopName} is completed',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1078,7 +1076,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1094,7 +1092,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL2';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new payment status is as follows: {$sOrder.cleared_description}.
@@ -1105,7 +1103,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new payment status is as follows: {$sOrder.cleared_description}.</strong><br/>
@@ -1121,7 +1119,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL11' ;
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is ready for delivery',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1132,7 +1130,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1148,7 +1146,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL5';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1170,7 +1168,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1212,7 +1210,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL3';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1223,7 +1221,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1239,7 +1237,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL8';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is cancelled',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1250,7 +1248,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1266,7 +1264,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL4';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is partially delivered',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1277,7 +1275,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1293,7 +1291,7 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL6';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your order with {config name=shopName} is delivered',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},
 
 the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.
 The new status is as follows: {$sOrder.status_description}.
@@ -1304,7 +1302,7 @@ You can check the current status of your order on our website under "My account"
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+        Dear {$sUser.billing_salutation|salutation} {$sUser.billing_lastname},<br/>
         <br/>
         the status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:"%d/%m/%Y"} has changed.<br/>
         <strong>The new status is as follows: {$sOrder.status_description}.</strong><br/>
@@ -1320,11 +1318,11 @@ WHERE `s_core_config_mails`.`name` = 'sORDERSTATEMAIL7';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Happy Birthday from {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Dear {if $sUser.salutation eq "mr"}Mr{elseif $sUser.salutation eq "ms"}Mrs{/if} {$sUser.lastname},
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
 we wish you all the best for your birthday.
 
-For your personal anniversary we thought of something special and send you your own birthday code over {if $sVoucher.value}{$sVoucher.value|currency|unescape:"htmlall"}{else}{$sVoucher.percental} %{/if} you can easily redeem in your next order.
+For your personal anniversary we thought of something special and send you your own birthday code over {if $sVoucher.value}{$sVoucher.value|currency|unescape:"htmlall"}{else}{$sVoucher.percental} %{/if} you can easily redeem in your next order in our online shop: {$sShopURL}.
 
 Your personal birthday code is: {$sVoucher.code}
 {if $sVoucher.valid_from && $sVoucher.valid_to}This code is valid from {$sVoucher.valid_from|date_format:"%d/%m/%Y"} to {$sVoucher.valid_to|date_format:"%d/%m/%Y"}.{/if}
@@ -1335,9 +1333,9 @@ Your personal birthday code is: {$sVoucher.code}
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
-	<p>Dear {if $sUser.salutation eq "mr"}Mr{elseif $sUser.salutation eq "ms"}Mrs{/if} {$sUser.lastname},</p>
-	<p><strong>we wish you all the best for your birthday.</strong> For your personal anniversary we thought of something special and send you your own birthday code over {if $sVoucher.value}{$sVoucher.value|currency|unescape:"htmlall"}{else}{$sVoucher.percental} %{/if} you can easily redeem in your next order in our <a href="{$sShopURL}" title="{$sShop}">online Shop</a>.</p>
-	<p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong></br>
+	<p>Dear {$sUser.salutation|salutation} {$sUser.lastname},</p>
+	<p><strong>we wish you all the best for your birthday.</strong> For your personal anniversary we thought of something special and send you your own birthday code over {if $sVoucher.value}{$sVoucher.value|currency|unescape:"htmlall"}{else}{$sVoucher.percental} %{/if} you can easily redeem in your next order in our <a href="{$sShopURL}" title="{$sShop}">online shop</a>.</p>
+	<p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong><br/>
   {if $sVoucher.valid_from && $sVoucher.valid_to}This code is valid from {$sVoucher.valid_from|date_format:"%d/%m/%Y"} to {$sVoucher.valid_to|date_format:"%d/%m/%Y"}.{/if}
   {if $sVoucher.valid_from && !$sVoucher.valid_to}This code is valid from {$sVoucher.valid_from|date_format:"%d/%m/%Y"}.{/if}
   {if !$sVoucher.valid_from && $sVoucher.valid_to}This code is valid to {$sVoucher.valid_to|date_format:"%d/%m/%Y"}.{/if}
@@ -1352,7 +1350,7 @@ WHERE `s_core_config_mails`.`name` = 'sBIRTHDAY';
 
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Evaluate article',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Hello  {$sUser.salutation|salutation} {$sUser.billing_lastname},
 
 You bought some products in our store a few days ago, we would really appreciate it if you would rate these products.
 Rating products helps us to improve our service and provide your opinion about these products to other customers.
@@ -1369,12 +1367,13 @@ Art.No     Description     Rating link
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
-    Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},<br/>
+    Hello  {$sUser.salutation|salutation} {$sUser.billing_lastname},<br/>
     <br/>
     You bought some products in our store a few days ago, we would really appreciate it if you would rate these products.<br/>
     Rating products helps us to improve our service and provide your opinion about these products to other customers.<br/>
     <br/>
     Here you can find the links for rating the products you bought.<br/>
+    <br/>
     <table width="80%" border="0" style="font-family:Arial, Helvetica, sans-serif; font-size:12px;">
         <tr>
           <td bgcolor="#F7F7F2" style="border-bottom:1px solid #cccccc;">Article</td>
@@ -1403,24 +1402,24 @@ Art.No     Description     Rating link
     <br/><br/>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
-  `context` = 'a:3:{s:6:"sOrder";a:38:{s:2:"id";s:2:"66";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:12:"order_number";s:5:"20006";s:6:"userID";s:1:"4";s:10:"customerID";s:1:"4";s:14:"invoice_amount";s:5:"701.4";s:18:"invoice_amount_net";s:6:"589.42";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-29 10:00:08";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:19:"cleared_description";s:16:"Komplett bezahlt";s:18:"status_description";s:9:"Completed";s:19:"payment_description";s:18:"Payment in advance";s:20:"dispatch_description";s:17:"Standard delivery";s:20:"currency_description";s:4:"Euro";}s:5:"sUser";a:76:{s:7:"orderID";s:2:"66";s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20006";s:17:"billing_firstname";s:4:"John";s:16:"billing_lastname";s:3:"Doe";s:14:"billing_street";s:16:"Examplestreet 11";s:15:"billing_zipcode";s:4:"1234";s:12:"billing_city";s:11:"Examplecity";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_country";s:7:"Germany";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:7:"germany";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:4:"John";s:17:"shipping_lastname";s:3:"Doe";s:15:"shipping_street";s:16:"Examplestreet 11";s:16:"shipping_zipcode";s:4:"1234";s:13:"shipping_city";s:11:"Examplecity";s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:7:"Germany";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:7:"germany";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"4";s:8:"password";s:60:"$2y$10$qcu486mGUDZ/qbUSJDi78uYwatm24dzQ/dCO79PVVP0MbGHJ0LLgq";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:12:"xyz@mail.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-10-30";s:9:"lastlogin";s:19:"2017-10-30 12:02:18";s:9:"sessionID";s:26:"mpmqj6qoro0pg3ua9u5hprh646";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"6";s:27:"default_shipping_address_id";s:1:"6";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:8:"birthday";s:10:"2017-10-30";s:11:"login_token";s:38:"1f6f51a1-54c1-4db8-8b4f-fbe957f8b856.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sArticles";a:1:{i:222;a:25:{s:14:"orderdetailsID";s:3:"222";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:3:"166";s:18:"articleordernumber";s:7:"SW10153";s:5:"price";s:5:"69.95";s:8:"quantity";s:2:"10";s:7:"invoice";s:5:"699.5";s:4:"name";s:11:"ELASTIC CAP";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:3:"esd";s:1:"0";s:9:"subshopID";s:1:"1";s:8:"language";s:1:"1";s:4:"link";s:70:"http://shopware.example/craft-tradition/women/wallets/166/die-zeit-100";s:15:"link_rating_tab";s:85:"http://shopware.example/craft-tradition/women/wallets/166/die-zeit-100?jumpTab=rating";s:11:"image_large";s:68:"https://www.shopwaredemo.de/media/image/e3/46/f9/SW10153_200x200.jpg";s:11:"image_small";s:68:"https://www.shopwaredemo.de/media/image/e3/46/f9/SW10153_200x200.jpg";s:14:"image_original";s:68:"https://www.shopwaredemo.de/media/image/e3/46/f9/SW10153_200x200.jpg";}}}'
+  `context` = 'a:3:{s:6:"sOrder";a:38:{s:2:"id";s:2:"66";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:12:"order_number";s:5:"20006";s:6:"userID";s:1:"4";s:10:"customerID";s:1:"4";s:14:"invoice_amount";s:5:"701.4";s:18:"invoice_amount_net";s:6:"589.42";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-29 10:00:08";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:19:"cleared_description";s:16:"Komplett bezahlt";s:18:"status_description";s:9:"Completed";s:19:"payment_description";s:18:"Payment in advance";s:20:"dispatch_description";s:17:"Standard delivery";s:20:"currency_description";s:4:"Euro";}s:5:"sUser";a:76:{s:7:"orderID";s:2:"66";s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20006";s:17:"billing_firstname";s:4:"John";s:16:"billing_lastname";s:3:"Doe";s:14:"billing_street";s:16:"Examplestreet 11";s:15:"billing_zipcode";s:4:"1234";s:12:"billing_city";s:11:"Examplecity";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_country";s:7:"Germany";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:7:"germany";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:4:"John";s:17:"shipping_lastname";s:3:"Doe";s:15:"shipping_street";s:16:"Examplestreet 11";s:16:"shipping_zipcode";s:4:"1234";s:13:"shipping_city";s:11:"Examplecity";s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:7:"Germany";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:7:"germany";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"4";s:8:"password";s:60:"$2y$10$qcu486mGUDZ/qbUSJDi78uYwatm24dzQ/dCO79PVVP0MbGHJ0LLgq";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:12:"xyz@mail.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-10-30";s:9:"lastlogin";s:19:"2017-10-30 12:02:18";s:9:"sessionID";s:26:"mpmqj6qoro0pg3ua9u5hprh646";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"6";s:27:"default_shipping_address_id";s:1:"6";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:8:"birthday";s:10:"2017-10-30";s:11:"login_token";s:38:"1f6f51a1-54c1-4db8-8b4f-fbe957f8b856.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sArticles";a:1:{i:222;a:25:{s:14:"orderdetailsID";s:3:"222";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:3:"166";s:18:"articleordernumber";s:7:"SW10153";s:5:"price";s:5:"69.95";s:8:"quantity";s:2:"10";s:7:"invoice";s:5:"699.5";s:4:"name";s:11:"ELASTIC CAP";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:3:"esd";s:1:"0";s:9:"subshopID";s:1:"1";s:8:"language";s:1:"1";s:4:"link";s:42:"http://shopware.example/elastic-muetze-153";s:15:"link_rating_tab";s:57:"http://shopware.example/elastic-muetze-153?jumpTab=rating";s:11:"image_large";s:68:"https://www.shopwaredemo.de/media/image/e3/46/f9/SW10153_200x200.jpg";s:11:"image_small";s:68:"https://www.shopwaredemo.de/media/image/e3/46/f9/SW10153_200x200.jpg";s:14:"image_original";s:68:"https://www.shopwaredemo.de/media/image/e3/46/f9/SW10153_200x200.jpg";}}}'
 WHERE `s_core_config_mails`.`name` = 'sARTICLECOMMENT';
 
 
 
-UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Documents for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'order documents {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
-Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
-thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.
+thank you for your order at {config name=shopName}. In the attachments of this email you will find the your order documents in PDF format.
 
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-        Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},<br/>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
         <br/>
-        thank you for your order at {config name=shopName}. In the attachments of this E-Mail you will find the documents for your order in PDF format.
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
