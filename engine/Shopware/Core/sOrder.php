@@ -646,6 +646,16 @@ class sOrder
 
         $attributeData = array_merge($attributeData, $this->orderAttributes);
 
+        $attributeData = $this->eventManager->filter(
+            'Shopware_Modules_Order_SaveOrder_FilterAttributes',
+            $attributeData,
+            [
+                'subject' => $this,
+                'orderID' => $orderID,
+                'orderParams' => $orderParams,
+            ]
+        );
+        
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id']);

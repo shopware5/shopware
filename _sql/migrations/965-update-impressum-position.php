@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,35 +20,31 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware Store - Global Stores and Models
- *
- * todo@all: Documentation
- */
-Ext.define('Shopware.apps.Base.store.OrderStatus', {
-    extend: 'Ext.data.Store',
+use Shopware\Components\Migrations\AbstractMigration;
 
-    alternateClassName: 'Shopware.store.OrderStatus',
-    storeId: 'base.OrderStatus',
-    model : 'Shopware.apps.Base.model.OrderStatus',
-    pageSize: 1000,
-    autoLoad: false,
-    remoteFilter: false,
-    proxy:{
-        type:'ajax',
-        url:'{url action="getOrderStatus"}',
-        reader:{
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
+class Migrations_Migration965 extends AbstractMigration
+{
+    public function up($modus)
+    {
+        if ($modus !== AbstractMigration::MODUS_INSTALL) {
+            return;
         }
+
+        $this->changeImprintToPositionZero();
     }
-}).create();
+
+    private function changeImprintToPositionZero()
+    {
+        $sql = <<<'EOD'
+SET @parent = (SELECT id FROM `s_cms_static` WHERE `description` LIKE 'Impressum' LIMIT 1);
+EOD;
+        $this->addSql($sql);
+
+        $sql = <<<'EOD'
+UPDATE `s_cms_static` SET `position`='0', `grouping` = 'gLeft|gBottom2' WHERE `id` = @parent;
+EOD;
+        $this->addSql($sql);
+    }
+}

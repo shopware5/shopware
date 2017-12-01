@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ### Additions
 
+* Added new filter event `Shopware_Modules_Order_SaveOrder_FilterAttributes` to `engine/Shopware/Core/sOrder.php` to allow modification of the Order's attributes
 * Added new notify until event `Shopware_Plugins_HttpCache_ShouldNotInvalidateCache` to `engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php` to be notified when the cache for a model will be invalidated and be able to prevent it
 * Added new service `Shopware\Components\HttpCache\CacheRouteInstaller` for creating cache routes
 * Added smarty block `frontend_index_header_meta_description_twitter` for `twitter:description` meta tag

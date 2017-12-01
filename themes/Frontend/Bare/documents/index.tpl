@@ -331,7 +331,7 @@ td.head  {
 
                 {$Containers.Content_Info.value}
             {block name="document_index_info_currency"}
-                {if $Order._currency.factor > 1}{s name="DocumentIndexCurrency"}
+                {if $Order._currency.factor != 1}{s name="DocumentIndexCurrency"}
                     <br>Euro Umrechnungsfaktor: {$Order._currency.factor|replace:".":","}
                     {/s}
                 {/if}
