@@ -562,6 +562,14 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
                 throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
             }
 
+            $reflectionController = new ReflectionClass($class);
+            if ($reflectionController->isAbstract()) {
+                throw new Enlight_Controller_Exception(
+                    'Controller "' . $request->getControllerName() . '" is abstract',
+                    Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+                );
+            }
+
             $proxy = Shopware()->Hooks()->getProxy($class);
 
             /** @var Enlight_Controller_Action $controller */
