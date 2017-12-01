@@ -61,11 +61,16 @@ class BlogService implements Service\BlogServiceInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
+        $result = [];
         $blogs = $this->blogGateway->getList($ids, $context);
 
         $this->resolveMedias($blogs, $context);
 
-        return $blogs;
+        foreach($ids as $id) {
+            $result[$id] = $blogs[$id];
+        }
+
+        return $result;
     }
 
     /**
