@@ -523,7 +523,7 @@ class Variant extends Resource implements BatchInterface
         }
 
         if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
-            $data['purchasePrice'] = floatval(str_replace(',', '.', $data['purchasePrice']));
+            $data['purchasePrice'] = (float) str_replace(',', '.', $data['purchasePrice']);
         }
 
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
@@ -939,13 +939,13 @@ class Variant extends Resource implements BatchInterface
     private function mergePriceData($priceData, $tax)
     {
         if (array_key_exists('from', $priceData)) {
-            $priceData['from'] = intval($priceData['from']);
+            $priceData['from'] = (int) $priceData['from'];
             if ($priceData['from'] <= 0) {
                 throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
             }
         }
         if (array_key_exists('to', $priceData)) {
-            $priceData['to'] = intval($priceData['to']);
+            $priceData['to'] = (int) $priceData['to'];
             // if the "to" value isn't numeric, set the place holder "beliebig"
             if ($priceData['to'] <= 0) {
                 $priceData['to'] = 'beliebig';
@@ -954,7 +954,7 @@ class Variant extends Resource implements BatchInterface
 
         foreach (['price', 'pseudoPrice', 'percent'] as $key) {
             if (array_key_exists($key, $priceData)) {
-                $priceData[$key] = floatval(str_replace(',', '.', $priceData[$key]));
+                $priceData[$key] = (float) str_replace(',', '.', $priceData[$key]);
             }
         }
 

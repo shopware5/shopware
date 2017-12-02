@@ -330,7 +330,7 @@ class sArticles
         $sVoteName = strip_tags($request->getPost('sVoteName'));
         $sVoteSummary = strip_tags($request->getPost('sVoteSummary'));
         $sVoteComment = strip_tags($request->getPost('sVoteComment'));
-        $sVoteStars = floatval($request->getPost('sVoteStars'));
+        $sVoteStars = (float) $request->getPost('sVoteStars');
         $sVoteMail = strip_tags($request->getPost('sVoteMail'));
 
         if ($sVoteStars < 1 || $sVoteStars > 10) {
@@ -418,7 +418,7 @@ class sArticles
         if (!$this->frontController->Request()->getQuery('sSearch')) {
             return;
         }
-        $sSearch = intval($this->frontController->Request()->getQuery('sSearch'));
+        $sSearch = (int) $this->frontController->Request()->getQuery('sSearch');
 
         $getArticles = $this->db->fetchAll(
             'SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC',
@@ -609,7 +609,7 @@ class sArticles
             $price = $price - ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
         }
         if ($this->sSYSTEM->sCurrency['factor']) {
-            $price = $price * floatval($this->sSYSTEM->sCurrency['factor']);
+            $price = $price * (float) $this->sSYSTEM->sCurrency['factor'];
         }
 
         // Condition Output-Netto AND NOT overwrite by customer-group
@@ -674,7 +674,7 @@ class sArticles
         }
 
         if (!empty($this->sSYSTEM->sCurrency['factor']) && $ignoreCurrency == false) {
-            $price = floatval($price) * floatval($this->sSYSTEM->sCurrency['factor']);
+            $price = (float) $price * (float) $this->sSYSTEM->sCurrency['factor'];
         }
 
         if ($ignoreTax == true) {
@@ -1174,7 +1174,7 @@ class sArticles
         $purchaseUnit = (float) $purchaseUnit;
         $referenceUnit = (float) $referenceUnit;
 
-        $price = floatval(str_replace(',', '.', $price));
+        $price = (float) str_replace(',', '.', $price);
 
         if ($purchaseUnit == 0 || $referenceUnit == 0) {
             return 0;

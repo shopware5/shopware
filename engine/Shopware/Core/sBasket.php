@@ -1199,20 +1199,18 @@ class sBasket
                     $t = round(str_replace(',', '.', $value['amountWithTax']), 2);
                 } else {
                     $t = str_replace(',', '.', $value['price']);
-                    $t = floatval(round($t * $value['quantity'], 2));
+                    $t = (float) round($t * $value['quantity'], 2);
                 }
                 if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
-                    $p = floatval($this->moduleManager->Articles()->sRound(
+                    $p = (float) $this->moduleManager->Articles()->sRound(
                         $this->moduleManager->Articles()->sRound(
                             round($value['netprice'], 2) * $value['quantity'])
-                        )
-                    );
+                        );
                 } else {
-                    $p = floatval($this->moduleManager->Articles()->sRound(
+                    $p = (float) $this->moduleManager->Articles()->sRound(
                         $this->moduleManager->Articles()->sRound(
                             $value['netprice'] * $value['quantity'])
-                        )
-                    );
+                        );
                 }
                 $calcDifference = $this->moduleManager->Articles()->sFormatPrice($t - $p);
                 $result['content'][$key]['tax'] = $calcDifference;
@@ -2138,7 +2136,7 @@ class sBasket
                 $taxRate = $this->config->get('sVOUCHERTAX');
             } elseif ($voucherDetails['taxconfig'] === 'auto') {
                 $taxRate = $this->getMaxTax();
-            } elseif (intval($voucherDetails['taxconfig'])) {
+            } elseif ((int) $voucherDetails['taxconfig']) {
                 $temporaryTax = $voucherDetails['taxconfig'];
                 $getTaxRate = $this->db->fetchOne(
                     'SELECT tax FROM s_core_tax WHERE id = ?',
@@ -2156,7 +2154,7 @@ class sBasket
                 $tax = $this->getMaxTax();
                 $taxRate = $tax;
                 $tax = round($voucherDetails['value'] / (100 + $tax) * 100, 3) * -1;
-            } elseif (intval($voucherDetails['taxconfig'])) {
+            } elseif ((int) $voucherDetails['taxconfig']) {
                 // Fix defined tax
                 $temporaryTax = $voucherDetails['taxconfig'];
                 $getTaxRate = $this->db->fetchOne(
@@ -2164,7 +2162,7 @@ class sBasket
                     [$temporaryTax]
                 );
                 $taxRate = $getTaxRate;
-                $tax = round($voucherDetails['value'] / (100 + (intval($getTaxRate))) * 100, 3) * -1;
+                $tax = round($voucherDetails['value'] / (100 + ((int) $getTaxRate)) * 100, 3) * -1;
             } else {
                 // No tax
                 $tax = $voucherDetails['value'] * -1;
@@ -2593,8 +2591,8 @@ class sBasket
             $queryAdditionalInfo['purchasesteps'] = 1;
         }
 
-        if (($quantity / $queryAdditionalInfo['purchasesteps']) != intval($quantity / $queryAdditionalInfo['purchasesteps'])) {
-            $quantity = intval($quantity / $queryAdditionalInfo['purchasesteps']) * $queryAdditionalInfo['purchasesteps'];
+        if (($quantity / $queryAdditionalInfo['purchasesteps']) != (int) ($quantity / $queryAdditionalInfo['purchasesteps'])) {
+            $quantity = (int) ($quantity / $queryAdditionalInfo['purchasesteps']) * $queryAdditionalInfo['purchasesteps'];
         }
 
         $maxPurchase = $this->config->get('sMAXPURCHASE');

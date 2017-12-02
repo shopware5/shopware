@@ -230,7 +230,7 @@ class sAdmin
      */
     public function sGetPaymentMeanById($id, $user = false)
     {
-        $id = intval($id);
+        $id = (int) $id;
         $resetPayment = false;
 
         $data = $this->db->fetchRow(
@@ -1488,13 +1488,13 @@ class sAdmin
             if ($this->session->offsetGet('sCountry')
                 && $this->session->offsetGet('sCountry') != $register['billing']['country']
             ) {
-                $register['billing']['country'] = intval($this->session->offsetGet('sCountry'));
+                $register['billing']['country'] = (int) $this->session->offsetGet('sCountry');
                 $this->session->offsetSet('sRegister', $register);
             }
 
             $userData['additional']['country'] = $this->db->fetchRow(
                 $countryQuery,
-                [intval($register['billing']['country'])]
+                [(int) $register['billing']['country']]
             );
             $userData['additional']['country'] = $userData['additional']['country'] ?: [];
             $userData['additional']['countryShipping'] = $userData['additional']['country'];
@@ -2436,7 +2436,7 @@ class sAdmin
         if (!empty($cache[$payment]['surchargestring'])) {
             foreach (explode(';', $cache[$payment]['surchargestring']) as $countrySurcharge) {
                 list($key, $value) = explode(':', $countrySurcharge);
-                $value = floatval(str_replace(',', '.', $value));
+                $value = (float) str_replace(',', '.', $value);
                 if (!empty($value)) {
                     $cache[$payment]['country_surcharge'][$key] = $value;
                 }

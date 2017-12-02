@@ -1026,7 +1026,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 } elseif ($resultVoucherTaxMode == 'none') {
                     // No tax
                     $tax = '0';
-                } elseif (intval($resultVoucherTaxMode)) {
+                } elseif ((int) $resultVoucherTaxMode) {
                     // Fix defined tax
                     $tax = Shopware()->Db()->fetchOne('
                     SELECT tax FROM s_core_tax WHERE id = ?
@@ -1048,7 +1048,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 continue;
             } // Ignore 0 % tax
 
-            $taxKey = number_format(floatval($item['tax_rate']), 2);
+            $taxKey = number_format((float) $item['tax_rate'], 2);
 
             $result[$taxKey] += str_replace(',', '.', $item['tax']);
         }
@@ -1616,7 +1616,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             try {
                 $quantity = 1;
                 if (!empty($quantities[$key])) {
-                    $quantity = intval($quantities[$key]);
+                    $quantity = (int) $quantities[$key];
                 }
 
                 $this->basket->sAddArticle($accessory, $quantity);
