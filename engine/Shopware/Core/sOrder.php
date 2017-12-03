@@ -903,6 +903,12 @@ class sOrder
         if ($variables['sBookingID']) {
             $context['sBookingID'] = $variables['sBookingID'];
         }
+        
+        $context = $this->eventManager->filter(
+            'Shopware_Modules_Order_SendMail_FilterContext',
+            $context,
+            ['subject' => $this]
+        );
 
         $mail = null;
         if ($event = $this->eventManager->notifyUntil(
