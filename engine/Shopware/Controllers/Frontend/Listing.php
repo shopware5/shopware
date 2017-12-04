@@ -190,10 +190,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign('manufacturer', $manufacturer);
         $this->View()->assign('ajaxCountUrlParams', [
             'sSupplier' => $manufacturerId,
-            'sCategory' => $context->getShop()->getCategory()->getId(),
+            'sCategory' => $context->getShop()->getCategory()->getId()
         ]);
 
-        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
+        $categoryContent = $this->getSeoDataOfManufacturer($manufacturer);
+        $categoryContent['productBoxLayout'] = $context->getShop()->getCategory()->getProductBoxLayout();
+
+        $this->View()->assign('sCategoryContent', $categoryContent);
     }
 
     /**
