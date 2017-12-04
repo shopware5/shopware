@@ -69,7 +69,8 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 
             $result = new ProductSearchResult([$directhit], 1, []);
             $data = $this->get('legacy_struct_converter')->convertListProductStruct($directhit);
-
+            //change name for compatibility reasons
+            $data['name'] = $data['articleName'];
             $this->View()->assign('searchResult', $result);
             $this->View()->assign('sSearchRequest', ['sSearch' => $term]);
             $this->View()->assign('sSearchResults', [
