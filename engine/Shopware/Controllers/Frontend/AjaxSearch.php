@@ -58,6 +58,27 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             ->createAjaxSearchCriteria($this->Request(), $context);
 
         /** @var ProductSearchResult $result */
+        
+        //check if search-tearm is a valid product-number
+        if ((Shopware()->Config()->get('activateNumberSearch') == "1")) {
+        $directhit = Shopware()->Container()->get('shopware_storefront.list_product_service')
+            ->get($term, $context);
+        }
+
+        if ((Shopware()->Config()->get('activateNumberSearch') == "1") && $directhit) {
+
+            $result = new ProductSearchResult([$directhit], 1, []);
+            $data = $this->get('legacy_struct_converter')->convertListProductStruct($directhit);
+
+            $this->View()->assign('searchResult', $result);
+            $this->View()->assign('sSearchRequest', ['sSearch' => $term]);
+            $this->View()->assign('sSearchResults', [
+                'sResults' => [$data],
+                'sArticlesCount' => 1,
+            ]);
+            return;
+        }
+        
         $result = $this->get('shopware_search.product_search')->search($criteria, $context);
 
         if ($result->getTotalCount() > 0) {
