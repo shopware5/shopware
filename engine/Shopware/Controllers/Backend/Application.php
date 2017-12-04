@@ -606,7 +606,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Helper function to get the repository of the configured model.
      *
-     * @return \Shopware\Models\Partner\Repository
+     * @return \Shopware\Components\Model\ModelRepository
      */
     protected function getRepository()
     {
