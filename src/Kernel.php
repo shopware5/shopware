@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware;
 
@@ -7,9 +7,9 @@ use Shopware\Framework\Framework;
 use Shopware\Framework\Plugin\Plugin;
 use Shopware\Framework\Plugin\PluginCollection;
 use Shopware\Storefront\Theme\Theme;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel as HttpKernel;
-use Symfony\Component\Config\Loader\LoaderInterface;
 
 class Kernel extends HttpKernel
 {
@@ -29,7 +29,7 @@ class Kernel extends HttpKernel
     private $themes = [];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __construct($environment, $debug)
     {
@@ -61,55 +61,38 @@ class Kernel extends HttpKernel
             new \Shopware\Administration\Administration(),
             new \Shopware\Translation\Translation(),
             new \Shopware\Filesystem\Filesystem(),
-            new \Shopware\Album\Album(),
-            new \Shopware\Area\Area(),
-            new \Shopware\ProductVote\ProductVote(),
-            new \Shopware\ProductVoteAverage\ProductVoteAverage(),
-            new \Shopware\AreaCountry\AreaCountry(),
-            new \Shopware\AreaCountryState\AreaCountryState(),
+            new \Shopware\Serializer\Serializer(),
+            new \Shopware\DbalIndexing\DbalIndexing(),
+
             new \Shopware\Category\Category(),
+            new \Shopware\Config\Config(),
+            new \Shopware\Country\Country(),
             new \Shopware\Currency\Currency(),
             new \Shopware\Customer\Customer(),
-            new \Shopware\CustomerAddress\CustomerAddress(),
-            new \Shopware\CustomerGroup\CustomerGroup(),
-            new \Shopware\CustomerGroupDiscount\CustomerGroupDiscount(),
-            new \Shopware\Holiday\Holiday(),
-            new \Shopware\ListingSorting\ListingSorting(),
+            new \Shopware\Listing\Listing(),
             new \Shopware\Locale\Locale(),
+            new \Shopware\Log\Log(),
+            new \Shopware\Mail\Mail(),
             new \Shopware\Media\Media(),
-            new \Shopware\PaymentMethod\PaymentMethod(),
-            new \Shopware\PriceGroup\PriceGroup(),
-            new \Shopware\PriceGroupDiscount\PriceGroupDiscount(),
+            new \Shopware\Order\Order(),
+            new \Shopware\Payment\Payment(),
+            new \Shopware\Plugin\Plugin(),
             new \Shopware\Product\Product(),
             new \Shopware\ProductVariant\ProductVariant(),
-            new \Shopware\ProductManufacturer\ProductManufacturer(),
-            new \Shopware\ProductPrice\ProductPrice(),
-            new \Shopware\ProductStream\ProductStream(),
-            new \Shopware\SeoUrl\SeoUrl(),
-            new \Shopware\Serializer\Serializer(),
-            new \Shopware\ShippingMethod\ShippingMethod(),
-            new \Shopware\ShippingMethodPrice\ShippingMethodPrice(),
+            new \Shopware\Seo\Seo(),
+            new \Shopware\Shipping\Shipping(),
             new \Shopware\Shop\Shop(),
-            new \Shopware\ShopTemplate\ShopTemplate(),
+            new \Shopware\Snippet\Snippet(),
             new \Shopware\Tax\Tax(),
-            new \Shopware\TaxAreaRule\TaxAreaRule(),
             new \Shopware\Unit\Unit(),
-            new \Shopware\Order\Order(),
-            new \Shopware\OrderAddress\OrderAddress(),
-            new \Shopware\OrderDelivery\OrderDelivery(),
-            new \Shopware\OrderDeliveryPosition\OrderDeliveryPosition(),
-            new \Shopware\OrderLineItem\OrderLineItem(),
-            new \Shopware\OrderState\OrderState(),
-            new \Shopware\ProductListingPrice\ProductListingPrice(),
-            new \Shopware\DbalIndexing\DbalIndexing(),
-            new \Shopware\ProductMedia\ProductMedia(),
+            new \Shopware\User\User(),
         ];
 
         // debug
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
-            $bundles[]= new \Symfony\Bundle\DebugBundle\DebugBundle();
-            $bundles[]= new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[]= new \Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new \Symfony\Bundle\DebugBundle\DebugBundle();
+            $bundles[] = new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+            $bundles[] = new \Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new \Shopware\Traceable\Traceable();
         }
 
@@ -122,7 +105,7 @@ class Kernel extends HttpKernel
 
     public function boot($withPlugins = true)
     {
-        if (true === $this->booted) {
+        if ($this->booted === true) {
             return;
         }
 
@@ -192,8 +175,13 @@ class Kernel extends HttpKernel
         return $this->getProjectDir() . '/custom/plugins';
     }
 
+    public function registerContainerConfiguration(LoaderInterface $loader): void
+    {
+        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
+    }
+
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getKernelParameters(): array
     {
@@ -218,12 +206,6 @@ class Kernel extends HttpKernel
         );
     }
 
-
-    public function registerContainerConfiguration(LoaderInterface $loader): void
-    {
-        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
-    }
-
     protected function getContainerClass()
     {
         $pluginHash = sha1(implode('', array_keys(self::getPlugins()->getActivePlugins())));
@@ -240,14 +222,6 @@ class Kernel extends HttpKernel
         return $this->themes = [
             new \Shopware\Storefront\Storefront(),
         ];
-    }
-
-    private function initializePluginSystem(): void
-    {
-        self::$connection = DatabaseConnector::createPdoConnection();
-
-        $this->initializePlugins();
-        $this->initializeThemes();
     }
 
     protected function initializePlugins(): void
@@ -289,5 +263,13 @@ class Kernel extends HttpKernel
 
             self::$plugins->add($plugin);
         }
+    }
+
+    private function initializePluginSystem(): void
+    {
+        self::$connection = DatabaseConnector::createPdoConnection();
+
+        $this->initializePlugins();
+        $this->initializeThemes();
     }
 }

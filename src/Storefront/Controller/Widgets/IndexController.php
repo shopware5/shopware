@@ -64,7 +64,7 @@ class IndexController extends StorefrontController
             'shop' => $context->getShop(),
             'currency' => $context->getCurrency(),
             'shops' => $this->loadShops($context),
-            'currencies' => $context->getShop()->getAvailableCurrencies(),
+            'currencies' => $context->getShop()->getCurrencies(),
         ]);
     }
 
@@ -72,14 +72,13 @@ class IndexController extends StorefrontController
     {
         $criteria = new Criteria();
 
-        $uuids = [$context->getShop()->getParentUuid(), $context->getShop()->getUuid()];
+        $uuids = array_filter([$context->getShop()->getParentUuid(), $context->getShop()->getUuid()]);
         $criteria->addFilter(new TermsQuery('shop.parentUuid', $uuids));
         $criteria->addFilter(new TermQuery('shop.active', 1));
 
         $shops = $this->shopRepository->search($criteria, $context->getTranslationContext());
         $shops->add($context->getShop());
-        $shops = $shops->sortByPosition();
 
-        return $shops;
+        return $shops->sortByPosition();
     }
 }
