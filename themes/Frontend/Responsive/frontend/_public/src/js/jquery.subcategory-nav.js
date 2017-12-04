@@ -71,15 +71,6 @@
             'mainMenuSelector': '.link--go-main',
 
             /**
-             * Selector for the wrapper of the sidebar navigation.
-             * This wrapper will contain the main menu.
-             *
-             * @property sidebarWrapperSelector
-             * @type {String}
-             */
-            'sidebarWrapperSelector': '.sidebar--categories-wrapper',
-
-            /**
              * ID of the root category ID of the current shop.
              * This is used to determine if the user switches to the main
              * menu when clicking on a back button.
@@ -238,7 +229,7 @@
              * @property $sidebar
              * @type {jQuery}
              */
-            me.$sidebar = $(opts.sidebarMainSelector);
+            me.$sidebar = me.$el.closest(opts.sidebarMainSelector);
 
             /**
              * Wrapper of the navigation lists in the main navigation.
@@ -247,7 +238,7 @@
              * @property $sidebarWrapper
              * @type {jQuery}
              */
-            me.$sidebarWrapper = $(opts.sidebarWrapperSelector);
+            me.$sidebarWrapper = me.$el;
 
             /**
              * Wrapper of the offcanvas animation
@@ -256,7 +247,7 @@
              * @property $navigation
              * @type {jQuery}
              */
-            me.$navigation = $(opts.mobileNavigationSelector);
+            me.$navigation = me.$el.closest(opts.mobileNavigationSelector);
             me.$navigation.show();
 
             /**

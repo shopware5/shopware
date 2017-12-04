@@ -22,11 +22,17 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 </IfModule>
 
 <IfModule mod_alias.c>
-    # Block access to VCS directories
+    # Restrict access to VCS directories
     RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
 
     # Restrict access to root folder files
-    RedirectMatch 404 /(composer\.(json|lock)|README\.md|UPGRADE\.md)$
+    RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|README\.md|UPGRADE-(.*)\.md|CONTRIBUTING\.md|eula.*\.txt|\.gitignore|.*\.dist)$
+
+    # Restrict access to shop configs files
+    RedirectMatch 404 /(web\/cache\/(config_\d+\.json|all.less))$
+
+    # Restrict access to theme configurations
+    RedirectMatch 404 /themes/(.*)(.*\.lock|package\.json|\.gitignore|Gruntfile\.js|all\.less|node_modules\/.*)$
 </IfModule>
 
 # Staging environment
