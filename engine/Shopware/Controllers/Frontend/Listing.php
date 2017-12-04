@@ -130,8 +130,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
         $sortingService = $this->get('shopware_storefront.custom_sorting_service');
 
+        $mainCategory = $context->getShop()->getCategory();
+        $categoryId = $mainCategory->getId();
         if (!$this->Request()->getParam('sCategory')) {
-            $categoryId = $context->getShop()->getCategory()->getId();
 
             $this->Request()->setParam('sCategory', $categoryId);
 
@@ -154,7 +155,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
-            $context->getShop()->getCategory()->getId(),
+            $categoryId,
             $criteria
         );
 
@@ -186,10 +187,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign('manufacturer', $manufacturer);
         $this->View()->assign('ajaxCountUrlParams', [
             'sSupplier' => $manufacturerId,
-            'sCategory' => $context->getShop()->getCategory()->getId(),
+            'sCategory' => $categoryId,
         ]);
 
-        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
+        $categoryContent = $this->getSeoDataOfManufacturer($manufacturer);
+        $categoryContent['productBoxLayout'] = $mainCategory->getProductBoxLayout();
+
+        $this->View()->assign('sCategoryContent', $categoryContent);
     }
 
     /**
