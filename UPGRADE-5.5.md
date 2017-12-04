@@ -12,13 +12,29 @@ This changelog references changes done in Shopware 5.5 patch versions.
     - `IFrameComponentHandler`
     - `YoutubeComponentHandler`
 * Added `mainDetail` to REST API call for retrieving a list of products
+* Added struct `Shopware\Components\Cart\Struct\CartItemStruct` to represent items in the cart during calculation
+* Added public function `sBasket::updateCartItems` to provide a new way of interacting with cart updates
+* Added following templates to `themes/Frontend/Bare/frontend/checkout/`
+    * `cart_item_premium_product.tpl`
+    * `cart_item_product.tpl`
+    * `cart_item_rebate.tpl`
+    * `cart_item_surcharge_discount.tpl`
+    * `cart_item_voucher.tpl`
 
 ### Changes
 
 * Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once
 * Changed Symfony version to 3.4.4
 * Changed the event `Shopware_Form_Builder` so that the `reference` contains the `BlockPrefix` of the Formtype, not the name
-* Changed REST API `articles` list call to include `mainDetail` 
+* Changed REST API `articles` list call to include `mainDetail`
+* Changed `themes/Frontend/Bare/frontend/checkout/cart_item.tpl` in which the following blocks are contained:
+    * `frontend_checkout_cart_item_product`
+    * `frontend_checkout_cart_item_premium_product`
+    * `frontend_checkout_cart_item_voucher`
+    * `frontend_checkout_cart_item_rebate`
+    * `frontend_checkout_cart_item_surcharge_discount`
+    
+    All these blocks are moved to own template files to optimize include process.
 
 ### Removals
 

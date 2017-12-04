@@ -583,16 +583,19 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         // Test with session and empty basket, expect false
         $this->assertFalse($this->module->getMaxTax());
 
-        $randomArticle = $this->db->fetchRow(
+        $products = $this->db->fetchAll(
             'SELECT * FROM s_articles_details detail
             INNER JOIN s_articles article
               ON article.id = detail.articleID
+            INNER JOIN s_core_tax tax
+              ON tax.id = article.taxID
             WHERE detail.active = 1
-            LIMIT 1'
+            ORDER BY tax.tax
+            LIMIT 2'
         );
+        $originalTaxId = $products[0]['taxID'];
 
-        $randOne = rand(1, 100);
-        $randTwo = rand(1, 100);
+        $this->db->update('s_articles', ['taxID' => 4], ['id = ?' => $products[0]['id']]);
 
         // Add one article, check that he is the new maximum
         $this->db->insert(
@@ -601,12 +604,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'price' => 100,
                 'quantity' => 1,
                 'sessionID' => $this->session->get('sessionId'),
-                'ordernumber' => $randomArticle['ordernumber'],
-                'articleID' => $randomArticle['articleID'],
-                'tax_rate' => $randOne,
+                'ordernumber' => $products[0]['ordernumber'],
+                'articleID' => $products[0]['articleID'],
+                'tax_rate' => $products[0]['tax'],
             ]
         );
-        $this->assertEquals($randOne, $this->module->getMaxTax());
+        $this->assertEquals($products[0]['tax'], $this->module->getMaxTax());
 
         // Add another article, check that we get the max of the two
         $this->db->insert(
@@ -615,12 +618,14 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'price' => 100,
                 'quantity' => 1,
                 'sessionID' => $this->session->get('sessionId'),
-                'ordernumber' => $randomArticle['ordernumber'],
-                'articleID' => $randomArticle['articleID'],
-                'tax_rate' => $randTwo,
+                'ordernumber' => $products[1]['ordernumber'],
+                'articleID' => $products[1]['articleID'],
+                'tax_rate' => $products[1]['tax'],
             ]
         );
-        $this->assertEquals(max($randOne, $randTwo), $this->module->getMaxTax());
+        $this->assertEquals($products[1]['tax'], $this->module->getMaxTax());
+
+        $this->db->update('s_articles', ['taxID' => $originalTaxId], ['id = ?' => $products[0]['id']]);
 
         // Housekeeping
         $this->db->delete(
