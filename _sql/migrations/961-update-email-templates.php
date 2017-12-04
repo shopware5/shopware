@@ -759,8 +759,9 @@ Bestellnummer     Artikelname    Bestand/Mindestbestand
 {$sArticle.ordernumber}       {$sArticle.name}        {$sArticle.instock}/{$sArticle.stockmin}
 {/foreach}
 
-{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '{include file="string:{config name=emailheaderhtml}"}
-<div style="font-family:arial; font-size:12px;">
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
     <p>
         Hallo,<br/>
         <br/>
@@ -2038,8 +2039,9 @@ Order number     Name of article    Stock/Minimum stock
 {$sArticle.ordernumber}       {$sArticle.name}        {$sArticle.instock}/{$sArticle.stockmin}
 {/foreach}
 
-{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '{include file="string:{config name=emailheaderhtml}"}
-<div style="font-family:arial; font-size:12px;">
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
     <p>
         Hello,<br/>
         <br/>
@@ -2620,7 +2622,7 @@ WHERE `s_core_config_mails`.`name` = 'sARTICLECOMMENT' AND `dirty` = 0 AND `cont
 EOD;
 
         $sql .= <<<'EOD'
-    UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Order documents {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+    UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Order documents for your order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
 Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
