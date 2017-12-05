@@ -258,7 +258,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         });
 
         customerStreamSelection.store.each(function(stream) {
-            var count = stream.get('newsletter_count');
+            var count = parseInt(stream.get('newsletter_count'));
             totalCount += count;
 
             record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {
