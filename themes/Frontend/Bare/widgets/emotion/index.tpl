@@ -99,44 +99,8 @@
 
                                     {block name="widgets/emotion/index/inner-element"}
 
-                                        {$file = ''}
-
-                                        {if $template == 'component_article'}
-                                            {$file = 'widgets/emotion/components/component_article.tpl'}
-
-                                        {elseif $template == 'component_article_slider'}
-                                            {$file = 'widgets/emotion/components/component_article_slider.tpl'}
-
-                                        {elseif $template == 'component_banner'}
-                                            {$file = 'widgets/emotion/components/component_banner.tpl'}
-
-                                        {elseif $template == 'component_banner_slider'}
-                                            {$file = 'widgets/emotion/components/component_banner_slider.tpl'}
-
-                                        {elseif $template == 'component_blog'}
-                                            {$file = 'widgets/emotion/components/component_blog.tpl'}
-
-                                        {elseif $template == 'component_category_teaser'}
-                                            {$file = 'widgets/emotion/components/component_category_teaser.tpl'}
-
-                                        {elseif $template == 'component_html'}
-                                            {$file = 'widgets/emotion/components/component_html.tpl'}
-
-                                        {elseif $template == 'component_iframe'}
-                                            {$file = 'widgets/emotion/components/component_iframe.tpl'}
-
-                                        {elseif $template == 'component_manufacturer_slider'}
-                                            {$file = 'widgets/emotion/components/component_manufacturer_slider.tpl'}
-
-                                        {elseif $template == 'component_youtube'}
-                                            {$file = 'widgets/emotion/components/component_youtube.tpl'}
-
-                                        {elseif "widgets/emotion/components/{$template}.tpl"|template_exists}
-                                            {$file = "widgets/emotion/components/{$template}.tpl"}
-
-                                        {/if}
-
-                                        {if $file != ''}
+                                        {$file = "widgets/emotion/components/{$template}.tpl"}
+                                        {if $file|template_exists}
                                             {include file=$file}
                                         {/if}
 
