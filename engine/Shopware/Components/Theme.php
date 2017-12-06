@@ -45,6 +45,20 @@ class Theme
     protected $extend = null;
 
     /**
+     * Defines for which themes the LESS definition should be discarded
+     *
+     * @var array
+     */
+    protected $discardedLessThemes = [];
+
+    /**
+     * Defines for which themes the JavaScript files should be discarded
+     *
+     * @var array
+     */
+    protected $discardedJavascriptThemes = [];
+
+    /**
      * Defines the human readable theme name
      * which displayed in the backend
      *
@@ -262,6 +276,38 @@ class Theme
     public function injectBeforePlugins()
     {
         return $this->injectBeforePlugins;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscardedLessThemes()
+    {
+        return $this->discardedLessThemes;
+    }
+
+    /**
+     * @param bool $discardedLessThemes
+     */
+    public function setDiscardedLessThemes($discardedLessThemes)
+    {
+        $this->discardedLessThemes = $discardedLessThemes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscardedJavascriptThemes()
+    {
+        return $this->discardedJavascriptThemes;
+    }
+
+    /**
+     * @param array $discardedJavascriptThemes
+     */
+    public function setDiscardedJavascriptThemes($discardedJavascriptThemes)
+    {
+        $this->discardedJavascriptThemes = $discardedJavascriptThemes;
     }
 
     /**

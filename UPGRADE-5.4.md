@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
+* Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
 
 ### Changes
 
