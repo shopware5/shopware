@@ -107,13 +107,11 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
 
         this.addBtn = Ext.create('Ext.button.Button', {
             text: me.snippets.add,
-            cls: 'small secondary',
             action: 'mediamanager-album-add-add',
             cls: 'primary'
         });
 
         return [ '->', this.closeBtn, this.addBtn ];
-
     }
 });
 //{/block}

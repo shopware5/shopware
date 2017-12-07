@@ -61,6 +61,8 @@ class GarbageCollectorFactory
     }
 
     /**
+     * @throws \Enlight_Event_Exception
+     *
      * @return GarbageCollector
      */
     public function factory()
@@ -103,6 +105,8 @@ class GarbageCollectorFactory
     }
 
     /**
+     * @throws \Enlight_Event_Exception
+     *
      * @return MediaPosition[]
      */
     private function getMediaPositions()
@@ -136,7 +140,7 @@ class GarbageCollectorFactory
             ->andWhere('entity = :entityName')
             ->andWhere('column_type = :columnType')
             ->setParameters([
-                'entityName' => 'Shopware\Models\Media\Media',
+                'entityName' => \Shopware\Models\Media\Media::class,
                 'columnType' => 'single_selection',
             ])
             ->execute()
@@ -153,7 +157,7 @@ class GarbageCollectorFactory
             ->andWhere('entity = :entityName')
             ->andWhere('column_type = :columnType')
             ->setParameters([
-                'entityName' => 'Shopware\Models\Media\Media',
+                'entityName' => \Shopware\Models\Media\Media::class,
                 'columnType' => 'multi_selection',
             ])
             ->execute()

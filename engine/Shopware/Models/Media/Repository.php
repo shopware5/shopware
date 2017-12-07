@@ -67,7 +67,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('media')
-                ->from('Shopware\Models\Media\Media', 'media');
+                ->from(\Shopware\Models\Media\Media::class, 'media');
         if ($filter) {
             $builder->addFilter($filter);
         }
@@ -106,7 +106,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAlbumMediaQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $albumId
+     * @param int  $albumId
      * @param null $filter
      * @param null $orderBy
      * @param null $validTypes
@@ -118,8 +118,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select('media')
-                ->from('Shopware\Models\Media\Media', 'media');
-        if ($albumId != null || $albumId != 0) {
+                ->from(\Shopware\Models\Media\Media::class, 'media');
+        if (!empty($albumId)) {
             $builder->where('media.albumId = :albumId')->setParameter('albumId', $albumId);
         }
 
@@ -145,7 +145,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $albumId
+     * @param int $albumId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -160,7 +160,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAlbumWithSettingsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $albumId
+     * @param int $albumId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -168,7 +168,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['album', 'settings'])
-                ->from('Shopware\Models\Media\Album', 'album')
+                ->from(\Shopware\Models\Media\Album::class, 'album')
                 ->leftJoin('album.settings', 'settings')
                 ->where('album.id = ?1')
                 ->setParameter(1, $albumId);
@@ -179,7 +179,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of \Doctrine\ORM\Query object which selects the media model by path
      *
-     * @param $path
+     * @param string $path
      *
      * @return \Doctrine\ORM\Query
      */
@@ -194,7 +194,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getMediaByPathQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $path
+     * @param string $path
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -202,7 +202,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['media']);
-        $builder->from('Shopware\Models\Media\Media', 'media')
+        $builder->from(\Shopware\Models\Media\Media::class, 'media')
                 ->where('media.path = ?1')
                 ->setParameter(1, $path);
 
