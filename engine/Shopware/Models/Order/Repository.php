@@ -422,6 +422,7 @@ class Repository extends ModelRepository
             'dispatch',
             'paymentStatus',
             'orderStatus',
+            'attribute'
         ]);
 
         $query->from('Shopware\Models\Order\Order', 'orders', 'orders.id');
@@ -439,6 +440,7 @@ class Repository extends ModelRepository
         $query->leftJoin('billing.state', 'billingState');
         $query->leftJoin('orders.shop', 'shop');
         $query->leftJoin('orders.dispatch', 'dispatch');
+        $query->leftJoin('orders.attribute', 'attribute');
         $query->where('orders.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
