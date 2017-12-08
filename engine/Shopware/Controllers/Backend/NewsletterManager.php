@@ -575,8 +575,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
-        $sender = $query->getArrayResult();
-
         $this->View()->assign([
             'success' => true,
             'data' => $result,
