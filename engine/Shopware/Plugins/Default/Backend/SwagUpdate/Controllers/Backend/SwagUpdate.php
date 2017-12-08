@@ -226,7 +226,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII, 0)) {
+        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII)) {
             $this->View()->assign([
                 'success' => false,
                 'error' => 'Could not read files from connection.',

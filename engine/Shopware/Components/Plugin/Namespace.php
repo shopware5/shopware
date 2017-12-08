@@ -465,8 +465,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 ]
             );
 
-            $newInfo->set('updateVersion', null);
-            $newInfo->set('updateSource', null);
+            $newInfo->set('updateVersion');
+            $newInfo->set('updateSource');
             $newInfo->set('updateDate', new DateTimeImmutable());
             $plugin->Info()->merge($newInfo);
             $this->registerPlugin($plugin);

@@ -551,7 +551,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             \PDO::FETCH_ASSOC
         );
 
-        $translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
+        $translation = $this->translationComponent->read($this->_order->order->language, 'documents');
         $this->_document->containers = new ArrayObject();
         foreach ($containers as $key => $container) {
             if (!is_numeric($key)) {

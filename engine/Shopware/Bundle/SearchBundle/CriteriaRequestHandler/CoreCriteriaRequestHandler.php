@@ -144,7 +144,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addShippingFreeCondition(Request $request, Criteria $criteria)
     {
-        $shippingFree = $request->getParam('shippingFree', null);
+        $shippingFree = $request->getParam('shippingFree');
         if (!$shippingFree) {
             return;
         }
@@ -158,7 +158,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addImmediateDeliveryCondition(Request $request, Criteria $criteria)
     {
-        $immediateDelivery = $request->getParam('immediateDelivery', null);
+        $immediateDelivery = $request->getParam('immediateDelivery');
         if (!$immediateDelivery) {
             return;
         }
@@ -172,7 +172,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addRatingCondition(Request $request, Criteria $criteria)
     {
-        $average = $request->getParam('rating', null);
+        $average = $request->getParam('rating');
         if (!$average) {
             return;
         }
@@ -186,8 +186,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addPriceCondition(Request $request, Criteria $criteria)
     {
-        $min = $request->getParam('priceMin', null);
-        $max = $request->getParam('priceMax', null);
+        $min = $request->getParam('priceMin');
+        $max = $request->getParam('priceMax');
 
         if (!$min && !$max) {
             return;
@@ -203,7 +203,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addSearchCondition(Request $request, Criteria $criteria)
     {
-        $term = $request->getParam('sSearch', null);
+        $term = $request->getParam('sSearch');
         if ($term == null) {
             return;
         }
@@ -245,7 +245,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private function addLimit(Request $request, Criteria $criteria)
     {
         $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
-        $max = $this->config->get('maxStoreFrontLimit', null);
+        $max = $this->config->get('maxStoreFrontLimit');
         if ($max) {
             $limit = min($limit, $max);
         }
@@ -266,8 +266,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     private function addWeightCondition(Request $request, Criteria $criteria)
     {
-        $min = $request->getParam('minWeight', null);
-        $max = $request->getParam('maxWeight', null);
+        $min = $request->getParam('minWeight');
+        $max = $request->getParam('maxWeight');
 
         if (!$min && !$max) {
             return;
@@ -279,8 +279,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     private function addWidthCondition(Request $request, Criteria $criteria)
     {
-        $min = $request->getParam('minWidth', null);
-        $max = $request->getParam('maxWidth', null);
+        $min = $request->getParam('minWidth');
+        $max = $request->getParam('maxWidth');
 
         if (!$min && !$max) {
             return;
@@ -292,8 +292,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     private function addLengthCondition(Request $request, Criteria $criteria)
     {
-        $min = $request->getParam('minLength', null);
-        $max = $request->getParam('maxLength', null);
+        $min = $request->getParam('minLength');
+        $max = $request->getParam('maxLength');
 
         if (!$min && !$max) {
             return;
@@ -305,8 +305,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     private function addHeightCondition(Request $request, Criteria $criteria)
     {
-        $min = $request->getParam('minHeight', null);
-        $max = $request->getParam('maxHeight', null);
+        $min = $request->getParam('minHeight');
+        $max = $request->getParam('maxHeight');
 
         if (!$min && !$max) {
             return;

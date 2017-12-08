@@ -43,7 +43,7 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
 
         if ($localeId !== null) {
             $request->setPost('shopId', $localeId);
-            $request->setPost('localeId', null);
+            $request->setPost('localeId');
         }
     }
 

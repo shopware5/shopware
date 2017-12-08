@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $filter = $this->Request()->filter;
         $usedIds = $this->Request()->usedIds;
 
-        $offset = $this->Request()->getParam('start', null);
+        $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit', 20);
 
         $dataQuery = $this->getArticleRepository()
@@ -133,7 +133,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $filter = $this->Request()->filter;
         $usedIds = $this->Request()->usedIds;
 
-        $offset = $this->Request()->getParam('start', null);
+        $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit', 20);
 
         $dataQuery = $this->getArticleRepository()

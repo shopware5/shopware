@@ -90,7 +90,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             ];
         }
 
-        $number = $this->Request()->getParam('number', null);
+        $number = $this->Request()->getParam('number');
         $selection = $this->Request()->getParam('group', []);
 
         $categoryId = $this->Request()->get('sCategory');

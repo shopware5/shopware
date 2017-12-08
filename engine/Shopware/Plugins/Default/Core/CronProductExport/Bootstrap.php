@@ -44,7 +44,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             'Shopware_CronJob_ProductExport',
             'onRun'
         );
-        $this->createCronJob('Product Export', 'ProductExport', 86400);
+        $this->createCronJob('Product Export', 'ProductExport');
 
         return true;
     }

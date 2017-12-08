@@ -97,7 +97,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $query = $this->getRepository()->getBackendListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('start')
         )->getQuery();
 
@@ -354,7 +354,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getCategoryArticlesAction()
     {
-        $categoryId = $this->Request()->getParam('categoryId', null);
+        $categoryId = $this->Request()->getParam('categoryId');
         $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
         $search = $this->Request()->getParam('search', '');
@@ -404,7 +404,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $usedIds = $this->Request()->usedIds;
 
-        $offset = $this->Request()->getParam('start', null);
+        $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit', 20);
 
         /** @var \Shopware\Models\Customer\Repository $customerRepository */
@@ -531,7 +531,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $categoryModel = $this->getRepository()->find($categoryId);
         }
 
-        $categoryModel->setStream(null);
+        $categoryModel->setStream();
         if ($params['streamId']) {
             $params['stream'] = Shopware()->Models()->find('Shopware\Models\ProductStream\ProductStream', $params['streamId']);
         }

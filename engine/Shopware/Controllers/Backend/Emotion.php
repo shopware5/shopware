@@ -70,11 +70,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function listAction()
     {
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
         $offset = $this->Request()->getParam('start', 0);
-        $filter = $this->Request()->getParam('filter', null);
-        $filterBy = $this->Request()->getParam('filterBy', null);
-        $categoryId = $this->Request()->getParam('categoryId', null);
+        $filter = $this->Request()->getParam('filter');
+        $filterBy = $this->Request()->getParam('filterBy');
+        $categoryId = $this->Request()->getParam('categoryId');
 
         $query = $this->getRepository()->getListingQuery($filter, $filterBy, $categoryId);
 
@@ -106,8 +106,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function getMasterLandingPagesAction()
     {
-        $id = $this->Request()->getParam('id', null);
-        $ownId = $this->Request()->getParam('ownId', null);
+        $id = $this->Request()->getParam('id');
+        $ownId = $this->Request()->getParam('ownId');
 
         $builder = $this->getRepository()->getListingQuery([], 'onlyLandingPageMasters');
 
@@ -139,7 +139,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function detailAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         $repository = $this->getRepository();
 
         $query = $repository->getEmotionDetailQuery($id);
@@ -752,7 +752,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $this->View()->assign(
             $this->deleteTemplate(
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id')
             )
         );
     }
@@ -775,7 +775,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $this->View()->assign(
             $this->duplicateTemplate(
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id')
             )
         );
     }
@@ -790,9 +790,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $this->View()->assign(
             $this->getTemplates(
-                $this->Request()->getParam('start', null),
-                $this->Request()->getParam('limit', null),
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('start'),
+                $this->Request()->getParam('limit'),
+                $this->Request()->getParam('id')
             )
         );
     }

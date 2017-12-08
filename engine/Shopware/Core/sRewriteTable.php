@@ -773,7 +773,7 @@ class sRewriteTable
     public function sCategoryPath($categoryId)
     {
         $parts = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
-            ->getPathById($categoryId, 'name');
+            ->getPathById($categoryId);
         $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
         $parts = array_slice($parts, $level);
 

@@ -159,8 +159,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
 
         $params = [
             'endDate' => $endDate,
@@ -406,7 +406,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
 
         $params = [
             'endDate' => $endDate,
@@ -445,8 +445,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
 
         $params = [
             'endDate' => $endDate,
@@ -515,8 +515,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $sort = $this->Request()->getParam('sort', null);
-        $filter = $this->Request()->getParam('filter', null);
+        $sort = $this->Request()->getParam('sort');
+        $filter = $this->Request()->getParam('filter');
 
         $params = [
             'endDate' => $endDate,
@@ -590,7 +590,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $filter = $filter[0]['value'];
         $sort = $this->Request()->getParam('sort', [['property' => 'orders.orderTime', 'direction' => 'DESC']]);
 

@@ -479,7 +479,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function getCustomerGroupKey()
     {
-        $customerGroupKey = $this->request->getParam('sValidation', null);
+        $customerGroupKey = $this->request->getParam('sValidation');
         $customerGroupId = $this->get('dbal_connection')->fetchColumn(
             'SELECT id FROM s_core_customergroups WHERE `groupkey` = ?',
             [$customerGroupKey]
