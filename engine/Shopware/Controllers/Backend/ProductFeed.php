@@ -287,19 +287,6 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $this->addAclPermission('deleteFeedAction', 'delete', 'Insufficient Permissions');
     }
 
-    /**
-     * Helper function to get access to the productFeed repository.
-     *
-     * @return \Shopware\Models\ProductFeed\Repository
-     */
-    private function getProductFeedRepository()
-    {
-        if ($this->productFeedRepository === null) {
-            $this->productFeedRepository = Shopware()->Models()->getRepository('Shopware\Models\ProductFeed\ProductFeed');
-        }
-
-        return $this->productFeedRepository;
-    }
 
     /**
      * Helper function to get access to the shop repository.
@@ -329,17 +316,6 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         return $this->articleRepository;
     }
 
-    /**
-     * Internal helper function to get access to the entity manager.
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
 
     /**
      * Returns an array with feed data for the passed feed id.

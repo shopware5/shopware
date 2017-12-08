@@ -4353,21 +4353,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
     }
 
-    /**
-     * Helper function to get a one or null result over the pagination extension
-     *
-     * @param \Doctrine\ORM\Query $query
-     *
-     * @return array
-     */
-    private function getOneOrNullResult($query)
-    {
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = $this->getModelManager()->createPaginator($query);
-
-        return $paginator->getIterator()->getArrayCopy();
-    }
 
     /**
      * @param array $detailData

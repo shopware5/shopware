@@ -1001,7 +1001,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         if (empty($id)) {
             return ['success' => false, 'error' => "The request parameter templateId don't passed!"];
         }
-        $data = [];
 
         try {
             $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $id);
@@ -1038,8 +1037,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     protected function saveTemplate($data)
     {
-        $result = [];
-
         try {
             //we have to remove the emotions to prevent an assignment from this side!
             unset($data['emotions']);
@@ -1280,7 +1277,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
 
             if (!empty($item['viewports'])) {
-                $item['viewports'] = $this->createElementViewports($emotion, $item, $item['viewports']);
+                $item['viewports'] = $this->createElementViewports($emotion, $item['viewports']);
             }
         }
 
@@ -1291,12 +1288,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Helper method for creating associated element viewports.
      *
      * @param Emotion $emotion
-     * @param array   $element
      * @param array   $elementViewports
      *
      * @return array
      */
-    private function createElementViewports(Emotion $emotion, array $element, array $elementViewports)
+    private function createElementViewports(Emotion $emotion, array $elementViewports)
     {
         foreach ($elementViewports as &$viewport) {
             $viewport['emotion'] = $emotion;

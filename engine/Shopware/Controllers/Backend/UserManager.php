@@ -715,17 +715,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         return $this->userRepository;
     }
 
-    /**
-     * Internal helper function to get access to the entity manager.
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
 
     /**
      * Returns all resource ids for the passed role where a rule with privilege NULL exists.
