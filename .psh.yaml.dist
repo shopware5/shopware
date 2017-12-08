@@ -14,14 +14,16 @@ paths:
   - dev-ops/common/actions
 
 templates:
-  - source: "dev-ops/docker/templates/php-dockerfile.tpl"
-    destination: "dev-ops/docker/containers/php7/Dockerfile"
   - source: "dev-ops/docker/docker-compose.override.yml"
     destination: "docker-compose.override.yml"
   - source: "dev-ops/common/templates/build.properties"
     destination: "build/build.properties"
   - source: "dev-ops/common/templates/behat.yml.dist"
     destination: "tests/Mink/behat.yml"
+  - source: "dev-ops/docker/templates/Dockerfile-app"
+    destination: "dev-ops/docker/containers/app/Dockerfile"
+  - source: "dev-ops/docker/templates/Dockerfile-mysql"
+    destination: "dev-ops/docker/containers/mysql/Dockerfile"
 
 const:
   DB_USER: "app"
@@ -29,17 +31,16 @@ const:
   DB_HOST: "mysql"
   DB_NAME: "shopware"
   DB_PORT: "3306"
-  SW_HOST: "10.101.101.56"
+  SW_HOST: "localhost:8088"
   SW_BASE_PATH: ""
   PHP_VERSION: "7.1"
+  MYSQL_VERSION: "5.7"
+  CONTAINER_SUFFIX: "-dev"
 
 dynamic:
   USERKEY: echo "$(id -u):$(id -g)"
   APP_ID: docker-compose ps -q app_server
   MYSQL_ID: docker-compose ps -q app_mysql
-  SELENIUM_ID: docker-compose ps -q selenium
-  USER_ID: id -u
-  GROUP_ID: id -g
 
 environments:
   docker:
@@ -50,9 +51,19 @@ environments:
       - "dev-ops/bamboo.shopware.com/actions"
     const:
       SW_HOST: "app_server"
+      SW_BASE_PATH: ""
+    templates:
+      - source: "dev-ops/common/templates/build.properties"
+        destination: "build/build.properties"
+      - source: "dev-ops/common/templates/behat.yml.dist"
+        destination: "tests/Mink/behat.yml"
+      - source: "dev-ops/docker/templates/Dockerfile-app"
+        destination: "dev-ops/docker/containers/app/Dockerfile"
+      - source: "dev-ops/docker/templates/Dockerfile-mysql"
+        destination: "dev-ops/docker/containers/mysql/Dockerfile"
+      - source: "dev-ops/bamboo.shopware.com/docker-compose.override.yml"
+        destination: "docker-compose.override.yml"
     dynamic:
       REVISION: echo "${SW_REVISION}"
       PARENT_REVISION: echo "${SW_PARENT_REVISION}"
-    templates:
-      - source: "dev-ops/bamboo.shopware.com/templates/config.php"
-        destination: "config.php"
+      OCULAR_ACCESS_TOKEN: echo "${OCULAR_ACCESS_TOKEN}"

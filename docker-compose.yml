@@ -1,34 +1,25 @@
-version: '2'
+version: '3.3'
 
 services:
   app_server:
-    build: dev-ops/docker/containers/php7
-    extra_hosts:
-      - "stash.shopware.com:172.16.0.62"
-      - "app_server:127.0.0.1"
-    volumes_from:
-      - app_volumes
-    environment:
-      TERM: xterm
+    build: dev-ops/docker/containers/app
+    links:
+      - app_mysql:mysql
+      - smtp:smtp
+    volumes:
+      - .:/app
+      - ~/.composer/cache:/.composer/cache
 
   app_mysql:
     build: dev-ops/docker/containers/mysql
-    volumes_from:
-      - app_volumes
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: app
       MYSQL_PASSWORD: app
 
   selenium:
-    image: selenium/standalone-chrome:3.3
+    image: selenium/standalone-chrome:3.8
+    shm_size: 2g
 
   smtp:
     image: mailhog/mailhog
-
-  app_volumes:
-    image: tianon/true
-    volumes:
-      - .:/project
-      - .:/var/www/shopware
-      - ~/.composer/cache:/home/app-shell/.composer/cache
