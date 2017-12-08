@@ -55,7 +55,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function countBannerClickAction()
     {
-        $bannerId = $this->Request()->getParam('bannerId', null);
+        $bannerId = $this->Request()->getParam('bannerId');
         if (is_null($bannerId)) {
             return false;
         }
@@ -87,7 +87,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function countBannerViewAction()
     {
-        $bannerId = $this->Request()->getParam('bannerId', null);
+        $bannerId = $this->Request()->getParam('bannerId');
         if (is_null($bannerId)) {
             return false;
         }

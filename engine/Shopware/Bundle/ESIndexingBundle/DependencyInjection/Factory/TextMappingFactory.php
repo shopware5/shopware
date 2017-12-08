@@ -39,7 +39,7 @@ class TextMappingFactory
     public static function factory(Client $client)
     {
         try {
-            $info = $client->info([]);
+            $info = $client->info();
         } catch (\Exception $e) {
             return new TextMappingES2();
         }

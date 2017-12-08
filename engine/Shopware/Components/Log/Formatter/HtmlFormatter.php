@@ -127,8 +127,8 @@ class HtmlFormatter extends NormalizerFormatter
      */
     private function addRow($th, $td = ' ')
     {
-        $th = htmlspecialchars($th, ENT_NOQUOTES, 'UTF-8');
-        $td = '<pre>' . htmlspecialchars($td, ENT_NOQUOTES, 'UTF-8') . '</pre>';
+        $th = htmlspecialchars($th, ENT_NOQUOTES);
+        $td = '<pre>' . htmlspecialchars($td, ENT_NOQUOTES) . '</pre>';
 
         return "<tr style=\"padding: 4px;spacing: 0;text-align: left;\">\n<th style=\"background: #cccccc\" width=\"100px\">$th:</th>\n<td style=\"padding: 4px;spacing: 0;text-align: left;background: #eeeeee\">" . $td . "</td>\n</tr>";
     }
@@ -143,7 +143,7 @@ class HtmlFormatter extends NormalizerFormatter
      */
     private function addTitle($title, $level)
     {
-        $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
+        $title = htmlspecialchars($title, ENT_NOQUOTES);
 
         return '<h1 style="background: ' . $this->logLevels[$level] . ';color: #ffffff;padding: 5px;">' . $title . '</h1>';
     }

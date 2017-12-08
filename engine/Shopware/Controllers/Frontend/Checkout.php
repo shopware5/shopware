@@ -1513,11 +1513,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $target = $this->Request()->getParam('target', 'shipping');
         $sessionKey = $target == 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
 
-        $this->session->offsetSet($sessionKey, $this->Request()->getParam('addressId', null));
+        $this->session->offsetSet($sessionKey, $this->Request()->getParam('addressId'));
 
         if ($target === 'both') {
-            $this->session->offsetSet('checkoutShippingAddressId', $this->Request()->getParam('addressId', null));
-            $this->session->offsetSet('checkoutBillingAddressId', $this->Request()->getParam('addressId', null));
+            $this->session->offsetSet('checkoutShippingAddressId', $this->Request()->getParam('addressId'));
+            $this->session->offsetSet('checkoutBillingAddressId', $this->Request()->getParam('addressId'));
         }
     }
 

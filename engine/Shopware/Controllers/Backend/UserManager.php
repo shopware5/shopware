@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function updateRoleAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         $rolesRepository = Shopware()->Models()->getRepository('Shopware\Models\User\Role');
 
         if (!empty($id)) {
@@ -230,7 +230,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function updateUserAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         $isNewUser = false;
 
         if (!empty($id)) {
@@ -310,13 +310,13 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function getResourcesAction()
     {
-        $search = $this->Request()->getParam('search', null);
+        $search = $this->Request()->getParam('search');
 
         $resources = $this->getUserRepository()
             ->getResourcesQuery($search)
             ->getResult();
         $data = [];
-        $role = $this->Request()->getParam('role', null);
+        $role = $this->Request()->getParam('role');
         $resourceAdmins = [];
 
         /** @var $role \Shopware\Models\User\Role */
@@ -358,7 +358,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function deleteResourceAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/user_manager');
 
@@ -398,7 +398,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function deletePrivilegeAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/user_manager');
 
@@ -505,7 +505,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/user_manager');
 
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         if (empty($id)) {
             $this->View()->assign([
                 'success' => false,
@@ -529,7 +529,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             return;
         }
         //get new role rules
-        $newRules = $this->Request()->getParam('privileges', null);
+        $newRules = $this->Request()->getParam('privileges');
 
         //iterate the new rules and create shopware models
         foreach ($newRules as $newRule) {

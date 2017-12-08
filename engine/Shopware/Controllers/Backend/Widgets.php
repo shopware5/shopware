@@ -400,7 +400,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         /** @var $auth Shopware_Components_Auth */
         $auth = Shopware()->Container()->get('Auth');
         $user = $auth->getIdentity();
-        $result = $this->fetchRssFeedData($user->locale, 5);
+        $result = $this->fetchRssFeedData($user->locale);
 
         $this->View()->assign(
             [

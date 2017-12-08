@@ -202,7 +202,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', $defaultSort);
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $filter = $filter[0]['value'];
 
         //get access on the customer getRepository()
@@ -257,8 +257,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function saveAction()
     {
-        $id = $this->Request()->getParam('id', null);
-        $paymentId = $this->Request()->getParam('paymentId', null);
+        $id = $this->Request()->getParam('id');
+        $paymentId = $this->Request()->getParam('paymentId');
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
@@ -309,7 +309,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         //set parameter to the customer model.
         $customer->fromArray($params);
 
-        $password = $this->Request()->getParam('newPassword', null);
+        $password = $this->Request()->getParam('newPassword');
 
         //encode the password with md5
         if (!empty($password)) {

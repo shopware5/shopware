@@ -515,7 +515,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchListing(ProductSearchResult $result)
     {
-        $categoryId = $this->Request()->getParam('sCategory', null);
+        $categoryId = $this->Request()->getParam('sCategory');
 
         if ($this->Request()->has('productBoxLayout')) {
             $boxLayout = $this->Request()->get('productBoxLayout');

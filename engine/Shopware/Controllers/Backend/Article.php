@@ -278,7 +278,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function duplicateArticleAction()
     {
-        $articleId = $this->Request()->getParam('articleId', null);
+        $articleId = $this->Request()->getParam('articleId');
 
         if (empty($articleId)) {
             $this->View()->assign([
@@ -350,7 +350,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     public function saveMediaMappingAction()
     {
-        $imageId = (int) $this->Request()->getParam('id', null);
+        $imageId = (int) $this->Request()->getParam('id');
         $mappings = $this->Request()->getParam('mappings');
 
         if (empty($imageId) || $imageId <= 0) {
@@ -542,7 +542,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     public function getArticleAction()
     {
-        $id = $this->Request()->getParam('articleId', null);
+        $id = $this->Request()->getParam('articleId');
         if (empty($id)) {
             $this->View()->assign(['success' => false, 'error' => 'No article id passed!']);
         }
@@ -597,7 +597,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     public function createPropertyValueAction()
     {
-        $groupId = $this->Request()->getParam('groupId', null);
+        $groupId = $this->Request()->getParam('groupId');
         $value = $this->Request()->getParam('value');
 
         if (!$groupId) {
@@ -1873,8 +1873,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data = $this->Request()->getParams();
         $articleId = $data['articleId'];
         $syntax = $data['syntax'];
-        $offset = $this->Request()->getParam('offset', null);
-        $limit = $this->Request()->getParam('limit', null);
+        $offset = $this->Request()->getParam('offset');
+        $limit = $this->Request()->getParam('limit');
 
         if (!$articleId > 0 || strlen($syntax) === 0) {
             return;
@@ -4263,8 +4263,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $language,
                 'variant',
                 $oldMainDetail->getId(),
-                $newData,
-                false
+                $newData
             );
         }
 
@@ -4282,8 +4281,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $language,
                 'article',
                 $articleId,
-                $newData,
-                false
+                $newData
             );
         }
     }

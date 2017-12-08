@@ -40,7 +40,7 @@ class ZipUtils
     {
         $stream = new \ZipArchive();
 
-        if (true !== ($retVal = $stream->open($filename, null))) {
+        if (true !== ($retVal = $stream->open($filename))) {
             throw new \RuntimeException(
                 self::getErrorMessage($retVal, $filename),
                 $retVal

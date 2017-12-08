@@ -380,7 +380,7 @@ class LegacyStructConverter
             }
 
             $data['pseudopricePercent'] = [
-                'int' => round($discount, 0),
+                'int' => round($discount),
                 'float' => $discount,
             ];
         }

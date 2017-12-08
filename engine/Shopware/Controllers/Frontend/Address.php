@@ -133,7 +133,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                 $this->addressService->setDefaultShippingAddress($address);
             }
 
-            if ($this->Request()->getParam('sTarget', null)) {
+            if ($this->Request()->getParam('sTarget')) {
                 $action = $this->Request()->getParam('sTargetAction', 'index') ?: 'index';
                 $this->redirect([
                     'controller' => $this->Request()->getParam('sTarget'),
@@ -158,7 +158,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function editAction()
     {
         $userId = $this->get('session')->get('sUserId');
-        $addressId = $this->Request()->getParam('id', null);
+        $addressId = $this->Request()->getParam('id');
         $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
         $form = $this->createForm(AddressFormType::class, $address);
@@ -200,7 +200,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function deleteAction()
     {
         $userId = $this->get('session')->get('sUserId');
-        $addressId = $this->Request()->getParam('id', null);
+        $addressId = $this->Request()->getParam('id');
 
         $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
@@ -226,7 +226,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function setDefaultShippingAddressAction()
     {
         $userId = $this->get('session')->get('sUserId');
-        $addressId = $this->Request()->getParam('addressId', null);
+        $addressId = $this->Request()->getParam('addressId');
 
         $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
@@ -247,7 +247,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function setDefaultBillingAddressAction()
     {
         $userId = $this->get('session')->get('sUserId');
-        $addressId = $this->Request()->getParam('addressId', null);
+        $addressId = $this->Request()->getParam('addressId');
 
         $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
@@ -269,7 +269,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     {
         $addressRepository = Shopware()->Models()->getRepository(Address::class);
         $addresses = $addressRepository->getListArray($this->get('session')->get('sUserId'));
-        $activeAddressId = $this->Request()->getParam('id', null);
+        $activeAddressId = $this->Request()->getParam('id');
         $extraData = $this->Request()->getParam('extraData', []);
 
         if (!empty($activeAddressId)) {
@@ -291,7 +291,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function ajaxEditorAction()
     {
         $userId = $this->get('session')->get('sUserId');
-        $addressId = $this->Request()->getParam('id', null);
+        $addressId = $this->Request()->getParam('id');
 
         if ($addressId) {
             $address = $this->addressRepository->getOneByUser($addressId, $userId);
@@ -315,7 +315,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $response = ['success' => true, 'errors' => [], 'data' => []];
 
         $userId = $this->get('session')->get('sUserId');
-        $addressId = $this->Request()->getPost('id', null);
+        $addressId = $this->Request()->getPost('id');
         $extraData = $this->Request()->getParam('extraData', []);
 
         if ($this->Request()->getParam('saveAction') === 'update') {
@@ -411,8 +411,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $viewData['error_messages'] = $errorMessages;
         $viewData['countryList'] = $this->admin->sGetCountryList();
         $viewData['formData'] = $formData;
-        $viewData['sTarget'] = $this->Request()->getParam('sTarget', null);
-        $viewData['sTargetAction'] = $this->Request()->getParam('sTargetAction', null);
+        $viewData['sTarget'] = $this->Request()->getParam('sTarget');
+        $viewData['sTargetAction'] = $this->Request()->getParam('sTargetAction');
         $viewData['extraData'] = $this->Request()->getParam('extraData', []);
 
         return $viewData;

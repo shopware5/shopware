@@ -110,7 +110,7 @@ class PostWrapper implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->request->setPost($offset, null);
+        $this->request->setPost($offset);
     }
 
     /**

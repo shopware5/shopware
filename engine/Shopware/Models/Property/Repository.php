@@ -199,7 +199,7 @@ class Repository extends ModelRepository
             $builder->setMaxResults($limit);
         }
 
-        return $this->getForceIndexQuery($builder->getQuery(), 'get_options_query', false);
+        return $this->getForceIndexQuery($builder->getQuery(), 'get_options_query');
     }
 
     /**

@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
@@ -192,7 +192,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     public function getAllSupplier()
     {
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);

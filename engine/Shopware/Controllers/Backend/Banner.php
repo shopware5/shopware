@@ -87,7 +87,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $query = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('start'),
             false
         );

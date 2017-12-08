@@ -213,7 +213,7 @@ class Requirements
     {
         try {
             $sql = 'SELECT @@SESSION.sql_mode;';
-            $result = $this->connection->query($sql)->fetchColumn(0);
+            $result = $this->connection->query($sql)->fetchColumn();
             if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
                 return true;
             }

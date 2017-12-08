@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     public function updatePaymentsAction()
     {
         try {
-            $id = $this->Request()->getParam('id', null);
+            $id = $this->Request()->getParam('id');
             /** @var $payment Payment */
             $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
             $action = $payment->getAction();

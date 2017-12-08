@@ -53,7 +53,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryContent = $this->loadCategoryContent($requestCategoryId);
 
-        $emotionConfiguration = $this->getEmotionConfiguration($requestCategoryId, false);
+        $emotionConfiguration = $this->getEmotionConfiguration($requestCategoryId);
 
         $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
         if ($location) {
@@ -122,7 +122,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function manufacturerAction()
     {
-        $manufacturerId = $this->Request()->getParam('sSupplier', null);
+        $manufacturerId = $this->Request()->getParam('sSupplier');
 
         /** @var $context ProductContextInterface */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();

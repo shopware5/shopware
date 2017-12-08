@@ -54,7 +54,7 @@ class ErrorCollector implements CollectorInterface
 
     public function start()
     {
-        $this->errorHandler->setEnabledLog(true);
+        $this->errorHandler->setEnabledLog();
         $this->errorHandler->registerErrorHandler(E_ALL | E_STRICT);
     }
 

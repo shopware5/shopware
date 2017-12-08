@@ -50,8 +50,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function getNewsletterGroupsAction()
     {
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
 
@@ -69,8 +69,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function createRecipientAction()
     {
-        $email = $this->Request()->getParam('email', null);
-        $groupId = $this->Request()->getParam('groupId', null);
+        $email = $this->Request()->getParam('email');
+        $groupId = $this->Request()->getParam('groupId');
 
         if ($email === null || $groupId === null) {
             $this->View()->assign([
@@ -107,8 +107,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function getGroupsAction()
     {
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
         $limit = (int) $this->Request()->getParam('limit', 10);
         $offset = (int) $this->Request()->getParam('start', 0);
 
@@ -180,9 +180,9 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function updateRecipientAction()
     {
-        $id = $this->Request()->getParam('id', null);
-        $email = $this->Request()->getParam('email', null);
-        $groupId = $this->Request()->getParam('groupId', null);
+        $id = $this->Request()->getParam('id');
+        $email = $this->Request()->getParam('email');
+        $groupId = $this->Request()->getParam('groupId');
 
         if ($id === null || $email === null || $groupId === null) {
             $this->View()->assign([
@@ -217,7 +217,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function deleteNewsletterAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         if ($id === null) {
             $this->View()->assign([
                 'success' => false,
@@ -396,7 +396,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function updateNewsletterAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         if ($id === null) {
             $this->View()->assign([
                 'success' => false,
@@ -501,7 +501,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function updateSenderAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         $data = $this->Request()->getParams();
 
         if ($id === null) {
@@ -535,8 +535,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function listRecipientsAction()
     {
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
 
@@ -561,8 +561,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function listSenderAction()
     {
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
 
@@ -609,7 +609,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function listNewslettersAction()
     {
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort', [['property' => 'mailing.date', 'direction' => 'DESC'], ['property' => 'mailing.id', 'direction' => 'DESC']]);
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
@@ -695,7 +695,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function releaseNewsletterAction()
     {
         $active = $this->Request()->getParam('status');
-        $id = (int) $this->Request()->getParam('id', null);
+        $id = (int) $this->Request()->getParam('id');
 
         if ($id === null) {
             $this->View()->assign([
