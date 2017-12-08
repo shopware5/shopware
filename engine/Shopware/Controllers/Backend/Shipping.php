@@ -115,15 +115,12 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         // process the parameters
         $minChange = $this->Request()->getParam('minChange', null);
         $dispatchId = $this->Request()->getParam('dispatchId', null);
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
 
         if (is_array($filter) && isset($filter[0]['value'])) {
             $filter = $filter[0]['value'];
         }
-        $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter, $limit, $offset);
+        $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter);
         $result = $query->getArrayResult();
 
         // if minChange was not passed, get it in order to show a proper cost matrix

@@ -48,20 +48,6 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     private $repository;
 
     /**
-     * Contains the user role who is executing this controller
-     *
-     * @var string
-     */
-    private $userRole;
-
-    /**
-     * Name of the default resource (Name of this controller)
-     *
-     * @var string
-     */
-    private $defaultResource;
-
-    /**
      * Stores in which namespace we are in
      *
      * @var Enlight_Components_Snippet_Namespace

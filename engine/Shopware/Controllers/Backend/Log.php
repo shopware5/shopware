@@ -127,13 +127,11 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             unset($params['_dc']);
 
             if ($params[0]) {
-                $data = [];
                 foreach ($params as $values) {
                     $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $values['id']);
 
                     Shopware()->Models()->remove($logModel);
                     Shopware()->Models()->flush();
-                    $data[] = Shopware()->Models()->toArray($logModel);
                 }
             } else {
                 $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $params['id']);

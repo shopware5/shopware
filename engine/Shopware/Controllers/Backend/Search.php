@@ -359,20 +359,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $builder->addSearchTerm($query, $term, $fields);
     }
 
-    /**
-     * Creates a custom search term condition
-     *
-     * @param string $entity
-     * @param string $column
-     *
-     * @return string
-     */
-    private function createCustomFieldToSearchTermCondition($entity, $column)
-    {
-        $field = $entity . '.' . $column;
-
-        return $field . ' LIKE :search';
-    }
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $query
