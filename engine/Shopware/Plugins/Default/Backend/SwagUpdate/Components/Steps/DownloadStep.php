@@ -68,11 +68,7 @@ class DownloadStep
         $download = new Download();
         $startTime = microtime(true);
         $download->setHaltCallback(function () use ($startTime) {
-            if (microtime(true) - $startTime > 10) {
-                return true;
-            }
-
-            return false;
+            return microtime(true) - $startTime > 10;
         });
         $offset = $download->downloadFile($this->version->uri, $this->destination, $this->version->size, $this->version->sha1);
 

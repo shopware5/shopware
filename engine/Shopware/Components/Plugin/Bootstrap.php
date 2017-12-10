@@ -145,11 +145,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function secureUninstall()
     {
-        if (empty($this->info->capabilities['secureUninstall']) || empty($this->info->capabilities['install'])) {
-            return false;
-        }
-
-        return true;
+        return !(empty($this->info->capabilities['secureUninstall']) || empty($this->info->capabilities['install']));
     }
 
     /**

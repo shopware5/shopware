@@ -840,11 +840,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function isValidStock(Shopware\Models\Article\Detail $variant, $newStock)
     {
-        if ($newStock < 0 && $variant->getArticle()->getLastStock()) {
-            return false;
-        }
-
-        return true;
+        return !($newStock < 0 && $variant->getArticle()->getLastStock());
     }
 
     /**

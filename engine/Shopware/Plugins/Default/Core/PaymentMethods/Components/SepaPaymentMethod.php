@@ -219,11 +219,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             $rest = intval($part) % 97;
         }
 
-        if ($rest != 1) {
-            return false;
-        }
-
-        return true;
+        return !($rest != 1);
     }
 
     private function sendSepaEmail($orderNumber, $userId, $data)
