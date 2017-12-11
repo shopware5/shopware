@@ -686,52 +686,49 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         foreach ($orders as $key => $data) {
-            try {
-                $orders[$key]['mail'] = null;
-                $orders[$key]['languageSubShop'] = null;
+            $orders[$key]['mail'] = null;
+            $orders[$key]['languageSubShop'] = null;
 
-                if (empty($data) || empty($data['id'])) {
-                    continue;
-                }
-
-                /** @var $order \Shopware\Models\Order\Order */
-                $order = Shopware()->Models()->find(Order::class, $data['id']);
-
-                if (!$order) {
-                    continue;
-                }
-
-                //we have to flush the status changes directly, because the "createStatusMail" function in the
-                //sOrder.php core class, use the order data from the database. So we have to save the new status before we
-                //create the status mail
-                $statusBefore = $order->getOrderStatus();
-                $clearedBefore = $order->getPaymentStatus();
-
-                //refresh the status models to return the new status data which will be displayed in the batch list
-                if (!empty($data['status']) || $data['status'] === 0) {
-                    $order->setOrderStatus(Shopware()->Models()->find(Status::class, $data['status']));
-                }
-                if (!empty($data['cleared'])) {
-                    $order->setPaymentStatus(Shopware()->Models()->find(Status::class, $data['cleared']));
-                }
-
-                Shopware()->Models()->flush($order);
-
-                // the setOrder function of the Shopware_Components_Document change the currency of the shop.
-                // this would create a new Shop if we execute an flush();
-                // Only create order documents when requested.
-                if ($documentType) {
-                    $this->createOrderDocuments($documentType, $documentMode, $order);
-                }
-
-                $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
-                $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
-
-                $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
-                //return the modified data array.
-                $orders[$key] = $data;
-            } catch (\Exception $e) {
+            if (empty($data) || empty($data['id'])) {
+                continue;
             }
+
+            /** @var $order \Shopware\Models\Order\Order */
+            $order = Shopware()->Models()->find(Order::class, $data['id']);
+            if (!$order) {
+                continue;
+            }
+
+            //we have to flush the status changes directly, because the "createStatusMail" function in the
+            //sOrder.php core class, use the order data from the database. So we have to save the new status before we
+            //create the status mail
+            $statusBefore = $order->getOrderStatus();
+            $clearedBefore = $order->getPaymentStatus();
+
+            //refresh the status models to return the new status data which will be displayed in the batch list
+            if (!empty($data['status']) || $data['status'] === 0) {
+                $order->setOrderStatus(Shopware()->Models()->find(Status::class, $data['status']));
+            }
+            if (!empty($data['cleared'])) {
+                $order->setPaymentStatus(Shopware()->Models()->find(Status::class, $data['cleared']));
+            }
+
+            try {
+                Shopware()->Models()->flush($order);
+            } catch (Exception $e) {
+                continue;
+            }
+
+            // the setOrder function of the Shopware_Components_Document change the currency of the shop.
+            // this would create a new Shop if we execute an flush();
+            $this->createOrderDocuments($documentType, $documentMode, $order);
+
+            $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
+            $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
+
+            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
+            //return the modified data array.
+            $orders[$key] = $data;
         }
 
         $this->View()->assign([
