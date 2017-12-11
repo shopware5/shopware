@@ -45,14 +45,14 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * all references to get the elements by the applicable selector
      */
     refs: [
-        { ref: 'orderListGrid', selector: 'order-list-main-window order-list'},
-        { ref: 'batchWindow', selector: 'order-batch-window'},
-        { ref: 'batchList', selector: 'order-batch-window batch-list'},
-        { ref: 'settingsPanel', selector: 'order-batch-window batch-settings-panel'},
-        { ref: 'progressBar', selector: 'order-progress-window progressbar'},
-        { ref: 'progressWindow', selector: 'order-progress-window'},
-        { ref: 'closeButton', selector: 'order-progress-window button[action=closeWindow]'},
-        { ref: 'cancelButton', selector: 'order-progress-window button[action=cancel]'}
+        { ref: 'orderListGrid', selector: 'order-list-main-window order-list' },
+        { ref: 'batchWindow', selector: 'order-batch-window' },
+        { ref: 'batchList', selector: 'order-batch-window batch-list' },
+        { ref: 'settingsPanel', selector: 'order-batch-window batch-settings-panel' },
+        { ref: 'progressBar', selector: 'order-progress-window progressbar' },
+        { ref: 'progressWindow', selector: 'order-progress-window' },
+        { ref: 'closeButton', selector: 'order-progress-window button[action=closeWindow]' },
+        { ref: 'cancelButton', selector: 'order-progress-window button[action=cancel]' }
     ],
 
     /**
@@ -70,10 +70,9 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             message: '{s name=cancel_message}{/s}',
             title: '{s name=cancel_title}{/s}'
         },
-        errorTitle: '{s name=error/title}Error{/s}',
-        growlMessage: '{s name=growlMessage}{/s}',
-        formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}',
-        noEmailsWillBeSent: '{s name=batch/no_emails_will_be_sent}Due to your current configuration no emails will be sent.{/s}',
+
+        growlMessage: '{s name=growlMessage}{/s}'
+
     },
 
     /**
@@ -106,7 +105,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      */
-    init: function () {
+    init: function() {
         var me = this;
 
         me.control({
@@ -124,7 +123,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     /**
      * Cancel the document creation.
      */
-    onCancelProcess: function () {
+    onCancelProcess: function() {
         var me = this;
 
         if (me.currentStatus !== me.processStatus.working) {
@@ -138,30 +137,14 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * on the batch window to create documents for the selected orders or|and change the order or|and payment status.
      * @param form
      */
-    onProcessChanges: function (form) {
+    onProcessChanges: function(form) {
         var me = this,
             orders = form.records,
             values = form.getValues(),
             orderListGrid = me.getOrderListGrid(),
             gridStore = orderListGrid.getStore(),
             store = Ext.create('Shopware.apps.Order.store.Batch'),
-            document = form.down('*[name=documentType]').store.getById(values.documentType),
-            sendEmailsField = form.form.findField('autoSendMail');
-
-        if (!form.form.isValid()) {
-            Shopware.Msg.createStickyGrowlMessage({
-                title: me.snippets.errorTitle,
-                text: me.snippets.formInvalid
-            });
-            return false;
-        }
-
-        if(sendEmailsField.getValue() === false){
-            Shopware.Msg.createStickyGrowlMessage({
-                title: me.snippets.errorTitle,
-                text: me.snippets.noEmailsWillBeSent
-            });
-        }
+            document = form.down('*[name=documentType]').store.getById(values.documentType);
 
         me.mode = values.mode;
         orders = me.prepareOrders(orders, values);
@@ -186,7 +169,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Store } listingStore
      * @param { Array } orders
      */
-    syncBatchStore: function (orderStore, listingStore, orders) {
+    syncBatchStore: function(orderStore, listingStore, orders) {
         var me = this,
             grid = me.getBatchList(),
             resultSet;
@@ -194,7 +177,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         grid.setLoading(true);
         orderStore.add(orders);
         orderStore.sync({
-            callback: function (batch) {
+            callback: function(batch) {
                 var operation = batch.operations[0];
                 resultSet = operation.resultSet ? operation.resultSet.records : operation.records;
 
@@ -214,7 +197,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { object } values
      * @returns { Ext.data.Store }
      */
-    prepareStoreProxy: function (store, values) {
+    prepareStoreProxy: function(store, values) {
         store.getProxy().extraParams = {
             docType: values.documentType,
             mode: values.mode,
@@ -233,8 +216,8 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { object } values
      * @returns { Array }
      */
-    prepareOrders: function (orders, values) {
-        Ext.each(orders, function (order) {
+    prepareOrders: function(orders, values) {
+        Ext.each(orders, function(order) {
             if (Ext.isDefined(values.orderStatus)) {
                 order.set('status', values.orderStatus);
             }
@@ -260,7 +243,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param index
      * @param { Shopware.apps.Order.store.Batch } resultStore
      */
-    queueProcess: function (document, store, orders, index, resultStore) {
+    queueProcess: function(document, store, orders, index, resultStore) {
         var me = this,
             progressBar = me.getProgressBar(),
             snippets = me.snippets,
@@ -285,7 +268,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } percentage
      * @param { boolean } canceled
      */
-    finishProcess: function (orders, resultStore, percentage, canceled) {
+    finishProcess: function(orders, resultStore, percentage, canceled) {
         var me = this,
             snippets = me.snippets,
             progressBar = me.getProgressBar(),
@@ -308,7 +291,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
         // Update the grid in order to set the new status or the mail
         batchStore.removeAll();
-        resultStore.each(function (record) {
+        resultStore.each(function(record) {
             batchStore.add(record);
         });
 
@@ -320,7 +303,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      *
      * @param { Array } orders
      */
-    createSingleDocument: function (orders) {
+    createSingleDocument: function(orders) {
         var me = this,
             settingValues = me.getSettingsPanel().getValues(),
             orderIds, data;
@@ -328,7 +311,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         if (settingValues.createSingleDocument) {
             orderIds = [];
 
-            Ext.each(orders, function (order) {
+            Ext.each(orders, function(order) {
                 orderIds.push(order.get('id'));
             });
 
@@ -350,7 +333,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Store } resultStore
      * @param { number } index
      */
-    process: function (document, store, orders, index, resultStore) {
+    process: function(document, store, orders, index, resultStore) {
         var me = this;
 
         if (!me.checkForCancellation(document, store, orders, index, resultStore)) {
@@ -368,7 +351,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } index
      * @returns { boolean }
      */
-    checkForCancellation: function (document, store, orders, index, resultStore) {
+    checkForCancellation: function(document, store, orders, index, resultStore) {
         var me = this,
             message;
 
@@ -384,10 +367,10 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
             // a little delay is required to open the messageBox in the top layer,
             // otherwise the window is behind a modal window.
-            Ext.defer(function () {
+            Ext.defer(function() {
                 Ext.Msg.prompt(
                     '{s name=document/attachment/invoice/number}{/s}', message,
-                    function (clickedButtonName, inputText) {
+                    function(clickedButtonName, inputText) {
                         if (clickedButtonName !== 'ok' || !inputText) {
                             return;
                         }
@@ -411,9 +394,9 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Model } document
      * @returns { boolean }
      */
-    hasDocument: function (order, document) {
+    hasDocument: function(order, document) {
         var result = false;
-        order.getReceipt().each(function (doc) {
+        order.getReceipt().each(function(doc) {
             if (document.get('id') == doc.get('typeId')) {
                 result = true;
                 return false;
@@ -422,6 +405,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
         return result;
     },
+
     /**
      * Save the Document by call store.sync
      *
@@ -431,7 +415,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Store } resultStore
      * @param { number } index
      */
-    saveDocument: function (document, orders, store, resultStore, index) {
+    saveDocument: function(document, orders, store, resultStore, index) {
         var me = this;
 
         store.removeAll();
@@ -454,7 +438,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } index
      * @returns { boolean }
      */
-    afterSaveDocument: function (batch, event, document, orders, store, resultStore, index) {
+    afterSaveDocument: function(batch, event, document, orders, store, resultStore, index) {
         var me = this,
             snippets = me.snippets,
             progressBar = me.getProgressBar(),
@@ -496,7 +480,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * process button and set the window loading to false.
      * @return void
      */
-    refreshProgressWindow: function (orders) {
+    refreshProgressWindow: function(orders) {
         var me = this,
             grid = me.getBatchList(),
             store = grid.getStore();
