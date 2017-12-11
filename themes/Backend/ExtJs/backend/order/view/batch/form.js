@@ -200,7 +200,8 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             validateOnBlur: true,
             allowBlank: true,
             validator: function (selectedValue) {
-                var singleDocField = me.getForm().findField('createSingleDocument'),
+                var attachmentsField = me.getForm().findField('addAttachments'),
+                    singleDocField = me.getForm().findField('createSingleDocument'),
                     selectedValLowered = typeof selectedValue === 'string' ? selectedValue.toLowerCase() : '',
                     recordFound = true;
 
@@ -209,6 +210,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                  */
                 if (!selectedValue || !selectedValue.length) {
                     singleDocField.disable();
+                    attachmentsField.disable();
                     return recordFound;
                 }
 
@@ -222,16 +224,17 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
 
                 if(recordFound){
                     singleDocField.enable();
+                    attachmentsField.enable();
                     return true;
                 }
 
                 singleDocField.disable();
+                attachmentsField.disable();
 
                 return me.snippets.invalidOption;
             },
             listeners: {
                 scope: this,
-                change: me.enableMailField,
                 afterrender: this.disableAutocompleteAndSpellcheck
             }
         });
@@ -298,35 +301,9 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             validator: me.validateComboboxSelection,
             listeners: {
                 scope: this,
-                afterrender: this.disableAutocompleteAndSpellcheck,
-                change: me.enableMailField
+                afterrender: this.disableAutocompleteAndSpellcheck
             }
         });
-    },
-    /**
-     * Enables the Send emails automatically field
-     *
-     * @param el
-     */
-    enableMailField: function (el) {
-        console.log(el);
-        var me = this,
-            autoSendMailField = me.getForm().findField('autoSendMail'),
-            orderStatusField = me.getForm().findField('orderStatus'),
-            paymentStatusField = me.getForm().findField('paymentStatus'),
-            documentTypeField = me.getForm().findField('documentType');
-
-        if(
-            orderStatusField.value === null &&
-            paymentStatusField.value === null &&
-            documentTypeField.value === null &&
-            el.value === null
-        ){
-            autoSendMailField.disable();
-            return;
-        }
-
-        autoSendMailField.enable();
     },
     /**
      * Creates the "Payment status field"
@@ -359,8 +336,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             validator: me.validateComboboxSelection,
             listeners: {
                 scope: this,
-                afterrender: this.disableAutocompleteAndSpellcheck,
-                change: me.enableMailField
+                afterrender: this.disableAutocompleteAndSpellcheck
             }
         });
     },
@@ -418,21 +394,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             fieldLabel: me.snippets.mail,
             inputValue: true,
             uncheckedValue: false,
-            disabled: true,
-            listeners: {
-                scope: this,
-                change: function (el) {
-                    var me = this,
-                        addAttachmentsField = me.getForm().findField('addAttachments');
-
-                    if (el.value === true) {
-                        addAttachmentsField.enable();
-                        return;
-                    }
-
-                    addAttachmentsField.disable();
-                }
-            }
         });
     },
     /**
@@ -485,11 +446,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                 },
                 enable: function (el) {
                     this.removeTooltip(el);
-                },
-                change: function (el) {
-                    var me = this,
-                        autoSendMailsField = me.getForm().findField('autoSendEmails');
-                    console.log(el.value);
                 }
             }
         });

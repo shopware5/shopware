@@ -72,8 +72,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         },
         errorTitle: '{s name=error/title}Error{/s}',
         growlMessage: '{s name=growlMessage}{/s}',
-        formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}',
-        noEmailsWillBeSent: '{s name=batch/no_emails_will_be_sent}Due to your current configuration no emails will be sent.{/s}',
+        formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}'
     },
 
     /**
@@ -145,8 +144,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             orderListGrid = me.getOrderListGrid(),
             gridStore = orderListGrid.getStore(),
             store = Ext.create('Shopware.apps.Order.store.Batch'),
-            document = form.down('*[name=documentType]').store.getById(values.documentType),
-            sendEmailsField = form.form.findField('autoSendMail');
+            document = form.down('*[name=documentType]').store.getById(values.documentType);
 
         if (!form.form.isValid()) {
             Shopware.Msg.createStickyGrowlMessage({
@@ -154,13 +152,6 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
                 text: me.snippets.formInvalid
             });
             return false;
-        }
-
-        if(sendEmailsField.getValue() === false){
-            Shopware.Msg.createStickyGrowlMessage({
-                title: me.snippets.errorTitle,
-                text: me.snippets.noEmailsWillBeSent
-            });
         }
 
         me.mode = values.mode;
