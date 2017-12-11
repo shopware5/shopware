@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Theme;
 use Shopware\Models\Shop;
 
 /**
@@ -292,6 +293,18 @@ class Inheritance
         }
 
         return $files;
+    }
+
+    /**
+     * @param Shop\Template $template
+     *
+     * @throws \Exception
+     *
+     * @return Theme
+     */
+    public function getTheme(Shop\Template $template)
+    {
+        return $this->util->getThemeByTemplate($template);
     }
 
     /**
