@@ -142,8 +142,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $data = [];
         foreach ($locales as $id => $locale) {
             list($l, $t) = explode('_', $locale);
-            $l = $current->getTranslation($l, 'language', $current);
-            $t = $current->getTranslation($t, 'territory', $current);
+            $l = $current::getTranslation($l, 'language', $current);
+            $t = $current::getTranslation($t, 'territory', $current);
             $data[] = [
                 'id' => $id,
                 'name' => "$l ($t)",
