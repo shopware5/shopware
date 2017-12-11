@@ -120,6 +120,14 @@ class ListProduct extends BaseProduct
     protected $createdAt;
 
     /**
+     * Defines the date which the product was last updated in
+     * the database.
+     *
+     * @var \DateTime
+     */
+    protected $updatedAt;
+
+    /**
      * Defines a list of keywords for this product.
      *
      * @var array
@@ -841,6 +849,22 @@ class ListProduct extends BaseProduct
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     /**

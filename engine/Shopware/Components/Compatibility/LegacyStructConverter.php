@@ -1146,6 +1146,10 @@ class LegacyStructConverter
         if ($product->getCreatedAt()) {
             $createDate = $product->getCreatedAt()->format('Y-m-d');
         }
+        $updateDate = null;
+        if ($product->getUpdatedAt()) {
+            $updateDate = $product->getUpdatedAt()->format('Y-m-d');
+        }
 
         $data = [
             'articleID' => $product->getId(),
@@ -1171,6 +1175,7 @@ class LegacyStructConverter
             'laststock' => $product->isCloseouts(),
             'additionaltext' => $product->getAdditional(),
             'datum' => $createDate,
+            'update' => $updateDate,
             'sales' => $product->getSales(),
             'filtergroupID' => null,
             'priceStartingFrom' => null,

@@ -241,11 +241,15 @@ class ProductProvider implements ProductProviderInterface
             $product->setFormattedCreatedAt(
                 $this->formatDate($product->getCreatedAt())
             );
+            $product->setFormattedUpdatedAt(
+                $this->formatDate($product->getUpdatedAt())
+            );
             $product->setFormattedReleaseDate(
                 $this->formatDate($product->getReleaseDate())
             );
 
             $product->setCreatedAt(null);
+            $product->setUpdatedAt(null);
             $product->setReleaseDate(null);
             $product->setPrices(null);
             $product->setPriceRules(null);

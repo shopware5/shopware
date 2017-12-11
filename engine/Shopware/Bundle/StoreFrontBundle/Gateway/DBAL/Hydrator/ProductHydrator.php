@@ -226,6 +226,11 @@ class ProductHydrator extends Hydrator
                 new \DateTime($data['__product_datum'])
             );
         }
+        if ($data['__product_changetime']) {
+            $product->setUpdatedAt(
+                new \DateTime($data['__product_changetime'])
+            );
+        }
 
         $product->setAdditional($data['__variant_additionaltext']);
         $product->setEan($data['__variant_ean']);
