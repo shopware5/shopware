@@ -121,7 +121,9 @@ class LessCollector
             $theme = $definition->getTheme();
             $themeClassName = get_class($theme);
 
-            $discardLess = array_merge($discardLess, $theme->getDiscardedLessThemes());
+            if ($theme) {
+                $discardLess = array_merge($discardLess, $theme->getDiscardedLessThemes());
+            }
 
             if (in_array($themeClassName, $discardLess)) {
                 $definitions[$i]->setFiles([]);

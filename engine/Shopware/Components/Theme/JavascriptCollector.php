@@ -97,7 +97,9 @@ class JavascriptCollector
             $theme = $definition->getTheme();
             $themeClassName = get_class($theme);
 
-            $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
+            if ($theme) {
+                $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
+            }
 
             if (!in_array($themeClassName, $discardJs)) {
                 $files = array_merge($files, $definition->getFiles());
