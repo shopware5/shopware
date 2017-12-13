@@ -82,25 +82,18 @@ class Store extends BaseStore
             return false;
         }
 
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        /** @var \SplFileInfo $path */
-        foreach ($iterator as $path) {
-            if ($path->getFilename() === '.gitkeep') {
+        /** @var $file \SplFileInfo */
+        foreach ($this->createRecursiveFileIterator($this->root) as $file) {
+            if (!$file->isFile()) {
                 continue;
             }
 
-            if ($path->isDir()) {
-                rmdir($path->__toString());
-            } else {
-                if (!$path->isFile()) {
-                    continue;
-                }
-                unlink($path->__toString());
+            // skip .gitkeep
+            if ($file->getFilename() === '.gitkeep') {
+                continue;
             }
+
+            unlink($file->getPathname());
         }
 
         return true;
@@ -117,7 +110,7 @@ class Store extends BaseStore
     public function purgeByHeader($name, $value = null)
     {
         // optimized purging for x-shopware-cache-id
-        if ($this->lookupOptimization && $name === 'x-shopware-cache-id') {
+        if ($this->lookupOptimization && $name == 'x-shopware-cache-id') {
             return $this->purgeByShopwareId($value);
         }
 
@@ -181,8 +174,6 @@ class Store extends BaseStore
      *
      * @param Request  $request
      * @param Response $response
-     *
-     * @throws \RuntimeException
      *
      * @return string
      */

@@ -71,8 +71,6 @@ class CacheManager
 
     /**
      * @param Container $container
-     *
-     * @throws \Exception
      */
     public function __construct(Container $container)
     {
@@ -96,22 +94,21 @@ class CacheManager
 
     /**
      * Clear HTTP-Cache
-     *
-     * @throws \Enlight_Event_Exception
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function clearHttpCache()
     {
-        // Fire event to let Plugin-Implementation clear cache - only when HTTP cache is enabled
         if ($this->container->getParameter('shopware.httpCache.enabled')) {
-            $this->events->notify('Shopware_Plugins_HttpCache_ClearCache');
+            $this->clearDirectory(
+                $this->container->getParameter('shopware.httpCache.cache_dir')
+            );
         }
+
+        // Fire event to let Plugin-Implementation clear cache
+        $this->events->notify('Shopware_Plugins_HttpCache_ClearCache');
     }
 
     /**
      * Clear template cache
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function clearTemplateCache()
     {
@@ -120,7 +117,7 @@ class CacheManager
 
         $this->clearDirectory($compileDir);
 
-        if ($cacheDir !== $compileDir) {
+        if ($cacheDir != $compileDir) {
             $this->clearDirectory($cacheDir);
         }
     }
@@ -135,8 +132,6 @@ class CacheManager
 
     /**
      * Clear rewrite cache
-     *
-     * @throws \Zend_Db_Adapter_Exception
      */
     public function clearRewriteCache()
     {
@@ -168,8 +163,6 @@ class CacheManager
 
     /**
      * Clear search cache
-     *
-     * @throws \Zend_Db_Adapter_Exception
      */
     public function clearSearchCache()
     {
@@ -182,8 +175,6 @@ class CacheManager
 
     /**
      * Clear search cache
-     *
-     * @throws \Zend_Cache_Exception
      */
     public function clearConfigCache()
     {
@@ -210,8 +201,6 @@ class CacheManager
      * - Doctrine-Proxies
      * - Doctrine-Annotations
      * - Doctrine-Metadata
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function clearProxyCache()
     {
@@ -246,17 +235,16 @@ class CacheManager
      *
      * @param null $request
      *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     *
      * @return array
      */
     public function getHttpCacheInfo($request = null)
     {
-        $info = [];
         if ($this->container->getParameter('shopware.httpCache.enabled')) {
             $info = $this->getDirectoryInfo(
                 $this->container->getParameter('shopware.httpCache.cache_dir')
             );
+        } else {
+            $info = [];
         }
 
         $info['name'] = 'Http-Reverse-Proxy';
@@ -272,8 +260,6 @@ class CacheManager
 
     /**
      * Returns cache information
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -310,8 +296,6 @@ class CacheManager
     /**
      * Returns template cache information
      *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     *
      * @return array
      */
     public function getTemplateCacheInfo()
@@ -325,8 +309,6 @@ class CacheManager
 
     /**
      * Returns template cache information
-     *
-     * @throws \Exception
      *
      * @return array
      */
@@ -342,8 +324,6 @@ class CacheManager
     /**
      * Returns cache information
      *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     *
      * @return array
      */
     public function getDoctrineProxyCacheInfo()
@@ -357,8 +337,6 @@ class CacheManager
 
     /**
      * Returns cache information
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -397,8 +375,6 @@ class CacheManager
      * Returns cache information
      *
      * @param string $dir
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      *
      * @return array
      */
