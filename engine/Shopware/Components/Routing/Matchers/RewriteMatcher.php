@@ -81,7 +81,6 @@ class RewriteMatcher implements MatcherInterface
         $params = $context->getParams();
         $params = $this->queryAliasMapper->replaceShortParams($params);
 
-        /* templates/_emotion/frontend/_resources/javascript/jquery.shopware.js */
         if (isset($params['sAction'])) {
             $params['action'] = $params['sAction'];
         }
@@ -128,7 +127,7 @@ class RewriteMatcher implements MatcherInterface
           SELECT subshopID as shopId, path, org_path as orgPath, main
           FROM s_core_rewrite_urls
           WHERE path LIKE :pathInfo
-          ORDER BY main DESC, subshopID = :shopId DESC
+          ORDER BY subshopID = :shopId DESC, main DESC
           LIMIT 1
         ';
 
