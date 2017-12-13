@@ -80,31 +80,32 @@ class JavascriptCollector
             $this->collectInheritanceJavascript($inheritances['custom'])
         );
 
-        $definitions = $this->eventManager->filter(
+        $discardJs = [];
+
+        for ($i = count($definitions) - 1; $i >= 0; --$i) {
+            $definition = $definitions[$i];
+
+            $theme = $definition->getTheme();
+
+            // not all definitions are associated with a specific theme (e.g. plugins)
+            if ($theme) {
+                $themeClassName = get_class($theme);
+                $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
+
+                if (in_array($themeClassName, $discardJs)) {
+                    $definition->setFiles([]);
+                }
+            }
+        }
+
+        $files = $this->eventManager->filter(
             'Theme_Compiler_Collect_Javascript_Files_FilterResult',
-            $definitions,
+            $this->getUniqueFiles($definitions),
             [
                 'shop' => $shop,
                 'template' => $template,
             ]
         );
-
-        $discardJs = [];
-        $files = [];
-        for ($i = count($definitions) - 1; $i >= 0; --$i) {
-            $definition = $definitions[$i];
-
-            $theme = $definition->getTheme();
-            $themeClassName = get_class($theme);
-
-            if ($theme) {
-                $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
-            }
-
-            if (!in_array($themeClassName, $discardJs)) {
-                $files = array_merge($files, $definition->getFiles());
-            }
-        }
 
         return $files;
     }
@@ -138,11 +139,13 @@ class JavascriptCollector
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      *
-     * @return string[]
+     * @return JavascriptDefinition[]
      */
     private function collectPluginJavascript(Shop\Shop $shop, Shop\Template $template)
     {
         $collection = new ArrayCollection();
+        $definition = new JavascriptDefinition();
+
         $this->eventManager->collect(
             'Theme_Compiler_Collect_Plugin_Javascript',
             $collection,
@@ -157,6 +160,24 @@ class JavascriptCollector
             }
         }
 
-        return $collection->toArray();
+        $definition->setFiles($collection->toArray());
+
+        return [$definition];
+    }
+
+    /**
+     * @param $definitions
+     *
+     * @return array
+     */
+    private function getUniqueFiles($definitions)
+    {
+        $files = [];
+        /** @var JavascriptDefinition $definition */
+        foreach ($definitions as $definition) {
+            $files = array_merge($files, $definition->getFiles());
+        }
+
+        return $files;
     }
 }
