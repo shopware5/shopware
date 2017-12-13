@@ -279,8 +279,8 @@
         </service>
 
         <service class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VariantConditionHandler" id="shopware_bundle.search_bundle_dbal_condition_handler.variant_condition_handler">
-            <argument id="shopware_searchdbal.search_price_helper_dbal" type="service"/>
             <tag name="condition_handler_dbal"/>
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
         <service id="shopware_searchdbal.height_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler" >
@@ -309,6 +309,10 @@
         <service id="shopware_searchdbal.condition_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
         <service id="shopware_searchdbal.sorting_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
         <service id="shopware_searchdbal.facet_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
-        <service id="shopware_searchdbal.variant_helper" class="Shopware\Bundle\SearchBundleDBAL\VariantHelper" />
+        <service id="shopware_searchdbal.variant_helper" class="Shopware\Bundle\SearchBundleDBAL\VariantHelper" >
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.custom_listing_hydrator"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+        </service>
     </services>
 </container>

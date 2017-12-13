@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -146,7 +145,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
 
         $query->from('s_articles', 'product');
 
-        if ($this->hasVariantCondition($criteria)) {
+        if ($criteria->hasVariantCondition()) {
             $query->innerJoin(
                 'product',
                 's_articles_details',
@@ -189,6 +188,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      * @param Criteria             $criteria
      * @param QueryBuilder         $query
      * @param ShopContextInterface $context
+     *
+     * @throws \Exception
      */
     private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
@@ -251,6 +252,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
+     * @throws \Enlight_Event_Exception
+     *
      * @return SortingHandlerInterface[]
      */
     private function registerSortingHandlers()
@@ -267,6 +270,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
+     * @throws \Enlight_Event_Exception
+     *
      * @return ConditionHandlerInterface[]
      */
     private function registerConditionHandlers()
@@ -299,16 +304,5 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
                 );
             }
         }
-    }
-
-    private function hasVariantCondition(Criteria $criteria)
-    {
-        foreach ($criteria->getConditions() as $condition) {
-            if ($condition instanceof VariantCondition) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

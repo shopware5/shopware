@@ -24,47 +24,16 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
-use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class VariantCondition implements ConditionInterface, \JsonSerializable
+class MainVariantCondition implements ConditionInterface, \JsonSerializable
 {
-    /**
-     * Each value id is combined via OR expression to restrict the criteria.
-     *
-     * @var int[]
-     */
-    protected $optionIds;
-
-    /**
-     * @param int[] $optionIds
-     */
-    public function __construct(array $optionIds)
-    {
-        Assertion::allIntegerish($optionIds);
-        $this->optionIds = array_map('intval', $optionIds);
-        sort($this->optionIds, SORT_NUMERIC);
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'options_' . implode('_', $this->getOptionIds());
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getOptionIds()
-    {
-        return $this->optionIds;
+        return 'isMain';
     }
 
     /**

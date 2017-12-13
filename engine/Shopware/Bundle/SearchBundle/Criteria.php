@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Assert\Assertion;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
@@ -501,5 +502,16 @@ class Criteria extends Extendable implements \JsonSerializable
         $this->fetchCount = $fetchCount;
 
         return $this;
+    }
+
+    public function hasVariantCondition()
+    {
+        foreach ($this->getConditions() as $condition) {
+            if ($condition instanceof VariantCondition) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

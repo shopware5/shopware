@@ -579,13 +579,23 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return $articles;
         }
 
-        $urls = array_map(function ($article) use ($categoryId) {
-            if ($categoryId !== null) {
-                return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
-            }
+        if ($this->Request()->getParam('options')) {
+            $urls = array_map(function ($article) use ($categoryId) {
+                if ($categoryId !== null) {
+                    return $article['linkVariant'] . '&sCategory=' . (int) $categoryId;
+                }
 
-            return $article['linkDetails'];
-        }, $articles);
+                return $article['linkVariant'];
+            }, $articles);
+        } else {
+            $urls = array_map(function ($article) use ($categoryId) {
+                if ($categoryId !== null) {
+                    return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
+                }
+
+                return $article['linkDetails'];
+            }, $articles);
+        }
 
         $rewrite = $router->generateList($urls);
 

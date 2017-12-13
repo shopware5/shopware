@@ -38,17 +38,46 @@ class VariantFacet implements FacetInterface
      */
     protected $groupIds;
 
-    public function __construct($groupIds)
+    /**
+     * @var array
+     */
+    protected $expandGroupsIds;
+
+    /**
+     * @param string|array      $groupIds
+     * @param string|array|null $expandGroupIds
+     */
+    public function __construct($groupIds, $expandGroupIds = null)
     {
         if (is_string($groupIds)) {
             $groupIds = array_filter(explode('|', $groupIds));
         }
         $this->groupIds = $groupIds;
+
+        if ($expandGroupIds === null) {
+            $expandGroupIds = [];
+        }
+
+        if (is_string($expandGroupIds)) {
+            $expandGroupIds = array_filter(explode('|', $expandGroupIds));
+        }
+        $this->expandGroupsIds = $expandGroupIds;
     }
 
-    public function getGroupIds(): array
+    /**
+     * @return array
+     */
+    public function getGroupIds()
     {
         return $this->groupIds;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExpandGroupIds()
+    {
+        return $this->expandGroupsIds;
     }
 
     /**

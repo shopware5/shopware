@@ -2389,6 +2389,11 @@ class sArticles
                 $article['linkDetails'] .= "&sCategory=$categoryId";
             }
 
+            // When a filter on a variant is active, use the variant link as detail link
+            if ($criteria->hasVariantCondition() && !empty($article['linkVariant'])) {
+                $article['linkDetails'] = $article['linkVariant'];
+            }
+
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
                 $article['description_long'] = $article['description'];
             }

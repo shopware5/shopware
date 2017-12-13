@@ -100,7 +100,9 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'tax.Detail',
         'tax.Rule',
 
-        'priceGroup.Discount'
+        'priceGroup.Discount',
+
+        'variantFilter.ExpandGroupsGrid'
     ],
 
     stores:[

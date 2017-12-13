@@ -196,6 +196,7 @@
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.configurator_hydrator_dbal"/>
             <argument type="service" id="shopware_storefront.media_gateway" />
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
         <service class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway" id="shopware_storefront.configurator_options_gateway">

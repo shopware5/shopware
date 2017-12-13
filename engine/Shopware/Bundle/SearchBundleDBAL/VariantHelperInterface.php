@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,44 +20,28 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Cache
- * @subpackage Cache
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware Application - Config module
- *
- * todo@all: Documentation
- */
-//{block name="backend/config/application"}
-Ext.define('Shopware.apps.Config', {
+namespace Shopware\Bundle\SearchBundleDBAL;
 
-    extend: 'Enlight.app.SubApplication',
+use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 
-    controllers: [ 'Main', 'Document' ],
-
-    bulkLoad: true,
-    loadPath: '{url action=load}',
-
-    params: {},
-    defaultController: 'Main',
+interface VariantHelperInterface
+{
+    /**
+     * Determines if the group belonging to the given option should be expanded in product listing
+     *
+     * @param array             $optionIds
+     * @param VariantFacet|null $variantFacet
+     *
+     * @return bool
+     */
+    public function shouldExpandGroup(array $optionIds, VariantFacet $variantFacet = null);
 
     /**
-     * This method will be called when all dependencies are solved and
-     * all member controllers, models, views and stores are initialized.
+     * Returns the VariantFacet
+     *
+     * @return null|object
      */
-    launch: function() {
-        var me = this,
-            controller = me.getController(me.defaultController);
-
-        console.log('yay');
-
-        return controller.mainWindow;
-    }
-});
-//{/block}
-
+    public function getVariantFacet();
+}

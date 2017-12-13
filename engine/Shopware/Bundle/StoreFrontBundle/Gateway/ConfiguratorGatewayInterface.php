@@ -96,4 +96,14 @@ interface ConfiguratorGatewayInterface
      * @return array Indexed by the option id
      */
     public function getProductCombinations(Struct\BaseProduct $product);
+
+    /**
+     * Get options of all groups which shouldn't expand.
+     *
+     * @param array                       $ordernumbers
+     * @param Struct\ShopContextInterface $context
+     *
+     * @return array
+     */
+    public function getVariantGroups(array $ordernumbers, Struct\ShopContextInterface $context);
 }

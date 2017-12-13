@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -38,10 +38,15 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class VariantConditionHandler implements ConditionHandlerInterface
 {
-    /** @var PriceHelper */
+    /**
+     * @var VariantHelperInterface
+     */
     private $helper;
 
-    public function __construct(PriceHelper $helper)
+    /**
+     * @param VariantHelperInterface $helper
+     */
+    public function __construct(VariantHelperInterface $helper)
     {
         $this->helper = $helper;
     }
@@ -72,6 +77,8 @@ class VariantConditionHandler implements ConditionHandlerInterface
         $query->addState('option_' . $tableKey);
 
         $where = [];
+        $shouldExpandGroup = $this->helper->shouldExpandGroup($condition->getOptionIds());
+
         /** @var VariantCondition $condition */
         foreach ($condition->getOptionIds() as $valueId) {
             $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
@@ -81,8 +88,6 @@ class VariantConditionHandler implements ConditionHandlerInterface
 
         $where = implode(' OR ', $where);
 
-        //        $this->helper->joinAvailableVariant($query);
-
         $query->innerJoin(
             'variant',
             's_article_configurator_option_relations',
@@ -91,11 +96,13 @@ class VariantConditionHandler implements ConditionHandlerInterface
              AND (' . $where . ')'
         );
 
-        if (!$query->hasState('variant_group_by')) {
-            $query->resetQueryPart('groupBy');
-        }
+        if ($shouldExpandGroup) {
+            if (!$query->hasState('variant_group_by')) {
+                $query->resetQueryPart('groupBy');
+            }
 
-        $query->addState('variant_group_by');
-        $query->addGroupBy($tableKey . '.option_id');
+            $query->addState('variant_group_by');
+            $query->addGroupBy($tableKey . '.option_id');
+        }
     }
 }

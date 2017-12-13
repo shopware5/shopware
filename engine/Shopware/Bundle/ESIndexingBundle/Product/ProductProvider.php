@@ -27,10 +27,13 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
+use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
@@ -90,6 +93,16 @@ class ProductProvider implements ProductProviderInterface
     private $propertyHydrator;
 
     /**
+     * @var ConfiguratorServiceInterface
+     */
+    private $configuratorService;
+
+    /**
+     * @var VariantHelper
+     */
+    private $variantHelper;
+
+    /**
      * @param ListProductGatewayInterface      $productGateway
      * @param CheapestPriceServiceInterface    $cheapestPriceService
      * @param VoteServiceInterface             $voteService
@@ -99,6 +112,8 @@ class ProductProvider implements ProductProviderInterface
      * @param PriceCalculationServiceInterface $priceCalculationService
      * @param FieldHelper                      $fieldHelper
      * @param PropertyHydrator                 $propertyHydrator
+     * @param ConfiguratorServiceInterface     $configuratorService
+     * @param VariantHelper                    $variantHelper
      */
     public function __construct(
         ListProductGatewayInterface $productGateway,
@@ -109,7 +124,9 @@ class ProductProvider implements ProductProviderInterface
         IdentifierSelector $identifierSelector,
         PriceCalculationServiceInterface $priceCalculationService,
         FieldHelper $fieldHelper,
-        PropertyHydrator $propertyHydrator
+        PropertyHydrator $propertyHydrator,
+        ConfiguratorServiceInterface $configuratorService,
+        VariantHelper $variantHelper
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -120,6 +137,8 @@ class ProductProvider implements ProductProviderInterface
         $this->priceCalculationService = $priceCalculationService;
         $this->fieldHelper = $fieldHelper;
         $this->propertyHydrator = $propertyHydrator;
+        $this->configuratorService = $configuratorService;
+        $this->variantHelper = $variantHelper;
     }
 
     /**
@@ -133,6 +152,38 @@ class ProductProvider implements ProductProviderInterface
             ContextService::FALLBACK_CUSTOMER_GROUP
         );
 
+        $numbers = [
+            'SW-1',
+            'SW-1.1',
+            'SW-1.2',
+            'SW-1.3',
+            'SW-2',
+            'SW-2.1',
+            //'SW-2.2',
+            //'SW-2.3',
+        ];
+
+        //permutate to
+
+        $numbers = [
+            'SW-1',
+            'SW-1.1',
+            'SW-2',
+            'SW-2.2',
+        ];
+
+        /*
+         *
+         * SELECT ordernumber FROM details
+         *  LEFT JOIN config_groups g1
+         *  LEFT JOIN config_groups g2
+         *
+         * WHERE numbers IN (:dasVonOben)
+         *
+         * GROUP BY g1.id, g2.id
+         *
+         * */
+
         $products = $this->productGateway->getList($numbers, $context);
         $average = $this->voteService->getAverages($products, $context);
         $cheapest = $this->getCheapestPrices($products, $shop->getId());
@@ -140,14 +191,32 @@ class ProductProvider implements ProductProviderInterface
         $categories = $this->getCategories($products);
         $properties = $this->getProperties($products, $context);
 
+        /**
+         * @var VariantFacet
+         */
+        $variantFacet = $this->variantHelper->getVariantFacet();
+        $configurations = $this->configuratorService->getVariantGroups($numbers, $context);
+
         $result = [];
         foreach ($products as $listProduct) {
             $product = Product::createFromListProduct($listProduct);
             $number = $product->getNumber();
             $id = $product->getId();
 
-            if (!$product->isMainVariant()) {
-                continue;
+            //todo@krispin: please change to "getProductsConfigurations" => batch operation
+            $product->setConfiguration($this->configuratorService->getProductConfiguration($product, $context));
+
+            if (array_key_exists($product->getId(), $configurations)) {
+                $groups = $product->getConfiguration();
+                foreach ($groups as $key => $group) {
+                    if (!in_array($group->getId(), $variantFacet->getExpandGroupIds())) {
+                        unset($groups[$key]);
+                    }
+                }
+
+                $groups = array_merge($groups, $configurations[$product->getId()]);
+
+                $product->setConfiguration($groups);
             }
 
             if (isset($average[$number])) {

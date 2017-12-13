@@ -42,7 +42,18 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.VariantFacet',
             labelWidth: 150,
             translatable: true,
             fieldLabel: '{s name="available_groups"}{/s}'
-        }];
+        },
+
+        {
+            xtype: 'variant-filter-expand-group-grid',
+            name: 'expandGroupIds',
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
+            store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
+            labelWidth: 150,
+            translatable: true,
+            fieldLabel: '{s name="expand_groups"}{/s}'
+        }
+        ];
     }
 });
 

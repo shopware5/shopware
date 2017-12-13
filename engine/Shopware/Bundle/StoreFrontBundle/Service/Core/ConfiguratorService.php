@@ -76,9 +76,20 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      */
     public function getProductsConfigurations($products, Struct\ShopContextInterface $context)
     {
-        $configuration = $this->productConfigurationGateway->getList($products, $context);
+        return $this->productConfigurationGateway->getList($products, $context);
+    }
 
-        return $configuration;
+    /**
+     * Get options of all groups which shouldn't expand.
+     *
+     * @param array                       $numbers
+     * @param Struct\ShopContextInterface $context
+     *
+     * @return array
+     */
+    public function getVariantGroups(array $numbers, Struct\ShopContextInterface $context)
+    {
+        return $this->configuratorGateway->getVariantGroups($numbers, $context);
     }
 
     /**

@@ -22,33 +22,34 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
+namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
-use Doctrine\DBAL\Connection;
+use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
+use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
-class VariantFacetHandler implements PartialFacetHandlerInterface
+class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     /**
-     * @var QueryBuilderFactoryInterface
+     * @var ConfiguratorServiceInterface
      */
-    private $queryBuilderFactory;
+    private $gateway;
 
     /**
      * @var string
@@ -56,115 +57,90 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @var PriceHelper
+     * VariantFacetHandler constructor.
+     *
+     * @param ConfiguratorOptionsGateway $gateway
+     * @param QueryAliasMapper           $queryAliasMapper
      */
-    private $helper;
-
-    /**
-     * @var ConfiguratorOptionsGateway
-     */
-    private $gateway;
-
-    public function __construct(
-        ConfiguratorOptionsGateway $gateway,
-        QueryBuilderFactoryInterface $queryBuilderFactory,
-        QueryAliasMapper $queryAliasMapper,
-        PriceHelper $helper
-    ) {
-        $this->queryBuilderFactory = $queryBuilderFactory;
-
+    public function __construct(ConfiguratorOptionsGateway $gateway, QueryAliasMapper $queryAliasMapper)
+    {
         //todo: Richtigen SeoAlias vergeben.
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('options')) {
             $this->fieldName = 'options';
         }
-        $this->helper = $helper;
+
         $this->gateway = $gateway;
     }
 
     /**
-     * {@inheritdoc}
+     * Validates if the criteria part can be handled by this handler
+     *
+     * @param CriteriaPartInterface $criteriaPart
+     *
+     * @return bool
      */
-    public function supportsFacet(FacetInterface $facet)
+    public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return $facet instanceof VariantFacet;
+        return $criteriaPart instanceof VariantFacet;
     }
 
     /**
-     * @param FacetInterface|VariantFacet $facet
-     * @param Criteria                    $reverted
-     * @param Criteria                    $criteria
-     * @param ShopContextInterface        $context
+     * Handles the criteria part and extends the provided search.
      *
-     * @return FacetResultInterface|null
+     * @param CriteriaPartInterface $criteriaPart
+     * @param Criteria              $criteria
+     * @param Search                $search
+     * @param ShopContextInterface  $context
      */
-    public function generatePartialFacet(
-        FacetInterface $facet,
-        Criteria $reverted,
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $aggregation = new TermsAggregation('variant');
+        $aggregation->setField('configuration.options.id');
+        $search->addAggregation($aggregation);
+    }
+
+    /**
+     * Hydrates the Elasticsearch result to extend the product number search result
+     * with facets or attributes.
+     *
+     * @param array                     $elasticResult
+     * @param ProductNumberSearchResult $result
+     * @param Criteria                  $criteria
+     * @param ShopContextInterface      $context
+     */
+    public function hydrate(
+        array $elasticResult,
+        ProductNumberSearchResult $result,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        if (empty($facet->getGroupIds())) {
-            return null;
+        if (!isset($elasticResult['aggregations']['variant'])) {
+            return;
         }
-        $options = $this->getOptions($context, $reverted, $facet);
 
-        if (null === $options) {
-            return null;
+        $buckets = $elasticResult['aggregations']['variant']['buckets'];
+
+        if (empty($buckets)) {
+            return;
         }
+
+        $ids = array_column($buckets, 'key');
+        $groups = $this->gateway->getOptionsWithGroups($ids);
+        if (empty($groups)) {
+            return;
+        }
+
+        /**
+         * @var VariantFacet
+         */
+        $facet = $criteria->getFacet('option');
         $actives = $this->getFilteredValues($criteria);
-
-        return $this->createCollectionResult($facet, $options, $actives);
-    }
-
-    protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
-    {
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-        $this->rebuildQuery($query, $facet);
-
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        if (empty($valueIds)) {
-            return null;
-        }
-
-        $properties = $this->gateway->getOptionsWithGroups(
-            $valueIds
-        );
-
-        return $properties;
-    }
-
-    private function rebuildQuery(QueryBuilder $query, VariantFacet $facet)
-    {
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
-
-        $this->helper->joinAvailableVariant($query);
-        $query->innerJoin('availableVariant', 's_article_configurator_option_relations', 'variantOptions', 'variantOptions.article_id = availableVariant.id');
-        $query->innerJoin('variantOptions', 's_article_configurator_options', 'options', 'options.id = variantOptions.option_id AND options.group_id IN (:variantGroupIds)');
-        $query->groupBy('variantOptions.option_id');
-        $query->select('variantOptions.option_id as id');
-        $query->setParameter('variantGroupIds', $facet->getGroupIds(), Connection::PARAM_INT_ARRAY);
-    }
-
-    /**
-     * @param Criteria $criteria
-     *
-     * @return array
-     */
-    private function getFilteredValues(Criteria $criteria)
-    {
-        $values = [];
-        foreach ($criteria->getConditions() as $condition) {
-            if ($condition instanceof VariantCondition) {
-                $values = array_merge($values, $condition->getOptionIds());
-            }
-        }
-
-        return $values;
+        $facet = $this->createCollectionResult($facet, $groups, $actives);
+        $result->addFacet($facet);
     }
 
     /**
@@ -223,5 +199,22 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         }
 
         return new FacetResultGroup($results, null, $facet->getName());
+    }
+
+    /**
+     * @param Criteria $criteria
+     *
+     * @return array
+     */
+    private function getFilteredValues(Criteria $criteria)
+    {
+        $values = [];
+        foreach ($criteria->getConditions() as $condition) {
+            if ($condition instanceof VariantCondition) {
+                $values = array_merge($values, $condition->getOptionIds());
+            }
+        }
+
+        return $values;
     }
 }

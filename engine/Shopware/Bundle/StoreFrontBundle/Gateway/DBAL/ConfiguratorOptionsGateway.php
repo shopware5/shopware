@@ -77,7 +77,38 @@ class ConfiguratorOptionsGateway
         $this->fieldHelper = $fieldHelper;
     }
 
-    public function getOptionsWithGroups(array $optionIds, Struct\ShopContextInterface $context)
+    public function getOptionsByGroups(array $groupIds)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->addSelect($this->fieldHelper->getConfiguratorGroupFields());
+        $query->addSelect($this->fieldHelper->getConfiguratorOptionFields());
+
+        $query->from('s_article_configurator_groups', 'configuratorGroup')
+            ->innerJoin('configuratorGroup', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.group_id = configuratorGroup.id')
+            ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
+            ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
+            ->addOrderBy('configuratorGroup.position')
+            ->addOrderBy('configuratorGroup.name')
+            ->addOrderBy('configuratorOption.position')
+            ->addOrderBy('configuratorOption.name')
+            ->groupBy('configuratorOption.id')
+            ->andWhere('configuratorGroup.id IN (:ids)')
+            ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
+
+        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $this->configuratorHydrator->hydrateGroups($data);
+    }
+
+    /**
+     * Get groups with options by optionids
+     *
+     * @param array $optionIds
+     *
+     * @return Struct\Configurator\Group[]
+     */
+    public function getOptionsWithGroups(array $optionIds)
     {
         $query = $this->connection->createQueryBuilder();
 

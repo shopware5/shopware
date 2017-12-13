@@ -28,7 +28,7 @@ class Migrations_Migration1204 extends Shopware\Components\Migrations\AbstractMi
     {
         $sql = <<<SQL
 INSERT IGNORE INTO `s_search_custom_facet` (`id`, `unique_key`, `active`, `display_in_categories`, `position`, `name`, `facet`, `deletable`) VALUES
-(NULL, 'VariantFacet', 0, 1, 11, 'Varianten', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\VariantFacet":{"groupIds":{}}}', 0)
+(NULL, 'VariantFacet', 0, 1, 11, 'Varianten', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\VariantFacet":{"groupIds":{}, "expandGroupIds":{}}}', 0)
 ;
 SQL;
         $this->addSql($sql);

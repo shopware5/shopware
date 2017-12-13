@@ -26,6 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -65,23 +67,30 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      * @var Connection
      */
     private $connection;
+    /**
+     * @var VariantHelper
+     */
+    private $variantHelper;
 
     /**
      * @param Connection                                                      $connection
      * @param FieldHelper                                                     $fieldHelper
      * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
+     * @param VariantHelper                                                   $variantHelper
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ConfiguratorHydrator $configuratorHydrator,
-        Gateway\MediaGatewayInterface $mediaGateway
+        Gateway\MediaGatewayInterface $mediaGateway,
+        VariantHelper $variantHelper
     ) {
         $this->connection = $connection;
         $this->configuratorHydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
         $this->mediaGateway = $mediaGateway;
+        $this->variantHelper = $variantHelper;
     }
 
     /**
@@ -187,6 +196,78 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         }
 
         return $data;
+    }
+
+    /**
+     * Get options of all groups which shouldn't expand.
+     *
+     * @param array                       $ordernumbers
+     * @param Struct\ShopContextInterface $context
+     *
+     * @return array
+     */
+    public function getVariantGroups(array $ordernumbers, Struct\ShopContextInterface $context)
+    {
+        if (empty($ordernumbers)) {
+            return [];
+        }
+
+        /**
+         * @var VariantFacet
+         */
+        $variantFacet = $this->variantHelper->getVariantFacet();
+
+        if (empty($variantFacet)) {
+            return [];
+        }
+
+        $expandGroups = $variantFacet->getExpandGroupIds();
+
+        if (empty($expandGroups)) {
+            return [];
+        }
+
+        $query = $this->connection->createQueryBuilder();
+        $query->select('DISTINCT articleId')
+            ->from('s_articles_details')
+            ->where('ordernumber IN (:products)')
+            ->setParameter(':products', $ordernumbers, Connection::PARAM_STR_ARRAY);
+        $articleIds = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['variant.articleId', 'options.group_id', "GROUP_CONCAT(DISTINCT relations.option_id SEPARATOR '|') as options"])
+            ->from('s_articles_details', 'variant')
+            ->innerJoin('variant', 's_article_configurator_option_relations', 'relations', 'variant.id = relations.article_id')
+            ->innerJoin('relations', 's_article_configurator_options', 'options', 'options.id = relations.option_id')
+            ->andWhere('NOT options.group_id in (:group_ids)')
+            ->setParameter(':group_ids', $expandGroups, Connection::PARAM_INT_ARRAY)
+            ->andWhere('variant.articleID IN (:products)')
+            ->setParameter(':products', $articleIds, Connection::PARAM_INT_ARRAY)
+            ->addGroupBy('variant.articleId')
+            ->addGroupBy('options.group_id');
+
+        $articles = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        $groups = [];
+        foreach ($articles as $article) {
+            $group = new Struct\Configurator\Group();
+            $group->setId($article['group_id']);
+
+            $options = explode('|', $article['options']);
+            foreach ($options as $option) {
+                $opt = new Struct\Configurator\Option();
+                $opt->setId($option);
+                $group->addOption($opt);
+            }
+
+            if (empty($groups[$article['articleId']])) {
+                $groups[$article['articleId']] = [];
+            }
+
+            array_push($groups[$article['articleId']], $group);
+        }
+
+        return $groups;
     }
 
     /**
