@@ -104,6 +104,23 @@ class LessCollector
             $this->collectInheritanceCss($inheritances['custom'])
         );
 
+        $discardLess = [];
+        for ($i = count($definitions) - 1; $i >= 0; --$i) {
+            $definition = $definitions[$i];
+            $theme = $definition->getTheme();
+
+            if (!$theme) {
+                continue;
+            }
+
+            $themeClassName = get_class($theme);
+            $discardLess = array_merge($discardLess, $theme->getDiscardedLessThemes());
+
+            if (in_array($themeClassName, $discardLess)) {
+                $definitions[$i]->setFiles([]);
+            }
+        }
+
         $definitions = $this->eventManager->filter(
             'Theme_Compiler_Collect_Less_Definitions_FilterResult',
             $definitions,
@@ -112,23 +129,6 @@ class LessCollector
                 'template' => $template,
             ]
         );
-
-        $discardLess = [];
-
-        for ($i = count($definitions) - 1; $i >= 0; --$i) {
-            $definition = $definitions[$i];
-
-            $theme = $definition->getTheme();
-            $themeClassName = get_class($theme);
-
-            if ($theme) {
-                $discardLess = array_merge($discardLess, $theme->getDiscardedLessThemes());
-            }
-
-            if (in_array($themeClassName, $discardLess)) {
-                $definitions[$i]->setFiles([]);
-            }
-        }
 
         return $definitions;
     }
