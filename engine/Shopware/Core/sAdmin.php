@@ -3204,6 +3204,12 @@ class sAdmin
             $context['sConfirmLink'] = $optIn;
         }
 
+        $context = $this->eventManager->filter('Shopware_Modules_Admin_sendMail_FilterVariables', $context, new Enlight_Event_EventArgs([
+            'template' => $template,
+            'recipient' => $recipient,
+            'optin' => $optIn
+        ]));
+
         $mail = Shopware()->TemplateMail()->createMail($template, $context);
         $mail->addTo($recipient);
         $mail->send();
