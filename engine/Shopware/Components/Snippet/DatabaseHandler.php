@@ -113,6 +113,8 @@ class DatabaseHandler
         $snippetCount = $this->em->getConnection()->fetchArray('SELECT * FROM s_core_snippets LIMIT 1');
         $databaseWriter->setUpdate((bool) $snippetCount);
 
+        $shops = $this->em->getRepository('Shopware\Models\Shop\Shop')->getShopIds();
+
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
             if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
@@ -135,7 +137,10 @@ class DatabaseHandler
                     $locale = $localeRepository->findOneBy(['locale' => $index]);
                 }
 
-                $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
+                foreach ($shops as $shop)
+                {
+                    $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), $shop['id']);
+                }
 
                 $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
             }
