@@ -626,9 +626,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
-    /**
-     * @throws Exception
-     */
     public function importPluginLicenceAction()
     {
         $technicalName = $this->Request()->getParam('technicalName');
@@ -772,8 +769,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @throws \Exception
-     *
      * @return null|AccessTokenStruct
      */
     private function getAccessToken()
@@ -786,16 +781,10 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return null;
         }
 
-        /** @var $token AccessTokenStruct */
-        $token = $this->get('BackendSession')->offsetGet('store_token');
-        $token = unserialize($token);
-
-        return $token;
+        return unserialize($this->get('BackendSession')->offsetGet('store_token'));
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     private function getLocale()
@@ -804,8 +793,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     private function getDomain()
@@ -818,7 +805,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**
@@ -835,8 +822,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param StoreException $exception
-     *
-     * @throws Exception
      *
      * @return mixed|string
      */
@@ -899,8 +884,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @throws Exception
-     *
      * @return PluginCategoryService
      */
     private function getCategoryService()
@@ -915,8 +898,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * @param BasketStruct $basket
      * @param array        $positions
-     *
-     * @throws \Exception
      */
     private function loadBasketPlugins(BasketStruct $basket, array $positions)
     {
@@ -961,8 +942,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param Exception $e
-     *
-     * @throws \Exception
      */
     private function handleException(Exception $e)
     {

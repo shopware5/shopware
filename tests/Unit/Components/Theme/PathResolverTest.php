@@ -25,7 +25,9 @@
 namespace Shopware\Components\Test\Theme;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\PathResolver;
+use Shopware\Kernel;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 
@@ -38,11 +40,15 @@ class PathResolverTest extends TestCase
 
     protected function setUp()
     {
+        $kernel = new Kernel('testing', true);
+        $releaseArray = $kernel->getRelease();
+
         $this->pathResolver = new PathResolver(
             '/my/root/dir',
             ['/my/root/dir/templates'],
             '/my/root/dir/template',
-            '/my/root/dir/web/cache'
+            '/my/root/dir/web/cache',
+            new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision'])
         );
     }
 
@@ -51,11 +57,13 @@ class PathResolverTest extends TestCase
         $timestamp = '200000';
         $templateId = 5;
         $shopId = 4;
+        $kernel = new Kernel('testing', true);
+        $release = $kernel->getRelease();
 
         $templateMock = $this->createTemplateMock($templateId);
         $shopMock = $this->createShopMock($shopId, $templateMock);
 
-        $filenameHash = $timestamp . '_' . md5($timestamp . $templateId . $shopId . \Shopware::REVISION);
+        $filenameHash = $timestamp . '_' . md5($timestamp . $templateId . $shopId . $release['revision']);
 
         $expected = '/my/root/dir/web/cache/' . $filenameHash . '.css';
         $this->assertEquals($expected, $this->pathResolver->getCssFilePath($shopMock, $timestamp));

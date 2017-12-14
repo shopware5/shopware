@@ -246,14 +246,12 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
-     *
-     * @throws Exception
      *
      * @return LocaleStruct Information about the current locale
      */

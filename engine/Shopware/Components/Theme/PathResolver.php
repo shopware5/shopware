@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme;
 
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop;
 
@@ -61,17 +62,24 @@ class PathResolver
     private $pluginDirectories;
 
     /**
-     * @param string $rootDir
-     * @param array  $pluginDirectories
-     * @param string $templateDir
-     * @param string $cacheDir
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($rootDir, array $pluginDirectories, $templateDir, $cacheDir)
+    private $release;
+
+    /**
+     * @param string                $rootDir
+     * @param array                 $pluginDirectories
+     * @param string                $templateDir
+     * @param string                $cacheDir
+     * @param ShopwareReleaseStruct $release
+     */
+    public function __construct($rootDir, array $pluginDirectories, $templateDir, $cacheDir, ShopwareReleaseStruct $release)
     {
         $this->rootDir = $rootDir;
         $this->pluginDirectories = $pluginDirectories;
         $this->templateDir = $templateDir;
         $this->cacheDir = $cacheDir;
+        $this->release = $release;
     }
 
     /**
@@ -356,7 +364,7 @@ class PathResolver
             $shop = $shop->getMain();
         }
 
-        $filename = $timestamp . '_' . md5($timestamp . $shop->getTemplate()->getId() . $shop->getId() . \Shopware::REVISION);
+        $filename = $timestamp . '_' . md5($timestamp . $shop->getTemplate()->getId() . $shop->getId() . $this->release->getRevision());
 
         return $filename . '.' . $suffix;
     }

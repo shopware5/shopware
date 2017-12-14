@@ -1,7 +1,7 @@
 {extends file="backend/base/header.tpl"}
 
 {* Page title *}
-{block name='backend/base/header/title'}Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT} (Rev. {Shopware::REVISION}) - Backend (c) shopware AG{/block}
+{block name='backend/base/header/title'}Shopware {$SHOPWARE_VERSION} {$SHOPWARE_VERSION_TEXT} (Rev. {$SHOPWARE_REVISION}) - Backend (c) shopware AG{/block}
 
 {block name="backend/base/header/css" append}
 <link rel="stylesheet" type="text/css" href="{link file="backend/_resources/styles/growl.css"}" />
@@ -33,7 +33,7 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
         launch: function() {
             var me = this,
                 preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application),
-                errorReporter = Ext.create('Shopware.global.ErrorReporter').bindEvents(Shopware.app.Application)
+                errorReporter = Ext.create('Shopware.global.ErrorReporter').bindEvents(Shopware.app.Application);
 
             /**
              * Activates the Ext.fx.Anim class globally and

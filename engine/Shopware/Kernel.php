@@ -77,9 +77,31 @@ use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
  */
 class Kernel implements HttpKernelInterface
 {
+    /**
+     * @Deprecated
+     *
+     * Will be removed in Shopware v5.5
+     *
+     * Use the following parameters from the DIC instead:
+     *      'shopware.release.version'
+     *      'shopware.release.revision'
+     *      'shopware.release.version_text'
+     *      'shopware.release' (a Struct containing all the parameters below)
+     */
     const VERSION = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
     const REVISION = \Shopware::REVISION;
+
+    /**
+     * Shopware Version definition. Is being replaced by the correct release information in release packages.
+     * Is available in the DIC as parameter 'shopware.release.*' or a Struct containing all the parameters below.
+     */
+    protected $release = [
+        'version' => self::VERSION,
+        'version_text' => self::VERSION_TEXT,
+        'revision' => self::REVISION,
+    ];
+
     /**
      * @var \Shopware
      */
@@ -390,7 +412,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getCacheDir()
     {
-        return $this->getRootDir() . '/var/cache/' . $this->environment . '_' . \Shopware::REVISION;
+        return $this->getRootDir() . '/var/cache/' . $this->environment . '_' . $this->release['revision'];
     }
 
     /**
@@ -453,6 +475,14 @@ class Kernel implements HttpKernelInterface
     public function getElasticSearchConfig()
     {
         return is_array($this->config['es']) ? $this->config['es'] : [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getRelease()
+    {
+        return $this->release;
     }
 
     protected function initializePlugins()
@@ -732,6 +762,9 @@ class Kernel implements HttpKernelInterface
             'kernel.logs_dir' => $this->getLogDir(),
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => $this->getContainerClass(),
+            'shopware.release.version' => $this->release['version'],
+            'shopware.release.version_text' => $this->release['version_text'],
+            'shopware.release.revision' => $this->release['revision'],
         ];
     }
 

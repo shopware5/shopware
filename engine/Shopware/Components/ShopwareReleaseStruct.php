@@ -22,22 +22,58 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Version extends Shopware_Controllers_Api_Rest
+namespace Shopware\Components;
+
+class ShopwareReleaseStruct
 {
     /**
-     * Returns the current version
+     * @var string
      */
-    public function indexAction()
+    private $version;
+
+    /**
+     * @var string
+     */
+    private $versionText;
+
+    /**
+     * @var string
+     */
+    private $revision;
+
+    /**
+     * @param string $version
+     * @param string $versionText
+     * @param string $revision
+     */
+    public function __construct($version, $versionText, $revision)
     {
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
-        $shopwareRelease = $this->container->get('shopware.release');
+        $this->version = $version;
+        $this->versionText = $versionText;
+        $this->revision = $revision;
+    }
 
-        $result['data'] = [
-            'version' => $shopwareRelease->getVersion(),
-            'revision' => $shopwareRelease->getRevision(),
-        ];
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
 
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
+    /**
+     * @return string
+     */
+    public function getVersionText()
+    {
+        return $this->versionText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRevision()
+    {
+        return $this->revision;
     }
 }
