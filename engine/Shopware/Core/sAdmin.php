@@ -551,6 +551,9 @@ class sAdmin
                 's_campaigns_mailaddresses',
                 ['email = ?' => $email]
             );
+            $this->eventManager->notify('Shopware_Modules_Admin_Newsletter_Unsubscribe', new Enlight_Event_EventArgs([
+                'email' => $email
+            ]));
         } else {
             // Check if mail address is already subscribed, return
             if ($this->db->fetchOne(
@@ -590,6 +593,7 @@ class sAdmin
             if (!$groupID) {
                 $groupID = '0';
             }
+
             // Insert email into database
             if (!empty($customer)) {
                 $this->db->insert(
@@ -602,6 +606,10 @@ class sAdmin
                     ['groupID' => $groupID, 'email' => $email, 'added' => $this->getCurrentDateFormatted()]
                 );
             }
+
+            $this->eventManager->notify('Shopware_Modules_Admin_sUpdateNewsletter_Subscribe', new Enlight_Event_EventArgs([
+                'email' => $email
+            ]));
         }
 
         return true;
@@ -2345,6 +2353,9 @@ class sAdmin
             ]);
         } elseif (!empty($unsubscribe)) {
             $this->db->delete('s_campaigns_maildata', ['email = ?' => $email, 'groupID = ?' => $groupID]);
+            $this->eventManager->notify('Shopware_Modules_Admin_Newsletter_Unsubscribe', new Enlight_Event_EventArgs([
+                'email' => $email
+            ]));
         }
 
         return $result;
