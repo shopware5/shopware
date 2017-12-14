@@ -122,7 +122,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             queryMode: 'remote',
             store: me.tplStore,
             emptyText: me.snippets.fields.templateEmptyText,
-            labelWidth: layoutLabelWidth
+            labelWidth: layoutLabelWidth,
+            pageSize: 20
         });
 
         me.modeSelectionTpl = new Ext.XTemplate(
