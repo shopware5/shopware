@@ -619,8 +619,8 @@ class sRewriteTable
             $fallbackId = $fallbackShop->getId();
         }
 
-        $queryBuilder->join( "emotions.shops", "shop", "WITH", "shop.id = :shopId" )
-            ->setParameter( "shopId", $languageId );
+        $queryBuilder->join('emotions.shops', 'shop', 'WITH', 'shop.id = :shopId')
+            ->setParameter('shopId', $languageId);
 
         $queryBuilder
             ->andWhere('emotions.isLandingPage = 1')
