@@ -18,7 +18,7 @@ services:
       MYSQL_PASSWORD: app
 
   selenium:
-    image: selenium/standalone-chrome:3.8
+    image: selenium/standalone-chrome:3.3
     shm_size: 2g
 
   smtp:
