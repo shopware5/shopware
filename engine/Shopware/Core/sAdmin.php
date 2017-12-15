@@ -1173,81 +1173,94 @@ class sAdmin
     public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
         $userId = $this->session->offsetGet('sUserId');
-        $getOrders = $this->db->fetchAll(
-            "SELECT
-                id, ordernumber, invoice_amount, invoice_amount_net,
-                invoice_shipping, invoice_shipping_net,
-                DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum,
-                status, cleared, comment
-            FROM s_order WHERE userID = ? AND s_order.status >= 0
-            ORDER BY ordertime DESC LIMIT 500",
-            [$userId]
-        );
 
-        foreach ($getOrders as $orderKey => $orderValue) {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query->select([
+                'SQL_CALC_FOUND_ROWS orders.id as orderID',
+                'orders.ordernumber as oOrdernumber',
+                'orders.invoice_amount',
+                'orders.invoice_amount_net',
+                'orders.invoice_shipping',
+                'orders.invoice_shipping_net',
+                'DATE_FORMAT(orders.ordertime, "%d.%m.%Y %H:%i") AS datum',
+                'orders.status as oStatus',
+                'orders.cleared',
+                'orders.comment',
+                'details.*'
+            ])
+            ->from('s_order', 'orders')
+            ->innerJoin(
+                'orders',
+                's_order_details',
+                'details',
+                'details.orderID = orders.id AND esdarticle = 1'
+            )
+            ->where('orders.userID  = :userID')
+            ->setParameter('userID', $userId)
+            ->andWhere('orders.status >= 0')
+            ->orderBy('orders.ordertime', 'DESC')
+            ->setFirstResult(($destinationPage - 1) * $perPage)
+            ->setMaxResults($perPage);
+
+        $getRawOrders = $query->execute()->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        $ordersCount = $this->db->fetchOne('SELECT FOUND_ROWS()');
+        $getOrders = [];
+
+        foreach ($getRawOrders as $orderKey => $getOrderDetails) {
             if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
                 || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
             ) {
                 $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
-                    ->sFormatPrice($orderValue['invoice_amount_net']);
+                    ->sFormatPrice($getOrderDetails[0]['invoice_amount_net']);
                 $getOrders[$orderKey]['invoice_shipping'] = $this->moduleManager->Articles()
-                    ->sFormatPrice($orderValue['invoice_shipping_net']);
+                    ->sFormatPrice($getOrderDetails[0]['invoice_shipping_net']);
             } else {
                 $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
-                    ->sFormatPrice($orderValue['invoice_amount']);
+                    ->sFormatPrice($getOrderDetails[0]['invoice_amount']);
                 $getOrders[$orderKey]['invoice_shipping'] = $this->moduleManager->Articles()
-                    ->sFormatPrice($orderValue['invoice_shipping']);
+                    ->sFormatPrice($getOrderDetails[0]['invoice_shipping']);
             }
 
-            $getOrderDetails = $this->db->fetchAll(
-                'SELECT * FROM s_order_details WHERE orderID = ?',
-                [$orderValue['id']]
-            );
+            $getOrders[$orderKey]['id'] = $getOrderDetails[0]['orderID'];
+            $getOrders[$orderKey]['ordernumber'] = $getOrderDetails[0]['oOrdernumber'];
+            $getOrders[$orderKey]['invoice_amount_net'] = $getOrderDetails[0]['invoice_amount_net'];
+            $getOrders[$orderKey]['invoice_shipping_net'] = $getOrderDetails[0]['invoice_shipping_net'];
+            $getOrders[$orderKey]['datum'] = $getOrderDetails[0]['datum'];
+            $getOrders[$orderKey]['status'] = $getOrderDetails[0]['oStatus'];
+            $getOrders[$orderKey]['cleared'] = $getOrderDetails[0]['cleared'];
+            $getOrders[$orderKey]['comment'] = $getOrderDetails[0]['comment'];
 
-            if (!count($getOrderDetails)) {
-                unset($getOrders[$orderKey]);
-            } else {
-                $foundESD = false;
-                foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
-                    $getOrderDetails[$orderDetailsKey]['amount'] = $this->moduleManager->Articles()
-                        ->sFormatPrice(round($orderDetailsValue['price'] * $orderDetailsValue['quantity'], 2));
-                    $getOrderDetails[$orderDetailsKey]['price'] = $this->moduleManager->Articles()
-                        ->sFormatPrice($orderDetailsValue['price']);
+            foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
+                $getOrderDetails[$orderDetailsKey]['amount'] = $this->moduleManager->Articles()
+                    ->sFormatPrice(round($orderDetailsValue['price'] * $orderDetailsValue['quantity'], 2));
+                $getOrderDetails[$orderDetailsKey]['price'] = $this->moduleManager->Articles()
+                    ->sFormatPrice($orderDetailsValue['price']);
 
-                    // Check for serial
-                    if ($getOrderDetails[$orderDetailsKey]['esdarticle']) {
-                        $foundESD = true;
-                        $numbers = [];
-                        $getSerial = $this->db->fetchAll(
-                            'SELECT serialnumber FROM s_articles_esd_serials, s_order_esd
-                            WHERE userID = ?
-                            AND orderID = ?
-                            AND orderdetailsID = ?
-                            AND s_order_esd.serialID = s_articles_esd_serials.id',
-                            [
-                                $userId,
-                                $orderValue['id'],
-                                $orderDetailsValue['id'],
-                            ]
-                        );
-                        foreach ($getSerial as $serial) {
-                            $numbers[] = $serial['serialnumber'];
-                        }
-                        $getOrderDetails[$orderDetailsKey]['serial'] = implode(', ', $numbers);
-                        // Building download link
-                        $getOrderDetails[$orderDetailsKey]['esdLink'] = $this->config->get('sBASEFILE')
-                            . '?sViewport=account&sAction=download&esdID='
-                            . $orderDetailsValue['id'];
-                    } else {
-                        unset($getOrderDetails[$orderDetailsKey]);
-                    }
+                // Check for serial
+                $numbers = [];
+                $getSerial = $this->db->fetchAll(
+                    'SELECT serialnumber FROM s_articles_esd_serials, s_order_esd
+                    WHERE userID = ?
+                    AND orderID = ?
+                    AND orderdetailsID = ?
+                    AND s_order_esd.serialID = s_articles_esd_serials.id',
+                    [
+                        $userId,
+                        $orderKey,
+                        $orderDetailsValue['id'],
+                    ]
+                );
+                foreach ($getSerial as $serial) {
+                    $numbers[] = $serial['serialnumber'];
                 }
-                if (!empty($foundESD)) {
-                    $getOrders[$orderKey]['details'] = $getOrderDetails;
-                } else {
-                    unset($getOrders[$orderKey]);
-                }
+                $getOrderDetails[$orderDetailsKey]['serial'] = implode(', ', $numbers);
+                // Building download link
+                $getOrderDetails[$orderDetailsKey]['esdLink'] = $this->config->get('sBASEFILE')
+                    . '?sViewport=account&sAction=download&esdID='
+                    . $orderDetailsValue['id'];
             }
+            $getOrders[$orderKey]['details'] = $getOrderDetails;
         }
 
         $getOrders = $this->eventManager->filter(
@@ -1258,12 +1271,11 @@ class sAdmin
 
         if ($perPage != 0) {
             // Make Array with page-structure to render in template
-            $numberOfPages = ceil(count($getOrders) / $perPage);
+            $numberOfPages = ceil($ordersCount / $perPage);
         } else {
             $numberOfPages = 0;
         }
-        $offset = ($destinationPage - 1) * $perPage;
-        $orderData['orderData'] = array_slice($getOrders, $offset, $perPage, true);
+        $orderData['orderData'] = $getOrders;
         $orderData['numberOfPages'] = $numberOfPages;
         $orderData['pages'] = $this->getPagerStructure($destinationPage, $numberOfPages);
 
