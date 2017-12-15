@@ -66,7 +66,11 @@ class BlogService implements Service\BlogServiceInterface
 
         $this->resolveMedias($blogs, $context);
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $blogs)) {
+                continue;
+            }
+
             $result[$id] = $blogs[$id];
         }
 
@@ -81,7 +85,15 @@ class BlogService implements Service\BlogServiceInterface
     {
         $mediaIds = [];
         foreach ($blogs as $blog) {
+            if (count($blog->getMediaIds()) === 0) {
+                continue;
+            }
+
             $mediaIds[] = $blog->getMediaIds();
+        }
+
+        if (count($mediaIds) === 0) {
+            return;
         }
 
         $mediaIds = array_keys(array_flip(array_merge(...$mediaIds)));
