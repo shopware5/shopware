@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
-use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
+use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -100,6 +100,7 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     ) {
         $aggregation = new TermsAggregation('variant');
         $aggregation->setField('configuration.options.id');
+        $aggregation->setParameters(['size' => 0]);
         $search->addAggregation($aggregation);
     }
 
@@ -138,6 +139,10 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
          * @var VariantFacet
          */
         $facet = $criteria->getFacet('option');
+        if (!$facet instanceof VariantFacet) {
+            return;
+        }
+
         $actives = $this->getFilteredValues($criteria);
         $facet = $this->createCollectionResult($facet, $groups, $actives);
         $result->addFacet($facet);

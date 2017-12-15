@@ -39,6 +39,9 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\GroupsByGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
@@ -144,45 +147,13 @@ class ProductProvider implements ProductProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Shop $shop, $numbers)
+    public function get(Shop $shop, $numbers, $groupByResult)
     {
         $context = $this->contextService->createShopContext(
             $shop->getId(),
             null,
             ContextService::FALLBACK_CUSTOMER_GROUP
         );
-
-        $numbers = [
-            'SW-1',
-            'SW-1.1',
-            'SW-1.2',
-            'SW-1.3',
-            'SW-2',
-            'SW-2.1',
-            //'SW-2.2',
-            //'SW-2.3',
-        ];
-
-        //permutate to
-
-        $numbers = [
-            'SW-1',
-            'SW-1.1',
-            'SW-2',
-            'SW-2.2',
-        ];
-
-        /*
-         *
-         * SELECT ordernumber FROM details
-         *  LEFT JOIN config_groups g1
-         *  LEFT JOIN config_groups g2
-         *
-         * WHERE numbers IN (:dasVonOben)
-         *
-         * GROUP BY g1.id, g2.id
-         *
-         * */
 
         $products = $this->productGateway->getList($numbers, $context);
         $average = $this->voteService->getAverages($products, $context);
@@ -196,6 +167,7 @@ class ProductProvider implements ProductProviderInterface
          */
         $variantFacet = $this->variantHelper->getVariantFacet();
         $configurations = $this->configuratorService->getVariantGroups($numbers, $context);
+        $productConfigurations = $this->configuratorService->getProductsConfigurations($products, $context);
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -203,20 +175,29 @@ class ProductProvider implements ProductProviderInterface
             $number = $product->getNumber();
             $id = $product->getId();
 
-            //todo@krispin: please change to "getProductsConfigurations" => batch operation
-            $product->setConfiguration($this->configuratorService->getProductConfiguration($product, $context));
+            if (!empty($variantFacet) && !empty($productConfigurations[$product->getNumber()])) {
+                $product->setConfiguration($productConfigurations[$product->getNumber()]);
 
-            if (array_key_exists($product->getId(), $configurations)) {
-                $groups = $product->getConfiguration();
-                foreach ($groups as $key => $group) {
-                    if (!in_array($group->getId(), $variantFacet->getExpandGroupIds())) {
-                        unset($groups[$key]);
+                if (!empty($variantFacet->getExpandGroupIds())) {
+                    $groupByResult = $this->startRecursiveGroupExpanding($variantFacet->getExpandGroupIds(), $productConfigurations, $product, $groupByResult);
+                } else {
+                    if (!$product->isMainVariant()) {
+                        continue;
                     }
                 }
 
-                $groups = array_merge($groups, $configurations[$product->getId()]);
+                if (array_key_exists($product->getId(), $configurations)) {
+                    $groups = $product->getConfiguration();
+                    foreach ($groups as $key => $group) {
+                        if (!in_array($group->getId(), $variantFacet->getExpandGroupIds())) {
+                            unset($groups[$key]);
+                        }
+                    }
 
-                $product->setConfiguration($groups);
+                    $groups = array_merge($groups, $configurations[$product->getId()]);
+
+                    $product->setConfiguration($groups);
+                }
             }
 
             if (isset($average[$number])) {
@@ -254,7 +235,103 @@ class ProductProvider implements ProductProviderInterface
             $result[$number] = $product;
         }
 
+        /*
+         * @var $result Product[];
+         */
+        /*$grouping = [];
+        foreach ($result as $product) {
+            $groups = $product->getGroupByGroups();
+            foreach ($groups as $group) {
+                $grouping[$group->getId()][] = $product->getNumber();
+            }
+        }
+
+        echo '<pre>';
+        print_r($grouping);
+        echo '<pre>';*/
+
         return $result;
+    }
+
+    /**
+     * @param int[]     $expandGroups
+     * @param Group[][] $productConfigurations
+     * @param Product   $product
+     * @param array     $groupByResult
+     *
+     * @return array
+     */
+    private function startRecursiveGroupExpanding(array $expandGroups, array $productConfigurations, Product $product, array $groupByResult)
+    {
+        $productVariantGroups = $productConfigurations[$product->getNumber()];
+        foreach ($productVariantGroups as $group) {
+            if (in_array($group->getId(), $expandGroups)) {
+                $option = $group->getOptions()[0];
+                if (empty($groupByResult[$product->getId()][$group->getId()][$option->getId()])) {
+                    $groupByGroups = $product->getGroupByGroups();
+                    $groupByGroups[] = new GroupsByGroup($group->getId());
+                    $product->setGroupByGroups($groupByGroups);
+
+                    $groupByResult[$product->getId()][$group->getId()][$option->getId()] = $product->getNumber();
+                }
+
+                $groupByResult = $this->recursiveGroupExpanding($expandGroups, $productVariantGroups, $product, $groupByResult, $group, $option, [$group]);
+            }
+        }
+
+        return $groupByResult;
+    }
+
+    /**
+     * @param array   $expandGroups
+     * @param Group[] $productVariantGroups
+     * @param Product $product
+     * @param array   $groupByResult
+     * @param Group   $parentGroup
+     * @param Option  $parentOption
+     * @param Group[] $previousGroups
+     *
+     * @return array
+     */
+    private function recursiveGroupExpanding(array $expandGroups, array $productVariantGroups, Product $product, array $groupByResult, Group $parentGroup, Option $parentOption, array $previousGroups)
+    {
+        $_productVariantGroups = $productVariantGroups;
+        array_shift($_productVariantGroups);
+
+        foreach ($_productVariantGroups as $group) {
+            if ($group->getId() == $parentGroup->getId()) {
+                continue;
+            }
+
+            if (in_array($group->getId(), $expandGroups)) {
+                if (in_array($group, $previousGroups)) {
+                    continue;
+                }
+
+                $groupKey = '';
+                foreach ($previousGroups as $previousGroup) {
+                    $groupKey .= (!empty($groupKey)) ? '-' . $previousGroup->getId() : $previousGroup->getId();
+                }
+                $groupKey .= '-' . $group->getId();
+                $previousGroups[] = $group;
+
+                /**
+                 * @var Option
+                 */
+                $option = $group->getOptions()[0];
+                if (empty($groupByResult[$product->getId()][$groupKey][$parentOption->getId()][$option->getId()])) {
+                    $groupByGroups = $product->getGroupByGroups();
+                    $groupByGroups[] = new GroupsByGroup($groupKey);
+                    $product->setGroupByGroups($groupByGroups);
+
+                    $groupByResult[$product->getId()][$groupKey][$parentOption->getId()][$option->getId()] = $product->getNumber();
+                } else {
+                    $groupByResult = $this->recursiveGroupExpanding($expandGroups, $productVariantGroups, $product, $groupByResult, $group, $option, $previousGroups);
+                }
+            }
+        }
+
+        return $groupByResult;
     }
 
     /**
@@ -283,8 +360,7 @@ class ProductProvider implements ProductProviderInterface
             ->from('s_articles_categories', 'mapping')
             ->innerJoin('mapping', 's_categories', 'categories', 'categories.id = mapping.categoryID')
             ->where('mapping.articleID IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-        ;
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -335,8 +411,7 @@ class ProductProvider implements ProductProviderInterface
             ->addOrderBy('filterArticles.articleID')
             ->addOrderBy('propertyOption.value')
             ->addOrderBy('propertyOption.id')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-        ;
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addPropertyOptionTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);

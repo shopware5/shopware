@@ -26,7 +26,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
-use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 
 /**
@@ -206,58 +205,18 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
      */
     private function createQuery($limit = null)
     {
-        /**
-         * @var VariantFacet
-         */
-        $variantFacet = $this->variantHelper->getVariantFacet();
-        $expandGroups = $variantFacet->getExpandGroupIds();
-
-        $groupResult = null;
-        if (!empty($expandGroups)) {
-            $groupQuery = $this->connection->createQueryBuilder()
-                ->select('variant.ordernumber')
-                ->from('s_articles_details', 'variant');
-
-            foreach ($expandGroups as $group) {
-                $relation_table_key = 'relation_' . $group;
-                $options_table_key = 'options_' . $group;
-                $value_group_key = ':group_id_' . $group;
-
-                $groupQuery->innerJoin('variant', 's_article_configurator_option_relations', $relation_table_key, 'variant.id = ' . $relation_table_key . '.article_id')
-                    ->innerJoin($relation_table_key, 's_article_configurator_options', $options_table_key, $options_table_key . '.id = ' . $relation_table_key . '.option_id')
-                    ->andWhere($options_table_key . '.group_id = ' . $value_group_key)
-                    ->setParameter($value_group_key, $group)
-                    ->addGroupBy($relation_table_key . '.option_id');
-            }
-
-            $groupQuery->andWhere('variant.id > :lastId')
-                ->setParameter(':lastId', 0)
-                ->addGroupBy('variant.articleID')
-                ->orderBy('variant.id');
-
-            $groupResult = $groupQuery->execute()->fetchAll(\PDO::FETCH_COLUMN);
-        }
-
-        $mainQuery = $this->connection->createQueryBuilder()
+        $query = $this->connection->createQueryBuilder()
             ->select(['variant.id', 'variant.ordernumber'])
             ->from('s_articles_details', 'variant')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
-
-        if (empty($groupResult)) {
-            $mainQuery->andWhere('variant.kind = 1');
-        } else {
-            $mainQuery->andWhere('(variant.kind = 1 or variant.ordernumber IN (:variant_ids))')
-                ->setParameter(':variant_ids', $groupResult, Connection::PARAM_STR_ARRAY);
-        }
-
-        $mainQuery->andWhere('variant.id > :lastId')
+            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
+            ->andWhere('variant.id > :lastId')
             ->setParameter(':lastId', 0)
             ->orderBy('variant.id');
 
         if ($limit !== null) {
-            $mainQuery->setMaxResults($limit);
+            $query->setMaxResults($limit);
         }
 
-        return $mainQuery;
+        return $query;
     }
 }

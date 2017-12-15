@@ -30,10 +30,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 interface ProductProviderInterface
 {
     /**
-     * @param Shop     $shop
+     * @param Shop $shop
      * @param string[] $numbers
      *
+     * @param array $groupByResult
      * @return Product[]
      */
-    public function get(Shop $shop, $numbers);
+    public function get(Shop $shop, $numbers, $groupByResult);
 }
