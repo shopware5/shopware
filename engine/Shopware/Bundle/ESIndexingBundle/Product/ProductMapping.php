@@ -158,6 +158,7 @@ class ProductMapping implements MappingInterface
                 'attributes' => $this->getAttributeMapping(),
 
                 'configuration' => $this->getVariantOptionsMapping($shop),
+                'groupByGroups' => $this->getGroupByGroupsMapping(),
             ],
         ];
     }
@@ -358,6 +359,15 @@ class ProductMapping implements MappingInterface
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
                 ],
+            ],
+        ];
+    }
+
+    private function getGroupByGroupsMapping()
+    {
+        return [
+            'properties' => [
+                'id' => $this->textMapping->getNotAnalyzedField(),
             ],
         ];
     }

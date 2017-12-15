@@ -223,10 +223,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $expandGroups = $variantFacet->getExpandGroupIds();
 
-        if (empty($expandGroups)) {
-            return [];
-        }
-
         $query = $this->connection->createQueryBuilder();
         $query->select('DISTINCT articleId')
             ->from('s_articles_details')
@@ -239,12 +235,15 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_article_configurator_option_relations', 'relations', 'variant.id = relations.article_id')
             ->innerJoin('relations', 's_article_configurator_options', 'options', 'options.id = relations.option_id')
-            ->andWhere('NOT options.group_id in (:group_ids)')
-            ->setParameter(':group_ids', $expandGroups, Connection::PARAM_INT_ARRAY)
             ->andWhere('variant.articleID IN (:products)')
             ->setParameter(':products', $articleIds, Connection::PARAM_INT_ARRAY)
             ->addGroupBy('variant.articleId')
             ->addGroupBy('options.group_id');
+
+        if (!empty($expandGroups)) {
+            $query->andWhere('NOT options.group_id in (:group_ids)')
+            ->setParameter(':group_ids', $expandGroups, Connection::PARAM_INT_ARRAY);
+        }
 
         $articles = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 

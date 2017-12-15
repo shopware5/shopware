@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\GroupsByGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
@@ -63,6 +64,11 @@ class Product extends ListProduct
      * @var Group[]
      */
     protected $configuration = [];
+
+    /**
+     * @var GroupsByGroup[]
+     */
+    protected $groupByGroups = [];
 
     /**
      * @param ListProduct $listProduct
@@ -177,5 +183,21 @@ class Product extends ListProduct
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    /**
+     * @return GroupsByGroup[]
+     */
+    public function getGroupByGroups()
+    {
+        return $this->groupByGroups;
+    }
+
+    /**
+     * @param GroupsByGroup[] $groupByGroups
+     */
+    public function setGroupByGroups($groupByGroups)
+    {
+        $this->groupByGroups = $groupByGroups;
     }
 }

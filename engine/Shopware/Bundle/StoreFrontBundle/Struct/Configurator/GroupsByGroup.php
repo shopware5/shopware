@@ -22,35 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleDBAL;
+namespace Shopware\Bundle\StoreFrontBundle\Struct\Configurator;
 
-use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
+use Shopware\Bundle\StoreFrontBundle\Struct\Struct;
 
-interface VariantHelperInterface
+class GroupsByGroup extends Struct implements \JsonSerializable
 {
-    /**
-     * Determines if the group belonging to the given option should be expanded in product listing
-     *
-     * @param array             $optionIds
-     * @param VariantFacet|null $variantFacet
-     *
-     * @return bool
-     */
-    public function shouldExpandGroup(array $optionIds, VariantFacet $variantFacet = null);
+    private $id;
 
     /**
-     * Returns the VariantFacet
+     * GroupsByGroup constructor.
      *
-     * @return null|object
+     * @param $id
      */
-    public function getVariantFacet();
+    public function __construct($id = null)
+    {
+        $this->id = $id;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
-     * Return the group id of the option id.
-     *
-     * @param int $optionId
-     *
-     * @return int
+     * @param null $id
      */
-    public function getGroupIdByOptionId($optionId);
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

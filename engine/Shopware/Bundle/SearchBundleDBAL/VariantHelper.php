@@ -131,6 +131,24 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
+     * Return the group id of the option id.
+     *
+     * @param int $optionId
+     *
+     * @return int
+     */
+    public function getGroupIdByOptionId($optionId)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->addSelect('DISTINCT group_id');
+        $query->from('s_article_configurator_options');
+        $query->andWhere('id IN (:ids)');
+        $query->setParameter('ids', $optionId);
+
+        return (int) $query->execute()->fetch(\PDO::FETCH_COLUMN);
+    }
+
+    /**
      * Returns the VariantFacet.
      *
      * @return null|object
