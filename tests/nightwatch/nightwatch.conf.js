@@ -15,9 +15,9 @@ module.exports = {
     // Selenium config - We're using the node packages `selenium-server` and `chromedriver` to automatically
     // bind the correct binaries
     selenium: {
-        start_process: true,
+        start_process: false,
         server_path: require('selenium-server').path,
-        host: (process.env.SELENIUM_HOST || 'localhost'),
+        host: (process.env.SELENIUM_HOST || 'selenium'),
         port: (process.env.SELENIUM_PORT || 4444),
         cli_args: {
             'webdriver.chrome.driver': require('chromedriver').path
@@ -34,11 +34,11 @@ module.exports = {
         // Selenium setup
         default: {
             selenium_port: (process.env.SELENIUM_PORT || 4444),
-            selenium_host: (process.env.SELENIUM_HOST || 'localhost'),
+            selenium_host: (process.env.SELENIUM_HOST || 'selenium'),
             silent: true,
-            launch_url: (process.env.URL || 'http://localhost'),
+            launch_url: (process.env.URL || 'http://app_server'),
             globals: {
-                devServerURL: (process.env.PAGE || 'http://localhost')
+                devServerURL: (process.env.PAGE || 'http://app_server')
             }
         },
 

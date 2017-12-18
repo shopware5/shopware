@@ -18,8 +18,10 @@ services:
       MYSQL_PASSWORD: app
 
   selenium:
-    image: selenium/standalone-chrome:3.3
+    image: selenium/standalone-chrome:3.8.1
     shm_size: 2g
+    environment:
+      DBUS_SESSION_BUS_ADDRESS: /dev/null
 
   smtp:
     image: mailhog/mailhog
