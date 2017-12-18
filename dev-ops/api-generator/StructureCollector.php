@@ -220,6 +220,8 @@ class StructureCollector
                 return 'FloatField';
             case 'Boolean':
                 return 'BoolField';
+            case 'Json':
+                return 'ArrayField';
             default:
                 echo "ERROR: unmapped type {$column->getType()}\n";
                 return '';
@@ -284,8 +286,6 @@ class StructureCollector
         Context $context,
         $foreignKeys
     ): void {
-        $a = $tableDefinition->tableName === 'product';
-
         //build inverse side for one to many associations
         //source is now reference and reference is now source
         foreach ($foreignKeys as $sourceColumnName => $foreignKey) {
@@ -311,10 +311,10 @@ class StructureCollector
                 continue;
             }
 
-//            if ($tableDefinition->isTranslationTable()) {
-//                continue;
-//            }
-
+            $isTranslation = $tableDefinition->isTranslationTable();
+            if ($referenceTableName === 'shop' && $isTranslation) {
+                continue;
+            }
             /** @var TableDefinition $referenceDefinition */
             $referenceDefinition = $definitions[$referenceTableName];
             $property = Util::createAssociationPropertyName($referenceDefinition->tableName, $tableDefinition->tableName);

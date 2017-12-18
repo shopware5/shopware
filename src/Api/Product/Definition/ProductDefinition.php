@@ -5,6 +5,7 @@ namespace Shopware\Api\Product\Definition;
 use Shopware\Api\Category\Definition\CategoryDefinition;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\EntityExtensionInterface;
+use Shopware\Api\Entity\Field\ArrayField;
 use Shopware\Api\Entity\Field\BoolField;
 use Shopware\Api\Entity\Field\DateField;
 use Shopware\Api\Entity\Field\FkField;
@@ -22,6 +23,7 @@ use Shopware\Api\Entity\Field\UuidField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
+use Shopware\Api\Entity\Write\Flag\SearchRanking;
 use Shopware\Api\Product\Collection\ProductBasicCollection;
 use Shopware\Api\Product\Collection\ProductDetailCollection;
 use Shopware\Api\Product\Event\Product\ProductWrittenEvent;
@@ -64,7 +66,7 @@ class ProductDefinition extends EntityDefinition
             new FkField('tax_uuid', 'taxUuid', TaxDefinition::class),
             new FkField('product_manufacturer_uuid', 'manufacturerUuid', ProductManufacturerDefinition::class),
             new FkField('unit_uuid', 'unitUuid', UnitDefinition::class),
-            (new TranslatedField(new StringField('name', 'name')))->setFlags(new Required()),
+            (new TranslatedField(new StringField('name', 'name')))->setFlags(new Required(), new SearchRanking(100)),
             new StringField('container_uuid', 'containerUuid'),
             new BoolField('is_main', 'isMain'),
             new BoolField('active', 'active'),
@@ -94,6 +96,7 @@ class ProductDefinition extends EntityDefinition
             new DateField('release_date', 'releaseDate'),
             new DateField('created_at', 'createdAt'),
             new DateField('updated_at', 'updatedAt'),
+            new ArrayField('category_tree', 'categoryTree'),
             new TranslatedField(new StringField('additional_text', 'additionalText')),
             new TranslatedField(new LongTextField('keywords', 'keywords')),
             new TranslatedField(new LongTextField('description', 'description')),
@@ -106,9 +109,9 @@ class ProductDefinition extends EntityDefinition
             new OneToManyAssociationField('listingPrices', ProductListingPriceDefinition::class, 'product_uuid', true, 'uuid'),
             new OneToManyAssociationField('media', ProductMediaDefinition::class, 'product_uuid', false, 'uuid'),
             new OneToManyAssociationField('prices', ProductPriceDefinition::class, 'product_uuid', true, 'uuid'),
+            new OneToManyAssociationField('searchKeywords', ProductSearchKeywordDefinition::class, 'product_uuid', false, 'uuid'),
             (new TranslationsAssociationField('translations', ProductTranslationDefinition::class, 'product_uuid', false, 'uuid'))->setFlags(new Required()),
             new ManyToManyAssociationField('categories', CategoryDefinition::class, ProductCategoryDefinition::class, false, 'product_uuid', 'category_uuid', 'categoryUuids'),
-            new ManyToManyAssociationField('categoryTree', CategoryDefinition::class, ProductCategoryTreeDefinition::class, false, 'product_uuid', 'category_uuid', 'categoryTreeUuids'),
             new ManyToManyAssociationField('seoCategories', CategoryDefinition::class, ProductSeoCategoryDefinition::class, false, 'product_uuid', 'category_uuid', 'seoCategoryUuids'),
             new ManyToManyAssociationField('tabs', ProductStreamDefinition::class, ProductStreamTabDefinition::class, false, 'product_uuid', 'product_stream_uuid', 'tabUuids'),
             new ManyToManyAssociationField('streams', ProductStreamDefinition::class, ProductStreamAssignmentDefinition::class, false, 'product_uuid', 'product_stream_uuid', 'streamUuids'),

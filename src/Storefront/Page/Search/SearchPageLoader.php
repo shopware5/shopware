@@ -3,9 +3,9 @@
 namespace Shopware\Storefront\Page\Search;
 
 use Shopware\Api\Entity\Search\Criteria;
-use Shopware\Api\Entity\Search\Query\MatchQuery;
-use Shopware\Api\Entity\Search\Query\NestedQuery;
+use Shopware\Api\Entity\Search\Query\ScoreQuery;
 use Shopware\Api\Entity\Search\Query\TermQuery;
+use Shopware\Api\Entity\Search\Query\TermsQuery;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Config\ConfigServiceInterface;
 use Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository;
@@ -24,15 +24,18 @@ class SearchPageLoader
     private $productRepository;
 
     /**
-     * SearchPageLoader constructor.
-     *
-     * @param ConfigServiceInterface      $configService
-     * @param StorefrontProductRepository $productRepository
+     * @var KeywordSearchTermInterpreter
      */
-    public function __construct(ConfigServiceInterface $configService, StorefrontProductRepository $productRepository)
-    {
+    private $termInterpreter;
+
+    public function __construct(
+        ConfigServiceInterface $configService,
+        StorefrontProductRepository $productRepository,
+        KeywordSearchTermInterpreter $termInterpreter
+    ) {
         $this->configService = $configService;
         $this->productRepository = $productRepository;
+        $this->termInterpreter = $termInterpreter;
     }
 
     /**
@@ -45,7 +48,9 @@ class SearchPageLoader
     public function load(string $searchTerm, Request $request, ShopContext $context): SearchPageStruct
     {
         $config = $this->configService->getByShop($context->getShop()->getUuid(), $context->getShop()->getParentUuid());
-        $criteria = $this->createCriteria(trim($searchTerm), $request, $config['enableAndSearchLogic']);
+
+        $criteria = $this->createCriteria(trim($searchTerm), $request, $context);
+
         $products = $this->productRepository->search($criteria, $context);
 
         $listingPageStruct = new SearchPageStruct();
@@ -57,53 +62,50 @@ class SearchPageLoader
         return $listingPageStruct;
     }
 
-    /**
-     * @param string  $searchTerm
-     * @param Request $request
-     * @param bool    $isAndSearchLogicEnabled
-     *
-     * @return Criteria
-     */
-    private function createCriteria(string $searchTerm, Request $request, bool $isAndSearchLogicEnabled): Criteria
-    {
+    private function createCriteria(
+        string $searchTerm,
+        Request $request,
+        ShopContext $context
+    ): Criteria {
         $limit = $request->query->getInt('limit', 20);
         $page = $request->query->getInt('page', 1);
 
         $criteria = new Criteria();
         $criteria->setOffset(($page - 1) * $limit);
         $criteria->setLimit($limit);
+        $criteria->setFetchCount(true);
         $criteria->addFilter(new TermQuery('product.active', 1));
-        $criteria->addFilter(
-            $this->createSearchTermFilter($searchTerm, $isAndSearchLogicEnabled)
-        );
 
-        return $criteria;
-    }
-
-    /**
-     * @param string $searchTerm
-     * @param bool   $isAndSearchLogicEnabled
-     *
-     * @return NestedQuery
-     */
-    private function createSearchTermFilter(string $searchTerm, bool $isAndSearchLogicEnabled): NestedQuery
-    {
-        $nameQueries = [];
-        $descriptionQueries = [];
-        $queryOperator = $isAndSearchLogicEnabled ? 'AND' : 'OR';
-        $searchTerms = explode(' ', $searchTerm);
-
-        foreach ($searchTerms as $term) {
-            $nameQueries[] = new MatchQuery('product.name', trim($term));
-            $descriptionQueries[] = new MatchQuery('product.description', trim($term));
+        $pattern = $this->termInterpreter->interpret($searchTerm, $context->getTranslationContext());
+        $keywords = $queries = [];
+        foreach ($pattern->getTerms() as $term) {
+            $queries[] = new ScoreQuery(
+                new TermQuery('product.searchKeywords.keyword', $term->getTerm()),
+                $term->getScore(),
+                'product.searchKeywords.ranking'
+            );
+            $keywords[] = $term->getTerm();
         }
 
-        return new NestedQuery(
-            [
-                new NestedQuery($nameQueries, $queryOperator),
-                new NestedQuery($descriptionQueries, $queryOperator),
-            ],
-            'OR'
-        );
+        foreach ($queries as $query) {
+            $criteria->addQuery($query);
+        }
+
+        $criteria->addFilter(new TermsQuery(
+            'product.searchKeywords.keyword',
+            array_values($keywords)
+        ));
+
+        $criteria->addFilter(new TermQuery(
+            'product.searchKeywords.shopUuid',
+            $context->getShop()->getUuid()
+        ));
+
+        $criteria->addFilter(new TermQuery(
+            'product.categoryTree',
+            $context->getShop()->getCategory()->getUuid()
+        ));
+
+        return $criteria;
     }
 }

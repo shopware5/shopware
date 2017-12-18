@@ -8,6 +8,7 @@ use Shopware\Api\Product\Event\ProductListingPrice\ProductListingPriceBasicLoade
 use Shopware\Api\Product\Event\ProductManufacturer\ProductManufacturerBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductMedia\ProductMediaBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductPrice\ProductPriceBasicLoadedEvent;
+use Shopware\Api\Product\Event\ProductSearchKeyword\ProductSearchKeywordBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductStream\ProductStreamBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductTranslation\ProductTranslationBasicLoadedEvent;
 use Shopware\Api\Tax\Event\Tax\TaxBasicLoadedEvent;
@@ -72,14 +73,14 @@ class ProductDetailLoadedEvent extends NestedEvent
         if ($this->products->getPrices()->count() > 0) {
             $events[] = new ProductPriceBasicLoadedEvent($this->products->getPrices(), $this->context);
         }
+        if ($this->products->getSearchKeywords()->count() > 0) {
+            $events[] = new ProductSearchKeywordBasicLoadedEvent($this->products->getSearchKeywords(), $this->context);
+        }
         if ($this->products->getTranslations()->count() > 0) {
             $events[] = new ProductTranslationBasicLoadedEvent($this->products->getTranslations(), $this->context);
         }
         if ($this->products->getAllCategories()->count() > 0) {
             $events[] = new CategoryBasicLoadedEvent($this->products->getAllCategories(), $this->context);
-        }
-        if ($this->products->getAllCategoryTree()->count() > 0) {
-            $events[] = new CategoryBasicLoadedEvent($this->products->getAllCategoryTree(), $this->context);
         }
         if ($this->products->getAllSeoCategories()->count() > 0) {
             $events[] = new CategoryBasicLoadedEvent($this->products->getAllSeoCategories(), $this->context);

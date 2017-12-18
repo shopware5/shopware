@@ -6,16 +6,49 @@ use Doctrine\DBAL\Connection;
 use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Dbal\EntityDefinitionResolver;
 use Shopware\Api\Entity\EntityDefinition;
+use Shopware\Api\Entity\Field\ArrayField;
 use Shopware\Api\Entity\Search\Query\MatchQuery;
 use Shopware\Api\Entity\Search\Query\NestedQuery;
 use Shopware\Api\Entity\Search\Query\NotQuery;
 use Shopware\Api\Entity\Search\Query\Query;
 use Shopware\Api\Entity\Search\Query\RangeQuery;
+use Shopware\Api\Entity\Search\Query\ScoreQuery;
 use Shopware\Api\Entity\Search\Query\TermQuery;
 use Shopware\Api\Entity\Search\Query\TermsQuery;
 
 class SqlQueryParser
 {
+    public static function parseRanking(array $queries, string $definition, string $root)
+    {
+        $result = new ParseResult();
+
+        /** @var ScoreQuery $query */
+        foreach ($queries as $query) {
+            $parsed = self::parse($query->getQuery(), $definition, $root);
+
+            foreach ($parsed->getWheres() as $where) {
+                if ($query->getScoreField()) {
+                    $field = EntityDefinitionResolver::resolveField($query->getScoreField(), $definition, $root);
+
+                    $result->addWhere(
+                        sprintf('IF(%s , %s * %s, 0)', $where, $query->getScore(), $field)
+                    );
+                    continue;
+                }
+
+                $result->addWhere(
+                    sprintf('IF(%s , %s, 0)', $where, $query->getScore())
+                );
+            }
+
+            foreach ($parsed->getParameters() as $key => $parameter) {
+                $result->addParameter($key, $parameter, $parsed->getType($key));
+            }
+        }
+
+        return $result;
+    }
+
     public static function parse(Query $query, string $definition, string $root = null): ParseResult
     {
         if ($root === null) {
@@ -30,16 +63,12 @@ class SqlQueryParser
                 return self::parseNestedQuery($query, $definition, $root);
             case $query instanceof TermQuery:
                 return self::parseTermQuery($query, $definition, $root);
-
             case $query instanceof TermsQuery:
                 return self::parseTermsQuery($query, $definition, $root);
-
             case $query instanceof MatchQuery:
                 return self::parseMatchQuery($query, $definition, $root);
-
             case $query instanceof RangeQuery:
                 return self::parseRangeQuery($query, $definition, $root);
-
             default:
                 throw new \RuntimeException(sprintf('Unsupported query %s', get_class($query)));
         }
@@ -95,11 +124,20 @@ class SqlQueryParser
     private static function parseTermsQuery(TermsQuery $query, string $definition, string $root): ParseResult
     {
         $key = self::getKey();
-        $field = EntityDefinitionResolver::resolveField($query->getField(), $definition, $root);
+        $select = EntityDefinitionResolver::resolveField($query->getField(), $definition, $root);
+        $field = EntityDefinitionResolver::getField($query->getField(), $definition, $root);
 
         $result = new ParseResult();
-        $result->addWhere($field . ' IN (:' . $key . ')');
-        $result->addParameter($key, $query->getValue(), Connection::PARAM_STR_ARRAY);
+
+        if ($field instanceof ArrayField) {
+            $result->addWhere('JSON_CONTAINS(' . $select . ', JSON_ARRAY(:' . $key . '))');
+            $result->addParameter($key, $query->getValue());
+
+            return $result;
+        }
+
+        $result->addWhere($select . ' IN (:' . $key . ')');
+        $result->addParameter($key, array_values($query->getValue()), Connection::PARAM_STR_ARRAY);
 
         return $result;
     }
@@ -107,16 +145,25 @@ class SqlQueryParser
     private static function parseTermQuery(TermQuery $query, string $definition, string $root): ParseResult
     {
         $key = self::getKey();
-        $field = EntityDefinitionResolver::resolveField($query->getField(), $definition, $root);
+        $select = EntityDefinitionResolver::resolveField($query->getField(), $definition, $root);
+        $field = EntityDefinitionResolver::getField($query->getField(), $definition, $root);
 
         $result = new ParseResult();
-        if ($query->getValue() === null) {
-            $result->addWhere($field . ' IS NULL');
+
+        if ($field instanceof ArrayField) {
+            $result->addWhere('JSON_CONTAINS(' . $select . ', JSON_ARRAY(:' . $key . '))');
+            $result->addParameter($key, $query->getValue());
 
             return $result;
         }
 
-        $result->addWhere($field . ' = :' . $key);
+        if ($query->getValue() === null) {
+            $result->addWhere($select . ' IS NULL');
+
+            return $result;
+        }
+
+        $result->addWhere($select . ' = :' . $key);
         $result->addParameter($key, $query->getValue());
 
         return $result;
