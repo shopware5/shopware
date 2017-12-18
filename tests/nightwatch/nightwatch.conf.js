@@ -9,7 +9,7 @@ module.exports = {
     src_folders: [
         resolve('./specs')
     ],
-    output_folder: resolve('./reports'),
+    output_folder: resolve('./../../build/artifacts/nightwatch'),
     custom_assertions_path: resolve('./custom-assertions'),
 
     // Selenium config - We're using the node packages `selenium-server` and `chromedriver` to automatically
