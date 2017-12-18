@@ -405,6 +405,19 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @return mixed
+     */
+    public function getShopIds()
+    {
+        $builder = $this->createQueryBuilder('shop');
+        $builder->select('shop.id');
+
+        $shopIds = $builder->getQuery()->getArrayResult();
+
+        return $shopIds;
+    }
+
+    /**
      * @param Shop $shop
      *
      * @return DetachedShop
