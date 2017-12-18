@@ -17,8 +17,8 @@ module.exports = {
     selenium: {
         start_process: true,
         server_path: require('selenium-server').path,
-        host: '127.0.0.1',
-        port: 4444,
+        host: (process.env.SELENIUM_HOST || 'localhost'),
+        port: (process.env.SELENIUM_PORT || 4444),
         cli_args: {
             'webdriver.chrome.driver': require('chromedriver').path
         }
@@ -33,12 +33,12 @@ module.exports = {
     test_settings: {
         // Selenium setup
         default: {
-            selenium_port: 4444,
-            selenium_host: 'localhost',
+            selenium_port: (process.env.SELENIUM_PORT || 4444),
+            selenium_host: (process.env.SELENIUM_HOST || 'localhost'),
             silent: true,
             launch_url: (process.env.URL || 'http://localhost'),
             globals: {
-                devServerURL: 'http://shopware-next.local:' + (process.env.PORT || '80')
+                devServerURL: (process.env.PAGE || 'http://localhost')
             }
         },
 
