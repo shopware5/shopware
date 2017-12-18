@@ -1,25 +1,25 @@
 <?php
 
-namespace Shopware\#bundle#\Repository;
+namespace Shopware\Api\#bundle#\Repository;
 
-use Shopware\Api\Search\AggregationResult;
-use Shopware\Api\Search\UuidSearchResult;
-use Shopware\Api\Search\Criteria;
-use Shopware\Api\Search\EntityAggregatorInterface;
-use Shopware\Api\Search\EntitySearcherInterface;
-use Shopware\Api\Read\EntityReaderInterface;
-use Shopware\Api\RepositoryInterface;
-use Shopware\Api\Write\EntityWriterInterface;
-use Shopware\Api\Write\WriteContext;
-use Shopware\Api\Write\GenericWrittenEvent;
+use Shopware\Api\Entity\Search\AggregationResult;
+use Shopware\Api\Entity\Search\UuidSearchResult;
+use Shopware\Api\Entity\Search\Criteria;
+use Shopware\Api\Entity\Search\EntityAggregatorInterface;
+use Shopware\Api\Entity\Search\EntitySearcherInterface;
+use Shopware\Api\Entity\Read\EntityReaderInterface;
+use Shopware\Api\Entity\RepositoryInterface;
+use Shopware\Api\Entity\Write\EntityWriterInterface;
+use Shopware\Api\Entity\Write\WriteContext;
+use Shopware\Api\Entity\Write\GenericWrittenEvent;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\#bundle#\Event\#classUc#\#classUc#SearchResultLoadedEvent;
-use Shopware\#bundle#\Event\#classUc#\#classUc#BasicLoadedEvent;
-use Shopware\#bundle#\Event\#classUc#\#classUc#AggregationResultLoadedEvent;
-use Shopware\#bundle#\Event\#classUc#\#classUc#UuidSearchResultLoadedEvent;
-use Shopware\#bundle#\Struct\#classUc#SearchResult;
-use Shopware\#bundle#\Definition\#classUc#Definition;
-use Shopware\#bundle#\Collection\#classUc#BasicCollection;
+use Shopware\Api\#bundle#\Event\#classUc#\#classUc#SearchResultLoadedEvent;
+use Shopware\Api\#bundle#\Event\#classUc#\#classUc#BasicLoadedEvent;
+use Shopware\Api\#bundle#\Event\#classUc#\#classUc#AggregationResultLoadedEvent;
+use Shopware\Api\#bundle#\Event\#classUc#\#classUc#UuidSearchResultLoadedEvent;
+use Shopware\Api\#bundle#\Struct\#classUc#SearchResult;
+use Shopware\Api\#bundle#\Definition\#classUc#Definition;
+use Shopware\Api\#bundle#\Collection\#classUc#BasicCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 #uses#
 

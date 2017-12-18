@@ -3,10 +3,10 @@
 namespace Shopware\Rest\Command;
 
 use Ramsey\Uuid\Uuid;
-use Shopware\Api\Search\Criteria;
-use Shopware\Api\Search\Query\TermQuery;
+use Shopware\Api\Entity\Search\Criteria;
+use Shopware\Api\Entity\Search\Query\TermQuery;
+use Shopware\Api\User\Repository\UserRepository;
 use Shopware\Context\Struct\TranslationContext;
-use Shopware\User\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -7,8 +7,8 @@ use Shopware\Api\Entity\Field\Field;
 use Shopware\Api\Entity\Field\ManyToManyAssociationField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
-use Shopware\Api\Write\Flag\PrimaryKey;
-use Shopware\Api\Write\WrittenEvent;
+use Shopware\Api\Entity\Write\Flag\PrimaryKey;
+use Shopware\Api\Entity\Write\WrittenEvent;
 use Shopware\Context\Struct\TranslationContext;
 
 abstract class EntityDefinition
@@ -74,11 +74,11 @@ abstract class EntityDefinition
 
     public static function createWrittenEvent(array $identifiers, TranslationContext $context, array $errors): ?WrittenEvent
     {
-        if (!array_key_exists(ProductDefinition::class, $identifiers)) {
+        if (!array_key_exists(self::class, $identifiers)) {
             return null;
         }
 
-        $uuids = $identifiers[ProductDefinition::class];
+        $uuids = $identifiers[self::class];
         $class = self::getWrittenEventClass();
 
         return new $class($uuids, $context, $errors);

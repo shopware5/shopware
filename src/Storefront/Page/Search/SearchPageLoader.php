@@ -2,19 +2,19 @@
 
 namespace Shopware\Storefront\Page\Search;
 
-use Shopware\Api\Search\Criteria;
-use Shopware\Api\Search\Query\MatchQuery;
-use Shopware\Api\Search\Query\NestedQuery;
-use Shopware\Api\Search\Query\TermQuery;
+use Shopware\Api\Entity\Search\Criteria;
+use Shopware\Api\Entity\Search\Query\MatchQuery;
+use Shopware\Api\Entity\Search\Query\NestedQuery;
+use Shopware\Api\Entity\Search\Query\TermQuery;
 use Shopware\Context\Struct\ShopContext;
-use Shopware\Framework\Config\CachedConfigService;
+use Shopware\Framework\Config\ConfigServiceInterface;
 use Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class SearchPageLoader
 {
     /**
-     * @var CachedConfigService
+     * @var ConfigServiceInterface
      */
     private $configService;
 
@@ -26,10 +26,10 @@ class SearchPageLoader
     /**
      * SearchPageLoader constructor.
      *
-     * @param CachedConfigService         $configService
+     * @param ConfigServiceInterface      $configService
      * @param StorefrontProductRepository $productRepository
      */
-    public function __construct(CachedConfigService $configService, StorefrontProductRepository $productRepository)
+    public function __construct(ConfigServiceInterface $configService, StorefrontProductRepository $productRepository)
     {
         $this->configService = $configService;
         $this->productRepository = $productRepository;

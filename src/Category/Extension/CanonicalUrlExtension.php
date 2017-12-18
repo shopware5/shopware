@@ -2,18 +2,18 @@
 
 namespace Shopware\Category\Extension;
 
+use Shopware\Api\Category\Definition\CategoryDefinition;
+use Shopware\Api\Category\Event\Category\CategoryBasicLoadedEvent;
 use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\FieldCollection;
-use Shopware\Api\Search\Criteria;
-use Shopware\Api\Search\Query\TermQuery;
-use Shopware\Api\Search\Query\TermsQuery;
-use Shopware\Api\Write\Flag\Deferred;
-use Shopware\Api\Write\Flag\Extension;
-use Shopware\Category\Definition\CategoryDefinition;
-use Shopware\Category\Event\Category\CategoryBasicLoadedEvent;
-use Shopware\Seo\Definition\SeoUrlDefinition;
-use Shopware\Seo\Repository\SeoUrlRepository;
+use Shopware\Api\Entity\Search\Criteria;
+use Shopware\Api\Entity\Search\Query\TermQuery;
+use Shopware\Api\Entity\Search\Query\TermsQuery;
+use Shopware\Api\Entity\Write\Flag\Deferred;
+use Shopware\Api\Entity\Write\Flag\Extension;
+use Shopware\Api\Seo\Definition\SeoUrlDefinition;
+use Shopware\Api\Seo\Repository\SeoUrlRepository;
 use Shopware\Storefront\Page\Listing\ListingPageUrlGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

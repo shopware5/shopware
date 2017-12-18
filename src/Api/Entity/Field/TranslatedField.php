@@ -24,10 +24,10 @@
 
 namespace Shopware\Api\Entity\Field;
 
-use Shopware\Api\Write\FieldAware\StorageAware;
-use Shopware\Api\Write\FieldAware\WriteContextAware;
-use Shopware\Api\Write\WriteContext;
-use Shopware\Shop\Definition\ShopDefinition;
+use Shopware\Api\Entity\Write\FieldAware\StorageAware;
+use Shopware\Api\Entity\Write\FieldAware\WriteContextAware;
+use Shopware\Api\Entity\Write\WriteContext;
+use Shopware\Api\Shop\Definition\ShopDefinition;
 
 class TranslatedField extends Field implements WriteContextAware
 {
