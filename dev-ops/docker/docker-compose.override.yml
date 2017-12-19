@@ -4,10 +4,14 @@ version: "3.3"
 services:
   app_server:
     ports:
-      - "8088:80"
+      - "18000:80"
 
   app_mysql:
     ports:
-      - "4407:3306"
+      - "13306:3306"
     volumes:
       - ./dev-ops/docker/_volumes/mysql:/var/lib/mysql
+
+  elasticsearch:
+    ports:
+      - "19200:9200"
