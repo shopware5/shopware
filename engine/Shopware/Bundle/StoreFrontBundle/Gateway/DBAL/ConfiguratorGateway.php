@@ -181,7 +181,14 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query->from('s_article_configurator_option_relations', 'relations')
             ->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleID = :articleId AND variant.active = 1')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->innerJoin(
+                'variant',
+                's_articles',
+                'product',
+                'product.id = variant.articleID AND (
+                    (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)
+                )'
+            )
             ->leftJoin('relations', 's_article_configurator_option_relations', 'assignedRelations', 'assignedRelations.article_id = relations.article_id AND assignedRelations.option_id != relations.option_id')
             ->groupBy('relations.option_id')
             ->setParameter(':articleId', $product->getId());

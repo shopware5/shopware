@@ -116,6 +116,7 @@ class ProductMapping implements MappingInterface
                 'calculatedPrices' => $this->getCalculatedPricesMapping($shop),
                 'minStock' => ['type' => 'long'],
                 'stock' => ['type' => 'long'],
+                'laststock' => ['type' => 'boolean'],
                 'sales' => ['type' => 'long'],
                 'states' => $this->textMapping->getKeywordField(),
                 'template' => $this->textMapping->getKeywordField(),

@@ -88,6 +88,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     public function getAvailableNumber($number, ShopContextInterface $context, $selection = [])
     {
         $productId = $this->getProductIdByNumber($number);
+
         if (!$productId) {
             throw new \RuntimeException('No valid product id found');
         }
@@ -192,7 +193,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         if ($this->config->get('hideNoInstock')) {
             $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
-            $query->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
+            $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         }
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -209,8 +210,8 @@ class ProductNumberService implements ProductNumberServiceInterface
     private function isNumberAvailable($number)
     {
         $query = $this->getProductNumberQuery();
-        $query->where('variant.ordernumber = :number')
-            ->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+
+        $query->andWhere('variant.ordernumber = :number')
             ->setParameter(':number', $number);
 
         $statement = $query->execute();
@@ -227,9 +228,10 @@ class ProductNumberService implements ProductNumberServiceInterface
     private function getMainVariantNumberById($productId)
     {
         $query = $this->getProductNumberQuery();
-        $query->where('variant.id = product.main_detail_id')
+
+        $query->andWhere('variant.id = product.main_detail_id')
             ->andWhere('product.id = :productId')
-            ->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->andWhere('(variant.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
             ->setParameter(':productId', $productId);
 
         $statement = $query->execute();
@@ -271,7 +273,7 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query = $this->getProductNumberQuery();
 
         $query->andWhere('product.id = :productId');
-        $query->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
+        $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         $query->setMaxResults(1);
         $query->setParameter(':productId', $productId);
 

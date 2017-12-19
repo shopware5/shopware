@@ -229,7 +229,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     {
         $stockCondition = '';
         if ($this->config->get('hideNoInstock')) {
-            $stockCondition = 'AND (product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)';
+            $stockCondition = 'AND (availableVariant.laststock * availableVariant.instock) >= (availableVariant.laststock * availableVariant.minpurchase)';
         }
 
         $query->innerJoin(
