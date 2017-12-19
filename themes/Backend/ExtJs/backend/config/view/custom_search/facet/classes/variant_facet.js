@@ -27,32 +27,41 @@
 
 Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.VariantFacet', {
 
-    getClass: function() {
+    initComponent: function() {
+        var me = this;
+        me.callParent(arguments);
+
+        console.log(me);
+    },
+
+    getClass: function () {
         return 'Shopware\\Bundle\\SearchBundle\\Facet\\VariantFacet';
     },
 
     createItems: function () {
+        var me = this;
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
-        return [{
-            xtype: 'shopware-form-field-grid',
-            name: 'groupIds',
-            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-            store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-            labelWidth: 150,
-            translatable: true,
-            fieldLabel: '{s name="available_groups"}{/s}'
-        },
+        return [
+            {
+                xtype: 'variant-filter-expand-group-grid',
+                name: 'groupIds',
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
+                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
+                labelWidth: 150,
+                translatable: true,
+                fieldLabel: '{s name="available_groups"}{/s}'
+            },
 
-        {
-            xtype: 'variant-filter-expand-group-grid',
-            name: 'expandGroupIds',
-            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-            store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-            labelWidth: 150,
-            translatable: true,
-            fieldLabel: '{s name="expand_groups"}{/s}'
-        }
+            {
+                xtype: 'variant-filter-expand-group-grid',
+                name: 'expandGroupIds',
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
+                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
+                labelWidth: 150,
+                translatable: true,
+                fieldLabel: '{s name="expand_groups"}{/s}'
+            }
         ];
     }
 });
