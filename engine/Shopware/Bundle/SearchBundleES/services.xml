@@ -187,6 +187,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.product_stock_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\ProductStockSortingHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.service_subscriber" class="Shopware\Bundle\SearchBundleES\Subscriber\ServiceSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
