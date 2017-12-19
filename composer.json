@@ -54,7 +54,7 @@
         "oyejorge/less.php": "1.7.0.10",
         "guzzlehttp/guzzle": "5.3.1",
         "egulias/email-validator": "1.2.12",
-        "elasticsearch/elasticsearch": "2.2.0",
+        "elasticsearch/elasticsearch": "2.3.2",
         "ongr/elasticsearch-dsl": "2.2.2",
         "league/flysystem": "1.0.22",
         "paragonie/random_compat": "2.0.10",
