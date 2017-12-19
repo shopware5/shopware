@@ -15,7 +15,7 @@
     <div class="content search--content">
         <h1 class="search--headline">
             {# @var listing \Shopware\Storefront\Page\Search\SearchPageStruct #}
-            {{ 'SearchHeadline'|trans({'%searchTerm%': searchTerm, '%searchResultProductsCount%': listing.products.total}, 'frontend/search/fuzzy')|raw}}
+            {{ 'SearchHeadline'|trans({'%searchTerm%': searchTerm|escape, '%searchResultProductsCount%': listing.products.total}, 'frontend/search/fuzzy')|raw}}
         </h1>
 
         {# Listing #}
