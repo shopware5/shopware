@@ -90,7 +90,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
         }
-        if ($default == null && $this->fallback) {
+        if ($default === null && $this->fallback) {
             $default = $this->fallback->get($name);
         }
         if ($save) {
