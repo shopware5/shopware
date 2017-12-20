@@ -238,19 +238,19 @@
     {/if}
 {/block}
 
-{block name="frontend_index_header_javascript_jquery"}
-    {* Add the partner statistics widget, if configured *}
-    {if !{config name=disableShopwareStatistics} }
-        {include file='widgets/index/statistic_include.tpl'}
-    {/if}
-{/block}
-
 {*Include jQuery and all other javascript files at the bottom of the page*}
 {block name="frontend_index_header_javascript_jquery_lib"}
     {compileJavascript timestamp={themeTimestamp} output="javascriptFiles"}
     {foreach $javascriptFiles as $file}
         <script{if $theme.asyncJavascriptLoading} async{/if} src="{$file}" id="main-script"></script>
     {/foreach}
+{/block}
+
+{block name="frontend_index_header_javascript_jquery"}
+    {* Add the partner statistics widget, if configured *}
+    {if !{config name=disableShopwareStatistics} }
+        {include file='widgets/index/statistic_include.tpl'}
+    {/if}
 {/block}
 
 {block name="frontend_index_javascript_async_ready"}
