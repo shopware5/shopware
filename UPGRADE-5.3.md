@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed the `createValueListFacetResult` method of `ProductAttributeFacetHandler` to display translations of attribute values in facet list
 * Changed the snippet export to specify the fallback language
 * The tax id of the invoice address is now also used for deliveries to foreign countries if the invoice country and delivery country are marked to be tax free for companies and if the delivery address does not have a tax id
+* Moved the block `frontend_index_header_javascript_jquery` back below `frontend_index_header_javascript_jquery_lib` (as it was before Shopware 5.3)
 
 ### Removals
 
