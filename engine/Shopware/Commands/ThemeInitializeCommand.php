@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Theme\Installer;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -47,7 +48,8 @@ class ThemeInitializeCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:theme:initialize')
-            ->setDescription('Initializes themes. Enables responsive theme for the default shop.');
+            ->setDescription('Initializes themes. Enables responsive theme for the default shop.')
+            ->addArgument('template',InputArgument::OPTIONAL,'Name of the template to initialize.','Responsive');
     }
 
     /**
@@ -61,23 +63,26 @@ class ThemeInitializeCommand extends ShopwareCommand
 
         $this->conn = $this->container->get('dbal_connection');
 
-        $templateId = $this->getResponsiveTemplateId();
+        $templateName = $input->getArgument('template');
+        $templateId = $this->getResponsiveTemplateId($templateName);
         $this->updateDefaultTemplateId($templateId);
 
-        $output->writeln('Themes initializes');
+        $output->writeln(sprintf('Theme %s initialized', $templateName));
     }
 
     /**
+     * @param string $templateName
+     *
      * @return int
      */
-    private function getResponsiveTemplateId()
+    private function getResponsiveTemplateId($templateName)
     {
-        $statement = $this->conn->query('SELECT id FROM s_core_templates WHERE template LIKE "Responsive"');
+        $statement = $this->conn->query(sprintf('SELECT id FROM s_core_templates WHERE template LIKE %s', $this->conn->quote($templateName)));
         $statement->execute();
         $templateId = $statement->fetchColumn(0);
 
         if (!$templateId) {
-            throw new \RuntimeException('Could not get id for default template');
+            throw new \RuntimeException(sprintf('Could not get id for template %s', $templateName));
         }
 
         return (int) $templateId;
