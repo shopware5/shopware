@@ -28,29 +28,58 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Struct;
 
 class GroupsByGroup extends Struct implements \JsonSerializable
 {
-    private $id;
+    /**
+     * @var string
+     */
+    private $key;
+
+    /**
+     * @var bool
+     */
+    private $shouldDisplay;
 
     /**
      * GroupsByGroup constructor.
      *
-     * @param $id
+     * @param string $key
+     * @param bool   $shouldDisplay
      */
-    public function __construct($id = null)
+    public function __construct($key, $shouldDisplay)
     {
-        $this->id = $id;
-    }
-
-    public function getId()
-    {
-        return $this->id;
+        $this->key = $key;
+        $this->shouldDisplay = $shouldDisplay;
     }
 
     /**
-     * @param null $id
+     * @return string
      */
-    public function setId($id)
+    public function getKey()
     {
-        $this->id = $id;
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShouldDisplay()
+    {
+        return $this->shouldDisplay;
+    }
+
+    /**
+     * @param bool $shouldDisplay
+     */
+    public function setShouldDisplay($shouldDisplay)
+    {
+        $this->shouldDisplay = $shouldDisplay;
     }
 
     /**

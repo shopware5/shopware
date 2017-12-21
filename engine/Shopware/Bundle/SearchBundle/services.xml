@@ -41,6 +41,7 @@
         <service class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\VariantCriteriaRequestHandler" id="shopware_bundle_search.criteria_request_handler.variant_criteria_request_handler">
             <argument id="dbal_connection" type="service"/>
             <tag name="criteria_request_handler"/>
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
         <service id="shopware_search.store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >

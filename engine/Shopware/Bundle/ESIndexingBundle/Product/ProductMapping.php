@@ -366,8 +366,10 @@ class ProductMapping implements MappingInterface
     private function getGroupByGroupsMapping()
     {
         return [
+            'type' => 'nested',
             'properties' => [
-                'id' => $this->textMapping->getNotAnalyzedField(),
+                'key' => $this->textMapping->getNotAnalyzedField(),
+                'shouldDisplay' => ['type' => 'boolean'],
             ],
         ];
     }
