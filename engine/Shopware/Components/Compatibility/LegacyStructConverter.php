@@ -236,10 +236,6 @@ class LegacyStructConverter
 
         /** @deprecated sSelfCanonical, use $canonicalParams instead */
         $canonical = $detailUrl;
-        if ($this->config->get('forceCanonicalHttp')) {
-            $canonical = str_replace('https://', 'http://', $canonical);
-        }
-
         $canonicalParams = $this->getCategoryCanonicalParams($category);
 
         if ($media && !array_key_exists('path', $media)) {

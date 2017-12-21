@@ -34,6 +34,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Removals
 
 * Removed config option for maximum number of category pages
+* Removed "Force http canonical url" setting in basic settings as it is obsolete
 * Removed config option `template_security['enabled']` for toggling smarty security
 * Removed support for separate SSL host and SSL path. Also the `Use SSL` and `Always SSL` options were merged.
     * Removed database fields
