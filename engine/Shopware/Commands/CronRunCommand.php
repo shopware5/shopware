@@ -46,7 +46,10 @@ class CronRunCommand extends ShopwareCommand
         $this
             ->setName('sw:cron:run')
             ->setDescription('Runs cronjobs.')
-            ->setHelp('The <info>%command.name%</info> runs due cronjobs.')
+            ->setHelp(<<<'EOF'
+The <info>%command.name%</info> runs due cronjobs.
+EOF
+            )
             ->addArgument(
                 'cronjob',
                 InputArgument::OPTIONAL,
@@ -62,23 +65,7 @@ class CronRunCommand extends ShopwareCommand
     }
 
     /**
-     * Executes the current command.
-     *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @throws \Exception
-     * @throws \Enlight_Exception
-     * @throws LogicException     When this abstract method is not implemented
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
-     *
-     * @see setCode()
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -120,9 +107,6 @@ class CronRunCommand extends ShopwareCommand
      * @param Enlight_Components_Cron_Manager $manager
      * @param string                          $cronjob
      * @param bool                            $force
-     *
-     * @throws \Exception
-     * @throws \RuntimeException
      */
     private function runSingleCronjob(OutputInterface $output, Enlight_Components_Cron_Manager $manager, $cronjob, $force)
     {
@@ -172,7 +156,7 @@ class CronRunCommand extends ShopwareCommand
     {
         $job = $manager->getJobByAction($action);
 
-        if ($job !== null) {
+        if ($job != null) {
             return $job;
         }
 
@@ -181,7 +165,7 @@ class CronRunCommand extends ShopwareCommand
             $job = $manager->getJobByAction('Shopware_CronJob_' . $action);
         }
 
-        if ($job !== null) {
+        if ($job != null) {
             return $job;
         }
 

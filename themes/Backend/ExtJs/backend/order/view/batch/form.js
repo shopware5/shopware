@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend: 'Ext.form.Panel',
+    extend:'Ext.form.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.batch-settings-panel',
+    alias:'widget.batch-settings-panel',
 
     /**
      * An optional extra CSS class that will be added to this component's Element.
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
     /**
      * Contains all snippets for the view component
      */
-    snippets: {
+    snippets:{
         info: '{s name=settings/info}Caution: If you have selected orders with an already existing receipt, these will be regenerated.{/s}',
         mode: {
             label: '{s name=settings/mode}Mode{/s}',
@@ -80,12 +80,9 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
         generate: '{s name=settings/process}Process changes{/s}',
         gridTitle: '{s name=settings/grid_title}Selected orders{/s}',
         settingsFieldSetLabel: '{s name=settings/field_set_label}Settings to generate{/s}',
-        oneDocument: '{s name=settings/one_document}Create single document{/s}',
-        selectOption: '{s name="settings/select_option"}Please select{/s}',
-        invalidOption: '{s name="settings/invalid_option"}Invalid Option{/s}',
-        errorTitle: '{s name=error/title}Error{/s}',
-        mustSelectDocument: '{s name=settings/must_select_document_type}You must select a document type{/s}'
+        oneDocument: '{s name=settings/one_document}Create single document{/s}'
     },
+
     /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -96,7 +93,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      *
      * @return void
      */
-    initComponent: function () {
+    initComponent:function () {
         var me = this;
 
         me.registerEvents();
@@ -110,13 +107,13 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             me.createSettingsContainer(),
             me.createOrderGrid()
         ];
-
         me.addCls('layout-expert');
         me.callParent(arguments);
     },
 
-    registerEvents: function () {
+    registerEvents: function() {
         this.addEvents(
+
             /**
              * Event will be fired when the user clicks the "generate documents" button which is
              * displayed within the form field set.
@@ -133,7 +130,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      *
      * @return Ext.container.Container
      */
-    createInfoContainer: function () {
+    createInfoContainer: function() {
         var me = this;
 
         return Ext.create('Ext.container.Container', {
@@ -141,30 +138,8 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             style: 'color: #999; font-style: italic; margin: 0 0 15px 0;'
         });
     },
-    /**
-     * Creates and returns the form fields
-     *
-     * @returns Array An array containing the form fields.
-     */
-    createFormFields: function () {
-        var me = this;
 
-        return [
-            me.createDocumentTypeField(),
-            me.createModeField(),
-            me.createOrderStatusField(),
-            me.createPaymentStatusField(),
-            me.createAutoSendEmailField(),
-            me.createAddAttachmentsField(),
-            me.createSingleDocumentField(),
-            me.createProcessButtonField()
-        ];
-    },
-    /**
-     *
-     * @returns Ext.form.FieldSet
-     */
-    createSettingsContainer: function () {
+    createSettingsContainer: function() {
         var me = this;
 
         return Ext.create('Ext.form.FieldSet', {
@@ -175,330 +150,86 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                 xtype: 'combobox',
                 anchor: '100%'
             },
-            items: me.createFormFields()
-        });
-    },
-    /**
-     * Creates the "Document type" field
-     *
-     * @returns Ext.form.field.ComboBox
-     */
-    createDocumentTypeField: function () {
-        var me = this,
-            store = Ext.create('Shopware.apps.Order.store.DocType');
-
-        return Ext.create('Ext.form.field.ComboBox', {
-            name: 'documentType',
-            fieldLabel: me.snippets.documentType,
-            store: store,
-            editable: true,
-            typeAhead: true,
-            minChars: 2,
-            displayField: 'name',
-            valueField: 'id',
-            emptyText: me.snippets.selectOption,
-            validateOnBlur: true,
-            allowBlank: true,
-            validator: function (selectedValue) {
-                var attachmentsField = me.getForm().findField('addAttachments'),
-                    singleDocField = me.getForm().findField('createSingleDocument'),
-                    selectedValLowered = typeof selectedValue === 'string' ? selectedValue.toLowerCase() : '',
-                    recordFound = true;
-
-                /**
-                 * If no option is selected, this is also considered as valid
-                 */
-                if (!selectedValue || !selectedValue.length) {
-                    singleDocField.disable();
-                    attachmentsField.disable();
-                    return recordFound;
-                }
-
-                /**
-                 * Validate the typed/selected option. Verify that is indeed a store option
-                 */
-                recordFound = store.data.findBy(function(item){
-                    var itemNameLowered = item.data.name.toLowerCase();
-                    return itemNameLowered === selectedValLowered;
-                });
-
-                if(recordFound){
-                    singleDocField.enable();
-                    attachmentsField.enable();
-                    return true;
-                }
-
-                singleDocField.disable();
-                attachmentsField.disable();
-
-                return me.snippets.invalidOption;
-            },
-            listeners: {
-                scope: this,
-                afterrender: this.disableAutocompleteAndSpellcheck
-            }
-        });
-    },
-    /**
-     * Creates the "Mode" field
-     *
-     * @returns Ext.form.field.ComboBox
-     */
-    createModeField: function () {
-        var me = this,
-            store = new Ext.data.SimpleStore({
-                fields: [
-                    'value',
-                    'description'
-                ],
-                data: me.modeData
-            });
-
-        return Ext.create('Ext.form.field.ComboBox', {
-            name: 'mode',
-            triggerAction: 'all',
-            fieldLabel: me.snippets.mode.label,
-            editable: true,
-            typeAhead: true,
-            minChars: 2,
-            emptyText: me.snippets.selectOption,
-            store: store,
-            snippets: me.snippets,
-            displayField: 'description',
-            valueField: 'value',
-            validateOnBlur: true,
-            validateOnChange: true,
-            validator: me.validateComboboxSelection,
-            listeners: {
-                scope: this,
-                afterrender: this.disableAutocompleteAndSpellcheck
-            }
-        });
-    },
-    /**
-     * Creates the "Order status" field
-     *
-     * @returns Ext.form.field.ComboBox
-     */
-    createOrderStatusField: function () {
-        var me = this,
-            store = me.orderStatusStore;
-
-        return Ext.create('Ext.form.field.ComboBox', {
-            name: 'orderStatus',
-            triggerAction: 'all',
-            queryMode: 'local',
-            editable: true,
-            fieldLabel: me.snippets.orderStatus,
-            store: store,
-            displayField: 'description',
-            valueField: 'id',
-            emptyText: me.snippets.selectOption,
-            mode: 'local',
-            validateOnChange: true,
-            validateOnBlur: true,
-            snippets: me.snippets,
-            validator: me.validateComboboxSelection,
-            listeners: {
-                scope: this,
-                afterrender: this.disableAutocompleteAndSpellcheck
-            }
-        });
-    },
-    /**
-     * Creates the "Payment status field"
-     *
-     * @returns Shopware.form.field.PagingComboBox
-     */
-    createPaymentStatusField: function () {
-        var me = this,
-            store = Ext.create(
-                'Shopware.store.PaymentStatus',
+            items: [
                 {
-                    pageSize: 5
-                }
-            );
-
-        return Ext.create('Shopware.form.field.PagingComboBox', {
-            pageSize: 5,
-            name: 'paymentStatus',
-            typeAhead: true,
-            editable: true,
-            emptyText: me.snippets.selectOption,
-            triggerAction: 'all',
-            fieldLabel: me.snippets.paymentStatus,
-            store: store,
-            snippets: me.snippets,
-            displayField: 'description',
-            valueField: 'id',
-            validateOnChange: true,
-            validateOnBlur: true,
-            validator: me.validateComboboxSelection,
-            listeners: {
-                scope: this,
-                afterrender: this.disableAutocompleteAndSpellcheck
-            }
-        });
-    },
-    /**
-     * Validates combo box selection
-     *
-     * @param selectedValue
-     */
-    validateComboboxSelection: function (selectedValue) {
-        var me = this,
-            selectedValLowered = typeof selectedValue === 'string' ? selectedValue.toLowerCase() : '',
-            recordFound = true,
-            store = me.store;
-        /**
-         * If no option is selected, this is also considered as valid
-         */
-        if (!selectedValue || !selectedValue.length) {
-            return recordFound;
-        }
-
-        /**
-         * Validate the typed/selected option. Verify that is indeed a store option
-         */
-        recordFound = store.data.findBy(function (item) {
-            var itemNameLowered = item.data.description.toLowerCase();
-            return itemNameLowered === selectedValLowered;
-        });
-
-        if (recordFound) {
-            return true;
-        }
-
-        return me.snippets.invalidOption;
-    },
-    /**
-     * Disables autocomplete and spellcheck on an element
-     * @return undefined
-     */
-    disableAutocompleteAndSpellcheck: function (elm) {
-        elm.inputEl.set({
-            autocomplete: 'off',
-            spellcheck: 'false'
-        })
-    },
-    /**
-     * Create "Send emails automatically" checkbox.
-     *
-     * @returns Ext.form.field.Checkbox
-     */
-    createAutoSendEmailField: function () {
-        var me = this;
-
-        return Ext.create('Ext.form.field.Checkbox', {
-            name: 'autoSendMail',
-            fieldLabel: me.snippets.mail,
-            inputValue: true,
-            uncheckedValue: false,
-        });
-    },
-    /**
-     * Create "Add documents/attachments to email" checkbox.
-     *
-     * When a "document type" has not been selected, the field will show a tooltip indicating that
-     * in order to activate this checkbox, a document type must be selected for doing so.
-     *
-     * @param Ext.form.field.ComboBox;
-     * @returns Ext.form.field.Checkbox
-     */
-    createAddAttachmentsField: function () {
-        return Ext.create('Ext.form.field.Checkbox', {
-            name: 'addAttachments',
-            fieldLabel: '{s name=attachment/batch/add}{/s}',
-            disabled: true,
-            inputValue: true,
-            uncheckedValue: false,
-            listeners: {
-                scope: this,
-                disable: function (el) {
-                    this.createTooltip(el, this.snippets.mustSelectDocument);
+                    name: 'documentType',
+                    triggerAction: 'all',
+                    fieldLabel: me.snippets.documentType,
+                    store: Ext.create('Shopware.apps.Order.store.DocType'),
+                    displayField: 'name',
+                    valueField: 'id'
                 },
-                enable: function (el) {
-                    this.removeTooltip(el);
-                }
-            }
-        });
-    },
-    /**
-     * Create "Single Document" checkbox.
-     *
-     * When a "document type" has not been selected, the field will show a tooltip indicating that
-     * in order to activate this checkbox, a document type must be selected for doing so.
-     *
-     * @returns Ext.form.field.Checkbox
-     */
-    createSingleDocumentField: function () {
-        var me = this;
-        return Ext.create('Ext.form.field.Checkbox', {
-            name: 'createSingleDocument',
-            fieldLabel: me.snippets.oneDocument,
-            disabled: true,
-            inputValue: true,
-            uncheckedValue: false,
-            listeners: {
-                scope: this,
-                disable: function (el) {
-                    this.createTooltip(el, this.snippets.mustSelectDocument);
+                {
+                    name: 'mode',
+                    triggerAction: 'all',
+                    fieldLabel: me.snippets.mode.label,
+                    store:new Ext.data.SimpleStore({
+                        fields:['value', 'description'], data: me.modeData
+                    }),
+                    displayField: 'description',
+                    valueField: 'value'
                 },
-                enable: function (el) {
-                    this.removeTooltip(el);
+                {
+                    name: 'orderStatus',
+                    triggerAction: 'all',
+                    queryMode: 'local',
+                    fieldLabel: me.snippets.orderStatus,
+                    store: me.orderStatusStore,
+                    displayField: 'description',
+                    valueField: 'id'
+                },
+                {
+                    xtype: 'pagingcombo',
+                    pageSize: 5,
+                    name: 'paymentStatus',
+                    triggerAction: 'all',
+                    fieldLabel: me.snippets.paymentStatus,
+                    store: Ext.create('Shopware.store.PaymentStatus', { pageSize: 5 }),
+                    displayField: 'description',
+                    valueField: 'id'
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: me.snippets.mail,
+                    checked: true,
+                    inputValue: true,
+                    uncheckedValue: false,
+                    name: 'autoSendMail'
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: '{s name=attachment/batch/add}{/s}',
+                    checked: true,
+                    inputValue: true,
+                    uncheckedValue: false,
+                    name: 'addAttachments'
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: me.snippets.oneDocument,
+                    checked: false,
+                    inputValue: true,
+                    uncheckedValue: false,
+                    name: 'createSingleDocument'
+                },
+                {
+                    xtype: 'button',
+                    margin: '15 0',
+                    cls: 'primary',
+                    text: me.snippets.generate,
+                    handler: function() {
+                        me.fireEvent('processChanges', me)
+                    }
                 }
-            }
+            ]
         });
     },
-    /**
-     * Creates tooltip for a form field
-     *
-     * @param Ext.form.Field elm
-     * @param string Text to show in the tooltip
-     * @returns  Ext.tip.QuickTip
-     */
-    createTooltip: function (elm, text) {
-        var me = this;
-        return Ext.tip.QuickTipManager.register({
-            target: elm.el,
-            name: elm.name + '-tooltip',
-            title: '',
-            text: me.snippets.mustSelectDocument,
-            trackMouse: false,
-        });
-    },
-    /**
-     * Removes an Ext.Quicktip from an element
-     * @param Ext.form.Field elm
-     * @return undefined
-     */
-    removeTooltip: function (elm) {
-        return Ext.QuickTips.unregister(elm.id);
-    },
-    /**
-     * Creates the form submission button
-     *
-     * @returns Ext.button.Button
-     */
-    createProcessButtonField: function () {
-        var me = this;
 
-        return Ext.create('Ext.button.Button', {
-            margin: '15 0',
-            cls: 'primary',
-            text: me.snippets.generate,
-            handler: function () {
-                me.fireEvent('processChanges', me)
-            }
-        });
-    },
     /**
      * Creates the grid which contains all selected orders and display if the mail is already sent and the current order
      * and payment status.
-     *
-     * @returns Shopware.apps.Order.view.batch.List
      */
-    createOrderGrid: function () {
+    createOrderGrid: function() {
         var me = this;
 
         var store = Ext.create('Ext.data.Store', {
