@@ -87,7 +87,7 @@ Ext.apply(Ext.form.field.VTypes, {
         }
 
         if (!field.hasOwnProperty('hasBlurListener')) {
-            field.on('change', this.onFireRemoteValidation, this, { delay: 300 });
+            field.on('change', this.onFireRemoteValidation, this, { delay: 750 });
             this.onFireRemoteValidation(field);
             field.hasBlurListener = true;
         }
@@ -185,7 +185,7 @@ Ext.apply(Ext.form.field.VTypes, {
                 var oldValid = field.oldValid;
 
                 if (!response.responseText) {
-                    //field is invalid setting the custom error message
+                    // Field is invalid setting the custom error message
                     field.markInvalid(field.validationErrorMsg);
                     field.vtypeText = field.validationErrorMsg;
 
