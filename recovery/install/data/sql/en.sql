@@ -146,16 +146,16 @@ Information on your order:
 
 Pos.  Art.No.               Description                                      Quantities       Price       Total
 {foreach item=details key=position from=$sOrderDetails}
-{{$position+1}|fill:4}  {$details.ordernumber|fill:20}  {$details.articlename|fill:49}  {$details.quantity|fill:6}  {$details.price|padding:8} EUR  {$details.amount|padding:8} EUR
+{{$position+1}|fill:4}  {$details.ordernumber|fill:20}  {$details.articlename|fill:49}  {$details.quantity|fill:6}  {$details.price|padding:8|currency|unescape:"htmlall"}      {$details.amount|padding:8|currency|unescape:"htmlall"}
 {/foreach}
 
-Shipping costs: {$sShippingCosts}
-Net total: {$sAmountNet}
+Shipping costs: {$sShippingCosts|currency|unescape:"htmlall"}
+Net total: {$sAmountNet|currency|unescape:"htmlall"}
 {if !$sNet}
 {foreach $sTaxRates as $rate => $value}
-plus {$rate}% VAT {$value|currency|unescape:"htmlall"}
+plus {$rate|number_format:0}% VAT {$value|currency|unescape:"htmlall"}
 {/foreach}
-Total gross: {$sAmount}
+Total gross: {$sAmount|currency|unescape:"htmlall"}
 {/if}
 
 Selected payment type: {$additional.payment.description}
@@ -234,8 +234,8 @@ If you have any questions, do not hesitate to contact us.
                 Article-No: {$details.ordernumber|fill:20}
             </td>
             <td style="border-bottom:1px solid #cccccc;">{$details.quantity|fill:6}</td>
-            <td style="border-bottom:1px solid #cccccc;">{$details.price|padding:8}{$sCurrency}</td>
-            <td style="border-bottom:1px solid #cccccc;">{$details.amount|padding:8} {$sCurrency}</td>
+            <td style="border-bottom:1px solid #cccccc;">{$details.price|padding:8|currency}</td>
+            <td style="border-bottom:1px solid #cccccc;">{$details.amount|padding:8|currency}</td>
         </tr>
         {/foreach}
 
@@ -244,13 +244,13 @@ If you have any questions, do not hesitate to contact us.
     <p>
         <br/>
         <br/>
-        Shipping costs: {$sShippingCosts}<br/>
-        Net total: {$sAmountNet}<br/>
+        Shipping costs: {$sShippingCosts|currency}<br/>
+        Net total: {$sAmountNet|currency}<br/>
         {if !$sNet}
         {foreach $sTaxRates as $rate => $value}
-        plus {$rate}% VAT {$value|currency}<br/>
+        plus {$rate|number_format:0}% VAT {$value|currency}<br/>
         {/foreach}
-        <strong>Total gross: {$sAmount}</strong><br/>
+        <strong>Total gross: {$sAmount|currency}</strong><br/>
         {/if}
         <br/>
         <br/>
@@ -825,8 +825,9 @@ Order number     Name of article    Stock/Minimum stock
 {$sArticle.ordernumber}       {$sArticle.name}        {$sArticle.instock}/{$sArticle.stockmin}
 {/foreach}
 
-{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '{include file="string:{config name=emailheaderhtml}"}
-<div style="font-family:arial; font-size:12px;">
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
     <p>
         Hello,<br/>
         <br/>
@@ -1407,7 +1408,7 @@ WHERE `s_core_config_mails`.`name` = 'sARTICLECOMMENT';
 
 
 
-UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'order documents {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Order documents for your order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
 
 Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
