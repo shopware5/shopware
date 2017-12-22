@@ -154,7 +154,7 @@ class ProductProvider implements ProductProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Shop $shop, $numbers, $groupByResult)
+    public function get(Shop $shop, $numbers)
     {
         $context = $this->contextService->createShopContext(
             $shop->getId(),
@@ -204,9 +204,6 @@ class ProductProvider implements ProductProviderInterface
                  * @var Group[]
                  */
                 $productGroups = array_map(function ($group) {
-                    /*
-                     * @var $group Group
-                     */
                     return $group->getId();
                 }, $productConfigurations[$product->getNumber()]);
                 $variantGroups = $this->configuratorOptionsGateway->getOptionsByGroups($productGroups);
@@ -277,9 +274,11 @@ class ProductProvider implements ProductProviderInterface
                     $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
                 }
             } else {
-                $option = $group->getOptions()[0];
-                $optionString = $option->getId();
-                $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
+                if (count($group->getOptions()) > 0) {
+                    $option = $group->getOptions()[0];
+                    $optionString = $option->getId();
+                    $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
+                }
             }
 
             //Iteration of the other deeps
@@ -298,9 +297,6 @@ class ProductProvider implements ProductProviderInterface
     private function getFilterGroups($productConfigurations, $combinations)
     {
         $ids = array_map(function ($group) {
-            /*
-             * @var $group Group
-             */
             return $group->getOptions()[0]->getId();
         }, $productConfigurations);
         $optionKey = implode('-', $ids);
@@ -335,20 +331,37 @@ class ProductProvider implements ProductProviderInterface
                 $_iterationBaseGroups = $iterationBaseGroups;
                 $_iterationBaseGroups[] = $group;
 
-                $group = $groups[0];
-                if (in_array($group->getId(), $expandGroups) && in_array($group, $_iterationBaseGroups)) {
-                    foreach ($group->getOptions() as $option) {
-                        $optionString = $option->getId();
-                        $combination = $this->recursiveCreateGroupBy($_iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
-                    }
-                } else {
-                    $option = $group->getOptions()[0];
-                    $optionString = $option->getId();
-                    $combination = $this->recursiveCreateGroupBy($_iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
-                }
+                $combination = $this->buildRecursiveOptionString($_iterationBaseGroups, $groups, $expandGroups, $combination);
 
                 ++$currentDeep;
                 $combination = $this->recursiveBaseGroupBy($_iterationBaseGroups, $groups, $expandGroups, $currentDeep, $maxDeep, $combination);
+            }
+        }
+
+        return $combination;
+    }
+
+    /**
+     * @param Group[] $iterationBaseGroups
+     * @param Group[] $groups
+     * @param int[]   $expandGroups
+     * @param array   $combination
+     *
+     * @return array
+     */
+    private function buildRecursiveOptionString($iterationBaseGroups, $groups, $expandGroups, $combination)
+    {
+        $group = $groups[0];
+        if (in_array($group->getId(), $expandGroups) && in_array($group, $iterationBaseGroups)) {
+            foreach ($group->getOptions() as $option) {
+                $optionString = $option->getId();
+                $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
+            }
+        } else {
+            if (count($group->getOptions()) > 0) {
+                $option = $group->getOptions()[0];
+                $optionString = $option->getId();
+                $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
             }
         }
 
@@ -370,25 +383,14 @@ class ProductProvider implements ProductProviderInterface
         array_shift($_groups);
 
         if (count($_groups) == 0) {
-            if (count($baseGroups) == 1) {
-                $combinationKey = $baseGroups[0]->getId();
-            } else {
-                usort($baseGroups, function ($groupA, $groupB) {
-                    /*
-                     * @var $groupA Group
-                     * @var $groupB Group
-                     */
-                    return strcmp($groupA->getId(), $groupB->getId());
-                });
+            usort($baseGroups, function ($groupA, $groupB) {
+                return strcmp($groupA->getId(), $groupB->getId());
+            });
 
-                $ids = array_map(function ($group) {
-                    /*
-                     * @var $group Group
-                     */
-                    return $group->getId();
-                }, $baseGroups);
-                $combinationKey = implode('-', $ids);
-            }
+            $ids = array_map(function ($group) {
+                return $group->getId();
+            }, $baseGroups);
+            $combinationKey = implode('-', $ids);
 
             $combination[$combinationKey][] = $currentOptionString;
 
@@ -402,9 +404,11 @@ class ProductProvider implements ProductProviderInterface
                 $combination = $this->recursiveCreateGroupBy($baseGroups, $_groups, $expandGroups, $combination, $optionString);
             }
         } else {
-            $option = $group->getOptions()[0];
-            $optionString = $currentOptionString . '-' . $option->getId();
-            $combination = $this->recursiveCreateGroupBy($baseGroups, $_groups, $expandGroups, $combination, $optionString);
+            if (count($group->getOptions()) > 0) {
+                $option = $group->getOptions()[0];
+                $optionString = $currentOptionString . '-' . $option->getId();
+                $combination = $this->recursiveCreateGroupBy($baseGroups, $_groups, $expandGroups, $combination, $optionString);
+            }
         }
 
         return $combination;

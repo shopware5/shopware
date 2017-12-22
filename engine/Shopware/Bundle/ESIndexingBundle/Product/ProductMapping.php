@@ -345,6 +345,11 @@ class ProductMapping implements MappingInterface
         ];
     }
 
+    /**
+     * @param Shop $shop
+     *
+     * @return array
+     */
     private function getVariantOptionsMapping(Shop $shop)
     {
         return [
@@ -363,6 +368,9 @@ class ProductMapping implements MappingInterface
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getGroupByGroupsMapping()
     {
         return [

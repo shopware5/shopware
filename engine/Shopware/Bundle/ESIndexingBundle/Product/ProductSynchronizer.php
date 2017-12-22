@@ -64,11 +64,10 @@ class ProductSynchronizer implements SynchronizerInterface
         $numbers = $this->getBacklogNumbers($backlogs);
         $queries = $this->getBacklogQueries($backlogs);
 
-        $groupByResults = [];
-        $this->productIndexer->indexProducts($shopIndex, $numbers, $groupByResults);
+        $this->productIndexer->indexProducts($shopIndex, $numbers);
         foreach ($queries as $query) {
             while ($queryNumbers = $query->fetch()) {
-                $this->productIndexer->indexProducts($shopIndex, $queryNumbers, $groupByResults);
+                $this->productIndexer->indexProducts($shopIndex, $queryNumbers);
             }
         }
     }
