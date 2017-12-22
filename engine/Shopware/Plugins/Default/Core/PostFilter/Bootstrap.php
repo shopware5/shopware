@@ -27,11 +27,34 @@
  */
 class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
+    /**
+     * @var string
+     */
     protected static $baseFile;
+
+    /**
+     * @var string
+     */
     protected $basePathUrl = '';
+
+    /**
+     * @var string
+     */
     protected $basePath = '';
+
+    /**
+     * @var bool
+     */
     protected $useSecure = false;
+
+    /**
+     * @var string[]
+     */
     protected $backLinkWhiteList = [];
+
+    /**
+     * @var string[]
+     */
     protected $urls;
 
     /**
@@ -82,7 +105,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
                 return $source;
             }
         }
-        if ($request->getModuleName() !== 'frontend' && $request->getModuleName() !== 'widgets') {
+        if (!in_array($request->getModuleName(), ['frontend', 'widgets'], true)) {
             return $args->getReturn();
         }
         $source = $this->filterUrls($source);
@@ -92,6 +115,8 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
 
     /**
      * Initializes plugin config
+     *
+     * @throws Exception
      */
     public function initConfig()
     {
@@ -123,9 +148,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     public function &filterSource($source)
     {
-        $source = preg_replace_callback('#<(a|form|iframe|link|img)[^<>]*(href|src|action)="([^"]*)".*>#Umsi', [$this, 'rewriteSrc'], $source);
-
-        return $source;
+        return preg_replace_callback('#<(a|form|iframe|link|img)[^<>]*(href|src|action)="([^"]*)".*>#Umsi', [$this, 'rewriteSrc'], $source);
     }
 
     /**
@@ -134,6 +157,9 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      * @see \Shopware_Controllers_Backend_Newsletter::outputFilter
      *
      * @param array $src
+     *
+     * @throws Exception
+     * @throws SmartyException
      *
      * @return string
      */
@@ -197,19 +223,14 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             $link .= $anchorPart;
         }
 
-        //check canonical shopware configuration
-        $forceCanonicalHttp = Shopware()->Config()->get('forceCanonicalHttp');
-
-        //check if the current link is a canonical link
+        // Check if the current link is a canonical link
         $isCanonical = (
             strpos($src[0], 'rel="canonical"') !== false ||
             strpos($src[0], 'rel="prev"') !== false ||
             strpos($src[0], 'rel="next"') !== false
         );
 
-        $replaceCanonical = !($isCanonical && $forceCanonicalHttp);
-
-        if ($this->useSecure && $src[1] !== 'a' && $replaceCanonical) {
+        if ($this->useSecure && !$isCanonical && $src[1] !== 'a') {
             $link = str_replace('http://' . $this->basePath, 'https://' . $this->basePath, $link);
         }
 
@@ -232,6 +253,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         ];
     }
 
+    /**
+     * @param string $source
+     *
+     * @return null|string|string[]
+     */
     protected function filterUrls($source)
     {
         /** @var $router \Shopware\Components\Routing\RouterInterface */
@@ -294,7 +320,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param $link
+     * @param string $link
      *
      * @throws SmartyException
      *
