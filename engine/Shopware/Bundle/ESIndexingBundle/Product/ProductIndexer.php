@@ -71,10 +71,9 @@ class ProductIndexer implements DataIndexerInterface
         $idQuery = $this->queryFactory->createCategoryQuery($categoryId, 100);
         $progress->start($idQuery->fetchCount(), 'Indexing products');
 
-        $groupByResults = [];
         while ($ids = $idQuery->fetch()) {
             $query = $this->queryFactory->createProductIdQuery($ids);
-            $this->indexProducts($index, $query->fetch(), $groupByResults);
+            $this->indexProducts($index, $query->fetch());
             $progress->advance(count(array_unique($ids)));
         }
 
@@ -83,18 +82,15 @@ class ProductIndexer implements DataIndexerInterface
 
     /**
      * @param ShopIndex $index
-     * @param string[] $numbers
-     *
-     * @param $groupByResults
-     * @return void
+     * @param string[]  $numbers
      */
-    public function indexProducts(ShopIndex $index, $numbers, $groupByResults)
+    public function indexProducts(ShopIndex $index, $numbers)
     {
         if (empty($numbers)) {
             return;
         }
 
-        $products = $this->provider->get($index->getShop(), $numbers, $groupByResults);
+        $products = $this->provider->get($index->getShop(), $numbers);
         $remove = array_diff($numbers, array_keys($products));
 
         $documents = [];

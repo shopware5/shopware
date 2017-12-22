@@ -154,7 +154,7 @@ class ProductProvider implements ProductProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Shop $shop, $numbers, $groupByResult)
+    public function get(Shop $shop, $numbers)
     {
         $context = $this->contextService->createShopContext(
             $shop->getId(),
@@ -204,9 +204,6 @@ class ProductProvider implements ProductProviderInterface
                  * @var Group[]
                  */
                 $productGroups = array_map(function ($group) {
-                    /*
-                     * @var $group Group
-                     */
                     return $group->getId();
                 }, $productConfigurations[$product->getNumber()]);
                 $variantGroups = $this->configuratorOptionsGateway->getOptionsByGroups($productGroups);
@@ -298,9 +295,6 @@ class ProductProvider implements ProductProviderInterface
     private function getFilterGroups($productConfigurations, $combinations)
     {
         $ids = array_map(function ($group) {
-            /*
-             * @var $group Group
-             */
             return $group->getOptions()[0]->getId();
         }, $productConfigurations);
         $optionKey = implode('-', $ids);
@@ -374,17 +368,10 @@ class ProductProvider implements ProductProviderInterface
                 $combinationKey = $baseGroups[0]->getId();
             } else {
                 usort($baseGroups, function ($groupA, $groupB) {
-                    /*
-                     * @var $groupA Group
-                     * @var $groupB Group
-                     */
                     return strcmp($groupA->getId(), $groupB->getId());
                 });
 
                 $ids = array_map(function ($group) {
-                    /*
-                     * @var $group Group
-                     */
                     return $group->getId();
                 }, $baseGroups);
                 $combinationKey = implode('-', $ids);
