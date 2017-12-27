@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Changed Smarty to improve error message when a template extends a parent template and said parent does not exist
+* Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance  
 
 ## 5.4.0
 
