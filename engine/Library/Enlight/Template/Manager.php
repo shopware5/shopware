@@ -297,6 +297,8 @@ class Enlight_Template_Manager extends Smarty
      * SmartyException with message 'directory [...] not allowed by security setting'. This is because
      * the security_policy still holds a reference to the old Smarty instance that does not know this new directories
      * as template sources.
+     *
+     * The security_policy is also cloned so other instances of the Enlight_Template_Manager do not get affected.
      */
     public function __clone()
     {
