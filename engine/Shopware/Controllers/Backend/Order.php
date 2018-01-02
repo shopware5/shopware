@@ -22,18 +22,22 @@
  * our trademarks remain entirely with us.
  */
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
 use Shopware\Models\Article\Detail as ArticleDetail;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Billing;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
 use Shopware\Models\Order\Document\Document;
+use Shopware\Models\Order\Document\Type;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Shipping;
 use Shopware\Models\Order\Status;
@@ -262,9 +266,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * Event listener method which fires when the order store is loaded. Returns an array of order data
-     * which displayed in an Ext.grid.Panel. The order data contains all associations of an order (positions, shop, customer, ...).
-     * The limit, filter and order parameter are used in the id query. The result of the id query are used
-     * to filter the detailed query which created over the getListQuery function.
+     * which displayed in an Ext.grid.Panel. The order data contains all associations of an order (positions, shop,
+     * customer, ...). The limit, filter and order parameter are used in the id query. The result of the id query are
+     * used to filter the detailed query which created over the getListQuery function.
      */
     public function getListAction()
     {
@@ -289,7 +293,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * Returns an array of all defined taxes. Used for the position grid combo box on the detail page of the backend order module.
+     * Returns an array of all defined taxes. Used for the position grid combo box on the detail page of the backend
+     * order module.
      */
     public function getTaxAction()
     {
@@ -933,9 +938,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function createMailAction()
     {
         $orderId = $this->request->getParam('orderId');
+        $mailTemplateName = $this->request->getParam('mailTemplateName', 'sORDERDOCUMENTS');
 
         /** @var $mail Enlight_Components_Mail */
-        $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, 'sORDERDOCUMENTS');
+        $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, $mailTemplateName);
 
         $this->view->assign([
             'mail' => [
@@ -950,6 +956,54 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'isHtml' => !empty($mail->getPlainBody()),
                 'orderId' => $orderId,
             ],
+        ]);
+    }
+
+    /**
+     * Retrieves all available mail templates
+     */
+    public function getMailTemplatesAction()
+    {
+        $limit = $this->Request()->getParam('limit', 100);
+        $offset = $this->Request()->getParam('start', 0);
+        $order = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
+
+        /** @var QueryBuilder $mailTemplatesQuery */
+        $mailTemplatesQuery = $this->getModelManager()->getRepository(Mail::class)->getMailsListQueryBuilder(
+            $filter,
+            $order,
+            $offset,
+            $limit
+        );
+
+        $mailTemplates = $mailTemplatesQuery->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
+
+        // Add a display name to the mail templates
+        $documentTypes = $this->getModelManager()->getRepository(Type::class)->findAll();
+        $documentTypeNames = [];
+        /** @var Type $documentType */
+        foreach ($documentTypes as $documentType) {
+            $documentTypeNames['document_' . $documentType->getKey()] = $documentType->getName();
+        }
+        foreach ($mailTemplates as &$mailTemplate) {
+            if ($mailTemplate['name'] === 'sORDERDOCUMENTS') {
+                $mailTemplate['displayName'] = $this->get('snippets')->getNamespace(
+                    'backend/order/main'
+                )->get(
+                    'default_mail_template',
+                    'Default template'
+                );
+            } elseif (isset($documentTypeNames[$mailTemplate['name']])) {
+                $mailTemplate['displayName'] = $documentTypeNames[$mailTemplate['name']];
+            } else {
+                $mailTemplate['displayName'] = $mailTemplate['name'];
+            }
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $mailTemplates,
         ]);
     }
 
