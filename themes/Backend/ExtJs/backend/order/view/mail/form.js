@@ -86,8 +86,24 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
     snippets: {
         subject: '{s name=subject}Subject{/s}',
         to: '{s name=to}To{/s}',
-        button: '{s name=button}Send mail{/s}'
+        button: '{s name=button}Send mail{/s}',
+        mailTemplate: '{s name=mail_template}Mail template{/s}'
     },
+
+    /**
+     * Constructor parameters
+     */
+    order: null,
+    preSelectedAttachment: null,
+    documentTypeStore: null,
+    listStore: null,
+
+    /**
+     * Store whether the user has changed the values of the form
+     *
+     * @type { boolean }
+     */
+    modified: false,
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -101,9 +117,9 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         var me = this;
 
         me.registerEvents();
+        me.createStores();
 
         me.items = me.getFormItems();
-
         me.dockedItems = me.getToolbar();
 
         me.callParent(arguments);
@@ -123,6 +139,36 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
              */
             'sendMail'
         );
+    },
+
+    /**
+     * @override
+     */
+    afterRender: function() {
+        this.callParent(arguments);
+
+        // Select the correct mail template for the clicked document
+        this.mailTemplateStore.load({
+            callback: function () {
+                var documentType = this.documentTypeStore.getById(this.preSelectedAttachment.get('typeId'));
+                this.mailTemplateComboBox.selectTemplateByDocumentType(documentType);
+            },
+            scope: this,
+        });
+    },
+
+    /**
+     * Creates the stores used in this component
+     */
+    createStores: function() {
+        // The mail template store should only contain mail templates that are made for documents (mailtype = 4), so
+        // add a filter here.
+        this.mailTemplateStore = Ext.create('Shopware.apps.Order.store.MailTemplate', {
+            filters: [{
+                property: 'mailtype',
+                value: 4,
+            }],
+        });
     },
 
     /**
@@ -159,6 +205,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         var me = this;
 
         var fields = [
+            this.createMailTemplateComboBox(),
             {
                 xtype: 'textfield',
                 name: 'to',
@@ -167,39 +214,124 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
             {
                 xtype: 'textfield',
                 name: 'subject',
-                fieldLabel: me.snippets.subject
-            }
+                fieldLabel: me.snippets.subject,
+                listeners: {
+                    change: function () {
+                        this.modified = true;
+                    },
+                    scope: this,
+                },
+            },
+            this.createTextContentEditor(),
+            this.createHtmlContentEditor()
         ];
 
-        if (me.mail.get('isHtml')) {
-            fields.push({
-                xtype: 'tinymcefield',
-                name: 'contentHtml',
-                minHeight: 90,
-                flex: 1
-            });
-        } else {
-            fields.push({
-                xtype: 'textarea',
-                name: 'content',
-                minHeight: 90,
-                flex: 1
-            });
-        }
-
         me.attachmentGrid = Ext.create('Shopware.apps.Order.view.mail.Attachment', {
-            attached: me.attached,
-            record: me.record,
-            receiptStore: me.record.getReceipt(),
-            listStore: me.listStore,
-            documentTypeStore: me.documentTypeStore
+            preSelectedAttachment: me.preSelectedAttachment,
+            order: me.order,
+            documentTypeStore: this.documentTypeStore,
+            listStore: this.listStore,
         });
 
         // adds at last the attachment panel
         fields.push(me.attachmentGrid);
 
         return fields;
-    }
+    },
 
+    /**
+     * Create the combo box for the selection of the mail template
+     *
+     * @return { Ext.form.field.ComboBox }
+     */
+    createMailTemplateComboBox: function () {
+        this.mailTemplateComboBox = Ext.create('Ext.form.field.ComboBox', {
+            name: 'mailTemplateName',
+            fieldLabel: this.snippets.mailTemplate,
+            store: this.mailTemplateStore,
+            displayField: 'displayName',
+            valueField: 'name',
+            listeners: {
+                change: function(comboBox, newValue, oldValue) {
+                    this.fireEvent('changeMailTemplateComboBox', this, comboBox, newValue, oldValue);
+                },
+                scope: this,
+            },
+            selectTemplateByDocumentType: function (documentType) {
+                var templateName = 'sORDERDOCUMENTS';
+                if (documentType) {
+                    var mailTemplate = this.getStore().findRecord('name', 'document_' + documentType.get('key'), 0, false, false, true);
+                    if (mailTemplate) {
+                        templateName = mailTemplate.get('name');
+                    }
+                }
+                this.setValue(templateName);
+            }
+        });
+
+        return this.mailTemplateComboBox;
+    },
+
+
+    /**
+     * Create the text field for text emails
+     *
+     * @return { Ext.form.field.Text }
+     */
+    createTextContentEditor: function () {
+        this.textContentTextField = Ext.create('Ext.form.field.Text', {
+            name: 'content',
+            minHeight: 90,
+            flex: 1,
+            listeners: {
+                change: function () {
+                    this.modified = true;
+                },
+                scope: this,
+            },
+        });
+
+        return this.textContentTextField;
+    },
+
+    /**
+     * Create the tinyMCE editor field for html emails
+     *
+     * @return { Ext.form.field.Text }
+     */
+    createHtmlContentEditor: function () {
+        this.htmlContentTextField = Ext.create('Shopware.form.field.TinyMCE', {
+            name: 'contentHtml',
+            minHeight: 90,
+            flex: 1,
+            disabled: true,
+            hidden: true,
+            listeners: {
+                change: function () {
+                    this.modified = true;
+                },
+                scope: this,
+            },
+        });
+
+        return this.htmlContentTextField;
+    },
+
+    /**
+     * @override
+     * @param { Shopware.apps.Order.model.Mail } mailTemplateRecord
+     */
+    loadRecord: function (mailTemplateRecord) {
+        this.callParent(arguments);
+
+        this.modified = false;
+
+        // Show the correct text/html editor dependent on the type of the email
+        var isHtml = mailTemplateRecord.get('isHtml');
+        this.htmlContentTextField.setVisible(isHtml);
+        this.htmlContentTextField.setDisabled(!isHtml);
+        this.textContentTextField.setVisible(!isHtml);
+        this.textContentTextField.setDisabled(isHtml);
+    },
 });
 //{/block}
