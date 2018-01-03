@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         errorTitle: '{s name=batch/error/title}Error{/s}',
         growlMessage: '{s name=growlMessage}{/s}',
         formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}',
-        noEmailsWillBeSent: '{s name=batch/no_emails_will_be_sent}Due to your current configuration no emails will be sent.{/s}',
+        noEmailsWillBeSent: '{s name=batch/no_emails_will_be_sent}Due to your current configuration no emails will be sent.{/s}'
     },
 
     /**
@@ -136,20 +136,23 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     /**
      * Event listener method which is fired when the user clicks the "process changes" button
      * on the batch window to create documents for the selected orders or|and change the order or|and payment status.
-     * @param form
+     *
+     * @param formComponent
      */
-    onProcessChanges: function (form) {
+    onProcessChanges: function (formComponent) {
         var me = this,
-            orders = form.records,
-            values = form.getValues(),
+            orders = formComponent.records,
+            values = formComponent.getValues(),
             orderListGrid = me.getOrderListGrid(),
             gridStore = orderListGrid.getStore(),
             store = Ext.create('Shopware.apps.Order.store.Batch'),
-            document = form.down('*[name=documentType]').store.getById(values.documentType),
-            attachDocumentsField = form.form.findField('addAttachments'),
-            sendEmailsField = form.form.findField('autoSendMail');
+            document = formComponent.down('*[name=documentType]').store.getById(values.documentType),
+            attachDocumentsField = formComponent.form.findField('addAttachments'),
+            sendEmailsField = formComponent.form.findField('autoSendMail'),
+            orderStatusField = formComponent.form.findField('orderStatus'),
+            paymentStatusField = formComponent.form.findField('paymentStatus');
 
-        if (!form.form.isValid()) {
+        if (!formComponent.form.isValid()) {
             Shopware.Msg.createStickyGrowlMessage({
                 title: me.snippets.errorTitle,
                 text: me.snippets.formInvalid
@@ -157,11 +160,12 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             return false;
         }
 
-        if(!sendEmailsField.getValue() || !attachDocumentsField.getValue()){
-            Shopware.Msg.createStickyGrowlMessage({
-                title: me.snippets.errorTitle,
-                text: me.snippets.noEmailsWillBeSent
-            });
+        var canAttachDocuments = document && attachDocumentsField.getValue(),
+            statusHasValue = orderStatusField.getValue() || paymentStatusField.getValue(),
+            autoSend = sendEmailsField.getValue();
+
+        if (autoSend && !canAttachDocuments && !statusHasValue){
+            Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
         }
 
         me.mode = values.mode;
@@ -196,12 +200,21 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         orderStore.add(orders);
         orderStore.sync({
             callback: function (batch) {
-                var operation = batch.operations[0];
+                var operation = batch.operations[0],
+                    settings = me.getSettingsPanel().getValues();
                 resultSet = operation.resultSet ? operation.resultSet.records : operation.records;
 
                 grid.getStore().removeAll();
                 grid.getStore().add(resultSet);
                 grid.setLoading(false);
+
+                var mailSent = resultSet.some(function (record) {
+                    return record.getMail().first();
+                });
+                // Inform the user if no mail was sent, but the autoSendMail checkbox is active (Occurs when no status change took place for example)
+                if (!mailSent && settings && settings.autoSendMail) {
+                    Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
+                }
 
                 listingStore.load();
             }
@@ -222,7 +235,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             forceTaxCheck: 1,
             displayDate: new Date(),
             deliveryDate: new Date(),
-            autoSend: values.autoSendMail && values.addAttachments,
+            autoSend: values.autoSendMail,
             addAttachments: values.addAttachments
         };
 
@@ -495,6 +508,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * Internal helper function which called when the batch process finished or canceled.
      * Refresh the progress window elements. Enables the close window button, disable the cancel
      * process button and set the window loading to false.
+     *
      * @return void
      */
     refreshProgressWindow: function (orders) {

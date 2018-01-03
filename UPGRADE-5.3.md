@@ -14,6 +14,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Changed loading of the themes/_private folder to be always executed
 * Added all additional article columns to product import/export
+* Changed the `checkOrderStatus` method in `Shopware_Controllers_Backend_Order` to only send e-mails when necessary
+* Changed `themes/Backend/ExtJs/backend/order/controller/batch.js` to inform the user about configuration errors
+* Changed `themes/Backend/ExtJs/backend/order/view/batch/form.js` to allow for more precise form validation and better feedback to the user
 
 ### Removals
 
