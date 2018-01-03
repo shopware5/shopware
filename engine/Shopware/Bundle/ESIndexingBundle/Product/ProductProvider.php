@@ -508,7 +508,9 @@ class ProductProvider implements ProductProviderInterface
                 $options = array_values($group->getOptions());
 
                 foreach ($options as $option) {
-                    $new[] = array_merge($item, [$index => $option->getName()]);
+                    $tmp = array_merge($item, [$index => $option->getName()]);
+
+                    $new[] = $tmp;
                 }
             }
             $result = $new;
