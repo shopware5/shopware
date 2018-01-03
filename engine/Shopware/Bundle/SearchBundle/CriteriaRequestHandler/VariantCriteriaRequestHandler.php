@@ -30,6 +30,8 @@ use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -43,11 +45,18 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var VariantHelperInterface
      */
-    public function __construct(Connection $connection)
+    private $variantHelper;
+
+    /**
+     * @param Connection             $connection
+     * @param VariantHelperInterface $variantHelper
+     */
+    public function __construct(Connection $connection, VariantHelperInterface $variantHelper)
     {
         $this->connection = $connection;
+        $this->variantHelper = $variantHelper;
     }
 
     /**
@@ -58,6 +67,15 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
     {
         $this->addVariantCondition($request, $criteria);
+
+        $criteria->addAttribute(
+            'swagVariantFilter',
+            new Attribute(
+                [
+                    'groupKey' => $this->getGroupKey($criteria),
+                ]
+            )
+        );
     }
 
     /**
@@ -123,5 +141,27 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the group key for the groupByGroups filter.
+     *
+     * @param $criteria Criteria
+     *
+     * @return string
+     */
+    private function getGroupKey($criteria)
+    {
+        $groups = [];
+        foreach ($criteria->getConditions() as $condition) {
+            if ($condition instanceof VariantCondition) {
+                $currentGroup = $this->variantHelper->getGroupIdByOptionId($condition->getOptionIds()[0]);
+                $groups[] = $currentGroup;
+            }
+        }
+
+        sort($groups, SORT_NUMERIC);
+
+        return implode('-', $groups);
     }
 }

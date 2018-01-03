@@ -116,7 +116,6 @@ class ProductMapping implements MappingInterface
                 'calculatedPrices' => $this->getCalculatedPricesMapping($shop),
                 'minStock' => ['type' => 'long'],
                 'stock' => ['type' => 'long'],
-                'laststock' => ['type' => 'boolean'],
                 'sales' => ['type' => 'long'],
                 'states' => $this->textMapping->getKeywordField(),
                 'template' => $this->textMapping->getKeywordField(),
@@ -346,6 +345,11 @@ class ProductMapping implements MappingInterface
         ];
     }
 
+    /**
+     * @param Shop $shop
+     *
+     * @return array
+     */
     private function getVariantOptionsMapping(Shop $shop)
     {
         return [
@@ -364,11 +368,16 @@ class ProductMapping implements MappingInterface
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getGroupByGroupsMapping()
     {
         return [
+            'type' => 'nested',
             'properties' => [
-                'id' => $this->textMapping->getNotAnalyzedField(),
+                'key' => $this->textMapping->getNotAnalyzedField(),
+                'shouldDisplay' => ['type' => 'boolean'],
             ],
         ];
     }
