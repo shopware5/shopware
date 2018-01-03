@@ -181,7 +181,14 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query->from('s_article_configurator_option_relations', 'relations')
             ->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleID = :articleId AND variant.active = 1')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->innerJoin(
+                'variant',
+                's_articles',
+                'product',
+                'product.id = variant.articleID AND (
+                    (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)
+                )'
+            )
             ->leftJoin('relations', 's_article_configurator_option_relations', 'assignedRelations', 'assignedRelations.article_id = relations.article_id AND assignedRelations.option_id != relations.option_id')
             ->groupBy('relations.option_id')
             ->setParameter(':articleId', $product->getId());
@@ -198,12 +205,12 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         return $data;
     }
 
-
     /**
      * Get possible combinations of all products
      *
-     * @param array $numbers
+     * @param array                       $numbers
      * @param Struct\ShopContextInterface $context
+     *
      * @return array
      */
     public function getProductsCombinations(array $numbers, Struct\ShopContextInterface $context)
@@ -226,14 +233,15 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
     }
 
     /**
      * Fetches  all groups with all options for provided products
      *
-     * @param array $numbers
+     * @param array                       $numbers
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Configurator\Group[]
      */
     public function getConfigurations(array $numbers, Struct\ShopContextInterface $context)
@@ -248,7 +256,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
         $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
-
 
         $query->from('s_articles', 'product');
         $query->innerJoin('product', 's_articles_details', 'variant', 'variant.articleID = product.id');
@@ -280,11 +287,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         return $result;
     }
-
-
-
-
-
 
     public function getVariantGroups(array $ordernumbers, Struct\ShopContextInterface $context)
     {

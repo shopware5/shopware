@@ -41,7 +41,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\GroupsByGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
@@ -169,9 +168,9 @@ class ProductProvider implements ProductProviderInterface
         $calculated = $this->getCalculatedPrices($shop, $products, $cheapest);
         $categories = $this->getCategories($products);
         $properties = $this->getProperties($products, $context);
-        
+
         $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
-        
+
         /**
          * @var VariantFacet
          */
@@ -180,7 +179,7 @@ class ProductProvider implements ProductProviderInterface
         $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
 
         $configurations = $this->configuratorService->getConfiguration($numbers, $context);
-        
+
         $combinations = $configuratorGateway->getProductsCombinations($numbers, $context);
 
         $result = [];
@@ -192,7 +191,7 @@ class ProductProvider implements ProductProviderInterface
             if (array_key_exists($number, $variantConfiguration)) {
                 $product->setConfiguration($variantConfiguration[$number]);
             }
-            
+
             if ($variantFacet && $product->getConfiguration()) {
                 $splitting = $this->createSplitting($configurations[$id], $combinations[$id]);
                 $visibility = $this->buildListingVisibility($splitting, $product->getConfiguration());
@@ -235,6 +234,26 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Combines all array elements with all array elements
+     *
+     * @param array $array
+     *
+     * @return array
+     */
+    public function arrayCombinations(array $array)
+    {
+        $results = [[]];
+
+        foreach ($array as $element) {
+            foreach ($results as $combination) {
+                array_push($results, array_merge([$element], $combination));
+            }
+        }
+
+        return array_filter($results);
     }
 
     /**
@@ -457,19 +476,19 @@ class ProductProvider implements ProductProviderInterface
 
             $first = array_intersect_key($groups, array_diff_key($keys, $combination));
 
-            usort($full, function(Group $a, Group $b) {
+            usort($full, function (Group $a, Group $b) {
                 return $a->getId() > $b->getId();
             });
 
             //create unique group key
-            $groupKey = array_map(function(Group $group) {
+            $groupKey = array_map(function (Group $group) {
                 return $group->getId();
             }, $full);
             $groupKey = 'g' . implode('-', $groupKey);
 
             $all = array_filter(array_merge($full, $first));
 
-            $firstIds = array_map(function(Group $group) {
+            $firstIds = array_map(function (Group $group) {
                 return $group->getId();
             }, $first);
 
@@ -482,9 +501,10 @@ class ProductProvider implements ProductProviderInterface
     /**
      * Builds all possible combinations of an nested array
      *
-     * @param array $groups
+     * @param array   $groups
      * @param Group[] $onlyFirst
-     * @param array $availability
+     * @param array   $availability
+     *
      * @return array
      */
     private function nestedArrayCombinations(array $groups, array $onlyFirst, array $availability)
@@ -499,8 +519,8 @@ class ProductProvider implements ProductProviderInterface
             $new = [];
             foreach ($result as $item) {
                 $options = array_values($group->getOptions());
-                
-                usort($options, function(Option $a, Option $b) {
+
+                usort($options, function (Option $a, Option $b) {
                     return $a->getId() > $b->getId();
                 });
 
@@ -551,29 +571,11 @@ class ProductProvider implements ProductProviderInterface
         return $result;
     }
 
-    /**
-     * Combines all array elements with all array elements
-     * @param array $array
-     * @return array
-     */
-    public function arrayCombinations(array $array)
-    {
-        $results = [[]];
-
-        foreach ($array as $element) {
-            foreach ($results as $combination) {
-                array_push($results, array_merge(array($element), $combination));
-            }
-        }
-
-        return array_filter($results);
-    }
-
     private function buildListingVisibility(array $splitting, array $configuration)
     {
         $key = [];
 
-        usort($configuration, function(Group $a, Group $b) {
+        usort($configuration, function (Group $a, Group $b) {
             return $a->getId() > $b->getId();
         });
 
@@ -587,10 +589,11 @@ class ProductProvider implements ProductProviderInterface
         $key = implode('-', $key);
 
         $visibility = [];
-        
+
         foreach ($splitting as $combination => $variants) {
             $visibility[$combination] = in_array($key, $variants);
         }
+
         return $visibility;
     }
 }

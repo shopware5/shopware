@@ -182,15 +182,20 @@ class PriceHelper implements PriceHelperInterface
 
         $stockCondition = '';
         if ($this->config->get('hideNoInStock')) {
-            $stockCondition = 'AND (product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)';
+            $stockCondition = <<< SQL
+AND (
+      (availableVariant.laststock * availableVariant.instock) 
+      >= 
+      (availableVariant.laststock * availableVariant.minpurchase)
+)
+SQL;
         }
 
         $query->innerJoin(
             'product',
             's_articles_details',
             'availableVariant',
-            'availableVariant.articleID = product.id
-             AND availableVariant.active = 1 ' . $stockCondition
+            'availableVariant.articleID = product.id AND availableVariant.active = 1 ' . $stockCondition
         );
 
         $query->addState(self::STATE_INCLUDES_AVAILABLE_VARIANT);

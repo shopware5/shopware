@@ -122,6 +122,7 @@
             <argument type="service" id="shopware_storefront.configurator_service" />
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
             <argument type="service" id="shopware_storefront.configurator_options_gateway"/>
+            <argument type="service" id="shopware_storefront.configurator_gateway"/>
         </service>
 
         <service id="shopware_elastic_search.product_mapping" class="Shopware\Bundle\ESIndexingBundle\Product\ProductMapping">

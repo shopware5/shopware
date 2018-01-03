@@ -281,6 +281,7 @@
         <service class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VariantConditionHandler" id="shopware_bundle.search_bundle_dbal_condition_handler.variant_condition_handler">
             <tag name="condition_handler_dbal"/>
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
+            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_searchdbal.height_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler" >

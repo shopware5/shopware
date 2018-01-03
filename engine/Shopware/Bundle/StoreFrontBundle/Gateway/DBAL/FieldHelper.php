@@ -124,7 +124,6 @@ class FieldHelper
             'product.pricegroupID as __product_pricegroupID',
             'product.pricegroupActive as __product_pricegroupActive',
             'product.filtergroupID as __product_filtergroupID',
-            'product.laststock as __product_laststock',
             'product.crossbundlelook as __product_crossbundlelook',
             'product.notification as __product_notification',
             'product.template as __product_template',
@@ -180,6 +179,7 @@ class FieldHelper
             'variant.releasedate as __variant_releasedate',
             'variant.shippingfree as __variant_shippingfree',
             'variant.shippingtime as __variant_shippingtime',
+            'variant.laststock as __product_laststock',
         ];
     }
 
