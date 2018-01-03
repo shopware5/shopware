@@ -194,6 +194,9 @@ class ProductProvider implements ProductProviderInterface
             
             if ($variantFacet && $product->getConfiguration()) {
                 $splitting = $this->createSplitting($configurations[$id], $combinations[$id]);
+                echo '<pre>';
+                print_r($splitting);
+                exit();
                 $visibility = $this->buildListingVisibility($splitting, $product->getConfiguration());
                 $product->setVisibility($visibility);
             }
@@ -456,13 +459,13 @@ class ProductProvider implements ProductProviderInterface
 
             $first = array_intersect_key($groups, array_diff_key($keys, $combination));
 
-//            //remove all options but leave the first one
-//            $first = array_map(function(Group $group) {
-//                $clone = clone $group;
-//                $options = $clone->getOptions();
-//                $clone->setOptions([array_shift($options)]);
-//                return $clone;
-//            }, $first);
+            //remove all options but leave the first one
+            $first = array_map(function(Group $group) {
+                $clone = clone $group;
+                $options = $clone->getOptions();
+                $clone->setOptions([array_shift($options)]);
+                return $clone;
+            }, $first);
 
             usort($full, function(Group $a, Group $b) {
                 return $a->getId() > $b->getId();
@@ -516,9 +519,6 @@ class ProductProvider implements ProductProviderInterface
             $result = $new;
         }
 
-        echo '<pre>';
-        print_r($result);
-        exit();
         foreach ($result as &$toImplode) {
             $toImplode = implode('-', $toImplode);
         }
