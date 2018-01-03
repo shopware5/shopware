@@ -769,9 +769,9 @@ class DqlHelper
             $value = null;
         }
 
-        if($value !== null) {
+        if ($value !== null) {
             $type = $info['type'];
-            if ($value && $type == 'decimal' || $type == 'integer' || $type == 'float') {
+            if ($type == 'decimal' || $type == 'integer' || $type == 'float') {
                 $value = str_replace(',', '.', $value);
             }
         }
