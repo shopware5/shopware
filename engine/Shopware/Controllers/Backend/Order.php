@@ -686,49 +686,52 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         foreach ($orders as $key => $data) {
-            $orders[$key]['mail'] = null;
-            $orders[$key]['languageSubShop'] = null;
-
-            if (empty($data) || empty($data['id'])) {
-                continue;
-            }
-
-            /** @var $order \Shopware\Models\Order\Order */
-            $order = Shopware()->Models()->find(Order::class, $data['id']);
-            if (!$order) {
-                continue;
-            }
-
-            //we have to flush the status changes directly, because the "createStatusMail" function in the
-            //sOrder.php core class, use the order data from the database. So we have to save the new status before we
-            //create the status mail
-            $statusBefore = $order->getOrderStatus();
-            $clearedBefore = $order->getPaymentStatus();
-
-            //refresh the status models to return the new status data which will be displayed in the batch list
-            if (!empty($data['status']) || $data['status'] === 0) {
-                $order->setOrderStatus(Shopware()->Models()->find(Status::class, $data['status']));
-            }
-            if (!empty($data['cleared'])) {
-                $order->setPaymentStatus(Shopware()->Models()->find(Status::class, $data['cleared']));
-            }
-
             try {
+                $orders[$key]['mail'] = null;
+                $orders[$key]['languageSubShop'] = null;
+
+                if (empty($data) || empty($data['id'])) {
+                    continue;
+                }
+
+                /** @var $order \Shopware\Models\Order\Order */
+                $order = Shopware()->Models()->find(Order::class, $data['id']);
+
+                if (!$order) {
+                    continue;
+                }
+
+                //we have to flush the status changes directly, because the "createStatusMail" function in the
+                //sOrder.php core class, use the order data from the database. So we have to save the new status before we
+                //create the status mail
+                $statusBefore = $order->getOrderStatus();
+                $clearedBefore = $order->getPaymentStatus();
+
+                //refresh the status models to return the new status data which will be displayed in the batch list
+                if (!empty($data['status']) || $data['status'] === 0) {
+                    $order->setOrderStatus(Shopware()->Models()->find(Status::class, $data['status']));
+                }
+                if (!empty($data['cleared'])) {
+                    $order->setPaymentStatus(Shopware()->Models()->find(Status::class, $data['cleared']));
+                }
+
                 Shopware()->Models()->flush($order);
-            } catch (Exception $e) {
-                continue;
+
+                // the setOrder function of the Shopware_Components_Document change the currency of the shop.
+                // this would create a new Shop if we execute an flush();
+                // Only create order documents when requested.
+                if ($documentType) {
+                    $this->createOrderDocuments($documentType, $documentMode, $order);
+                }
+
+                $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
+                $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
+
+                $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
+                //return the modified data array.
+                $orders[$key] = $data;
+            } catch (\Exception $e) {
             }
-
-            // the setOrder function of the Shopware_Components_Document change the currency of the shop.
-            // this would create a new Shop if we execute an flush();
-            $this->createOrderDocuments($documentType, $documentMode, $order);
-
-            $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
-            $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
-
-            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
-            //return the modified data array.
-            $orders[$key] = $data;
         }
 
         $this->View()->assign([
@@ -1318,8 +1321,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * Internal helper function to check if the order or payment status has been changed. If one
-     * of the status changed, the function will create a status mail. If the passed autoSend parameter
-     * is true, the created status mail will be send directly.
+     * of the status changed, the function will create a status mail.
+     * If the passed autoSend parameter is true, and a document type is selected and addattachments is also clicked
+     * the created status mail will be sent directly.
+
      *
      * @param Order                         $order
      * @param \Shopware\Models\Order\Status $statusBefore
@@ -1334,7 +1339,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         if ($autoSend ||
             $order->getOrderStatus()->getId() !== $statusBefore->getId() ||
-            $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
+            $order->getPaymentStatus()->getId() !== $clearedBefore->getId()
+        ) {
             //status or cleared changed?
             if ($order->getOrderStatus()->getId() !== $statusBefore->getId()) {
                 $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
@@ -1344,8 +1350,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $mail = $this->getMailForOrder($order->getId(), null);
             }
 
-            //mail object created and auto send activated, then send mail directly.
-            if ($autoSend && is_object($mail['mail'])) {
+            if ($autoSend && $documentType && $addAttachments && is_object($mail['mail'])) {
                 if ($addAttachments) {
                     $document = $this->getDocument($documentType, $order);
                     $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
@@ -1354,9 +1359,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
                 //check if send mail was successfully.
                 $mail['data']['sent'] = is_object($result);
-            }
 
-            return $mail['data'];
+                return $mail['data'];
+            }
         }
 
         return null;
