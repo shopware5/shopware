@@ -156,9 +156,7 @@ class ProductMapping implements MappingInterface
                 'unit' => $this->getUnitMapping(),
 
                 'attributes' => $this->getAttributeMapping(),
-
-                'configuration' => $this->getVariantOptionsMapping($shop),
-                'groupByGroups' => $this->getGroupByGroupsMapping(),
+                'configuration' => $this->getVariantOptionsMapping($shop)
             ],
         ];
     }

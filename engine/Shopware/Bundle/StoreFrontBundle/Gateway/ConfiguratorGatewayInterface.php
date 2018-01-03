@@ -97,6 +97,8 @@ interface ConfiguratorGatewayInterface
      */
     public function getProductCombinations(Struct\BaseProduct $product);
 
+    public function getProductsCombinations(array $numbers, Struct\ShopContextInterface $context);
+
     /**
      * Get options of all groups which shouldn't expand.
      *
@@ -106,4 +108,6 @@ interface ConfiguratorGatewayInterface
      * @return array
      */
     public function getVariantGroups(array $ordernumbers, Struct\ShopContextInterface $context);
+
+    public function getConfigurations(array $numbers, Struct\ShopContextInterface $context);
 }

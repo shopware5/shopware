@@ -198,14 +198,110 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         return $data;
     }
 
+
     /**
-     * Get options of all groups which shouldn't expand.
+     * Get possible combinations of all products
      *
-     * @param array                       $ordernumbers
+     * @param array $numbers
      * @param Struct\ShopContextInterface $context
-     *
      * @return array
      */
+    public function getProductsCombinations(array $numbers, Struct\ShopContextInterface $context)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select([
+            'variant.articleID',
+            'relations.option_id',
+            "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations",
+        ]);
+
+        $query->from('s_article_configurator_option_relations', 'relations');
+
+        $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.ordernumber IN (:numbers) AND variant.active = 1');
+        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
+        $query->leftJoin('relations', 's_article_configurator_option_relations', 'assignedRelations', 'assignedRelations.article_id = relations.article_id AND assignedRelations.option_id != relations.option_id');
+
+        $query->addGroupBy('variant.articleID');
+        $query->addGroupBy('relations.option_id');
+
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
+
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+
+        $result = [];
+        foreach ($data as $productId => $rows) {
+            $options = [];
+
+            foreach ($rows as $row) {
+                $options[(int) $row['option_id']] = array_filter(explode('|', $row['combinations']));
+            }
+            $result[$productId] = $options;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Fetches  all groups with all options for provided products
+     *
+     * @param array $numbers
+     * @param Struct\ShopContextInterface $context
+     * @return Struct\Configurator\Group[]
+     */
+    public function getConfigurations(array $numbers, Struct\ShopContextInterface $context)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->addSelect('product.id as array_key');
+
+        $query->addSelect($this->fieldHelper->getConfiguratorSetFields())
+            ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
+            ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
+        ;
+
+        $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
+        $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
+
+
+        $query->from('s_articles', 'product');
+        $query->innerJoin('product', 's_articles_details', 'variant', 'variant.articleID = product.id');
+        $query->innerJoin('product', 's_article_configurator_sets', 'configuratorSet', 'configuratorSet.id = product.configurator_set_id');
+        $query->innerJoin('configuratorSet', 's_article_configurator_set_group_relations', 'groupRelation', 'groupRelation.set_id = configuratorSet.id');
+        $query->innerJoin('configuratorSet', 's_article_configurator_set_option_relations', 'optionRelation', 'optionRelation.set_id = configuratorSet.id');
+        $query->innerJoin('groupRelation', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = groupRelation.group_id');
+        $query->innerJoin('optionRelation', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.id = optionRelation.option_id AND configuratorOption.group_id = configuratorGroup.id');
+        $query->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id');
+        $query->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id');
+
+        $query->addOrderBy('configuratorGroup.position');
+        $query->addOrderBy('configuratorGroup.name');
+        $query->addOrderBy('configuratorOption.position');
+        $query->addOrderBy('configuratorOption.name');
+
+        $query->addGroupBy('product.id');
+        $query->addGroupBy('configuratorOption.id');
+
+        $query->where('variant.ordernumber IN (:numbers)');
+        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
+
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
+
+        $result = [];
+        foreach ($data as $productId => $rows) {
+            $result[$productId] = $this->configuratorHydrator->hydrateGroups($rows);
+        }
+
+        return $result;
+    }
+
+
+
+
+
+
     public function getVariantGroups(array $ordernumbers, Struct\ShopContextInterface $context)
     {
         if (empty($ordernumbers)) {

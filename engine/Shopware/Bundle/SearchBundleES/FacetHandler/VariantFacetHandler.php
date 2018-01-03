@@ -64,7 +64,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     public function __construct(ConfiguratorOptionsGateway $gateway, QueryAliasMapper $queryAliasMapper)
     {
-        //todo: Richtigen SeoAlias vergeben.
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('options')) {
             $this->fieldName = 'options';
         }
@@ -100,7 +99,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     ) {
         $aggregation = new TermsAggregation('variant');
         $aggregation->setField('configuration.options.id');
-        $aggregation->setParameters(['size' => 0]);
         $search->addAggregation($aggregation);
     }
 

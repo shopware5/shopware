@@ -82,4 +82,6 @@ interface ConfiguratorServiceInterface
      * @return array
      */
     public function getVariantGroups(array $numbers, Struct\ShopContextInterface $context);
+
+    public function getConfiguration(array $numbers, Struct\ShopContextInterface $context);
 }

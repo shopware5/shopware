@@ -38,7 +38,7 @@
                             <a href="{$sArticle.linkDetails}"
                                class="product--title"
                                title="{$sArticle.articleName|escapeHtml}">
-                                {$sArticle.articleName|truncate:50|escapeHtml}
+                                {$sArticle.articleName|truncate:50|escapeHtml} ({$sArticle.ordernumber})
                             </a>
                         {/block}
 

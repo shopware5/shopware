@@ -92,6 +92,11 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         return $this->configuratorGateway->getVariantGroups($numbers, $context);
     }
 
+    public function getConfiguration(array $numbers, Struct\ShopContextInterface $context)
+    {
+        return $this->configuratorGateway->getConfigurations($numbers, $context);
+    }
+
     /**
      * {@inheritdoc}
      */

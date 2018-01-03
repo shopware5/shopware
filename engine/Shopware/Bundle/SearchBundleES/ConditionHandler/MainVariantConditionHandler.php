@@ -60,7 +60,7 @@ class MainVariantConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addFilter(new TermQuery('isMainVariant', 1));
+        $search->addPostFilter(new TermQuery('isMainVariant', 1));
     }
 
     /**

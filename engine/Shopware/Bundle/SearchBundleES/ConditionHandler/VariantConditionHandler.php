@@ -24,9 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
-use ONGR\ElasticsearchDSL\Query\Joining\NestedQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
@@ -71,17 +69,11 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /**
-         * @var VariantCondition
-         */
-        $boolQuery = new BoolQuery();
-        $boolQuery->add(new MatchQuery('groupByGroups.key', $criteria->getAttribute('swagVariantFilter')->get('groupKey')));
-        $boolQuery->add(new MatchQuery('groupByGroups.shouldDisplay', true));
+        $groupBy = $this->buildGroupBy($criteria);
+        $search->addPostFilter(new TermQuery($groupBy, 1));
 
-        $nested = new NestedQuery('groupByGroups', $boolQuery);
-        $search->addFilter($nested);
-
-        $search->addFilter(
+        /** @var VariantCondition $criteriaPart */
+        $search->addPostFilter(
             new TermsQuery(
                 'configuration.options.id',
                 $criteriaPart->getOptionIds()
@@ -103,21 +95,30 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /**
-         * @var VariantCondition
-         */
-        $boolQuery = new BoolQuery();
-        $boolQuery->add(new MatchQuery('groupByGroups.key', $criteria->getAttribute('swagVariantFilter')->get('groupKey')));
-        $boolQuery->add(new MatchQuery('groupByGroups.shouldDisplay', true));
+        $groupBy = $this->buildGroupBy($criteria);
+        $search->addPostFilter(new TermQuery($groupBy, 1));
 
-        $nested = new NestedQuery('groupByGroups', $boolQuery);
-        $search->addPostFilter($nested);
-
+        /** @var VariantCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery(
                 'configuration.options.id',
                 $criteriaPart->getOptionIds()
             )
         );
+    }
+
+    private function buildGroupBy(Criteria $criteria)
+    {
+        $groups = [];
+        foreach ($criteria->getConditions() as $condition) {
+            if ($condition instanceof VariantCondition) {
+                $currentGroup = $this->variantHelper->getGroupIdByOptionId($condition->getOptionIds()[0]);
+                $groups[] = $currentGroup;
+            }
+        }
+
+        sort($groups, SORT_NUMERIC);
+
+        return 'visibility.g' . implode('-', $groups);
     }
 }

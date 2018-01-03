@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
+use Shopware\Bundle\SearchBundle\Condition\SimpleCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
@@ -67,15 +68,6 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
     {
         $this->addVariantCondition($request, $criteria);
-
-        $criteria->addAttribute(
-            'swagVariantFilter',
-            new Attribute(
-                [
-                    'groupKey' => $this->getGroupKey($criteria),
-                ]
-            )
-        );
     }
 
     /**
@@ -141,27 +133,5 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Returns the group key for the groupByGroups filter.
-     *
-     * @param $criteria Criteria
-     *
-     * @return string
-     */
-    private function getGroupKey($criteria)
-    {
-        $groups = [];
-        foreach ($criteria->getConditions() as $condition) {
-            if ($condition instanceof VariantCondition) {
-                $currentGroup = $this->variantHelper->getGroupIdByOptionId($condition->getOptionIds()[0]);
-                $groups[] = $currentGroup;
-            }
-        }
-
-        sort($groups, SORT_NUMERIC);
-
-        return implode('-', $groups);
     }
 }

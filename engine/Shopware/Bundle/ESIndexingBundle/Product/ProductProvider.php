@@ -168,15 +168,19 @@ class ProductProvider implements ProductProviderInterface
         $calculated = $this->getCalculatedPrices($shop, $products, $cheapest);
         $categories = $this->getCategories($products);
         $properties = $this->getProperties($products, $context);
-
+        
+        $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
+        
         /**
          * @var VariantFacet
          */
         $variantFacet = $this->variantHelper->getVariantFacet();
-        if (!empty($variantFacet)) {
-            $configurations = $this->configuratorService->getVariantGroups($numbers, $context);
-            $productConfigurations = $this->configuratorService->getProductsConfigurations($products, $context);
-        }
+
+        $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
+
+        $configurations = $this->configuratorService->getConfiguration($numbers, $context);
+        
+        $combinations = $configuratorGateway->getProductsCombinations($numbers, $context);
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -184,32 +188,14 @@ class ProductProvider implements ProductProviderInterface
             $number = $product->getNumber();
             $id = $product->getId();
 
-            if (!empty($variantFacet) && !empty($productConfigurations[$product->getNumber()])) {
-                $product->setConfiguration($productConfigurations[$product->getNumber()]);
-
-                if (array_key_exists($product->getId(), $configurations)) {
-                    $groups = $product->getConfiguration();
-                    foreach ($groups as $key => $group) {
-                        if (!in_array($group->getId(), $variantFacet->getExpandGroupIds())) {
-                            unset($groups[$key]);
-                        }
-                    }
-
-                    $groups = array_merge($groups, $configurations[$product->getId()]);
-
-                    $product->setConfiguration($groups);
-                }
-
-                /**
-                 * @var Group[]
-                 */
-                $productGroups = array_map(function ($group) {
-                    return $group->getId();
-                }, $productConfigurations[$product->getNumber()]);
-                $variantGroups = $this->configuratorOptionsGateway->getOptionsByGroups($productGroups);
-                $combinations = $this->createGroupBy($variantGroups, $variantFacet->getExpandGroupIds());
-                $filterInGroups = $this->getFilterGroups($productConfigurations[$product->getNumber()], $combinations);
-                $product->setGroupByGroups($filterInGroups);
+            if (array_key_exists($number, $variantConfiguration)) {
+                $product->setConfiguration($variantConfiguration[$number]);
+            }
+            
+            if ($variantFacet && $product->getConfiguration()) {
+                $splitting = $this->createSplitting($configurations[$id], $combinations[$id]);
+                $visibility = $this->buildListingVisibility($splitting, $product->getConfiguration());
+                $product->setVisibility($visibility);
             }
 
             if (isset($average[$number])) {
@@ -248,153 +234,6 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @param Group[] $groups
-     * @param int[]   $expandGroups
-     *
-     * @return string[]
-     */
-    public function createGroupBy(array $groups, array $expandGroups)
-    {
-        $combination = [];
-        $baseGroups = $groups;
-
-        foreach ($baseGroups as $baseGroup) {
-            $maxDeep = count($groups);
-            $currentDeep = 1;
-            $iterationBaseGroups = [$baseGroup];
-
-            //Iteration of deep 1
-            $group = $groups[0];
-            if (in_array($baseGroup->getId(), $expandGroups) && $baseGroup->getId() == $group->getId()) {
-                foreach ($group->getOptions() as $option) {
-                    $optionString = $option->getId();
-                    $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
-                }
-            } else {
-                $option = $group->getOptions()[0];
-                $optionString = $option->getId();
-                $combination = $this->recursiveCreateGroupBy($iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
-            }
-
-            //Iteration of the other deeps
-            $combination = $this->recursiveBaseGroupBy($iterationBaseGroups, $groups, $expandGroups, $currentDeep, $maxDeep, $combination);
-        }
-
-        return $combination;
-    }
-
-    /**
-     * @param Group[] $productConfigurations
-     * @param array   $combinations
-     *
-     * @return array
-     */
-    private function getFilterGroups($productConfigurations, $combinations)
-    {
-        $ids = array_map(function ($group) {
-            return $group->getOptions()[0]->getId();
-        }, $productConfigurations);
-        $optionKey = implode('-', $ids);
-
-        $visibleInGroups = [];
-        foreach ($combinations as $key => $options) {
-            $visibleInGroups[] = new GroupsByGroup($key, in_array($optionKey, $options));
-        }
-
-        return $visibleInGroups;
-    }
-
-    /**
-     * @param Group[] $iterationBaseGroups
-     * @param Group[] $groups
-     * @param int[]   $expandGroups
-     * @param int     $currentDeep
-     * @param int     $maxDeep
-     * @param array   $combination
-     *
-     * @return array
-     */
-    private function recursiveBaseGroupBy($iterationBaseGroups, $groups, $expandGroups, $currentDeep, $maxDeep, $combination)
-    {
-        if ($currentDeep > $maxDeep) {
-            return $combination;
-        }
-
-        $nextIterationGroup = null;
-        foreach ($groups as $group) {
-            if (!in_array($group, $iterationBaseGroups)) {
-                $_iterationBaseGroups = $iterationBaseGroups;
-                $_iterationBaseGroups[] = $group;
-
-                $group = $groups[0];
-                if (in_array($group->getId(), $expandGroups) && in_array($group, $_iterationBaseGroups)) {
-                    foreach ($group->getOptions() as $option) {
-                        $optionString = $option->getId();
-                        $combination = $this->recursiveCreateGroupBy($_iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
-                    }
-                } else {
-                    $option = $group->getOptions()[0];
-                    $optionString = $option->getId();
-                    $combination = $this->recursiveCreateGroupBy($_iterationBaseGroups, $groups, $expandGroups, $combination, $optionString);
-                }
-
-                ++$currentDeep;
-                $combination = $this->recursiveBaseGroupBy($_iterationBaseGroups, $groups, $expandGroups, $currentDeep, $maxDeep, $combination);
-            }
-        }
-
-        return $combination;
-    }
-
-    /**
-     * @param Group[]  $baseGroups
-     * @param Group[]  $groups
-     * @param int[]    $expandGroups
-     * @param string[] $combination
-     * @param string   $currentOptionString
-     *
-     * @return array
-     */
-    private function recursiveCreateGroupBy($baseGroups, $groups, $expandGroups, $combination, $currentOptionString)
-    {
-        $_groups = $groups;
-        array_shift($_groups);
-
-        if (count($_groups) == 0) {
-            if (count($baseGroups) == 1) {
-                $combinationKey = $baseGroups[0]->getId();
-            } else {
-                usort($baseGroups, function ($groupA, $groupB) {
-                    return strcmp($groupA->getId(), $groupB->getId());
-                });
-
-                $ids = array_map(function ($group) {
-                    return $group->getId();
-                }, $baseGroups);
-                $combinationKey = implode('-', $ids);
-            }
-
-            $combination[$combinationKey][] = $currentOptionString;
-
-            return $combination;
-        }
-
-        $group = $_groups[0];
-        if (in_array($group->getId(), $expandGroups) && in_array($group, $baseGroups)) {
-            foreach ($group->getOptions() as $option) {
-                $optionString = $currentOptionString . '-' . $option->getId();
-                $combination = $this->recursiveCreateGroupBy($baseGroups, $_groups, $expandGroups, $combination, $optionString);
-            }
-        } else {
-            $option = $group->getOptions()[0];
-            $optionString = $currentOptionString . '-' . $option->getId();
-            $combination = $this->recursiveCreateGroupBy($baseGroups, $_groups, $expandGroups, $combination, $optionString);
-        }
-
-        return $combination;
     }
 
     /**
@@ -598,5 +437,132 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return true;
+    }
+
+    private function createSplitting(array $groups, array $availability)
+    {
+        $c = $this->arrayCombinations(array_keys($groups));
+
+        //flip keys for later intersection
+        $keys = array_flip(array_keys($groups));
+
+        $result = [];
+        foreach ($c as $combination) {
+            //flip combination to use key intersect
+            $combination = array_flip($combination);
+
+            //all options of groups will be combined together
+            $full = array_intersect_key($groups, $combination);
+
+            $first = array_intersect_key($groups, array_diff_key($keys, $combination));
+
+//            //remove all options but leave the first one
+//            $first = array_map(function(Group $group) {
+//                $clone = clone $group;
+//                $options = $clone->getOptions();
+//                $clone->setOptions([array_shift($options)]);
+//                return $clone;
+//            }, $first);
+
+            usort($full, function(Group $a, Group $b) {
+                return $a->getId() > $b->getId();
+            });
+
+            //create unique group key
+            $groupKey = array_map(function(Group $group) {
+                return $group->getId();
+            }, $full);
+            $groupKey = 'g' . implode('-', $groupKey);
+
+            $all = array_filter(array_merge($full, $first));
+            usort($all, function(Group $a, Group $b) {
+                return $a->getId() > $b->getId();
+            });
+
+            $result[$groupKey] = $this->nestedArrayCombinations($all, $first, $availability);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Builds all possible combinations of an nested array
+     *
+     * @param array $groups
+     * @param Group[] $onlyFirst
+     * @param array $availability
+     * @return array
+     */
+    private function nestedArrayCombinations(array $groups, array $onlyFirst, array $availability)
+    {
+        $result = [[]];
+
+        $groups = array_values($groups);
+
+        $max = count($groups);
+
+        /** @var Group $group */
+        foreach ($groups as $index => $group) {
+            $new = [];
+            foreach ($result as $item) {
+                $options = array_values($group->getOptions());
+
+                foreach ($options as $option) {
+                    $new[] = array_merge($item, [$index => $option->getName()]);
+                }
+            }
+            $result = $new;
+        }
+
+        echo '<pre>';
+        print_r($result);
+        exit();
+        foreach ($result as &$toImplode) {
+            $toImplode = implode('-', $toImplode);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Combines all array elements with all array elements
+     * @param array $array
+     * @return array
+     */
+    public function arrayCombinations(array $array)
+    {
+        $results = [[]];
+
+        foreach ($array as $element) {
+            foreach ($results as $combination) {
+                array_push($results, array_merge(array($element), $combination));
+            }
+        }
+
+        return array_filter($results);
+    }
+
+    private function buildListingVisibility(array $splitting, array $configuration)
+    {
+        $key = [];
+
+        usort($configuration, function(Group $a, Group $b) {
+            return $a->getId() > $b->getId();
+        });
+
+        /** @var Group $group */
+        foreach ($configuration as $group) {
+            foreach ($group->getOptions() as $option) {
+                $key[] = $option->getName();
+            }
+        }
+        $key = implode('-', $key);
+
+        $visibility = [];
+        
+        foreach ($splitting as $combination => $variants) {
+            $visibility[$combination] = in_array($key, $variants);
+        }
+        return $visibility;
     }
 }

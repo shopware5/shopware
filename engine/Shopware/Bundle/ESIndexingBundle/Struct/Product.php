@@ -71,6 +71,11 @@ class Product extends ListProduct
     protected $groupByGroups = [];
 
     /**
+     * @var array
+     */
+    protected $visibility = [];
+
+    /**
      * @param ListProduct $listProduct
      *
      * @return Product
@@ -199,5 +204,15 @@ class Product extends ListProduct
     public function setGroupByGroups($groupByGroups)
     {
         $this->groupByGroups = $groupByGroups;
+    }
+
+    public function setVisibility(array $visibility)
+    {
+        $this->visibility = $visibility;
+    }
+
+    public function getVisibility()
+    {
+        return $this->visibility;
     }
 }
