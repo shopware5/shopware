@@ -212,37 +212,21 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query->select([
             'variant.articleID',
-            'relations.option_id',
-            "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations",
+            "GROUP_CONCAT(DISTINCT relations.option_id ORDER BY relations.option_id  SEPARATOR '-') as combinations",
         ]);
 
         $query->from('s_article_configurator_option_relations', 'relations');
-
         $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.ordernumber IN (:numbers) AND variant.active = 1');
         $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
-        $query->leftJoin('relations', 's_article_configurator_option_relations', 'assignedRelations', 'assignedRelations.article_id = relations.article_id AND assignedRelations.option_id != relations.option_id');
-
         $query->addGroupBy('variant.articleID');
-        $query->addGroupBy('relations.option_id');
+        $query->addGroupBy('variant.id');
 
         $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
-
-        $result = [];
-        foreach ($data as $productId => $rows) {
-            $options = [];
-
-            foreach ($rows as $row) {
-                $options[(int) $row['option_id']] = array_filter(explode('|', $row['combinations']));
-            }
-            $result[$productId] = $options;
-        }
-
-        return $result;
+        return $statement->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_COLUMN);
     }
 
     /**
