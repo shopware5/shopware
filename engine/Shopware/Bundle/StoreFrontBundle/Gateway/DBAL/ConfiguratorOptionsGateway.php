@@ -77,7 +77,7 @@ class ConfiguratorOptionsGateway
         $this->fieldHelper = $fieldHelper;
     }
 
-    public function getOptionsByGroups(array $groupIds)
+    public function getOptionsByGroups(array $groupIds, $articleId)
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -88,13 +88,16 @@ class ConfiguratorOptionsGateway
             ->innerJoin('configuratorGroup', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.group_id = configuratorGroup.id')
             ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
             ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
+            ->innerJoin('configuratorOption', 's_article_configurator_option_relations', 'configuratorRelations', 'configuratorRelations.option_id = configuratorOption.id')
+            ->innerJoin('configuratorRelations', 's_articles_details', 'details', 'details.id = configuratorRelations.article_id and details.articleId = :articleId')
             ->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.name')
             ->addOrderBy('configuratorOption.position')
             ->addOrderBy('configuratorOption.name')
             ->groupBy('configuratorOption.id')
             ->andWhere('configuratorGroup.id IN (:ids)')
-            ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':articleId', $articleId);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -130,5 +133,26 @@ class ConfiguratorOptionsGateway
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
         return $this->configuratorHydrator->hydrateGroups($data);
+    }
+
+    public function getVariantOptionKeys($ordernumbers) {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(["articleID, GROUP_CONCAT(DISTINCT options.name ORDER BY options.group_id SEPARATOR '-') as optionKey"])
+            ->from('s_articles_details', 'variant')
+            ->innerJoin('variant', 's_article_configurator_option_relations', 'relations', 'variant.id = relations.article_id')
+            ->innerJoin('relations', 's_article_configurator_options', 'options', 'options.id = relations.option_id')
+            ->andWhere('variant.ordernumber in (:ordernumbers)')
+            ->andWhere('variant.active = true')
+            ->setParameter(':ordernumbers', $ordernumbers, Connection::PARAM_STR_ARRAY)
+            ->addGroupBy('variant.ordernumber');
+
+        $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        $optionKeys = [];
+        foreach ($result as $value) {
+            $optionKeys[$value['articleID']][] = $value['optionKey'];
+        }
+
+        return $optionKeys;
     }
 }
