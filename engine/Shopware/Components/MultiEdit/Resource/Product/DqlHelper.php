@@ -769,9 +769,11 @@ class DqlHelper
             $value = null;
         }
 
-        $type = $info['type'];
-        if ($value && $type == 'decimal' || $type == 'integer' || $type == 'float') {
-            $value = str_replace(',', '.', $value);
+        if($value !== null) {
+            $type = $info['type'];
+            if ($value && $type == 'decimal' || $type == 'integer' || $type == 'float') {
+                $value = str_replace(',', '.', $value);
+            }
         }
 
         return $value;
