@@ -606,6 +606,8 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
+     * Refers to the ability of a product to be "on sale", even if it's out of stock
+     *
      * @return bool
      */
     public function isCloseouts()
@@ -778,7 +780,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     public function isAvailable()
     {
-        if (!$this->isCloseouts()) {
+        if ($this->isCloseouts()) {
             return true;
         }
 

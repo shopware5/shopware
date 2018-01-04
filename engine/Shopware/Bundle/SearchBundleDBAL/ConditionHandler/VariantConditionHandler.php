@@ -44,11 +44,17 @@ class VariantConditionHandler implements ConditionHandlerInterface
     private $helper;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param VariantHelperInterface $helper
      */
-    public function __construct(VariantHelperInterface $helper)
+    public function __construct(VariantHelperInterface $helper, \Shopware_Components_Config $config)
     {
         $this->helper = $helper;
+        $this->config = $config;
     }
 
     /**
@@ -74,6 +80,7 @@ class VariantConditionHandler implements ConditionHandlerInterface
         if ($query->hasState('option_' . $tableKey)) {
             return;
         }
+
         $query->addState('option_' . $tableKey);
 
         $where = [];
@@ -86,6 +93,15 @@ class VariantConditionHandler implements ConditionHandlerInterface
             $query->setParameter($valueKey, $valueId);
         }
 
+        $stockCondition = '';
+
+        /*
+         * Check for stock in variants if the hideNoInStock option has been enabled in the configuration
+         */
+        if ($this->config->get('hideNoInStock')) {
+            $stockCondition = ' AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)';
+        }
+
         $where = implode(' OR ', $where);
 
         $query->innerJoin(
@@ -93,7 +109,7 @@ class VariantConditionHandler implements ConditionHandlerInterface
             's_article_configurator_option_relations',
             $tableKey,
             'variant.id = ' . $tableKey . '.article_id
-             AND (' . $where . ')'
+             AND (' . $where . ')' . $stockCondition
         );
 
         if ($shouldExpandGroup) {
