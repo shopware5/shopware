@@ -42,13 +42,27 @@ class VariantCondition implements ConditionInterface, \JsonSerializable
     protected $optionIds;
 
     /**
-     * @param int[] $optionIds
+     * @var bool
      */
-    public function __construct(array $optionIds)
+    protected $expandVariants;
+
+    /**
+     * @var int
+     */
+    protected $groupId;
+
+    /**
+     * @param int[] $optionIds
+     * @param $expandVariants
+     * @param $groupId
+     */
+    public function __construct(array $optionIds, $expandVariants, $groupId)
     {
         Assertion::allIntegerish($optionIds);
         $this->optionIds = array_map('intval', $optionIds);
         sort($this->optionIds, SORT_NUMERIC);
+        $this->expandVariants = $expandVariants;
+        $this->groupId = (int) $groupId;
     }
 
     /**
@@ -73,5 +87,15 @@ class VariantCondition implements ConditionInterface, \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    public function expandVariants()
+    {
+        return $this->expandVariants;
+    }
+
+    public function getGroupId()
+    {
+        return $this->groupId;
     }
 }

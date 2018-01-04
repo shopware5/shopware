@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use Shopware\Bundle\SearchBundle\Condition\MainVariantCondition;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
@@ -57,7 +58,7 @@ class VariantSearch implements ProductNumberSearchInterface
      */
     public function search(Criteria $criteria, Struct\ShopContextInterface $context)
     {
-        if (!$criteria->hasVariantCondition()) {
+        if (!$criteria->hasConditionOfClass(VariantCondition::class)) {
             $criteria->addCondition(new MainVariantCondition());
         }
 

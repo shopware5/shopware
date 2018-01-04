@@ -38,24 +38,17 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class VariantConditionHandler implements ConditionHandlerInterface
 {
-    const VARIANT_GROUP_BY = 'variant_group_by';
     /**
      * @var VariantHelperInterface
      */
     private $helper;
 
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @param VariantHelperInterface $helper
      */
-    public function __construct(VariantHelperInterface $helper, \Shopware_Components_Config $config)
+    public function __construct(VariantHelperInterface $helper)
     {
         $this->helper = $helper;
-        $this->config = $config;
     }
 
     /**
@@ -74,54 +67,7 @@ class VariantConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $tableKey = $condition->getName();
-
-        $suffix = md5(json_encode($condition));
-
-        if ($query->hasState('option_' . $tableKey)) {
-            return;
-        }
-
-        $query->addState('option_' . $tableKey);
-
-        $where = [];
-        $shouldExpandGroup = $this->helper->shouldExpandGroup($condition->getOptionIds());
-
-        /** @var VariantCondition $condition */
-        foreach ($condition->getOptionIds() as $valueId) {
-            $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
-            $where[] = $tableKey . '.option_id = ' . $valueKey;
-            $query->setParameter($valueKey, $valueId);
-        }
-
-        $stockCondition = '';
-
-        /*
-         * Check for stock in variants if the hideNoInStock option has been enabled in the configuration
-         */
-        if ($this->config->get('hideNoInStock')) {
-            $stockCondition = ' AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)';
-        }
-
-        $where = implode(' OR ', $where);
-
-        $query->innerJoin(
-            'variant',
-            's_article_configurator_option_relations',
-            $tableKey,
-            'variant.id = ' . $tableKey . '.article_id
-             AND (' . $where . ')' . $stockCondition
-        );
-
-        if (!$shouldExpandGroup) {
-            return;
-        }
-
-        if (!$query->hasState(self::VARIANT_GROUP_BY)) {
-            $query->resetQueryPart('groupBy');
-        }
-
-        $query->addState(self::VARIANT_GROUP_BY);
-        $query->addGroupBy($tableKey . '.option_id');
+        /* @var VariantCondition $condition */
+        $this->helper->joinVariantCondition($query, $condition);
     }
 }

@@ -116,6 +116,13 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         return $this->createCollectionResult($facet, $options, $actives);
     }
 
+    /**
+     * @param ShopContextInterface $context
+     * @param Criteria             $queryCriteria
+     * @param VariantFacet         $facet
+     *
+     * @return null|Group[]
+     */
     protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
@@ -133,6 +140,12 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         return $this->gateway->getOptions($valueIds);
     }
 
+    /**
+     * Modifies the query reading products from the database to reflect the selected options
+     *
+     * @param QueryBuilder $query
+     * @param VariantFacet $facet
+     */
     private function rebuildQuery(QueryBuilder $query, VariantFacet $facet)
     {
         $query->resetQueryPart('orderBy');

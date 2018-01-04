@@ -2382,6 +2382,7 @@ class sArticles
         $articles = [];
 
         /** @var $product StoreFrontBundle\Struct\ListProduct */
+        $hasCondition = $criteria->hasConditionOfClass(SearchBundle\Condition\VariantCondition::class);
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
@@ -2390,8 +2391,11 @@ class sArticles
             }
 
             // When a filter on a variant is active, use the variant link as detail link
-            if ($criteria->hasVariantCondition() && !empty($article['linkVariant'])) {
+            if ($hasCondition && !empty($article['linkVariant'])) {
                 $article['linkDetails'] = $article['linkVariant'];
+            }
+            if ($hasCondition && !empty($article['prices'])) {
+                $article['price'] = $article['prices'][0]['price'];
             }
 
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {

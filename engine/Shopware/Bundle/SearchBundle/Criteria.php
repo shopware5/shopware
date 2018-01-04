@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Assert\Assertion;
-use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
@@ -504,14 +503,30 @@ class Criteria extends Extendable implements \JsonSerializable
         return $this;
     }
 
-    public function hasVariantCondition()
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    public function hasConditionOfClass($class)
     {
-        foreach ($this->getConditions() as $condition) {
-            if ($condition instanceof VariantCondition) {
-                return true;
-            }
-        }
+        $conditions = $this->getConditionsByClass($class);
 
-        return false;
+        return !empty($conditions);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return ConditionInterface[]
+     */
+    public function getConditionsByClass($class)
+    {
+        return array_filter(
+            $this->getConditions(),
+            function (ConditionInterface $condition) use ($class) {
+                return $condition instanceof $class;
+            }
+        );
     }
 }

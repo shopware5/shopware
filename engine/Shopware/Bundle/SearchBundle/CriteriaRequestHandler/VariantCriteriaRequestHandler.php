@@ -27,12 +27,10 @@ namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
-use Shopware\Bundle\SearchBundle\Condition\SimpleCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -88,8 +86,14 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             return;
         }
 
-        foreach ($filters as $filter) {
-            $condition = new VariantCondition($filter);
+        $facet = $this->variantHelper->getVariantFacet();
+        $groups = [];
+        if ($facet) {
+            $groups = $facet->getExpandGroupIds();
+        }
+
+        foreach ($filters as $groupId => $filter) {
+            $condition = new VariantCondition($filter, in_array($groupId, $groups), $groupId);
             $criteria->addCondition($condition);
         }
     }

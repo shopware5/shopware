@@ -72,7 +72,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         $groupBy = $this->buildGroupBy($criteria);
         $search->addPostFilter(new TermQuery($groupBy, 1));
 
-        /** @var VariantCondition $criteriaPart */
+        /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery(
                 'configuration.options.id',
@@ -98,7 +98,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         $groupBy = $this->buildGroupBy($criteria);
         $search->addPostFilter(new TermQuery($groupBy, 1));
 
-        /** @var VariantCondition $criteriaPart */
+        /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery(
                 'configuration.options.id',
@@ -109,13 +109,11 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
 
     private function buildGroupBy(Criteria $criteria)
     {
-        $groups = [];
-        foreach ($criteria->getConditions() as $condition) {
-            if ($condition instanceof VariantCondition) {
-                $currentGroup = $this->variantHelper->getGroupIdByOptionId($condition->getOptionIds()[0]);
-                $groups[] = $currentGroup;
-            }
-        }
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+
+        $groups = array_map(function (VariantCondition $condition) {
+            return $condition->getGroupId();
+        }, $conditions);
 
         sort($groups, SORT_NUMERIC);
 

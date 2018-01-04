@@ -150,26 +150,26 @@ class ListingPriceTable implements ListingPriceTableInterface
 
         $taxCase = $this->buildTaxCase($context);
 
-        //rounded to filter this value correctly
+        // Rounded to filter this value correctly
         // => 2,99999999 displayed as 3,- € but won't be displayed with a filter on price >= 3,- €
         $selection = 'ROUND(' .
 
-            //customer group price (with fallback switch)
+            // Customer group price (with fallback switch)
             'prices.price' .
 
-            //multiplied with the variant min purchase
+            // Multiplied with the variant min purchase
             ($considerMinPurchase ? ' * availableVariant.minpurchase' : '') .
 
-            //multiplied with the percentage price group discount
+            // Multiplied with the percentage price group discount
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
 
-            //multiplied with the product tax if the current customer group should see gross prices
+            // Multiplied with the product tax if the current customer group should see gross prices
             ($current->displayGrossPrices() ? ' * (( ' . $taxCase . ' + 100) / 100)' : '') .
 
-            //multiplied with the percentage discount of the current customer group
+            // Multiplied with the percentage discount of the current customer group
             ($discount ? ' * ' . (100 - (float) $discount) / 100 : '') .
 
-            //multiplied with the shop currency factor
+            // Multiplied with the shop currency factor
             ($currency->getFactor() ? ' * ' . $currency->getFactor() : '') .
 
             ', 2)';

@@ -44,6 +44,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\ReflectionHelper;
 
 class ProductProvider implements ProductProviderInterface
 {
@@ -112,6 +113,16 @@ class ProductProvider implements ProductProviderInterface
      */
     private $configurationLoader;
 
+    /**
+     * @var ReflectionHelper
+     */
+    private $reflectionHelper;
+
+    /**
+     * @var VariantFacet|null|bool
+     */
+    private $variantFacet;
+
     public function __construct(
         ListProductGatewayInterface $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
@@ -160,9 +171,6 @@ class ProductProvider implements ProductProviderInterface
         $categories = $this->getCategories($products);
         $properties = $this->getProperties($products, $context);
 
-        /**
-         * @var VariantFacet
-         */
         $variantFacet = $this->variantHelper->getVariantFacet();
 
         $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);

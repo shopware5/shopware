@@ -24,30 +24,15 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-interface VariantHelperInterface
+/**
+ * Interface for ConditionHandlers and SortingHandlers which need access to the general Criteria-object
+ */
+interface CriteriaAwareInterface
 {
     /**
-     * Returns the VariantFacet
-     *
-     * @return VariantFacet|false
+     * @param Criteria $criteria
      */
-    public function getVariantFacet();
-
-    /**
-     * @param QueryBuilder     $query
-     * @param VariantCondition $condition
-     */
-    public function joinVariantCondition(QueryBuilder $query, VariantCondition $condition);
-
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     * @param Criteria             $criteria
-     */
-    public function joinPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria);
+    public function setCriteria(Criteria $criteria);
 }
