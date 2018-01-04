@@ -177,11 +177,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                return new Backlog(self::EVENT_VARIANT_DELETED, ['number' => $entity->getNumber()]);
+                return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getArticleId()]);
             case $entity instanceof PriceModel:
-                return new Backlog(self::EVENT_PRICE_DELETED, ['number' => $entity->getDetail()->getNumber()]);
+                return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getDetail()->getArticleId()]);
             case $entity instanceof VoteModel:
-                return new Backlog(self::EVENT_VOTE_DELETED, ['articleId' => $entity->getArticle()->getId()]);
+                return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -201,11 +201,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                return new Backlog(self::EVENT_VARIANT_INSERTED, ['number' => $entity->getNumber()]);
+                return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getArticleId()]);
             case $entity instanceof PriceModel:
-                return new Backlog(self::EVENT_PRICE_INSERTED, ['number' => $entity->getDetail()->getNumber()]);
+                return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getDetail()->getArticleId()]);
             case $entity instanceof VoteModel:
-                return new Backlog(self::EVENT_VOTE_INSERTED, ['articleId' => $entity->getArticle()->getId()]);
+                return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -230,11 +230,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                return new Backlog(self::EVENT_VARIANT_UPDATED, ['number' => $entity->getNumber()]);
+                return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getArticleId()]);
             case $entity instanceof PriceModel:
-                return new Backlog(self::EVENT_PRICE_UPDATED, ['number' => $entity->getDetail()->getNumber()]);
+                return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getDetail()->getArticleId()]);
             case $entity instanceof VoteModel:
-                return new Backlog(self::EVENT_VOTE_UPDATED, ['articleId' => $entity->getArticle()->getId()]);
+                return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:

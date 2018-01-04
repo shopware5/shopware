@@ -210,7 +210,6 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
             ->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
             ->andWhere('variant.id > :lastId')
-            ->andWhere('variant.active = true')
             ->setParameter(':lastId', 0)
             ->orderBy('variant.id');
 

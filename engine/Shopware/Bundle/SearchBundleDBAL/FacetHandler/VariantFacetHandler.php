@@ -156,7 +156,9 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         $values = [];
         foreach ($criteria->getConditions() as $condition) {
             if ($condition instanceof VariantCondition) {
-                $values = array_merge($values, $condition->getOptionIds());
+                foreach ($condition->getOptionIds() as $id) {
+                    $values[] = $id;
+                }
             }
         }
 

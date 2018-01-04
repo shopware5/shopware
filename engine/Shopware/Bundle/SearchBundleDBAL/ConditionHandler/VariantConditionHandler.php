@@ -38,6 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class VariantConditionHandler implements ConditionHandlerInterface
 {
+    const VARIANT_GROUP_BY = 'variant_group_by';
     /**
      * @var VariantHelperInterface
      */
@@ -112,13 +113,15 @@ class VariantConditionHandler implements ConditionHandlerInterface
              AND (' . $where . ')' . $stockCondition
         );
 
-        if ($shouldExpandGroup) {
-            if (!$query->hasState('variant_group_by')) {
-                $query->resetQueryPart('groupBy');
-            }
-
-            $query->addState('variant_group_by');
-            $query->addGroupBy($tableKey . '.option_id');
+        if (!$shouldExpandGroup) {
+            return;
         }
+
+        if (!$query->hasState(self::VARIANT_GROUP_BY)) {
+            $query->resetQueryPart('groupBy');
+        }
+
+        $query->addState(self::VARIANT_GROUP_BY);
+        $query->addGroupBy($tableKey . '.option_id');
     }
 }
