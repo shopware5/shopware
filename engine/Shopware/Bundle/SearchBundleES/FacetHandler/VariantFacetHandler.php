@@ -128,7 +128,7 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
         }
 
         $ids = array_column($buckets, 'key');
-        $groups = $this->gateway->getOptionsWithGroups($ids);
+        $groups = $this->gateway->getOptions($ids);
         if (empty($groups)) {
             return;
         }

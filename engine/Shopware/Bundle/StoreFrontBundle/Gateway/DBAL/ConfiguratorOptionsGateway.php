@@ -38,7 +38,7 @@ class ConfiguratorOptionsGateway
     /**
      * @var Hydrator\ConfiguratorHydrator
      */
-    private $configuratorHydrator;
+    private $hydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -61,6 +61,11 @@ class ConfiguratorOptionsGateway
     private $connection;
 
     /**
+     * @var Gateway\MediaGatewayInterface
+     */
+    private $mediaGateway;
+
+    /**
      * @param Connection                                                      $connection
      * @param FieldHelper                                                     $fieldHelper
      * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
@@ -73,32 +78,9 @@ class ConfiguratorOptionsGateway
         Gateway\MediaGatewayInterface $mediaGateway
     ) {
         $this->connection = $connection;
-        $this->configuratorHydrator = $configuratorHydrator;
+        $this->hydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
-    }
-
-    public function getOptionsByGroups(array $groupIds)
-    {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->addSelect($this->fieldHelper->getConfiguratorGroupFields());
-        $query->addSelect($this->fieldHelper->getConfiguratorOptionFields());
-
-        $query->from('s_article_configurator_groups', 'configuratorGroup')
-            ->innerJoin('configuratorGroup', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.group_id = configuratorGroup.id')
-            ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
-            ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
-            ->addOrderBy('configuratorGroup.position')
-            ->addOrderBy('configuratorGroup.name')
-            ->addOrderBy('configuratorOption.position')
-            ->addOrderBy('configuratorOption.name')
-            ->groupBy('configuratorOption.id')
-            ->andWhere('configuratorGroup.id IN (:ids)')
-            ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
-
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
-
-        return $this->configuratorHydrator->hydrateGroups($data);
+        $this->mediaGateway = $mediaGateway;
     }
 
     /**
@@ -108,10 +90,11 @@ class ConfiguratorOptionsGateway
      *
      * @return Struct\Configurator\Group[]
      */
-    public function getOptionsWithGroups(array $optionIds)
+    public function getOptions(array $optionIds)
     {
         $query = $this->connection->createQueryBuilder();
 
+        //todo@dr media values missing
         $query->addSelect($this->fieldHelper->getConfiguratorGroupFields());
         $query->addSelect($this->fieldHelper->getConfiguratorOptionFields());
 
@@ -129,6 +112,6 @@ class ConfiguratorOptionsGateway
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $this->configuratorHydrator->hydrateGroups($data);
+        return $this->hydrator->hydrateGroups($data);
     }
 }

@@ -156,7 +156,7 @@ class ProductMapping implements MappingInterface
                 'unit' => $this->getUnitMapping(),
 
                 'attributes' => $this->getAttributeMapping(),
-                'configuration' => $this->getVariantOptionsMapping($shop)
+                'configuration' => $this->getVariantOptionsMapping($shop),
             ],
         ];
     }
@@ -362,20 +362,6 @@ class ProductMapping implements MappingInterface
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
                 ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getGroupByGroupsMapping()
-    {
-        return [
-            'type' => 'nested',
-            'properties' => [
-                'key' => $this->textMapping->getNotAnalyzedField(),
-                'shouldDisplay' => ['type' => 'boolean'],
             ],
         ];
     }

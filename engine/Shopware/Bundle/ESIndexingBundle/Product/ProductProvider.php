@@ -29,7 +29,6 @@ use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface;
@@ -40,9 +39,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\GroupsByGroup;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
@@ -105,25 +101,17 @@ class ProductProvider implements ProductProviderInterface
      * @var VariantHelper
      */
     private $variantHelper;
-    /**
-     * @var ConfiguratorOptionsGateway
-     */
-    private $configuratorOptionsGateway;
 
     /**
-     * @param ListProductGatewayInterface      $productGateway
-     * @param CheapestPriceServiceInterface    $cheapestPriceService
-     * @param VoteServiceInterface             $voteService
-     * @param ContextServiceInterface          $contextService
-     * @param Connection                       $connection
-     * @param IdentifierSelector               $identifierSelector
-     * @param PriceCalculationServiceInterface $priceCalculationService
-     * @param FieldHelper                      $fieldHelper
-     * @param PropertyHydrator                 $propertyHydrator
-     * @param ConfiguratorServiceInterface     $configuratorService
-     * @param VariantHelper                    $variantHelper
-     * @param ConfiguratorOptionsGateway       $configuratorOptionsGateway
+     * @var ProductListingVisibilityLoader
      */
+    private $visibilityLoader;
+
+    /**
+     * @var ProductConfigurationLoader
+     */
+    private $configurationLoader;
+
     public function __construct(
         ListProductGatewayInterface $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
@@ -136,7 +124,8 @@ class ProductProvider implements ProductProviderInterface
         PropertyHydrator $propertyHydrator,
         ConfiguratorServiceInterface $configuratorService,
         VariantHelper $variantHelper,
-        ConfiguratorOptionsGateway $configuratorOptionsGateway
+        ProductConfigurationLoader $configurationLoader,
+        ProductListingVisibilityLoader $visibilityLoader
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -149,7 +138,8 @@ class ProductProvider implements ProductProviderInterface
         $this->propertyHydrator = $propertyHydrator;
         $this->configuratorService = $configuratorService;
         $this->variantHelper = $variantHelper;
-        $this->configuratorOptionsGateway = $configuratorOptionsGateway;
+        $this->configurationLoader = $configurationLoader;
+        $this->visibilityLoader = $visibilityLoader;
     }
 
     /**
@@ -169,9 +159,7 @@ class ProductProvider implements ProductProviderInterface
         $calculated = $this->getCalculatedPrices($shop, $products, $cheapest);
         $categories = $this->getCategories($products);
         $properties = $this->getProperties($products, $context);
-        
-        $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
-        
+
         /**
          * @var VariantFacet
          */
@@ -179,9 +167,9 @@ class ProductProvider implements ProductProviderInterface
 
         $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
 
-        $configurations = $this->configuratorService->getConfiguration($numbers, $context);
-        
-        $combinations = $configuratorGateway->getProductsCombinations($numbers, $context);
+        $configurations = $this->configurationLoader->getConfigurations($numbers, $context);
+
+        $combinations = $this->configurationLoader->getCombinations($numbers);
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -192,11 +180,17 @@ class ProductProvider implements ProductProviderInterface
             if (array_key_exists($number, $variantConfiguration)) {
                 $product->setConfiguration($variantConfiguration[$number]);
             }
-            
+            if (array_key_exists($id, $configurations)) {
+                $product->setFullConfiguration($configurations[$id]);
+            }
+            if (array_key_exists($id, $combinations)) {
+                $product->setAvailableCombinations($combinations[$id]);
+            }
+
             if ($variantFacet && $product->getConfiguration()) {
-                $splitting = $this->createSplitting($configurations[$id], $combinations[$id]);
-                $visibility = $this->buildListingVisibility($splitting, $product->getConfiguration());
-                $product->setVisibility($visibility);
+                $product->setVisibility(
+                    $this->visibilityLoader->getVisibility($product)
+                );
             }
 
             if (isset($average[$number])) {
@@ -270,10 +264,9 @@ class ProductProvider implements ProductProviderInterface
         $result = [];
         foreach ($data as $row) {
             $articleId = (int) $row['articleID'];
+            $categories = [];
             if (isset($result[$articleId])) {
                 $categories = $result[$articleId];
-            } else {
-                $categories = [];
             }
             $temp = explode('|', $row['path']);
             $temp[] = $row['id'];
@@ -438,159 +431,5 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return true;
-    }
-
-    private function createSplitting(array $groups, array $availability)
-    {
-        $c = $this->arrayCombinations(array_keys($groups));
-
-        //flip keys for later intersection
-        $keys = array_flip(array_keys($groups));
-
-        $result = [];
-        foreach ($c as $combination) {
-            //flip combination to use key intersect
-            $combination = array_flip($combination);
-
-            //all options of groups will be combined together
-            $full = array_intersect_key($groups, $combination);
-
-            $first = array_intersect_key($groups, array_diff_key($keys, $combination));
-
-            usort($full, function(Group $a, Group $b) {
-                return $a->getId() > $b->getId();
-            });
-
-            //create unique group key
-            $groupKey = array_map(function(Group $group) {
-                return $group->getId();
-            }, $full);
-            $groupKey = 'g' . implode('-', $groupKey);
-
-            $all = array_filter(array_merge($full, $first));
-
-            $firstIds = array_map(function(Group $group) {
-                return $group->getId();
-            }, $first);
-
-            $result[$groupKey] = $this->nestedArrayCombinations($all, $firstIds, $availability);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Builds all possible combinations of an nested array
-     *
-     * @param array $groups
-     * @param Group[] $onlyFirst
-     * @param array $availability
-     * @return array
-     */
-    private function nestedArrayCombinations(array $groups, array $onlyFirst, array $availability)
-    {
-        $result = [[]];
-
-        $groups = array_values($groups);
-
-        /** @var Group $group */
-        foreach ($groups as $index => $group) {
-            $isFirst = in_array($group->getId(), $onlyFirst, true);
-            $new = [];
-            foreach ($result as $item) {
-                $options = array_values($group->getOptions());
-                
-                usort($options, function(Option $a, Option $b) {
-                    return $a->getId() > $b->getId();
-                });
-
-                /** @var Option $option */
-                foreach ($options as $option) {
-                    $tmp = array_merge($item, [$index => (int) $option->getId()]);
-                    sort($tmp, SORT_NUMERIC);
-
-                    $isAvailable = false;
-                    foreach ($availability as $available) {
-                        $available = '-' . $available . '-';
-
-                        $allMatch = true;
-                        foreach ($tmp as $key) {
-                            if (strpos($available, '-' . $key . '-') === false) {
-                                $allMatch = false;
-                            }
-                        }
-                        if ($allMatch) {
-                            $isAvailable = true;
-                            break;
-                        }
-                    }
-
-                    if (!$isAvailable) {
-                        continue;
-                    }
-
-                    $new[] = $tmp;
-
-                    if ($isFirst) {
-                        break;
-                    }
-                }
-            }
-
-            if (empty($new)) {
-                continue;
-            }
-
-            $result = $new;
-        }
-
-        foreach ($result as &$toImplode) {
-            $toImplode = implode('-', $toImplode);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Combines all array elements with all array elements
-     * @param array $array
-     * @return array
-     */
-    public function arrayCombinations(array $array)
-    {
-        $results = [[]];
-
-        foreach ($array as $element) {
-            foreach ($results as $combination) {
-                array_push($results, array_merge(array($element), $combination));
-            }
-        }
-
-        return array_filter($results);
-    }
-
-    private function buildListingVisibility(array $splitting, array $configuration)
-    {
-        $key = [];
-
-        usort($configuration, function(Group $a, Group $b) {
-            return $a->getId() > $b->getId();
-        });
-
-        /** @var Group $group */
-        foreach ($configuration as $group) {
-            foreach ($group->getOptions() as $option) {
-                $key[] = $option->getId();
-            }
-        }
-        sort($key, SORT_NUMERIC);
-        $key = implode('-', $key);
-
-        $visibility = [];
-        
-        foreach ($splitting as $combination => $variants) {
-            $visibility[$combination] = in_array($key, $variants);
-        }
-        return $visibility;
     }
 }

@@ -121,7 +121,8 @@
             <argument type="service" id="shopware_storefront.property_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.configurator_service" />
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
-            <argument type="service" id="shopware_storefront.configurator_options_gateway"/>
+            <argument type="service" id="shopware_elastic_search.product_configuration_loader"/>
+            <argument type="service" id="shopware_elastic_search.product_listing_visibility_loader"/>
         </service>
 
         <service id="shopware_elastic_search.product_mapping" class="Shopware\Bundle\ESIndexingBundle\Product\ProductMapping">
@@ -150,6 +151,14 @@
         <service id="shopware_elastic_search.domain_backlog_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\DomainBacklogSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductListingVisibilityLoader" id="shopware_elastic_search.product_listing_visibility_loader"/>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductConfigurationLoader" id="shopware_elastic_search.product_configuration_loader">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.configurator_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
         </service>
 
     </services>

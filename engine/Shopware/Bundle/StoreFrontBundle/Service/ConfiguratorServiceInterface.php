@@ -72,16 +72,4 @@ interface ConfiguratorServiceInterface
      * @return Struct\Configurator\Set
      */
     public function getProductConfigurator(Struct\BaseProduct $product, Struct\ShopContextInterface $context, array $selection);
-
-    /**
-     * Get options of all groups which shouldn't expand.
-     *
-     * @param array                       $numbers
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return array
-     */
-    public function getVariantGroups(array $numbers, Struct\ShopContextInterface $context);
-
-    public function getConfiguration(array $numbers, Struct\ShopContextInterface $context);
 }

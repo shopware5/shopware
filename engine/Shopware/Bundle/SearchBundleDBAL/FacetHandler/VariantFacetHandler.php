@@ -130,11 +130,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
-        $properties = $this->gateway->getOptionsWithGroups(
-            $valueIds
-        );
-
-        return $properties;
+        return $this->gateway->getOptions($valueIds);
     }
 
     private function rebuildQuery(QueryBuilder $query, VariantFacet $facet)

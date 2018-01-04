@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\GroupsByGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
@@ -66,14 +65,19 @@ class Product extends ListProduct
     protected $configuration = [];
 
     /**
-     * @var GroupsByGroup[]
-     */
-    protected $groupByGroups = [];
-
-    /**
      * @var array
      */
     protected $visibility = [];
+
+    /**
+     * @var Group[]
+     */
+    protected $fullConfiguration;
+
+    /**
+     * @var string[]
+     */
+    protected $availableCombinations = [];
 
     /**
      * @param ListProduct $listProduct
@@ -190,22 +194,6 @@ class Product extends ListProduct
         return $this->configuration;
     }
 
-    /**
-     * @return GroupsByGroup[]
-     */
-    public function getGroupByGroups()
-    {
-        return $this->groupByGroups;
-    }
-
-    /**
-     * @param GroupsByGroup[] $groupByGroups
-     */
-    public function setGroupByGroups($groupByGroups)
-    {
-        $this->groupByGroups = $groupByGroups;
-    }
-
     public function setVisibility(array $visibility)
     {
         $this->visibility = $visibility;
@@ -214,5 +202,31 @@ class Product extends ListProduct
     public function getVisibility()
     {
         return $this->visibility;
+    }
+
+    public function setAvailableCombinations(array $combinations)
+    {
+        $this->availableCombinations = $combinations;
+    }
+
+    public function getAvailableCombinations()
+    {
+        return $this->availableCombinations;
+    }
+
+    /**
+     * @param Group[] $fullConfiguration
+     */
+    public function setFullConfiguration(array $fullConfiguration)
+    {
+        $this->fullConfiguration = $fullConfiguration;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getFullConfiguration()
+    {
+        return $this->fullConfiguration;
     }
 }
