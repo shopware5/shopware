@@ -122,7 +122,6 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
-        error_log(print_r('price facet handler', true) . "\n", 3, '/var/log/test.log');
         if (!$query->hasState(PriceConditionHandler::LISTING_PRICE_JOINED)) {
             $table = $this->listingPriceTable->get($context);
             $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');

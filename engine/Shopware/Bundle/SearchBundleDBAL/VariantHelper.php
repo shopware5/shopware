@@ -137,8 +137,6 @@ class VariantHelper implements VariantHelperInterface
             return;
         }
 
-        error_log(print_r('join prices in variant helper', true) . "\n", 3, '/var/log/test.log');
-
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         foreach ($conditions as $condition) {
             $this->joinVariantCondition($query, $condition);
@@ -153,12 +151,10 @@ class VariantHelper implements VariantHelperInterface
             $variantCondition[] = 'listing_price.' . $tableKey . '_id = ' . $tableKey . '.option_id';
         }
 
-        $priceTable = $this->createListingPriceTable($criteria);
-        $this->joinPriceGroup($query);
-        $query->addSelect(['listing_price.*']);
-        $query->addSelect('MIN(' . $this->getSelection($context) . ') as cheapest_price_value');
+        $priceTable = $this->createListingPriceTable($criteria, $context);
 
-        $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
+        $query->addSelect(['listing_price.*']);
+        $query->addSelect('listing_price.price as cheapest_price_value');
         $query->innerJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
@@ -195,7 +191,6 @@ class VariantHelper implements VariantHelperInterface
      * @param VariantCondition $condition
      *
      * @throws \RuntimeException
-     * @throws \ReflectionException
      * @throws \InvalidArgumentException
      */
     public function joinVariantCondition(QueryBuilder $query, VariantCondition $condition)
@@ -247,16 +242,23 @@ class VariantHelper implements VariantHelperInterface
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createListingPriceTable(Criteria $criteria)
+    private function createListingPriceTable(Criteria $criteria, ShopContextInterface $context)
     {
+        $selection = $this->getSelection($context);
+
         $query = $this->connection->createQueryBuilder();
 
         $query->select([
-            'MIN(price) AS price',
+            'MIN(' . $selection . ') AS price',
             'prices.articledetailsID AS variant_id',
+            'COUNT(DISTINCT price) as different_price_count',
             'prices.articleID AS product_id',
         ]);
         $query->from('s_articles_prices', 'prices');
+        $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID AND variant.active = 1');
+        $query->innerJoin('prices', 's_articles', 'product', 'product.id = variant.articleID');
+        $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
+        $this->joinPriceGroup($query);
 
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
@@ -266,9 +268,10 @@ class VariantHelper implements VariantHelperInterface
             $column = $tableKey . '.option_id AS ' . $tableKey . '_id';
             $query->innerJoin('prices', 's_article_configurator_option_relations', $tableKey, $tableKey . '.article_id = prices.articledetailsID');
             $query->addSelect($column);
+            $query->addGroupBy($tableKey . '.option_id');
         }
 
-        $query->groupBy('prices.articleID');
+        $query->addGroupBy('prices.articleID');
 
         return $query;
     }
@@ -294,7 +297,7 @@ class VariantHelper implements VariantHelperInterface
         $selection = 'ROUND(' .
 
             // Customer group price (with fallback switch)
-            'listing_price.price' .
+            'prices.price' .
 
             // Multiplied with the variant min purchase
             ($considerMinPurchase ? ' * variant.minpurchase' : '') .

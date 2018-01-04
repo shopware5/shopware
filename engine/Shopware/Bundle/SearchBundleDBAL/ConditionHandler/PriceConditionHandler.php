@@ -69,8 +69,6 @@ class PriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        error_log(print_r('default price handler', true) . "\n", 3, '/var/log/test.log');
-
         if (!$query->hasState(self::LISTING_PRICE_JOINED)) {
             $table = $this->listingPriceTable->get($context);
             $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');

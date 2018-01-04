@@ -107,7 +107,6 @@ class PriceHelper implements PriceHelperInterface
         if ($query->hasState(self::STATE_INCLUDES_CHEAPEST_PRICE)) {
             return;
         }
-        error_log(print_r('join default', true) . "\n", 3, '/var/log/test.log');
 
         $this->joinDefaultPrices($query, $context);
 
@@ -138,7 +137,6 @@ class PriceHelper implements PriceHelperInterface
         if ($query->hasState(self::STATE_INCLUDES_DEFAULT_PRICE)) {
             return;
         }
-        error_log(print_r('join default', true) . "\n", 3, '/var/log/test.log');
         $this->joinAvailableVariant($query);
 
         $graduation = 'defaultPrice.from = 1';

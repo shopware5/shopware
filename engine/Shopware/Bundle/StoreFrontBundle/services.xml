@@ -205,8 +205,6 @@
             <argument id="shopware_storefront.media_gateway" type="service"/>
         </service>
 
-
-
         <service id="shopware_storefront.graduated_prices_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
@@ -487,5 +485,12 @@
             <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
         </service>
+
+        <service id="shopware_storefront.variant_listing_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
+        </service>
+
     </services>
 </container>

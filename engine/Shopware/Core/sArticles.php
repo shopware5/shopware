@@ -2374,10 +2374,7 @@ class sArticles
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
-        $searchResult = $this->searchService->search(
-            $criteria,
-            $context
-        );
+        $searchResult = $this->searchService->search($criteria, $context);
 
         $articles = [];
 
@@ -2393,9 +2390,6 @@ class sArticles
             // When a filter on a variant is active, use the variant link as detail link
             if ($hasCondition && !empty($article['linkVariant'])) {
                 $article['linkDetails'] = $article['linkVariant'];
-            }
-            if ($hasCondition && !empty($article['prices'])) {
-                $article['price'] = $article['prices'][0]['price'];
             }
 
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {

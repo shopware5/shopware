@@ -112,10 +112,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
+        error_log(print_r($query->getSQL(), true) . "\n", 3, '/var/log/test.log');
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $products = [];
-        error_log(print_r($data, true) . "\n", 3, '/var/log/test.log');
 
+        error_log(print_r($data, true) . "\n", 3, '/var/log/test.log');
         foreach ($data as $row) {
             $product = new BaseProduct(
                 (int) $row['__product_id'],

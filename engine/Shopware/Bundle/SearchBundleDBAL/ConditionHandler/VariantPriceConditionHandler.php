@@ -85,8 +85,6 @@ class VariantPriceConditionHandler implements ConditionHandlerInterface, Criteri
             return;
         }
 
-        error_log(print_r('variant price handler', true) . "\n", 3, '/var/log/test.log');
-
         $this->variantHelper->joinPrices($query, $context, $this->criteria);
 
         $suffix = md5(json_encode($condition));

@@ -66,5 +66,15 @@
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
         </service>
+
+        <service class="Shopware\Bundle\SearchBundle\VariantSearch"
+                 id="shopware_search.variant_search"
+                 decorates="shopware_search.product_search">
+
+            <argument id="shopware_search.variant_search.inner" type="service"/>
+            <argument id="shopware_storefront.variant_listing_price_service" type="service"/>
+        </service>
+
+
     </services>
 </container>
