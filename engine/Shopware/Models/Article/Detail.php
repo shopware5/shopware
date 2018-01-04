@@ -193,7 +193,7 @@ class Detail extends ModelEntity
     /**
      * @var int
      *
-     * @ORM\Column(name="laststock", type="integer", nullable=true)
+     * @ORM\Column(name="laststock", type="boolean", nullable=false)
      */
     private $lastStock = null;
 

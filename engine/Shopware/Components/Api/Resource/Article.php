@@ -259,10 +259,10 @@ class Article extends Resource implements BatchInterface
 
         $builder = $this->getRepository()->createQueryBuilder('article')
             ->addSelect(['attribute'])
+            ->addSelect('mainDetail.lastStock')
             ->leftJoin('article.mainDetail', 'mainDetail')
-            ->leftJoin('mainDetail.attribute', 'attribute');
-
-        $builder->addFilter($criteria)
+            ->leftJoin('mainDetail.attribute', 'attribute')
+            ->addFilter($criteria)
             ->addOrderBy($orderBy)
             ->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -276,8 +276,12 @@ class Article extends Resource implements BatchInterface
         //returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the article data
-        $articles = $paginator->getIterator()->getArrayCopy();
+        $articles = array_map(function ($val) {
+            $val[0]['lastStock'] = $val['lastStock'];
+            unset($val['lastStock']);
+
+            return $val[0];
+        }, $paginator->getIterator()->getArrayCopy());
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY
             && isset($options['language'])

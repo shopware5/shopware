@@ -443,7 +443,7 @@ class Article extends ModelEntity
     /**
      * @var int
      *
-     * @deprecated
+     * @deprecated Since version 5.4, to be removed in 6.0
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
      */
     private $lastStock = false;
