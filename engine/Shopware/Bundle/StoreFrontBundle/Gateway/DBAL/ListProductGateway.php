@@ -162,6 +162,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->where('variant.ordernumber IN (:numbers)')
             ->andWhere('variant.active = 1')
             ->andWhere('product.active = 1')
+            ->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         $this->fieldHelper->addProductTranslation($query, $context);
@@ -198,8 +199,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->andWhere('prices.articleID = product.id');
 
         if ($this->config->get('hideNoInStock')) {
-            $stockCondition = '(priceVariant.laststock * priceVariant.instock) >= (priceVariant.laststock * priceVariant.minpurchase)';
-            $query->andWhere($stockCondition);
+            $query->andWhere('(priceVariant.laststock * priceVariant.instock) >= (priceVariant.laststock * priceVariant.minpurchase)');
         }
 
         return $query;
@@ -245,7 +245,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->from('s_articles_details', 'availableVariant')
             ->where('availableVariant.articleID = product.id')
             ->andWhere('availableVariant.active = 1')
-            ->andWhere('availableVariant.instock >= availableVariant.minpurchase');
+            ->andWhere('(availableVariant.laststock * availableVariant.instock) >= (availableVariant.instock >= availableVariant.minpurchase)');
 
         return $query;
     }

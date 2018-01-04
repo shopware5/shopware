@@ -780,7 +780,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     public function isAvailable()
     {
-        if ($this->isCloseouts()) {
+        if (!$this->isCloseouts()) {
             return true;
         }
 

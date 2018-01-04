@@ -1119,12 +1119,12 @@ class sArticles
         }
 
         $product = $this->productService->get($productNumber, $context);
+
         if (!$product) {
             return [];
         }
 
-        $hideNoInStock = $this->config->get('hideNoInStock');
-        if ($hideNoInStock && !$product->isAvailable()) {
+        if ($this->config->get('hideNoInStock') && !$product->isAvailable()) {
             return [];
         }
 
@@ -2478,7 +2478,8 @@ class sArticles
              FROM s_articles_details variant
              INNER JOIN s_articles product
                 ON product.main_detail_id = variant.id
-                AND product.id = ?',
+                AND product.id = ?
+                AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)',
             [$product->getId()]
         );
 
