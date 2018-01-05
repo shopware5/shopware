@@ -32,7 +32,12 @@ class Migrations_Migration1205 extends AbstractMigration
     public function up($modus)
     {
         $sql = <<<'SQL'
-ALTER TABLE `s_articles_details` ADD `laststock` INT(1) UNSIGNED DEFAULT 0 AFTER `stockmin`
+ALTER TABLE `s_articles_details` ADD `laststock` INT NOT NULL DEFAULT 0 AFTER `stockmin`
+SQL;
+        $this->addSql($sql);
+
+        $sql = <<<'SQL'
+UPDATE `s_articles_details` d INNER JOIN `s_articles` a ON a.id=d.articleID SET d.laststock=a.laststock
 SQL;
         $this->addSql($sql);
 
