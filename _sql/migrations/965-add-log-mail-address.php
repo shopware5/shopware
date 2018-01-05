@@ -34,6 +34,6 @@ class Migrations_Migration965 extends AbstractMigration
                     VALUES (@parent, 'log_mail_address', NULL, 'Email-Adresse für Fehlermeldungen', 'Hier kannst einstellen, an welche Email-Adresse die Logeinträge geschickt werden sollen', 'text', '0', '0', '0', NULL);";
         $this->addSql($sql);
         $this->addSql("SET @elementID = (SELECT id FROM s_core_config_elements WHERE name = 'log_mail_address' LIMIT 1);");
-        $this->addSql("INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementID, 2, 'email address for log entries', 'define an email address for logs ');");
+        $this->addSql("INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementID, 2, 'Email address for log entries', 'Define an email address for logs');");
     }
 }
