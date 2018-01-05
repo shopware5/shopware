@@ -126,6 +126,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         $query->leftJoin('customer.defaultBillingAddress', 'billing');
         $query->leftJoin('customer.attribute', 'attribute');
         $query->leftJoin('customer.group', 'groups');
+        $query->orderBy('customer.id','DESC');
 
         $filters = $this->Request()->getParam('filter', []);
         $search = null;
