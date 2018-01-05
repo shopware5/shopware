@@ -69,24 +69,31 @@ class VariantHelper implements VariantHelperInterface
      * @var null|VariantFacet|bool
      */
     private $variantFacet;
+    /**
+     * @var ListingPriceHelper
+     */
+    private $listingPriceHelper;
 
     /**
      * @param Connection                  $connection
      * @param CustomListingHydrator       $customFacetGateway
      * @param FieldHelper                 $fieldHelper
      * @param \Shopware_Components_Config $config
+     * @param ListingPriceHelper          $listingPriceHelper
      */
     public function __construct(
         Connection $connection,
         CustomListingHydrator $customFacetGateway,
         FieldHelper $fieldHelper,
-        \Shopware_Components_Config $config)
-    {
+        \Shopware_Components_Config $config,
+        ListingPriceHelper $listingPriceHelper
+    ) {
         $this->connection = $connection;
         $this->customFacetGateway = $customFacetGateway;
         $this->fieldHelper = $fieldHelper;
         $this->config = $config;
         $this->reflectionHelper = new ReflectionHelper();
+        $this->listingPriceHelper = $listingPriceHelper;
     }
 
     /**
@@ -138,6 +145,7 @@ class VariantHelper implements VariantHelperInterface
         }
 
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        /** @var VariantCondition $condition */
         foreach ($conditions as $condition) {
             $this->joinVariantCondition($query, $condition);
         }
@@ -154,7 +162,6 @@ class VariantHelper implements VariantHelperInterface
         $priceTable = $this->createListingPriceTable($criteria, $context);
 
         $query->addSelect(['listing_price.*']);
-        $query->addSelect('listing_price.price as cheapest_price_value');
         $query->innerJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
@@ -244,21 +251,26 @@ class VariantHelper implements VariantHelperInterface
      */
     private function createListingPriceTable(Criteria $criteria, ShopContextInterface $context)
     {
-        $selection = $this->getSelection($context);
+        $selection = $this->listingPriceHelper->getSelection($context);
 
         $query = $this->connection->createQueryBuilder();
 
         $query->select([
-            'MIN(' . $selection . ') AS price',
+            'prices.*',
+            'MIN(' . $selection . ') AS cheapest_price',
             'prices.articledetailsID AS variant_id',
             'COUNT(DISTINCT price) as different_price_count',
             'prices.articleID AS product_id',
         ]);
-        $query->from('s_articles_prices', 'prices');
+
+        $priceTable = $this->listingPriceHelper->getPriceTable($context);
+
+        $query->from('s_articles', 'product');
+        $query->innerJoin('product', '(' . $priceTable->getSQL() . ')', 'prices', 'product.id = prices.articleID');
         $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID AND variant.active = 1');
-        $query->innerJoin('prices', 's_articles', 'product', 'product.id = variant.articleID');
         $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
-        $this->joinPriceGroup($query);
+
+        $this->listingPriceHelper->joinPriceGroup($query);
 
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
@@ -271,109 +283,22 @@ class VariantHelper implements VariantHelperInterface
             $query->addGroupBy($tableKey . '.option_id');
         }
 
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $query->andWhere("IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')");
+        } else {
+            $query->andWhere('prices.from = 1');
+        }
+
+        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
+        $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
+
+        if ($this->hasDifferentCustomerGroups($context)) {
+            $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
+        }
+
         $query->addGroupBy('prices.articleID');
 
         return $query;
-    }
-
-    /**
-     * @param ShopContextInterface $context
-     *
-     * @return string
-     */
-    private function getSelection(ShopContextInterface $context)
-    {
-        $current = $context->getCurrentCustomerGroup();
-        $currency = $context->getCurrency();
-
-        $discount = $current->useDiscount() ? $current->getPercentageDiscount() : 0;
-
-        $considerMinPurchase = $this->config->get('calculateCheapestPriceWithMinPurchase');
-
-        $taxCase = $this->buildTaxCase($context);
-
-        // Rounded to filter this value correctly
-        // => 2,99999999 displayed as 3,- € but won't be displayed with a filter on price >= 3,- €
-        $selection = 'ROUND(' .
-
-            // Customer group price (with fallback switch)
-            'prices.price' .
-
-            // Multiplied with the variant min purchase
-            ($considerMinPurchase ? ' * variant.minpurchase' : '') .
-
-            // Multiplied with the percentage price group discount
-            ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
-
-            // Multiplied with the product tax if the current customer group should see gross prices
-            ($current->displayGrossPrices() ? ' * (( ' . $taxCase . ' + 100) / 100)' : '') .
-
-            // Multiplied with the percentage discount of the current customer group
-            ($discount ? ' * ' . (100 - (float) $discount) / 100 : '') .
-
-            // Multiplied with the shop currency factor
-            ($currency->getFactor() ? ' * ' . $currency->getFactor() : '') .
-
-            ', 2)';
-
-        return $selection;
-    }
-
-    /**
-     * Builds the tax cases for the price selection query
-     *
-     * @param ShopContextInterface $context
-     *
-     * @return string
-     */
-    private function buildTaxCase(ShopContextInterface $context)
-    {
-        $cases = [];
-        foreach ($context->getTaxRules() as $rule) {
-            $cases[] = ' WHEN ' . $rule->getId() . ' THEN ' . $rule->getTax();
-        }
-
-        return '(CASE tax.id ' . implode(' ', $cases) . ' END)';
-    }
-
-    /**
-     * @return array
-     */
-    private function getPriceColumns()
-    {
-        return [
-            '`id`',
-            '`pricegroup`',
-            '`from`',
-            '`to`',
-            '`articleID`',
-            '`articledetailsID`',
-            '`price`',
-            '`pseudoprice`',
-            '`baseprice`',
-            '`percent`',
-        ];
-    }
-
-    /**
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     */
-    private function joinPriceGroup(\Doctrine\DBAL\Query\QueryBuilder $query)
-    {
-        $discountStart = '1';
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $discountStart = '(SELECT MAX(discountstart) FROM s_core_pricegroups_discounts subPriceGroup WHERE subPriceGroup.id = priceGroup.id AND subPriceGroup.customergroupID = :priceGroupCustomerGroup)';
-        }
-
-        $query->leftJoin(
-            'product',
-            's_core_pricegroups_discounts',
-            'priceGroup',
-            'priceGroup.groupID = product.pricegroupID
-             AND priceGroup.discountstart = ' . $discountStart . '
-             AND priceGroup.customergroupID = :priceGroupCustomerGroup
-             AND product.pricegroupActive = 1'
-        );
     }
 
     /**

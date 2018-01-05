@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ListingPriceTable implements ListingPriceTableInterface
@@ -41,27 +40,32 @@ class ListingPriceTable implements ListingPriceTableInterface
     private $config;
 
     /**
-     * @param Connection                  $connection
-     * @param \Shopware_Components_Config $config
+     * @var ListingPriceHelper
      */
-    public function __construct(Connection $connection, \Shopware_Components_Config $config)
-    {
+    private $listingPriceHelper;
+
+    public function __construct(
+        Connection $connection,
+        \Shopware_Components_Config $config,
+        ListingPriceHelper $listingPriceHelper
+    ) {
         $this->connection = $connection;
         $this->config = $config;
+        $this->listingPriceHelper = $listingPriceHelper;
     }
 
     /**
      * @param ShopContextInterface $context
      *
-     * @return DoctrineQueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function get(ShopContextInterface $context)
     {
-        $priceTable = $this->getPriceTable($context);
+        $priceTable = $this->listingPriceHelper->getPriceTable($context);
 
         $query = $this->connection->createQueryBuilder();
 
-        $selection = 'MIN(' . $this->getSelection($context) . ') as cheapest_price';
+        $selection = 'MIN(' . $this->listingPriceHelper->getSelection($context) . ') as cheapest_price';
 
         $query->select(['prices.*', $selection]);
         $query->from('s_articles', 'product');
@@ -69,7 +73,7 @@ class ListingPriceTable implements ListingPriceTableInterface
         $query->innerJoin('product', '(' . $priceTable->getSQL() . ')', 'prices', 'product.id = prices.articleID');
 
         $this->joinAvailableVariant($query);
-        $this->joinPriceGroup($query);
+        $this->listingPriceHelper->joinPriceGroup($query);
 
         $query->andWhere('prices.articledetailsID = availableVariant.id');
 
@@ -102,130 +106,9 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @return string
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
      */
-    private function getPriceSwitchColumns()
-    {
-        $template = 'IFNULL(customerPrice.%s, defaultPrice.%s) as %s';
-        $switch = [];
-        foreach ($this->getPriceColumns() as $column) {
-            $switch[] = sprintf($template, $column, $column, $column);
-        }
-
-        return implode(',', $switch);
-    }
-
-    /**
-     * @return array
-     */
-    private function getPriceColumns()
-    {
-        return [
-            '`id`',
-            '`pricegroup`',
-            '`from`',
-            '`to`',
-            '`articleID`',
-            '`articledetailsID`',
-            '`price`',
-            '`pseudoprice`',
-            '`baseprice`',
-            '`percent`',
-        ];
-    }
-
-    /**
-     * @param ShopContextInterface $context
-     *
-     * @return string
-     */
-    private function getSelection(ShopContextInterface $context)
-    {
-        $current = $context->getCurrentCustomerGroup();
-        $currency = $context->getCurrency();
-
-        $discount = $current->useDiscount() ? $current->getPercentageDiscount() : 0;
-
-        $considerMinPurchase = $this->config->get('calculateCheapestPriceWithMinPurchase');
-
-        $taxCase = $this->buildTaxCase($context);
-
-        // Rounded to filter this value correctly
-        // => 2,99999999 displayed as 3,- € but won't be displayed with a filter on price >= 3,- €
-        $selection = 'ROUND(' .
-
-            // Customer group price (with fallback switch)
-            'prices.price' .
-
-            // Multiplied with the variant min purchase
-            ($considerMinPurchase ? ' * availableVariant.minpurchase' : '') .
-
-            // Multiplied with the percentage price group discount
-            ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
-
-            // Multiplied with the product tax if the current customer group should see gross prices
-            ($current->displayGrossPrices() ? ' * (( ' . $taxCase . ' + 100) / 100)' : '') .
-
-            // Multiplied with the percentage discount of the current customer group
-            ($discount ? ' * ' . (100 - (float) $discount) / 100 : '') .
-
-            // Multiplied with the shop currency factor
-            ($currency->getFactor() ? ' * ' . $currency->getFactor() : '') .
-
-            ', 2)';
-
-        return $selection;
-    }
-
-    /**
-     * Builds the tax cases for the price selection query
-     *
-     * @param ShopContextInterface $context
-     *
-     * @return string
-     */
-    private function buildTaxCase(ShopContextInterface $context)
-    {
-        $cases = [];
-        foreach ($context->getTaxRules() as $rule) {
-            $cases[] = ' WHEN ' . $rule->getId() . ' THEN ' . $rule->getTax();
-        }
-
-        return '(CASE tax.id ' . implode(' ', $cases) . ' END)';
-    }
-
-    /**
-     * @param ShopContextInterface $context
-     *
-     * @return DoctrineQueryBuilder
-     */
-    private function getPriceTable(ShopContextInterface $context)
-    {
-        $priceTable = $this->connection->createQueryBuilder();
-        $priceTable->select($this->getPriceColumns());
-        $priceTable->from('s_articles_prices', 'defaultPrice');
-        $priceTable->where('defaultPrice.pricegroup = :fallbackCustomerGroup');
-
-        if (!$this->hasDifferentCustomerGroups($context)) {
-            return $priceTable;
-        }
-
-        $priceTable->select($this->getPriceSwitchColumns());
-        $priceTable->leftJoin(
-            'defaultPrice',
-            's_articles_prices',
-            'customerPrice',
-            'customerPrice.articledetailsID = defaultPrice.articledetailsID
-            AND customerPrice.pricegroup = :currentCustomerGroup'
-        );
-
-        return $priceTable;
-    }
-
-    /**
-     * @param DoctrineQueryBuilder $query
-     */
-    private function joinAvailableVariant(DoctrineQueryBuilder $query)
+    private function joinAvailableVariant(\Doctrine\DBAL\Query\QueryBuilder $query)
     {
         $stockCondition = '';
         if ($this->config->get('hideNoInstock')) {
@@ -238,27 +121,6 @@ class ListingPriceTable implements ListingPriceTableInterface
             'availableVariant',
             'availableVariant.articleID = product.id
              AND availableVariant.active = 1 ' . $stockCondition
-        );
-    }
-
-    /**
-     * @param DoctrineQueryBuilder $query
-     */
-    private function joinPriceGroup(DoctrineQueryBuilder $query)
-    {
-        $discountStart = '1';
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $discountStart = '(SELECT MAX(discountstart) FROM s_core_pricegroups_discounts subPriceGroup WHERE subPriceGroup.id = priceGroup.id AND subPriceGroup.customergroupID = :priceGroupCustomerGroup)';
-        }
-
-        $query->leftJoin(
-            'product',
-            's_core_pricegroups_discounts',
-            'priceGroup',
-            'priceGroup.groupID = product.pricegroupID
-             AND priceGroup.discountstart = ' . $discountStart . '
-             AND priceGroup.customergroupID = :priceGroupCustomerGroup
-             AND product.pricegroupActive = 1'
         );
     }
 }

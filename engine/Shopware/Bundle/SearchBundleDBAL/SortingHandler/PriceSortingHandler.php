@@ -24,10 +24,11 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
-use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
+use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -37,19 +38,21 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceSortingHandler implements SortingHandlerInterface
+class PriceSortingHandler implements SortingHandlerInterface, CriteriaAwareInterface
 {
     /**
-     * @var ListingPriceTable
+     * @var Criteria
      */
-    private $listingPriceTable;
+    private $criteria;
 
     /**
-     * @param ListingPriceTable $listingPriceTable
+     * @var ListingPriceSwitcher
      */
-    public function __construct(ListingPriceTable $listingPriceTable)
+    private $listingPriceSwitcher;
+
+    public function __construct(ListingPriceSwitcher $listingPriceSwitcher)
     {
-        $this->listingPriceTable = $listingPriceTable;
+        $this->listingPriceSwitcher = $listingPriceSwitcher;
     }
 
     /**
@@ -68,16 +71,14 @@ class PriceSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (!$query->hasState(PriceConditionHandler::LISTING_PRICE_JOINED)) {
-            $table = $this->listingPriceTable->get($context);
-            $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');
-            foreach ($table->getParameters() as $key => $value) {
-                $query->setParameter($key, $value);
-            }
-            $query->addState(PriceConditionHandler::LISTING_PRICE_JOINED);
-        }
+        $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
 
         /* @var PriceSorting $sorting */
         $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection());
+    }
+
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
     }
 }

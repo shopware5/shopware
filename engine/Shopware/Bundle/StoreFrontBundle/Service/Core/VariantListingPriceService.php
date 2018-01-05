@@ -104,7 +104,7 @@ class VariantListingPriceService
             }
 
             $product->getListingPrice()->setCalculatedPrice(
-                round((float) $data[$number]['cheapest_price_value'], 2)
+                round((float) $data[$number]['cheapest_price'], 2)
             );
 
             $product->setDisplayFromPrice($data[$number]['different_price_count'] > 1);
@@ -120,12 +120,12 @@ class VariantListingPriceService
                 return false;
             }
 
-            if (!$attribute->exists('cheapest_price_value')) {
+            if (!$attribute->exists('cheapest_price')) {
                 return false;
             }
 
             $product->getListingPrice()->setCalculatedPrice(
-                round((float) $attribute->get('cheapest_price_value'), 2)
+                round((float) $attribute->get('cheapest_price'), 2)
             );
         }
 

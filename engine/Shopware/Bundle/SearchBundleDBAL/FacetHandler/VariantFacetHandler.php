@@ -137,7 +137,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
-        return $this->gateway->getOptions($valueIds);
+        return $this->gateway->getOptions($valueIds, $context);
     }
 
     /**

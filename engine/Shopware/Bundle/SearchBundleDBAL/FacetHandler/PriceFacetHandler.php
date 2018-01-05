@@ -30,8 +30,7 @@ use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
-use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -65,27 +64,18 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
     private $maxFieldName;
 
     /**
-     * @var ListingPriceTable
+     * @var ListingPriceSwitcher
      */
-    private $listingPriceTable;
+    private $listingPriceSwitcher;
 
-    /**
-     * @param ListingPriceTable                    $listingPriceTable
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     *
-     * @internal param PriceHelperInterface $priceHelper
-     */
     public function __construct(
-        ListingPriceTable $listingPriceTable,
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper
+        QueryAliasMapper $queryAliasMapper,
+        ListingPriceSwitcher $listingPriceSwitcher
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
-        $this->listingPriceTable = $listingPriceTable;
 
         if (!$this->minFieldName = $queryAliasMapper->getShortAlias('priceMin')) {
             $this->minFieldName = 'priceMin';
@@ -94,6 +84,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         if (!$this->maxFieldName = $queryAliasMapper->getShortAlias('priceMax')) {
             $this->maxFieldName = 'priceMax';
         }
+        $this->listingPriceSwitcher = $listingPriceSwitcher;
     }
 
     /**
@@ -122,14 +113,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
-        if (!$query->hasState(PriceConditionHandler::LISTING_PRICE_JOINED)) {
-            $table = $this->listingPriceTable->get($context);
-            $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');
-            foreach ($table->getParameters() as $key => $value) {
-                $query->setParameter($key, $value);
-            }
-            $query->addState(PriceConditionHandler::LISTING_PRICE_JOINED);
-        }
+        $this->listingPriceSwitcher->joinPrice($query, $criteria, $context);
 
         $query->select('MIN(listing_price.cheapest_price)');
 

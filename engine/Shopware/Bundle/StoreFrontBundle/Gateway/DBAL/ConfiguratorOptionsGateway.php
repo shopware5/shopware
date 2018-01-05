@@ -27,6 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -90,25 +91,34 @@ class ConfiguratorOptionsGateway
      *
      * @return Struct\Configurator\Group[]
      */
-    public function getOptions(array $optionIds)
+    public function getOptions(array $optionIds, ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
 
-        //todo@dr media values missing
         $query->addSelect($this->fieldHelper->getConfiguratorGroupFields());
         $query->addSelect($this->fieldHelper->getConfiguratorOptionFields());
+        $query->addSelect($this->fieldHelper->getMediaFields());
 
-        $query->from('s_article_configurator_groups', 'configuratorGroup')
-            ->innerJoin('configuratorGroup', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.group_id = configuratorGroup.id')
-            ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
-            ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
-            ->addOrderBy('configuratorGroup.position')
-            ->addOrderBy('configuratorGroup.name')
-            ->addOrderBy('configuratorOption.position')
-            ->addOrderBy('configuratorOption.name')
-            ->groupBy('configuratorOption.id')
-            ->andWhere('configuratorOption.id IN (:ids)')
-            ->setParameter('ids', $optionIds, Connection::PARAM_INT_ARRAY);
+        $query->from('s_article_configurator_groups', 'configuratorGroup');
+        $query->innerJoin('configuratorGroup', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.group_id = configuratorGroup.id');
+        $query->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id');
+        $query->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id');
+
+        $query->leftJoin('configuratorOption', 's_media', 'media', 'media.id = configuratorOption.media_id');
+        $query->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
+        $query->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID');
+
+        $query->addOrderBy('configuratorGroup.position');
+        $query->addOrderBy('configuratorGroup.name');
+        $query->addOrderBy('configuratorOption.position');
+        $query->addOrderBy('configuratorOption.name');
+        $query->groupBy('configuratorOption.id');
+        $query->andWhere('configuratorOption.id IN (:ids)');
+        $query->setParameter('ids', $optionIds, Connection::PARAM_INT_ARRAY);
+
+        $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
+        $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 

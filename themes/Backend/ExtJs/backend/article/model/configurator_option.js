@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorOption', {
         { name: 'groupId', type: 'int' },
         { name: 'active', type: 'boolean', defaultValue: false },
         { name: 'articleId', type: 'int' },
+        { name: 'mediaId', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'position', type: 'int' }
     ],

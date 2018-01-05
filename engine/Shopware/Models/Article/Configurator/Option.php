@@ -110,6 +110,12 @@ class Option extends ModelEntity
     private $dependencyChildren;
 
     /**
+     * @var int
+     * @ORM\Column(name="media_id", type="integer", nullable=true)
+     */
+    private $mediaId;
+
+    /**
      * Class constructor, initials the array collections for the associations.
      */
     public function __construct()
@@ -222,5 +228,15 @@ class Option extends ModelEntity
     public function setAttribute($attribute)
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ConfiguratorOption', 'attribute', 'configuratorOption');
+    }
+
+    public function getMediaId()
+    {
+        return $this->mediaId;
+    }
+
+    public function setMediaId($mediaId)
+    {
+        $this->mediaId = $mediaId;
     }
 }

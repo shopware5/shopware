@@ -35,5 +35,10 @@ class Migrations_Migration1205 extends AbstractMigration
 ALTER TABLE `s_articles_details` ADD `laststock` INT(1) UNSIGNED DEFAULT 0 AFTER `stockmin`
 SQL;
         $this->addSql($sql);
+
+        $sql = <<<'SQL'
+ALTER TABLE `s_article_configurator_options` ADD `media_id` int(11) NULL;
+SQL;
+        $this->addSql($sql);
     }
 }

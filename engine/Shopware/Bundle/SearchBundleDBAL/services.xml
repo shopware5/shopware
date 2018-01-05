@@ -21,11 +21,7 @@
         <service id="shopware_searchdbal.listing_price_table" class="Shopware\Bundle\SearchBundleDBAL\ListingPriceTable">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="config" />
-        </service>
-
-        <service id="shopware_searchdbal.variant_listing_price_table" class="Shopware\Bundle\SearchBundleDBAL\VariantListingPriceTable">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="config" />
+            <argument type="service" id="shopware_searchdbal.listing_price_helper"/>
         </service>
 
         <!-- Search handlers -->
@@ -119,21 +115,11 @@
         </service>
 
         <service id="shopware_searchdbal.price_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\PriceFacetHandler">
-            <argument type="service" id="shopware_searchdbal.listing_price_table"/>
-            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
             <tag name="facet_handler_dbal"/>
-        </service>
-
-        <service id="shopware_searchdbal.variant_price_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\VariantPriceFacetHandler"
-                decorates="shopware_searchdbal.price_facet_handler_dbal" public="false">
-            <argument type="service" id="shopware_searchdbal.variant_price_facet_handler_dbal.inner"/>
-            <argument type="service" id="shopware_searchdbal.listing_price_table"/>
-            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
-            <tag name="facet_handler_dbal"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
+            <argument type="service" id="snippets"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <argument type="service" id="shopware_searchdbal.listing_price_switcher"/>
         </service>
 
         <service class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\VariantFacetHandler" id="shopware_bundle.search_bundle_dbal_facet_handler.variant_facet_handler">
@@ -143,7 +129,6 @@
             <argument type="service" id="shopware_searchdbal.search_price_helper_dbal"/>
             <tag name="facet_handler_dbal"/>
         </service>
-
 
         <!-- Condition handler -->
         <service id="shopware_searchdbal.vote_average_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VoteAverageConditionHandler">
@@ -161,7 +146,7 @@
         </service>
 
         <service id="shopware_searchdbal.has_pseudo_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPseudoPriceConditionHandler">
-            <argument type="service" id="shopware_searchdbal.listing_price_table" />
+            <argument type="service" id="shopware_searchdbal.listing_price_switcher"/>
             <tag name="condition_handler_dbal"/>
         </service>
 
@@ -222,17 +207,8 @@
         </service>
 
         <service id="shopware_searchdbal.price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler" >
-            <argument type="service" id="shopware_searchdbal.listing_price_table" />
-        </service>
-
-        <service id="shopware_searchdbal.variant_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VariantPriceConditionHandler"
-                decorates="shopware_searchdbal.price_condition_handler_dbal"
-                public="false">
-
-            <argument type="service" id="shopware_searchdbal.variant_price_condition_handler_dbal.inner" />
-            <argument type="service" id="shopware_searchdbal.variant_helper"/>
-
-            <tag name="condition_handler_dbal"/>
+            <argument type="service" id="shopware_searchdbal.listing_price_switcher" />
+            <tag name="condition_handler_dbal" />
         </service>
 
         <service id="shopware_searchdbal.similar_products_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SimilarProductConditionHandler">
@@ -257,7 +233,7 @@
         </service>
 
         <service id="shopware_searchdbal.price_sorting_handler_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\PriceSortingHandler" >
-            <argument type="service" id="shopware_searchdbal.listing_price_table" />
+            <argument type="service" id="shopware_searchdbal.listing_price_switcher" />
             <tag name="sorting_handler_dbal"/>
         </service>
 
@@ -337,6 +313,19 @@
             <argument type="service" id="shopware_storefront.custom_listing_hydrator"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="config"/>
+            <argument type="service" id="shopware_searchdbal.listing_price_helper"/>
         </service>
+
+        <service id="shopware_searchdbal.listing_price_switcher" class="Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher">
+            <argument id="shopware_searchdbal.listing_price_table" type="service"/>
+            <argument id="shopware_searchdbal.variant_helper" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\SearchBundleDBAL\ListingPriceHelper" id="shopware_searchdbal.listing_price_helper">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="config" type="service"/>
+        </service>
+
+
     </services>
 </container>
