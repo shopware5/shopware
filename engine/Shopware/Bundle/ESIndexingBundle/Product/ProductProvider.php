@@ -197,7 +197,7 @@ class ProductProvider implements ProductProviderInterface
 
             if ($variantFacet && $product->getConfiguration()) {
                 $product->setVisibility(
-                    $this->visibilityLoader->getVisibility($product)
+                    $this->visibilityLoader->getVisibility($product, $variantFacet)
                 );
             }
 

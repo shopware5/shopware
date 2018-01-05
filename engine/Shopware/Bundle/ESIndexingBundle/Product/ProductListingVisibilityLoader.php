@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
+use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 
@@ -33,14 +34,20 @@ class ProductListingVisibilityLoader
     /**
      * Builds the visibility for the variant listings
      *
-     * @param Product $product
+     * @param Product      $product
+     * @param VariantFacet $facet
      *
      * @return array
      */
-    public function getVisibility(Product $product)
+    public function getVisibility(Product $product, VariantFacet $facet)
     {
+        $groups = $product->getFullConfiguration();
+        $groups = array_filter($groups, function (Group $group) use ($facet) {
+            return in_array($group->getId(), $facet->getExpandGroupIds(), true);
+        });
+
         $splitting = $this->createSplitting(
-            $product->getFullConfiguration(),
+            $groups,
             $product->getAvailableCombinations()
         );
 

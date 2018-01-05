@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
@@ -36,25 +35,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class VariantListingPriceService
 {
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * @var VariantHelperInterface
      */
     private $helper;
+
     /**
      * @var QueryBuilderFactoryInterface
      */
     private $factory;
 
     public function __construct(
-        Connection $connection,
         QueryBuilderFactoryInterface $factory,
         VariantHelperInterface $helper
     ) {
-        $this->connection = $connection;
         $this->helper = $helper;
         $this->factory = $factory;
     }

@@ -127,12 +127,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
             return;
         }
 
-        $ids = array_column($buckets, 'key');
-        $groups = $this->gateway->getOptions($ids);
-        if (empty($groups)) {
-            return;
-        }
-
         /**
          * @var VariantFacet
          */
@@ -140,6 +134,16 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
         if (!$facet instanceof VariantFacet) {
             return;
         }
+
+        $ids = array_column($buckets, 'key');
+        $groups = $this->gateway->getOptions($ids, $context);
+        if (empty($groups)) {
+            return;
+        }
+
+        $groups = array_filter($groups, function (Group $group) use ($facet) {
+            return in_array($group->getId(), $facet->getGroupIds(), true);
+        });
 
         $actives = $this->getFilteredValues($criteria);
         $facet = $this->createCollectionResult($facet, $groups, $actives);
@@ -212,9 +216,12 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     private function getFilteredValues(Criteria $criteria)
     {
         $values = [];
-        foreach ($criteria->getConditions() as $condition) {
-            if ($condition instanceof VariantCondition) {
-                $values = array_merge($values, $condition->getOptionIds());
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+
+        /** @var VariantCondition $condition */
+        foreach ($conditions as $condition) {
+            foreach ($condition->getOptionIds() as $id) {
+                $values[] = $id;
             }
         }
 
