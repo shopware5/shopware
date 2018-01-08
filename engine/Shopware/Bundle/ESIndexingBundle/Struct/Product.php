@@ -80,6 +80,11 @@ class Product extends ListProduct
     protected $availableCombinations = [];
 
     /**
+     * @var array
+     */
+    protected $listingVariationPrices = [];
+
+    /**
      * @param ListProduct $listProduct
      *
      * @return Product
@@ -228,5 +233,15 @@ class Product extends ListProduct
     public function getFullConfiguration()
     {
         return $this->fullConfiguration;
+    }
+
+    public function setListingVariationPrices(array $prices)
+    {
+        $this->listingVariationPrices = $prices;
+    }
+
+    public function getListingVariationPrices()
+    {
+        return $this->listingVariationPrices;
     }
 }

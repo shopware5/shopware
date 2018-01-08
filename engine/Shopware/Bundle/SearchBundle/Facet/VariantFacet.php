@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Facet;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
@@ -52,7 +53,8 @@ class VariantFacet implements FacetInterface
         if (is_string($groupIds)) {
             $groupIds = array_filter(explode('|', $groupIds));
         }
-        $this->groupIds = $groupIds;
+        Assertion::allIntegerish($groupIds);
+        $this->groupIds = array_map('intval', $groupIds);
 
         if ($expandGroupIds === null) {
             $expandGroupIds = [];
@@ -61,7 +63,9 @@ class VariantFacet implements FacetInterface
         if (is_string($expandGroupIds)) {
             $expandGroupIds = array_filter(explode('|', $expandGroupIds));
         }
-        $this->expandGroupsIds = $expandGroupIds;
+
+        Assertion::allIntegerish($expandGroupIds);
+        $this->expandGroupsIds = array_map('intval', $expandGroupIds);
     }
 
     /**

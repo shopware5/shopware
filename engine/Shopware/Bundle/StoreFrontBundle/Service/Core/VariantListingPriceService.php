@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
+use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
@@ -56,6 +57,10 @@ class VariantListingPriceService
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
+        $conditions = array_filter($conditions, function(VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+
         if (empty($conditions)) {
             return;
         }
@@ -79,12 +84,21 @@ class VariantListingPriceService
      */
     private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
-        $query = $this->factory->createQuery($criteria, $context);
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+
+        $cleanCriteria = new Criteria();
+        foreach ($conditions as $condition) {
+            $cleanCriteria->addCondition($condition);
+        }
+        $numbers = array_keys($result->getProducts());
+        $cleanCriteria->addCondition(new OrdernumberCondition($numbers));
+
+        $query = $this->factory->createQuery($cleanCriteria, $context);
         $select = $query->getQueryPart('select');
         $select = array_merge(['variant.ordernumber as array_key'], $select);
         $query->select($select);
 
-        $this->helper->joinPrices($query, $context, $criteria);
+        $this->helper->joinPrices($query, $context, $cleanCriteria);
         $query->addGroupBy('product.id');
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);

@@ -104,24 +104,14 @@ class ProductProvider implements ProductProviderInterface
     private $variantHelper;
 
     /**
-     * @var ProductListingVisibilityLoader
+     * @var ProductListingVariationLoader
      */
-    private $visibilityLoader;
+    private $listingVariationLoader;
 
     /**
      * @var ProductConfigurationLoader
      */
     private $configurationLoader;
-
-    /**
-     * @var ReflectionHelper
-     */
-    private $reflectionHelper;
-
-    /**
-     * @var VariantFacet|null|bool
-     */
-    private $variantFacet;
 
     public function __construct(
         ListProductGatewayInterface $productGateway,
@@ -136,7 +126,7 @@ class ProductProvider implements ProductProviderInterface
         ConfiguratorServiceInterface $configuratorService,
         VariantHelper $variantHelper,
         ProductConfigurationLoader $configurationLoader,
-        ProductListingVisibilityLoader $visibilityLoader
+        ProductListingVariationLoader $visibilityLoader
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -150,7 +140,7 @@ class ProductProvider implements ProductProviderInterface
         $this->configuratorService = $configuratorService;
         $this->variantHelper = $variantHelper;
         $this->configurationLoader = $configurationLoader;
-        $this->visibilityLoader = $visibilityLoader;
+        $this->listingVariationLoader = $visibilityLoader;
     }
 
     /**
@@ -179,6 +169,8 @@ class ProductProvider implements ProductProviderInterface
 
         $combinations = $this->configurationLoader->getCombinations($numbers);
 
+        $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration);
+
         $result = [];
         foreach ($products as $listProduct) {
             $product = Product::createFromListProduct($listProduct);
@@ -197,7 +189,11 @@ class ProductProvider implements ProductProviderInterface
 
             if ($variantFacet && $product->getConfiguration()) {
                 $product->setVisibility(
-                    $this->visibilityLoader->getVisibility($product, $variantFacet)
+                    $this->listingVariationLoader->getVisibility($product, $variantFacet)
+                );
+
+                $product->setListingVariationPrices(
+                    $listingPrices[$product->getNumber()]
                 );
             }
 
@@ -367,13 +363,7 @@ class ProductProvider implements ProductProviderInterface
      */
     private function getCalculatedPrices($shop, $products, $priceRules)
     {
-        $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
-        if (!$shop->isMain()) {
-            $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getParentId());
-        }
-
-        $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
-        $contexts = $this->getContexts($shop->getId(), $customerGroups, $currencies);
+        $contexts = $this->getPriceContexts($shop);
 
         $prices = [];
         foreach ($products as $product) {
@@ -439,5 +429,21 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param Shop $shop
+     * @return array
+     */
+    private function getPriceContexts(Shop $shop)
+    {
+        $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
+        if (!$shop->isMain()) {
+            $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getParentId());
+        }
+
+        $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
+
+        return $this->getContexts($shop->getId(), $customerGroups, $currencies);
     }
 }

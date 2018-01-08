@@ -111,6 +111,10 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
+        $conditions = array_filter($conditions, function(VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+        
         $groups = array_map(function (VariantCondition $condition) {
             return $condition->getGroupId();
         }, $conditions);
