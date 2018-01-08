@@ -347,6 +347,26 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         return $getVoucher;
     }
+    
+    /**
+     * Get user_attributes (s_user_attributes)
+     */
+
+    public function getUserAttributes($id)
+    {
+        if (empty($id)) {
+            return false;
+        }
+
+
+        $sqlUserAttributes = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_user_attributes WHERE userID = ?',
+            [$id]
+        );
+
+        return $sqlUserAttributes;
+
+    }
 
     /**
      * Assign configuration / data to template, new template base
@@ -434,6 +454,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 'countryShipping' => $order->shipping->country,
                 'country' => $order->billing->country,
             ],
+            'attributes' => $this->getUserAttributes($order->userID),
         ];
         $this->_view->assign('User', $user);
     }
