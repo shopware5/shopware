@@ -98,7 +98,8 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
         ShopContextInterface $context
     ) {
         $aggregation = new TermsAggregation('variant');
-        $aggregation->setField('configuration.options.id');
+        $aggregation->setField('fullConfiguration.options.id');
+        $aggregation->setParameters(['size' => 5000]);
         $search->addAggregation($aggregation);
     }
 

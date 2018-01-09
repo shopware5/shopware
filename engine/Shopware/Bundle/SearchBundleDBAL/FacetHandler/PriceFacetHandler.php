@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
@@ -109,23 +110,18 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
+        $query = $this->buildQuery($reverted, $criteria, $context);
 
-        $this->listingPriceSwitcher->joinPrice($query, $criteria, $context);
-
-        $query->select('MIN(listing_price.cheapest_price)');
+        $query->orderBy('listing_price.cheapest_price', 'ASC');
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $min = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        $query->groupBy('product.id')
-            ->orderBy('listing_price.cheapest_price', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
+        $query = $this->buildQuery($reverted, $criteria, $context);
+
+        $query->orderBy('listing_price.cheapest_price', 'DESC');
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -167,5 +163,30 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
             2,
             'frontend/listing/filter/facet-currency-range.tpl'
         );
+    }
+
+    /**
+     * @param Criteria             $reverted
+     * @param Criteria             $criteria
+     * @param ShopContextInterface $context
+     *
+     * @return \Shopware\Bundle\SearchBundleDBAL\QueryBuilder
+     */
+    private function buildQuery(Criteria $reverted, Criteria $criteria, ShopContextInterface $context)
+    {
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        foreach ($conditions as $condition) {
+            $reverted->addBaseCondition($condition);
+        }
+
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+
+        $this->listingPriceSwitcher->joinPrice($query, $criteria, $context);
+        $query->select('listing_price.cheapest_price');
+        $query->setFirstResult(0);
+        $query->setMaxResults(1);
+        $query->addGroupBy('product.id');
+
+        return $query;
     }
 }

@@ -85,6 +85,11 @@ class Product extends ListProduct
     protected $listingVariationPrices = [];
 
     /**
+     * @var array
+     */
+    protected $filterConfiguration = [];
+
+    /**
      * @param ListProduct $listProduct
      *
      * @return Product
@@ -243,5 +248,15 @@ class Product extends ListProduct
     public function getListingVariationPrices()
     {
         return $this->listingVariationPrices;
+    }
+
+    public function setFilterConfiguration(array $filterConfiguration)
+    {
+        $this->filterConfiguration = $filterConfiguration;
+    }
+
+    public function getFilterConfiguration()
+    {
+        return $this->filterConfiguration;
     }
 }

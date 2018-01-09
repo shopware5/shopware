@@ -71,9 +71,10 @@ class ProductListingVariationLoader
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop          $shop
      * @param ListProduct[] $products
-     * @param array $configurations
+     * @param array         $configurations
+     *
      * @return array
      */
     public function getListingPrices(
@@ -96,7 +97,7 @@ class ProductListingVariationLoader
                 }
 
                 $configuration = $configurations[$product->getNumber()];
-                $groups = array_map(function(Group $group) {
+                $groups = array_map(function (Group $group) {
                     return $group->getId();
                 }, $configuration);
 
@@ -114,6 +115,9 @@ class ProductListingVariationLoader
 
         $calculated = [];
         foreach ($contexts as $context) {
+            if (!array_key_exists($context->getCurrentCustomerGroup()->getKey(), $combinationPrices)) {
+                continue;
+            }
             $customerPrices = $combinationPrices[$context->getCurrentCustomerGroup()->getKey()];
 
             $key = $context->getCurrentCustomerGroup()->getKey() . '_' . $context->getCurrency()->getId();
@@ -147,6 +151,7 @@ class ProductListingVariationLoader
         $splitting = $this->createSplitting($groups, $product->getAvailableCombinations(), $facet);
 
         $configuration = $product->getConfiguration();
+
         return $this->buildListingVisibility($splitting, $configuration);
     }
 
@@ -248,7 +253,7 @@ class ProductListingVariationLoader
             //check if options of this group only be combined with the first element
             $isFirst = in_array($group->getId(), $onlyFirst, true);
             $new = [];
-            
+
             foreach ($result as $item) {
                 $options = array_values($group->getOptions());
 
@@ -307,10 +312,9 @@ class ProductListingVariationLoader
         return $result;
     }
 
-
     private function fetchPrices(array $products)
     {
-        $ids = array_map(function(ListProduct $product) {
+        $ids = array_map(function (ListProduct $product) {
             return $product->getId();
         }, $products);
 
@@ -327,6 +331,10 @@ class ProductListingVariationLoader
         $query->from('s_articles_prices', 'prices');
         $query->innerJoin('prices', 's_article_configurator_option_relations', 'relations', 'relations.article_id = prices.articledetailsID');
         $query->innerJoin('relations', 's_article_configurator_options', 'options', 'relations.option_id = options.id');
+        $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID');
+
+        $query->andWhere('variant.laststock * variant.instock >= variant.laststock * variant.minpurchase');
+        $query->andWhere('variant.active = 1');
         $query->andWhere('prices.to = :to');
         $query->andWhere('prices.pricegroup = :customerGroup');
         $query->andWhere('prices.articleID IN (:products)');
@@ -347,6 +355,7 @@ class ProductListingVariationLoader
                 $price['groups'] = array_map('intval', $price['groups']);
             }
         }
+
         return $prices;
     }
 
@@ -390,16 +399,17 @@ class ProductListingVariationLoader
             sort($combination, SORT_NUMERIC);
 
             //now check which option ids are affected by the current combination
-                // size combination => only consider prices with same size
-                // size + color combination => only consider prices with same size and color like the current product
+            // size combination => only consider prices with same size
+            // size + color combination => only consider prices with same size and color like the current product
 
             $tmp = array_values(array_keys(array_intersect(array_flip($options), $combination)));
             sort($tmp, SORT_NUMERIC);
 
             //filter prices which has configuration matches the current variant configuration
-            $affected = array_filter($prices, function(array $price) use ($tmp) {
+            $affected = array_filter($prices, function (array $price) use ($tmp) {
                 $diff = array_intersect($price['options'], $tmp);
                 $diff = array_values($diff);
+
                 return $diff === $tmp;
             });
 
@@ -417,6 +427,7 @@ class ProductListingVariationLoader
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getPriceContexts(Shop $shop)

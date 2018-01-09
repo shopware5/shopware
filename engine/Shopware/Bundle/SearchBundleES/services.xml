@@ -236,7 +236,6 @@
 
         <service id="shopware_search_es.variant_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\VariantConditionHandler" >
             <tag name="shopware_search_es.search_handler"/>
-            <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
         <service id="shopware_search_es.variant_condition_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\VariantFacetHandler">

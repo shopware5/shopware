@@ -30,19 +30,11 @@ use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class VariantConditionHandler implements PartialConditionHandlerInterface
 {
-    private $variantHelper;
-
-    public function __construct(VariantHelperInterface $variantHelper)
-    {
-        $this->variantHelper = $variantHelper;
-    }
-
     /**
      * Validates if the criteria part can be handled by this handler
      *
@@ -69,16 +61,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $groupBy = $this->buildGroupBy($criteria);
-        $search->addPostFilter(new TermQuery($groupBy, 1));
-
-        /* @var VariantCondition $criteriaPart */
-        $search->addPostFilter(
-            new TermsQuery(
-                'configuration.options.id',
-                $criteriaPart->getOptionIds()
-            )
-        );
+        $this->handle($criteriaPart, $criteria, $search);
     }
 
     /**
@@ -95,26 +78,33 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        $this->handle($criteriaPart, $criteria, $search);
+    }
+
+    private function handle(CriteriaPartInterface $criteriaPart, Criteria $criteria, Search $search)
+    {
         $groupBy = $this->buildGroupBy($criteria);
+
         if ($groupBy) {
             $search->addPostFilter(new TermQuery($groupBy, 1));
 
             /* @var VariantCondition $criteriaPart */
             $search->addPostFilter(
                 new TermsQuery(
-                    'configuration.options.id',
+                    'filterConfiguration.options.id',
                     $criteriaPart->getOptionIds()
                 )
             );
 
             return;
         }
+
         $search->addPostFilter(new TermQuery('isMainVariant', 1));
 
         /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery(
-                'fullConfiguration.options.id',
+                'filterConfiguration.options.id',
                 $criteriaPart->getOptionIds()
             )
         );
