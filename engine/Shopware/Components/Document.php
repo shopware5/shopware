@@ -349,18 +349,22 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     
-     /**
+    /**
      * Get user_attributes (s_user_attributes)
+     *
+     * @param int $userID
+     *
+     * @return array
+     * @throws Exception
      */
-
-    public function getUserAttributes($id)
+    public function getUserAttributes($userID)
     {
-        if (empty($id)) {
+        if (empty($userID)) {
             return false;
         }
 
         $service = Shopware()->Container()->get('shopware_attribute.data_loader');
-        $sqlUserAttributes = $service->load('s_user_attributes', $id);
+        $sqlUserAttributes = $service->load('s_user_attributes', $userID);
 
         return $sqlUserAttributes;
     }
