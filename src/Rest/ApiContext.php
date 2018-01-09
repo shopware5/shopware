@@ -7,8 +7,6 @@ use Shopware\Context\Struct\TranslationContext;
 
 class ApiContext
 {
-    public const KERNEL_USER = 'kernel';
-
     /**
      * @var array
      */
@@ -37,12 +35,12 @@ class ApiContext
     /**
      * @var string
      */
-    private $userUuid;
+    private $userId;
 
     public function __construct(
         array $payload,
         ShopContext $shopContext,
-        string $userUuid = self::KERNEL_USER,
+        ?string $userId = null,
         array $parameters = [],
         string $outputFormat,
         string $resultFormat = ResultFormat::BASIC
@@ -52,7 +50,7 @@ class ApiContext
         $this->shopContext = $shopContext;
         $this->parameters = $parameters;
         $this->resultFormat = $resultFormat;
-        $this->userUuid = $userUuid;
+        $this->userId = $userId;
     }
 
     public function getPayload(): array
@@ -85,8 +83,8 @@ class ApiContext
         return $this->parameters;
     }
 
-    public function getUserUuid(): string
+    public function getUserId(): string
     {
-        return $this->userUuid;
+        return $this->userId;
     }
 }

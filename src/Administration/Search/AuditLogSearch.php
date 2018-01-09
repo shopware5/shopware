@@ -4,6 +4,7 @@ namespace Shopware\Administration\Search;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Ramsey\Uuid\Uuid;
 use Shopware\Api\Customer\Definition\CustomerDefinition;
 use Shopware\Api\Entity\Entity;
 use Shopware\Api\Entity\EntityDefinition;
@@ -133,11 +134,11 @@ class AuditLogSearch
         $query->addSelect([
             'log.entity',
             'log.foreign_key',
-            'COUNT(log.user_uuid) as `action_count`',
+            'COUNT(log.user_id) as `action_count`',
         ]);
         $query->from('audit_log', 'log');
-        $query->andWhere('log.user_uuid = :user');
-        $query->setParameter(':user', $userId);
+        $query->andWhere('log.user_id = :user');
+        $query->setParameter('user', Uuid::fromString($userId)->getBytes());
         $query->addGroupBy('entity');
         $query->addGroupBy('foreign_key');
         $query->addOrderBy('action_count', 'DESC');
@@ -154,7 +155,7 @@ class AuditLogSearch
 
             /** @var Entity $entity */
             foreach ($result as $entity) {
-                $score = $this->getEntityScore($scoring, $entity->getUuid());
+                $score = $this->getEntityScore($scoring, $entity->getId());
 
                 if (!$entity->hasExtension('search')) {
                     continue;
@@ -169,11 +170,12 @@ class AuditLogSearch
         return $results;
     }
 
-    private function getEntityScore(array $scoring, string $uuid)
+    private function getEntityScore(array $scoring, string $id)
     {
         $fallback = 1.1;
         foreach ($scoring as $score) {
-            if ($score['foreign_key'] === $uuid) {
+            $foreignKey = Uuid::fromBytes($score['foreign_key'])->toString();
+            if ($foreignKey === $id) {
                 return 1 + ($score['action_count'] / 10);
             }
         }

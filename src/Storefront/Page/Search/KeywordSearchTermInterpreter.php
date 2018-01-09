@@ -4,6 +4,7 @@ namespace Shopware\Storefront\Page\Search;
 
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Search\Term\SearchPattern;
 use Shopware\Api\Entity\Search\Term\SearchTerm;
 use Shopware\Api\Entity\Search\Term\TokenizerInterface;
@@ -102,8 +103,8 @@ class KeywordSearchTermInterpreter
         }
 
         $query->andWhere('(' . implode(' OR ', $wheres) . ')');
-        $query->andWhere('shop_uuid = :shop');
-        $query->setParameter('shop', $context->getShopUuid());
+        $query->andWhere('shop_id = :shop');
+        $query->setParameter('shop', Uuid::fromString($context->getShopId())->getBytes());
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }

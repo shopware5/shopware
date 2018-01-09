@@ -65,7 +65,7 @@ class TranslatedField extends Field implements WriteContextAware
     {
         $this->storageName = $field->getStorageName();
         $this->foreignClassName = ShopDefinition::class;
-        $this->foreignFieldName = 'uuid';
+        $this->foreignFieldName = 'id';
 
         /* @var Field $field */
         parent::__construct($field->getPropertyName());
@@ -76,18 +76,6 @@ class TranslatedField extends Field implements WriteContextAware
      */
     public function __invoke(string $type, string $key, $value = null): \Generator
     {
-        if (is_string($value)) {
-            // load from write context the default language
-
-            yield 'translations' => [
-                $this->writeContext->get($this->foreignClassName, $this->foreignFieldName) => [
-                    $key => $value,
-                ],
-            ];
-
-            return;
-        }
-
         if (is_array($value)) {
             $isNumeric = count(array_diff($value, range(0, count($value)))) === 0;
 
@@ -111,6 +99,13 @@ class TranslatedField extends Field implements WriteContextAware
 
             return;
         }
+
+        // load from write context the default language
+        yield 'translations' => [
+            $this->writeContext->get($this->foreignClassName, $this->foreignFieldName) => [
+                $key => $value,
+            ],
+        ];
     }
 
     /**

@@ -25,11 +25,11 @@ class ApiTest extends ApiTestCase
             'POST',
             '/api/product',
             [
-                'uuid' => Uuid::uuid4()->toString(),
+                'id' => Uuid::uuid4()->toString(),
                 'name' => 'test123',
                 'the_unknown_field' => 'do nothing?',
-                'taxUuid' => 'SWAG-TAX-UUID-1',
-                'productManufacturer' => ['uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-2'],
+                'taxId' => '49260353-68e3-4d9f-a695-e017d7a231b9',
+                'productManufacturer' => ['id' => Uuid::uuid4()->toString(), 'name' => 'Test'],
             ]
         );
 

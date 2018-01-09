@@ -3,26 +3,32 @@
 namespace Shopware\Api\Test;
 
 use Doctrine\DBAL\Connection;
+use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Write\EntityWriterInterface;
 use Shopware\Api\Entity\Write\FieldException\WriteStackException;
 use Shopware\Api\Entity\Write\WriteContext;
 use Shopware\Api\Product\Definition\ProductDefinition;
+use Shopware\Category\Extension\CategoryPathBuilder;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Storefront\Context\StorefrontContextService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class WriterTest extends KernelTestCase
 {
-    public const UUID = 'AA-BB-CC';
+    public $id;
 
     /**
      * @var Connection
      */
     private $connection;
+    private $idBytes;
 
     public function setUp()
     {
         self::bootKernel();
+        $this->id = Uuid::uuid4()->toString();
+        $this->idBytes = Uuid::fromString($this->id)->getBytes();
+        
         $container = self::$kernel->getContainer();
         $this->connection = $container->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -34,17 +40,17 @@ class WriterTest extends KernelTestCase
         parent::tearDown();
     }
 
-    public function testInsertWithUuid()
+    public function testInsertWithId()
     {
         $this->getWriter()->insert(
             ProductDefinition::class,
             [
                 [
-                    'uuid' => self::UUID,
+                    'id' => $this->id,
                     'name' => 'test',
                     'the_unknown_field' => 'do nothing?',
-                    'taxUuid' => 'SWAG-TAX-UUID-1',
-                    'manufacturer' => ['uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-2'],
+                    'taxId' => '49260353-68e3-4d9f-a695-e017d7a231b9',
+                    'manufacturer' => ['id' => Uuid::uuid4()->toString(), 'link' => 'https://shopware.com', 'name' => 'shopware AG'],
                     'mode' => 0,
                     'lastStock' => true,
                     'crossbundlelook' => 1,
@@ -57,14 +63,14 @@ class WriterTest extends KernelTestCase
             $this->createWriteContext()
         );
 
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', [
-            'uuid' => self::UUID,
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE id=:id', [
+            'id' => $this->idBytes,
         ]);
 
-        self::assertSame(self::UUID, $product['uuid']);
+        self::assertNotEmpty($product['id']);
     }
 
-    public function testInsertWithoutUuid()
+    public function testInsertWithoutId()
     {
         $productCountBefore = (int) $this->connection->fetchColumn('SELECT COUNT(*) FROM product');
 
@@ -72,21 +78,18 @@ class WriterTest extends KernelTestCase
             ProductDefinition::class,
             [
                 [
-                    'uuid' => 'detail-1',
                     'the_unknown_field' => 'do nothing?',
-                    'taxUuid' => 'SWAG-TAX-UUID-1',
+                    'taxId' => '49260353-68e3-4d9f-a695-e017d7a231b9',
                     'name' => 'foo',
-                    'manufacturer' => ['uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-2'],
+                    'manufacturer' => ['id' => Uuid::uuid4()->toString(), 'link' => 'https://shopware.com', 'name' => 'shopware AG'],
                 ],
             ],
             $this->createWriteContext()
         );
 
         $productCountAfter = (int) $this->connection->fetchColumn('SELECT COUNT(*) FROM product');
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid NOT LIKE "SWAG-%"');
 
         self::assertSame($productCountBefore + 1, $productCountAfter);
-        self::assertNotEmpty($product['uuid']);
     }
 
     public function testInsertFromDocs()
@@ -95,12 +98,12 @@ class WriterTest extends KernelTestCase
             ProductDefinition::class,
             [
                 [
-                    'uuid' => self::UUID,
+                    'id' => $this->id,
                     'name' => 'ConfiguratorTest',
                     'description' => 'A test article',
                     'descriptionLong' => '<p>I\'m a <b>test article</b></p>',
-                    'taxUuid' => 'SWAG-TAX-UUID-1',
-                    'manufacturer' => ['uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-2'],
+                    'taxId' => '49260353-68e3-4d9f-a695-e017d7a231b9',
+                    'manufacturer' => ['id' => Uuid::uuid4()->toString(), 'link' => 'https://shopware.com', 'name' => 'shopware AG'],
                     'updatedAt' => new \DateTime(),
                     'mode' => 0,
                     'lastStock' => true,
@@ -113,13 +116,12 @@ class WriterTest extends KernelTestCase
                     'isMain' => true,
 
                     'categories' => [
-                        ['categoryUuid' => 'SWAG-CATEGORY-UUID-25'],
+                        ['categoryId' => CategoryPathBuilder::ROOT],
                     ],
-
                     'prices' => [
                         [
                             'price' => (float) 999,
-                            'customerGroupUuid' => StorefrontContextService::FALLBACK_CUSTOMER_GROUP,
+                            'customerGroupId' => StorefrontContextService::FALLBACK_CUSTOMER_GROUP,
                         ],
                     ],
                 ],
@@ -127,22 +129,24 @@ class WriterTest extends KernelTestCase
             $this->createWriteContext()
         );
 
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', [
-            'uuid' => self::UUID,
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE id=:id', [
+            'id' => $this->idBytes,
         ]);
 
-        self::assertSame(self::UUID, $product['uuid']);
+        self::assertNotEmpty($product);
     }
 
     public function testUpdate()
     {
         $this->insertEmptyProduct();
 
+        $productManufacturerId = Uuid::uuid4()->toString();
+
         $this->getWriter()->update(
             ProductDefinition::class,
             [
                 [
-                    'uuid' => self::UUID,
+                    'id' => $this->id,
                     'name' => '_THE_TITLE_',
                     'the_unknown_field' => 'do nothing?',
                     'description' => '<p>no html</p>',
@@ -150,25 +154,24 @@ class WriterTest extends KernelTestCase
                     'availableFrom' => new \DateTime('2011-01-01T15:03:01.012345Z'),
                     'availableTo' => new \DateTime('2011-01-01T15:03:01.012345Z'),
                     'manufacturer' => [
-                        'uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-1',
+                        'id' => $productManufacturerId,
                         'link' => 'http://www.shopware.com',
+                        'name' => 'Another Company',
                     ],
                 ],
             ],
             $this->createWriteContext()
         );
 
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
-        $productManufacturer = $this->connection->fetchAssoc('SELECT * FROM product_manufacturer WHERE uuid=:uuid', ['uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-1']);
-        $productManufacturerTranslation = $this->connection->fetchAssoc('SELECT * FROM product_manufacturer_translation WHERE product_manufacturer_uuid=:uuid', ['uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-1']);
-        $productTranslation = $this->connection->fetchAssoc('SELECT * FROM product_translation WHERE product_uuid=:uuid', ['uuid' => self::UUID]);
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE id=:id', ['id' => $this->idBytes]);
+        $productManufacturer = $this->connection->fetchAssoc('SELECT * FROM product_manufacturer WHERE id=:id', ['id' => Uuid::fromString($productManufacturerId)->getBytes()]);
+        $productManufacturerTranslation = $this->connection->fetchAssoc('SELECT * FROM product_manufacturer_translation WHERE product_manufacturer_id=:id', ['id' => Uuid::fromString($productManufacturerId)->getBytes()]);
+        $productTranslation = $this->connection->fetchAssoc('SELECT * FROM product_translation WHERE product_id=:id', ['id' => $this->idBytes]);
 
-        self::assertSame(self::UUID, $product['uuid']);
         self::assertSame('_THE_TITLE_', $productTranslation['name'], print_r($productTranslation, true));
         self::assertSame('no html', $productTranslation['description']);
         self::assertSame('<p>html</p>', $productTranslation['description_long']);
-        self::assertSame('SWAG-PRODUCT-MANUFACTURER-UUID-1', $product['product_manufacturer_uuid']);
-        self::assertSame('shopware AG', $productManufacturerTranslation['name']);
+        self::assertSame('Another Company', $productManufacturerTranslation['name']);
         self::assertSame('http://www.shopware.com', $productManufacturer['link']);
     }
 
@@ -176,19 +179,18 @@ class WriterTest extends KernelTestCase
     {
         $this->insertEmptyProduct();
 
-        $newProduct = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
+        $newProduct = $this->connection->fetchAssoc('SELECT * FROM product WHERE id=:id', ['id' => $this->idBytes]);
 
         $this->getWriter()->update(
             ProductDefinition::class,
             [
-                ['uuid' => self::UUID, 'template' => 'ABC'],
+                ['id' => $this->id, 'template' => 'ABC'],
             ],
             $this->createWriteContext()
         );
 
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE id=:id', ['id' => $this->idBytes]);
 
-        self::assertSame(self::UUID, $product['uuid']);
         self::assertSame('ABC', $product['template']);
 
         self::assertNotEquals('0000-00-00 00:00:00', $product['updated_at']);
@@ -208,24 +210,24 @@ class WriterTest extends KernelTestCase
             ProductDefinition::class,
             [
                 [
-                    'uuid' => self::UUID,
+                    'id' => $this->id,
                     'name' => [
-                        'SWAG-SHOP-UUID-1' => '1ABC',
-                        'SWAG-SHOP-UUID-2' => '2ABC',
+                        'FFA32A50-E2D0-4CF3-8389-A53F8D6CD594' => '1ABC',
+                        '2d905256-e751-4967-8dd5-a32a81b94f1f' => '2ABC',
                     ],
-                    'description' => 'foo', // implicit SWAG-SHOP-UUID-1
+                    'description' => 'foo', // implicit FFA32A50-E2D0-4CF3-8389-A53F8D6CD594
                     'descriptionLong' => [
-                        'SWAG-SHOP-UUID-2' => '2CBA',
+                        '2d905256-e751-4967-8dd5-a32a81b94f1f' => '2CBA',
                     ],
                     'translations' => [
-                        'SWAG-SHOP-UUID-2' => [
+                        '2d905256-e751-4967-8dd5-a32a81b94f1f' => [
                             'name' => 'bar',
                             'description' => 'foo',
                             'keywords' => 'fiz,baz',
                         ],
                     ],
                     'metaTitle' => [
-                        'SWAG-SHOP-UUID-2' => 'bar',
+                        '2d905256-e751-4967-8dd5-a32a81b94f1f' => 'bar',
                     ],
                 ],
             ],
@@ -241,7 +243,7 @@ class WriterTest extends KernelTestCase
 //        ];
 //
 //        'GET /product/abc' => [
-//            'uuid' => self::UUID,
+//            'id' => $this->id,
 //            'name' => '', // aus implicit,
 //            'translations' => [],
 //
@@ -251,8 +253,8 @@ class WriterTest extends KernelTestCase
 //        'GET /product/abc/translation/%s' => 'detailAction'
 //
 //        'GET /product/abc/translation/en' => [
-//            'productUuid' => 'abc',
-//            'languageUuid' => 'SWAG-SHOP-UUID-2',
+//            'productId' => 'abc',
+//            'languageId' => '2d905256-e751-4967-8dd5-a32a81b94f1f',
 //            'metaTitle' => 'bar',
 //            'name' => '',
 //            [...]
@@ -260,21 +262,34 @@ class WriterTest extends KernelTestCase
 //
 //        'POST /product/abc' => [];
 
-        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE uuid=:uuid', ['uuid' => self::UUID]);
-        $productTranslations = $this->connection->fetchAll('SELECT * FROM product_translation WHERE product_uuid=:uuid ORDER BY language_uuid', ['uuid' => self::UUID]);
+        $product = $this->connection->fetchAssoc('SELECT * FROM product WHERE id=:id', ['id' => $this->idBytes]);
+        $productTranslations = $this->connection->fetchAll('SELECT * FROM product_translation WHERE product_id= :id', ['id' => $this->idBytes]);
 
-        self::assertSame(self::UUID, $product['uuid']);
+        self::assertNotEmpty($product);
+
         self::assertCount(2, $productTranslations, print_r($productTranslations, true));
-        self::assertSame('1ABC', $productTranslations[0]['name']);
-        self::assertSame('2ABC', $productTranslations[1]['name']);
-        self::assertSame('foo', $productTranslations[0]['description']);
-        self::assertSame('foo', $productTranslations[1]['description']);
-        self::assertNull($productTranslations[0]['description_long']);
-        self::assertSame('2CBA', $productTranslations[1]['description_long']);
-        self::assertNull($productTranslations[0]['meta_title']);
-        self::assertSame('bar', $productTranslations[1]['meta_title']);
-        self::assertNull($productTranslations[0]['keywords']);
-        self::assertSame('fiz,baz', $productTranslations[1]['keywords']);
+
+        $productTranslations = array_map(function($a) {
+            $a['language_id'] = Uuid::fromBytes($a['language_id'])->toString();;
+            return $a;
+        }, $productTranslations);
+
+        foreach ($productTranslations as $translation) {
+            if ($translation['language_id'] === 'ffa32a50-e2d0-4cf3-8389-a53f8d6cd594') {
+                self::assertSame('1ABC', $translation['name']);
+                self::assertSame('foo', $translation['description']);
+                self::assertNull($translation['description_long']);
+                self::assertNull($translation['meta_title']);
+                self::assertNull($translation['keywords']);
+
+            } else {
+                self::assertSame('2ABC', $translation['name']);
+                self::assertSame('foo', $translation['description']);
+                self::assertSame('2CBA', $translation['description_long']);
+                self::assertSame('bar', $translation['meta_title']);
+                self::assertSame('fiz,baz', $translation['keywords']);
+            }
+        }
     }
 
     public function testUpdateInvalid()
@@ -290,7 +305,7 @@ class WriterTest extends KernelTestCase
         $this->getWriter()->update(
             ProductDefinition::class,
             [
-                ['uuid' => self::UUID, 'name' => $tooLongValue],
+                ['id' => $this->id, 'name' => $tooLongValue],
             ],
             $this->createWriteContext()
         );
@@ -310,15 +325,24 @@ class WriterTest extends KernelTestCase
 
     protected function insertEmptyProduct(): void
     {
-        $this->connection->insert(
-            'product',
+        $this->getWriter()->insert(
+            ProductDefinition::class,
             [
-                'uuid' => self::UUID,
-                'tax_uuid' => 'SWAG-TAX-UUID-1',
-                'product_manufacturer_uuid' => 'SWAG-PRODUCT-MANUFACTURER-UUID-2',
-                'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
-                'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
-            ]);
+                [
+                    'id' => $this->id,
+                    'name' => 'Test product',
+                    'tax_id' => '49260353-68e3-4d9f-a695-e017d7a231b9',
+                    'manufacturer' => [
+                        'id' => Uuid::uuid4()->toString(),
+                        'name' => 'shopware AG',
+                        'link' => 'https://shopware.com',
+                    ],
+                    'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                    'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                ],
+            ],
+            $this->createWriteContext()
+        );
     }
 
     private function getWriter(): EntityWriterInterface

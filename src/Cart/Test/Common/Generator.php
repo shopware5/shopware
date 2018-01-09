@@ -25,6 +25,7 @@
 namespace Shopware\Cart\Test\Common;
 
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 use Shopware\Api\Country\Struct\CountryAreaBasicStruct;
 use Shopware\Api\Country\Struct\CountryBasicStruct;
 use Shopware\Api\Country\Struct\CountryStateBasicStruct;
@@ -41,6 +42,7 @@ use Shopware\Cart\Delivery\Struct\ShippingLocation;
 use Shopware\Cart\Tax\TaxDetector;
 use Shopware\CartBridge\Product\ProductPriceGateway;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Storefront\Context\StorefrontContextService;
 
 class Generator extends TestCase
 {
@@ -58,28 +60,28 @@ class Generator extends TestCase
     ) {
         if ($shop === null) {
             $shop = new ShopDetailStruct();
-            $shop->setUuid('SWAG-SHOP-UUID-1');
+            $shop->setId('FFA32A50-E2D0-4CF3-8389-A53F8D6CD594');
             $shop->setIsDefault(true);
-            $shop->setFallbackTranslationUuid(null);
+            $shop->setFallbackTranslationId(null);
         }
 
         $currency = $currency ?: (new CurrencyBasicStruct())->assign([
-            'uuid' => '1',
+            'id' => '4c8eba11-bd35-46d7-86af-bed481a6e665',
         ]);
 
         if (!$currentCustomerGroup) {
             $currentCustomerGroup = new CustomerGroupBasicStruct();
-            $currentCustomerGroup->setUuid('EK2');
+            $currentCustomerGroup->setId(StorefrontContextService::FALLBACK_CUSTOMER_GROUP);
         }
 
         if (!$fallbackCustomerGroup) {
             $fallbackCustomerGroup = new CustomerGroupBasicStruct();
-            $fallbackCustomerGroup->setUuid('EK1');
+            $fallbackCustomerGroup->setId(StorefrontContextService::FALLBACK_CUSTOMER_GROUP);
         }
 
         if (!$taxes) {
             $tax = new TaxBasicStruct();
-            $tax->setUuid('SWAG-TAX-UUID-1');
+            $tax->setId('49260353-68e3-4d9f-a695-e017d7a231b9');
             $tax->setName('test');
             $tax->setRate(19.0);
 
@@ -88,18 +90,18 @@ class Generator extends TestCase
 
         if (!$area) {
             $area = new CountryAreaBasicStruct();
-            $area->setUuid('SWAG-AREA-UUID-1');
+            $area->setId('5cff02b1-0297-41a4-891c-430bcd9e3603');
         }
 
         if (!$country) {
             $country = new CountryBasicStruct();
-            $country->setUuid('SWAG-AREA-COUNTRY-UUID-1');
-            $country->setAreaUuid($area->getUuid());
+            $country->setId('5cff02b1-0297-41a4-891c-430bcd9e3603');
+            $country->setAreaId($area->getId());
         }
         if (!$state) {
             $state = new CountryStateBasicStruct();
-            $state->setUuid('SWAG-AREA-COUNTRY-STATE-UUID-1');
-            $state->setCountryUuid($country->getUuid());
+            $state->setId('bd5e2dcf-547e-4df6-bb1f-f58a554bc69e');
+            $state->setCountryId($country->getId());
         }
 
         if (!$shipping) {
@@ -108,9 +110,9 @@ class Generator extends TestCase
             $shipping->setCountryState($state);
         }
 
-        $paymentMethod = (new PaymentMethodBasicStruct())->assign(['uuid' => '1']);
-        $shippingMethod = (new ShippingMethodBasicStruct())->assign(['uuid' => '1']);
-        $customer = (new CustomerBasicStruct())->assign(['uuid' => '1']);
+        $paymentMethod = (new PaymentMethodBasicStruct())->assign(['id' => '19d144ff-e15f-4772-860d-59fca7f207c1']);
+        $shippingMethod = (new ShippingMethodBasicStruct())->assign(['id' => '8beeb66e-9dda-46b1-8891-a059257a590e']);
+        $customer = (new CustomerBasicStruct())->assign(['id' => Uuid::uuid4()->toString()]);
 
         return new ShopContext(
             $shop,

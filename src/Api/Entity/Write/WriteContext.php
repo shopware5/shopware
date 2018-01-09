@@ -55,7 +55,7 @@ class WriteContext
     public static function createFromTranslationContext(TranslationContext $context): self
     {
         $self = new self($context);
-        $self->set(ShopDefinition::class, 'uuid', $context->getShopUuid());
+        $self->set(ShopDefinition::class, 'id', $context->getShopId());
 
         return $self;
     }
@@ -140,9 +140,7 @@ class WriteContext
     {
         foreach ($existingPrimaries as $row) {
             ksort($row);
-            $unique = md5(json_encode($row));
-
-            $this->primaryKeys[$table][] = $unique;
+            $this->primaryKeys[$table][] = $row;
         }
     }
 
@@ -158,11 +156,14 @@ class WriteContext
             return false;
         }
 
+        $keys = $this->primaryKeys[$table];
         ksort($primaryKey);
-        $unique = md5(json_encode($primaryKey));
-
-        return array_key_exists($table, $this->primaryKeys)
-            && in_array($unique, $this->primaryKeys[$table]);
+        foreach ($keys as $key) {
+            if ($key === $primaryKey) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getTranslationContext(): TranslationContext
