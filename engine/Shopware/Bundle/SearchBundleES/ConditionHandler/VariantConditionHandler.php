@@ -96,12 +96,25 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $groupBy = $this->buildGroupBy($criteria);
-        $search->addPostFilter(new TermQuery($groupBy, 1));
+        if ($groupBy) {
+            $search->addPostFilter(new TermQuery($groupBy, 1));
+
+            /* @var VariantCondition $criteriaPart */
+            $search->addPostFilter(
+                new TermsQuery(
+                    'configuration.options.id',
+                    $criteriaPart->getOptionIds()
+                )
+            );
+
+            return;
+        }
+        $search->addPostFilter(new TermQuery('isMainVariant', 1));
 
         /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery(
-                'configuration.options.id',
+                'fullConfiguration.options.id',
                 $criteriaPart->getOptionIds()
             )
         );
@@ -111,13 +124,17 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
-        $conditions = array_filter($conditions, function(VariantCondition $condition) {
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
             return $condition->expandVariants();
         });
-        
+
         $groups = array_map(function (VariantCondition $condition) {
             return $condition->getGroupId();
         }, $conditions);
+
+        if (empty($conditions)) {
+            return null;
+        }
 
         sort($groups, SORT_NUMERIC);
 
