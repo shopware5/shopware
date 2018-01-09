@@ -250,17 +250,26 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $data = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
 
+        $paperSize = 'A4';
+        $paperSize = Shopware()->Container()->get('events')->filter(
+            'Shopware_Document_Render_Get_Paper_Size',
+            $paperSize,
+            [
+                'template' => $this->_document['template'],
+                'document' => $this->_document
+            ]
+        );
         if ($this->_renderer == 'html' || !$this->_renderer) {
             echo $data;
         } elseif ($this->_renderer == 'pdf') {
             if ($this->_preview == true || !$this->_documentHash) {
-                $mpdf = new mPDF('utf-8', 'A4', '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
+                $mpdf = new mPDF('utf-8', $paperSize, '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output();
                 exit;
             }
             $path = sprintf('%s%s.pdf', Shopware()->DocPath('files_documents'), $this->_documentHash);
-            $mpdf = new mPDF('utf-8', 'A4', '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
+            $mpdf = new mPDF('utf-8', $paperSize, '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
             $mpdf->WriteHTML($data);
             $mpdf->Output($path, 'F');
         }
