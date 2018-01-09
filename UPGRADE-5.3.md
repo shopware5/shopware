@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.6
+
+[View all changes from v5.3.5...v5.3.6](https://github.com/shopware/shopware/compare/v5.3.5...v5.3.6)
+
+### Additions
+
+* Added new event `Shopware_Controllers_Widgets_Listing_fetchListing_filterViewParams` to `Shopware_Controller_Widgets_Listing::fetchListing()` in order to allow for filtering of template variables before the template is fetched by the function.
+
 ## 5.3.5
 
 [View all changes from v5.3.4...v5.3.5](https://github.com/shopware/shopware/compare/v5.3.4...v5.3.5)

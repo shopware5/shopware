@@ -30,12 +30,12 @@ use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
- * Shopware Listing Widgets
+ * Shopware Listing Widgets.
  */
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
     /**
-     * product navigation as json string
+     * product navigation as json string.
      */
     public function productNavigationAction()
     {
@@ -102,7 +102,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * topseller action for getting topsellers
-     * by category with perPage filtering
+     * by category with perPage filtering.
      */
     public function topSellerAction()
     {
@@ -177,7 +177,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * tag cloud by category
+     * tag cloud by category.
      */
     public function tagCloudAction()
     {
@@ -268,7 +268,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level
+     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level.
      */
     public function getCategoryAction()
     {
@@ -281,7 +281,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level
+     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level.
      */
     public function getCustomPageAction()
     {
@@ -294,7 +294,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * Helper function to return the category information by category id
+     * Helper function to return the category information by category id.
      *
      * @param int $categoryId
      *
@@ -530,12 +530,20 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $this->loadThemeConfig();
 
-        $this->View()->assign([
-            'sArticles' => $articles,
-            'pageIndex' => $this->Request()->getParam('sPage'),
-            'productBoxLayout' => $boxLayout,
-            'sCategoryCurrent' => $categoryId,
-        ]);
+        $viewParams = $this->get('events')->filter(
+            'Shopware_Controllers_Widgets_Listing_fetchListing_filterViewParams',
+            [
+                'sArticles' => $articles,
+                'pageIndex' => $this->Request()->getParam('sPage'),
+                'productBoxLayout' => $boxLayout,
+                'sCategoryCurrent' => $categoryId,
+            ],
+            [
+                'searchResult' => $result,
+            ]
+        );
+
+        $this->View()->assign($viewParams);
 
         return $this->View()->fetch('frontend/listing/listing_ajax.tpl');
     }
