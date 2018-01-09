@@ -59,10 +59,6 @@ class DemodataCommand extends ContainerAwareCommand
 
         $this->io->success('Successfully created demodata.');
 
-        $arguments = ['command' => 'category:build:path'];
-        $command = $this->getApplication()->find('category:build:path');
-        $command->run(new ArrayInput($arguments), $output);
-
         $arguments = ['command' => 'dbal:refresh:index'];
         $command = $this->getApplication()->find('dbal:refresh:index');
         $command->run(new ArrayInput($arguments), $output);
@@ -197,7 +193,7 @@ class DemodataCommand extends ContainerAwareCommand
 
         $payload = [];
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $graduaded = [
                 [
                     'customerGroupId' => '3294e6f6-372b-415f-ac73-71cbc191548f',
