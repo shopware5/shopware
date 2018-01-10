@@ -2571,7 +2571,10 @@ class sArticles
         }
 
         foreach ($selection as $groupId => $optionId) {
-            if (!$groupId || !$optionId) {
+            $groupId = (int) $groupId;
+            $optionId = (int) $optionId;
+
+            if ($groupId <= 0 || $optionId <= 0) {
                 unset($selection[$groupId]);
             }
         }
