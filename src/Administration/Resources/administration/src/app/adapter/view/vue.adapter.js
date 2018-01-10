@@ -1,13 +1,16 @@
 import 'src/app/component/components';
-
-import Vue from 'vue';
 import VueRouter from 'vue-router';
-import utils from 'src/core/service/util.service';
 import VueMoment from 'vue-moment';
 
+import utils from 'src/core/service/util.service';
+
+/**
+ * Contains the global Vue.js components
+ * @type {{}}
+ */
 const vueComponents = {};
 
-export default function VueAdapter(context, componentFactory) {
+export default function VueAdapter(context, componentFactory, stateFactory, Vue) {
     Vue.use(VueRouter);
     Vue.use(VueMoment);
 
@@ -87,9 +90,16 @@ export default function VueAdapter(context, componentFactory) {
     function createInstance(renderElement, router, providers) {
         const components = getComponents();
 
+        // We need the store instance to inject it into the Vue constructor
+        const store = stateFactory.initialize(Vue);
+
+        // Enables to see the router changes in VueX
+        stateFactory.mapRouterToState(router);
+
         return new Vue({
             el: renderElement,
             router,
+            store,
             components,
             template: '<sw-admin />',
             provide() {
@@ -157,10 +167,20 @@ export default function VueAdapter(context, componentFactory) {
         return vueComponents;
     }
 
+    /**
+     * Returns the adapter wrapper
+     *
+     * @returns {Vue}
+     */
     function getWrapper() {
         return Vue;
     }
 
+    /**
+     * Returns the name of the adapter
+     *
+     * @returns {string}
+     */
     function getName() {
         return 'Vue.js';
     }

@@ -11,9 +11,7 @@ module.exports = {
     },
 
     globals: {
-        Shopware: true,
-        ComponentFactory: true,
-        ModuleFactory: true
+        Shopware: true
     },
 
     // https://github.com/airbnb/javascript
@@ -63,6 +61,8 @@ module.exports = {
         // Allow both types of linebreak because of multiple contributors with different systems.
         'linebreak-style': 0,
 
+        'object-shorthand': 0,
+
         'no-prototype-builtins': 0,
 
         'object-curly-newline': [ 'error', { 'consistent': true } ],
@@ -72,7 +72,6 @@ module.exports = {
             'allowAfterSuper': true
         }],
 
-        // TODO@STP - Consider using destruction for array and object access
         "prefer-destructuring": [ 'off', { 'object': true, 'array': false } ],
 
         // allow optionalDependencies
