@@ -158,6 +158,7 @@
             <argument type="service" id="shopware_storefront.price_calculator"/>
             <argument type="service" id="shopware_elastic_search.identifier_selector"/>
             <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="shopware_searchdbal.listing_price_helper"/>
         </service>
 
 

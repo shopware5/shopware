@@ -27,7 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
@@ -39,12 +38,12 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\ReflectionHelper;
 
 class ProductProvider implements ProductProviderInterface
 {
@@ -192,6 +191,13 @@ class ProductProvider implements ProductProviderInterface
                     $this->listingVariationLoader->getVisibility($product, $variantFacet)
                 );
 
+                $product->setFilterConfiguration(
+                    $this->buildFilterConfiguration(
+                        $variantFacet->getExpandGroupIds(),
+                        $product->getConfiguration(),
+                        $product->getFullConfiguration()
+                    )
+                );
                 $product->setListingVariationPrices(
                     $listingPrices[$product->getNumber()]
                 );
@@ -433,6 +439,7 @@ class ProductProvider implements ProductProviderInterface
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getPriceContexts(Shop $shop)
@@ -445,5 +452,43 @@ class ProductProvider implements ProductProviderInterface
         $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
 
         return $this->getContexts($shop->getId(), $customerGroups, $currencies);
+    }
+
+    /**
+     * @param int[]   $expandGroupIds
+     * @param Group[] $configurations
+     * @param Group[] $fullConfiguration
+     *
+     * @return array
+     */
+    private function buildFilterConfiguration(array $expandGroupIds, array $configurations, array $fullConfiguration)
+    {
+        $merged = [];
+        foreach ($configurations as $config) {
+            if (in_array($config->getId(), $expandGroupIds, true)) {
+                $merged[] = $config;
+                continue;
+            }
+            $merged[] = $this->getFullConfigurationGroup($config->getId(), $fullConfiguration);
+        }
+
+        return $merged;
+    }
+
+    /**
+     * @param int     $id
+     * @param Group[] $groups
+     *
+     * @return null|Group
+     */
+    private function getFullConfigurationGroup($id, $groups)
+    {
+        foreach ($groups as $group) {
+            if ($group->getId() === $id) {
+                return $group;
+            }
+        }
+
+        return null;
     }
 }

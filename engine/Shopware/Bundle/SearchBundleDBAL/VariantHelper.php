@@ -163,6 +163,8 @@ class VariantHelper implements VariantHelperInterface
 
         $query->addSelect(['listing_price.*']);
         $query->innerJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
+        $query->andWhere('variant.laststock * variant.instock >= variant.laststock * variant.minpurchase');
+        $query->andWhere('variant.active = 1');
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
