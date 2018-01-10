@@ -31,6 +31,7 @@
             <argument>%shopware.plugin_directories%</argument>
             <argument>%shopware.template.templatedir%</argument>
             <argument>%shopware.web.cachedir%</argument>
+            <argument type="service" id="shopware.release" />
         </service>
 
         <service id="theme_generator" class="Shopware\Components\Theme\Generator">
@@ -82,7 +83,7 @@
             <argument type="service" id="js_compressor" />
             <argument type="service" id="events" />
             <argument type="service" id="theme_timestamp_persistor" />
-
+            <argument type="service" id="shopware.release" />
         </service>
 
         <service id="theme_timestamp_persistor" class="Shopware\Components\Theme\DBALTimestampPersistor">

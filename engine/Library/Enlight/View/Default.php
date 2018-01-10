@@ -121,8 +121,8 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * This function adds a template directory into the internal instance of the Enlight_Template_Manager
      *
-     * @param      $templateDir
-     * @param null $key
+     * @param string|string $templateDir
+     * @param null|string   $key
      *
      * @return Enlight_View_Default
      */
@@ -174,7 +174,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Creates a new template by name over the Enlight_Template_Manager.
      *
-     * @param   $template_name
+     * @param string $template_name
      *
      * @return Enlight_Template_Default
      */
@@ -186,7 +186,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * This function extends the internal array with the given template.
      *
-     * @param   $template_name
+     * @param string $template_name
      *
      * @return Enlight_View_Default
      */
@@ -220,7 +220,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Checks if the Enlight_Template_Manager stored the given template.
      *
-     * @param   $template_name
+     * @param string $template_name
      *
      * @return bool
      */
@@ -263,7 +263,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * @param string $spec
      * @param int    $scope
      *
-     * @return Enlight_View_Default
+     * @return Enlight_Template_Default
      */
     public function clearAssign($spec = null, $scope = null)
     {
@@ -303,7 +303,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Fetch an template by name over the Enlight_Template_Manager.
      *
-     * @param   $template_name
+     * @param string $template_name
      *
      * @return string
      */

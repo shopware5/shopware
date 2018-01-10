@@ -16,6 +16,12 @@
         <service id="PasswordEncoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
 
+        <service id="shopware.release" class="Shopware\Components\ShopwareReleaseStruct">
+            <argument>%shopware.release.version%</argument>
+            <argument>%shopware.release.version_text%</argument>
+            <argument>%shopware.release.revision%</argument>
+        </service>
+
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>
             <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 6.0.</deprecated>
@@ -160,6 +166,7 @@
             <argument>%shopware.cache.backend%</argument>
             <argument>%shopware.cache.frontendOptions%</argument>
             <argument>%shopware.cache.backendOptions%</argument>
+            <argument type="service" id="shopware.release" />
         </service>
 
         <service id="config_factory" class="Shopware\Components\DependencyInjection\Bridge\Config" />
@@ -168,6 +175,7 @@
             <argument type="service" id="cache" />
             <argument type="service" id="db" on-invalid="ignore"/>
             <argument>%shopware.config%</argument>
+            <argument type="service" id="shopware.release" />
          </service>
 
         <service class="Shopware_Components_Translation" id="translation">
@@ -191,6 +199,7 @@
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache" />
             <argument type="service" id="model_repository_factory" />
+            <argument type="service" id="shopware.release" />
         </service>
 
         <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />

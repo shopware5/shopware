@@ -40,6 +40,7 @@ use Shopware\Components\Plugin\XmlConfigDefinitionReader;
 use Shopware\Components\Plugin\XmlCronjobReader;
 use Shopware\Components\Plugin\XmlMenuReader;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
@@ -77,18 +78,25 @@ class PluginInstaller
     private $pluginDirectories;
 
     /**
-     * @param ModelManager         $em
-     * @param DatabaseHandler      $snippetHandler
-     * @param RequirementValidator $requirementValidator
-     * @param \PDO                 $pdo
-     * @param string|string[]      $pluginDirectories
+     * @var ShopwareReleaseStruct
+     */
+    private $release;
+
+    /**
+     * @param ModelManager          $em
+     * @param DatabaseHandler       $snippetHandler
+     * @param RequirementValidator  $requirementValidator
+     * @param \PDO                  $pdo
+     * @param string|string[]       $pluginDirectories
+     * @param ShopwareReleaseStruct $release
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $pluginDirectories
+        $pluginDirectories,
+        ShopwareReleaseStruct $release
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
@@ -96,6 +104,7 @@ class PluginInstaller
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
         $this->pluginDirectories = (array) $pluginDirectories;
+        $this->release = $release;
     }
 
     /**
@@ -110,9 +119,9 @@ class PluginInstaller
         /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
-        $context = new InstallContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new InstallContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
-        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', \Shopware::VERSION);
+        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
             $this->installResources($pluginBootstrap, $plugin);
@@ -147,7 +156,7 @@ class PluginInstaller
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
-        $context = new UninstallContext($plugin, \Shopware::VERSION, $plugin->getVersion(), !$removeData);
+        $context = new UninstallContext($plugin, $this->release->getVersion(), $plugin->getVersion(), !$removeData);
         $bootstrap = $this->getPluginByName($plugin->getName());
 
         $bootstrap->uninstall($context);
@@ -183,11 +192,11 @@ class PluginInstaller
     public function updatePlugin(Plugin $plugin)
     {
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
-        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', \Shopware::VERSION);
+        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
 
         $context = new UpdateContext(
             $plugin,
-            \Shopware::VERSION,
+            $this->release->getVersion(),
             $plugin->getVersion(),
             $plugin->getUpdateVersion()
         );
@@ -218,7 +227,7 @@ class PluginInstaller
      */
     public function activatePlugin(Plugin $plugin)
     {
-        $context = new ActivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
         $bootstrap = $this->getPluginByName($plugin->getName());
         $bootstrap->activate($context);
@@ -240,7 +249,7 @@ class PluginInstaller
      */
     public function deactivatePlugin(Plugin $plugin)
     {
-        $context = new DeactivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new DeactivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         $bootstrap = $this->getPluginByName($plugin->getName());
         $bootstrap->deactivate($context);
 

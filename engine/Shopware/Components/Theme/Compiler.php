@@ -26,6 +26,7 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\Compressor\CompressorInterface;
 use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop;
@@ -91,7 +92,12 @@ class Compiler
     private $javascriptCollector;
 
     /**
-     * @param $rootDir
+     * @var ShopwareReleaseStruct
+     */
+    private $release;
+
+    /**
+     * @param string                      $rootDir
      * @param LessCompiler                $compiler
      * @param PathResolver                $pathResolver
      * @param Inheritance                 $inheritance
@@ -99,6 +105,7 @@ class Compiler
      * @param CompressorInterface         $jsCompressor
      * @param \Enlight_Event_EventManager $eventManager
      * @param TimestampPersistor          $timestampPersistor
+     * @param ShopwareReleaseStruct       $release
      */
     public function __construct(
         $rootDir,
@@ -108,7 +115,8 @@ class Compiler
         Service $service,
         CompressorInterface $jsCompressor,
         \Enlight_Event_EventManager $eventManager,
-        TimestampPersistor $timestampPersistor
+        TimestampPersistor $timestampPersistor,
+        ShopwareReleaseStruct $release
     ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
@@ -118,6 +126,7 @@ class Compiler
         $this->pathResolver = $pathResolver;
         $this->jsCompressor = $jsCompressor;
         $this->timestampPersistor = $timestampPersistor;
+        $this->release = $release;
 
         $this->lessCollector = new LessCollector(
             $pathResolver,
@@ -182,18 +191,17 @@ class Compiler
         $config = $this->getConfig($shop->getTemplate(), $shop);
         $timestamp = $this->getThemeTimestamp($shop);
 
-        $rootDir = $this->rootDir;
         $lessFiles = [];
         foreach ($less as $definition) {
             $config = array_merge($config, $definition->getConfig());
             $lessFiles = array_merge($lessFiles, $definition->getFiles());
         }
 
-        $js = array_map(function ($file) use ($rootDir) {
+        $js = array_map(function ($file) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
         }, $js);
 
-        $lessFiles = array_map(function ($file) use ($rootDir) {
+        $lessFiles = array_map(function ($file) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
         }, $lessFiles);
 
@@ -417,7 +425,7 @@ class Compiler
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
         $config = $this->inheritance->buildConfig($template, $shop, true);
-        $config['shopware-revision'] = \Shopware::REVISION;
+        $config['shopware-revision'] = $this->release->getRevision();
 
         $collection = new ArrayCollection();
 

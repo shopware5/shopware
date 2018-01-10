@@ -31,7 +31,9 @@ use PDO;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\RequirementValidator;
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
+use Shopware\Kernel;
 
 /**
  * Class PluginInstallerTest
@@ -79,12 +81,16 @@ class PluginInstallerTest extends TestCase
         $pdo = $this->createMock(PDO::class);
         $pdo->expects($this->once())->method('query')->willReturn($statement);
 
+        $kernel = new Kernel('testing', true);
+        $releaseArray = $kernel->getRelease();
+
         $pluginInstaller = new PluginInstaller(
             $entityManager,
             $databaseHandler,
             $requirementValidator,
             $pdo,
-            __DIR__ . '/Fixtures'
+            __DIR__ . '/Fixtures',
+            new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision'])
         );
 
         $pluginInstaller->refreshPluginList($dateTime);

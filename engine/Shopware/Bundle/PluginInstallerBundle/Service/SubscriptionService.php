@@ -32,6 +32,7 @@ use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopwareReleaseStruct;
 
 /**
  * Class SubscriptionService
@@ -59,21 +60,28 @@ class SubscriptionService
     private $pluginLicenceService;
 
     /**
-     * @param Connection           $connection
-     * @param StoreClient          $storeClient
-     * @param ModelManager         $models
-     * @param PluginLicenceService $pluginLicenceService
+     * @var ShopwareReleaseStruct
      */
-    public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService)
+    private $release;
+
+    /**
+     * @param Connection            $connection
+     * @param StoreClient           $storeClient
+     * @param ModelManager          $models
+     * @param PluginLicenceService  $pluginLicenceService
+     * @param ShopwareReleaseStruct $release
+     */
+    public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService, ShopwareReleaseStruct $release)
     {
         $this->connection = $connection;
         $this->storeClient = $storeClient;
         $this->models = $models;
         $this->pluginLicenceService = $pluginLicenceService;
+        $this->release = $release;
     }
 
     /**
-     * reset the Secret in the database
+     * Reset the Secret in the database
      */
     public function resetShopSecret()
     {
@@ -85,7 +93,7 @@ class SubscriptionService
     }
 
     /**
-     * get current secret from the database
+     * Get current secret from the database
      *
      * @return string
      */
@@ -107,7 +115,7 @@ class SubscriptionService
     }
 
     /**
-     * set new secret to the database
+     * Set new secret to the database
      */
     public function setShopSecret()
     {
@@ -150,7 +158,7 @@ class SubscriptionService
     }
 
     /**
-     * @param $secret
+     * @param string $secret
      *
      * @return PluginInformationResultStruct|false
      */
@@ -159,7 +167,7 @@ class SubscriptionService
         $domain = $this->getDomain();
         $params = [
             'domain' => $domain,
-            'shopwareVersion' => \Shopware::VERSION,
+            'shopwareVersion' => $this->release->getVersion(),
             'plugins' => $this->getPluginsNameAndVersion(),
         ];
 
@@ -185,22 +193,19 @@ class SubscriptionService
 
         $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
 
-        $informationResult = new PluginInformationResultStruct($pluginInformationStructs, $isShopUpgraded);
-
-        return $informationResult;
+        return new PluginInformationResultStruct($pluginInformationStructs, $isShopUpgraded);
     }
 
     /**
-     * generate new Secret by API Call
+     * Generate new secret by API call
      *
      * @return string
      */
     private function generateApiShopSecret()
     {
-        $token = Shopware()->BackendSession()->offsetGet('store_token');
-        $token = unserialize($token);
+        $token = unserialize(Shopware()->BackendSession()->offsetGet('store_token'));
 
-        if ($token == null) {
+        if ($token === null) {
             $token = Shopware()->BackendSession()->accessToken;
         }
 
@@ -218,13 +223,13 @@ class SubscriptionService
     }
 
     /**
-     * returns the domain of the shop
+     * Returns the domain of the shop
      *
      * @return string
      */
     private function getDomain()
     {
-        $repo = $this->models->getRepository('Shopware\Models\Shop\Shop');
+        $repo = $this->models->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $default = $repo->getActiveDefault();
 
@@ -242,7 +247,7 @@ class SubscriptionService
     {
         $lastCheck = $request->getCookie('lastCheckSubscriptionDate');
 
-        return $lastCheck != date('dmY');
+        return $lastCheck !== date('dmY');
     }
 
     /**
