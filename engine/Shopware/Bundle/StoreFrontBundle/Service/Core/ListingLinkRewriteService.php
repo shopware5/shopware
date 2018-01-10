@@ -48,6 +48,10 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            if (!$condition->expandVariants() && count($condition->getOptionIds()) == 1) {
+                return true;
+            }
+
             return $condition->expandVariants();
         });
 
@@ -83,16 +87,24 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
 
     private function buildListingVariantLink($number, array $config, array $conditions)
     {
+        $notExpandGroupIds = array_map(function (VariantCondition $condition) {
+            if (!$condition->expandVariants()) {
+                return $condition->getGroupId();
+            }
+        }, $conditions);
+
         $groupIds = array_map(function (VariantCondition $condition) {
             return $condition->getGroupId();
         }, $conditions);
+
+        $groupIds = array_diff($groupIds, $notExpandGroupIds);
 
         $filtered = array_filter($config, function (Group $group) use ($groupIds) {
             return in_array($group->getId(), $groupIds, true);
         });
 
-        $complete = count($config) === count($filtered);
-        if ($complete) {
+        $complete = count($config) === count($conditions);
+        if (empty($notExpandGroupIds) && $complete) {
             return 'number=' . $number;
         }
 
@@ -100,6 +112,15 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         /** @var Group $group */
         foreach ($filtered as $group) {
             $keys[] = 'group[' . $group->getId() . ']' . '=' . $group->getOptions()[0]->getId();
+        }
+
+        if (!empty($notExpandGroupIds)) {
+            /** @var VariantCondition[] $conditions */
+            foreach ($conditions as $condition) {
+                if (in_array($condition->getGroupId(), $notExpandGroupIds)) {
+                    $keys[] = 'group[' . $condition->getGroupId() . ']' . '=' . $condition->getOptionIds()[0];
+                }
+            }
         }
 
         return implode('&', $keys);
