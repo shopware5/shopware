@@ -2,6 +2,18 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.6
+
+[View all changes from v5.3.5...v5.3.6](https://github.com/shopware/shopware/compare/v5.3.5...v5.3.6)
+
+### Changes
+
+* Changed logging of exceptions to not log 404 errors 
+
+### Additions
+
+* Added product sorting by stock facet
+
 ## 5.3.5
 
 [View all changes from v5.3.4...v5.3.5](https://github.com/shopware/shopware/compare/v5.3.4...v5.3.5)
