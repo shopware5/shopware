@@ -190,7 +190,7 @@ class sBasket
     {
         $result = $this->db->fetchAll(
             'SELECT (d.instock - b.quantity) as diffStock, b.ordernumber,
-                a.laststock, IF(a.active=1, d.active, 0) as active
+                d.laststock, IF(a.active=1, d.active, 0) as active
             FROM s_order_basket b
             LEFT JOIN s_articles_details d
               ON d.ordernumber = b.ordernumber
@@ -2450,7 +2450,7 @@ class sBasket
             ad.purchasesteps,
             ad.purchaseunit,
             COALESCE (ad.unitID, mad.unitID) AS unitID,
-            a.laststock,
+            ad.laststock,
             ad.shippingtime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,

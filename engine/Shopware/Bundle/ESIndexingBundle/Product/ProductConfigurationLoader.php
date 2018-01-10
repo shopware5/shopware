@@ -71,7 +71,7 @@ class ProductConfigurationLoader
 
         $query->from('s_article_configurator_option_relations', 'relations');
         $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.ordernumber IN (:numbers) AND variant.active = 1');
-        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
+        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         $query->addGroupBy('variant.articleID');
         $query->addGroupBy('variant.id');
 

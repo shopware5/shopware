@@ -88,7 +88,6 @@ class ProductNumberService implements ProductNumberServiceInterface
     public function getAvailableNumber($number, ShopContextInterface $context, $selection = [])
     {
         $productId = $this->getProductIdByNumber($number);
-
         if (!$productId) {
             throw new \RuntimeException('No valid product id found');
         }
@@ -231,7 +230,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         $query->andWhere('variant.id = product.main_detail_id')
             ->andWhere('product.id = :productId')
-            ->andWhere('(variant.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)')
             ->setParameter(':productId', $productId);
 
         $statement = $query->execute();
