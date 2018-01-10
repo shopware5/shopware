@@ -29,6 +29,7 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
@@ -178,6 +179,8 @@ class sArticles
      */
     private $productNumberService;
 
+    private $listingLinkRewriteService;
+
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
@@ -208,6 +211,7 @@ class sArticles
         $this->session = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
         $this->productNumberService = $container->get('shopware_storefront.product_number_service');
+        $this->listingLinkRewriteService = $container->get('shopware_storefront.listing_link_rewrite_service');
 
         $this->articleComparisons = new sArticlesComparisons($this, $container);
     }
@@ -2377,19 +2381,11 @@ class sArticles
         $searchResult = $this->searchService->search($criteria, $context);
 
         $articles = [];
-
-        /** @var $product StoreFrontBundle\Struct\ListProduct */
-        $hasCondition = $criteria->hasConditionOfClass(SearchBundle\Condition\VariantCondition::class);
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
             if (!empty($categoryId) && $categoryId != $context->getShop()->getCategory()->getId()) {
                 $article['linkDetails'] .= "&sCategory=$categoryId";
-            }
-
-            // When a filter on a variant is active, use the variant link as detail link
-            if ($hasCondition && !empty($article['linkVariant'])) {
-                $article['linkDetails'] = $article['linkVariant'];
             }
 
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
@@ -2399,6 +2395,8 @@ class sArticles
 
             $articles[$article['ordernumber']] = $article;
         }
+
+        $articles = $this->listingLinkRewriteService->rewriteLinks($criteria, $articles, $context);
 
         $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
         $sPage = (int) $request->getParam('sPage', 1);

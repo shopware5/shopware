@@ -491,5 +491,10 @@
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
+
+        <service id="shopware_storefront.listing_link_rewrite_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService">
+            <argument id="shopware_storefront.configurator_service" type="service"/>
+        </service>
+
     </services>
 </container>
