@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
@@ -58,16 +59,23 @@ class ProductListingVariationLoader
      */
     private $contextService;
 
+    /**
+     * @var ListingPriceHelper
+     */
+    private $listingPriceHelper;
+
     public function __construct(
         Connection $connection,
         PriceCalculatorInterface $calculationService,
         IdentifierSelector $identifierSelector,
-        ContextServiceInterface $contextService
+        ContextServiceInterface $contextService,
+        ListingPriceHelper $listingPriceHelper
     ) {
         $this->connection = $connection;
         $this->calculator = $calculationService;
         $this->identifierSelector = $identifierSelector;
         $this->contextService = $contextService;
+        $this->listingPriceHelper = $listingPriceHelper;
     }
 
     /**
@@ -88,7 +96,7 @@ class ProductListingVariationLoader
 
         /** @var ShopContextInterface $context */
         foreach ($contexts as $context) {
-            $prices = $this->fetchPrices($products);
+            $prices = $this->fetchPrices($products, $context);
             $key = $context->getCurrentCustomerGroup()->getKey();
 
             foreach ($products as $product) {
@@ -312,11 +320,13 @@ class ProductListingVariationLoader
         return $result;
     }
 
-    private function fetchPrices(array $products)
+    private function fetchPrices(array $products, ShopContextInterface $context)
     {
         $ids = array_map(function (ListProduct $product) {
             return $product->getId();
         }, $products);
+
+        $priceTable = $this->listingPriceHelper->getPriceTable($context);
 
         $query = $this->connection->createQueryBuilder();
         $query->addSelect([
@@ -328,21 +338,26 @@ class ProductListingVariationLoader
             'GROUP_CONCAT(DISTINCT options.group_id ORDER BY options.group_id) as `groups`',
         ]);
 
-        $query->from('s_articles_prices', 'prices');
+        $query->from('s_articles_details', 'variant');
+        $query->innerJoin('variant', '(' . $priceTable . ')', 'prices', 'variant.id = prices.articledetailsID');
         $query->innerJoin('prices', 's_article_configurator_option_relations', 'relations', 'relations.article_id = prices.articledetailsID');
         $query->innerJoin('relations', 's_article_configurator_options', 'options', 'relations.option_id = options.id');
-        $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID');
 
         $query->andWhere('variant.laststock * variant.instock >= variant.laststock * variant.minpurchase');
         $query->andWhere('variant.active = 1');
         $query->andWhere('prices.to = :to');
-        $query->andWhere('prices.pricegroup = :customerGroup');
         $query->andWhere('prices.articleID IN (:products)');
         $query->groupBy('prices.articledetailsID');
 
-        $query->setParameter('customerGroup', 'EK');
         $query->setParameter('to', 'beliebig');
         $query->setParameter('products', $ids, Connection::PARAM_INT_ARRAY);
+
+        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
+        $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
+
+        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+            $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
+        }
 
         $prices = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
 
