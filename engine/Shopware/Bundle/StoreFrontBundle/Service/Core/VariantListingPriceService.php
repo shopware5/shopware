@@ -57,7 +57,7 @@ class VariantListingPriceService
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
-        $conditions = array_filter($conditions, function(VariantCondition $condition) {
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
             return $condition->expandVariants();
         });
 
@@ -85,6 +85,9 @@ class VariantListingPriceService
     private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
 
         $cleanCriteria = new Criteria();
         foreach ($conditions as $condition) {
