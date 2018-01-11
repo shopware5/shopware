@@ -4,9 +4,7 @@ namespace Shopware\Api\Test\Entity\Write;
 
 use Doctrine\DBAL\Connection;
 use Ramsey\Uuid\Uuid;
-use Shopware\Api\Category\Definition\CategoryDefinition;
 use Shopware\Api\Country\Definition\CountryAreaDefinition;
-use Shopware\Api\Country\Definition\CountryDefinition;
 use Shopware\Api\Entity\Write\EntityWriterInterface;
 use Shopware\Api\Entity\Write\FieldException\WriteStackException;
 use Shopware\Api\Entity\Write\WriteContext;
@@ -53,7 +51,7 @@ class WriterTest extends KernelTestCase
         $this->getWriter()->insert(
             CountryAreaDefinition::class,
             [
-                ['id' => $id->toString(), 'name' => 'test-country']
+                ['id' => $id->toString(), 'name' => 'test-country'],
             ],
             $context
         );
@@ -64,7 +62,7 @@ class WriterTest extends KernelTestCase
         $this->getWriter()->delete(
             CountryAreaDefinition::class,
             [
-                ['id' => $id->toString()]
+                ['id' => $id->toString()],
             ],
             $context
         );
@@ -84,7 +82,7 @@ class WriterTest extends KernelTestCase
             CountryAreaDefinition::class,
             [
                 ['id' => $id->toString(), 'name' => 'test-country1'],
-                ['id' => $id2->toString(), 'name' => 'test-country2']
+                ['id' => $id2->toString(), 'name' => 'test-country2'],
             ],
             $context
         );
@@ -101,7 +99,7 @@ class WriterTest extends KernelTestCase
             CountryAreaDefinition::class,
             [
                 ['id' => $id->toString()],
-                ['id' => $id2->toString()]
+                ['id' => $id2->toString()],
             ],
             $context
         );
@@ -115,7 +113,6 @@ class WriterTest extends KernelTestCase
         $this->assertEmpty($exists);
     }
 
-
     public function testMultiDeleteWithNoneExistingId()
     {
         $id = Uuid::uuid4();
@@ -127,7 +124,7 @@ class WriterTest extends KernelTestCase
             CountryAreaDefinition::class,
             [
                 ['id' => $id->toString(), 'name' => 'test-country1'],
-                ['id' => $id2->toString(), 'name' => 'test-country2']
+                ['id' => $id2->toString(), 'name' => 'test-country2'],
             ],
             $context
         );
@@ -147,7 +144,7 @@ class WriterTest extends KernelTestCase
                 ['id' => $id2->toString()],
                 ['id' => Uuid::uuid4()->toString()],
                 ['id' => Uuid::uuid4()->toString()],
-                ['id' => Uuid::uuid4()->toString()]
+                ['id' => Uuid::uuid4()->toString()],
             ],
             $context
         );
@@ -172,10 +169,9 @@ class WriterTest extends KernelTestCase
                 'id' => $productId->toString(),
                 'name' => 'test 1',
                 'categories' => [
-                    ['category' => ['id' => $categoryId->toString(), 'name' => 'test']]
-                ]
-            ]
-
+                    ['category' => ['id' => $categoryId->toString(), 'name' => 'test']],
+                ],
+            ],
         ], $context);
 
         $exists = $this->connection->fetchAll(
@@ -185,7 +181,7 @@ class WriterTest extends KernelTestCase
         $this->assertCount(1, $exists);
 
         $this->getWriter()->delete(ProductCategoryDefinition::class, [
-            ['productId' => $productId->toString(), 'categoryId' => $categoryId->toString()]
+            ['productId' => $productId->toString(), 'categoryId' => $categoryId->toString()],
         ], $context);
 
         $exists = $this->connection->fetchAll(
@@ -195,6 +191,17 @@ class WriterTest extends KernelTestCase
         $this->assertEmpty($exists);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testRequiresAllPrimaryKeyValuesForDelete()
+    {
+        $productId = Uuid::uuid4();
+
+        $this->getWriter()->delete(ProductCategoryDefinition::class, [
+            ['productId' => $productId->toString()],
+        ], $this->createWriteContext());
+    }
 
     public function testMultiDeleteWithMultiplePrimaryColumns()
     {
@@ -208,15 +215,15 @@ class WriterTest extends KernelTestCase
                 'id' => $productId->toString(),
                 'name' => 'test 1',
                 'categories' => [
-                    ['category' => ['id' => $categoryId->toString(), 'name' => 'test']]
-                ]
-            ],[
+                    ['category' => ['id' => $categoryId->toString(), 'name' => 'test']],
+                ],
+            ], [
                 'id' => $productId2->toString(),
                 'name' => 'test 1',
                 'categories' => [
-                    ['categoryId' => $categoryId->toString()]
-                ]
-            ]
+                    ['categoryId' => $categoryId->toString()],
+                ],
+            ],
         ], $context);
 
         $exists = $this->connection->fetchAll(
@@ -228,7 +235,7 @@ class WriterTest extends KernelTestCase
 
         $this->getWriter()->delete(ProductCategoryDefinition::class, [
             ['productId' => $productId->toString(), 'categoryId' => $categoryId->toString()],
-            ['productId' => $productId2->toString(), 'categoryId' => $categoryId->toString()]
+            ['productId' => $productId2->toString(), 'categoryId' => $categoryId->toString()],
         ], $context);
 
         $exists = $this->connection->fetchAll(
@@ -515,9 +522,7 @@ class WriterTest extends KernelTestCase
      */
     protected function createWriteContext(): WriteContext
     {
-        $context = WriteContext::createFromTranslationContext(
-            TranslationContext::createDefaultContext()
-        );
+        $context = WriteContext::createFromTranslationContext(TranslationContext::createDefaultContext());
 
         return $context;
     }
