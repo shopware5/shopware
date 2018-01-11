@@ -2,13 +2,24 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
-[View all changes from v5.3.2...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.2...v5.4.0)
+[View all changes from v5.3.6...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.6...v5.4.0)
 
 ### Additions
 
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
 * Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
+* Added DIC parameters:
+    - `shopware.release.version`
+        The version of the Shopware installation (e.g. '5.4.0')
+    - `shopware.release.version_text`
+        The version_text of the Shopware installation (e.g. 'RC1')
+    - `shopware.release.revision`
+        The revision of the Shopware installation (e.g. '20180081547')
+
+* Added new service in the DIC containing all parameters above 
+    - `shopware.release`
+        A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
 
 ### Changes
 
@@ -36,6 +47,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Removed config option for maximum number of category pages
 * Removed "Force http canonical url" setting in basic settings as it is obsolete
 * Removed config option `template_security['enabled']` for toggling smarty security
+* Removed config option `blogcategory` and `bloglimit`
 * Removed support for separate SSL host and SSL path. Also the `Use SSL` and `Always SSL` options were merged.
     * Removed database fields
         - `s_core_shops.secure_host`
@@ -65,9 +77,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * Changed methods
         - `\Shopware\Components\Theme\PathResolver::formatPathToUrl`
            The method signature no longer contains the `isSecureRequest` parameter
-        
-    * Deprecated `forceSecure` and `sUseSSL` smarty flags
-* Removed config option `blogcategory` and `bloglimit`
 
 ### Deprecations
 
@@ -75,6 +84,11 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Deprecated constants `Shopware::VERSION`, `Shopware::VERSION_TEXT` and `Shopware::REVISION`, they will be removed in Shopware v5.5. This information can now be retrieved from the DIC.
     * New, alternative DIC parameters:
         - `shopware.release.version`
+            The version of the Shopware installation (e.g. '5.4.0')
         - `shopware.release.version_text`
+            The version_text of the Shopware installation (e.g. 'RC1')
         - `shopware.release.revision`
-        - `shopware.release`: Associative array containing all parameters above
+            The revision of the Shopware installation (e.g. '20180081547')
+    * New, alternative DIC service:
+        - `shopware.release`
+            A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above 
