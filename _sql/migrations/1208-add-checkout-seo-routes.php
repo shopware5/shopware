@@ -57,10 +57,20 @@ class Migrations_Migration1208 extends Shopware\Components\Migrations\AbstractMi
     private function addGermanRoutes($shopId)
     {
         $this->addStaticRoutes([
+                'sViewport=account,mein-konto',
+                'sViewport=account&sAction=profile,mein-konto/persoenliche-daten',
+                'sViewport=address&sAction=index,mein-konto/adressen',
+                'sViewport=account&sAction=payment,mein-konto/zahlarten',
+                'sViewport=account&sAction=orders,mein-konto/bestellungen',
+                'sViewport=account&sAction=downloads,mein-konto/downloads',
+                'sViewport=account&sAction=logout,mein-konto/abmelden',
+                'sViewport=note,merkzettel',
+
                 'sViewport=register,anmeldung',
+                'sViewport=checkout&sAction=index,bestellen',
                 'sViewport=checkout&sAction=cart,warenkorb',
-                'sViewport=checkout&sAction=confirm,bestellen',
-                'sViewport=checkout&sAction=shippingPayment,zahlungsart-und-versand',
+                'sViewport=checkout&sAction=confirm,meine-bestellung',
+                'sViewport=checkout&sAction=shippingPayment,zahlung-und-versand',
                 'sViewport=checkout,pruefen-und-bestellen',
                 'sViewport=checkout&sAction=finish,vielen-dank-fuer-ihre-bestellung',
         ], $shopId);
@@ -72,9 +82,19 @@ class Migrations_Migration1208 extends Shopware\Components\Migrations\AbstractMi
     private function addEnglishRoutes($shopId)
     {
         $this->addStaticRoutes([
-                'sViewport=register,path' => 'signup',
+                'sViewport=account,my-account',
+                'sViewport=account&sAction=profile,my-account/personal-data',
+                'sViewport=address&sAction=index,my-account/addresses',
+                'sViewport=account&sAction=payment,my-account/payment-methods',
+                'sViewport=account&sAction=orders,my-account/orders',
+                'sViewport=account&sAction=downloads,my-account/downloads',
+                'sViewport=account&sAction=logout,my-account/logout',
+                'sViewport=note,notepad',
+
+                'sViewport=register,signup',
+                'sViewport=checkout&sAction=index,order',
                 'sViewport=checkout&sAction=cart,basket',
-                'sViewport=checkout&sAction=confirm,order',
+                'sViewport=checkout&sAction=confirm,my-order',
                 'sViewport=checkout&sAction=shippingPayment,payment-and-delivery',
                 'sViewport=checkout,check-and-order',
                 'sViewport=checkout&sAction=finish,thank-you-for-your-order',
