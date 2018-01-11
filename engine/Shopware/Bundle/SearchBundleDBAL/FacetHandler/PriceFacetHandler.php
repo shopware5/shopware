@@ -174,12 +174,13 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
      */
     private function buildQuery(Criteria $reverted, Criteria $criteria, ShopContextInterface $context)
     {
+        $tmp = clone $reverted;
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         foreach ($conditions as $condition) {
-            $reverted->addBaseCondition($condition);
+            $tmp->addBaseCondition($condition);
         }
 
-        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+        $query = $this->queryBuilderFactory->createQuery($tmp, $context);
 
         $this->listingPriceSwitcher->joinPrice($query, $criteria, $context);
         $query->select('listing_price.cheapest_price');
