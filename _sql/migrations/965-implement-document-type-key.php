@@ -29,6 +29,8 @@ class Migrations_Migration965 extends Shopware\Components\Migrations\AbstractMig
         // Add the standard document keys as well as a fallback naming for documents
         // added by plugins.
         $sql = <<<'EOF'
+ALTER TABLE `s_core_documents`
+    ADD COLUMN `key` varchar(255) COLLATE utf8_unicode_ci;
 UPDATE s_core_documents as doc
 	SET `key` = (CASE	WHEN id = 1 THEN 'invoice'
 					 	WHEN id = 2 THEN 'delivery_note'
@@ -37,6 +39,8 @@ UPDATE s_core_documents as doc
 					 	ELSE CONCAT(doc.name, "_", doc.id)
 					END
 	);
+ALTER TABLE `s_core_documents`
+    MODIFY COLUMN `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL UNIQUE;
 EOF;
 
         $this->addSql($sql);

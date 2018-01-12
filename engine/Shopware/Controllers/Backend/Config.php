@@ -645,11 +645,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ) {
                         $this->View()->assign([
                             'success' => false,
-                            'message' => 'Please choose a different technical name since another document with the same technical name already exists.',
+                            'message' => $this->get('snippets')->getNamespace('backend/config/view/document')->get('document/detail/key_exists'),
                         ]);
 
                         return;
                     }
+
+                    // No the exception we want to handle here, rethrow. (Instead of fall through)
+                    throw $ex;
                 default:
                     throw $ex;
             }
