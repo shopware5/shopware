@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -1153,13 +1154,40 @@ class sArticles
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $product = $this->getLegacyProduct(
+        $article = $this->getLegacyProduct(
             $product,
             $categoryId,
             $selection
         );
 
-        return $product;
+        if (!$article['isSelectionSpecified'] && $product->hasConfigurator()) {
+            $criteria = new SearchBundle\Criteria();
+            foreach ($selection as $groupId => $optionId) {
+                $criteria->addBaseCondition(
+                    new VariantCondition([(int) $optionId], true, (int) $groupId)
+                );
+            }
+
+            $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
+
+            $result = new SearchBundle\ProductSearchResult(
+                [$product->getNumber() => $product],
+                1,
+                [],
+                $criteria,
+                $context
+            );
+
+            $service->updatePrices($criteria, $result, $context);
+
+            if ($product->displayFromPrice()) {
+                $article['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
+            }
+
+            $article['price'] = $product->getListingPrice()->getCalculatedPrice();
+        }
+
+        return $article;
     }
 
     /**

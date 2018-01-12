@@ -494,6 +494,7 @@
 
         <service id="shopware_storefront.listing_link_rewrite_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService">
             <argument id="shopware_storefront.configurator_service" type="service"/>
+            <argument type="service" id="router"/>
         </service>
 
     </services>

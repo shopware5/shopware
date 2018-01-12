@@ -31,6 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Routing\Router;
 
 class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
 {
@@ -38,20 +39,25 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
      * @var ConfiguratorServiceInterface
      */
     private $configuratorService;
+    /**
+     * @var Router
+     */
+    private $router;
 
-    public function __construct(ConfiguratorServiceInterface $configuratorService)
+    public function __construct(ConfiguratorServiceInterface $configuratorService, Router $router)
     {
         $this->configuratorService = $configuratorService;
+        $this->router = $router;
     }
 
-    public function rewriteLinks(Criteria $criteria, array $articles, ShopContextInterface $context)
-    {
+    public function rewriteLinks(
+        Criteria $criteria,
+        array $articles,
+        ShopContextInterface $context,
+        $categoryId = null
+    ) {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         $conditions = array_filter($conditions, function (VariantCondition $condition) {
-            if (!$condition->expandVariants() && count($condition->getOptionIds()) == 1) {
-                return true;
-            }
-
             return $condition->expandVariants();
         });
 
@@ -64,6 +70,23 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
             $configurations = $this->configuratorService->getProductsConfigurations($products, $context);
         }
 
+        $urls = array_map(function ($article) use ($categoryId) {
+            if ($categoryId !== null) {
+                return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
+            }
+
+            return $article['linkDetails'];
+        }, $articles);
+
+        $rewrite = $this->router->generateList($urls);
+
+        foreach ($articles as $key => &$article) {
+            if (!array_key_exists($key, $rewrite)) {
+                continue;
+            }
+            $article['linkDetails'] = $rewrite[$key];
+        }
+
         foreach ($articles as &$article) {
             $number = $article['ordernumber'];
 
@@ -74,10 +97,11 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
 
             if (!empty($config)) {
                 $variantLink = $this->buildListingVariantLink($number, $config, $conditions);
-                $article['linkDetails'] .= '&' . $variantLink;
 
-                if (strpos($variantLink, 'number=') !== false) {
-                    $article['allowBuyInListing'] = true;
+                if (strpos($article['linkDetails'], '?') !== false) {
+                    $article['linkDetails'] .= '&' . $variantLink;
+                } else {
+                    $article['linkDetails'] .= '?' . $variantLink;
                 }
             }
         }
@@ -87,42 +111,24 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
 
     private function buildListingVariantLink($number, array $config, array $conditions)
     {
-        $notExpandGroupIds = array_map(function (VariantCondition $condition) {
-            if (!$condition->expandVariants()) {
-                return $condition->getGroupId();
-            }
-        }, $conditions);
-
         $groupIds = array_map(function (VariantCondition $condition) {
             return $condition->getGroupId();
         }, $conditions);
-
-        $groupIds = array_diff($groupIds, $notExpandGroupIds);
 
         $filtered = array_filter($config, function (Group $group) use ($groupIds) {
             return in_array($group->getId(), $groupIds, true);
         });
 
-        $complete = count($config) === count($conditions);
-        if (empty($notExpandGroupIds) && $complete) {
+        if (count($config) === count($filtered)) {
             return 'number=' . $number;
         }
 
         $keys = [];
         /** @var Group $group */
         foreach ($filtered as $group) {
-            $keys[] = 'group[' . $group->getId() . ']' . '=' . $group->getOptions()[0]->getId();
+            $keys['group'][$group->getId()] = $group->getOptions()[0]->getId();
         }
 
-        if (!empty($notExpandGroupIds)) {
-            /** @var VariantCondition[] $conditions */
-            foreach ($conditions as $condition) {
-                if (in_array($condition->getGroupId(), $notExpandGroupIds)) {
-                    $keys[] = 'group[' . $condition->getGroupId() . ']' . '=' . $condition->getOptionIds()[0];
-                }
-            }
-        }
-
-        return implode('&', $keys);
+        return http_build_query($keys);
     }
 }
