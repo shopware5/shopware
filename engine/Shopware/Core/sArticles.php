@@ -2498,8 +2498,7 @@ class sArticles
              FROM s_articles_details variant
              INNER JOIN s_articles product
                 ON product.main_detail_id = variant.id
-                AND product.id = ?
-                AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)',
+                AND product.id = ?',
             [$product->getId()]
         );
 

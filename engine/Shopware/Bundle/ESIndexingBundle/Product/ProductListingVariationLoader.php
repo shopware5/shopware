@@ -434,7 +434,9 @@ class ProductListingVariationLoader
             //store front filters to filtered group "sort by price for `color`"
             $key = 'g' . implode('-', $combination);
 
-            $cheapestPrices[$key] = min($price);
+            if (!empty($price)) {
+                $cheapestPrices[$key] = min($price);
+            }
         }
 
         return $cheapestPrices;

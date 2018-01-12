@@ -36,7 +36,13 @@
         {/block}
 
         {block name='frontend_detail_buy_laststock'}
-            {if !$sArticle.isAvailable && ($sArticle.isSelectionSpecified || !$sArticle.sConfigurator)}
+            {if !$sArticle.isAvailable && !$sArticle.sConfigurator}
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
+
+            {elseif !$sArticle.isAvailable && $sArticle.isSelectionSpecified}
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
+
+            {elseif !$sArticle.isAvailable && !$sArticle.hasAvailableVariant}
                 {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
             {/if}
         {/block}

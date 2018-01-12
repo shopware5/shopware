@@ -126,7 +126,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-        $this->rebuildQuery($query, $facet);
+        $this->rebuildQuery($queryCriteria, $query, $facet);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -143,18 +143,29 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     /**
      * Modifies the query reading products from the database to reflect the selected options
      *
+     * @param Criteria     $criteria
      * @param QueryBuilder $query
      * @param VariantFacet $facet
      */
-    private function rebuildQuery(QueryBuilder $query, VariantFacet $facet)
+    private function rebuildQuery(Criteria $criteria, QueryBuilder $query, VariantFacet $facet)
     {
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
 
-        $this->helper->joinAvailableVariant($query);
-        $query->innerJoin('availableVariant', 's_article_configurator_option_relations', 'variantOptions', 'variantOptions.article_id = availableVariant.id');
+        $variantAlias = 'variant';
+        if (empty($conditions)) {
+            $this->helper->joinAvailableVariant($query);
+            $variantAlias = 'availableVariant';
+        }
+
+        $query->innerJoin($variantAlias, 's_article_configurator_option_relations', 'variantOptions', 'variantOptions.article_id = ' . $variantAlias . '.id');
+        //        $query->andWhere('(availableVariant.laststock * availableVariant.instock) >= (availableVariant.laststock * availableVariant.minpurchase)');
+
+        $query->resetQueryPart('orderBy');
         $query->innerJoin('variantOptions', 's_article_configurator_options', 'options', 'options.id = variantOptions.option_id AND options.group_id IN (:variantGroupIds)');
-        $query->groupBy('variantOptions.option_id');
+        $query->addGroupBy('variantOptions.option_id');
         $query->select('variantOptions.option_id as id');
         $query->setParameter('variantGroupIds', $facet->getGroupIds(), Connection::PARAM_INT_ARRAY);
     }
