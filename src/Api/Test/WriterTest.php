@@ -10,6 +10,7 @@ use Shopware\Api\Entity\Write\WriteContext;
 use Shopware\Api\Product\Definition\ProductDefinition;
 use Shopware\Category\Extension\CategoryPathBuilder;
 use Shopware\Context\Struct\TranslationContext;
+use Shopware\Defaults;
 use Shopware\Storefront\Context\StorefrontContextService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -116,12 +117,12 @@ class WriterTest extends KernelTestCase
                     'isMain' => true,
 
                     'categories' => [
-                        ['categoryId' => CategoryPathBuilder::ROOT],
+                        ['categoryId' => Defaults::ROOT_CATEGORY],
                     ],
                     'prices' => [
                         [
                             'price' => (float) 999,
-                            'customerGroupId' => StorefrontContextService::FALLBACK_CUSTOMER_GROUP,
+                            'customerGroupId' => Defaults::FALLBACK_CUSTOMER_GROUP,
                         ],
                     ],
                 ],
