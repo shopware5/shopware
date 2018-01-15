@@ -71,12 +71,11 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         QueryAliasMapper $queryAliasMapper,
         PriceHelper $helper
     ) {
-        $this->queryBuilderFactory = $queryBuilderFactory;
-
-        //todo: Richtigen SeoAlias vergeben.
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('options')) {
-            $this->fieldName = 'options';
+        if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
+            $this->fieldName = 'var';
         }
+
+        $this->queryBuilderFactory = $queryBuilderFactory;
         $this->helper = $helper;
         $this->gateway = $gateway;
     }

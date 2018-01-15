@@ -64,8 +64,8 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     public function __construct(ConfiguratorOptionsGateway $gateway, QueryAliasMapper $queryAliasMapper)
     {
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('options')) {
-            $this->fieldName = 'options';
+        if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
+            $this->fieldName = 'var';
         }
 
         $this->gateway = $gateway;

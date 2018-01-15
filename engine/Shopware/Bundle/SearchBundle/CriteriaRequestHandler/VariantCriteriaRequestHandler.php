@@ -74,7 +74,7 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addVariantCondition(Request $request, Criteria $criteria)
     {
-        $filters = $request->getParam('options', []);
+        $filters = $request->getParam('variants', []);
         if (empty($filters)) {
             return;
         }
