@@ -59,12 +59,17 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Render form - onSubmit checkFields -
      *
-     * @throws Enlight_Exception
+     * @throws \Exception
+     * @throws \DomainException
+     * @throws \Enlight_Exception
+     * @throws \Zend_Mail_Exception
+     * @throws \Enlight_Event_Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function indexAction()
     {
         $id = $this->Request()->getParam('sFid');
-        $id = ($id) ? $id : $this->Request()->getParam('id');
+        $id = $id ?: $this->Request()->getParam('id');
 
         $this->View()->forceMail = (int) $this->Request()->getParam('forceMail');
         $this->View()->id = $id;
@@ -86,10 +91,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * Commit form via email (default) or database (ticket  system)
+     * Commit form via email (default) or database (ticket system)
      *
-     * @throws Enlight_Exception
+     * @throws \Enlight_Exception
      * @throws \Zend_Mail_Exception
+     * @throws \Enlight_Event_Exception
      */
     public function commitForm()
     {
@@ -98,7 +104,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         //Email field available check
         foreach ($this->_elements as $element) {
-            if ($element['typ'] == 'email') {
+            if ($element['typ'] === 'email') {
                 $postEmail = $this->_postData[$element['id']];
                 $postEmail = trim($postEmail);
             }
@@ -130,7 +136,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @param int $formId
      *
      * @throws \Exception
-     * @throws Enlight_Exception
+     * @throws \Enlight_Exception
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return array
@@ -143,7 +149,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);
+        $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)->getFormQuery($formId, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
@@ -175,7 +181,15 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
-                if ($element['name'] == 'inquiry' && !empty($this->Request()->sInquiry)) {
+                if ($element['name'] === 'sordernumber') {
+                    if ($sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
+                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, false);
+                        $element['value'] = sprintf('%s (%s)', $product, $sOrdernumber);
+                        $this->_elements[$id]['value'] = $element['value'];
+                    }
+                }
+
+                if ($element['name'] === 'inquiry' && !empty($this->Request()->sInquiry)) {
                     switch ($this->Request()->sInquiry) {
                         case 'basket':
                             $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextBasket');
@@ -191,8 +205,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                                 $element['value'] = $text;
                             }
                             break;
+
                         case 'detail':
-                            if ($this->Request()->getParam('sOrdernumber', null) !== null) {
+                            if ($this->Request()->getParam('sOrdernumber') !== null) {
                                 $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
                                 $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
                                 $text .= ' ' . $getName;
@@ -208,7 +223,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             }
         }
 
-        // prepare formadata for view
+        // prepare form data for view
         $formData = [
             'id' => (string) $form->getId(),  // intended string cast to keep compatibility
             'name' => $form->getName(),
@@ -240,7 +255,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     protected function _createLabelElement($element)
     {
         $output = "<label for=\"{$element['name']}\">";
-        if ($element['typ'] == 'text2') {
+        if ($element['typ'] === 'text2') {
             $output .= str_replace(';', '/', "{$element['label']}");
         } else {
             $output .= "{$element['label']}";
@@ -256,14 +271,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Create input element method
      *
-     * @param array $element
-     * @param array $post
+     * @param array  $element
+     * @param string $post
      *
      * @return string
      */
-    protected function _createInputElement($element, $post = null)
+    protected function _createInputElement(array $element, $post = null)
     {
-        if ($element['required'] == 1) {
+        if ((int) $element['required'] === 1) {
             $requiredField = 'is--required required';
             $requiredFieldSnippet = '%*%';
             $requiredFieldAria = 'required="required" aria-required="true"';
@@ -277,6 +292,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         switch ($element['typ']) {
             case 'password':
+            case 'hidden':
             case 'email':
             case 'text':
             case 'textarea':
@@ -289,8 +305,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if ($element['typ'] !== 'textarea') {
                     $post = str_replace('"', '', $post);
                 }
-
                 break;
+
             case 'text2':
                 $post[0] = $this->_filterInput($post[0]);
                 if (empty($post[0]) && !empty($element['value'][0])) {
@@ -304,6 +320,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
                 $post[1] = str_replace('"', '', $post[1]);
                 break;
+
             default:
                 break;
         }
@@ -311,10 +328,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $output = '';
         switch ($element['typ']) {
             case 'password':
+            case 'hidden':
             case 'email':
             case 'text':
                 $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField\" $requiredFieldAria value=\"{$post}\" id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\"/>\r\n";
                 break;
+
             case 'checkbox':
                 if ($post == $element['value']) {
                     $checked = ' checked';
@@ -323,9 +342,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
                 $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField\" $requiredFieldAria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
                 break;
+
             case 'file':
                 $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField file\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
                 break;
+
             case 'text2':
                 $element['class'] = explode(';', $element['class']);
                 $element['name'] = explode(';', $element['name']);
@@ -342,12 +363,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 $output .= "<input type=\"text\" class=\"{$element['class'][0]} $requiredField\" $requiredFieldAria value=\"{$post[0]}\" $placeholder0 id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
                 $output .= "<input type=\"text\" class=\"{$element['class'][1]} $requiredField\" $requiredFieldAria value=\"{$post[1]}\" $placeholder1 id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
                 break;
+
             case 'textarea':
                 if (empty($post) && $element['value']) {
                     $post = $element['value'];
                 }
                 $output .= "<textarea class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\">{$post}</textarea>\r\n";
                 break;
+
             case 'select':
                 $values = explode(';', $element['value']);
                 $output .= "<select class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t";
@@ -372,14 +395,16 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
                 $output .= "</select>\r\n";
                 break;
+
             case 'radio':
                 $values = explode(';', $element['value']);
                 foreach ($values as $value) {
+                    $checked = '';
+
                     if ($value == $post) {
                         $checked = ' checked';
-                    } else {
-                        $checked = '';
                     }
+
                     $output .= "<input type=\"radio\" class=\"{$element['class']} $requiredField\" value=\"$value\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked> $value ";
                 }
                 $output .= "\r\n";
@@ -415,9 +440,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @param array $inputs
      * @param array $elements
      *
+     * @throws \Exception
+     *
      * @return array
      */
-    protected function _validateInput($inputs, $elements)
+    protected function _validateInput(array $inputs, array $elements)
     {
         $errors = [];
 
@@ -425,9 +452,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $emailValidator = $this->container->get('validator.email');
 
         foreach ($elements as $element) {
-            $valide = true;
+            $valid = true;
             $value = '';
-            if ($element['typ'] == 'text2') {
+            if ($element['typ'] === 'text2') {
                 $element['name'] = explode(';', $element['name']);
                 if (!empty($inputs[$element['name'][0]])) {
                     $value[0] = $inputs[$element['name'][0]];
@@ -443,57 +470,59 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 switch ($element['typ']) {
                     case 'date':
                         $values = preg_split('#[^0-9]#', $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
-                        if (count($values) != 3) {
+                        if (count($values) !== 3) {
                             unset($value);
-                            $valide = false;
+                            $valid = false;
                             break;
                         }
-                        if (strlen($values[0]) == 4) {
+                        if (strlen($values[0]) === 4) {
                             $value = mktime(0, 0, 0, $values[1], $values[2], $values[0]);
                         } else {
                             $value = mktime(0, 0, 0, $values[0], $values[2], $values[1]);
                         }
                         if (empty($value) || $value = -1) {
                             unset($value);
-                            $valide = false;
+                            $valid = false;
                             break;
                         }
-                            $value = date('Y-m-d', $value);
-
+                        $value = date('Y-m-d', $value);
                         break;
+
                     case 'email':
                         $value = strtolower($value);
                         if (!$emailValidator->isValid($value)) {
                             unset($value);
-                            $valide = false;
+                            $valid = false;
                         }
                         $host = trim(substr($value, strpos($value, '@') + 1));
                         if (empty($host) || !gethostbyname($host)) {
                             unset($value);
-                            $valide = false;
+                            $valid = false;
                         }
                         break;
+
                     case 'text2':
                         foreach (array_keys($value) as $key) {
                             $value[$key] = trim(strip_tags($value[$key]));
                             if (empty($value[$key])) {
                                 unset($value[$key]);
-                                $valide = false;
+                                $valid = false;
                             }
                             $value = array_values($value);
                         }
                         break;
+
                     default:
                         $value = trim(strip_tags($value));
                         if (empty($value)) {
                             unset($value);
-                            $valide = true;
+                            $valid = true;
                             break;
                         }
                         break;
                 }
             }
-            if ($valide == false && $element['required'] == 1) {
+            if ($valid === false && $element['required'] == 1) {
                 $errors['v'][] = $element['id'];
                 $errors['e'][$element['id']] = true;
             } elseif (empty($value) && $element['required'] == 1) {
@@ -509,6 +538,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
     /**
      * @param Enlight_View_Default $view
+     *
+     * @throws \Exception
      */
     private function renderElementNote(Enlight_View_Default $view)
     {
@@ -531,7 +562,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * @param int $formId
      *
-     * @throws Enlight_Exception
+     * @throws \Enlight_Exception
+     * @throws \Zend_Mail_Exception
+     * @throws \Enlight_Event_Exception
      */
     private function handleFormPost($formId)
     {
@@ -557,6 +590,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      *
      * Populates $this->_errors
      * Modifies  $this->_elements
+     *
+     * @throws \Exception
      */
     private function checkFields()
     {
@@ -575,7 +610,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         if (!empty($this->_errors)) {
             foreach ($this->_errors['e'] as $key => $value) {
                 if (isset($this->_errors['e'][$key])) {
-                    if ($this->_elements[$key]['typ'] == 'text2') {
+                    if ($this->_elements[$key]['typ'] === 'text2') {
                         $class = explode(';', $this->_elements[$key]['class']);
                         $this->_elements[$key]['class'] = implode(
                                 ' instyle_error has--error;',
@@ -590,7 +625,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * replaces placeholder variables
+     * Replaces placeholder variables
      *
      * @param string $content
      *
@@ -599,18 +634,23 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     private function replaceVariables($content)
     {
         foreach ($this->_postData as $key => $value) {
-            if ($this->_elements[$key]['typ'] == 'text2') {
+            if ($this->_elements[$key]['typ'] === 'text2') {
                 $names = explode(';', $this->_elements[$key]['name']);
-                $content = str_replace('{sVars.' . $names[0] . '}', $value[0], $content);
-                $content = str_replace('{sVars.' . $names[1] . '}', $value[1], $content);
+                $content = str_replace(
+                    ['{sVars.' . $names[0] . '}', '{sVars.' . $names[1] . '}'],
+                    [$value[0], $value[1]],
+                    $content
+                );
             } else {
                 $content = str_replace('{sVars.' . $this->_elements[$key]['name'] . '}', $value, $content);
             }
         }
 
-        $content = str_replace('{sIP}', $_SERVER['REMOTE_ADDR'], $content);
-        $content = str_replace('{sDateTime}', date('d.m.Y h:i:s'), $content);
-        $content = str_replace('{sShopname}', Shopware()->Config()->shopName, $content);
+        $content = str_replace(
+            ['{sIP}', '{sDateTime}', '{sShopname}'],
+            [$_SERVER['REMOTE_ADDR'], date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
+            $content
+        );
 
         return strip_tags($content);
     }

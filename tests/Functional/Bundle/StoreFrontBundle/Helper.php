@@ -1279,6 +1279,7 @@ class Helper
             'txtArtikel' => 'Dummy Translation',
             'txtshortdescription' => 'Dummy Translation',
             'txtlangbeschreibung' => 'Dummy Translation',
+            'txtshippingtime' => 'Dummy Translation',
             'txtzusatztxt' => 'Dummy Translation',
             'txtkeywords' => 'Dummy Translation',
             'txtpackunit' => 'Dummy Translation',

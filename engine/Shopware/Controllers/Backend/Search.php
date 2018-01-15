@@ -181,9 +181,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         ";
 
         $sql = Shopware()->Db()->limit($sql, 5);
-        $result = Shopware()->Db()->fetchAll($sql);
 
-        return $result;
+        return Shopware()->Db()->fetchAll($sql);
     }
 
     /**
@@ -286,9 +285,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
         $entityManager = $this->get('models');
-        $pagination = $entityManager->createPaginator($query);
 
-        return $pagination;
+        return $entityManager->createPaginator($query);
     }
 
     /**
@@ -378,9 +376,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function createCustomFieldToSearchTermCondition($entity, $column)
     {
         $field = $entity . '.' . $column;
-        $where = $field . ' LIKE :search';
 
-        return $where;
+        return $field . ' LIKE :search';
     }
 
     /**

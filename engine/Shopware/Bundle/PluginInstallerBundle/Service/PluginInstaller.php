@@ -40,6 +40,7 @@ use Shopware\Components\Plugin\XmlConfigDefinitionReader;
 use Shopware\Components\Plugin\XmlCronjobReader;
 use Shopware\Components\Plugin\XmlMenuReader;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
@@ -72,30 +73,38 @@ class PluginInstaller
     private $pdo;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $pluginDirectory;
+    private $pluginDirectories;
 
     /**
-     * @param ModelManager         $em
-     * @param DatabaseHandler      $snippetHandler
-     * @param RequirementValidator $requirementValidator
-     * @param \PDO                 $pdo
-     * @param $pluginDirectory
+     * @var ShopwareReleaseStruct
+     */
+    private $release;
+
+    /**
+     * @param ModelManager          $em
+     * @param DatabaseHandler       $snippetHandler
+     * @param RequirementValidator  $requirementValidator
+     * @param \PDO                  $pdo
+     * @param string|string[]       $pluginDirectories
+     * @param ShopwareReleaseStruct $release
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $pluginDirectory
+        $pluginDirectories,
+        ShopwareReleaseStruct $release
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
-        $this->pluginDirectory = $pluginDirectory;
+        $this->pluginDirectories = (array) $pluginDirectories;
+        $this->release = $release;
     }
 
     /**
@@ -110,9 +119,9 @@ class PluginInstaller
         /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
-        $context = new InstallContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new InstallContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
-        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', \Shopware::VERSION);
+        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
             $this->installResources($pluginBootstrap, $plugin);
@@ -139,6 +148,7 @@ class PluginInstaller
      * @param Plugin $plugin
      * @param bool   $removeData
      *
+     * @throws \Exception
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -146,7 +156,7 @@ class PluginInstaller
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
-        $context = new UninstallContext($plugin, \Shopware::VERSION, $plugin->getVersion(), !$removeData);
+        $context = new UninstallContext($plugin, $this->release->getVersion(), $plugin->getVersion(), !$removeData);
         $bootstrap = $this->getPluginByName($plugin->getName());
 
         $bootstrap->uninstall($context);
@@ -182,11 +192,11 @@ class PluginInstaller
     public function updatePlugin(Plugin $plugin)
     {
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
-        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', \Shopware::VERSION);
+        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
 
         $context = new UpdateContext(
             $plugin,
-            \Shopware::VERSION,
+            $this->release->getVersion(),
             $plugin->getVersion(),
             $plugin->getUpdateVersion()
         );
@@ -210,11 +220,14 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return ActivateContext
      */
     public function activatePlugin(Plugin $plugin)
     {
-        $context = new ActivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
         $bootstrap = $this->getPluginByName($plugin->getName());
         $bootstrap->activate($context);
@@ -229,11 +242,14 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return DeactivateContext
      */
     public function deactivatePlugin(Plugin $plugin)
     {
-        $context = new DeactivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new DeactivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         $bootstrap = $this->getPluginByName($plugin->getName());
         $bootstrap->deactivate($context);
 
@@ -245,12 +261,14 @@ class PluginInstaller
 
     /**
      * @param \DateTimeInterface $refreshDate
+     *
+     * @throws \RuntimeException
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
         $initializer = new PluginInitializer(
             $this->pdo,
-            $this->pluginDirectory
+            $this->pluginDirectories
         );
         $plugins = $initializer->initializePlugins();
 
@@ -300,7 +318,7 @@ class PluginInstaller
                 'capability_secure_uninstall' => true,
                 'refresh_date' => $refreshDate,
                 'translations' => $translations ? json_encode($translations) : null,
-                'changes' => $info['changelog'] ? json_encode($info['changelog']) : null,
+                'changes' => isset($info['changelog']) ? json_encode($info['changelog']) : null,
             ];
 
             if ($currentPluginInfo) {
@@ -332,6 +350,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      *
+     * @throws \Exception
+     *
      * @return string
      */
     public function getPluginPath(Plugin $plugin)
@@ -354,6 +374,8 @@ class PluginInstaller
     /**
      * @param PluginBootstrap $bootstrap
      * @param Plugin          $plugin
+     *
+     * @throws \Exception
      */
     private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
     {
@@ -385,6 +407,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param string $file
+     *
+     * @throws \Exception
      */
     private function installForm(Plugin $plugin, $file)
     {
@@ -398,6 +422,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param string $file
+     *
+     * @throws \InvalidArgumentException
      */
     private function installMenu(Plugin $plugin, $file)
     {
@@ -411,6 +437,8 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param string $file
+     *
+     * @throws \InvalidArgumentException
      */
     private function installCronjob(Plugin $plugin, $file)
     {
@@ -435,6 +463,8 @@ class PluginInstaller
     /**
      * @param string $pluginName
      *
+     * @throws \Exception
+     *
      * @return PluginBootstrap
      */
     private function getPluginByName($pluginName)
@@ -452,6 +482,8 @@ class PluginInstaller
 
     /**
      * @param int $pluginId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function removeEmotionComponents($pluginId)
     {
@@ -477,6 +509,8 @@ class PluginInstaller
 
     /**
      * @param int $pluginId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function removeFormsAndElements($pluginId)
     {

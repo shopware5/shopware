@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ListProduct extends BaseProduct implements \JsonSerializable
+class ListProduct extends BaseProduct
 {
     /**
      * State for a calculated product price.

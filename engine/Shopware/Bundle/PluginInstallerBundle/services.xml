@@ -22,7 +22,11 @@
             <argument type="service" id="shopware.snippet_database_handler" />
             <argument type="service" id="shopware.plugin_requirement_validator" />
             <argument type="service" id="db_connection" />
-            <argument>%shopware.plugin_directories.ShopwarePlugins%</argument>
+            <argument type="collection">
+                <argument type="string">%shopware.plugin_directories.ShopwarePlugins%</argument>
+                <argument type="string">%shopware.plugin_directories.ProjectPlugins%</argument>
+            </argument>
+            <argument type="service" id="shopware.release" />
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">
@@ -39,10 +43,11 @@
             <argument type="service" id="shopware_plugininstaller.legacy_plugin_installer"/>
             <argument type="service" id="shopware.plugin.config_writer"/>
             <argument type="service" id="shopware.plugin.config_reader"/>
+            <argument type="service" id="shopware.release" />
         </service>
 
         <service id="shopware_plugininstaller.plugin_download_service" class="Shopware\Bundle\PluginInstallerBundle\Service\DownloadService">
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.downloadsdir%</argument>
             <argument>%shopware.plugin_directories%</argument>
             <argument type="service" id="shopware_plugininstaller.store_client"/>
             <argument type="service" id="dbal_connection" />
@@ -94,6 +99,7 @@
             <argument type="service" id="shopware_plugininstaller.store_client" />
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_plugininstaller.plugin_licence_service" />
+            <argument type="service" id="shopware.release" />
         </service>
     </services>
 </container>

@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Esd extends Extendable implements \JsonSerializable
+class Esd extends Extendable
 {
     /**
      * @var int

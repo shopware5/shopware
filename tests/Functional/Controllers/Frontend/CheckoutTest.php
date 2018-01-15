@@ -94,6 +94,19 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     }
 
     /**
+     * Tests that products can't add to basket over HTTP-GET
+     */
+    public function testAddBasketOverGetFails()
+    {
+        $this->expectException(LogicException::class);
+
+        $this->reset();
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->Request()->setParam('sQuantity', 5);
+        $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
+    }
+
+    /**
      * Compares the calculated price from a basket with the calculated price from Order/Order::calculateInvoiceAmount
      * It does so by creating via the frontend controllers, and comparing the amount (net & gross) with the values provided by
      * Order/Order::calculateInvoiceAmount (Which will be called when one changes / saves the order in the backend).
@@ -126,11 +139,13 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
 
         // Confirm checkout
         $this->reset();
+        $this->Request()->setMethod('POST');
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->dispatch('/checkout/confirm');
 
         // Finish checkout
         $this->reset();
+        $this->Request()->setMethod('POST');
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setParam('sAGB', 'on');
         $this->dispatch('/checkout/finish');
@@ -205,6 +220,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     private function addBasketArticle($userAgent, $quantity = 1)
     {
         $this->reset();
+        $this->Request()->setMethod('POST');
         $this->Request()->setHeader('User-Agent', $userAgent);
         $this->Request()->setParam('sQuantity', $quantity);
         $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);

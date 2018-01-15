@@ -272,7 +272,12 @@
             /**
              * selector for the parent of the loading indicator in if the filters in sidebar mode
              */
-            sidebarLoadingIndicatorParentSelector: '.content-main--inner'
+            sidebarLoadingIndicatorParentSelector: '.content-main--inner',
+
+            /**
+             * selector for the jquery.add-article plugin to enable support for the off canvas cart
+             */
+            addArticleSelector: '*[data-add-article="true"]'
         },
 
         /**
@@ -307,10 +312,10 @@
 
             me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
             me.listingUrl = me.$filterForm.attr('data-listing-url');
-            me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
-            me.showInstantFilterResult = $.parseJSON(me.$filterForm.attr('data-instant-filter-result'));
+            me.loadFacets = me.$filterForm.attr('data-load-facets') === 'true';
+            me.showInstantFilterResult = me.$filterForm.attr('data-instant-filter-result') === 'true';
             me.isInfiniteScrolling = me.$listing.attr(me.opts.infiniteScrollingAttribute);
-            me.isFilterpanelInSidebar = $.parseJSON(me.$filterForm.attr('data-is-in-sidebar'));
+            me.isFilterpanelInSidebar = me.$filterForm.attr('data-is-in-sidebar') === 'true';
 
             me.controllerURL = window.location.href.split('?')[0];
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
@@ -1021,7 +1026,6 @@
                 me.sendListingRequest(params, loadFacets, loadProducts, function (response) {
                     me.disableLoading(loadingIndicator, loadProducts, response, function () {
                         me.updateListing(response);
-
                         // publish finish event to update filter panels
                         $.publish('plugin/swListingActions/onGetFilterResultFinished', [me, response, params]);
                     });
@@ -1134,6 +1138,8 @@
 
             $.publish('plugin/swListingActions/updateListing', [this, html]);
 
+            StateManager.updatePlugin(this.opts.addArticleSelector, 'swAddArticle');
+
             if (this.isInfiniteScrolling) {
                 pages = Math.ceil(response.totalCount / this.$perPageInput.val());
 
@@ -1141,7 +1147,6 @@
                 this.$listing.attr('data-pages', pages);
                 this.$listing.data('plugin_swInfiniteScrolling').destroy();
                 StateManager.addPlugin(this.opts.listingSelector, 'swInfiniteScrolling');
-                StateManager.addPlugin('*[data-add-article="true"]', 'swAddArticle');
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [this, html, pages]);
             } else {
                 this.updatePagination(response);

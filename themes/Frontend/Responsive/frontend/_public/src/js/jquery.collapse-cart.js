@@ -320,7 +320,7 @@
 
             $.ajax({
                 url: url,
-                dataType: 'jsonp',
+                dataType: 'html',
                 method: 'POST',
                 success: function (result) {
                     me.$el.html(result);

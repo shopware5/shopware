@@ -56,7 +56,7 @@ class StoreListUpdatesCommand extends StoreCommand
     {
         $version = $input->getOption('shopware-version');
         if (empty($version)) {
-            $version = \Shopware::VERSION;
+            $version = $this->container->getParameter('shopware.release.version');
         }
 
         $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();

@@ -80,11 +80,9 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return [Shopware.grid.HeaderToolTip]
      */
     getHeaderToolTipPlugin: function() {
-        var headerToolTipPlugin = Ext.create('Shopware.grid.HeaderToolTip', {
+        return Ext.create('Shopware.grid.HeaderToolTip', {
             showIcons: true
         });
-
-        return headerToolTipPlugin;
     },
 
     /**
@@ -93,22 +91,20 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return [Ext.grid.plugin.RowEditing]
      */
     getRowEditingPlugin: function() {
-        var me = this, rowEditingPlugin = Ext.create('Ext.grid.plugin.RowEditing', {
-            saveBtnText : me.messages.saveBtnText,
-            cancelBtnText : me.messages.cancelBtnText,
+        return Ext.create('Ext.grid.plugin.RowEditing', {
+            saveBtnText: this.messages.saveBtnText,
+            cancelBtnText: this.messages.cancelBtnText,
             errorSummary: false
         });
-
-        return rowEditingPlugin;
     },
 
     /**
      * Creates gridviewdragdrop plugin
      *
-     * @return [object]
+     * @return { object }
      */
     getViewConfig: function() {
-        var viewConfig = {
+        return {
             /*{if {acl_is_allowed privilege=createupdate}}*/
             plugins: {
                 pluginId: 'my-gridviewdragdrop',
@@ -116,8 +112,6 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             }
             /*{/if}*/
         };
-
-        return viewConfig;
     },
 
     /**
@@ -248,8 +242,6 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         return columns;
     },
 
-
-
     /**
      * Creates store object used for the typ column
      *
@@ -264,7 +256,8 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 ['checkbox', 'Checkbox'],
                 ['email', 'Email'],
                 ['select', 'select'],
-                ['textarea', 'textarea']
+                ['textarea', 'textarea'],
+                ['hidden', 'hidden']
             ]
         });
     },
@@ -288,12 +281,10 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
     /**
      * Creates the grid toolbar with the add and delete button
      *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
+     * @return { Ext.toolbar.Toolbar } grid toolbar
      */
     getToolbar: function() {
-        var me = this;
-
-        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+        return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             ui: 'shopware-ui',
             cls: 'shopware-toolbar',
@@ -312,13 +303,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 xtype: 'tbfill'
             }, {
                 xtype: 'container',
-                html: '<p style="padding: 5px">' + me.messages.hintDragDrop + '</p>'
+                html: '<p style="padding: 5px">' + this.messages.hintDragDrop + '</p>'
             }
             /*{/if}*/
             ]
         });
-
-        return toolbar;
     },
 
     /**
@@ -327,24 +316,23 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return Ext.toolbar.Paging
      */
     getPagingbar: function () {
-        var pagingbar =  Ext.create('Ext.toolbar.Paging', {
+        return Ext.create('Ext.toolbar.Paging', {
             store: this.store,
             dock:'bottom',
             displayInfo: true
         });
-
-        return pagingbar;
     },
 
     /**
      * Renderer for sorthandle-column
      *
-     * @param [string] value
+     * @param { string } value
+     * @param { Object } metadata
+     *
+     * @return string
      */
     renderSorthandleColumn: function (value,  metadata) {
-        var me = this;
-
-        metadata.tdAttr = 'data-qtip="' + me.messages.hintDragDrop +'"';
+        metadata.tdAttr = 'data-qtip="' + this.messages.hintDragDrop +'"';
 
         return '<div style="cursor: n-resize;">&#009868;</div>';
     }

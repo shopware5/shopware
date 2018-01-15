@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class BaseProduct extends Extendable implements \JsonSerializable
+class BaseProduct extends Extendable
 {
     /**
      * Unique identifier of the product (s_articles).

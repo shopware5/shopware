@@ -54,7 +54,9 @@ class DetailContext extends SubContext
      */
     public function iPutTheArticleTimesIntoTheBasket($quantity = 1)
     {
-        $this->getPage('Detail')->toBasket($quantity);
+        /** @var $page Detail */
+        $page = $this->getPage('Detail');
+        $page->addToBasket($quantity);
     }
 
     /**

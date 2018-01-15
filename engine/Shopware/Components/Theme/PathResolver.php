@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme;
 
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop;
 
@@ -46,9 +47,14 @@ class PathResolver
     private $rootDir;
 
     /**
-     * @var \Enlight_Template_Manager
+     * @var string
      */
-    private $templateManager;
+    private $templateDir;
+
+    /**
+     * @var string
+     */
+    private $cacheDir;
 
     /**
      * @var array
@@ -56,15 +62,24 @@ class PathResolver
     private $pluginDirectories;
 
     /**
-     * @param string                    $rootDir
-     * @param array                     $pluginDirectories
-     * @param \Enlight_Template_Manager $templateManager
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($rootDir, array $pluginDirectories, \Enlight_Template_Manager $templateManager)
+    private $release;
+
+    /**
+     * @param string                $rootDir
+     * @param array                 $pluginDirectories
+     * @param string                $templateDir
+     * @param string                $cacheDir
+     * @param ShopwareReleaseStruct $release
+     */
+    public function __construct($rootDir, array $pluginDirectories, $templateDir, $cacheDir, ShopwareReleaseStruct $release)
     {
         $this->rootDir = $rootDir;
-        $this->templateManager = $templateManager;
         $this->pluginDirectories = $pluginDirectories;
+        $this->templateDir = $templateDir;
+        $this->cacheDir = $cacheDir;
+        $this->release = $release;
     }
 
     /**
@@ -88,11 +103,11 @@ class PathResolver
             return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $template['template'];
         }
 
-        if ($template['plugin_namespace'] === 'ShopwarePlugins') {
+        if (in_array($template['plugin_namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
             return implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    $this->pluginDirectories['ShopwarePlugins'] . '/' . $template['plugin_name'] . '/Resources',
+                    $this->pluginDirectories[$template['plugin_namespace']] . '/' . $template['plugin_name'] . '/Resources',
                     'Themes',
                     'Frontend',
                     $template['template'],
@@ -126,7 +141,7 @@ class PathResolver
             return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
         }
 
-        return $this->pluginDirectories['ShopwarePlugins'] . '/' . $plugin->getName() . '/Resources';
+        return $this->pluginDirectories[$plugin->getNamespace()] . '/' . $plugin->getName() . '/Resources';
     }
 
     /**
@@ -136,9 +151,7 @@ class PathResolver
      */
     public function getFrontendThemeDirectory()
     {
-        return $this->getBaseThemeDirectory() .
-        DIRECTORY_SEPARATOR .
-        'Frontend';
+        return $this->getBaseThemeDirectory() . DIRECTORY_SEPARATOR . 'Frontend';
     }
 
     /**
@@ -149,9 +162,7 @@ class PathResolver
      */
     public function getBackendThemeDirectory()
     {
-        return $this->getBaseThemeDirectory() .
-        DIRECTORY_SEPARATOR .
-        'Backend';
+        return $this->getBaseThemeDirectory() . DIRECTORY_SEPARATOR . 'Backend';
     }
 
     /**
@@ -261,13 +272,13 @@ class PathResolver
     }
 
     /**
-     * Helper function which returns the default shopware theme directory.
+     * Helper function which returns the cache directory
      *
      * @return string
      */
     public function getCacheDirectory()
     {
-        return $this->rootDir . '/web/cache';
+        return rtrim($this->cacheDir, '/');
     }
 
     /**
@@ -278,7 +289,7 @@ class PathResolver
      */
     public function formatPathToUrl($path, Shop\Shop $shop)
     {
-        return str_replace($this->rootDir, $shop->getBasePath(), $path);
+        return str_replace(rtrim($this->rootDir, '/'), $shop->getBasePath(), $path);
     }
 
     /**
@@ -300,7 +311,7 @@ class PathResolver
      */
     public function getSourceMapUrl(Shop\Shop $shop)
     {
-        return $shop->getBasePath() . '/web/cache/css.source.map';
+        return $this->formatPathToUrl($this->getSourceMapPath(), $shop);
     }
 
     /**
@@ -312,7 +323,7 @@ class PathResolver
      * function starts the theme compiler operations.
      *
      * @param Shop\Shop $shop
-     * @param $timestamp
+     * @param int       $timestamp
      *
      * @return string
      */
@@ -329,7 +340,7 @@ class PathResolver
      * function starts the theme compiler operations.
      *
      * @param Shop\Shop $shop
-     * @param $timestamp
+     * @param int       $timestamp
      *
      * @return string
      */
@@ -341,7 +352,7 @@ class PathResolver
     /**
      * Helper function to build a unique file name.
      *
-     * @param string    $timestamp
+     * @param int       $timestamp
      * @param Shop\Shop $shop
      * @param string    $suffix
      *
@@ -353,7 +364,7 @@ class PathResolver
             $shop = $shop->getMain();
         }
 
-        $filename = $timestamp . '_' . md5($timestamp . $shop->getTemplate()->getId() . $shop->getId() . \Shopware::REVISION);
+        $filename = $timestamp . '_' . md5($timestamp . $shop->getTemplate()->getId() . $shop->getId() . $this->release->getRevision());
 
         return $filename . '.' . $suffix;
     }
@@ -363,7 +374,7 @@ class PathResolver
      */
     private function getBaseThemeDirectory()
     {
-        return $this->rootDir . DIRECTORY_SEPARATOR . 'themes';
+        return rtrim($this->templateDir, DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -372,7 +383,7 @@ class PathResolver
      *
      * @param Shop\Template $theme
      *
-     * @return null|string
+     * @return string
      */
     private function getThemeDirectory(Shop\Template $theme)
     {

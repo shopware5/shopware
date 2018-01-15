@@ -68,21 +68,39 @@ class JavascriptCollector
     {
         $inheritances = $this->inheritance->buildInheritances($template);
 
-        $files = $this->collectInheritanceJavascript($inheritances['bare']);
+        $definitions = $this->collectInheritanceJavascript($inheritances['bare']);
 
-        $files = array_merge(
-            $files,
+        $definitions = array_merge(
+            $definitions,
             $this->collectPluginJavascript($shop, $template)
         );
 
-        $files = array_merge(
-            $files,
+        $definitions = array_merge(
+            $definitions,
             $this->collectInheritanceJavascript($inheritances['custom'])
         );
 
+        $discardJs = [];
+
+        for ($i = count($definitions) - 1; $i >= 0; --$i) {
+            $definition = $definitions[$i];
+
+            $theme = $definition->getTheme();
+
+            // not all definitions are associated with a specific theme (e.g. plugins)
+            if ($theme) {
+                $themeClassName = get_class($theme);
+                $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
+
+                if (in_array($themeClassName, $discardJs)) {
+                    $definition->setFiles([]);
+                }
+            }
+        }
+
         $files = $this->eventManager->filter(
             'Theme_Compiler_Collect_Javascript_Files_FilterResult',
-            $files,
+            $this->getUniqueFiles($definitions),
             [
                 'shop' => $shop,
                 'template' => $template,
@@ -95,19 +113,23 @@ class JavascriptCollector
     /**
      * @param $inheritance
      *
-     * @return string[]
+     * @throws \Exception
+     *
+     * @return JavascriptDefinition[]
      */
     private function collectInheritanceJavascript($inheritance)
     {
-        $files = [];
+        $definitions = [];
         foreach (array_reverse($inheritance) as $template) {
-            $files = array_merge(
-                $files,
-                $this->inheritance->getTemplateJavascriptFiles($template)
-            );
+            $definition = new JavascriptDefinition();
+
+            $definition->setTheme($this->inheritance->getTheme($template));
+            $definition->setFiles($this->inheritance->getTemplateJavascriptFiles($template));
+
+            $definitions[] = $definition;
         }
 
-        return $files;
+        return $definitions;
     }
 
     /**
@@ -117,11 +139,13 @@ class JavascriptCollector
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      *
-     * @return string[]
+     * @return JavascriptDefinition[]
      */
     private function collectPluginJavascript(Shop\Shop $shop, Shop\Template $template)
     {
         $collection = new ArrayCollection();
+        $definition = new JavascriptDefinition();
+
         $this->eventManager->collect(
             'Theme_Compiler_Collect_Plugin_Javascript',
             $collection,
@@ -136,6 +160,24 @@ class JavascriptCollector
             }
         }
 
-        return $collection->toArray();
+        $definition->setFiles($collection->toArray());
+
+        return [$definition];
+    }
+
+    /**
+     * @param $definitions
+     *
+     * @return array
+     */
+    private function getUniqueFiles($definitions)
+    {
+        $files = [];
+        /** @var JavascriptDefinition $definition */
+        foreach ($definitions as $definition) {
+            $files = array_merge($files, $definition->getFiles());
+        }
+
+        return $files;
     }
 }

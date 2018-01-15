@@ -267,8 +267,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $apiEndpoint = $config['update-feedback-api-endpoint'];
             $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
             $publicKey = trim(file_get_contents($rootDir . '/engine/Shopware/Components/HttpClient/public.key'));
+            $shopwareRelease = $this->container->get('shopware.release');
 
-            $collector = new FeedbackCollector($apiEndpoint, $publicKey, $this->getUnique());
+            $collector = new FeedbackCollector($apiEndpoint, $publicKey, $this->getUnique(), $shopwareRelease);
 
             try {
                 $collector->sendData();
@@ -323,7 +324,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
     public function downloadAction()
     {
-        $offset = $this->Request()->get('offset', 0);
+        $offset = (int) $this->Request()->get('offset', 0);
 
         /** @var Version $version */
         $version = $this->getCachedVersion();
@@ -353,8 +354,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $unpackStep = new UnpackStep($source, $fileDir);
 
-        $offset = $this->Request()->get('offset', 0);
-        if ($offset == 0) {
+        $offset = (int) $this->Request()->get('offset', 0);
+        if ($offset === 0) {
             $fs->remove($updateDir);
         }
 
@@ -465,7 +466,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      */
     private function getUnique()
     {
-        /** @var UniqueIdGeneratorInterface $uniqueIdGenerator */
+        /** @var Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface $uniqueIdGenerator */
         $uniqueIdGenerator = $this->container->get('shopware_plugininstaller.unique_id_generator');
 
         return $uniqueIdGenerator->getUniqueId();
@@ -489,8 +490,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         if (!empty($pluginConfig['update-fake-version'])) {
             $shopwareVersion = $pluginConfig['update-fake-version'];
         } else {
-            $shopwareVersion = Shopware::VERSION;
-            $versionText = \Shopware::VERSION_TEXT;
+            $shopwareVersion = $this->container->getParameter('shopware.release.version');
+            $versionText = $this->container->getParameter('shopware.release.version_text');
             if (!empty($versionText)) {
                 $shopwareVersion .= '-' . $versionText;
             }
@@ -544,9 +545,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     private function createDestinationFromVersion(Version $version)
     {
         $filename = 'update_' . $version->sha1 . '.zip';
-        $destination = Shopware()->DocPath('files') . $filename;
 
-        return $destination;
+        return Shopware()->DocPath('files') . $filename;
     }
 
     /**

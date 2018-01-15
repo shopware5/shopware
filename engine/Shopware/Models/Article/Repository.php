@@ -1406,7 +1406,7 @@ class Repository extends ModelRepository
 
         return $builder->select(['taxes'])
                 ->from('Shopware\Models\Tax\Tax', 'taxes')
-                ->orderBy('taxes.name', 'ASC');
+                ->orderBy('taxes.tax', 'DESC');
     }
 
     /**

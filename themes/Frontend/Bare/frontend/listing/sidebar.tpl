@@ -8,9 +8,7 @@
 
                 <div class="sidebar-filter">
                     <div class="sidebar-filter--content">
-                        {if $criteria && $facets}
-                            {include file="frontend/listing/actions/action-filter-panel.tpl"}
-                        {/if}
+                        {include file="frontend/listing/actions/action-filter-panel.tpl"}
                     </div>
                 </div>
             </div>

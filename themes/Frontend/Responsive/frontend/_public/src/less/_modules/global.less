@@ -21,8 +21,8 @@ Add a `is--` class to an element to easily change the properties.
 `.is--underline` - sets element to text-decoration: underline<br/>
 `.is--line-through` - sets element to text-decoration: line-through<br/>
 `.is--uppercase` - sets element to text-transform: uppercase<br/>
-`.is--strong` - sets element to font-weight: 600<br/>
-`.is--bold` - sets element to font-weight: bold<br/>
+`.is--strong` - sets element to font-weight: @font-bold-weight<br/>
+`.is--bold` - sets element to font-weight: @font-bold-weight<br/>
 `.is--italic` - sets element to font-style: italic<br/>
 `.is--nowrap` - sets element to white-space: nowrap<br/>
 
@@ -153,8 +153,8 @@ blockquote {
 .is--underline { text-decoration: underline !important; }
 .is--line-through { text-decoration: line-through !important; }
 .is--uppercase { text-transform: uppercase !important; }
-.is--strong { font-weight: 600 !important; }
-.is--bold { font-weight: bold !important; }
+.is--strong { font-weight: @font-bold-weight !important; }
+.is--bold { font-weight: @font-bold-weight !important; }
 .is--italic { font-style: italic; }
 .is--nowrap { white-space: nowrap !important; }
 
@@ -208,7 +208,7 @@ blockquote {
         .unitize(margin-bottom, 45);
         .unitize(min-height, 700);
     }
-    
+
     .content-main--inner {
         .unitize-padding(0, 50, 50, 50);
     }

@@ -40,7 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Criteria extends Extendable implements \JsonSerializable
+class Criteria extends Extendable
 {
     /**
      * Offset for the limitation

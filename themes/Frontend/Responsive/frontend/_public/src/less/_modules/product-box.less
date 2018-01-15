@@ -155,7 +155,7 @@ Shopware provides 3 product box types:<br/>
         display: block;
         width: 100%;
         color: @text-color-dark;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         overflow: hidden;
 
         &:hover {
@@ -193,7 +193,7 @@ Shopware provides 3 product box types:<br/>
             .unitize(line-height, 20);
             display: inline-block;
             color: @text-color-dark;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
 
             &.is--discount {
                 color: @badge-discount-bg;
@@ -305,7 +305,7 @@ Creates a corner product badge on a product-box.
             float: left;
             position: relative;
             text-align: center;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             clear: both;
         }
 
@@ -427,7 +427,7 @@ Creates a corner product badge on a product-box.
         }
 
         .is--discount {
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
     }
 
@@ -471,7 +471,7 @@ Creates a corner product badge on a product-box.
         .tap-highlight-color(rgba(0, 0, 0, 0));
         display: block;
         color: @text-color;
-        font-weight: normal;
+        font-weight: @font-base-weight;
         white-space: normal;
     }
 }

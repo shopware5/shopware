@@ -1554,11 +1554,12 @@ class sArticles
      * Get name from a certain article by order number
      *
      * @param string $orderNumber
-     * @param bool   $returnAll   return only name or additional data, too
+     * @param bool   $returnAll   Return only name or additional data, too
+     * @param bool   $translate   Disables the translation of the product if set to false
      *
      * @return string or array
      */
-    public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false)
+    public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {
         $article = $this->db->fetchRow('
             SELECT
@@ -1581,18 +1582,20 @@ class sArticles
         }
 
         // Load translations for article or variant
-        if ($article['did'] != $article['main_detail_id']) {
-            $article = $this->sGetTranslation(
-                $article,
-                $article['did'],
-                'variant'
-            );
-        } else {
-            $article = $this->sGetTranslation(
-                $article,
-                $article['id'],
-                'article'
-            );
+        if ($translate) {
+            if ((int) $article['did'] !== (int) $article['main_detail_id']) {
+                $article = $this->sGetTranslation(
+                    $article,
+                    $article['did'],
+                    'variant'
+                );
+            } else {
+                $article = $this->sGetTranslation(
+                    $article,
+                    $article['id'],
+                    'article'
+                );
+            }
         }
 
         // If article has variants, we need to append the additional text to the name
@@ -1682,6 +1685,7 @@ class sArticles
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'articleName',
                     'txtzusatztxt' => 'additionaltext',
                     'txtkeywords' => 'keywords',
@@ -1752,10 +1756,10 @@ class sArticles
     /**
      * Get translation for an object (article / variant / link / download / supplier)
      *
-     * @param $data
-     * @param $id
-     * @param $object
-     * @param $language
+     * @param array  $data
+     * @param int    $id
+     * @param string $object
+     * @param int    $language
      *
      * @return array
      */
@@ -1773,6 +1777,7 @@ class sArticles
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'articleName',
                     'txtzusatztxt' => 'additionaltext',
                     'txtkeywords' => 'keywords',
@@ -1780,7 +1785,7 @@ class sArticles
                 ];
                 break;
             case 'variant':
-                $map = ['txtzusatztxt' => 'additionaltext', 'txtpackunit' => 'packunit'];
+                $map = ['txtshippingtime' => 'shippingtime', 'txtzusatztxt' => 'additionaltext', 'txtpackunit' => 'packunit'];
                 break;
             case 'link':
                 $map = ['linkname' => 'description'];
@@ -1834,10 +1839,9 @@ class sArticles
         }
         if (!empty($objectData)) {
             foreach ($objectData as $translateKey => $value) {
+                $key = $translateKey;
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
-                } else {
-                    $key = $translateKey;
                 }
                 $data[$key] = $value;
             }
@@ -1869,11 +1873,9 @@ class sArticles
                 foreach ($sArticle['sConfigurator'] as $key => $group) {
                     foreach ($group['values'] as $key2 => $option) {
                         $groupVal = $group['groupnameOrig'] ? $group['groupnameOrig'] : $group['groupname'];
-                        $groupVal = str_replace('/', '', $groupVal);
-                        $groupVal = str_replace(' ', '', $groupVal);
+                        $groupVal = str_replace(['/', ' '], '', $groupVal);
                         $optionVal = $option['optionnameOrig'] ? $option['optionnameOrig'] : $option['optionname'];
-                        $optionVal = str_replace('/', '', $optionVal);
-                        $optionVal = str_replace(' ', '', $optionVal);
+                        $optionVal = str_replace(['/', ' '], '', $optionVal);
                         if (!empty($option['selected'])) {
                             $referenceImages[strtolower($groupVal . ':' . str_replace(' ', '', $optionVal))] = true;
                         }
@@ -1898,7 +1900,7 @@ class sArticles
                     if (preg_match('/(.*){(.*)}/', $value['relations'])) {
                         $configuratorImages = true;
                     }
-                    if ($value['main'] == 1) {
+                    if ((int) $value['main'] === 1) {
                         $mainKey = $k;
                     }
                 }
@@ -1942,13 +1944,13 @@ class sArticles
                             $imageFailedCheck[] = true;
                         }
                     }
-                    if (count($imageFailedCheck) && count($imageFailedCheck) >= 1 && count($available) >= 1 && $relation == '||') { // ODER Verknï¿½pfunbg
+                    if ($relation === '||' && count($imageFailedCheck) && count($imageFailedCheck) >= 1 && count($available) >= 1) { // OR combination
                         if (!empty($debug)) {
                             echo $string . " matching combination\n";
                         }
                         $sArticle['images'][$imageKey]['relations'] = '';
                         $positions[$image['position']] = $imageKey;
-                    } elseif (count($imageFailedCheck) == count($available) && $relation == '&') { // UND VERKNï¿½PFUNG
+                    } elseif ($relation === '&' && count($imageFailedCheck) === count($available)) { // AND combination
                         $sArticle['images'][$imageKey]['relations'] = '';
                         $positions[$image['position']] = $imageKey;
                     } else {
@@ -1972,7 +1974,7 @@ class sArticles
 
         if (!empty($sArticle['images'])) {
             foreach ($sArticle['images'] as $key => $image) {
-                if ($image['relations'] == '&{}' || $image['relations'] == '||{}') {
+                if ($image['relations'] === '&{}' || $image['relations'] === '||{}') {
                     $sArticle['images'][$key]['relations'] = '';
                 }
             }
@@ -2024,7 +2026,7 @@ class sArticles
             $diff = $ids;
         }
 
-        if ($mode == 'new') {
+        if ($mode === 'new') {
             $value = current($diff);
         } else {
             shuffle($diff);
@@ -2044,7 +2046,7 @@ class sArticles
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
         }
 
         return $this->mediaRepository;
@@ -2058,7 +2060,7 @@ class sArticles
     private function getArticleRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->articleRepository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
         }
 
         return $this->articleRepository;
@@ -2068,6 +2070,8 @@ class sArticles
      * @param int                                          $categoryId
      * @param StoreFrontBundle\Struct\ShopContextInterface $context
      * @param Enlight_Controller_Request_RequestHttp       $request
+     *
+     * @throws \Exception
      *
      * @return SearchBundle\Criteria
      */
@@ -2108,9 +2112,9 @@ class sArticles
     }
 
     /**
-     * @param SearchBundle\ProductNumberSearchResult $searchResult
-     * @param $orderNumber
-     * @param $categoryId
+     * @param SearchBundle\ProductNumberSearchResult          $searchResult
+     * @param string                                          $orderNumber
+     * @param int                                             $categoryId
      * @param StoreFrontBundle\Struct\ProductContextInterface $context
      *
      * @return array
@@ -2205,9 +2209,8 @@ class sArticles
         );
 
         $queryPrams = http_build_query($params, null, '&');
-        $listingLink = $this->config->get('sBASEFILE') . '?' . $queryPrams;
 
-        return $listingLink;
+        return $this->config->get('sBASEFILE') . '?' . $queryPrams;
     }
 
     /**
@@ -2263,8 +2266,10 @@ class sArticles
     /**
      * Internal helper function to convert the image data from the database to the frontend structure.
      *
-     * @param $image
+     * @param array $image
      * @param $articleAlbum \Shopware\Models\Media\Album
+     *
+     * @throws \Exception
      *
      * @return array
      */
@@ -2393,7 +2398,7 @@ class sArticles
      * Returns a listing of products. Used for the backward compatibility category listings.
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
-     * @param $categoryId
+     * @param int                                             $categoryId
      * @param StoreFrontBundle\Struct\ProductContextInterface $context
      * @param Enlight_Controller_Request_Request              $request
      * @param SearchBundle\Criteria                           $criteria
@@ -2552,10 +2557,15 @@ class sArticles
         ];
     }
 
+    /**
+     * @param string $longDescription
+     *
+     * @return string
+     */
     private function getDescriptionKeywords($longDescription)
     {
         //sDescriptionKeywords
-        $string = (strip_tags(html_entity_decode($longDescription, null, 'UTF-8')));
+        $string = strip_tags(html_entity_decode($longDescription, null, 'UTF-8'));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
         $badWords = explode(',', $this->config->get('badwords'));

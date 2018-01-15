@@ -421,7 +421,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                             grid.fireEvent('openArticle', record);
                         },
                         getClass: function(value, metadata, record) {
-                             if (!record.get('articleId'))  {
+                             if (!record.get('articleId') || record.get('mode') !== 0)  {
                                  return 'x-hidden';
                              }
                         }

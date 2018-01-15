@@ -69,11 +69,9 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     {
         $config = $this->Config();
 
-        $options = [
+        return [
             'cost' => $config['bcryptCost'],
         ];
-
-        return $options;
     }
 
     /**
@@ -182,19 +180,19 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         );
     }
 
-     /**
-      * Registers all necessary events and hooks.
-      */
-     private function subscribeEvents()
-     {
-         $this->subscribeEvent(
+    /**
+     * Registers all necessary events and hooks.
+     */
+    private function subscribeEvents()
+    {
+        $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_PasswordEncoder',
             'onInitResourcePasswordEncoder'
         );
 
-         $this->subscribeEvent(
+        $this->subscribeEvent(
             'Shopware_Components_Password_Manager_AddEncoder',
             'onAddEncoder'
         );
-     }
+    }
 }

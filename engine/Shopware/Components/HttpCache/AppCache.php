@@ -287,7 +287,12 @@ class AppCache extends HttpCache
             return new $class($this->options, $this->kernel);
         }
 
-        return new Store($this->cacheDir ? $this->cacheDir : $this->kernel->getCacheDir() . '/http_cache', $this->options['cache_cookies'], $this->options['lookup_optimization']);
+        return new Store(
+            $this->cacheDir ? $this->cacheDir : $this->kernel->getCacheDir() . '/http_cache',
+            $this->options['cache_cookies'],
+            $this->options['lookup_optimization'],
+            $this->options['ignored_url_parameters']
+        );
     }
 
     /**
@@ -329,9 +334,7 @@ class AppCache extends HttpCache
      */
     protected function getPurgeAllowedIPs()
     {
-        $allowedIps = $this->options['purge_allowed_ips'];
-
-        return $allowedIps;
+        return $this->options['purge_allowed_ips'];
     }
 
     /**

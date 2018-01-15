@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService;
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\RepositoryInterface;
@@ -67,7 +67,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     private $shopwareConfig;
 
     /**
-     * @var AdditionalTextService
+     * @var AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -75,13 +75,13 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
      * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
      * @param RepositoryInterface                $productStreamRepository
      * @param ShopwareConfig                     $shopwareConfig
-     * @param AdditionalTextService              $additionalTextService
+     * @param AdditionalTextServiceInterface     $additionalTextService
      */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
         RepositoryInterface $productStreamRepository,
         ShopwareConfig $shopwareConfig,
-        AdditionalTextService $additionalTextService
+        AdditionalTextServiceInterface $additionalTextService
     ) {
         $this->criteriaFactory = $criteriaFactory;
         $this->productStreamRepository = $productStreamRepository;

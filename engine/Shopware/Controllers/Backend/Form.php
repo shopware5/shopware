@@ -73,6 +73,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Creates new form
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function createFormAction()
     {
@@ -94,6 +97,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Updates form
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function updateFormAction()
     {
@@ -127,6 +133,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Removes form
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function removeFormAction()
     {
@@ -152,6 +161,10 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Copies form
+     *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function copyFormAction()
     {
@@ -192,7 +205,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        $result = $this->getManager()->getRepository('Shopware\Models\Form\Field')->findBy(
+        $result = $this->getManager()->getRepository(\Shopware\Models\Form\Field::class)->findBy(
             ['formId' => $id],
             ['position' => 'ASC']
         );
@@ -204,6 +217,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Updates form
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function updateFieldAction()
     {
@@ -214,7 +230,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $result Field */
-        $result = $this->getManager()->getRepository('Shopware\Models\Form\Field')->find($id);
+        $result = $this->getManager()->getRepository(\Shopware\Models\Form\Field::class)->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Field not found']);
 
@@ -233,6 +249,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Creates new field
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function createFieldAction()
     {
@@ -265,6 +284,11 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Removes field
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function removeFieldAction()
     {
@@ -275,7 +299,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $result Field */
-        $result = $this->getManager()->find('Shopware\Models\Form\Field', $id);
+        $result = $this->getManager()->find(\Shopware\Models\Form\Field::class, $id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Field not found']);
 
@@ -297,7 +321,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $positions = json_decode($data);
 
         $qb = $this->getManager()->createQueryBuilder();
-        $qb->update('Shopware\Models\Form\Field', 'field')
+        $qb->update(\Shopware\Models\Form\Field::class, 'field')
             ->andWhere('field.id = :fieldId');
 
         foreach ($positions as $position => $fieldid) {
@@ -332,7 +356,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Gets a single form incl. it's fields
      *
-     * @param $id
+     * @param int $id
      */
     protected function getSingleForm($id)
     {
@@ -359,7 +383,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
      *
      * @return array
      */
-    protected function prefixProperties($properties = [], $prefix = '')
+    protected function prefixProperties(array $properties = [], $prefix = '')
     {
         foreach ($properties as $key => $property) {
             if (isset($property['property'])) {
@@ -390,7 +414,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Form\Form');
+            $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class);
         }
 
         return $this->repository;

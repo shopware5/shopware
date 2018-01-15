@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 use Shopware\Components\Random;
+use Shopware\Components\ShopwareReleaseStruct;
 
 /**
  * @category  Shopware
@@ -49,15 +50,22 @@ class FeedbackCollector
     private $uniqueId;
 
     /**
-     * @param string $apiEndpoint
-     * @param string $publicKey
-     * @param string $uniqueId
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($apiEndpoint, $publicKey, $uniqueId)
+    private $release;
+
+    /**
+     * @param string                $apiEndpoint
+     * @param string                $publicKey
+     * @param string                $uniqueId
+     * @param ShopwareReleaseStruct $release
+     */
+    public function __construct($apiEndpoint, $publicKey, $uniqueId, ShopwareReleaseStruct $release)
     {
         $this->apiEndpoint = rtrim($apiEndpoint, '/');
         $this->publicKey = $publicKey;
         $this->uniqueId = $uniqueId;
+        $this->release = $release;
     }
 
     /**
@@ -66,9 +74,8 @@ class FeedbackCollector
     public function sendData()
     {
         $data = $this->gatherData();
-        $result = $this->submitData($data);
 
-        return $result;
+        return $this->submitData($data);
     }
 
     /**
@@ -90,7 +97,7 @@ class FeedbackCollector
 
         $client = new \Zend_Http_Client($apiUrl, [
             'timeout' => 1,
-            'useragent' => 'Shopware/' . \Shopware::VERSION,
+            'useragent' => 'Shopware/' . $this->release->getVersion(),
         ]);
 
         $response = $client->setRawData($dataString)->setEncType('application/json')->request('POST');
@@ -128,9 +135,9 @@ class FeedbackCollector
                 'arch' => php_uname('m'),
                 'dist' => php_uname('r'),
                 'sapi' => PHP_SAPI,
-                'shopware_version' => \Shopware::VERSION,
-                'shopware_version_text' => \Shopware::VERSION_TEXT,
-                'shopware_version_revision' => \Shopware::REVISION,
+                'shopware_version' => $this->release->getVersion(),
+                'shopware_version_text' => $this->release->getVersionText(),
+                'shopware_version_revision' => $this->release->getRevision(),
                 'max_execution_time' => ini_get('max_execution_time'),
                 'memory_limit' => ini_get('memory_limit'),
                 'serverSoftware' => $serverSoftware,
@@ -163,10 +170,8 @@ class FeedbackCollector
     }
 
     /**
-     * @param $data
-     * @param $encryptionMethod
-     *
-     * @throws \Exception
+     * @param string $data
+     * @param string $encryptionMethod
      *
      * @return array
      */

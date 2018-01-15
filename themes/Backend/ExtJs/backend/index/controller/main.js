@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         } else {
             me.initBackendDesktop();
-            
+
             if (enableInstallationFeedback) {
                 Ext.Function.defer(function() {
                     Shopware.app.Application.addSubApplication({
@@ -407,7 +407,6 @@ createKeyNavOverlay = function() {
         items: [ dataView ]
     });
     win.show();
-
 };
 
 /**
@@ -459,7 +458,7 @@ openSearchResult = function(module, id) {
             break;
     }
     return false;
-}
+};
 
 /**
  * Proxy method which just shows a growl like
@@ -498,8 +497,8 @@ createShopwareVersionMessage = function() {
             autoScroll: true,
             cls: Ext.baseCSSPrefix + 'about-shopware-content',
             html: '<p>' +
-                    '<strong>Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT}</strong>' +
-                    '<span>Build Rev {Shopware::REVISION}</span></p>' +
+                    '<strong>Shopware {$SHOPWARE_VERSION} {$SHOPWARE_VERSION_TEXT}</strong>' +
+                    '<span>Build Rev {$SHOPWARE_REVISION}</span></p>' +
 
                     '{if $product == "CE"}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
                     '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +

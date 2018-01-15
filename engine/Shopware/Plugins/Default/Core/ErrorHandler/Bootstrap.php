@@ -285,14 +285,19 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function createMailHandler()
     {
+        $mail = Shopware()->Config()->get('logMailAddress');
+
+        if (empty($mail)) {
+            $mail = Shopware()->Config()->Mail;
+        }
+
         $mailer = new \Enlight_Components_Mail();
-        $mailer->addTo(Shopware()->Config()->Mail);
+        $mailer->addTo($mail);
         $mailer->setSubject('Error in shop "' . Shopware()->Config()->Shopname . '".');
         $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());
-        $bufferedHandler = new BufferHandler($mailHandler);
 
-        return $bufferedHandler;
+        return new BufferHandler($mailHandler);
     }
 }

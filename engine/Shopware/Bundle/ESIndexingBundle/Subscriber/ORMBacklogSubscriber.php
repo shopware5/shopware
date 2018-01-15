@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -169,7 +170,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     /**
      * @param object $entity
      *
-     * @return Backlog
+     * @return Backlog|null
      */
     private function getDeleteBacklog($entity)
     {
@@ -177,11 +178,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getArticleId()]);
+                return new Backlog(self::EVENT_VARIANT_DELETED, ['number' => $entity->getNumber()]);
             case $entity instanceof PriceModel:
-                return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getDetail()->getArticleId()]);
+                return new Backlog(self::EVENT_PRICE_DELETED, ['number' => $entity->getDetail()->getNumber()]);
             case $entity instanceof VoteModel:
-                return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getArticle()->getId()]);
+                return new Backlog(self::EVENT_VOTE_DELETED, ['articleId' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -191,7 +192,12 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof PropertyGroupModel:
                 return new Backlog(self::EVENT_PROPERTY_GROUP_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof PropertyOptionModel:
-                return new Backlog(self::EVENT_PROPERTY_OPTION_DELETED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
+                try {
+                    return new Backlog(self::EVENT_PROPERTY_OPTION_DELETED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
+                } catch (EntityNotFoundException $e) {
+                    //catch delete chain - parents already deleted
+                    return null;
+                }
         }
     }
 
@@ -201,11 +207,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getArticleId()]);
+                return new Backlog(self::EVENT_VARIANT_INSERTED, ['number' => $entity->getNumber()]);
             case $entity instanceof PriceModel:
-                return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getDetail()->getArticleId()]);
+                return new Backlog(self::EVENT_PRICE_INSERTED, ['number' => $entity->getDetail()->getNumber()]);
             case $entity instanceof VoteModel:
-                return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getArticle()->getId()]);
+                return new Backlog(self::EVENT_VOTE_INSERTED, ['articleId' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -215,7 +221,12 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof PropertyGroupModel:
                 return new Backlog(self::EVENT_PROPERTY_GROUP_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof PropertyOptionModel:
-                return new Backlog(self::EVENT_PROPERTY_OPTION_INSERTED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
+                try {
+                    return new Backlog(self::EVENT_PROPERTY_OPTION_INSERTED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
+                } catch (EntityNotFoundException $e) {
+                    //catch delete chain - parents already deleted
+                    return null;
+                }
         }
     }
 
@@ -230,11 +241,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getArticleId()]);
+                return new Backlog(self::EVENT_VARIANT_UPDATED, ['number' => $entity->getNumber()]);
             case $entity instanceof PriceModel:
-                return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getDetail()->getArticleId()]);
+                return new Backlog(self::EVENT_PRICE_UPDATED, ['number' => $entity->getDetail()->getNumber()]);
             case $entity instanceof VoteModel:
-                return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getArticle()->getId()]);
+                return new Backlog(self::EVENT_VOTE_UPDATED, ['articleId' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -244,7 +255,12 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof PropertyGroupModel:
                 return new Backlog(self::EVENT_PROPERTY_GROUP_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof PropertyOptionModel:
-                return new Backlog(self::EVENT_PROPERTY_OPTION_UPDATED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
+                try {
+                    return new Backlog(self::EVENT_PROPERTY_OPTION_UPDATED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
+                } catch (EntityNotFoundException $e) {
+                    //catch delete chain - parents already deleted
+                    return null;
+                }
         }
     }
 }

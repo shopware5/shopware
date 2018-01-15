@@ -25,11 +25,12 @@
 /**
  * Formats a given decimal value to a local aware currency value
  *
+ * @see http://framework.zend.com/manual/de/zend.currency.options.html
  *
- * @link http://framework.zend.com/manual/de/zend.currency.options.html
- * @param float  $value Value can have a coma as a decimal separator
- * @param array  $config
- * @param string $position where the currency symbol should be displayed
+ * @param float        $value    Value can have a coma as a decimal separator
+ * @param array|string $config
+ * @param string       $position where the currency symbol should be displayed
+ *
  * @return float|string
  */
 function smarty_modifier_currency($value, $config = null, $position = null)
@@ -41,12 +42,12 @@ function smarty_modifier_currency($value, $config = null, $position = null)
     if (!empty($config) && is_string($config)) {
         $config = strtoupper($config);
         if (defined('Zend_Currency::' . $config)) {
-            $config = array('display' => constant('Zend_Currency::' . $config));
+            $config = ['display' => constant('Zend_Currency::' . $config)];
         } else {
-            $config = array();
+            $config = [];
         }
     } else {
-        $config = array();
+        $config = [];
     }
 
     if (!empty($position) && is_string($position)) {
@@ -57,9 +58,9 @@ function smarty_modifier_currency($value, $config = null, $position = null)
     }
 
     $currency = Shopware()->Container()->get('Currency');
-    $value = floatval(str_replace(',', '.', $value));
-    $value = $currency->toCurrency($value, $config);
-    $value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
-    $value = htmlentities($value, ENT_COMPAT, 'UTF-8', false);
-    return $value;
+    $formattedValue = (float) str_replace(',', '.', $value);
+    $formattedValue = $currency->toCurrency($formattedValue, $config);
+    $formattedValue = mb_convert_encoding($formattedValue, 'HTML-ENTITIES', 'UTF-8');
+
+    return htmlentities($formattedValue, ENT_COMPAT, 'UTF-8', false);
 }

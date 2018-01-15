@@ -25,7 +25,7 @@
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Customer as Customer;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
 
 /**

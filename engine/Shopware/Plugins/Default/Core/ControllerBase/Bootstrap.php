@@ -57,7 +57,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view = $args->getSubject()->View();
 
         if (!$request->isDispatched() || $response->isException()
-            || $request->getModuleName() != 'frontend'
+            || $request->getModuleName() !== 'frontend'
             || !$view->hasTemplate()
         ) {
             return;
