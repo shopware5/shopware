@@ -25,8 +25,11 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Models\Article\Configurator\Group;
 
 class VariantSearch implements ProductSearchInterface
 {
@@ -40,12 +43,19 @@ class VariantSearch implements ProductSearchInterface
      */
     private $listingPriceService;
 
+    /**
+     * @var ConfiguratorServiceInterface
+     */
+    private $configuratorService;
+
     public function __construct(
         ProductSearchInterface $decorated,
-        VariantListingPriceService $listingPriceService
+        VariantListingPriceService $listingPriceService,
+        ConfiguratorServiceInterface $configuratorService
     ) {
         $this->decorated = $decorated;
         $this->listingPriceService = $listingPriceService;
+        $this->configuratorService = $configuratorService;
     }
 
     public function search(Criteria $criteria, Struct\ProductContextInterface $context)
@@ -57,6 +67,39 @@ class VariantSearch implements ProductSearchInterface
         }
 
         $this->listingPriceService->updatePrices($criteria, $result, $context);
+
+        $products = $result->getProducts();
+        $configurations = $this->configuratorService->getProductsConfigurations($products, $context);
+
+        // todo@all Implement display of filtered options in listing
+        $filterGroupIds = array_map(function ($variantCondition) {
+            /** @var VariantCondition $variantCondition */
+            if ($variantCondition->expandVariants()) {
+                return $variantCondition->getGroupId();
+            }
+        }, $criteria->getConditionsByClass(VariantCondition::class));
+
+        if (!empty($filterGroupIds)) {
+            foreach ($products as $product) {
+                if (!array_key_exists($product->getNumber(), $configurations)) {
+                    continue;
+                }
+
+                $configuration = $configurations[$product->getNumber()];
+
+                $options = [];
+                /** @var Group $group */
+                foreach ($configuration as $group) {
+                    if (in_array($group->getId(), $filterGroupIds)) {
+                        $options[] = $group->getOptions()[0]->getName();
+                    }
+                }
+
+                if (!empty($options)) {
+                    $product->addAttribute('swagVariantOptionTag', new Attribute(['value' => implode(', ', $options)]));
+                }
+            }
+        }
 
         return $result;
     }

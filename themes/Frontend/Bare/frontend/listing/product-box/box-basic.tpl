@@ -39,6 +39,10 @@
                                class="product--title"
                                title="{$sArticle.articleName|escapeHtml}">
                                 {$sArticle.articleName|truncate:50|escapeHtml} ({$sArticle.ordernumber})
+                                {if $sArticle.attributes.swagVariantOptionTag}
+                                    -
+                                    {$sArticle.attributes.swagVariantOptionTag->get('value')}
+                                {/if}
                             </a>
                         {/block}
 
