@@ -163,7 +163,8 @@ Ext.define('Shopware.apps.Order.model.Order', {
          */
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            messageProperty: 'message',
         }
     },
 
