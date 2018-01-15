@@ -66,7 +66,23 @@ class Translation extends Resource implements BatchInterface
     /** @var \Shopware_Components_Translation $translationWriter */
     protected $translationWriter = null;
 
+    /**
+     * @var \Shopware\Models\Translation\Translation
+     */
     protected $repository = null;
+
+    /**
+     * @var \Shopware_Components_Translation
+     */
+    private $translationComponent;
+
+    /**
+     * @param \Shopware_Components_Translation|null $translationComponent
+     */
+    public function __construct(\Shopware_Components_Translation $translationComponent = null)
+    {
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+    }
 
     /**
      * This methods needs to return an ID for the current resource.
@@ -96,11 +112,7 @@ class Translation extends Resource implements BatchInterface
      */
     public function getTranslationComponent()
     {
-        if ($this->translationWriter === null) {
-            $this->translationWriter = new \Shopware_Components_Translation();
-        }
-
-        return $this->translationWriter;
+        return $this->translationComponent;
     }
 
     /**
@@ -125,8 +137,8 @@ class Translation extends Resource implements BatchInterface
         $offset = 0,
         $limit = 25,
         array $criteria = [],
-        array $orderBy = [])
-    {
+        array $orderBy = []
+    ) {
         $this->checkPrivilege('read');
 
         $query = $this->getListQuery($offset, $limit, $criteria, $orderBy)->getQuery();
@@ -386,7 +398,7 @@ class Translation extends Resource implements BatchInterface
     protected function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository('Shopware\Models\Translation\Translation');
+            $this->repository = $this->getManager()->getRepository(\Shopware\Models\Translation\Translation::class);
         }
 
         return $this->repository;

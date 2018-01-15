@@ -127,6 +127,7 @@
 {include file='backend/base/model/product_box_layout.js'}
 {include file='backend/base/model/page_not_found_destination_options.js'}
 {include file='backend/base/model/attribute_config.js'}
+{include file='backend/base/model/corner_position.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -160,6 +161,7 @@
 {include file='backend/base/store/page_not_found_destination_options.js'}
 {include file='backend/base/store/attribute_config.js'}
 {include file='backend/base/store/salutation.js'}
+{include file='backend/base/store/corner_position.js'}
 
 
 {* Include shopware related components *}

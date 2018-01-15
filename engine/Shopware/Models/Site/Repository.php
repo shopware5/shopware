@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the site model (Shopware\Models\Site\Site).
- * <br>
+ *
  * The premium model repository is responsible for loading site data.
  */
 class Repository extends ModelRepository
@@ -36,10 +36,10 @@ class Repository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param array|null $filterBy
+     * @param array|null $orderBy
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -54,17 +54,17 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param array|null $filterBy
+     * @param array|null $orderBy
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getGroupListQueryBuilder(array $filterBy = null, array $orderBy = null, $limit = null, $offset = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->from('Shopware\Models\Site\Group', 'g');
+        $builder->from(\Shopware\Models\Site\Group::class, 'g');
         $builder->leftJoin('g.mapping', 'm');
 
         $builder->select([
@@ -94,8 +94,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select all sites
      * for the passed node name and shop
      *
-     * @param $nodeName
-     * @param int $shopId
+     * @param string $nodeName
+     * @param int    $shopId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -110,8 +110,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSitesByNodeNameQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $nodeName
-     * @param int $shopId
+     * @param string $nodeName
+     * @param int    $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -119,7 +119,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['sites', 'children', 'attribute', 'childrenAttribute'])
-                ->from('Shopware\Models\Site\Site', 'sites')
+                ->from(\Shopware\Models\Site\Site::class, 'sites')
                 ->leftJoin('sites.attribute', 'attribute')
                 ->leftJoin('sites.children', 'children')
                 ->leftJoin('children.attribute', 'childrenAttribute')
@@ -145,7 +145,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $siteId
+     * @param int $siteId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -160,7 +160,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $siteId
+     * @param int $siteId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -168,7 +168,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\Site', 'attribute')
+                      ->from(\Shopware\Models\Site\Site::class, 'attribute')
                       ->where('attribute.siteId = ?1')
                       ->setParameter(1, $siteId);
 
@@ -178,7 +178,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $siteId
+     * @param int $siteId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -193,7 +193,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSiteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $siteId
+     * @param int $siteId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -201,7 +201,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['site'])
-                ->from('Shopware\Models\Site\Site', 'site')
+                ->from(\Shopware\Models\Site\Site::class, 'site')
                 ->leftJoin('site.attribute', 'attribute')
                 ->where('site.id = ?1')
                 ->setParameter(1, $siteId);
@@ -212,9 +212,9 @@ class Repository extends ModelRepository
     /**
      * Returns a query with all site objects with an empty link
      *
-     * @param $shopId
-     * @param $offset
-     * @param $limit
+     * @param int $shopId
+     * @param int $offset
+     * @param int $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -230,7 +230,7 @@ class Repository extends ModelRepository
     /**
      * Returns the QueryBuilder object for getSitesWithoutLinkQuery
      *
-     * @param $shopId
+     * @param int $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -238,7 +238,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['site'])
-            ->from('Shopware\Models\Site\Site', 'site')
+            ->from(\Shopware\Models\Site\Site::class, 'site')
             ->where('site.link = \'\'')
             ->andWhere('(site.shopIds LIKE :shopId OR site.shopIds IS NULL)')
             ->setParameter('shopId', '%|' . $shopId . '|%');

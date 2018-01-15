@@ -99,7 +99,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
             name: 'freezeUpDate',
             labelWidth: 130,
             minValue: new Date(),
-            allowBlank: true
+            allowBlank: true,
+            disabled: true
         });
 
         me.freezeUpTime = Ext.create('Ext.form.field.Time', {
@@ -108,7 +109,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
             name: 'freezeUpTime',
             minDate: new Date(),
             helpText: '{s name="freeze_up_help"}{/s}',
-            margin: '0 0 0 135'
+            margin: '0 0 0 135',
+            disabled: true
         });
 
         me.freezeUpContainer = Ext.create('Ext.container.Container', {

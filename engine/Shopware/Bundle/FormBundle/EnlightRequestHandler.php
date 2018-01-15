@@ -27,6 +27,7 @@ namespace Shopware\Bundle\FormBundle;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\RequestHandlerInterface;
+use Symfony\Component\HttpFoundation\File\File;
 
 class EnlightRequestHandler implements RequestHandlerInterface
 {
@@ -54,6 +55,16 @@ class EnlightRequestHandler implements RequestHandlerInterface
         }
 
         $form->submit($data, 'PATCH' !== $method);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return bool
+     */
+    public function isFileUpload($data)
+    {
+        return $data instanceof File;
     }
 
     /**

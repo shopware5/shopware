@@ -161,12 +161,12 @@ class PluginLocalService
     }
 
     /**
-     * @param $plugins
+     * @param array       $plugins
      * @param BaseRequest $context
      *
      * @return PluginStruct[]
      */
-    private function iteratePlugins($plugins, BaseRequest $context)
+    private function iteratePlugins(array $plugins, BaseRequest $context)
     {
         $locale = substr($context->getLocale(), 0, 2);
 
@@ -187,6 +187,25 @@ class PluginLocalService
 
             if (isset($translations[$locale]['description'])) {
                 $row['description'] = $translations[$locale]['description'];
+            }
+
+            if (!empty($row['changes'])) {
+                $row['changes'] = json_decode($row['changes'], true);
+                $changelog = [];
+
+                foreach ($row['changes'] as $version => $item) {
+                    $lang = isset($item[$locale]) ? $locale : 'en';
+
+                    if (isset($item[$lang])) {
+                        $changelog[] = [
+                            'version' => $version,
+                            // The implode concatenates multiple entries for one language
+                            'text' => $this->parseChangeLog(trim(implode($item[$lang], ''))),
+                        ];
+                    }
+                }
+
+                $row['changelog'] = $changelog;
             }
         }
 
@@ -244,6 +263,7 @@ class PluginLocalService
             'plugin.author',
             'plugin.link',
             'plugin.support',
+            'plugin.changes',
 
             'licence.id as __licence_id',
             'licence.host as __licence_host',
@@ -259,5 +279,29 @@ class PluginLocalService
             ->groupBy('plugin.id');
 
         return $query;
+    }
+
+    /**
+     * Removes all but allowed tags and attributes from the content of the HTML.
+     *
+     * @param string $html
+     *
+     * @return string
+     */
+    private function parseChangeLog($html)
+    {
+        $html = strip_tags($html, '<br><i><b><strong><em><del><u><div><span><ul><li><ll><ol><p><a>');
+
+        $dom = new \DOMDocument();
+        $dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+        $xpath = new \DOMXPath($dom);
+        $nodes = $xpath->query("//@*[local-name() != 'href']");
+
+        foreach ($nodes as $node) {
+            $node->parentNode->removeAttribute($node->nodeName);
+        }
+
+        return $dom->saveHTML();
     }
 }

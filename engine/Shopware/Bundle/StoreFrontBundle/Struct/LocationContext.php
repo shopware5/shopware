@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class LocationContext extends Extendable implements LocationContextInterface, \JsonSerializable
+class LocationContext extends Extendable implements LocationContextInterface
 {
     /**
      * @var Area

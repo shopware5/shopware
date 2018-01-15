@@ -891,8 +891,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (empty($result[0]['links'])) {
             return [];
         }
-            // map the link target to the boolean format that is expected by the ExtJS backend module
-            $links = $result[0]['links'];
+        // map the link target to the boolean format that is expected by the ExtJS backend module
+        $links = $result[0]['links'];
         foreach ($links as &$linkData) {
             $linkData['target'] = ($linkData['target'] === '_blank') ? true : false;
         }
@@ -1675,9 +1675,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getFreeSerialCount($esdId)
     {
         $query = $this->getRepository()->getFreeSerialsCountByEsdQuery($esdId);
-        $result = $query->getSingleScalarResult();
 
-        return $result;
+        return $query->getSingleScalarResult();
     }
 
     /**
@@ -2029,7 +2028,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getTranslationComponent()
     {
         if ($this->translation === null) {
-            $this->translation = new Shopware_Components_Translation();
+            $this->translation = $this->container->get('translation');
         }
 
         return $this->translation;
@@ -2233,9 +2232,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->setParameter(3, $ids);
             }
         }
-        $variants = $builder->getQuery()->getResult();
 
-        return $variants;
+        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -2332,6 +2330,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 unset($coreTranslation['objectdata']['name']);
                 unset($coreTranslation['objectdata']['description']);
                 unset($coreTranslation['objectdata']['descriptionLong']);
+                unset($coreTranslation['objectdata']['shippingTime']);
                 unset($coreTranslation['objectdata']['keywords']);
                 $coreTranslation['objectkey'] = $variant->getId();
                 $coreTranslation['objecttype'] = 'variant';
@@ -3359,6 +3358,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             unset($articleTranslation['objectdata']['name']);
             unset($articleTranslation['objectdata']['description']);
             unset($articleTranslation['objectdata']['descriptionLong']);
+            unset($articleTranslation['objectdata']['shippingTime']);
             unset($articleTranslation['objectdata']['keywords']);
             $articleTranslation['objectkey'] = $template->getId();
             $articleTranslation['objecttype'] = 'configuratorTemplate';

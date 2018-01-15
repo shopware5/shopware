@@ -646,6 +646,16 @@ class sOrder
 
         $attributeData = array_merge($attributeData, $this->orderAttributes);
 
+        $attributeData = $this->eventManager->filter(
+            'Shopware_Modules_Order_SaveOrder_FilterAttributes',
+            $attributeData,
+            [
+                'subject' => $this,
+                'orderID' => $orderID,
+                'orderParams' => $orderParams,
+            ]
+        );
+        
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id']);
@@ -1081,6 +1091,7 @@ class sOrder
             street,
             zipcode,
             city,
+            phone,
             countryID,
             stateID,
             additional_address_line1,
@@ -1098,6 +1109,7 @@ class sOrder
             :street,
             :zipcode,
             :city,
+            :phone,
             :countryID,
             :stateID,
             :additional_address_line1,
@@ -1117,6 +1129,7 @@ class sOrder
             ':street' => (string) $address['street'],
             ':zipcode' => (string) $address['zipcode'],
             ':city' => (string) $address['city'],
+            ':phone' => (string) $address['phone'],
             ':countryID' => $address['countryID'],
             ':stateID' => $address['stateID'],
             ':additional_address_line1' => (string) $address['additional_address_line1'],
@@ -1247,7 +1260,8 @@ class sOrder
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
-        $shop = $repository->getActiveById($shopId);
+        // The (sub-)shop might be inactive by now, so that's why we use `getById` instead of `getActiveById`
+        $shop = $repository->getById($shopId);
         $shop->registerResources();
 
         $order['status_description'] = Shopware()->Snippets()->getNamespace('backend/static/order_status')->get(
@@ -1495,9 +1509,7 @@ WHERE
     `o`.`id` = :orderId
 EOT;
 
-        $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
-
-        return $row;
+        return $this->db->fetchRow($sql, ['orderId' => $orderId]);
     }
 
     /**
@@ -1544,9 +1556,7 @@ ORDER BY
     `orderdetailsID` ASC
 EOT;
 
-        $rows = $this->db->fetchAll($sql, ['orderId' => $orderId]);
-
-        return $rows;
+        return $this->db->fetchAll($sql, ['orderId' => $orderId]);
     }
 
     /**
@@ -1639,9 +1649,7 @@ WHERE
     `b`.`orderID`=:orderId
 EOT;
 
-        $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
-
-        return $row;
+        return $this->db->fetchRow($sql, ['orderId' => $orderId]);
     }
 
     /**

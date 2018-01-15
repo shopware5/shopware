@@ -272,7 +272,12 @@
             /**
              * selector for the parent of the loading indicator in if the filters in sidebar mode
              */
-            sidebarLoadingIndicatorParentSelector: '.content-main--inner'
+            sidebarLoadingIndicatorParentSelector: '.content-main--inner',
+
+            /**
+             * selector for the jquery.add-article plugin to enable support for the off canvas cart
+             */
+            addArticleSelector: '*[data-add-article="true"]'
         },
 
         /**
@@ -307,10 +312,10 @@
 
             me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
             me.listingUrl = me.$filterForm.attr('data-listing-url');
-            me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
-            me.showInstantFilterResult = $.parseJSON(me.$filterForm.attr('data-instant-filter-result'));
+            me.loadFacets = me.$filterForm.attr('data-load-facets') === 'true';
+            me.showInstantFilterResult = me.$filterForm.attr('data-instant-filter-result') === 'true';
             me.isInfiniteScrolling = me.$listing.attr(me.opts.infiniteScrollingAttribute);
-            me.isFilterpanelInSidebar = $.parseJSON(me.$filterForm.attr('data-is-in-sidebar'));
+            me.isFilterpanelInSidebar = me.$filterForm.attr('data-is-in-sidebar') === 'true';
 
             me.controllerURL = window.location.href.split('?')[0];
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
@@ -657,7 +662,7 @@
          * It removes the clicked filter param form the set of active filters
          * and updates the specific component.
          *
-         * @param event
+         * @param {Event} event
          */
         onActiveFilterClick: function (event) {
             var me = this,
@@ -666,9 +671,26 @@
                 isMobile = StateManager.isCurrentState(['xs', 's']);
 
             if (param === 'reset') {
+                // Reset all facets
                 $.each(me.activeFilterElements, function (key) {
                     me.removeActiveFilter(key);
                     me.resetFilterProperty(key);
+                });
+
+                // Reset all options inside the facets
+                $.each(me.$filterComponents, function (i, component) {
+                    var $component = $(component),
+                        componentPlugin = $component.data('plugin_swFilterComponent');
+
+                    $.each(componentPlugin.$inputs, function(i, item) {
+                        componentPlugin.disable($(item), false);
+                        componentPlugin.disableComponent(false);
+                    });
+
+                    $component
+                        .removeClass(me.opts.disabledCls)
+                        .find('.' + me.opts.disabledCls)
+                        .removeClass(me.opts.disabledCls);
                 });
 
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
@@ -1004,7 +1026,6 @@
                 me.sendListingRequest(params, loadFacets, loadProducts, function (response) {
                     me.disableLoading(loadingIndicator, loadProducts, response, function () {
                         me.updateListing(response);
-
                         // publish finish event to update filter panels
                         $.publish('plugin/swListingActions/onGetFilterResultFinished', [me, response, params]);
                     });
@@ -1015,7 +1036,7 @@
         /**
          * Enables the loading animation in the listing
          *
-         * @param {object} loadingIndicator
+         * @param {Object} loadingIndicator
          * @param {boolean} loadProducts
          * @param {function} callback
          */
@@ -1048,9 +1069,10 @@
 
         /**
          * Disables the loading animation for the listing
-         * @param {object} loadingIndicator
+         *
+         * @param {Object} loadingIndicator
          * @param {boolean} loadProducts
-         * @param {object} response
+         * @param {Object} response
          * @param {function} callback
          */
         disableLoading: function (loadingIndicator, loadProducts, response, callback) {
@@ -1069,6 +1091,7 @@
         },
 
         /**
+         * Builds the URL by taking the basic path and adding parameters to it.
          *
          * @param {string} formParams
          * @param {boolean} loadProducts
@@ -1084,11 +1107,12 @@
             if (loadFacets) {
                 url += '&loadFacets=1';
             }
+
             return url;
         },
 
         /**
-         * updates the listing with new products
+         * Updates the listing with new products
          *
          * @param {Object} response
          */
@@ -1114,6 +1138,8 @@
 
             $.publish('plugin/swListingActions/updateListing', [this, html]);
 
+            StateManager.updatePlugin(this.opts.addArticleSelector, 'swAddArticle');
+
             if (this.isInfiniteScrolling) {
                 pages = Math.ceil(response.totalCount / this.$perPageInput.val());
 
@@ -1121,7 +1147,6 @@
                 this.$listing.attr('data-pages', pages);
                 this.$listing.data('plugin_swInfiniteScrolling').destroy();
                 StateManager.addPlugin(this.opts.listingSelector, 'swInfiniteScrolling');
-                StateManager.addPlugin('*[data-add-article="true"]', 'swAddArticle');
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [this, html, pages]);
             } else {
                 this.updatePagination(response);
@@ -1129,7 +1154,7 @@
         },
 
         /**
-         * updates the off canvas filter close button with the amount of products
+         * Updates the off canvas filter close button with the amount of products
          *
          * @param {int} totalCount
          */
@@ -1304,7 +1329,7 @@
          * Updates the layout of an existing filter label element.
          *
          * @param param
-         * @param label
+         * @param {string} label
          */
         updateActiveFilterElement: function (param, label) {
             this.activeFilterElements[param].html(this.getLabelIcon() + label);
@@ -1377,6 +1402,9 @@
                     labelText = $label.html() + ' ' + $label.next('[data-date-range-input]').attr('data-display-value');
                 } else if ($label.find('img').length) {
                     labelText = $label.find('img').attr('alt');
+                } else if ($label.closest(this.opts.filterComponentSelector).is('[data-filter-type="radio"]')) {
+                    var activeRadioId = $label.closest(this.opts.filterComponentSelector).find('input:checked').attr('id');
+                    labelText = this.$filterForm.find('label[for="' + this.escapeDoubleQuotes(activeRadioId) + '"]').html();
                 } else if (value > 0 || valueString.length > 0) {
                     labelText = $label.html();
                 }
@@ -1400,7 +1428,7 @@
         /**
          * Creates the label content for the special rating component.
          *
-         * @param stars | Integer
+         * @param {int} stars
          * @returns {string}
          */
         createStarLabel: function (stars) {

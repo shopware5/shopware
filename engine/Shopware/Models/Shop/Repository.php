@@ -276,6 +276,25 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @param int $id
+     *
+     * @return DetachedShop
+     */
+    public function getById($id)
+    {
+        $builder = $this->getQueryBuilder();
+        $builder->andWhere('shop.id=:shopId');
+        $builder->setParameter('shopId', $id);
+        $shop = $builder->getQuery()->getOneOrNullResult();
+
+        if ($shop !== null) {
+            $shop = $this->fixActive($shop);
+        }
+
+        return $shop;
+    }
+
+    /**
      * Returns the default shop with additional data
      *
      * @return DetachedShop
@@ -302,9 +321,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('shop');
         $builder->where('shop.default = 1');
-        $shop = $builder->getQuery()->getOneOrNullResult();
 
-        return $shop;
+        return $builder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -318,9 +336,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('shop');
         $builder->where('shop.active = 1');
-        $shops = $builder->getQuery()->getResult($hydrationMode);
 
-        return $shops;
+        return $builder->getQuery()->getResult($hydrationMode);
     }
 
     /**
@@ -368,7 +385,7 @@ class Repository extends ModelRepository
     /**
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getActiveQueryBuilder()
+    public function getQueryBuilder()
     {
         /* @var $builder QueryBuilder */
         return $this->createQueryBuilder('shop')
@@ -399,9 +416,18 @@ class Repository extends ModelRepository
             ->leftJoin('main.template', 'mainTemplate')
             ->leftJoin('main.currencies', 'mainCurrencies')
 
-            ->where('shop.active = 1')
             ->orderBy('shop.main')
             ->addOrderBy('shop.position');
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getActiveQueryBuilder()
+    {
+        /* @var $builder QueryBuilder */
+        return $this->getQueryBuilder()
+            ->where('shop.active = 1');
     }
 
     /**
@@ -575,11 +601,12 @@ class Repository extends ModelRepository
     private function getShopArrayByHostAlias($host)
     {
         $query = $this->getDbalShopsQuery();
-        $query->where('(shop.hosts LIKE :host1 OR shop.hosts LIKE :host2 OR shop.hosts LIKE :host3)');
+        $query->where('(shop.hosts LIKE :host1 OR shop.hosts LIKE :host2 OR shop.hosts LIKE :host3 OR shop.hosts LIKE :host4)');
         $query->andWhere('shop.active = 1');
         $query->setParameter('host1', "%\n" . $host . "\n%");
         $query->setParameter('host2', $host . "\n%");
         $query->setParameter('host3', "%\n" . $host);
+        $query->setParameter('host4', $host);
         $query->orderBy('shop.main_id');
         $query->addOrderBy('shop.position');
         $query->setMaxResults(1);

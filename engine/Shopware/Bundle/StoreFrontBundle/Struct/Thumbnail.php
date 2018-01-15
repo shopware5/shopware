@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Thumbnail extends Extendable implements \JsonSerializable
+class Thumbnail extends Extendable
 {
     /**
      * @var string

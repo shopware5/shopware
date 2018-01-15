@@ -27,6 +27,7 @@ namespace   Shopware\Models\Customer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Components\Security\AttributeCleanerTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -58,6 +59,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Customer extends LazyFetchModelEntity
 {
+    /*
+     * HTML Cleansing trait (Used to cleanup different properties in setters)
+     * @see \Shopware\Components\Security\AttributeCleanerTrait
+     */
+    use AttributeCleanerTrait;
+
     const ACCOUNT_MODE_CUSTOMER = 0;
     const ACCOUNT_MODE_FAST_LOGIN = 1;
 
@@ -520,7 +527,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = $this->cleanup($email);
 
         return $this;
     }
@@ -810,7 +817,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setReferer($referer)
     {
-        $this->referer = $referer;
+        $this->referer = $this->cleanup($referer);
 
         return $this;
     }
@@ -834,7 +841,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setInternalComment($internalComment)
     {
-        $this->internalComment = $internalComment;
+        $this->internalComment = $this->cleanup($internalComment);
 
         return $this;
     }
@@ -902,10 +909,12 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * Event listener method which fired when the model will be saved.
-     * Initials the date time fields if this fields are null.
+     * Event listener method which is fired when the model is saved.
+     * This method will also initialize the date time fields if these fields are null.
      *
      * @ORM\PrePersist
+     *
+     * @throws \LogicException (See AttributeCleanerTrait)
      */
     public function onSave()
     {
@@ -925,9 +934,11 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * Event listener method which fired when the model will be updated.
+     * Event listener method which is fired when the model is updated.
      *
      * @ORM\PreUpdate
+     *
+     * @throws \LogicException (See AttributeCleanerTrait)
      */
     public function onUpdate()
     {
@@ -1257,7 +1268,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setSalutation($salutation)
     {
-        $this->salutation = $salutation;
+        $this->salutation = $this->cleanup($salutation);
     }
 
     /**
@@ -1273,7 +1284,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = $this->cleanup($title);
     }
 
     /**
@@ -1289,7 +1300,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setFirstname($firstname)
     {
-        $this->firstname = $firstname;
+        $this->firstname = $this->cleanup($firstname);
     }
 
     /**
@@ -1305,7 +1316,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setLastname($lastname)
     {
-        $this->lastname = $lastname;
+        $this->lastname = $this->cleanup($lastname);
     }
 
     /**

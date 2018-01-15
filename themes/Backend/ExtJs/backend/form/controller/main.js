@@ -41,8 +41,6 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      */
     extend: 'Ext.app.Controller',
 
-
-
     /**
      * Define references for the different parts of our application. The
      * references are parsed by ExtJS and Getter methods are automatically created.
@@ -67,6 +65,7 @@ Ext.define('Shopware.apps.Form.controller.Main', {
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
+     *
      * @return void
      */
     init: function() {
@@ -112,10 +111,10 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      * Helper method which handles all clicks of the action column
      *
      * @event render
-     * @param [Ext.grid.View] grid - The grid on which the event has been fired
-     * @param [integer] rowIndex - On which row position has been clicked
-     * @param [integer] colIndex - On which coulmn position has been clicked
-     * @param [object] item - The item that has been clicked
+     * @param { Ext.grid.View } grid - The grid on which the event has been fired
+     * @param { integer } rowIndex - On which row position has been clicked
+     * @param { integer } colIndex - On which coulmn position has been clicked
+     * @param { Object } item - The item that has been clicked
      * @return void
      */
     handleActionColumn: function (grid, rowIndex, colIndex, item) {
@@ -149,10 +148,10 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      * Event listener which copies a single Form based on the passed
      * grid (e.g. the grid store) and the row index
      *
-     * @param [Ext.grid.View] grid - The grid on which the event has been fired
-     * @param [integer] rowIndex - On which row position has been clicked
-     * @param [integer] colIndex - On which coulmn position has been clicked
-     * @param [object] item - The item that has been clicked
+     * @param { Ext.grid.View } grid - The grid on which the event has been fired
+     * @param { integer } rowIndex - On which row position has been clicked
+     * @param { integer } colIndex - On which coulmn position has been clicked
+     * @param { Object } item - The item that has been clicked
      * @return void
      */
     onCopyForm: function(grid, rowIndex, colIndex, item) {
@@ -176,10 +175,10 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      * Event listener which deletes a single Form based on the passed
      * grid (e.g. the grid store) and the row index
      *
-     * @param [Ext.grid.View] grid - The grid on which the event has been fired
-     * @param [integer] rowIndex - On which row position has been clicked
-     * @param [integer] colIndex - On which coulmn position has been clicked
-     * @param [object] item - The item that has been clicked
+     * @param { Ext.grid.View } grid - The grid on which the event has been fired
+     * @param { integer } rowIndex - On which row position has been clicked
+     * @param { integer } colIndex - On which coulmn position has been clicked
+     * @param { Object } item - The item that has been clicked
      * @return void
      */
     onDeleteSingleForm: function (grid, rowIndex, colIndex, item) {
@@ -208,8 +207,8 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      * to search forms by their name.
      *
      * @event change
-     * @param [object] field - Ext.form.field.Text
-     * @param [string] value - inserted search value
+     * @param { Object } field - Ext.form.field.Text
+     * @param { string } value - inserted search value
      * @return void
      */
     onSearch: function(field, value) {
@@ -233,10 +232,10 @@ Ext.define('Shopware.apps.Form.controller.Main', {
     /**
      * Opens the Ext.window.window to modify an existing form
      *
-     * @param [Ext.grid.View] grid - The grid on which the event has been fired
-     * @param [integer] rowIndex - On which row position has been clicked
-     * @param [integer] colIndex - On which coulmn position has been clicked
-     * @param [object] item - The item that has been clicked
+     * @param { Ext.grid.View } grid - The grid on which the event has been fired
+     * @param { integer } rowIndex - On which row position has been clicked
+     * @param { integer } colIndex - On which coulmn position has been clicked
+     * @param { Object } item - The item that has been clicked
      */
     onOpenEditWindow: function (grid, rowIndex, colIndex, item) {
         var me = this,
@@ -301,7 +300,6 @@ Ext.define('Shopware.apps.Form.controller.Main', {
             selected = sm.selected.items,
             store = grid.getStore();
 
-
         var message = Ext.String.format('{s name=dialog_delete_forms_message}Are you sure you want to delete the selected forms?{/s}');
 
         Ext.MessageBox.confirm('{s name=dialog_delete_forms_title}Delete forms{/s}', message, function (response) {
@@ -327,7 +325,7 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      * Function to save a form
      *
      * @event click
-     * @param [object] btn Contains the clicked button
+     * @param { Object } btn Contains the clicked button
      * @return void
      */
     onSaveForm: function(btn) {
@@ -353,7 +351,7 @@ Ext.define('Shopware.apps.Form.controller.Main', {
             callback: function() {
                 formPanel.setLoading(false);
                 formPanel.loadRecord(record);
-                // set extraparams
+                // set extra params
                 win.down('form-main-fieldgrid').setDisabled(false);
 
                 formPanel.attributeForm.saveAttribute(record.data.id);

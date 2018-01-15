@@ -54,8 +54,6 @@ class Mail
             $defaultCharSet = null;
         }
 
-        $mail = new \Enlight_Components_Mail($defaultCharSet);
-
-        return $mail;
+        return new \Enlight_Components_Mail($defaultCharSet);
     }
 }

@@ -83,10 +83,9 @@ class PluginViewService
 
         $store = $this->storePluginService->getPlugin($context);
 
-        $this->hydrator->assignStorePluginStruct(
-            $locale,
-            $store
-        );
+        if ($store) {
+            $this->hydrator->assignStorePluginStruct($locale, $store);
+        }
 
         return $locale;
     }

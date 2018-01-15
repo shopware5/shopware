@@ -157,9 +157,7 @@ class Product implements ResourceInterface
      */
     public function getColumnConfig()
     {
-        $columns = array_values($this->dqlHelper->getColumnsForProductListing());
-
-        return $columns;
+        return array_values($this->dqlHelper->getColumnsForProductListing());
     }
 
     /**

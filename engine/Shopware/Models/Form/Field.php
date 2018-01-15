@@ -56,6 +56,7 @@ class Field extends ModelEntity
      * @ORM\JoinColumn(name="supportID", referencedColumnName="id")
      */
     protected $form;
+
     /**
      * Primary Key - autoincrement value
      *

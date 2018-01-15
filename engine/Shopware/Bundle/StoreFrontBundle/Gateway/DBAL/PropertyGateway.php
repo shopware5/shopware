@@ -137,8 +137,6 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $statement = $query->execute();
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = $this->propertyHydrator->hydrateValues($rows);
-
-        return $result;
+        return $this->propertyHydrator->hydrateValues($rows);
     }
 }

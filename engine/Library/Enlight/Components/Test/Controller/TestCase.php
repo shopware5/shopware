@@ -151,6 +151,13 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         $container->load('Front');
         $container->load('Plugins');
+
+        foreach ($container->get('kernel')->getPlugins() as $plugin) {
+            if (!$plugin->isActive()) {
+                continue;
+            }
+            $container->get('events')->addSubscriber($plugin);
+        }
     }
 
     /**

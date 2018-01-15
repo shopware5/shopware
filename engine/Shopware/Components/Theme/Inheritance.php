@@ -28,8 +28,7 @@ use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Theme;
-use Shopware\Models\Shop as Shop;
+use Shopware\Models\Shop;
 
 /**
  * The Theme\Inheritance class is used to
@@ -118,6 +117,26 @@ class Inheritance
             'bare' => array_values($bare),
             'custom' => array_values($custom),
         ];
+    }
+
+    /**
+     * Returns the inheritance-path of a given shop theme as an array of
+     * template-names. The names are sorted descending in priority.
+     *
+     * @param \Shopware\Models\Shop\Template $template
+     *
+     * @return string[]
+     */
+    public function getInheritancePath(Shop\Template $template)
+    {
+        $hierarchy = $this->buildInheritanceRecursive($template);
+        $path = [];
+
+        foreach ($hierarchy as $hierarchicalTemplate) {
+            $path[] = $hierarchicalTemplate->getTemplate();
+        }
+
+        return $path;
     }
 
     /**

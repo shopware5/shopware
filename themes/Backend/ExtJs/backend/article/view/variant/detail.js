@@ -118,7 +118,8 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
             additionalText: '{s name=detail/base/additional_text}Additional text{/s}',
             additionalTextSupport: '{s name=detail/base/additional_text_support}If left empty, an automatic text will be generated using the configurator options. This behaviour can be configured.{/s}',
-            purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}'
+            purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}',
+            configuratorOptions: '{s name=detail/base/configurator_options}Configurator options{/s}'
         },
         basePrice: {
             title:'{s name=detail/base_price/title}Base price calculation{/s}',
@@ -397,6 +398,22 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 validationRequestParam: articleId,
                 validationErrorMsg: me.snippets.baseFieldSet.numberValidation
             }, {
+                xtype: 'fieldcontainer',
+                fieldLabel: me.snippets.baseFieldSet.configuratorOptions,
+                items: [{
+                    xtype: 'box',
+                    autoEl: {
+                        tag: 'div',
+                        html: (new Ext.XTemplate(
+                            // {literal}
+                            '<tpl for=".">',
+                                '<span style="display: inline-block; border-radius: 4px; background-color: white; border: 1px solid #CED4D8; padding: 4px 8px; font-size: 0.85em; margin-right: 5px; box-shadow: 1px 1px 1px rgba(0,0,0,0.1); font-weight: bold">{.}</span>',
+                            '</tpl>'
+                            // {/literal}
+                        )).apply(me.getConfiguratorOptionNames()),
+                    },
+                }],
+            } , {
                 xtype: 'textfield',
                 allowBlank: true,
                 name: 'additionalText',
@@ -585,6 +602,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             items: [{
                 xtype: 'textfield',
                 name: 'shippingTime',
+                translatable: true,
                 fieldLabel: me.snippets.settings.deliveryTime
             }, {
                 xtype: 'checkboxfield',
@@ -617,6 +635,24 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 fieldLabel: me.snippets.settings.len
             }]
         });
+    },
+
+    /**
+     * Return array of all configurator option names of the article variant
+     *
+     * @return { string[] }
+     */
+    getConfiguratorOptionNames: function () {
+        if (!this.record) {
+            return [];
+        }
+
+        var configuratorOptionNames = [];
+        this.record.getConfiguratorOptions().each(function (configuratorOption) {
+            configuratorOptionNames.push(configuratorOption.get('name'));
+        });
+
+        return configuratorOptionNames;
     }
 });
 //{/block}

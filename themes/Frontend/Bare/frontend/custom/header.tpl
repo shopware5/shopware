@@ -1,5 +1,9 @@
 {extends file="frontend/index/header.tpl"}
 
+{block name='frontend_index_header_canonical'}
+    <link rel="canonical" href="{url controller=custom sCustom=$sCustomPage.id}" />
+{/block}
+
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sCustomPage.meta_keywords}{$sCustomPage.meta_keywords|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
 

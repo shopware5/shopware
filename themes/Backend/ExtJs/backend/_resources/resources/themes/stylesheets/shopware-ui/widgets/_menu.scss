@@ -34,6 +34,7 @@
     -moz-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
     -ms-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
     box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
+    z-index: 100000 !important;
 
     // Dropdown body
     .#{$prefix}menu-body {

@@ -76,15 +76,19 @@ class Repository extends ModelRepository
      * @param null $filter
      * @param null $limit
      * @param null $offset
+     * @param null $orderBy
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getUsersQuery($filter = null, $limit = null, $offset = null)
+    public function getUsersQuery($filter = null, $limit = null, $offset = null, $orderBy = null)
     {
         $builder = $this->getUsersQueryBuilder($filter);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
+        }
+        if ($orderBy !== null) {
+            $builder->addOrderBy($orderBy);
         }
 
         return $builder->getQuery();

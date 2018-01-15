@@ -42,13 +42,27 @@ class TermHelper implements TermHelperInterface
     private $useBadWords;
 
     /**
-     * @param $config
-     * @param bool $useBadWords
+     * @var bool
      */
-    public function __construct($config, $useBadWords = true)
+    private $replaceUmlauts;
+
+    /**
+     * @var bool
+     */
+    private $replaceNonLetters;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     * @param bool                        $useBadWords
+     * @param bool                        $replaceUmlauts
+     * @param bool                        $replaceNonLetters
+     */
+    public function __construct($config, $useBadWords = true, $replaceUmlauts = true, $replaceNonLetters = true)
     {
         $this->config = $config;
         $this->useBadWords = $useBadWords;
+        $this->replaceUmlauts = $replaceUmlauts;
+        $this->replaceNonLetters = $replaceNonLetters;
     }
 
     /**
@@ -60,16 +74,20 @@ class TermHelper implements TermHelperInterface
      */
     public function splitTerm($string)
     {
-        $string = str_replace(
-            ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
-            ['Ue', 'ue', 'ae', 'Ae', 'oe', 'Oe', 'ss'],
-            $string
-        );
+        if ($this->replaceUmlauts) {
+            $string = str_replace(
+                ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
+                ['Ue', 'ue', 'ae', 'Ae', 'oe', 'Oe', 'ss'],
+                $string
+            );
+        }
 
         $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
 
-        // Remove not required chars from string
-        $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
+        if ($this->replaceNonLetters) {
+            // Remove not required chars from string
+            $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
+        }
 
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);

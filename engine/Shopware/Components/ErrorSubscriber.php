@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Subscriber to catch possibly occurring exceptions in the controller.
@@ -47,6 +48,16 @@ class ErrorSubscriber implements SubscriberInterface
     private $exceptionCountAtFirstEncounter = 0;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -59,6 +70,8 @@ class ErrorSubscriber implements SubscriberInterface
 
     /**
      * @param \Enlight_Controller_EventArgs $args
+     *
+     * @throws \Exception
      */
     public function handleError(\Enlight_Controller_EventArgs $args)
     {
@@ -79,6 +92,19 @@ class ErrorSubscriber implements SubscriberInterface
                 throw array_pop($exceptions);
             }
 
+            if (is_array($exceptions)) {
+                $last = array_pop($exceptions);
+                // Make sure this is an Exception and also no minor one
+                if ($last instanceof \Exception && !in_array($last->getCode(), [
+                    \Enlight_Controller_Exception::ActionNotFound,
+                    \Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found,
+                    \Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route,
+                    \Enlight_Controller_Exception::NO_ROUTE,
+                    ], true)) {
+                    $this->logger->critical($last->getMessage());
+                }
+            }
+
             return;
         }
 
@@ -97,7 +123,7 @@ class ErrorSubscriber implements SubscriberInterface
         // Keep a copy of the original request
         $error->request = clone $request;
 
-        // get a count of the number of exceptions encountered
+        // Get a count of the number of exceptions encountered
         $this->exceptionCountAtFirstEncounter = count($exceptions);
 
         // Forward to the error handler

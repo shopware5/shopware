@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * The parent class that this class extends.
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Contains all snippets for the component.
@@ -60,17 +60,18 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         },
         growlMessage: '{s name=growlMessage}Article{/s}'
     },
+
     /**
      * Set component references for easy access
      * @array
      */
-    refs:[
-        { ref:'mediaList', selector:'article-detail-window article-image-list dataview[name=image-listing]' },
-        { ref:'mediaListComponent', selector:'article-detail-window article-image-list' },
-        { ref:'previewButton', selector:'article-detail-window article-image-list button[action=previewImage]' },
-        { ref:'removeButton', selector:'article-detail-window article-image-list button[action=removeImage]' },
-        { ref:'mediaInfo', selector:'article-detail-window article-image-info' },
-        { ref:'mediaDropZone', selector:'article-detail-window article-image-upload article-image-drop-zone' }
+    refs: [
+        { ref: 'mediaList', selector: 'article-detail-window article-image-list dataview[name=image-listing]' },
+        { ref: 'mediaListComponent', selector: 'article-detail-window article-image-list' },
+        { ref: 'previewButton', selector: 'article-detail-window article-image-list button[action=previewImage]' },
+        { ref: 'removeButton', selector: 'article-detail-window article-image-list button[action=removeImage]' },
+        { ref: 'mediaInfo', selector: 'article-detail-window article-image-info' },
+        { ref: 'mediaDropZone', selector: 'article-detail-window article-image-upload article-image-drop-zone' }
     ],
 
     /**
@@ -81,7 +82,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
@@ -111,6 +112,9 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             },
             'article-detail-window article-image-upload': {
                 mediaUpload: me.onMediaUpload
+            },
+            'article-detail-window': {
+                saveArticle: me.onSaveArticle
             }
         });
         me.callParent(arguments);
@@ -119,14 +123,15 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     /**
      * Event listener function of the settings panel in the image tab.
      * Fired when the user clicks the button "save settings"
+     *
      * @param form
      * @param record
-     * @return Boolean
+     * @param { function } callback
+     * @return boolean
      */
     onSaveImageSettings: function(form, record, callback) {
-        var me = this;
-        var info = me.getMediaInfo();
-        var list = me.getMediaList();
+        var me = this,
+            info = me.getMediaInfo();
 
         if (!form || !record) {
             callback();
@@ -159,26 +164,26 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onSaveMapping: function(mappingWindow) {
         var me = this;
 
-        //first we have to get the image record of the mapping window.
+        // First we have to get the image record of the mapping window.
         var record = mappingWindow.record;
 
-        //than we create a new media mapping store which used to fire the ajax request in all cases to the same backend controller function
+        // Then we create a new media mapping store which used to fire the ajax request in all cases to the same backend controller function
         var mappingStore = Ext.create('Shopware.apps.Article.store.MediaMapping');
 
-        //now we set the mapping store of the window into the associated image store.
+        // Now we set the mapping store of the window into the associated image store.
         record.getMappingsStore =  mappingWindow.store;
 
-        //to be sure the request will be fired, we set the dirty flag of the record
+        // To be sure the request will be fired, we set the dirty flag of the record
         record.setDirty();
 
-        //now we add the image record to the new store
+        // Now we add the image record to the new store
         mappingStore.add(record);
 
-        //now we set the hasConfig flag for the image manually
+        // Now we set the hasConfig flag for the image manually
         record.set('hasConfig', (record.getMappingsStore.getCount() > 0));
 
         mappingWindow.setLoading(true);
-        //at least we call the sync function to send the request "saveMediaMapping"
+        // At last we call the sync function to send the request "saveMediaMapping"
         mappingStore.sync({
             success: function(result, operation) {
                 mappingWindow.setLoading(false);
@@ -221,7 +226,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             return false;
         }
 
-        //create new store to collect all defined configurator options.
+        // Create new store to collect all defined configurator options.
         var allOptions = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.ConfiguratorOption' });
         me.subApplication.configuratorGroupStore.each(function(group) {
             if (group instanceof Ext.data.Model &&
@@ -234,32 +239,32 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             }
         });
 
-        //create a new mapping model which contains the different configurator options as single rule
+        // Create a new mapping model which contains the different configurator options as single rule
         var mapping = Ext.create('Shopware.apps.Article.model.MediaMapping', {
             id: null,
             imageId: record.get('id')
         });
 
-        //now we create a store for the selected options to collect all rules.
+        // Now we create a store for the selected options to collect all rules.
         var ruleStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.MediaMappingRule' });
 
-        //we have to iterate the nodes to resolve the configured option ids with models.
+        // We have to iterate the nodes to resolve the configured option ids with models.
         Ext.each(nodes, function(node) {
             var option = allOptions.getById(node.get('id'));
 
-            //the rule model has an association to an configurator option. So we have to create for extJs a new Ext.data.Store
-            //to use them as association store.
+            // The rule model has an association to an configurator option. So we have to create for extJs a new Ext.data.Store
+            // To use them as association store.
             var optionStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.ConfiguratorOption' });
             optionStore.add(option);
 
-            //now we create a new rule with the configured option id.
-            //we don't have to set the mapping id, because extJs resolve it over the association
+            // Now we create a new rule with the configured option id.
+            // We don't have to set the mapping id, because extJs resolve it over the association
             var rule = Ext.create('Shopware.apps.Article.model.MediaMappingRule', {
                 id: null,
                 optionId: node.get('id')
             });
 
-            //at least we set the associated option store in the new mapping rule model.
+            // At last we set the associated option store in the new mapping rule model.
             rule.getOptionStore = optionStore;
             ruleStore.add(rule);
         });
@@ -281,20 +286,20 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         var me = this, onlyOneChecked = true,
             groupNode = null;
 
-        //first we check if the checked parameter is true and the node has a parent node.
+        // First we check if the checked parameter is true and the node has a parent node.
         if (checked && node && node.parentNode) {
-            //if this is the case the parent node is the configurator group node.
+            // If this is the case the parent node is the configurator group node.
             groupNode = node.parentNode;
-            //we have to iterate the child nodes of the group node.
+            // We have to iterate the child nodes of the group node.
             Ext.each(groupNode.childNodes, function(childNode) {
-                //if the queue node not equals the checked node we have to check the "checked" property
+                // If the queue node not equals the checked node we have to check the "checked" property
                 if (childNode !== node && childNode.get('checked')) {
-                    //if the checked property is set to true, an other node was already checked in the group
+                    // If the checked property is set to true, an other node was already checked in the group
                     onlyOneChecked = false;
                     return false;
                 }
             });
-            //if the checked node isn't the only checked we have to remove the checked property.
+            // If the checked node isn't the only checked we have to remove the checked property.
             if (!onlyOneChecked) {
                 node.set('checked', false);
                 Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.failure.onlyOneCanBeChecked, me.snippets.growlMessage);
@@ -311,7 +316,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onDisplayNewRuleWindow: function(window) {
         var me = this;
 
-        var ruleWindow = me.getView('image.NewRule').create({
+        me.getView('image.NewRule').create({
             store: window.store,
             record: window.record,
             configuratorGroupStore: me.subApplication.configuratorGroupStore
@@ -335,7 +340,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         if (!selected instanceof Ext.data.Model) {
             return false;
         }
-        var mappingWindow = me.getView('image.Mapping').create({
+        me.getView('image.Mapping').create({
             record: selected
         }).show();
     },
@@ -388,7 +393,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * Event will be fired when the user want to upload images over the button on the image tab.
      *
      * @event
-     * @param [object]
+     * @param { object } field
      */
     onMediaUpload: function(field) {
         var dropZone = this.getMediaDropZone(), me = this;
@@ -421,12 +426,11 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param file
      */
     onDownload: function(file) {
-        var me = this;
-
         if (!(file instanceof Ext.data.Model)) {
             return;
         }
-        window.open(file.get('original'),file.get('name'),'width=1024,height=768');
+
+        window.open(file.get('original'), file.get('name'), 'width=1024,height=768');
     },
 
     /**
@@ -434,7 +438,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * over the media selection or uploads images over the drag and drop zone or over
      * the file upload field.
      *
-     * @param media
+     * @param response
      */
     onFileUploaded: function(response) {
         var me = this,
@@ -461,8 +465,12 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     /**
      * Event will be fired when the user select an article image in the listing.
      *
-     * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
-     * @param [Shopware.apps.Article.model.Media] The selected media
+     * @param { Ext.selection.DataViewModel } dataViewModel -  The selection data view model of the Ext.view.View
+     * @param { Shopware.apps.Article.model.Media } media -  The selected media
+     * @param previewButton
+     * @param removeButton
+     * @param configButton
+     * @param downloadButton
      */
     onSelectMedia: function(dataViewModel, media, previewButton, removeButton, configButton, downloadButton) {
         var me = this,
@@ -486,6 +494,16 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         }
     },
 
+    /**
+     *
+     * @param dataViewModel
+     * @param media
+     * @param previewButton
+     * @param removeButton
+     * @param configButton
+     * @param downloadButton
+     * @param { function } callback
+     */
     loadInfoView: function(dataViewModel, media, previewButton, removeButton, configButton, downloadButton, callback) {
         var me = this;
         var infoView = me.getMediaInfo();
@@ -497,18 +515,20 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             infoView.record = media;
             infoView.loadRecord(media);
             infoView.settingsForm.loadRecord(media);
+
             infoView.attributeForm.loadAttribute(media.get('id'), function() {
                 callback();
             });
         }
+
         me.disableImageButtons(dataViewModel, previewButton, removeButton, configButton, downloadButton);
     },
 
     /**
      * Event will be fired when the user de select an article image in the listing.
      *
-     * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
-     * @param [Shopware.apps.Article.model.Media] The selected media
+     * @param { Ext.selection.DataViewModel } dataViewModel - The selection data view model of the Ext.view.View
+     * @param { Shopware.apps.Article.model.Media } media   - The selected media
      */
     onDeselectMedia: function(dataViewModel, media, previewButton, removeButton, configButton, downloadButton) {
         this.disableImageButtons(dataViewModel, previewButton, removeButton, configButton, downloadButton);
@@ -533,7 +553,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         removeButton.setDisabled(disabled);
         previewButton.setDisabled(disabled);
 
-
         if (!selected || !selected.get('id') > 0 || me.subApplication.splitViewActive) {
             configButton.setDisabled(true);
             downloadButton.setDisabled(true);
@@ -543,19 +562,19 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         }
 
         if (!disabled) {
-            previewButton.setDisabled(selected.get('main')===1);
+            previewButton.setDisabled(selected.get('main') === 1);
         }
     },
 
     /**
      * Event will be fired when the user move an image.
      *
-     * @param [Ext.data.Store] The media store
-     * @param [Shopware.apps.Article.model.Media] The dragged record
-     * @param [Shopware.apps.Article.model.Media] The target record, on which the dragged record dropped
+     * @param { Ext.data.Store } mediaStore - The media store
+     * @param { Shopware.apps.Article.model.Media } draggedRecord -  The dragged record
+     * @param { Shopware.apps.Article.model.Media } targetRecord - The target record, on which the dragged record dropped
      */
     onMediaMoved: function(mediaStore, draggedRecord, targetRecord) {
-        var me = this, index, indexOfDragged;
+        var index, indexOfDragged;
 
         if (!mediaStore instanceof Ext.data.Store
                 || !draggedRecord instanceof Ext.data.Model
@@ -570,6 +589,17 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         mediaStore.remove(draggedRecord);
         mediaStore.insert(index, draggedRecord);
         return true;
+    },
+
+    /**
+     * Makes sure the attributes are saved when the "Save"-button on the main panel is being clicked.
+     */
+    onSaveArticle: function() {
+        var info = this.getMediaInfo();
+
+        if (info.record) {
+            info.attributeForm.saveAttribute(info.record.get('id'));
+        }
     }
 });
 //{/block}

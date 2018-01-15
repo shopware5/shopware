@@ -93,6 +93,10 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $search = preg_replace('/[^\\w0-9]+/u', ' ', $search);
         $search = trim(preg_replace('/\s+/', '%', $search), '%');
 
+        if ($search === '') {
+            return;
+        }
+
         $articles = $this->getArticles($search);
         $customers = $this->getCustomers($search);
         $orders = $this->getOrders($search);
@@ -177,9 +181,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         ";
 
         $sql = Shopware()->Db()->limit($sql, 5);
-        $result = Shopware()->Db()->fetchAll($sql);
 
-        return $result;
+        return Shopware()->Db()->fetchAll($sql);
     }
 
     /**
@@ -240,9 +243,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
         $entityManager = $this->get('models');
-        $pagination = $entityManager->createPaginator($query);
 
-        return $pagination;
+        return $entityManager->createPaginator($query);
     }
 
     /**
@@ -302,7 +304,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function createEntitySearchQuery($entity)
+    public function createEntitySearchQuery($entity)
     {
         /** @var \Doctrine\ORM\QueryBuilder $query */
         $query = $this->get('models')->createQueryBuilder();
@@ -374,9 +376,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function createCustomFieldToSearchTermCondition($entity, $column)
     {
         $field = $entity . '.' . $column;
-        $where = $field . ' LIKE :search';
 
-        return $where;
+        return $field . ' LIKE :search';
     }
 
     /**

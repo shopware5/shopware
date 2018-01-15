@@ -52,7 +52,7 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
         'tiff' => Media::TYPE_IMAGE,
         'eps' => Media::TYPE_VECTOR,
         'pbm' => Media::TYPE_IMAGE,
-        'psd' => Media::TYPE_IMAGE,
+        'psd' => Media::TYPE_UNKNOWN,
         'wbm' => Media::TYPE_IMAGE,
         '264' => Media::TYPE_VIDEO,
         '3g2' => Media::TYPE_VIDEO,

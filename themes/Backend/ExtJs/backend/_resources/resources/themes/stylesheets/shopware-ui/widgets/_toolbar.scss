@@ -190,6 +190,7 @@
     position: fixed;
     left: 0; top: 0;
     width: 100%;
+    z-index: 100000 !important;
 
     .#{$prefix}box-inner {
 		width: 100% !important;
@@ -424,7 +425,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 19001;
+    z-index: 100000 !important;
 
 	// Seperator
 	.#{$prefix}toolbar-separator-horizontal {
@@ -463,6 +464,7 @@
     top: auto !important;
     background: rgba(0, 0, 0, .5);
     border: 0 none;
+    z-index: 100000 !important;
 
     .#{$prefix}tip-body {
         color: #fff;

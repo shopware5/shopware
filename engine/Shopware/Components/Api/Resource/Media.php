@@ -504,9 +504,7 @@ class Media extends Resource
         $oldFilename = pathinfo($oldPath, PATHINFO_BASENAME);
 
         if (strlen($oldFilename) >= self::FILENAME_LENGTH) {
-            $path = str_replace($oldFilename, $filename, $oldPath);
-
-            return $path;
+            return str_replace($oldFilename, $filename, $oldPath);
         }
 
         return $oldPath;

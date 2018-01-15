@@ -1,0 +1,50 @@
+#override defaults for dev
+version: "2"
+
+services:
+  app_server:
+    volumes:
+      - ~/.composer/cache:/var/www/composer-cache-dir
+    networks:
+      shopware:
+        ipv4_address: 10.101.101.56
+        aliases:
+          - app_server
+
+  app_mysql:
+    networks:
+      shopware:
+        ipv4_address: 10.101.101.57
+        aliases:
+          - mysql
+          - app_mysql
+
+  selenium:
+    networks:
+      shopware:
+        ipv4_address: 10.101.101.58
+        aliases:
+          - selenium
+
+  smtp:
+    networks:
+      shopware:
+        ipv4_address: 10.101.101.59
+        aliases:
+          - smtp
+
+  app_volumes:
+    image: tianon/true
+    container_name: app_volumes
+    volumes:
+      - .:/project
+      - .:/var/www/shopware
+
+networks:
+  shopware:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.101.101.0/24
+          gateway: 10.101.101.1

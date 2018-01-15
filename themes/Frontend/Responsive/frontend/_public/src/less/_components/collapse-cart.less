@@ -118,12 +118,12 @@ The collapse cart element contains the current items in the users shopping cart 
         .alert--icon,
         .icon--element {
             width: 15%;
-            
+
             .is--warning {
                 color: @highlight-notice;
                 background: desaturate(lighten(@highlight-notice, 42%),20%);
             }
-            
+
             .is--success {
                 color: @highlight-success;
                 background: desaturate(lighten(@highlight-success, 42%),20%);
@@ -180,7 +180,7 @@ The collapse cart element contains the current items in the users shopping cart 
                     color: #fff;
                     text-transform: uppercase;
                     text-align: center;
-                    font-weight: bold;
+                    font-weight: @font-bold-weight;
                     display: block;
                     position: absolute;
                     padding: 0;
@@ -198,7 +198,7 @@ The collapse cart element contains the current items in the users shopping cart 
                 .unitize-width(35);
                 margin: 0 auto;
                 text-align: center;
-                font-weight: bold;
+                font-weight: @font-bold-weight;
                 background: @text-color;
                 color: #fff;
 
@@ -228,11 +228,11 @@ The collapse cart element contains the current items in the users shopping cart 
 
         .item--quantity {
             .unitize-margin(0, 5, 0, 0);
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
 
         .item--price {
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             float: right;
         }
 
@@ -268,7 +268,7 @@ The collapse cart element contains the current items in the users shopping cart 
 
         .prices--articles {
             color: @text-color-dark;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
     }
 

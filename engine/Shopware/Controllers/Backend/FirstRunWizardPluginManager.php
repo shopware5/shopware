@@ -177,10 +177,6 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             return;
         }
 
-        /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
-        $storeClient = $this->container->get('shopware_plugininstaller.store_client');
-        $storeClient->doTrackEvent('First Run Wizard started');
-
         $this->View()->assign([
             'success' => true,
             'data' => $localizations,
@@ -234,6 +230,10 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
             return;
         }
+
+        /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
+        $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+        $storeClient->doTrackEvent('First Run Wizard started');
 
         $this->View()->assign([
             'success' => true,

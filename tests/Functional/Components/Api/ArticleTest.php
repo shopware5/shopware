@@ -969,6 +969,33 @@ class ArticleTest extends TestCase
     }
 
     /**
+     * Tests that getList uses only the main variants attributes for filtering
+     *
+     * @depends testCreateShouldBeSuccessful
+     *
+     * @param int $id
+     */
+    public function testGetListShouldUseCorrectDetailsAttribute($id)
+    {
+        // Filter with attribute of main variant => article found
+        $result = $this->resource->getList(0, 1, [
+            'id' => $id,
+            'attribute.attr1' => 'Freitext1', // Belongs to main variant
+        ]);
+
+        $this->assertEquals(1, $result['total']);
+        $this->assertEquals($id, $result['data'][0]['id'], $id);
+
+        // Filter with attribute of other (non-main) variant => no result
+        $result = $this->resource->getList(0, 1, [
+            'id' => $id,
+            'attribute.attr3' => 'Freitext3',
+        ]);
+
+        $this->assertEquals(0, $result['total']);
+    }
+
+    /**
      * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testCreateWithInvalidDataShouldThrowValidationException()
@@ -1825,6 +1852,7 @@ class ArticleTest extends TestCase
                 'name' => 'English-Name',
                 'description' => 'English-Description',
                 'descriptionLong' => 'English-DescriptionLong',
+                'shippingTime' => 'English-ShippingTime',
                 'keywords' => 'English-Keywords',
                 'packUnit' => 'English-PackUnit',
             ],
@@ -1845,6 +1873,7 @@ class ArticleTest extends TestCase
         $this->assertEquals($definedTranslation['name'], $savedTranslation['name']);
         $this->assertEquals($definedTranslation['description'], $savedTranslation['description']);
         $this->assertEquals($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
+        $this->assertEquals($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
         $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 
@@ -2229,7 +2258,7 @@ class ArticleTest extends TestCase
             }
         }
 
-        $this->resource->generateVariantImages($article->getId());
+        $this->resource->generateVariantImages($article);
 
         $article = $this->resource->getOne($article->getId());
 

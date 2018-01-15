@@ -265,6 +265,10 @@ class Enlight_Components_Cron_Manager
             }
 
             $this->endJob($job);
+            $this->eventManager->notify('Shopware_CronJob_Finished_' . $job->getAction(), [
+                'subject' => $this,
+                'job'     => $job,
+            ]); 
 
             return $jobArgs;
         } catch (Exception $e) {

@@ -27,38 +27,30 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\CustomerSearchBundle\Condition\HasTotalOrderAmountCondition;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\DynamicConditionParserTrait;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 {
+    use DynamicConditionParserTrait;
+
     /**
      * @param ConditionInterface $condition
      * @param QueryBuilder       $query
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /* @var HasTotalOrderAmountCondition $condition */
-        switch ($condition->getOperator()) {
-            case ConditionInterface::OPERATOR_EQ:
-                $query->andWhere('customer.invoice_amount_sum = :HasTotalOrderAmountCondition');
-                break;
-            case ConditionInterface::OPERATOR_NEQ:
-                $query->andWhere('customer.invoice_amount_sum != :HasTotalOrderAmountCondition');
-                break;
-            case ConditionInterface::OPERATOR_LT:
-                $query->andWhere('customer.invoice_amount_sum < :HasTotalOrderAmountCondition');
-                break;
-            case ConditionInterface::OPERATOR_LTE:
-                $query->andWhere('customer.invoice_amount_sum <= :HasTotalOrderAmountCondition');
-                break;
-            case ConditionInterface::OPERATOR_GT:
-                $query->andWhere('customer.invoice_amount_sum > :HasTotalOrderAmountCondition');
-                break;
-            default:
-                $query->andWhere('customer.invoice_amount_sum >= :HasTotalOrderAmountCondition');
-        }
-
-        $query->setParameter(':HasTotalOrderAmountCondition', $condition->getMinimumOrderAmount());
+        /*
+         * $this->parse method is Imported from DynamicConditionParserTrait
+         */
+        return $this->parse(
+            $query,
+            's_customer_search_index',
+            'customer',
+            'invoice_amount_sum',
+            $condition->getMinimumOrderAmount(),
+            $condition->getOperator() ? $condition->getOperator() : ConditionInterface::OPERATOR_GTE
+        );
     }
 
     public function supports(ConditionInterface $condition)

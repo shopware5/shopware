@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.MediaManager.model.Media', {
         'path',
         'userId',
         'thumbnail',
+        'thumbnails',
         'width',
         'height',
         'albumId',

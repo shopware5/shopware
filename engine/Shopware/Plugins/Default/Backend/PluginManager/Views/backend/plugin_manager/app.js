@@ -146,7 +146,8 @@ Ext.define('Shopware.apps.PluginManager', {
         'store-register',
         'clear-all-cache',
         'plugin-state-changed',
-        'refresh-account-data'
+        'refresh-account-data',
+        'execute-plugin-update'
     ],
 
     dynamicEvents: [
