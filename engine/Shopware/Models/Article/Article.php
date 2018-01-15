@@ -39,6 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles")
+ * @ORM\HasLifecycleCallbacks
  */
 class Article extends ModelEntity
 {
@@ -1369,5 +1370,14 @@ class Article extends ModelEntity
     public function setRelatedProductStreams($relatedProductStreams)
     {
         $this->relatedProductStreams = $relatedProductStreams;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateChangedTimestamp()
+    {
+        $this->changed = new \DateTime();
     }
 }

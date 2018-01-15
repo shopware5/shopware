@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Order\Order;
 
 /**
  * @category  Shopware
@@ -116,6 +117,51 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
             'DELETE FROM `s_order_documents` WHERE `orderID` = :orderID;',
             ['orderID' => $orderId]
         );
+    }
+
+    /**
+     * Tests whether an order cannot be overwritten by a save request that bases on outdated data. (The order in the
+     * database is newer than that one the request body is based on.)
+     */
+    public function testSaveOrderOverwriteProtection()
+    {
+        // Prepare data for the test
+        $orderId = 16548453;
+        Shopware()->Db()->query(
+            "INSERT IGNORE INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr`) VALUES
+            (:orderId, '29996', 1, 126.82, 106.57, 3.9, 3.28, '2013-07-10 08:17:20', 0, 17, 5, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 9, 'EUR', 1, 1, '172.16.10.71');
+            
+            INSERT IGNORE INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
+            (16548454, :orderId, '20003', 178, 'SW10178', 19.95, 1, 'Strandtuch Ibiza', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, '')",
+            ['orderId' => $orderId]
+        );
+
+        // Prepare post data for request
+        /** @var DateTime $changeDate */
+        $changeDate = Shopware()->Models()->find(Order::class, $orderId)->getChanged();
+        $postData = [
+            'id' => 16548453,
+            'changed' => $changeDate->format('c'),
+            'invoice_amount' => 100,
+            'billing' => [
+                0 => [],
+            ],
+            'shipping' => [
+                0 => [],
+            ],
+        ];
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+
+        // Try to change the entity with the correct timestamp. This should work
+        $this->Request()->setMethod('POST')->setPost($postData);
+        $this->dispatch('backend/Order/save');
+        self::assertTrue($this->View()->success);
+
+        // Now use an outdated timestamp. The controller should detect this and fail.
+        $postData['changed'] = '2008-08-07 18:11:31';
+        $this->Request()->setMethod('POST')->setPost($postData);
+        $this->dispatch('backend/Order/batchProcess');
+        self::assertFalse($this->View()->success);
     }
 
     /**

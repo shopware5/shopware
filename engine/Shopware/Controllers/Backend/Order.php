@@ -367,7 +367,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $id = $this->Request()->getParam('id');
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = Shopware()->Snippets()->getNamespace('backend/order/main');
 
         //the backend order module have no function to create a new order so an order id must be passed.
         if (empty($id)) {
@@ -406,6 +406,17 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
         //get all passed order data
         $data = $this->Request()->getParams();
+
+        // Check whether the order has been modified in the meantime
+        if ($order->getChanged() != new \DateTime($data['changed'])) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->getOrder($order->getId()),
+                'message' => $namespace->get('order_has_been_changed', 'The order has been changed in the meantime. To prevent overwriting these changes, saving the order was aborted. Please close the order and re-open it.'),
+            ]);
+
+            return;
+        }
 
         //prepares the associated data of an order.
         $data = $this->getAssociatedData($data, $order, $billing, $shipping);

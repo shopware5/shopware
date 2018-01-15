@@ -50,6 +50,7 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
     fields: [
         // {block name="backend/customer/model/customer/fields"}{/block}
         { name: 'newPassword', type: 'string' },
+        { name: 'changed', type: 'date' },
         { name: 'amount', type: 'float' },
         { name: 'orderCount', type: 'int' },
         { name: 'canceledOrderAmount', type: 'float' },
