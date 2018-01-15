@@ -94,7 +94,7 @@ class ProductCategoryIndexer implements IndexerInterface
 
     public function refresh(GenericWrittenEvent $event): void
     {
-        $productIds = $this->getProductIds($event);
+        $productIds = $this->getRefreshedProductIds($event);
         if (empty($productIds)) {
             return;
         }
@@ -109,7 +109,7 @@ class ProductCategoryIndexer implements IndexerInterface
         $categories = $this->fetchCategories($ids);
 
         foreach ($categories as $productId => $mapping) {
-            $categoryIds = explode('||', (string) $mapping['ids']);
+            $categoryIds = array_filter(explode('||', (string) $mapping['ids']));
 
             $categoryIds = array_map(function (string $bytes) {
                 return Uuid::fromBytes($bytes)->toString();
@@ -150,7 +150,7 @@ class ProductCategoryIndexer implements IndexerInterface
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
     }
 
-    private function getProductIds(GenericWrittenEvent $event): array
+    private function getRefreshedProductIds(GenericWrittenEvent $event): array
     {
         $productEvent = $event->getEventByDefinition(ProductCategoryDefinition::class);
 
