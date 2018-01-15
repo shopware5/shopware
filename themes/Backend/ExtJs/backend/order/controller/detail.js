@@ -690,7 +690,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         options.callback(order);
                     }
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
+                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + operation.getError(), me.snippets.growlMessage)
                 }
                 // reload the order list
                 me.getOrderList().store.load();

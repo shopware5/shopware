@@ -5271,6 +5271,7 @@ CREATE TABLE IF NOT EXISTS `s_media_attributes` (
 DROP TABLE IF EXISTS `s_order`;
 CREATE TABLE IF NOT EXISTS `s_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `changeTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `ordernumber` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `userID` int(11) DEFAULT NULL,
   `invoice_amount` double NOT NULL DEFAULT '0',
