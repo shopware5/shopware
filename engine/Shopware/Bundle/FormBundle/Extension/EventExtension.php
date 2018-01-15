@@ -51,7 +51,10 @@ class EventExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'triggerEvent']);
+        $this->eventManager->notify('Shopware_Form_Builder', [
+            'reference' => $builder->getForm()->getConfig()->getType()->getName(),
+            'builder' => $builder,
+        ]);
     }
 
     /**
@@ -62,18 +65,5 @@ class EventExtension extends AbstractTypeExtension
     public function getExtendedType()
     {
         return \Symfony\Component\Form\Extension\Core\Type\FormType::class;
-    }
-
-    /**
-     * Trigger general form builder event with reference of the form type
-     *
-     * @param FormEvent $event
-     */
-    public function triggerEvent(FormEvent $event)
-    {
-        $this->eventManager->notify('Shopware_Form_Builder', [
-            'reference' => $event->getForm()->getConfig()->getType()->getBlockPrefix(),
-            'builder' => $event->getForm(),
-        ]);
     }
 }
