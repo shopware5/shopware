@@ -29,7 +29,7 @@
  * execute the cron jobs with the associated cron job arguments.
  *
  * @category   Enlight
- * @package    Enlight_Cron
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -52,7 +52,8 @@ class Enlight_Components_Cron_Manager
      *
      * @param Enlight_Components_Cron_Adapter $adapter
      * @param Enlight_Event_EventManager|null $eventManager
-     * @param string $eventArgsClass
+     * @param string                          $eventArgsClass
+     *
      * @return Enlight_Components_Cron_Manager
      */
     public function __construct(
@@ -71,11 +72,13 @@ class Enlight_Components_Cron_Manager
      * Sets the read / write adapter
      *
      * @param Enlight_Components_Cron_Adapter $adapter
+     *
      * @return Enlight_Components_Cron_Manager
      */
     public function setAdapter(Enlight_Components_Cron_Adapter $adapter)
     {
         $this->adapter = $adapter;
+
         return $this;
     }
 
@@ -93,11 +96,13 @@ class Enlight_Components_Cron_Manager
      * Sets an Event Manager. Needed to execute the cron
      *
      * @param Enlight_Event_EventManager|null $eventManager
+     *
      * @return Enlight_Components_Cron_Manager
      */
     public function setEventManager(Enlight_Event_EventManager $eventManager = null)
     {
         $this->eventManager = $eventManager;
+
         return $this;
     }
 
@@ -115,6 +120,7 @@ class Enlight_Components_Cron_Manager
      * Deactivate a given Cron Job in the crontab
      *
      * @param Enlight_Components_Cron_Job $job
+     *
      * @return Enlight_Components_Cron_Adapter
      */
     public function disableJob(Enlight_Components_Cron_Job $job)
@@ -127,26 +133,32 @@ class Enlight_Components_Cron_Manager
     /**
      * Deactivate a given Cron Job
      *
-     * @throws Enlight_Exception
      * @param \Enlight_Components_Cron_Job $job
+     *
+     * @throws Enlight_Exception
+     *
      * @return Enlight_Components_Cron_Manager
      */
     public function deleteJob(Enlight_Components_Cron_Job $job)
     {
         $this->adapter->deleteJob($job);
+
         return $this;
     }
 
     /**
      * Updates a cron job
      *
-     * @throws Enlight_Exception
      * @param \Enlight_Components_Cron_Job $job
+     *
+     * @throws Enlight_Exception
+     *
      * @return Enlight_Components_Cron_Manager
      */
     public function updateJob(Enlight_Components_Cron_Job $job)
     {
         $this->adapter->updateJob($job);
+
         return $this;
     }
 
@@ -163,7 +175,8 @@ class Enlight_Components_Cron_Manager
     /**
      * Receives a single Cron job defined by its id from crontab
      *
-     * @param Int $id
+     * @param int $id
+     *
      * @return null|Enlight_Components_Cron_Job
      */
     public function getJobById($id)
@@ -172,13 +185,15 @@ class Enlight_Components_Cron_Manager
         if (empty($retVal)) {
             return null;
         }
+
         return $retVal;
     }
 
     /**
      * Receives a single cron job by its name from the crontab
      *
-     * @param String $name
+     * @param string $name
+     *
      * @return null|Enlight_Components_Cron_Job
      */
     public function getJobByName($name)
@@ -187,13 +202,15 @@ class Enlight_Components_Cron_Manager
         if (empty($retVal)) {
             return null;
         }
+
         return $retVal;
     }
 
     /**
      * Receives a single cron job by its action from the crontab
      *
-     * @param String $action
+     * @param string $action
+     *
      * @return null|Enlight_Components_Cron_Job
      */
     public function getJobByAction($action)
@@ -202,6 +219,7 @@ class Enlight_Components_Cron_Manager
         if (empty($retVal)) {
             return null;
         }
+
         return $retVal;
     }
 
@@ -209,11 +227,13 @@ class Enlight_Components_Cron_Manager
      * Adds an job to the crontab
      *
      * @param Enlight_Components_Cron_Job $job
+     *
      * @return Enlight_Components_Cron_Manager
      */
     public function addJob(Enlight_Components_Cron_Job $job)
     {
         $this->adapter->createJob($job);
+
         return $this;
     }
 
@@ -221,6 +241,7 @@ class Enlight_Components_Cron_Manager
      * Returns the next cron job who is due to execute
      *
      * @param bool $force
+     *
      * @return null|Enlight_Components_Cron_Job
      */
     public function getNextJob($force = false)
@@ -232,8 +253,10 @@ class Enlight_Components_Cron_Manager
      * Runs a job by handing it over to
      *
      * @param Enlight_Components_Cron_Job $job
-     * @return Enlight_Event_EventArgs
+     *
      * @throws Exception
+     *
+     * @return Enlight_Event_EventArgs
      * @throw Enlight_Exception
      */
     public function runJob(Enlight_Components_Cron_Job $job)
@@ -250,7 +273,7 @@ class Enlight_Components_Cron_Manager
             /** @var Enlight_Components_Cron_EventArgs $jobArgs */
             $jobArgs = new $this->eventArgsClass([
                 'subject' => $this,
-                'job' => $job
+                'job' => $job,
             ]);
             $jobArgs->setReturn($job->getData());
 
@@ -265,6 +288,10 @@ class Enlight_Components_Cron_Manager
             }
 
             $this->endJob($job);
+            $this->eventManager->notify('Shopware_CronJob_Finished_' . $job->getAction(), [
+                'subject' => $this,
+                'job' => $job,
+            ]);
 
             return $jobArgs;
         } catch (Exception $e) {
@@ -278,7 +305,7 @@ class Enlight_Components_Cron_Manager
 
             $this->eventManager->notify('Shopware_CronJob_Error_' . $action, [
                 'subject' => $this,
-                'job'     => $job,
+                'job' => $job,
             ]);
 
             throw $e;
@@ -289,13 +316,12 @@ class Enlight_Components_Cron_Manager
      * Ends a job by handing it over to
      *
      * @param Enlight_Components_Cron_Job $job
-     * @return void
      */
     protected function endJob(Enlight_Components_Cron_Job $job)
     {
         $now = new Zend_Date();
         $now = $now->getTimestamp();
-        $interval =  $job->getInterval();
+        $interval = $job->getInterval();
         $next = $job->getNext()->getTimestamp();
         do {
             $next += $interval;

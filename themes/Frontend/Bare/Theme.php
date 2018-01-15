@@ -33,6 +33,7 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Defines the human readable theme name
      * which displayed in the backend
+     *
      * @var string
      */
     protected $name = '__theme_name__';
@@ -40,12 +41,14 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Allows to define a description text
      * for the theme
+     *
      * @var string
      */
     protected $description = '__theme_description__';
 
     /**
      * Name of the theme author.
+     *
      * @var string
      */
     protected $author = '__author__';
@@ -74,8 +77,8 @@ class Theme extends \Shopware\Components\Theme
                 'attributes' => [
                     'layout' => 'anchor',
                     'autoScroll' => true,
-                    'padding' => '0'
-                ]
+                    'padding' => '0',
+                ],
             ]
         );
 
@@ -85,10 +88,10 @@ class Theme extends \Shopware\Components\Theme
             [
                 'attributes' => [
                     'padding' => '10',
-                    'margin'=> '5',
+                    'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
-                ]
+                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%'],
+                ],
             ]
         );
 
@@ -136,10 +139,10 @@ class Theme extends \Shopware\Components\Theme
             [
                 'attributes' => [
                     'padding' => '10',
-                    'margin'=> '5',
+                    'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
-                ]
+                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%'],
+                ],
             ]
         );
 
@@ -187,17 +190,6 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
-     * Helper function to get the attribute of a checkbox field which shows a description label
-     * @param $snippetName
-     * @return array
-     */
-    private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
-    {
-        $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
-        return ['attributes' => [$labelType => $description]];
-    }
-
-    /**
      * @param ArrayCollection $collection
      */
     public function createConfigSets(ArrayCollection $collection)
@@ -214,5 +206,20 @@ class Theme extends \Shopware\Components\Theme
             ->setValues(['color' => '#fff']);
 
         $collection->add($set);
+    }
+
+    /**
+     * Helper function to get the attribute of a checkbox field which shows a description label
+     *
+     * @param string $snippetName
+     * @param string $labelType
+     *
+     * @return array
+     */
+    private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
+    {
+        $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+
+        return ['attributes' => [$labelType => $description]];
     }
 }

@@ -61,19 +61,18 @@ Ext.define('Shopware.apps.Form.view.main.List', {
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
     getGridSelModel: function () {
-        var selModel = Ext.create('Ext.selection.CheckboxModel', {
+        return Ext.create('Ext.selection.CheckboxModel', {
             listeners:{
                 selectionchange: function (sm, selections) {
                     var owner = this.view.ownerCt,
                         btn = owner.down('button[action=delete]');
 
                     /*{if {acl_is_allowed privilege=delete}}*/
-                    btn.setDisabled(selections.length == 0);
+                    btn.setDisabled(selections.length === 0);
                     /*{/if}*/
                 }
             }
         });
-        return selModel;
     },
 
     /**
@@ -118,25 +117,23 @@ Ext.define('Shopware.apps.Form.view.main.List', {
         });
         /*{/if}*/
 
-        var columns = [{
-                header: '{s name=column_name}Name{/s}',
-                dataIndex: 'name',
-                flex: 1
-            }, {
-                header: '{s name=column_email}Email address{/s}',
-                dataIndex: 'email',
-                flex: 1
-            }, {
-                /**
-                 * Special column type which provides
-                 * clickable icons in each row
-                 */
-                xtype: 'actioncolumn',
-                width: actionColumItems.length * 26,
-                items: actionColumItems
-            }];
-
-        return columns;
+        return [{
+            header: '{s name=column_name}Name{/s}',
+            dataIndex: 'name',
+            flex: 1
+        }, {
+            header: '{s name=column_email}Email address{/s}',
+            dataIndex: 'email',
+            flex: 1
+        }, {
+            /**
+             * Special column type which provides
+             * clickable icons in each row
+             */
+            xtype: 'actioncolumn',
+            width: actionColumItems.length * 26,
+            items: actionColumItems
+        }];
     },
 
     /**
@@ -145,7 +142,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
     getToolbar: function() {
-        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+        return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             ui : 'shopware-ui',
             items: [
@@ -181,8 +178,6 @@ Ext.define('Shopware.apps.Form.view.main.List', {
                 width: 6
             }]
         });
-
-        return toolbar;
     },
 
     /**
@@ -191,13 +186,11 @@ Ext.define('Shopware.apps.Form.view.main.List', {
      * @return Ext.toolbar.Paging
      */
     getPagingbar: function () {
-        var pagingbar =  Ext.create('Ext.toolbar.Paging', {
+        return Ext.create('Ext.toolbar.Paging', {
             store: this.store,
             dock: 'bottom',
             displayInfo: true
         });
-
-        return pagingbar;
     }
 });
 //{/block}

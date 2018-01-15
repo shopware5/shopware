@@ -208,7 +208,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
     .range-info--label {
         color: @text-color-dark;
-        font-weight: 600;
+        font-weight: @font-bold-weight;
     }
 }
 
@@ -261,7 +261,7 @@ The styling includes the collapsed and expanded styling and the panel component 
                 .unitize(font-size, 7);
                 display: block;
                 font-family: @sw-icon-fontname;
-                font-weight: normal;
+                font-weight: @font-base-weight;
                 text-align: center;
                 color: #fff;
                 content: @sw-icon-check;
@@ -270,7 +270,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
         &:checked ~ .filter-panel--label {
             color: @brand-primary;
-            font-weight: 600;
+            font-weight: @font-bold-weight;
         }
 
         &:disabled ~ .input--state,
@@ -318,7 +318,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
         &:checked ~ .filter-panel--label {
             color: @brand-primary;
-            font-weight: 600;
+            font-weight: @font-bold-weight;
         }
 
         &:disabled .input--state,
@@ -391,7 +391,7 @@ The styling includes the collapsed and expanded styling and the panel component 
                 display: block;
                 position: absolute;
                 font-family: @sw-icon-fontname;
-                font-weight: normal;
+                font-weight: @font-base-weight;
                 text-align: center;
                 color: #fff;
                 content: @sw-icon-check;
@@ -476,7 +476,7 @@ The styling includes the collapsed and expanded styling and the panel component 
                 color: @text-color;
             }
             .rating-star--suffix {
-                font-weight: bold;
+                font-weight: @font-bold-weight;
             }
         }
 
@@ -602,7 +602,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
 .filter--btn-apply {
     position: relative;
-    font-weight: 600;
+    font-weight: @font-bold-weight;
     width: 100%;
 
     &.is--icon-right [class^="icon--"] {
@@ -618,7 +618,7 @@ The styling includes the collapsed and expanded styling and the panel component 
     }
 
     .filter--count {
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 }
 
@@ -788,6 +788,6 @@ The styling includes the collapsed and expanded styling and the panel component 
     .listing--wrapper.has--sidebar-filter .action--sort .sort--label {
         .unitize-margin(0, 10, 0, 0);
         display: inline-block;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
     }
 }

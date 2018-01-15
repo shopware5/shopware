@@ -24,6 +24,25 @@
 
 /**
  * Order model for document generation
+ * @property int id;
+ * @property array order;
+ * @property ArrayObject positions;
+ * @property int userID;
+ * @property array user;
+ * @property array billing;
+ * @property array shipping;
+ * @property array payment;
+ * @property array paymentInstances;
+ * @property array dispatch;
+ * @property bool net;
+ * @property bool summaryNet;
+ * @property float amountNetto;
+ * @property float amount;
+ * @property array tax;
+ * @property array currency;
+ * @property float shippingCosts;
+ * @property bool shippingCostsAsPosition;
+ * @property mixed discount;
  */
 class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
 {
@@ -504,6 +523,14 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
             $this->_positions->offsetSet($key, $position);
         }
+
+        $parameters = Shopware()->Container()->get('events')->filter(
+            'Shopware_Models_Order_Document_Filter_Parameters',
+            $this->getParameters(),
+            ['subject' => $this]
+        );
+
+        $this->setParameters($parameters);
     }
 
     /**
@@ -662,6 +689,38 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             ),
             ArrayObject::ARRAY_AS_PROPS
         );
+    }
+
+    /**
+     * @return array
+     */
+    private function getParameters()
+    {
+        return [
+            'positions' => $this->_positions,
+            'amountNetto' => $this->_amountNetto,
+            'amount' => $this->_amount,
+            'discount' => $this->_discount,
+            'tax' => $this->_tax,
+            'net' => $this->_net,
+            'shipping' => $this->_shipping,
+            'user' => $this->_user,
+        ];
+    }
+
+    /**
+     * @param array $parameters
+     */
+    private function setParameters(array $parameters)
+    {
+        $this->_positions = $parameters['positions'];
+        $this->_amountNetto = $parameters['amountNetto'];
+        $this->_amount = $parameters['amount'];
+        $this->_discount = $parameters['discount'];
+        $this->_tax = $parameters['tax'];
+        $this->_net = $parameters['net'];
+        $this->_shipping = $parameters['shipping'];
+        $this->_user = $parameters['user'];
     }
 
     /**

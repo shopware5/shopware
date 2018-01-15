@@ -458,9 +458,8 @@ class Repository extends ModelRepository
         $query->leftJoin('document.type', 'documentType');
         $query->where('IDENTITY(document.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
-        $documents = $query->getQuery()->getArrayResult();
 
-        return $documents;
+        return $query->getQuery()->getArrayResult();
     }
 
     /**

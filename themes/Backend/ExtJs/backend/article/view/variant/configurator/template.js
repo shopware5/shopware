@@ -533,6 +533,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             items: [{
                 xtype: 'textfield',
                 name: 'shippingTime',
+                translatable: true,
                 fieldLabel: me.snippets.settings.deliveryTime
             }, {
                 xtype: 'checkboxfield',

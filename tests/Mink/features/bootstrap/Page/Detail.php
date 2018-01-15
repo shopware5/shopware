@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Driver\GoutteDriver;
-use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\ArticleEvaluation;
@@ -115,14 +114,37 @@ class Detail extends Page implements HelperSelectorInterface
      *
      * @param int $quantity
      */
-    public function toBasket($quantity = 1)
+    public function addToBasket($quantity = 1)
     {
         $this->fillField('sQuantity', $quantity);
-        $this->pressButton('In den Warenkorb');
+        $this->find('css', "button[name='In den Warenkorb']")->click();
+    }
 
-        if ($this->getDriver() instanceof Selenium2Driver) {
-            $this->clickLink('Warenkorb anzeigen');
+    public function toBasket($offcanvasCart = false)
+    {
+        if ($offcanvasCart) {
+            $text = 'Warenkorb anzeigen';
+        } else {
+            $text = 'Warenkorb bearbeiten';
         }
+
+        Helper::spin(function () use ($text) {
+            try {
+                if ($this->find('css', "a[title='$text']")) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // Page does not contain the text
+            }
+
+            return false;
+        }, 5);
+
+        $this->clickLink($text);
+
+        /** @var CheckoutCart $checkoutCartPage */
+        $checkoutCartPage = $this->getPage('CheckoutCart');
+        $checkoutCartPage->verifyPage();
     }
 
     /**

@@ -1023,12 +1023,14 @@ class TranslationTest extends TestCase
                     'name' => 'Dummy Translation',
                     'description' => 'Dummy Translation',
                     'descriptionLong' => 'Dummy Translation',
+                    'shippingTime' => 'Dummy Translation',
                     'additionalText' => 'Dummy Translation',
                     'keywords' => 'Dummy Translation',
                     'packUnit' => 'Dummy Translation',
                 ];
             case 'variant':
                 return [
+                    'shippingTime' => 'Dummy Translation',
                     'additionalText' => 'Dummy Translation',
                     'packUnit' => 'Dummy Translation',
                 ];

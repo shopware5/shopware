@@ -167,8 +167,8 @@
             'ajax_add_article' => {url controller="checkout" action="addArticle"},
             'ajax_listing' => {url module="widgets" controller="Listing" action="ajaxListing"},
             'ajax_cart_refresh' => {url controller="checkout" action="ajaxAmount"},
-            'ajax_address_selection' => {url controller="address" action="ajaxSelection" fullPath forceSecure},
-            'ajax_address_editor' => {url controller="address" action="ajaxEditor" fullPath forceSecure}
+            'ajax_address_selection' => {url controller="address" action="ajaxSelection" fullPath},
+            'ajax_address_editor' => {url controller="address" action="ajaxEditor" fullPath}
         ]}
 
         {$snippetsData = [
@@ -236,6 +236,12 @@
                 var themeConfig = themeConfig || JSON.parse('{$themeConfig|json_encode}');
                 var lastSeenProductsConfig = lastSeenProductsConfig || JSON.parse('{$lastSeenProductsConfig|json_encode}');
                 var csrfConfig = csrfConfig || JSON.parse('{$csrfConfig|json_encode}');
+                var statisticDevices = [
+                    { device: 'mobile', enter: 0, exit: 767 },
+                    { device: 'tablet', enter: 768, exit: 1259 },
+                    { device: 'desktop', enter: 1260, exit: 5160 }
+                ];
+
             {/block}
         </script>
 

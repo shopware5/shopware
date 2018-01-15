@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getDetailStatusAction()
     {
         /** @var $repository \Shopware\Models\Order\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class);
         $data = $repository->getDetailStatusQuery()->getArrayResult();
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -98,7 +98,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getTaxesAction()
     {
         /** @var $repository Shopware\Components\Model\ModelRepository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Tax\Tax');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tax\Tax::class);
 
         $query = $repository->queryBy(
             $this->Request()->getParam('filter', []),
@@ -107,13 +107,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $this->Request()->getParam('start')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -130,8 +130,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getPaymentsAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
 
         $query = $repository->getPaymentsQuery(
             $filter = $this->Request()->getParam('filter', []),
@@ -140,13 +140,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $limit = $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -164,8 +164,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getCustomerGroupsAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class);
 
         $builder = $repository->createQueryBuilder('groups');
         $builder->select([
@@ -184,13 +184,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -217,13 +217,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $this->Request()->getParam('start')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -241,8 +241,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getDispatchesAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Dispatch\Dispatch::class);
 
         $query = $repository->getDispatchesQuery(
             $this->Request()->getParam('filter', []),
@@ -251,13 +251,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -274,8 +274,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getSuppliersAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Supplier::class);
 
         $builder = $repository->createQueryBuilder('s');
         $builder->select([
@@ -287,9 +287,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $builder->addFilter($this->Request()->getParam('filter', []));
 
-        //use the query param because this is the default in ext js
+        // Use the query param because this is the default in ext js
         $searchQuery = $this->Request()->getParam('query', []);
-        //search for values
+        // Search for values
         if (!empty($searchQuery)) {
             $builder->andWhere('s.name LIKE :searchQuery')
                 ->setParameter('searchQuery', '%' . $searchQuery . '%');
@@ -302,13 +302,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -322,8 +322,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getPaymentStatusAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class);
 
         $query = $repository->getPaymentStatusQuery(
             $filter = $this->Request()->getParam('filter'),
@@ -332,13 +332,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $limit = $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -352,8 +352,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getOrderStatusAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class);
         $query = $repository->getOrderStatusQuery(
             $filter = $this->Request()->getParam('filter', []),
             $order = $this->Request()->getParam('sort', []),
@@ -361,13 +361,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $limit = $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -384,8 +384,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getCountriesAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\Country::class);
         $query = $repository->getCountriesQuery(
             $filter = $this->Request()->getParam('filter', []),
             $order = $this->Request()->getParam('sort', []),
@@ -393,13 +393,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $limit = $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -421,8 +421,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getArticlesAction()
     {
-        //load shop repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+        // Load shop repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
 
         $builder = $repository->createQueryBuilder('articles');
 
@@ -448,22 +448,22 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->leftJoin('articles.details', 'details');
         $builder->groupBy('articles.id');
 
-        //don't search for normal articles
+        // Don't search for normal articles
         $displayArticles = (bool) $this->Request()->getParam('articles', true);
         if (!$displayArticles) {
             $builder->andWhere('articles.configuratorSetId IS NOT NULL');
         }
 
-        //don't search for variant articles?
-        //this is deprecated, because it's the same as "configurator". Further it does not search for variant articles,
-        //this was replaced by the option to set another store. To search for look at the example explained in the
-        //search scope documentation of the Shopware.form.field.ArticleSearch.js
+        // Don't search for variant articles?
+        // This is deprecated, because it's the same as "configurator". Further it does not search for variant articles,
+        // This was replaced by the option to set another store. To search for look at the example explained in the
+        // search scope documentation of the Shopware.form.field.ArticleSearch.js
         $displayVariants = (bool) $this->Request()->getParam('variants', true);
         if (!$displayVariants) {
             $builder->andWhere('articles.configuratorSetId IS NULL');
         }
 
-        //don't search for configurator articles
+        // Don't search for configurator articles
         $displayConfigurators = (bool) $this->Request()->getParam('configurator', true);
         if (!$displayConfigurators) {
             $builder->andWhere('articles.configuratorSetId IS NULL');
@@ -493,13 +493,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $paginator = Shopware()->Models()->createPaginator($query);
 
-        //get total result of the query
+        // Get total result of the query
         $total = $paginator->count();
 
-        //select all shop as array
+        // Select all shop as array
         $data = $paginator->getIterator()->getArrayCopy();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -598,8 +598,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getUsersAction()
     {
-        //load user repository
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\User\User');
+        // Load user repository
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\User\User::class);
         $builder = $repository->createQueryBuilder('user');
         $fields = [
             'id' => 'user.id',
@@ -625,21 +625,20 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     public function getShopsAction()
     {
-        //load shop repository
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $query = $repository->getBaseListQuery(
             $filter = $this->Request()->getParam('filter', []),
@@ -648,13 +647,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $limit = $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -664,9 +663,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getShopsWithThemesAction()
     {
-        //load shop repository
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $shopId = $this->Request()->getParam('shopId', null);
         $filter = $this->Request()->getParam('filter', []);
@@ -686,19 +684,19 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $this->Request()->getParam('limit')
         );
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     public function getTemplatesAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Template');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Template::class);
         $templates = $repository->findAll();
 
         /** @var $template \Shopware\Models\Shop\Template* */
@@ -723,7 +721,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getCurrenciesAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
 
         $builder = $repository->createQueryBuilder('c');
         $builder->select([
@@ -740,13 +738,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
-        //get total result of the query
+        // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
-        //select all shop as array
+        // Select all shop as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -784,7 +782,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getCountryAreasAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Country\Area');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\Area::class);
 
         $builder = $repository->createQueryBuilder('area');
         $builder->select([
@@ -809,7 +807,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $countryId = $this->Request()->getParam('countryId', null);
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Country\State');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\State::class);
 
         $builder = $repository->createQueryBuilder('state');
         $builder->select([
@@ -893,8 +891,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     /**
      * Loads options for the 404 page config options.
      * Returns an array of all defined emotion pages, plus the 2 default options.
-     *
-     * @return array
      */
     public function getPageNotFoundDestinationOptionsAction()
     {
@@ -904,7 +900,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/base/page_not_found_destination_options');
 
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')
+        $query = Shopware()->Models()->getRepository(\Shopware\Models\Emotion\Emotion::class)
             ->getNameListQuery(true, $sort, $offset, $limit);
         $count = Shopware()->Models()->getQueryCount($query);
         $emotions = $query->getArrayResult();
@@ -939,7 +935,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function validateEmailAction()
     {
-        // disable template renderer and automatic json renderer
+        // Disable template renderer and automatic json renderer
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
@@ -994,8 +990,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      *    [int]      bottom
      *    [int]      pageBreak
      * </code>
-     *
-     * @throws \Exception
      */
     public function getDocTypesAction()
     {
@@ -1026,7 +1020,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      *
      * @return array
      */
-    private function prepareParam($properties, $fields)
+    private function prepareParam(array $properties, array $fields)
     {
         if (empty($properties)) {
             return $properties;
@@ -1043,16 +1037,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * prepares the sort params for the variant search
+     * Prepares the sort params for the variant search
      *
      * @param array $properties
      * @param array $fields
      *
      * @return array
      */
-    private function prepareVariantParam($properties, $fields)
+    private function prepareVariantParam(array $properties, array $fields)
     {
-        //maps the fields to the correct table
+        // Maps the fields to the correct table
         foreach ($properties as $key => $property) {
             foreach ($fields as $field) {
                 $asStr = ' as ';
@@ -1075,7 +1069,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * adds the additional text for variants
+     * Adds the additional text for variants
      *
      * @param array $data
      *
@@ -1086,7 +1080,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $variantIds = [];
         $tmpVariant = [];
 
-        //checks if an additional text is available
+        // Checks if an additional text is available
         foreach ($data as $variantData) {
             if (!empty($variantData['additionalText'])) {
                 $variantData['name'] = $variantData['name'] . ' ' . $variantData['additionalText'];
@@ -1123,7 +1117,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $tmpVariant = $this->buildDynamicText($tmpVariant, $result);
 
-        //maps the associative data array back to an normal indexed array
+        // Maps the associative data array back to an normal indexed array
         $data = [];
         foreach ($tmpVariant as $variant) {
             $data[] = $variant;
@@ -1133,14 +1127,14 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * helper function to generate the additional text dynamically
+     * Helper function to generate the additional text dynamically
      *
      * @param array $data
      * @param array $variantsWithoutAdditionalText
      *
      * @return array
      */
-    private function buildDynamicText($data, $variantsWithoutAdditionalText)
+    private function buildDynamicText(array $data, array $variantsWithoutAdditionalText)
     {
         foreach ($variantsWithoutAdditionalText as $variantWithoutAdditionalText) {
             $variantData = &$data[$variantWithoutAdditionalText['id']];
@@ -1164,7 +1158,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $builder = Shopware()->Container()->get('models')->createQueryBuilder();
         $builder->select(['element', 'values'])
-            ->from('Shopware\Models\Config\Element', 'element')
+            ->from(\Shopware\Models\Config\Element::class, 'element')
             ->leftJoin('element.values', 'values')
             ->where('element.name = :name')
             ->setParameter('name', 'shopsalutations');

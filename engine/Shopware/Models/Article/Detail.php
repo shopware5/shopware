@@ -768,7 +768,7 @@ class Detail extends ModelEntity
      *
      * @param \DateTime|string|null $releaseDate
      *
-     * @return Article
+     * @return Detail
      */
     public function setReleaseDate($releaseDate = null)
     {

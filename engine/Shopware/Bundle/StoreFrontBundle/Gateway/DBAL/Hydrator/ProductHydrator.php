@@ -118,6 +118,7 @@ class ProductHydrator extends Hydrator
             'txtArtikel' => '__product_name',
             'txtshortdescription' => '__product_description',
             'txtlangbeschreibung' => '__product_description_long',
+            'txtshippingtime' => '__variant_shippingtime',
             'txtzusatztxt' => '__variant_additionaltext',
             'txtkeywords' => '__product_keywords',
             'txtpackunit' => '__unit_packunit',

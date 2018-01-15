@@ -177,10 +177,6 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             return;
         }
 
-        /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
-        $storeClient = $this->container->get('shopware_plugininstaller.store_client');
-        $storeClient->doTrackEvent('First Run Wizard started');
-
         $this->View()->assign([
             'success' => true,
             'data' => $localizations,
@@ -235,6 +231,10 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             return;
         }
 
+        /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
+        $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+        $storeClient->doTrackEvent('First Run Wizard started');
+
         $this->View()->assign([
             'success' => true,
             'data' => array_values($localizations),
@@ -246,14 +246,12 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
-     *
-     * @throws Exception
      *
      * @return LocaleStruct Information about the current locale
      */

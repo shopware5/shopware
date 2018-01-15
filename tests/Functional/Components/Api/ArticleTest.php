@@ -1852,6 +1852,7 @@ class ArticleTest extends TestCase
                 'name' => 'English-Name',
                 'description' => 'English-Description',
                 'descriptionLong' => 'English-DescriptionLong',
+                'shippingTime' => 'English-ShippingTime',
                 'keywords' => 'English-Keywords',
                 'packUnit' => 'English-PackUnit',
             ],
@@ -1872,6 +1873,7 @@ class ArticleTest extends TestCase
         $this->assertEquals($definedTranslation['name'], $savedTranslation['name']);
         $this->assertEquals($definedTranslation['description'], $savedTranslation['description']);
         $this->assertEquals($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
+        $this->assertEquals($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
         $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 

@@ -27,7 +27,7 @@ It contains the product actions, the product information such as pictures and de
             .unitize(font-size, 21);
             margin: 0;
             padding: 0;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             color: @text-color-dark;
         }
     }
@@ -106,7 +106,7 @@ It contains the product actions, the product information such as pictures and de
         }
 
         .price--label {
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
 
         .price--line-through {
@@ -121,7 +121,7 @@ It contains the product actions, the product information such as pictures and de
             .unitize(font-size, 28);
             white-space: nowrap;
             color: @text-color-dark;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             display: inline-block;
             line-height: 1;
         }
@@ -143,7 +143,7 @@ It contains the product actions, the product information such as pictures and de
             background: @badge-discount-bg;
             color: @badge-discount-color;
             text-align: center;
-            font-weight: bold;
+            font-weight: @font-bold-weight;
             vertical-align: top;
         }
     }
@@ -171,7 +171,7 @@ It contains the product actions, the product information such as pictures and de
         .select-field select {
             @buyboxBtnFontSize: @btn-font-size + 2;
             .unitize(@buyboxBtnFontSize, 16, font-size);
-            font-weight: bold;
+            font-weight: @font-bold-weight;
         }
     }
 
@@ -226,7 +226,7 @@ It contains the product actions, the product information such as pictures and de
     .content--title {
         .unitize(font-size, 18);
         .unitize-margin(10, 0, 5, 0);
-        font-weight: 700;
+        font-weight: @font-bold-weight;
         color: @text-color-dark;
 
         &.title--description-supplier {
@@ -455,7 +455,7 @@ It contains the product actions, the product information such as pictures and de
     .border-radius(3px);
     background: @brand-secondary;
     color: #fff;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
 }
 
     // Product notification
@@ -490,7 +490,7 @@ It contains the product actions, the product information such as pictures and de
 .configurator--form {
     .unitize-padding(10, 0);
 
-    .select-field { 
+    .select-field {
         max-width: 100%;
     }
 }
@@ -498,7 +498,7 @@ It contains the product actions, the product information such as pictures and de
 .configurator--label {
     .unitize-margin(6, 0, 4, 0);
     .unitize(font-size, 14);
-    font-weight: bold;
+    font-weight: @font-bold-weight;
 }
 
 .is--ctl-detail .content-main--inner {
@@ -521,7 +521,7 @@ It contains the product actions, the product information such as pictures and de
 
 .tab--title {
     color: @text-color;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
 
     &:hover {
         color: @link-color;

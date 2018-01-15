@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopPage extends Extendable implements \JsonSerializable
+class ShopPage extends Extendable
 {
     /**
      * @var int

@@ -51,7 +51,7 @@ class PluginCheck
     /**
      * Check if the currently installed plugin where marked to be compatible with the selected sw version
      *
-     * @param $version
+     * @param string $version
      *
      * @return array
      */
@@ -62,7 +62,9 @@ class PluginCheck
         $technicalNames = array_column($installedPlugins, 'name');
         $locale = $this->getLocale();
 
-        $request = new PluginsByTechnicalNameRequest($locale, \Shopware::VERSION, $technicalNames);
+        $shopwareVersion = $this->container->getParameter('shopware.release.version');
+
+        $request = new PluginsByTechnicalNameRequest($locale, $shopwareVersion, $technicalNames);
         $storePlugins = $service->getPlugins($request);
 
         $request = new PluginsByTechnicalNameRequest($locale, $version, $technicalNames);

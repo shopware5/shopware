@@ -32,6 +32,7 @@ use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
@@ -73,18 +74,25 @@ class InstallerService
     private $pluginInstaller;
 
     /**
+     * @var ShopwareReleaseStruct
+     */
+    private $release;
+
+    /**
      * @param ModelManager          $em
      * @param PluginInstaller       $pluginInstaller
      * @param LegacyPluginInstaller $legacyPluginInstaller
      * @param ConfigWriter          $configWriter
      * @param ConfigReader          $configReader
+     * @param ShopwareReleaseStruct $release
      */
     public function __construct(
         ModelManager $em,
         PluginInstaller $pluginInstaller,
         LegacyPluginInstaller $legacyPluginInstaller,
         ConfigWriter $configWriter,
-        ConfigReader $configReader
+        ConfigReader $configReader,
+        ShopwareReleaseStruct $release
     ) {
         $this->em = $em;
         $this->pluginInstaller = $pluginInstaller;
@@ -93,6 +101,7 @@ class InstallerService
         $this->configReader = $configReader;
         $this->pluginRepository = $this->em->getRepository(Plugin::class);
         $this->shopRepository = $this->em->getRepository(Shop::class);
+        $this->release = $release;
     }
 
     /**
@@ -153,7 +162,7 @@ class InstallerService
      */
     public function installPlugin(Plugin $plugin)
     {
-        $context = new InstallContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new InstallContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         if ($plugin->getInstalled()) {
             return $context;
         }
@@ -178,7 +187,7 @@ class InstallerService
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
-        $context = new UninstallContext($plugin, \Shopware::VERSION, $plugin->getVersion(), !$removeData);
+        $context = new UninstallContext($plugin, $this->release->getVersion(), $plugin->getVersion(), !$removeData);
         if (!$plugin->getInstalled()) {
             return $context;
         }
@@ -202,7 +211,7 @@ class InstallerService
      */
     public function updatePlugin(Plugin $plugin)
     {
-        $context = new UpdateContext($plugin, \Shopware::VERSION, $plugin->getVersion(), $plugin->getUpdateVersion());
+        $context = new UpdateContext($plugin, $this->release->getVersion(), $plugin->getVersion(), $plugin->getUpdateVersion());
         if (!$plugin->getUpdateVersion()) {
             return $context;
         }
@@ -226,7 +235,7 @@ class InstallerService
      */
     public function activatePlugin(Plugin $plugin)
     {
-        $context = new ActivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         if ($plugin->getActive()) {
             return $context;
         }
@@ -254,7 +263,7 @@ class InstallerService
      */
     public function deactivatePlugin(Plugin $plugin)
     {
-        $context = new DeactivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new DeactivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         if (!$plugin->getActive()) {
             return $context;
         }

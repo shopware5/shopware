@@ -188,9 +188,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->setParameter(':ids', array_values($ids), Connection::PARAM_INT_ARRAY)
             ->groupBy('mapping.articleID');
 
-        $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        return $mapping;
+        return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     /**

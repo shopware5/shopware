@@ -38,7 +38,6 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
     public function init()
     {
         parent::init();
-        $this->translation = $this->container->get('translation');
     }
 
     /**
@@ -77,7 +76,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
         $key = (string) $this->Request()->getParam('key', 1);
         $language = (string) $this->Request()->getParam('language');
 
-        $data = $this->translation->read($language, $type, $key, $merge);
+        $data = $this->getTranslation()->read($language, $type, $key, $merge);
 
         $this->View()->assign([
             'data' => $data, 'success' => true,
@@ -96,7 +95,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
         $data = (array) $this->Request()->getParam('data', []);
 
         $this->View()->assign([
-            'success' => $this->translation->write(
+            'success' => $this->getTranslation()->write(
                 $language,
                 $type,
                 $key,
@@ -104,5 +103,14 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
                 $merge
             ),
         ]);
+    }
+
+    protected function getTranslation()
+    {
+        if (!isset($this->translation)) {
+            $this->translation = $this->container->get('translation');
+        }
+
+        return $this->translation;
     }
 }

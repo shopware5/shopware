@@ -320,11 +320,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function getAlternativeLocalesAction()
     {
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var $targetLocale \Shopware\Models\Shop\Locale */
         $targetLocale = Shopware()->Container()->get('Auth')->getIdentity()->locale;
-
-        /** @var Zend_Locale $baseLocale */
-        $baseLocale = Shopware()->Container()->get('locale');
 
         $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
 
@@ -339,8 +336,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $data = [];
         foreach ($locales as $id => $locale) {
             list($l, $t) = explode('_', $locale);
-            $l = $baseLocale->getTranslation($l, 'language', $targetLocale->getLocale());
-            $t = $baseLocale->getTranslation($t, 'territory', $targetLocale->getLocale());
+            $l = Zend_Locale::getTranslation($l, 'language', $targetLocale->getLocale());
+            $t = Zend_Locale::getTranslation($t, 'territory', $targetLocale->getLocale());
             $data[] = [
                 'id' => $id,
                 'name' => "$l ($t)",
@@ -533,7 +530,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**

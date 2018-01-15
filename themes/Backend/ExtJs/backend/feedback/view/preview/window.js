@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Feedback.view.preview.Window', {
             flex: 1,
             autoScroll: true,
             style: 'background-color: #ffffff;',
-            html: Ext.String.format('{s name=window/info_text}{/s}', '{Shopware::VERSION}'),
+            html: Ext.String.format('{s name=window/info_text}{/s}', '{$SHOPWARE_VERSION}'),
             styleHtmlContent: true
         });
 

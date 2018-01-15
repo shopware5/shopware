@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Unit extends Extendable implements \JsonSerializable
+class Unit extends Extendable
 {
     /**
      * Unique identifier of the struct.

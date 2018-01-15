@@ -231,9 +231,9 @@ class Shopware_Components_Translation
      * Reads multiple translations including their fallbacks
      * Merges the two (fallback has less priority) and returns the results
      *
-     * @param int $language
-     * @param int $fallback
-     * @param $type
+     * @param int    $language
+     * @param int    $fallback
+     * @param string $type
      *
      * @return array|mixed
      */
@@ -424,12 +424,14 @@ class Shopware_Components_Translation
                     'txtArtikel' => 'name',
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'descriptionLong',
+                    'txtshippingtime' => 'shippingTime',
                     'txtzusatztxt' => 'additionalText',
                     'txtkeywords' => 'keywords',
                     'txtpackunit' => 'packUnit',
                 ];
             case 'variant':
                 return [
+                    'txtshippingtime' => 'shippingTime',
                     'txtzusatztxt' => 'additionalText',
                     'txtpackunit' => 'packUnit',
                 ];
@@ -520,6 +522,7 @@ class Shopware_Components_Translation
             'keywords' => (isset($data['txtkeywords'])) ? (string) $data['txtkeywords'] : '',
             'description' => (isset($data['txtshortdescription'])) ? (string) $data['txtshortdescription'] : '',
             'description_long' => (isset($data['txtlangbeschreibung'])) ? (string) $data['txtlangbeschreibung'] : '',
+            'shippingtime' => (isset($data['txtshippingtime'])) ? (string) $data['txtshippingtime'] : '',
         ]);
 
         $schemaManager = $this->connection->getSchemaManager();

@@ -840,8 +840,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     private function translateMessage($name, $default = null)
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/newsletter_manager/main');
-        $translation = $namespace->get($name, $default);
 
-        return $translation;
+        return $namespace->get($name, $default);
     }
 }

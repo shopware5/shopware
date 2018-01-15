@@ -123,6 +123,7 @@ return array_replace_recursive([
         'Local' => $this->AppPath('Plugins_Local'),
         'Community' => $this->AppPath('Plugins_Community'),
         'ShopwarePlugins' => $this->DocPath('custom_plugins'),
+        'ProjectPlugins' => $this->DocPath('custom_project'),
     ],
     'template' => [
         'compileCheck' => true,
@@ -134,6 +135,7 @@ return array_replace_recursive([
         'forceCache' => false,
         'cacheDir' => $this->getCacheDir() . '/templates',
         'compileDir' => $this->getCacheDir() . '/templates',
+        'templateDir' => $this->DocPath('themes'),
     ],
     'mail' => [
         'charset' => 'utf-8',
@@ -150,6 +152,43 @@ return array_replace_recursive([
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir() . '/html',
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
+/*
+ * The "ignored_url_parameters" configuration will spare your Shopware system from recaching a page when any
+ * of the parameters listed here is matched. This allows the caching system to be more efficient regarding  performance.
+ *
+ * Uncomment the following parameters to enable recommended suggestions.
+ * NOTE: The following set of parameters will be added as default in Shopware 5.4
+ */
+        'ignored_url_parameters' => [
+/*
+           'pk_campaign',    //Piwik
+           'piwik_campaign',
+           'pk_kwd',
+           'piwik_kwd',
+           'pk_keyword',
+           'pixelId',        //Yahoo
+           'kwid',
+           'kw',
+           'adid',
+           'chl',
+           'dv',
+           'nk',
+           'pa',
+           'camid',
+           'adgid',
+           'utm_term',       //Google
+           'utm_source',
+           'utm_medium',
+           'utm_campaign',
+           'utm_content',
+           'gclid',
+           'cx',
+           'ie',
+           'cof',
+           'siteurl',
+           '_ga',
+*/
+        ],
     ],
     'session' => [
         'cookie_lifetime' => 0,
@@ -203,5 +242,14 @@ return array_replace_recursive([
     'template_security' => [
         'php_modifiers' => include __DIR__ . '/smarty_functions.php',
         'php_functions' => include __DIR__ . '/smarty_functions.php',
+    ],
+    'app' => [
+        'rootDir' => $this->DocPath(),
+        'downloadsDir' => $this->DocPath('files_downloads'),
+        'documentsDir' => $this->DocPath('files_documents'),
+    ],
+    'web' => [
+        'webDir' => $this->DocPath('web'),
+        'cacheDir' => $this->DocPath('web_cache'),
     ],
 ], $customConfig);

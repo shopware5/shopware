@@ -661,6 +661,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             $result['sErrorMessages']
         );
 
+        // Try with valid voucher code, empty basket
         $voucherData = [
             'vouchercode' => 'testOne',
             'description' => 'testOne description',
@@ -670,7 +671,6 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             'ordercode' => uniqid(rand()),
             'modus' => 0,
         ];
-        // Try with valid voucher code, empty basket
         $this->db->insert(
             's_emarketing_vouchers',
             $voucherData
@@ -678,21 +678,28 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('testOne');
+
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
-            str_replace(
-                '{sMinimumCharge}',
-                $voucherData['minimumcharge'],
-                $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureMinimumCharge',
-                    'The minimum charge for this voucher is {sMinimumCharge}'
-                )
-            ),
-            $result['sErrorMessages']
-        );
+        $this->assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
+
+        // Check if a currency switch is reflected in the snippet correctly
+        $currencyDe = Shopware()->Container()->get('Currency');
+        Shopware()->Container()->set('Currency', new \Zend_Currency('GBP', new \Zend_Locale('en_GB')));
+
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $result = $this->module->sAddVoucher('testOne');
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertTrue($result['sErrorFlag']);
+
+        $this->assertContains('Der Mindestumsatz für diesen Gutschein beträgt &pound;10.00', $result['sErrorMessages']);
+
+        Shopware()->Container()->set('Currency', $currencyDe);
 
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
@@ -817,17 +824,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('sErrorFlag', $result);
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
-            str_replace(
-                '{sMinimumCharge}',
-                $voucherData['minimumcharge'],
-                $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureMinimumCharge',
-                    'The minimum charge for this voucher is {sMinimumCharge}'
-                )
-            ),
-            $result['sErrorMessages']
-        );
+        $this->assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
 
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(

@@ -108,7 +108,7 @@ abstract class StoreCommand extends ShopwareCommand
     {
         $version = $input->getOption('shopware-version');
         if (empty($version)) {
-            $version = \Shopware::VERSION;
+            $version = $this->container->getParameter('shopware.release.version');
         }
 
         return $version;

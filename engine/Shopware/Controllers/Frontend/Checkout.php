@@ -27,13 +27,14 @@ use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Models\Customer\Address;
+use Shopware\Components\CSRFGetProtectionAware;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
@@ -66,6 +67,25 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->admin = Shopware()->Modules()->Admin();
         $this->basket = Shopware()->Modules()->Basket();
         $this->session = Shopware()->Session();
+    }
+
+    /**
+     * @return array
+     */
+    public function getCSRFProtectedActions()
+    {
+        return [
+            'ajaxAddArticle',
+            'addArticle',
+            'ajaxAddArticleCart',
+            'ajaxDeleteArticle',
+            'ajaxDeleteArticleCart',
+            'deleteArticle',
+            'addAccessories',
+            'changeQuantity',
+            'addPremium',
+            'setAddress'
+        ];
     }
 
     /**
@@ -277,7 +297,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             ';
 
             $order = Shopware()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId]);
-            if (!empty($order)) {
+
+            if (empty($order)) {
+                if ($this->Request()->isGet()) {
+                    return $this->forward('confirm');
+                }
+            } else {
                 $this->View()->assign($order);
                 $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
@@ -372,6 +397,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
         }
 
+        if ($this->Request()->isGet()) {
+            return $this->forward('confirm');
+        }
+
         $this->saveOrder();
         $this->saveDefaultAddresses();
         $this->resetTemporaryAddresses();
@@ -461,9 +490,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      *
      * @param sAdd = ordernumber
      * @param sQuantity = quantity
+     * @throws LogicException
      */
     public function addArticleAction()
     {
+        if(strtolower($this->Request()->getMethod()) !== 'post'){
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $ordernumber = trim($this->Request()->getParam('sAdd'));
         $quantity = $this->Request()->getParam('sQuantity');
         $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
@@ -1411,6 +1445,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAddArticleCartAction()
     {
+        if(strtolower($this->Request()->getMethod()) !== 'post'){
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
 
@@ -1443,6 +1481,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxDeleteArticleCartAction()
     {
+        if(strtolower($this->Request()->getMethod()) !== 'post'){
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $itemId = $this->Request()->getParam('sDelete');
 
         if ($itemId) {
@@ -1537,6 +1579,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return false;
         }
 
+        if (empty($userData['shippingaddress']['ustid']) &&
+            !empty($userData['billingaddress']['ustid']) &&
+            !empty($userData['additional']['country']['taxfree_ustid'])) {
+            return true;
+        }
+
         return !empty($userData['shippingaddress']['ustid']);
     }
 
@@ -1609,7 +1657,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             try {
                 $quantity = 1;
                 if (!empty($quantities[$key])) {
-                    $quantity = intval($quantities[$key]);
+                    $quantity = (int) $quantities[$key];
                 }
 
                 $this->basket->sAddArticle($accessory, $quantity);
