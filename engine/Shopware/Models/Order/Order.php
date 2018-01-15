@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Order;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -224,6 +225,14 @@ class Order extends ModelEntity
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * Time of the last modification of the order
+     *
+     * @var DateTime
+     * @ORM\Column(name="changeTime", type="datetime", nullable=false)
+     */
+    private $changeTime;
 
     /**
      * Contains the alphanumeric order number. If the
@@ -466,6 +475,22 @@ class Order extends ModelEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getChangeTime()
+    {
+        return $this->changeTime;
+    }
+
+    /**
+     * @param DateTime $changeTime
+     */
+    public function setChangeTime($changeTime)
+    {
+        $this->changeTime = $changeTime;
     }
 
     /**
@@ -1282,5 +1307,14 @@ class Order extends ModelEntity
     public function getDeviceType()
     {
         return $this->deviceType;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateChangeTime()
+    {
+        $this->changeTime = new DateTime();
     }
 }
