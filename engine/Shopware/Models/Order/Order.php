@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Tax\Rule;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -1142,7 +1143,24 @@ class Order extends ModelEntity
 
             // additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
-                $taxValue = $tax->getTax();
+                $ruleApplied = FALSE;
+
+                //check, if any tax rules are matching
+                /** @var Rule $rule */
+                foreach($tax->getRules() as $rule) {
+                    if($rule->getActive() && $rule->getCustomerGroup()->getKey() == $this->getCustomer()->getGroupKey() &&
+                        $rule->getAreaId() == $this->getBilling()->getCountry()->getArea()->getId() &&
+                        (!$rule->getCountryId() || $rule->getCountryId() == $this->getBilling()->getCountry()->getId()) &&
+                        (!$rule->getStateId() || $rule->getStateId() == $this->getBilling()->getState()->getId())) {
+                        $taxValue = $rule->getTax();
+                        $ruleApplied = TRUE;
+                    }
+                }
+
+                //fallback to default tax if no matching tax rules found
+                if(!$ruleApplied) {
+                    $taxValue = $tax->getTax();
+                }
             }
 
             if ($this->net) {
