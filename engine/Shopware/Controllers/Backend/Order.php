@@ -543,10 +543,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $position = $detailRepository->find($id);
         }
 
+        $actualTaxID = ($position->getTax() ? $position->getTax()->getId() : NULL);
+
         $data = $this->Request()->getParams();
         $data['number'] = $order->getNumber();
 
-        $data = $this->getPositionAssociatedData($data);
+        $data = $this->getPositionAssociatedData($data, $actualTaxID);
         // If $data === null, the article was not found
         if ($data === null) {
             $this->View()->assign([
@@ -1588,9 +1590,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      *
      * @param array $data
      *
+     * @param $formerTaxId
      * @return array
+     * @throws Exception
      */
-    private function getPositionAssociatedData($data)
+    private function getPositionAssociatedData($data, $formerTaxId)
     {
         //checks if the status id for the position is passed and search for the assigned status model
         if ($data['statusId'] >= 0) {
@@ -1602,7 +1606,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //checks if the tax id for the position is passed and search for the assigned tax model
         if (!empty($data['taxId'])) {
             $tax = Shopware()->Models()->find(Tax::class, $data['taxId']);
-            if ($tax instanceof \Shopware\Models\Tax\Tax) {
+            if ($data['taxId'] !== $formerTaxId && $tax instanceof \Shopware\Models\Tax\Tax) {
                 $data['tax'] = $tax;
                 $data['taxRate'] = $tax->getTax();
             }
