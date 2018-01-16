@@ -205,7 +205,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->View()->sContentItem = $content;
-        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']) . '?p=' . $this->Request()->getParam('p', 1);
+        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']) . '?p=' . (int) $this->Request()->getParam('p', 1);
     }
 
     /**

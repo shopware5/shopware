@@ -296,12 +296,18 @@
          * Fetches the configured options based on the {@link PluginBase.$el}.
          *
          * @param {Boolean} shouldDeserialize
+         * @param {array} ignoreList
          * @returns {mixed} configuration
          */
-        applyDataAttributes: function (shouldDeserialize) {
+        applyDataAttributes: function (shouldDeserialize, ignoreList) {
             var me = this, attr;
+            ignoreList = ignoreList || [];
 
             $.each(me.opts, function (key) {
+                if (ignoreList.indexOf(key) !== -1) {
+                    return;
+                }
+
                 attr = me.$el.attr('data-' + key);
 
                 if (typeof attr === 'undefined') {
