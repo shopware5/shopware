@@ -47,9 +47,13 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
 
     init: function() {
         var me = this,
-            mask = new Ext.LoadMask(Ext.ComponentQuery.query('viewport')[0], { msg: this.snippets.checkingStoreMessage });
+            mask,
+            viewport = Ext.ComponentQuery.query('viewport');
 
-        mask.show();
+        if (viewport.length > 0) {
+            mask = new Ext.LoadMask(viewport[0], { msg: this.snippets.checkingStoreMessage });
+            mask.show();
+        }
 
         Ext.Ajax.request({
             url: '{url controller=PluginManager action=pingStore}',
@@ -77,7 +81,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                     return;
                 }
 
-                mask.destroy();
+                if (mask) {
+                    mask.destroy();
+                }
                 me.mainWindow.show();
             }
         });
