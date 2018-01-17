@@ -121,7 +121,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      *
      * @return string
      */
-    public function &filterSource($source)
+    public function filterSource($source)
     {
         $source = preg_replace_callback('#<(a|form|iframe|link|img)[^<>]*(href|src|action)="([^"]*)".*>#Umsi', [$this, 'rewriteSrc'], $source);
 
