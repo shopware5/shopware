@@ -815,7 +815,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         $mail->setFrom($this->Request()->getParam('fromMail', ''), $this->Request()->getParam('fromName', ''));
-        $mail->addTo($this->Request()->getParam('to', ''));
+        $addTo = explode(',',$this->Request()->getParam('to', ''));
+        foreach($addTo as $add){
+            $mail->addTo(trim($add));
+        }
 
         Shopware()->Modules()->Order()->sendStatusMail($mail);
 
