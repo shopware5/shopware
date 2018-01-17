@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function preDispatch()
     {
-        if (strtolower($this->Request()->getActionName()) == 'index' && $this->checkStoreApi()) {
+        if (strtolower($this->Request()->getActionName()) === 'index' && $this->checkStoreApi()) {
             $this->getCategoryService()->synchronize();
         }
         parent::preDispatch();
@@ -132,6 +132,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -197,7 +198,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $pluginInformationStructs = $pluginLicenseService->getExpiringLicenses();
                 $pluginInformation = new PluginInformationResultStruct($pluginInformationStructs);
             } catch (\Exception $e) {
-                $this->View()->assign(['succes' => false, 'message' => $e->getMessage()]);
+                $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
                 return;
             }
@@ -213,7 +214,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return;
         }
 
-        $categoryId = $this->Request()->getParam('categoryId', null);
+        $categoryId = $this->Request()->getParam('categoryId');
 
         $filter = $this->Request()->getParam('filter', []);
 
@@ -382,7 +383,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function detailAction()
     {
-        $technicalName = $this->Request()->getParam('technicalName', null);
+        $technicalName = $this->Request()->getParam('technicalName');
 
         $context = new PluginsByTechnicalNameRequest(
             $this->getLocale(),
@@ -759,7 +760,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $customSorting = [];
         foreach ($this->Request()->getParam('sort', []) as $sortData) {
-            if ($sortData['property'] == 'groupingState') {
+            if ($sortData['property'] === 'groupingState') {
                 continue;
             }
             $sortData['property'] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $sortData['property']));
