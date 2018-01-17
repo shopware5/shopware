@@ -80,6 +80,13 @@ class EntityWriter implements EntityWriterInterface
         return $this->decorated->update($definition, $rawData, $writeContext);
     }
 
+    public function delete(string $definition, array $ids, WriteContext $writeContext)
+    {
+        $this->writeAuditLog($definition, $ids, $writeContext, __FUNCTION__);
+
+        return $this->decorated->delete($definition, $ids, $writeContext);
+    }
+
     private function writeAuditLog(string $definition, array $rawData, WriteContext $writeContext, string $action)
     {
         $userId = $this->getUserId($writeContext->getTranslationContext());
@@ -99,6 +106,10 @@ class EntityWriter implements EntityWriterInterface
                 $log['foreignKey'] = $data['id'];
             }
 
+            //invalid uuid provided, skip audit log insert and
+            if (isset($log['foreignKey']) && !Uuid::isValid($data['id'])) {
+                return;
+            }
             $this->decorated->insert(AuditLogDefinition::class, [$log], $writeContext);
         }
     }

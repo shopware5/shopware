@@ -32,11 +32,13 @@ class EventGenerator
         }
         $this->createWrittenEvent($definition);
 
+        $this->createDeletedEvent($definition);
+
         if ($definition->isMappingTable) {
             return;
         }
 
-        $this->createBasicLoadedEvent($definition);
+        $this->createBasicLoadedEvent($definition, $context);
 
         $this->createSearchResultEvent($definition);
 
@@ -45,7 +47,7 @@ class EventGenerator
         $this->createIdSearchResultEvent($definition);
 
         if ($definition->hasDetail()) {
-            $this->generateDetail($definition);
+            $this->generateDetail($definition, $context);
         }
     }
 
@@ -75,8 +77,8 @@ class EventGenerator
     {
         $template = file_get_contents(__DIR__.'/basic_loaded_event.txt');
 
-        $basics = array_filter($definition->associations, function(Association $association) {
-            return $association->inBasic;
+        $basics = array_filter($definition->associations, function(Association $association){
+            return $association->inBasic && !$association->writeOnly;
         });
 
         $nested = $this->buildNestedLoadedEvents($definition, $basics);
@@ -114,6 +116,10 @@ class EventGenerator
         $plural = $definition->domainNameInPlural;
         /** @var Association $association */
         foreach ($basics as $association) {
+            if ($association->writeOnly) {
+                continue;
+            }
+
             $associationClass = $association->referenceTableDomainName;
             $associationPlural = $association->propertyPlural;
 
@@ -155,11 +161,11 @@ class EventGenerator
         return ['uses' => array_unique($uses), 'template' => $template];
     }
 
-    private function generateDetail($definition)
+    private function generateDetail($definition, Context $context)
     {
         $template = file_get_contents(__DIR__.'/detail_loaded_event.txt');
 
-        $nested = $this->buildNestedLoadedEvents($definition, $definition->associations);
+        $nested = $this->buildNestedLoadedEvents($definition, $definition->associations, $context);
 
         $template = str_replace(
             ['#bundle#', '#classUc#', '#table#', '#pluralLc#', '#pluralUc#', '#events#', '#uses#'],
@@ -249,6 +255,25 @@ class EventGenerator
 
         $file = sprintf(
             $this->directory.'/%s/Event/%s/%sAggregationResultLoadedEvent.php',
+            ucfirst($definition->bundle),
+            ucfirst($definition->domainName),
+            ucfirst($definition->domainName)
+        );
+
+        file_put_contents($file, $template);
+    }
+
+    private function createDeletedEvent($definition): void
+    {
+        $template = file_get_contents(__DIR__.'/deleted_event.txt');
+        $template = str_replace(
+            ['#bundle#', '#classUc#', '#table#'],
+            [ucfirst($definition->bundle), ucfirst($definition->domainName), $definition->tableName],
+            $template
+        );
+
+        $file = sprintf(
+            $this->directory.'/%s/Event/%s/%sDeletedEvent.php',
             ucfirst($definition->bundle),
             ucfirst($definition->domainName),
             ucfirst($definition->domainName)

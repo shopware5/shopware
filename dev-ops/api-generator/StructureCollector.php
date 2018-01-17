@@ -148,8 +148,9 @@ class StructureCollector
 
         $foreignKeys = [];
         foreach ($rawForeignKeys as $foreignKey) {
-            $foreignKeys[$foreignKey->getLocalColumns()[0]] = [$foreignKey->getForeignTableName(), $foreignKey->getForeignColumns()[0]];
+            $foreignKeys[$foreignKey->getLocalColumns()[0]] = [$foreignKey->getForeignTableName(), $foreignKey->getForeignColumns()[0], $foreignKey->onDelete()];
         }
+
         $foreignKeys = array_merge($foreignKeys, $context->getForeignKeys($tableDefinition->tableName));
 
         $existing = $context->getAssociationsForTable($tableDefinition->tableName);
@@ -251,11 +252,23 @@ class StructureCollector
                 continue;
             }
 
-            list($referenceTableName, $referenceColumnName) = $foreignKeys[$column->getName()];
+            list($referenceTableName, $referenceColumnName, $cascade) = $foreignKeys[$column->getName()];
 
-            $domain = Util::createPropertyName($tableDefinition->tableName, $column->getName());
-            if ($domain === $tableDefinition->domainName) {
+            if ($column->getName() === 'parent_id') {
                 $domain = 'parent';
+                $association = new OneToManyAssociation(
+                    $tableDefinition->tableName,
+                    $tableDefinition->tableName,
+                    'children',
+                    false,
+                    'id',
+                    $column->getName(),
+                    true,
+                    [],
+                    'CASCADE'
+                );
+                $association->writeOnly = $context->writeOnly($association);
+                $manyToOne[] = $association;
             } else {
                 $domain = Util::createAssociationPropertyName($tableDefinition->tableName, $column->getName());
             }
@@ -267,9 +280,12 @@ class StructureCollector
                 false,
                 $column->getName(),
                 $referenceColumnName,
-                !$column->getNotnull()
+                !$column->getNotnull(),
+                [],
+                null
             );
             $association->inBasic = $context->loadInBasic($association);
+            $association->writeOnly = $context->writeOnly($association);
 
             $manyToOne[] = $association;
         }
@@ -293,7 +309,7 @@ class StructureCollector
         //build inverse side for one to many associations
         //source is now reference and reference is now source
         foreach ($foreignKeys as $sourceColumnName => $foreignKey) {
-            list($referenceTableName, $referenceColumnName) = $foreignKey;
+            list($referenceTableName, $referenceColumnName, $onDelete) = $foreignKey;
 
             if (!isset($definitions[$referenceTableName])) {
                 continue;
@@ -329,9 +345,12 @@ class StructureCollector
                 $property,
                 false,
                 $referenceColumnName,
-                $sourceColumnName
+                $sourceColumnName,
+                false,
+                [],
+                $onDelete
             );
-
+            $association->writeOnly = $context->writeOnly($association);
             $association->inBasic = $context->loadInBasic($association);
 
             $referenceDefinition->associations[] = $association;

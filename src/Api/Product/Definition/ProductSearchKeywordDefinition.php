@@ -14,6 +14,7 @@ use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
 use Shopware\Api\Product\Collection\ProductSearchKeywordBasicCollection;
 use Shopware\Api\Product\Collection\ProductSearchKeywordDetailCollection;
+use Shopware\Api\Product\Event\ProductSearchKeyword\ProductSearchKeywordDeletedEvent;
 use Shopware\Api\Product\Event\ProductSearchKeyword\ProductSearchKeywordWrittenEvent;
 use Shopware\Api\Product\Repository\ProductSearchKeywordRepository;
 use Shopware\Api\Product\Struct\ProductSearchKeywordBasicStruct;
@@ -73,6 +74,11 @@ class ProductSearchKeywordDefinition extends EntityDefinition
     public static function getBasicCollectionClass(): string
     {
         return ProductSearchKeywordBasicCollection::class;
+    }
+
+    public static function getDeletedEventClass(): string
+    {
+        return ProductSearchKeywordDeletedEvent::class;
     }
 
     public static function getWrittenEventClass(): string

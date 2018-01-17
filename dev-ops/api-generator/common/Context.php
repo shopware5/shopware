@@ -15,7 +15,7 @@ class Context
     /**
      * @var array
      */
-    public $prevent;
+    public $writeOnly;
 
     /**
      * @var array
@@ -26,19 +26,26 @@ class Context
      * @var array
      */
     public $htmlFields;
+
     /**
      * @var array
      */
     public $virtualForeignKeys;
 
-    public function __construct(array $associations, array $basicAssociations, array $prevent, array $inject, array $htmlFields = [], array $virtualForeignKeys = [])
+    /**
+     * @var array
+     */
+    public $prevent;
+
+    public function __construct(array $associations, array $basicAssociations, array $writeOnly, array $inject, array $htmlFields = [], array $virtualForeignKeys = [], array $prevent = [])
     {
         $this->associations = $associations;
         $this->basicAssociations = $basicAssociations;
-        $this->prevent = $prevent;
+        $this->writeOnly = $writeOnly;
         $this->inject = $inject;
         $this->htmlFields = $htmlFields;
         $this->virtualForeignKeys = $virtualForeignKeys;
+        $this->prevent = $prevent;
     }
 
     public function getForeignKeys(string $table): array
@@ -79,6 +86,22 @@ class Context
         return $inject['struct'];
     }
 
+    public function writeOnly(Association $association): bool
+    {
+        if (!array_key_exists($association->sourceTable, $this->writeOnly)) {
+            return false;
+        }
+        $prevent = $this->writeOnly[$association->sourceTable];
+
+        if (in_array($association->property, $prevent, true)) {
+            return true;
+        }
+        if ($association instanceof OneToManyAssociation || $association instanceof ManyToManyAssociation) {
+            return in_array($association->propertyPlural, $prevent, true);
+        }
+        return false;
+    }
+
     public function prevent(Association $association): bool
     {
         if (!array_key_exists($association->sourceTable, $this->prevent)) {
@@ -94,6 +117,7 @@ class Context
         }
         return false;
     }
+
 
     public function loadInBasic(Association $association): bool
     {

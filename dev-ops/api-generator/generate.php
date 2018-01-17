@@ -52,10 +52,19 @@ $associations = [
     new ManyToManyAssociation('product_stream', 'product', 'product', 'product_stream_assignment'),
 ];
 
-$prevent = [
-    'shop' => ['snippet', 'templateConfigFormFieldValue', 'productSeoCategory', 'customer', 'order', 'seoUrl',  'mailAttachment', 'configFormFieldValue', 'productSearchKeyword'],
-    'locale' => ['configFormFieldTranslation', 'configFormTranslation'],
-    'customer_address' => ['customers'],
+$writeOnly = [
+    'shop' => [
+        'snippet',
+        'templateConfigFormFieldValue',
+        'productSeoCategory',
+        'customer',
+        'order',
+        'seoUrl',
+        'mailAttachment',
+        'configFormFieldValue',
+        'productSearchKeyword'
+    ],
+
     'customer_group' => [
         'productListingPrices',
         'productPrices',
@@ -93,8 +102,8 @@ $inject = [
 
 $virtualForeignKeys = [
     'customer' => [
-        'default_shipping_address_id' => ['customer_address', 'id'],
-        'default_billing_address_id' => ['customer_address', 'id']
+        'default_shipping_address_id' => ['customer_address', 'id', 'CASCADE'],
+        'default_billing_address_id' => ['customer_address', 'id', 'CASCADE']
     ]
 ];
 
@@ -102,13 +111,18 @@ $htmlFields = [
     'product_translation.description_long'
 ];
 
+$prevent = [
+    'customer_address' => ['customers'],
+    'locale' => ['configFormFieldTranslation', 'configFormTranslation'],
+];
 $context = new Context(
     $associations,
     $inBasic,
-    $prevent,
+    $writeOnly,
     $inject,
     $htmlFields,
-    $virtualForeignKeys
+    $virtualForeignKeys,
+    $prevent
 );
 
 $generator = new ApiGenerator(__DIR__ . '/../../src/Api/');
