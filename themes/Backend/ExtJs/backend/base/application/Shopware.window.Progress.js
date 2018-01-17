@@ -119,7 +119,6 @@ Ext.define('Shopware.window.Progress', {
      */
     processCanceledText: '{s name="progress_window/process_canceled_text"}Process canceled at position [0] of [1]{/s}',
 
-
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
@@ -457,7 +456,7 @@ Ext.define('Shopware.window.Progress', {
              * @param { Object } task - The last task which was executed
              * @param { Boolean } processCanceled - Flag if the process canceled over the cancel button.
              */
-            'process-done'
+            'grid-process-done'
         );
     },
 
@@ -575,7 +574,7 @@ Ext.define('Shopware.window.Progress', {
         if (!me.fireEvent('before-result-field-set-created', me, fieldSet)) {
             return fieldSet;
         }
-        
+
         me.resultGrid = me.createResultGrid();
 
         me.fireEvent('after-result-grid-created', me, me.resultGrid);

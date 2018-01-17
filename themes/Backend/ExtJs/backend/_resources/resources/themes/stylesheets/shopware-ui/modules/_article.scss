@@ -260,6 +260,23 @@
             border-right: 0 none;
             background: #fff;
         }
+
+        .image-variant-info-icon {
+            height: 12px;
+            width: 12px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .image-variant-info-ct {
+            color: $dark-font-color;
+            font-size: 12px;
+        }
+
+        .image-variant-info-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
     }
 
     .#{$prefix}item-bubble-list li {

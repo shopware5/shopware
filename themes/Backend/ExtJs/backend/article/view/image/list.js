@@ -196,13 +196,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         var me = this;
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<tpl if="main===1">',
-                    '<div class="article-thumb-wrap main middle" >',
-                '</tpl>',
-                '<tpl if="main!=1">',
-                    '<div class="article-thumb-wrap middle" >',
-                '</tpl>',
-
+                '<div class="article-thumb-wrap middle" >',
                     // If the type is image, then show the image
                     '<div class="thumb">',
                         '<div class="inner-thumb"><img src="{literal}{thumbnail}{/literal}" /></div>',
@@ -226,7 +220,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
      * @return [object] this.dataView - created Ext.view.View
      */
     createMediaView: function() {
-        var me = this, model;
+        var me = this;
 
         me.dataView = Ext.create('Ext.view.View', {
             itemSelector: '.article-thumb-wrap',

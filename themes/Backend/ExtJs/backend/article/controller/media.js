@@ -71,7 +71,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         { ref: 'previewButton', selector: 'article-detail-window article-image-list button[action=previewImage]' },
         { ref: 'removeButton', selector: 'article-detail-window article-image-list button[action=removeImage]' },
         { ref: 'mediaInfo', selector: 'article-detail-window article-image-info' },
-        { ref: 'mediaDropZone', selector: 'article-detail-window article-image-upload article-image-drop-zone' }
+        { ref: 'mediaDropZone', selector: 'article-detail-window article-image-upload article-image-drop-zone' },
+        { ref: 'mappingWindow', selector: 'article-image-mapping-window' }
     ],
 
     /**
@@ -108,15 +109,19 @@ Ext.define('Shopware.apps.Article.controller.Media', {
                 fileUploaded: me.onFileUploaded
             },
             'article-detail-window article-image-info': {
-                saveImageSettings: me.onSaveImageSettings
+                saveImageSettings: me.onSaveImageSettings,
+                onSettingsFormLoadRecord: me.onSettingsFormLoadRecord
             },
             'article-detail-window article-image-upload': {
                 mediaUpload: me.onMediaUpload
             },
             'article-detail-window': {
-                saveArticle: me.onSaveArticle
+                saveArticle: me.onSaveArticle,
+                assignVariantImage: me.onAssignImageToVariant,
+                gridProcessDone: me.onSaveImageConfigurationDone
             }
         });
+
         me.callParent(arguments);
     },
 
@@ -162,15 +167,71 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param mappingWindow
      */
     onSaveMapping: function(mappingWindow) {
-        var me = this;
+        var me = this,
+            record = mappingWindow.selected;
 
-        // First we have to get the image record of the mapping window.
-        var record = mappingWindow.record;
+        // Multiselect was used
+        if (record instanceof Array) {
+            me.openProgressWindow(record, mappingWindow);
 
-        // Then we create a new media mapping store which used to fire the ajax request in all cases to the same backend controller function
-        var mappingStore = Ext.create('Shopware.apps.Article.store.MediaMapping');
+            return;
+        }
 
-        // Now we set the mapping store of the window into the associated image store.
+        mappingWindow.setLoading(true);
+        me.saveMappingRecord.call(me, record, mappingWindow, function (result, operation, success, message) {
+            mappingWindow.setLoading(false);
+            mappingWindow.destroy();
+
+            if (success) {
+                Shopware.Notification.createGrowlMessage(me.snippets.success.title, me.snippets.success.mapping, me.snippets.growlMessage);
+            } else {
+                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+            }
+        });
+    },
+
+    /**
+     * @param { Ext.data.Model[] } records
+     * @param { Shopware.apps.Article.view.image.Mapping } mappingWindow
+     */
+    openProgressWindow: function (records, mappingWindow) {
+        Ext.create('Shopware.apps.Article.view.image.Progress', {
+            mappingWindow: mappingWindow,
+            configure: function() {
+                return {
+                    tasks: [{
+                        event: 'assign-variant-image',
+                        data: records,
+                        text: '{s name="image/variant_info/progress/progress_text"}Image [0] of [1]{/s}',
+                        totalCount: records.length
+                    }],
+
+                    infoText: '{s name="image/variant_info/progress/description"}<h2>Assign image variants</h2>You can use the <b><i>`Cancel process`</i></b> button the cancel the process. Depending on the amount of the data set, this process might take a while.{/s}'
+                }
+            }
+        }).show();
+    },
+
+    /**
+     * @param { Object } task
+     * @param { Ext.data.Model } record
+     * @param { Function } callback
+     */
+    onAssignImageToVariant: function (task, record, callback) {
+        this.saveMappingRecord(record, this.getMappingWindow(), callback);
+    },
+
+    /**
+     * @param { Ext.data.Model } record
+     * @param { Shopware.apps.Article.view.image.Mapping } mappingWindow
+     * @param { Function } [callback]
+     */
+    saveMappingRecord: function (record, mappingWindow, callback) {
+        var me = this,
+            mappingStore = Ext.create('Shopware.apps.Article.store.MediaMapping'),
+            callback = callback || Ext.emptyFn();
+
+        // We set the mapping store of the window into the associated image store.
         record.getMappingsStore =  mappingWindow.store;
 
         // To be sure the request will be fired, we set the dirty flag of the record
@@ -182,25 +243,28 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         // Now we set the hasConfig flag for the image manually
         record.set('hasConfig', (record.getMappingsStore.getCount() > 0));
 
-        mappingWindow.setLoading(true);
         // At last we call the sync function to send the request "saveMediaMapping"
         mappingStore.sync({
             success: function(result, operation) {
-                mappingWindow.setLoading(false);
-                mappingWindow.destroy();
-                Shopware.Notification.createGrowlMessage(me.snippets.success.title, me.snippets.success.mapping, me.snippets.growlMessage);
+                var variants = me.getMappingFromRecord(record);
+                me.getMediaInfo().variantInfoField.update({
+                    hasItems: variants.length > 0,
+                    items: variants
+                });
+
+                callback(result, operation, true);
             },
             failure: function(result, operation) {
                 var rawData = record.getProxy().getReader().rawData,
                     message = rawData.message;
 
-                mappingWindow.setLoading(false);
                 if (Ext.isString(message) && message.length > 0) {
                     message = me.snippets.failure.mapping + '<br>' +  message;
                 } else {
                     message = me.snippets.failure.mapping + '<br>' + me.snippets.failure.noMoreInformation;
                 }
-                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+
+                callback(result, operation, false, message);
             }
         });
     },
@@ -220,7 +284,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         var me = this,
             record = ruleWindow.record,
             tree = ruleWindow.configuratorTree,
-            nodes = tree.getChecked();
+            nodes = tree.getChecked(),
+            mapping;
 
         if (nodes.length === 0) {
             return false;
@@ -237,12 +302,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
                     allOptions.add(group.getConfiguratorOptions().data.items);
                 }
             }
-        });
-
-        // Create a new mapping model which contains the different configurator options as single rule
-        var mapping = Ext.create('Shopware.apps.Article.model.MediaMapping', {
-            id: null,
-            imageId: record.get('id')
         });
 
         // Now we create a store for the selected options to collect all rules.
@@ -268,8 +327,20 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             rule.getOptionStore = optionStore;
             ruleStore.add(rule);
         });
+
+        // In case of multiselect, we only need the first record
+        if (ruleWindow.multiSelect) {
+            record = record[0];
+        }
+
+        mapping = Ext.create('Shopware.apps.Article.model.MediaMapping', {
+            id: null,
+            imageId: record.get('id')
+        });
+
         mapping.getRulesStore = ruleStore;
         ruleWindow.store.add(mapping);
+
         ruleWindow.destroy();
     },
 
@@ -314,11 +385,13 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param window
      */
     onDisplayNewRuleWindow: function(window) {
-        var me = this;
+        var me = this,
+            record = window.selected;
 
         me.getView('image.NewRule').create({
             store: window.store,
-            record: window.record,
+            record: record,
+            multiSelect: window.hasMultiple,
             configuratorGroupStore: me.subApplication.configuratorGroupStore
         }).show();
     },
@@ -330,18 +403,30 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @return Boolean
      */
     onOpenImageMapping: function() {
-        var me = this, selected = null,
-            mediaList = me.getMediaList();
+        var me = this,
+            selected,
+            mediaList = me.getMediaList(),
+            selModel = mediaList.getSelectionModel();
 
-        if (mediaList.getSelectionModel() &&  mediaList.getSelectionModel().selected && mediaList.getSelectionModel().selected.first()) {
-            selected = mediaList.getSelectionModel().selected.first();
-        }
-
-        if (!selected instanceof Ext.data.Model) {
+        if (!selModel || !selModel.getSelection()) {
             return false;
         }
+
+        // Will be used for multi select
+        selected = selModel.getSelection();
+
+        // Handle single choice
+        if (selModel.getCount() === 1) {
+            if (!selModel.selected instanceof Ext.data.Model) {
+                return false;
+            }
+
+            selected = selModel.selected.first()
+        }
+
         me.getView('image.Mapping').create({
-            record: selected
+            selected: selected,
+            hasMultiple: selModel.getCount() > 1
         }).show();
     },
 
@@ -600,6 +685,59 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         if (info.record) {
             info.attributeForm.saveAttribute(info.record.get('id'));
         }
+    },
+
+    /**
+     * @param { Ext.form.Panel } form
+     * @param { Ext.data.Model } record
+     */
+    onSettingsFormLoadRecord: function (form, record) {
+        var variants = this.getMappingFromRecord(record);
+
+        form.variantInfoField.update({
+            hasItems: variants.length > 0,
+            items: variants
+        });
+    },
+
+    /**
+     * @param { Shopware.window.Progress } progress
+     */
+    onSaveImageConfigurationDone: function (progress) {
+        if (progress.name !== 'image-variants-progress-window') {
+            return;
+        }
+
+        progress.mappingWindow.destroy();
+    },
+
+    /**
+     * Iterates the defined rules and displays the configured configurator options as string.
+     *
+     * @param { Ext.data.Model } record
+     * @returns { Array }
+     */
+    getMappingFromRecord: function (record) {
+        var variants = [];
+
+        record.getMappings().each(function (mapping) {
+            if (!(mapping instanceof Ext.data.Model) ||
+                !(mapping.getRules() instanceof Ext.data.Store) ||
+                mapping.getRules().getCount() < 1) {
+                return;
+            }
+
+            var optionNames = [];
+            mapping.getRules().each(function(item) {
+                if (item instanceof Ext.data.Model && item.getOption() && item.getOption().first()) {
+                    optionNames.push(item.getOption().first().get('name'));
+                }
+            });
+
+            variants.push({ assignedVariants: optionNames.join(' > ') });
+        });
+
+        return variants;
     }
 });
 //{/block}

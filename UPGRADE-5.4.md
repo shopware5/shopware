@@ -9,6 +9,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
 * Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
+* Added multi-select feature when assigning variant configurations to product images
+* Added variant configuration information in the image information panel
 * Added DIC parameters:
     - `shopware.release.version`
         The version of the Shopware installation (e.g. '5.4.0')
