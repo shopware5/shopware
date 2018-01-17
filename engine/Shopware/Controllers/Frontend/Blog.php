@@ -373,7 +373,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function ratingAction()
     {
-        $blogArticleId = intval($this->Request()->blogArticle);
+        $blogArticleId = (int) $this->Request()->getParam('blogArticle');
 
         if (!empty($blogArticleId)) {
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);

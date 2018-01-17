@@ -135,7 +135,7 @@ class PluginConfigSetCommand extends ShopwareCommand
             return true;
         }
         if (preg_match('/^\d+$/', $value)) {
-            return intval($value);
+            return (int) $value;
         }
 
         return $value;
