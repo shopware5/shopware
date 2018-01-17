@@ -326,9 +326,16 @@ class ProductListingVariationLoader
             return $product->getId();
         }, $products);
 
+        $variantIds = array_map(function (ListProduct $product) {
+            return $product->getVariantId();
+        }, $products);
+
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
+        $priceTable->andWhere('defaultPrice.articledetailsID IN (:variants)');
 
         $query = $this->connection->createQueryBuilder();
+        $query->setParameter('variants', $variantIds, Connection::PARAM_INT_ARRAY);
+
         $query->addSelect([
             'prices.articleID',
             'relations.article_id as variant_id',
