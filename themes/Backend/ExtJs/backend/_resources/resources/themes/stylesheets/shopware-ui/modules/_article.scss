@@ -125,8 +125,8 @@
 
             //styling for the selected article image
             .article-thumb-wrap.x-item-selected {
-                @include single-box-shadow(rgba(24, 158, 255, 1), 0, 0, 5px);
-                border-color: #189eff;
+                @include single-box-shadow(rgba(22, 132, 231, 1), 0, 0, 5px);
+                border-color: #1684E7 !important;
             }
 
 
@@ -151,11 +151,6 @@
 
             .article-thumb-wrap.drag-over.middle:before {
                 height: 166px
-            }
-	        //styling for the main image
-            .article-thumb-wrap.main {
-                @include single-box-shadow(rgba(22, 132, 231, 1), 0, 0, 5px);
-                border-color: #1684E7 !important;
             }
 
             .article-thumb-wrap .thumb .mapping-config {

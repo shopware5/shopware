@@ -128,6 +128,10 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
 
         if (me.hasMultiple) {
             me.title += Ext.String.format('{s name="image/variant_info/mapping_window/title"} ([0] images){/s}', me.selected.length);
+            me.mappingGrid.viewConfig = {
+                emptyText: '<div style="font-size:13px; text-align: center; color: #6c818f; width: 420px; margin: 20px auto;">{s name="image/mapping_window/empty_text"}{/s}</div>',
+                deferEmptyText: false
+            };
         }
 
         me.callParent(arguments);
@@ -177,7 +181,8 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
     createGrid: function () {
         var me = this;
 
-        me.mappingGrid = Ext.create('Ext.grid.Panel', {
+        me.mappingGrid = {
+            xtype: 'grid',
             name: 'mapping-grid',
             store: me.store,
             selModel: me.getGridSelModel(),
@@ -190,7 +195,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
                 },
                 me.createActionColumn()
             ]
-        });
+        };
         return me.mappingGrid;
     },
 
@@ -238,7 +243,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
         return {
             iconCls: 'sprite-minus-circle-frame',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.mappingGrid.getStore().remove(record);
+                me.mappingGrid.store.remove(record);
             }
         };
     },
