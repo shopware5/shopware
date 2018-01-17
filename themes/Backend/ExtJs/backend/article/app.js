@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Article', {
         'image.DropZone',
         'image.Mapping',
         'image.NewRule',
+        'image.Progress',
         'variant.List',
         'variant.Configurator',
         'variant.Detail',

@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.subApplication.addEvents('batchStoreLoaded');
@@ -459,8 +459,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                  * applying the scope on callback functions
                  */
                 me.subApplication.fireEvent('ProductModule:storesChanged', me.mainWindow.article);
-
-
             }
         });
     },
