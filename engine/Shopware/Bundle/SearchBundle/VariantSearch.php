@@ -71,12 +71,13 @@ class VariantSearch implements ProductSearchInterface
         $products = $result->getProducts();
         $configurations = $this->configuratorService->getProductsConfigurations($products, $context);
 
-        // todo@all Implement display of filtered options in listing
         $filterGroupIds = array_map(function ($variantCondition) {
             /** @var VariantCondition $variantCondition */
             if ($variantCondition->expandVariants()) {
                 return $variantCondition->getGroupId();
             }
+
+            return null;
         }, $criteria->getConditionsByClass(VariantCondition::class));
 
         if (!empty($filterGroupIds)) {
@@ -85,18 +86,16 @@ class VariantSearch implements ProductSearchInterface
                     continue;
                 }
 
-                $configuration = $configurations[$product->getNumber()];
-
-                $options = [];
+                $groups = [];
                 /** @var Group $group */
-                foreach ($configuration as $group) {
+                foreach ($configurations[$product->getNumber()] as $group) {
                     if (in_array($group->getId(), $filterGroupIds)) {
-                        $options[] = $group->getOptions()[0]->getName();
+                        $groups[] = ['groupName' => $group->getName(), 'optionName' => $group->getOptions()[0]->getName()];
                     }
                 }
 
-                if (!empty($options)) {
-                    $product->addAttribute('swagVariantOptionTag', new Attribute(['value' => implode(', ', $options)]));
+                if (!empty($groups)) {
+                    $product->addAttribute('swagVariantConfiguration', new Attribute(['value' => $groups]));
                 }
             }
         }

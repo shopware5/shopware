@@ -38,12 +38,19 @@
                             <a href="{$sArticle.linkDetails}"
                                class="product--title"
                                title="{$sArticle.articleName|escapeHtml}">
-                                {$sArticle.articleName|truncate:50|escapeHtml} ({$sArticle.ordernumber})
-                                {if $sArticle.attributes.swagVariantOptionTag}
-                                    -
-                                    {$sArticle.attributes.swagVariantOptionTag->get('value')}
-                                {/if}
+                                {$sArticle.articleName|truncate:50|escapeHtml}
                             </a>
+                        {/block}
+
+                        {* Variant description *}
+                        {block name='frontend_listing_box_variant_description'}
+                            <div class="variant--description">
+                                {if $sArticle.attributes.swagVariantConfiguration}
+                                    {foreach $sArticle.attributes.swagVariantConfiguration->get('value') as $group}
+                                        {$group.groupName}: <span class="variant--optionName">{$group.optionName}</span> |
+                                    {/foreach}
+                                {/if}
+                            </div>
                         {/block}
 
                         {* Product description *}
