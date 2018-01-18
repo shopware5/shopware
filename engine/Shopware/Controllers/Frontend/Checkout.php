@@ -26,8 +26,8 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
-use Shopware\Models\Customer\Address;
 use Shopware\Components\CSRFGetProtectionAware;
+use Shopware\Models\Customer\Address;
 
 /**
  * @category  Shopware
@@ -84,7 +84,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             'addAccessories',
             'changeQuantity',
             'addPremium',
-            'setAddress'
+            'setAddress',
         ];
     }
 
@@ -490,11 +490,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      *
      * @param sAdd = ordernumber
      * @param sQuantity = quantity
+     *
      * @throws LogicException
      */
     public function addArticleAction()
     {
-        if(strtolower($this->Request()->getMethod()) !== 'post'){
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
             throw new \LogicException('This action only admits post requests');
         }
 
@@ -1424,12 +1425,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * This action will get redirected from the default addArticleAction
      * when the request was an AJAX request.
      *
-     * The json padding will be set so that the content type will get to
-     * 'text/javascript' so the template can be returned via jsonp
+     * The content type will be set to json
      */
     public function ajaxAddArticleAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        /** @var $jsonPlugin Enlight_Controller_Plugins_Json_Bootstrap */
+        $jsonPlugin = Shopware()->Plugins()->Controller()->Json();
+        $jsonPlugin->setRenderer();
     }
 
     /**
@@ -1445,7 +1447,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxAddArticleCartAction()
     {
-        if(strtolower($this->Request()->getMethod()) !== 'post'){
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
             throw new \LogicException('This action only admits post requests');
         }
 
@@ -1481,7 +1483,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxDeleteArticleCartAction()
     {
-        if(strtolower($this->Request()->getMethod()) !== 'post'){
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
             throw new \LogicException('This action only admits post requests');
         }
 
@@ -1503,8 +1505,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxCartAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
         $view = $this->View();
         $basket = $this->getBasket();
 
@@ -1525,7 +1525,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxAmountAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        $this->Response()->setHeader('Content-Type', 'application/json');
 
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
@@ -1536,12 +1536,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $this->Response()->setBody(
-            json_encode(
-                [
+            json_encode([
                     'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
                     'quantity' => $quantity,
-                ]
-            )
+            ])
         );
     }
 

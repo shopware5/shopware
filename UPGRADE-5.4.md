@@ -43,6 +43,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `ajaxAddArticleCart`
         - `ajaxDeleteArticle`
         - `ajaxDeleteArticleCart`
+        
+* Changed JSONP requests to JSON in the following Frontend controllers:
+    * Controller List
+        - Frontend/AjaxSearch.php
+        - Frontend/Checkout.php
+        - Frontend/Compare.php
+        - Frontend/Note.php
+        - Widgets/Listing.php
 
 ### Removals
 

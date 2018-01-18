@@ -66,7 +66,7 @@
             // Ajax request for adding article to compare list
             $.ajax({
                 url: addArticleUrl,
-                dataType: 'jsonp',
+                dataType: 'html',
                 method: 'POST',
                 success: function (data) {
                     var compareMenu = $(me.opts.compareMenuSelector);

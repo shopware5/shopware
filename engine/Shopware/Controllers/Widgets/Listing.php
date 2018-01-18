@@ -43,6 +43,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         try {
             $ordernumber = $this->Request()->get('ordernumber');
+
             if (!$ordernumber) {
                 throw new \InvalidArgumentException('Argument ordernumber missing');
             }
@@ -60,44 +61,38 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             /** @var $articleModule \sArticles */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($ordernumber, $categoryId, $this->Request());
+
+            $linkRewriter = function ($link) {
+                /** @var $core sCore */
+                $core = Shopware()->Modules()->Core();
+
+                return $core->sRewriteLink($link);
+            };
+
+            if (isset($navigation['previousProduct'])) {
+                $navigation['previousProduct']['href'] = $linkRewriter($navigation['previousProduct']['link']);
+            }
+
+            if (isset($navigation['nextProduct'])) {
+                $navigation['nextProduct']['href'] = $linkRewriter($navigation['nextProduct']['link']);
+            }
+
+            $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);
+            $responseCode = 200;
+            $body = json_encode($navigation, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
         } catch (\InvalidArgumentException $e) {
+            $responseCode = 500;
             $result = ['error' => $e->getMessage()];
             $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-            $this->Response()->setBody($body);
-            $this->Response()->setHeader('Content-type', 'application/json', true);
-            $this->Response()->setHttpResponseCode(500);
-
-            return;
         } catch (\Exception $e) {
+            $responseCode = 500;
             $result = ['exception' => $e];
             $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-            $this->Response()->setBody($body);
-            $this->Response()->setHeader('Content-type', 'application/json', true);
-            $this->Response()->setHttpResponseCode(500);
-
-            return;
         }
 
-        $linkRewriter = function ($link) {
-            /** @var $core sCore */
-            $core = Shopware()->Modules()->Core();
-
-            return $core->sRewriteLink($link);
-        };
-
-        if (isset($navigation['previousProduct'])) {
-            $navigation['previousProduct']['href'] = $linkRewriter($navigation['previousProduct']['link']);
-        }
-
-        if (isset($navigation['nextProduct'])) {
-            $navigation['nextProduct']['href'] = $linkRewriter($navigation['nextProduct']['link']);
-        }
-
-        $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);
-
-        $body = json_encode($navigation, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-        $this->Response()->setBody($body);
         $this->Response()->setHeader('Content-type', 'application/json', true);
+        $this->Response()->setHttpResponseCode($responseCode);
+        $this->Response()->setBody($body);
     }
 
     /**
@@ -231,8 +226,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function ajaxListingAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
