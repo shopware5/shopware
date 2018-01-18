@@ -108,7 +108,7 @@
 
             $.ajax({
                 url: url,
-                dataType: 'jsonp',
+                dataType: 'json',
                 method: 'POST',
                 success: $.proxy(this.responseHandler, this, $target)
             });
@@ -124,9 +124,7 @@
          * @param {object} $target - The associated element
          * @param {String} json - The ajax response as a JSON string
          */
-        responseHandler: function ($target, json) {
-            var response = JSON.parse(json);
-
+        responseHandler: function ($target, response) {
             $.publish('plugin/swAjaxWishlist/onTriggerRequestLoaded', [this, $target, response]);
 
             if (!response.success) {

@@ -436,7 +436,7 @@
 
             $.ajax({
                 url: opts.ajaxCartURL,
-                dataType: 'jsonp',
+                dataType: 'json',
                 success: function (result) {
                     $el.html(result);
                     picturefill();

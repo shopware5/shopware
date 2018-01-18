@@ -128,7 +128,7 @@
 
             $.ajax({
                 data: ajaxData,
-                dataType: 'jsonp',
+                dataType: 'html',
                 method: 'POST',
                 url: opts.addArticleUrl,
                 success: function (result) {

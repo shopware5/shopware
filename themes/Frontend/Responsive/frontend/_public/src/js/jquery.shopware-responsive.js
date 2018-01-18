@@ -64,7 +64,7 @@
         // Detail page tab menus
         .addPlugin('.product--rating-link, .link--publish-comment', 'swScrollAnimate', {
             scrollTarget: '.tab-menu--product'
-        },['s','m','l','xl'])
+        }, ['s', 'm', 'l', 'xl'])
         .addPlugin('a.link--publish-comment', 'swOffcanvasButton', {
             contentSelector: '#tab--product-comment'
         }, ['xs'])
@@ -195,11 +195,9 @@
             $.publish('plugin/swResponsive/onCartRefresh');
 
             $.ajax({
-                'url': ajaxCartRefresh,
-                'dataType': 'jsonp',
-                'success': function (response) {
-                    var cart = JSON.parse(response);
-
+                url: ajaxCartRefresh,
+                dataType: 'json',
+                success: function (cart) {
                     if (!cart.amount || !cart.quantity) {
                         return;
                     }
