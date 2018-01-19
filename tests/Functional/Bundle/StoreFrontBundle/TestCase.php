@@ -289,7 +289,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $customerGroup = $this->helper->createCustomerGroup();
         $shop = $this->helper->getShop($shopId);
 
-        $context =  $this->helper->createContext(
+        $context = $this->helper->createContext(
             $customerGroup,
             $shop,
             [$tax]

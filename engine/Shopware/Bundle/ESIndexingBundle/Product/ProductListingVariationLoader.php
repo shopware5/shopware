@@ -100,7 +100,7 @@ class ProductListingVariationLoader
             $key = $context->getCurrentCustomerGroup()->getKey();
 
             foreach ($products as $product) {
-                if (!isset($configurations[$product->getNumber()])) {
+                if (!isset($configurations[$product->getNumber()]) || !isset($prices[$product->getId()])) {
                     continue;
                 }
 
