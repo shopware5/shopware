@@ -523,7 +523,18 @@ class Variant extends Resource implements BatchInterface
         }
 
         if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
-            $data['purchasePrice'] = floatval(str_replace(',', '.', $data['purchasePrice']));
+            $data['purchasePrice'] = (float) str_replace(',', '.', $data['purchasePrice']);
+        }
+
+        /*
+         * @Deprecated
+         *
+         * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
+         *
+         * If `lastStock` was only defined on the main product, apply it to all it's variants
+         */
+        if (empty($data['lastStock'])) {
+            $data['lastStock'] = $article->getLastStock();
         }
 
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
@@ -838,7 +849,7 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
             }
 
-        //new unit data send? create new unit for this variant
+            //new unit data send? create new unit for this variant
         } elseif (!empty($data['unit'])) {
             $data['unit'] = $this->updateUnitReference($data['unit']);
         }

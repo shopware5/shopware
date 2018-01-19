@@ -31,19 +31,9 @@ class Migrations_Migration1206 extends AbstractMigration
      */
     public function up($modus)
     {
-        $sql = <<<'SQL'
-ALTER TABLE `s_articles_details` ADD `laststock` INT NOT NULL DEFAULT 0 AFTER `stockmin`
-SQL;
-        $this->addSql($sql);
+        $this->addSql('ALTER TABLE `s_articles_details` ADD `laststock` INT(1) NOT NULL DEFAULT 0 AFTER `stockmin`');
+        $this->addSql('ALTER TABLE `s_article_configurator_options` ADD `media_id` int(11) NULL');
 
-        $sql = <<<'SQL'
-UPDATE `s_articles_details` d INNER JOIN `s_articles` a ON a.id=d.articleID SET d.laststock=a.laststock
-SQL;
-        $this->addSql($sql);
-
-        $sql = <<<'SQL'
-ALTER TABLE `s_article_configurator_options` ADD `media_id` int(11) NULL;
-SQL;
-        $this->addSql($sql);
+        $this->addSql('UPDATE `s_articles_details` d INNER JOIN `s_articles` a ON a.`id`=d.`articleID` SET d.`laststock`=a.`laststock`');
     }
 }

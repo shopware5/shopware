@@ -130,7 +130,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               ON article.id = detail.articleID
             WHERE detail.instock > 2
             AND detail.active = 1
-            AND article.laststock = 1
+            AND detail.lastStock = 1
             LIMIT 1'
         );
 
@@ -167,7 +167,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               ON article.id = detail.articleID
             WHERE detail.instock > 5
             AND detail.active = 1
-            AND article.laststock = 1
+            AND detail.lastStock = 1
             AND article.active = 1
             LIMIT 1'
         );
@@ -189,7 +189,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               ON article.id = detail.articleID
             WHERE detail.instock > 5
             AND detail.active = 1
-            AND article.laststock = 1
+            AND detail.lastStock = 1
             AND article.active = 1
             AND article.id != "' . $outStockArticle['articleID'] . '"
             LIMIT 1'
@@ -235,7 +235,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            AND article.laststock = 0
+            AND detail.lastStock = 0
             LIMIT 1'
         );
 
@@ -1820,6 +1820,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'mainDetail' => [
                     'number' => 'swTEST' . uniqid(rand()),
                     'inStock' => 15,
+                    'lastStock' => true,
                     'unitId' => 1,
                     'prices' => [
                         [
@@ -2186,7 +2187,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               FROM s_articles_avoid_customergroups
               WHERE customergroupID = 1
             )
-            AND (article.laststock = 0 OR detail.instock > 0)
+            AND (detail.lastStock = 0 OR detail.instock > 0)
             LIMIT 1'
         );
 
@@ -2227,7 +2228,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               FROM s_articles_avoid_customergroups
               WHERE customergroupID = 1
             )
-            AND (article.laststock = 0 OR detail.instock > 0)
+            AND (detail.lastStock = 0 OR detail.instock > 0)
             LIMIT 1'
         );
         $idOne = $this->module->sAddArticle($randomArticle['ordernumber'], 1);
@@ -2248,7 +2249,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
-        // Get random article with stock controll and add it to the basket
+        // Get random article with stock control and add it to the basket
         $randomArticleOne = $this->db->fetchRow(
             'SELECT detail.* FROM s_articles_details detail
             INNER JOIN s_articles article
@@ -2256,7 +2257,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             LEFT JOIN s_articles_avoid_customergroups avoid
               ON avoid.articleID = article.id
             WHERE detail.active = 1
-            AND laststock = 1
+            AND detail.lastStock = 1
             AND instock > 3
             AND avoid.articleID IS NULL
             AND article.id NOT IN (
@@ -2297,9 +2298,9 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            AND laststock = 0
-            AND instock > 20
-            AND instock < 70
+            AND detail.laststock = 0
+            AND detail.instock > 20
+            AND detail.instock < 70
             AND article.id NOT IN (
               SELECT articleID
               FROM s_articles_avoid_customergroups
