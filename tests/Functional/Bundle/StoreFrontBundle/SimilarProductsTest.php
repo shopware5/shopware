@@ -140,8 +140,12 @@ class SimilarProductsTest extends TestCase
 
         $helper = new Helper();
         $converter = new Converter();
+        $convertedShop = $converter->convertShop($helper->getShop(1));
+        if (!$convertedShop->getCurrency()) {
+            $convertedShop->setCurrency($context->getCurrency());
+        }
         $helper->refreshSearchIndexes(
-            $converter->convertShop($helper->getShop(1))
+            $convertedShop
         );
 
         $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
