@@ -102,7 +102,9 @@ Ext.define('Shopware.apps.Config.controller.Form', {
 
         'priceGroup.Discount',
 
-        'variantFilter.ExpandGroupsGrid'
+        'variantFilter.ExpandGroupsGrid',
+        'variantFilter.DynamicVariantReader',
+        'variantFilter.ExpandGroupsHiddenField'
     ],
 
     stores:[

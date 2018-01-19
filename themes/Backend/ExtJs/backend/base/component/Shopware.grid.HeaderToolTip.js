@@ -106,8 +106,8 @@ Ext.define('Shopware.grid.HeaderToolTip', {
      * @return void
      */
     onAfterRender: function() {
-        var me = this;
-            headerCt = me.client.headerCt;
+        var me = this,
+            headerCt = me.client.headerCt,
             grid = me.client;
 
         if (me.showIcons) {
