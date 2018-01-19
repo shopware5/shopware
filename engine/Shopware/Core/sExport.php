@@ -1314,7 +1314,7 @@ class sExport
             SELECT
                 MIN(d.instock>=b.quantity) as instock,
                 MIN(d.instock>=(b.quantity+d.stockmin)) as stockmin,
-                MIN(a.laststock) as laststock,
+                MIN(d.laststock) as laststock,
                 SUM(d.weight*b.quantity) as weight,
                 SUM(IF(a.id,b.quantity,0)) as count_article,
                 MAX(b.shippingfree) as shippingfree,

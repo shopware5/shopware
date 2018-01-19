@@ -143,11 +143,16 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
             fieldLabel: me.snippets.nameField
         });
 
+        me.mediaField = Ext.create('Shopware.form.field.Media', {
+            name: 'mediaId',
+            fieldLabel: 'Filter image'
+        });
+
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'anchor',
             bodyPadding: 20,
             autoScroll: true,
-            items: [ nameField ],
+            items: [ nameField, me.mediaField ],
             plugins: [{
                 ptype: 'translation',
                 translationType: 'configuratoroption'

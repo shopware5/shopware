@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 
 /**
  * @category  Shopware
@@ -114,7 +113,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
         $products = [];
 
         foreach ($data as $row) {
@@ -170,7 +168,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $handler = $this->getFacetHandler($facet);
 
             if ($criteria->generatePartialFacets() && !$handler instanceof PartialFacetHandlerInterface) {
-                throw new \Exception(sprintf("New filter mode activated, handler class %s doesn't support this mode", get_class($handler)));
+                throw new \RuntimeException(sprintf("New filter mode activated, handler class %s doesn't support this mode", get_class($handler)));
             }
 
             if ($handler instanceof PartialFacetHandlerInterface) {

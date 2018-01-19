@@ -606,6 +606,8 @@ class ListProduct extends BaseProduct
     }
 
     /**
+     * Refers to the ability of a product to be "on sale", even if it's out of stock
+     *
      * @return bool
      */
     public function isCloseouts()

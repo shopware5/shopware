@@ -178,26 +178,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                try {
-                    return new Backlog(self::EVENT_VARIANT_DELETED, ['number' => $entity->getArticle()->getMainDetail()->getNumber()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_VARIANT_DELETED, ['number' => $entity->getNumber()]);
             case $entity instanceof PriceModel:
-                try {
-                    return new Backlog(self::EVENT_PRICE_DELETED, ['number' => $entity->getDetail()->getArticle()->getMainDetail()->getNumber()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_PRICE_DELETED, ['number' => $entity->getDetail()->getNumber()]);
             case $entity instanceof VoteModel:
-                try {
-                    return new Backlog(self::EVENT_VOTE_DELETED, ['articleId' => $entity->getArticle()->getId()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_VOTE_DELETED, ['articleId' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -222,26 +207,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                try {
-                    return new Backlog(self::EVENT_VARIANT_INSERTED, ['number' => $entity->getArticle()->getMainDetail()->getNumber()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_VARIANT_INSERTED, ['number' => $entity->getNumber()]);
             case $entity instanceof PriceModel:
-                try {
-                    return new Backlog(self::EVENT_PRICE_INSERTED, ['number' => $entity->getDetail()->getArticle()->getMainDetail()->getNumber()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_PRICE_INSERTED, ['number' => $entity->getDetail()->getNumber()]);
             case $entity instanceof VoteModel:
-                try {
-                    return new Backlog(self::EVENT_VOTE_INSERTED, ['articleId' => $entity->getArticle()->getId()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_VOTE_INSERTED, ['articleId' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:
@@ -271,26 +241,11 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof ArticleModel:
                 return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
-                try {
-                    return new Backlog(self::EVENT_VARIANT_UPDATED, ['number' => $entity->getArticle()->getMainDetail()->getNumber()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_VARIANT_UPDATED, ['number' => $entity->getNumber()]);
             case $entity instanceof PriceModel:
-                try {
-                    return new Backlog(self::EVENT_PRICE_UPDATED, ['number' => $entity->getDetail()->getArticle()->getMainDetail()->getNumber()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_PRICE_UPDATED, ['number' => $entity->getDetail()->getNumber()]);
             case $entity instanceof VoteModel:
-                try {
-                    return new Backlog(self::EVENT_VOTE_UPDATED, ['articleId' => $entity->getArticle()->getId()]);
-                } catch (EntityNotFoundException $e) {
-                    //catch delete chain - parents already deleted
-                    return null;
-                }
+                return new Backlog(self::EVENT_VOTE_UPDATED, ['articleId' => $entity->getArticle()->getId()]);
             case $entity instanceof SupplierModel:
                 return new Backlog(self::EVENT_SUPPLIER_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof UnitModel:

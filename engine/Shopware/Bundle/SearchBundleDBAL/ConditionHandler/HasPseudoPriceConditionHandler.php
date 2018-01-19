@@ -26,8 +26,9 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,16 +40,18 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
 {
     /**
-     * @var ListingPriceTable
+     * @var ListingPriceSwitcher
      */
-    private $listingPriceTable;
+    private $listingPriceSwitcher;
 
     /**
-     * @param ListingPriceTable $listingPriceTable
+     * @var Criteria
      */
-    public function __construct(ListingPriceTable $listingPriceTable)
+    private $criteria;
+
+    public function __construct(ListingPriceSwitcher $listingPriceSwitcher)
     {
-        $this->listingPriceTable = $listingPriceTable;
+        $this->listingPriceSwitcher = $listingPriceSwitcher;
     }
 
     /**
@@ -67,14 +70,7 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (!$query->hasState(PriceConditionHandler::LISTING_PRICE_JOINED)) {
-            $table = $this->listingPriceTable->get($context);
-            $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');
-            foreach ($table->getParameters() as $key => $value) {
-                $query->setParameter($key, $value);
-            }
-            $query->addState(PriceConditionHandler::LISTING_PRICE_JOINED);
-        }
+        $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
 
         $query->andWhere('listing_price.pseudoprice > 0');
     }

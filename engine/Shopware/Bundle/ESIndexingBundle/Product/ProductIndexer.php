@@ -83,8 +83,6 @@ class ProductIndexer implements DataIndexerInterface
     /**
      * @param ShopIndex $index
      * @param string[]  $numbers
-     *
-     * @return \string[]
      */
     public function indexProducts(ShopIndex $index, $numbers)
     {

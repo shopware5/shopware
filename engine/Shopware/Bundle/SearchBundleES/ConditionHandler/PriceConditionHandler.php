@@ -26,26 +26,23 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
+use Shopware\Bundle\SearchBundleES\PriceFieldMapper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceConditionHandler implements PartialConditionHandlerInterface
 {
     /**
-     * @var FieldMappingInterface
+     * @var PriceFieldMapper
      */
-    private $fieldMapping;
+    private $mapper;
 
-    /**
-     * @param FieldMappingInterface $fieldMapping
-     */
-    public function __construct(FieldMappingInterface $fieldMapping)
+    public function __construct(PriceFieldMapper $mapper)
     {
-        $this->fieldMapping = $fieldMapping;
+        $this->mapper = $mapper;
     }
 
     /**
@@ -66,7 +63,7 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addFilter(
-            $this->createQuery($criteriaPart, $context)
+            $this->createQuery($criteria, $criteriaPart, $context)
         );
     }
 
@@ -80,17 +77,18 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addPostFilter(
-            $this->createQuery($criteriaPart, $context)
+            $this->createQuery($criteria, $criteriaPart, $context)
         );
     }
 
     /**
+     * @param Criteria $criteria
      * @param CriteriaPartInterface $criteriaPart
-     * @param ShopContextInterface  $context
+     * @param ShopContextInterface $context
      *
      * @return RangeQuery
      */
-    private function createQuery(CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
+    private function createQuery(Criteria $criteria, CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
     {
         $range = [];
 
@@ -102,6 +100,6 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
             $range['lte'] = $criteriaPart->getMaxPrice();
         }
 
-        return new RangeQuery($this->fieldMapping->getPriceField($context), $range);
+        return new RangeQuery($this->mapper->getPriceField($criteria, $context), $range);
     }
 }

@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -65,6 +66,9 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      * @param ConditionHandlerInterface[] $conditionHandlers
      * @param SortingHandlerInterface[]   $sortingHandlers
      * @param Container                   $container
+     *
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
      */
     public function __construct(
         Connection $connection,
@@ -138,26 +142,42 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function createQuery(Criteria $criteria, ShopContextInterface $context)
     {
         $query = $this->createQueryBuilder();
 
-        $query->from('s_articles', 'product')
-            ->innerJoin(
+        $this->prepareHandlers($criteria);
+
+        $query->from('s_articles', 'product');
+
+        if ($criteria->hasConditionOfClass(VariantCondition::class)) {
+            $query->innerJoin(
+                'product',
+                's_articles_details',
+                'variant',
+                'variant.articleID = product.id
+                 AND variant.active = 1
+                 AND product.active = 1'
+            );
+        } else {
+            $query->innerJoin(
                 'product',
                 's_articles_details',
                 'variant',
                 'variant.id = product.main_detail_id
                  AND variant.active = 1
                  AND product.active = 1'
-            )
-            ->innerJoin(
-                'variant',
-                's_articles_attributes',
-                'productAttribute',
-                'productAttribute.articledetailsID = variant.id'
             );
+        }
+        $query->innerJoin(
+            'variant',
+            's_articles_attributes',
+            'productAttribute',
+            'productAttribute.articledetailsID = variant.id'
+        );
 
         $this->addConditions($criteria, $query, $context);
 
@@ -176,6 +196,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      * @param Criteria             $criteria
      * @param QueryBuilder         $query
      * @param ShopContextInterface $context
+     *
+     * @throws \Exception
      */
     private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
@@ -238,6 +260,9 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     *
      * @return SortingHandlerInterface[]
      */
     private function registerSortingHandlers()
@@ -254,6 +279,9 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
+     * @throws \RuntimeException
+     * @throws \Enlight_Event_Exception
+     *
      * @return ConditionHandlerInterface[]
      */
     private function registerConditionHandlers()
@@ -272,6 +300,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * @param ArrayCollection $objects
      * @param string          $class
+     *
+     * @throws \RuntimeException
      */
     private function assertCollectionIsInstanceOf(ArrayCollection $objects, $class)
     {
@@ -284,6 +314,23 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
                         $class
                     )
                 );
+            }
+        }
+    }
+
+    /**
+     * @param Criteria $criteria
+     */
+    private function prepareHandlers($criteria)
+    {
+        $handlers = array_merge(
+            $this->conditionHandlers,
+            $this->sortingHandlers
+        );
+
+        foreach ($handlers as $handler) {
+            if ($handler instanceof CriteriaAwareInterface) {
+                $handler->setCriteria($criteria);
             }
         }
     }

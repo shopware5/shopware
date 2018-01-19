@@ -22,12 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
-use Shopware\Components\Routing\RouterInterface;
 
 /**
  * Shopware Listing Widgets
@@ -215,6 +216,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         $result = $this->fetchCategoryListing();
+
         $this->setSearchResultResponse($result);
     }
 
@@ -502,6 +504,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
+     * @param Criteria            $criteria
      * @param ProductSearchResult $result
      *
      * @return string
@@ -554,8 +557,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     * @param null|int            $categoryId
+     * @param Criteria             $criteria
+     * @param ProductSearchResult  $result
+     * @param ShopContextInterface $context
+     * @param null|int             $categoryId
      *
      * @return array
      */
@@ -563,8 +568,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         /** @var LegacyStructConverter $converter */
         $converter = $this->get('legacy_struct_converter');
-        /** @var RouterInterface $router */
-        $router = $this->get('router');
 
         $articles = $converter->convertListProductStructList($result->getProducts());
 
@@ -572,24 +575,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return $articles;
         }
 
-        $urls = array_map(function ($article) use ($categoryId) {
-            if ($categoryId !== null) {
-                return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
-            }
-
-            return $article['linkDetails'];
-        }, $articles);
-
-        $rewrite = $router->generateList($urls);
-
-        foreach ($articles as $key => &$article) {
-            if (!array_key_exists($key, $rewrite)) {
-                continue;
-            }
-            $article['linkDetails'] = $rewrite[$key];
-        }
-
-        return $articles;
+        return $this->get('shopware_storefront.listing_link_rewrite_service')->rewriteLinks(
+            $result->getCriteria(),
+            $articles,
+            $result->getContext(),
+            $categoryId
+        );
     }
 
     private function loadThemeConfig()

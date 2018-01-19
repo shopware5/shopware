@@ -2881,6 +2881,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function saveArticle($data, $article)
     {
         $data = $this->prepareAssociatedData($data, $article);
+
         $article->fromArray($data);
 
         Shopware()->Models()->persist($article);
@@ -3300,6 +3301,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->getArrayResult();
         }
 
+        $detailData[0]['laststock'] = (int) $detailData[0]['laststock'];
+
         return $detailData[0];
     }
 
@@ -3599,6 +3602,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $data['mainDetail'] = $data['mainDetail'][0];
         $data['mainDetail']['active'] = $data['active'];
+        $data['mainDetail']['lastStock'] = (int) ($data['lastStock'] >= 0 ? $data['lastStock'] : 0);
+
         if (!empty($data['mainDetail']['unitId'])) {
             $data['mainDetail']['unit'] = Shopware()->Models()->find('Shopware\Models\Article\Unit', $data['mainDetail']['unitId']);
         } else {

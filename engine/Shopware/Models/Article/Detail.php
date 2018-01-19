@@ -191,6 +191,13 @@ class Detail extends ModelEntity
     private $stockMin = null;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="laststock", type="boolean", nullable=false)
+     */
+    private $lastStock = null;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
@@ -482,6 +489,30 @@ class Detail extends ModelEntity
     public function getStockMin()
     {
         return $this->stockMin;
+    }
+
+    /**
+     * Set lastStock
+     *
+     * @param int $lastStock
+     *
+     * @return Detail
+     */
+    public function setLastStock($lastStock)
+    {
+        $this->lastStock = $lastStock;
+
+        return $this;
+    }
+
+    /**
+     * Get lastStock
+     *
+     * @return int
+     */
+    public function getLastStock()
+    {
+        return $this->lastStock;
     }
 
     /**

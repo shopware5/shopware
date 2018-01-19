@@ -134,6 +134,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             deliveryTime: '{s name=detail/settings/delivery_time}Delivery time (days){/s}',
             stock: '{s name=detail/settings/stock}Stock{/s}',
             minStock: '{s name=detail/settings/min_stock}Minimum storage inventory{/s}',
+            inStock: '{s name=detail/settings/on_sale_field}Disable when no stock{/s}',
+            inStockBox: '{s name=detail/settings/on_sale_box}Do not display if stock <= 0{/s}',
             releaseDate: '{s name=detail/settings/release_date}Release date{/s}',
             ean: '{s name=detail/settings/ean}EAN{/s}',
             width: '{s name=detail/settings/width}Width{/s}',
@@ -540,7 +542,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
                 boxLabel: me.snippets.settings.shippingFree.box,
                 inputValue: true,
                 uncheckedValue:false
-            } , {
+            }, {
+                xtype: 'checkboxfield',
+                name: 'lastStock',
+                fieldLabel: me.snippets.settings.inStock,
+                boxLabel: me.snippets.settings.inStockBox,
+                inputValue: true,
+                uncheckedValue:false
+            }, {
                 xtype: 'textfield',
                 name: 'ean',
                 fieldLabel: me.snippets.settings.ean

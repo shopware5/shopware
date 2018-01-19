@@ -156,6 +156,7 @@ class ProductMapping implements MappingInterface
                 'unit' => $this->getUnitMapping(),
 
                 'attributes' => $this->getAttributeMapping(),
+                'configuration' => $this->getVariantOptionsMapping($shop),
             ],
         ];
     }
@@ -337,6 +338,29 @@ class ProductMapping implements MappingInterface
             'properties' => [
                 'core' => [
                     'properties' => $properties,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param Shop $shop
+     *
+     * @return array
+     */
+    private function getVariantOptionsMapping(Shop $shop)
+    {
+        return [
+            'properties' => [
+                'id' => ['type' => 'long'],
+                'name' => $this->fieldMapping->getLanguageField($shop),
+                'description' => $this->fieldMapping->getLanguageField($shop),
+                'options' => [
+                    'properties' => [
+                        'id' => ['type' => 'long'],
+                        'name' => $this->fieldMapping->getLanguageField($shop),
+                        'description' => $this->fieldMapping->getLanguageField($shop),
+                    ],
                 ],
             ],
         ];

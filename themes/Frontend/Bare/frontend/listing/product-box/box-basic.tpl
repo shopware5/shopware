@@ -42,6 +42,17 @@
                             </a>
                         {/block}
 
+                        {* Variant description *}
+                        {block name='frontend_listing_box_variant_description'}
+                            <div class="variant--description">
+                                {if $sArticle.attributes.swagVariantConfiguration}
+                                    {foreach $sArticle.attributes.swagVariantConfiguration->get('value') as $group}
+                                        {$group.groupName}: <span class="variant--optionName">{$group.optionName}</span> |
+                                    {/foreach}
+                                {/if}
+                            </div>
+                        {/block}
+
                         {* Product description *}
                         {block name='frontend_listing_box_article_description'}
                             <div class="product--description">

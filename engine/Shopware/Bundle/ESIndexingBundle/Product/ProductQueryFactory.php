@@ -26,6 +26,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 
 /**
  * Class ProductQueryFactory
@@ -36,13 +37,16 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
      * @var Connection
      */
     private $connection;
+    private $variantHelper;
 
     /**
-     * @param Connection $connection
+     * @param Connection    $connection
+     * @param VariantHelper $variantHelper
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, VariantHelper $variantHelper)
     {
         $this->connection = $connection;
+        $this->variantHelper = $variantHelper;
     }
 
     /**
@@ -205,10 +209,8 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
             ->select(['variant.id', 'variant.ordernumber'])
             ->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
-            ->andWhere('variant.kind = :kind')
             ->andWhere('variant.id > :lastId')
             ->setParameter(':lastId', 0)
-            ->setParameter(':kind', 1)
             ->orderBy('variant.id');
 
         if ($limit !== null) {

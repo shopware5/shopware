@@ -188,10 +188,10 @@ class Helper
      * Creates a simple product which contains all required
      * data for an quick product creation.
      *
-     * @param $number
-     * @param Tax   $tax
-     * @param Group $customerGroup
-     * @param float $priceOffset
+     * @param string $number
+     * @param Tax    $tax
+     * @param Group  $customerGroup
+     * @param float  $priceOffset
      *
      * @return array
      */
@@ -255,7 +255,7 @@ class Helper
 
         foreach ($this->createdManufacturers as $manufacturerId) {
             try {
-                $manufacturer = $this->entityManager->find('Shopware\Models\Article\Supplier', $manufacturerId);
+                $manufacturer = $this->entityManager->find(\Shopware\Models\Article\Supplier::class, $manufacturerId);
                 if (!$manufacturer) {
                     continue;
                 }
@@ -267,7 +267,7 @@ class Helper
         }
 
         foreach ($this->createdConfiguratorGroups as $groupId) {
-            $group = $this->entityManager->find('Shopware\Models\Article\Configurator\Group', $groupId);
+            $group = $this->entityManager->find(\Shopware\Models\Article\Configurator\Group::class, $groupId);
             if (!$group) {
                 continue;
             }
@@ -277,7 +277,7 @@ class Helper
     }
 
     /**
-     * @param $number
+     * @param int $number
      */
     public function removeArticle($number)
     {
@@ -290,7 +290,7 @@ class Helper
             return;
         }
 
-        $article = $this->entityManager->find('Shopware\Models\Article\Article', $articleId);
+        $article = $this->entityManager->find(\Shopware\Models\Article\Article::class, $articleId);
 
         if ($article) {
             $this->entityManager->remove($article);
@@ -308,7 +308,7 @@ class Helper
         }
 
         foreach ($detailIds as $id) {
-            $detail = $this->entityManager->find('Shopware\Models\Article\Detail', $id);
+            $detail = $this->entityManager->find(\Shopware\Models\Article\Detail::class, $id);
             if ($detail) {
                 $this->entityManager->remove($detail);
                 $this->entityManager->flush();
@@ -445,7 +445,7 @@ class Helper
         $priceGroup = new Models\Price\Group();
         $priceGroup->setName('TEST-GROUP');
 
-        $repo = $this->entityManager->getRepository('Shopware\Models\Customer\Group');
+        $repo = $this->entityManager->getRepository(\Shopware\Models\Customer\Group::class);
         $collection = [];
         foreach ($discounts as $data) {
             $discount = new Models\Price\Discount();
@@ -741,6 +741,7 @@ class Helper
                 'supplierNumber' => 'kn12lk3nkl213',
                 'active' => 1,
                 'inStock' => 222,
+                'lastStock' => true,
                 'stockMin' => 51,
                 'weight' => '2.000',
                 'width' => '23.000',

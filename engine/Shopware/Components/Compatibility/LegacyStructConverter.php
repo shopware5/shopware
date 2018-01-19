@@ -1162,6 +1162,7 @@ class LegacyStructConverter
             'tax' => $product->getTax()->getTax(),
             'instock' => $product->getStock(),
             'isAvailable' => $product->isAvailable(),
+            'hasAvailableVariant' => $product->hasAvailableVariant(),
             'weight' => $product->getWeight(),
             'shippingtime' => $product->getShippingTime(),
             'pricegroupActive' => false,
