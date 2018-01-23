@@ -536,16 +536,16 @@ Ext.define('Shopware.window.Progress', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             text: me.cancelButtonText,
-            handler: function() {
-                me.cancelProcess = true;
-            }
+            handler: Ext.bind(me.onCancelProgress, me)
         });
 
         me.closeButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             text: me.closeButtonText,
             disabled: true,
-            handler: function() { me.destroy() }
+            handler: function() {
+                me.destroy();
+            }
         });
 
         items.push('->');
@@ -897,6 +897,10 @@ Ext.define('Shopware.window.Progress', {
         }
 
         return params.join('<br>');
+    },
+
+    onCancelProgress: function () {
+        this.cancelProcess = true;
     }
 
 });

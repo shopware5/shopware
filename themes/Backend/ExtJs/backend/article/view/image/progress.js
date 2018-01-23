@@ -118,9 +118,27 @@ Ext.define('Shopware.apps.Article.view.image.Progress', {
     createToolbarItems: function () {
         var items = this.callParent(arguments);
 
+        this.closeButton.setVisible(false);
+
+        this.registerCustomButtonHandler(this.closeButton);
+        this.registerCustomButtonHandler(this.cancelButton);
+
         items.push(this.createStartButton());
 
         return items;
+    },
+
+    /**
+     * @Override
+     */
+    onCancelProgress: function () {
+        this.cancelProcess = true;
+        this.startProgressButton.destroy();
+
+        if (!this.allowStart) {
+            this.allowStart = true;
+            this.sequentialProcess(undefined, this.getConfig('tasks'));
+        }
     },
 
     /**
@@ -129,7 +147,7 @@ Ext.define('Shopware.apps.Article.view.image.Progress', {
     createStartButton: function () {
         var me = this;
 
-        return Ext.create('Ext.button.Button', {
+        me.startProgressButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             text: '{s name="image/variant_info/progress/save_button/text"}Save configurations{/s}',
             handler: function () {
@@ -138,6 +156,21 @@ Ext.define('Shopware.apps.Article.view.image.Progress', {
 
                 this.destroy();
             }
+        });
+
+        return me.startProgressButton;
+    },
+
+    /**
+     * @param { Ext.button.Button } btn
+     */
+    registerCustomButtonHandler: function (btn) {
+        btn.on('disable', function (btn) {
+            btn.setVisible(false);
+        });
+
+        btn.on('enable', function (btn) {
+            btn.setVisible(true);
         });
     }
 });

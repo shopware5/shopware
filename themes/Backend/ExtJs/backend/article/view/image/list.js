@@ -85,6 +85,8 @@ Ext.define('Shopware.apps.Article.view.image.List', {
      */
     hasActiveAttributes: false,
 
+    layout: 'fit',
+
     /**
      * Initializes the component and sets the neccessary
      * toolbars and items.
@@ -99,15 +101,23 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         me.title = me.snippets.title;
         me.tbar = me.createActionToolbar();
         me.dropZone = Ext.create('Shopware.apps.Article.view.image.DropZone', {
-            anchor: '100%',
             padding: 20,
-            dropZoneConfig: { hideOnLegacy: true, focusable: false }
+            dropZoneConfig: { hideOnLegacy: true, focusable: false },
+            height: 100,
+            style: {
+                borderBottom: '1px solid',
+                borderColor: '#a4b5c0'
+            }
         });
 
         me.items = [{
             xtype: 'container',
             style: 'background: #fff',
             autoScroll: true,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
             items: [
                 me.dropZone,
                 me.createMediaView()
@@ -229,7 +239,9 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             multiSelect: true,
             padding: '10 10 20',
             store: me.mediaStore,
-            tpl: me.createMediaViewTemplate()
+            flex: 1,
+            tpl: me.createMediaViewTemplate(),
+            plugins: [ Ext.create('Ext.ux.DataView.DragSelector', {}) ]
         });
 
         me.dataView.getSelectionModel().on('select', function (dataViewModel, media) {
