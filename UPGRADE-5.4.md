@@ -103,3 +103,4 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * New, alternative DIC service:
         - `shopware.release`
             A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above 
+* Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
