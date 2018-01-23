@@ -2,6 +2,18 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.7
+
+[View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)
+
+### Changes
+* Changed input validation to fix non persistent XSS vulnerability in the frontend
+* Changed timeout for store API requests
+
+### Deprecations
+
+* Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
+
 ## 5.3.6
 
 [View all changes from v5.3.5...v5.3.6](https://github.com/shopware/shopware/compare/v5.3.5...v5.3.6)
