@@ -237,12 +237,12 @@ class sBasket
      */
     public function sGetAmountRestrictedArticles($articles, $supplier)
     {
-        if (!is_array($articles) && empty($supplier)) {
+        if (empty($articles) && empty($supplier)) {
             return $this->sGetAmountArticles();
         }
 
         $extraConditions = [];
-        if (is_array($articles)) {
+        if (!empty($articles)) {
             $extraConditions[] = $this->db->quoteInto('ordernumber IN (?) ', $articles);
         }
         if (!empty($supplier)) {
