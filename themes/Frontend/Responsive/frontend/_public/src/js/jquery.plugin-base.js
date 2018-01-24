@@ -308,7 +308,7 @@
                     return;
                 }
 
-                attr = me.$el.attr('data-' + key);
+                attr = me.$el.data(key);
 
                 if (typeof attr === 'undefined') {
                     return true;
