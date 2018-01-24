@@ -248,7 +248,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->from('s_articles_details', 'availableVariant')
             ->where('availableVariant.articleID = product.id')
             ->andWhere('availableVariant.active = 1')
-            ->andWhere('(availableVariant.laststock * availableVariant.instock) >= (availableVariant.laststock >= availableVariant.minpurchase)');
+            ->andWhere('(availableVariant.laststock * availableVariant.instock) >= (availableVariant.laststock * availableVariant.minpurchase)');
 
         return $query;
     }
