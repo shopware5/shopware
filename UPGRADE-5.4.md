@@ -23,6 +23,24 @@ This changelog references changes done in Shopware 5.4 patch versions.
     - `shopware.release`
         A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
 
+* Added several paths to the DIC:
+	- `shopware.plugin_directories.projectplugins` 
+		Path to project specific plugins, see [Composer project](https://github.com/shopware/composer-project)
+	- `shopware.template.templatedir`
+		Path to the themes folder
+	- `shopware.app.rootdir`
+		Path to the root of your project
+	- `shopware.app.downloadsdir`
+		Path to the downloads folder
+	- `shopware.app.documentsdir`
+		Path to the generated documents folder
+	- `shopware.web.webdir`
+		Path to the web folder
+	- `shopware.web.cachedir`
+		Path to the web-cache folder 
+	
+	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
+
 ### Changes
 
 * Updated mPDF to v6.1.4 and included it via composer
