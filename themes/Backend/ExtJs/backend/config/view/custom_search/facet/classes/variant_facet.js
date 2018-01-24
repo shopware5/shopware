@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/translation}
+//{namespace name=backend/config/view/variant_filter}
 
 //{block name="backend/config/view/custom_search/facet/classes/variant"}
 
@@ -30,8 +30,6 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.VariantFacet',
     initComponent: function() {
         var me = this;
         me.callParent(arguments);
-
-        console.log(me);
     },
 
     getClass: function () {
@@ -39,29 +37,26 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.VariantFacet',
     },
 
     createItems: function () {
-        var me = this;
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        var descriptionCt = Ext.create('Ext.container.Container', {
+                html: '{s name="variant_facet/info_text"}{/s}',
+                cls: Ext.baseCSSPrefix + 'variant-facet-info'
+            }),
+            expandGroupIdsField = Ext.create('Shopware.apps.Config.view.variantFilter.ExpandGroupsHiddenField', {
+                name: 'expandGroupIds',
+                translatable: true,
+                // Prevent background on base body element
+                baseBodyCls: Ext.baseCSSPrefix + 'form-item-body-hidden',
+                insertGlobeIcon: Ext.emptyFn
+            }),
+            groupsGrid = Ext.create('Shopware.apps.Config.view.variantFilter.ExpandGroupsGrid', {
+                name: 'groupIds',
+                translatable: true
+            });
 
         return [
-            {
-                xtype: 'variant-filter-expand-group-grid',
-                name: 'groupIds',
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-                labelWidth: 150,
-                translatable: true,
-                fieldLabel: '{s name="available_groups"}{/s}'
-            },
-
-            {
-                xtype: 'variant-filter-expand-group-grid',
-                name: 'expandGroupIds',
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Configurator\\Group"),
-                labelWidth: 150,
-                translatable: true,
-                fieldLabel: '{s name="expand_groups"}{/s}'
-            }
+            descriptionCt,
+            groupsGrid,
+            expandGroupIdsField
         ];
     }
 });

@@ -64,9 +64,10 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Facet', {
             values = { },
             data = { };
 
-        Ext.each(me.formPanel.items.items, function(field) {
+        me.formPanel.getForm().getFields().each(function(field) {
             values[field.getName()] = field.getValue();
         });
+
         data[me.handler.getClass()] = values;
 
         return Ext.JSON.encode(data);
