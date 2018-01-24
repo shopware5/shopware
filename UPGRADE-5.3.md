@@ -2,11 +2,20 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.8
+
+[View all changes from v5.3.7...v5.3.8](https://github.com/shopware/shopware/compare/v5.3.7...v5.3.8)
+
+### Removals
+
+* Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
+
 ## 5.3.7
 
 [View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)
 
 ### Changes
+
 * Changed input validation to fix non persistent XSS vulnerability in the frontend
 * Changed timeout for store API requests
 
