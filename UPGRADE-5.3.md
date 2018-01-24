@@ -10,6 +10,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * Added new column `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
 
+### Changes
+
+* Changed loading of the themes/_private folder to be always executed
+
 ### Removals
 
 * Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
