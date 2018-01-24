@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 [View all changes from v5.3.7...v5.3.8](https://github.com/shopware/shopware/compare/v5.3.7...v5.3.8)
 
+### Additions 
+
+* Added new column `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
+
 ### Removals
 
 * Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
@@ -54,7 +58,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new API endpoint /users which allows to manage the backend users. For more information, look [here](https://developers.shopware.com/developers-guide/rest-api/api-resource-user/) 
 * Added generatePassword method to engine/Shopware/Components/Random.php which allows to generate cryptographically secure passwords
 * Added UserName and UserEmail validator in /engine/Shopware/Components/Auth
-* Added hidden `sordernumber` form fields to inquiry forms 
+* Added hidden `sordernumber` form fields to inquiry forms
 
 ### Changes
 
