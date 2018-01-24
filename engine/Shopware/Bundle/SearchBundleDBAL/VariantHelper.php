@@ -272,6 +272,9 @@ class VariantHelper implements VariantHelperInterface
         $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID AND variant.active = 1');
         $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
 
+        $this->joinAvailableVariant($query);
+        $query->andWhere('prices.articledetailsID = availableVariant.id');
+
         $this->listingPriceHelper->joinPriceGroup($query);
 
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
@@ -311,5 +314,24 @@ class VariantHelper implements VariantHelperInterface
     private function hasDifferentCustomerGroups(ShopContextInterface $context)
     {
         return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
+     */
+    private function joinAvailableVariant(\Doctrine\DBAL\Query\QueryBuilder $query)
+    {
+        $stockCondition = '';
+        if ($this->config->get('hideNoInstock')) {
+            $stockCondition = 'AND (availableVariant.laststock * availableVariant.instock) >= (availableVariant.laststock * availableVariant.minpurchase)';
+        }
+
+        $query->innerJoin(
+            'product',
+            's_articles_details',
+            'availableVariant',
+            'availableVariant.articleID = product.id
+             AND availableVariant.active = 1 ' . $stockCondition
+        );
     }
 }
