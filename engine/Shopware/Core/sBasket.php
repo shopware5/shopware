@@ -1325,10 +1325,10 @@ class sBasket
      */
     public function sCountNotes()
     {
-        $responseCookies = $this->front->Response()->getCookies();
+        $responseUniqueId = $this->getUniqueFromResponse();
 
-        if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
-            $uniqueId = $responseCookies['sUniqueID']['value'];
+        if (!empty($responseUniqueId)) {
+            $uniqueId = $responseUniqueId;
         } else {
             $uniqueId = $this->front->Request()->getCookie('sUniqueID');
         }
@@ -2936,5 +2936,19 @@ class sBasket
         }
 
         return $newQuantity;
+    }
+
+    /**
+     * @return string
+     */
+    private function getUniqueFromResponse()
+    {
+        foreach ($this->front->Response()->getCookies() as $cookie) {
+            if ($cookie['name'] === 'sUniqueID') {
+                return $cookie['value'];
+            }
+        }
+
+        return '';
     }
 }
