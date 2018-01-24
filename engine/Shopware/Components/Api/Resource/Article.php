@@ -1963,17 +1963,21 @@ class Article extends Resource implements BatchInterface
             $shop
         );
 
-        $data['links'] = $this->translateAssociation(
-            $data['links'],
-            $shop,
-            'link'
-        );
+        if (isset($data['links'])) {
+            $data['links'] = $this->translateAssociation(
+                $data['links'],
+                $shop,
+                'link'
+            );
+        }
 
-        $data['downloads'] = $this->translateAssociation(
-            $data['downloads'],
-            $shop,
-            'download'
-        );
+        if (isset($data['downloads'])) {
+            $data['downloads'] = $this->translateAssociation(
+                $data['downloads'],
+                $shop,
+                'download'
+            );
+        }
 
         $data['supplier'] = $this->translateSupplier($data['supplier'], $shop);
 

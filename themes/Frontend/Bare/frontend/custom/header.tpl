@@ -9,3 +9,5 @@
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $sCustomPage.meta_description}{$sCustomPage.meta_description|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_meta_description_og"}{if $sCustomPage.meta_description}{$sCustomPage.meta_description|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_meta_description_twitter"}{if $sCustomPage.meta_description}{$sCustomPage.meta_description|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}

@@ -607,12 +607,12 @@ class CategoryDenormalization
      */
     public function limit($sql, $count, $offset = 0)
     {
-        $count = intval($count);
+        $count = (int) $count;
         if ($count <= 0) {
             throw new \Exception("LIMIT argument count=$count is not valid");
         }
 
-        $offset = intval($offset);
+        $offset = (int) $offset;
         if ($offset < 0) {
             throw new \Exception("LIMIT argument offset=$offset is not valid");
         }

@@ -44,8 +44,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
 
     snippets : {
         columns : {
-            mail: '{s name=columns/mailAdress}Mail adress{/s}',
-            senderName: "{s name=columns/senderName}Sender\'s name{/s}",
+            mail: '{s name=columns/mailAddress}Mail address{/s}',
+            senderName: '{s name=columns/senderName}Sender\'s name{/s}',
             actions: '{s name=columns/actions}Actions{/s}'
         }
     },
@@ -58,31 +58,31 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
     initComponent: function() {
         var me = this;
 
-    me.selModel = me.getGridSelModel();
-    me.columns = me.getColumns();
-    me.tbar = me.getToolbar();
-    me.bbar = me.getPagingbar();
+        me.selModel = me.getGridSelModel();
+        me.columns = me.getColumns();
+        me.tbar = me.getToolbar();
+        me.bbar = me.getPagingbar();
 
-    // register events
-    me.addEvents(
-        /**
-         * Fired when the user clicks the "delete" action button or the "deleteSelected" button
-        */
-        'deleteSender',
+        // register events
+        me.addEvents(
+            /**
+             * Fired when the user clicks the "delete" action button or the "deleteSelected" button
+            */
+            'deleteSender',
 
-        /**
-         *  Fired when the user clicks the "edit" action button
-         */
-        'editSender',
+            /**
+             *  Fired when the user clicks the "edit" action button
+             */
+            'editSender',
 
-        /**
-         * Fired when the user clicks the "create new sender" button in the toolbar
-         */
-        'createNewSender'
-    );
+            /**
+             * Fired when the user clicks the "create new sender" button in the toolbar
+             */
+            'createNewSender'
+        );
 
-    me.callParent(arguments);
-},
+        me.callParent(arguments);
+    },
 
     /**
      * Return the selection model for this grid.
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
             listeners:{
                 // Unlocks the delete button if the user has checked at least one checkbox
                 selectionchange:function (sm, selections) {
-                    me.deleteSenderButton.setDisabled(selections.length == 0);
+                    me.deleteSenderButton.setDisabled(selections.length === 0);
                 }
             }
         });
