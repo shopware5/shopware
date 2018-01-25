@@ -138,20 +138,6 @@ class sOrder
     /**
      * Custom attributes
      *
-     * @var string
-     *
-     * @deprecated since 5.2, remove in 5.3. Use orderAttributes instead
-     */
-    public $o_attr_1;
-    public $o_attr_2;
-    public $o_attr_3;
-    public $o_attr_4;
-    public $o_attr_5;
-    public $o_attr_6;
-
-    /**
-     * Custom attributes
-     *
      * @var array
      */
     public $orderAttributes = [];
@@ -377,8 +363,8 @@ class sOrder
 
         if ($this->isTaxFree(
             $this->sSYSTEM->sUSERGROUPDATA['tax'],
-            $this->sSYSTEM->sUSERGROUPDATA['id'])
-        ) {
+            $this->sSYSTEM->sUSERGROUPDATA['id']
+        )) {
             $net = '1';
         } else {
             $net = '0';
@@ -452,17 +438,7 @@ class sOrder
             throw new Enlight_Exception('##sOrder-sTemporaryOrder-#01: No rows affected or no order id saved', 0);
         }
 
-        // Create order attributes
-        $attributeData = [
-            'attribute1' => $this->o_attr_1,
-            'attribute2' => $this->o_attr_2,
-            'attribute3' => $this->o_attr_3,
-            'attribute4' => $this->o_attr_4,
-            'attribute5' => $this->o_attr_5,
-            'attribute6' => $this->o_attr_6,
-        ];
-        $attributeData = array_merge($attributeData, $this->orderAttributes);
-        $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
+        $this->attributePersister->persist($this->orderAttributes, 's_order_attributes', $orderID);
 
         $position = 0;
         foreach ($this->sBasketData['content'] as $basketRow) {
@@ -635,27 +611,15 @@ class sOrder
             //Payment method code failure
         }
 
-        $attributeData = [
-            'attribute1' => $this->o_attr_1,
-            'attribute2' => $this->o_attr_2,
-            'attribute3' => $this->o_attr_3,
-            'attribute4' => $this->o_attr_4,
-            'attribute5' => $this->o_attr_5,
-            'attribute6' => $this->o_attr_6,
-        ];
-
-        $attributeData = array_merge($attributeData, $this->orderAttributes);
-
         $attributeData = $this->eventManager->filter(
             'Shopware_Modules_Order_SaveOrder_FilterAttributes',
-            $attributeData,
+            $this->orderAttributes,
             [
                 'subject' => $this,
                 'orderID' => $orderID,
                 'orderParams' => $orderParams,
             ]
         );
-        
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id']);
@@ -689,7 +653,8 @@ class sOrder
                 VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s)
             ';
 
-            $sql = sprintf($preparedQuery,
+            $sql = sprintf(
+                $preparedQuery,
                 $orderID,
                 $this->db->quote((string) $orderNumber),
                 $basketRow['articleID'],
@@ -886,9 +851,8 @@ class sOrder
 
         // Support for individual payment means with custom-tables
         if ($variables['additional']['payment']['table']) {
-            $paymentTable = $this->db->fetchRow("
-                  SELECT * FROM {$variables['additional']['payment']['table']}
-                  WHERE userID=?",
+            $paymentTable = $this->db->fetchRow(
+                "SELECT * FROM {$variables['additional']['payment']['table']} WHERE userID=?",
                 [$variables['additional']['user']['id']]
             );
             $context['sPaymentTable'] = $paymentTable ?: [];
@@ -903,7 +867,7 @@ class sOrder
         if ($variables['sBookingID']) {
             $context['sBookingID'] = $variables['sBookingID'];
         }
-        
+
         $context = $this->eventManager->filter(
             'Shopware_Modules_Order_SendMail_FilterContext',
             $context,
@@ -1819,8 +1783,8 @@ EOT;
      */
     private function refreshOrderedVariant($orderNumber, $quantity)
     {
-        $this->db->executeUpdate('
-            UPDATE s_articles_details
+        $this->db->executeUpdate(
+            'UPDATE s_articles_details
             SET sales = sales + :quantity,
                 instock = instock - :quantity
             WHERE ordernumber = :number',
