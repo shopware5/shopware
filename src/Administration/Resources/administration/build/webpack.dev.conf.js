@@ -30,8 +30,6 @@ try {
     Object.keys(plugins).forEach(function (pluginName) {
         baseWebpackConfig.entry[pluginName] = path.join('../../../../', plugins[pluginName]);
     });
-
-    console.log(baseWebpackConfig.entry);
 } catch(e) {}
 
 baseWebpackConfig.entry.app = appEntry;
