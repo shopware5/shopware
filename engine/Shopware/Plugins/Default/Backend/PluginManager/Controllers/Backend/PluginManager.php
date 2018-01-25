@@ -215,7 +215,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return;
         }
 
-        $categoryId = $this->Request()->getParam('categoryId', null);
+        $categoryId = $this->Request()->getParam('categoryId');
 
         $filter = $this->Request()->getParam('filter', []);
 
@@ -384,7 +384,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function detailAction()
     {
-        $technicalName = $this->Request()->getParam('technicalName', null);
+        $technicalName = $this->Request()->getParam('technicalName');
 
         $context = new PluginsByTechnicalNameRequest(
             $this->getLocale(),

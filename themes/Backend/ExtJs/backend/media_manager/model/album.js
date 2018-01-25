@@ -38,6 +38,7 @@ Ext.define('Shopware.apps.MediaManager.model.Album', {
         'id',
         'text',
         'position',
+        'garbageCollectable',
         'mediaCount',
         'parentId',
         'createThumbnails',

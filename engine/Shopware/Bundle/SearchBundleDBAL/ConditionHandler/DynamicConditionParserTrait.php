@@ -102,8 +102,8 @@ trait DynamicConditionParserTrait
             );
         }
 
-        //Identify each field placeholder value with the table alias and the field name
-        $boundParamName = sprintf(':%s_%s', $tableAlias, $field);
+        //Identify each field placeholder value with table alias and a hash of condition properties
+        $boundParamName = sprintf(':%s_%s', $tableAlias, md5($field . $operator . json_encode($value)));
         $field = sprintf('%s.%s', $tableAlias, $field);
 
         switch (true) {

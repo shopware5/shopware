@@ -22,35 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-return [
-    'db' => [
-        'username' => '__DB_USER__',
-        'password' => '__DB_PASSWORD__',
-        'dbname' => '__DB_NAME__',
-        'host' => '__DB_HOST__',
-        'port' => '__DB_PORT__',
-    ],
+namespace Shopware\Bundle\SearchBundle\Sorting;
 
-    'csrfProtection' => [
-        'frontend' => false,
-        'backend' => false,
-    ],
-
-    'store' => [
-        'apiEndpoint' => 'http://172.16.0.61:8000',
-    ],
-
-    'front' => [
-        'showException' => true,
-    ],
-
-    'phpsettings' => [
-        'display_errors' => 1,
-    ],
-
-    'mail' => [
-        'type' => 'smtp',
-        'host' => 'smtp',
-        'port' => 1025,
-    ],
-];
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class ProductStockSorting extends Sorting
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'product_stock';
+    }
+}

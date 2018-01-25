@@ -204,19 +204,19 @@ class SepaPaymentMethod extends GenericPaymentMethod
         }
 
         $teststring = substr($teststring, 4)
-            . strval(ord($teststring[0]) - 55)
-            . strval(ord($teststring[1]) - 55)
+            . (string) (ord($teststring[0]) - 55)
+            . (string) (ord($teststring[1]) - 55)
             . substr($teststring, 2, 2);
 
         $teststring = preg_replace_callback('/[A-Za-z]/', function ($letter) {
-            return intval(ord(strtolower($letter[0])) - 87);
+            return (int) (ord(strtolower($letter[0])) - 87);
         }, $teststring);
 
         $rest = 0;
         $strlen = strlen($teststring);
         for ($pos = 0; $pos < $strlen; $pos += 7) {
-            $part = strval($rest) . substr($teststring, $pos, 7);
-            $rest = intval($part) % 97;
+            $part = (string) $rest . substr($teststring, $pos, 7);
+            $rest = (int) $part % 97;
         }
 
         if ($rest != 1) {

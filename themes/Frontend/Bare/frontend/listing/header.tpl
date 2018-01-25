@@ -62,7 +62,7 @@
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
-    {elseif !{config name=seoIndexPaginationLinks} || !$showListing}
+    {elseif (!{config name=seoIndexPaginationLinks} || !$showListing) && !$metaRobots|strpos:'noindex' === false}
         <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}" />
     {/if}
 {/block}

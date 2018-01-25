@@ -236,7 +236,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             allowBlank: false,
             required: true,
             enableKeyEvents: true,
-            checkChangeBuffer: 700,
             vtype: 'remote',
             validationUrl: null,
             validationRequestParams: {
@@ -249,7 +248,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                 afterrender: function(field) {
                     window.setTimeout(function() {
                         field.validationUrl = '{url action="validateEmail"}';
-                    }, 500);
+                    }, 750);
                 }
             }
         });

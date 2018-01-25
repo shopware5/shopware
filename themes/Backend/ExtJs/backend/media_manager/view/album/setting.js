@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     height: 700,
     layout: 'fit',
     autoShow: true,
+    footerButton: true,
 
     /**
      * Holder property which holds of the album settings.
@@ -59,6 +60,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             save: '{s name="settings/save"}Save settings{/s}',
             albumName: '{s name="settings/albumName"}Album name{/s}',
             myAlbum: '{s name="settings/myAlbum"}My album{/s}',
+            garbageCollectable: '{s name="settings/garbageCollectable"}Auto cleanup{/s}',
+            garbageCollectableLabel: '{s name="settings/garbageCollectableLabel"}Allow unused images in this album to be moved to trash{/s}',
+            garbageCollectableHelp: '{s name="settings/garbageCollectableHelp"}If active, the command line task <i>sw:media:cleanup</i> looks for unused images in this album and moves them to the trash{/s}',
             thumbnails: '{s name="settings/thumbails"}Thumbnails{/s}',
             createThumbnails: '{s name="settings/createThumbnails"}Create thumbnails for this album{/s}',
             createThumb: '{s name="settings/createThumb"}Create thumbnail{/s}',
@@ -136,6 +140,16 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             name: 'text'
         });
 
+        // Allow garbage collection of unused images in this album
+        me.garbageCollectable = Ext.create('Ext.form.field.Checkbox', {
+            name: 'garbageCollectable',
+            fieldLabel: me.snippets.settings.garbageCollectable,
+            inputValue: true,
+            uncheckedValue: false,
+            boxLabel: me.snippets.settings.garbageCollectableLabel,
+            helpText: me.snippets.settings.garbageCollectableHelp
+        });
+
         // Create thumbnails for this album
         me.createThumbsField = Ext.create('Ext.form.field.Checkbox', {
             name: 'createThumbnails',
@@ -170,6 +184,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             },
             items: [
                 me.albumNameField,
+                me.garbageCollectable,
                 me.createThumbsField,
                 me.iconSelectionField,
                 me.thumbnailSelectionField

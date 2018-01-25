@@ -78,8 +78,8 @@
             var me = this,
                 opts;
 
-            // Override options with data attributes.
-            me.applyDataAttributes();
+            // Override options with data attributes. Exclude ajaxCartURL
+            me.applyDataAttributes(false, ['ajaxCartURL']);
 
             opts = me.opts;
 

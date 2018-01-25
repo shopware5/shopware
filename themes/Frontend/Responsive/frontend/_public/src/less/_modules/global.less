@@ -193,7 +193,10 @@ blockquote {
 @media screen and(min-width: @tabletViewportWidth) {
     .content-main {
         .box-shadow(0 0 4px 1px @border-color);
-        .unitize(min-height, 750);
+
+        &:not(.is--small) {
+            .unitize(min-height, 750);
+        }
     }
 
     .content-main--inner {
@@ -206,7 +209,10 @@ blockquote {
     .content-main {
         .unitize(margin-top, 20);
         .unitize(margin-bottom, 45);
-        .unitize(min-height, 700);
+
+        &:not(.is--small) {
+            .unitize(min-height, 700);
+        }
     }
 
     .content-main--inner {

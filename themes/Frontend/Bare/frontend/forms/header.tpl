@@ -12,3 +12,5 @@
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $sSupport.metaDescription}{$sSupport.metaDescription|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_meta_description_og"}{if $sSupport.metaDescription}{$sSupport.metaDescription|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_meta_description_twitter"}{if $sSupport.metaDescription}{$sSupport.metaDescription|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}

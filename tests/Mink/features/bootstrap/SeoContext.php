@@ -68,8 +68,8 @@ class SeoContext extends SubContext
     }
 
     /**
-     * @Then /^I should robots meta "(?P<metaOne>[^"]*)"$/
-     * @Then /^I should robots metas "(?P<metaOne>[^"]*)" and "(?P<metaTwo>[^"]*)"$/
+     * @Then /^I should see robots meta "(?P<metaOne>[^"]*)"$/
+     * @Then /^I should see robots metas "(?P<metaOne>[^"]*)" and "(?P<metaTwo>[^"]*)"$/
      */
     public function iShouldRobotsMeta($metaOne, $metaTwo = null)
     {

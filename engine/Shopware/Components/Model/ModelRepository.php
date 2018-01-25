@@ -54,7 +54,7 @@ class ModelRepository extends EntityRepository
     public function createQueryBuilder($alias, $indexBy = null)
     {
         /** @var QueryBuilder $builder */
-        $builder = parent::createQueryBuilder($alias, $indexBy = null);
+        $builder = parent::createQueryBuilder($alias, $indexBy);
         $builder->setAlias($alias);
 
         return $builder;

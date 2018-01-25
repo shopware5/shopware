@@ -587,8 +587,8 @@ class sOrder
             'userID' => $this->sUserData['additional']['user']['id'],
             'invoice_amount' => $this->sBasketData['AmountWithTaxNumeric'],
             'invoice_amount_net' => $this->sBasketData['AmountNetNumeric'],
-            'invoice_shipping' => floatval($this->sShippingcostsNumeric),
-            'invoice_shipping_net' => floatval($this->sShippingcostsNumericNet),
+            'invoice_shipping' => (float) $this->sShippingcostsNumeric,
+            'invoice_shipping_net' => (float) $this->sShippingcostsNumericNet,
             'ordertime' => new Zend_Db_Expr('NOW()'),
             'status' => 0,
             'cleared' => 17,
@@ -903,6 +903,12 @@ class sOrder
         if ($variables['sBookingID']) {
             $context['sBookingID'] = $variables['sBookingID'];
         }
+        
+        $context = $this->eventManager->filter(
+            'Shopware_Modules_Order_SendMail_FilterContext',
+            $context,
+            ['subject' => $this]
+        );
 
         $mail = null;
         if ($event = $this->eventManager->notifyUntil(
