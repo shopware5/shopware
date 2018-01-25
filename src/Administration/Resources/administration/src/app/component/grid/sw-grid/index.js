@@ -2,7 +2,6 @@ import './sw-grid.less';
 import template from './sw-grid.html.twig';
 
 Shopware.Component.register('sw-grid', {
-
     data() {
         return {
             columns: []
@@ -30,6 +29,12 @@ Shopware.Component.register('sw-grid', {
             default: true
         },
 
+        selectIndeterminateEnabled: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+
         sidebar: {
             type: Boolean,
             required: false,
@@ -50,6 +55,10 @@ Shopware.Component.register('sw-grid', {
     },
 
     computed: {
+        SELECT_STATE_UNCHECKED: () => 0,
+        SELECT_STATE_CHECKED: () => 1,
+        SELECT_STATE_INDETERMINATE: () => 2,
+
         columnFlex() {
             let flex = (this.selectable === true) ? '50px ' : '';
 
@@ -68,6 +77,20 @@ Shopware.Component.register('sw-grid', {
             return {
                 'grid-template-columns': flex.trim()
             };
+        },
+
+        selectionStatus() {
+            const selectedCount = this.items.filter(item => item.selected).length;
+            const isAnyEnabled = selectedCount > 0;
+            const isAllEnabled = isAnyEnabled && selectedCount === this.items.length;
+
+            if (!isAllEnabled && isAnyEnabled && this.selectIndeterminateEnabled) {
+                return this.SELECT_STATE_INDETERMINATE;
+            }
+            if (isAllEnabled) {
+                return this.SELECT_STATE_CHECKED;
+            }
+            return this.SELECT_STATE_UNCHECKED;
         }
     },
 
@@ -82,7 +105,9 @@ Shopware.Component.register('sw-grid', {
     },
 
     methods: {
-        selectAll(selected) {
+        toggleSelection() {
+            const selected = this.selectionStatus !== this.SELECT_STATE_CHECKED;
+
             this.items.forEach((item) => {
                 this.$set(item, 'selected', selected);
             });

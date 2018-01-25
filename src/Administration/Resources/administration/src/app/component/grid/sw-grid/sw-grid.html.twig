@@ -5,7 +5,9 @@
 
             <slot name="header" v-if="header">
                 <div class="sw-grid--header" :style="columnFlex">
-                    <div class="sw-grid--cell" v-if="selectable"><input type="checkbox" v-on:change="selectAll($event.target.checked)"></div>
+                    <div class="sw-grid--cell" v-if="selectable">
+                        <input type="checkbox" v-on:change="toggleSelection()" :indeterminate.prop="selectionStatus == SELECT_STATE_INDETERMINATE" :checked="selectionStatus == SELECT_STATE_CHECKED">
+                    </div>
                     <div class="sw-grid--cell" v-for="column in columns">{{ column.label }}</div>
                     <div class="sw-grid--cell" v-if="actions.length > 0">Actions</div>
                 </div>
