@@ -502,9 +502,6 @@
                     }
                     action = 'ajax_validate_email';
                     break;
-                case 'register_billing_ustid':
-                    action = 'ajax_validate_billing';
-                    break;
                 case 'register_personal_password':
                 case 'register_personal_passwordConfirmation':
                     if (hasPasswordConfirmation && (me.$personalPassword.val().length <= 0 || me.$personalPasswordConfirmation.val().length <= 0)) {
