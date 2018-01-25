@@ -53,6 +53,7 @@ class Settings extends ModelEntity
      * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
      */
     protected $album;
+
     /**
      * Unique identifier
      *

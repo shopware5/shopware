@@ -28,10 +28,10 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/plugin_manager/translation}
-//{block name="backend/plugin_manager/controller/main"}
+// {namespace name=backend/plugin_manager/translation}
+// {block name="backend/plugin_manager/controller/main"}
 Ext.define('Shopware.apps.PluginManager.controller.Main', {
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
     mainWindow: null,
 
     refs: [
@@ -41,16 +41,27 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         { ref: 'listingWindow', selector: 'plugin-manager-listing-window' }
     ],
 
+    snippets: {
+        'checkingStoreMessage': '{s name="checking_sbp"}Checking Shopware API...{/s}'
+    },
+
     init: function() {
-        var me = this;
+        var me = this,
+            mask,
+            viewport = Ext.ComponentQuery.query('viewport');
+
+        if (viewport.length > 0) {
+            mask = new Ext.LoadMask(viewport[0], { msg: this.snippets.checkingStoreMessage });
+            mask.show();
+        }
 
         Ext.Ajax.request({
             url: '{url controller=PluginManager action=pingStore}',
             method: 'POST',
-            success: function (operation, opts) {
-                var response = Ext.decode(operation.responseText);
+            callback: function (operation, success, response) {
+                var result = Ext.decode(response.responseText);
 
-                Shopware.app.Application.sbpAvailable = response.success;
+                Shopware.app.Application.sbpAvailable = result.success;
 
                 if (me.subApplication.params) {
                     if (me.subApplication.params.displayPlugin) {
@@ -66,8 +77,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                     Shopware.Notification.createGrowlMessage('', '{s name="sbp_not_available"}Shopware store not available, store features disabled.{/s}');
                 }
                 me.mainWindow = me.getView('list.Window').create();
-                if (me.subApplication.action == 'ImportExport') {
-                   return;
+                if (me.subApplication.action === 'ImportExport') {
+                    return;
+                }
+
+                if (mask) {
+                    mask.destroy();
                 }
                 me.mainWindow.show();
             }
@@ -182,24 +197,24 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             navController.displayLocalPluginPage();
         }
 
-        if (me.subApplication.action == 'Listing' && me.subApplication.params.filter) {
+        if (me.subApplication.action === 'Listing' && me.subApplication.params.filter) {
             Shopware.app.Application.fireEvent('load-store-listing', me.subApplication.params.filter);
             return;
         }
 
-        if (me.subApplication.action == 'PremiumPlugins') {
+        if (me.subApplication.action === 'PremiumPlugins') {
             Shopware.app.Application.fireEvent('display-premium-plugins');
             return;
         }
-        if (me.subApplication.action == 'ExpiredPlugins') {
+        if (me.subApplication.action === 'ExpiredPlugins') {
             Shopware.app.Application.fireEvent('display-expired-plugins');
         }
-        if (me.subApplication.action == 'ShopwareConnect') {
+        if (me.subApplication.action === 'ShopwareConnect') {
             Shopware.app.Application.fireEvent('display-connect-introduction');
 
             return;
         }
-        if (me.subApplication.action == 'ImportExport') {
+        if (me.subApplication.action === 'ImportExport') {
             Shopware.app.Application.fireEvent('display-importexport-teaser');
             var plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
                 technicalName: 'SwagMigration'
@@ -309,4 +324,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         }, me);
     }
 });
-//{/block}
+// {/block}

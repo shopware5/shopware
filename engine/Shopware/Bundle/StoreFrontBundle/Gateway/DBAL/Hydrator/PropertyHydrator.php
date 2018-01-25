@@ -237,8 +237,8 @@ class PropertyHydrator extends Hydrator
     private function sortOptionsNumercialValue(&$options)
     {
         usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
-            $a = floatval(str_replace(',', '.', $a->getName()));
-            $b = floatval(str_replace(',', '.', $b->getName()));
+            $a = (float) str_replace(',', '.', $a->getName());
+            $b = (float) str_replace(',', '.', $b->getName());
 
             if ($a == $b) {
                 return 0;

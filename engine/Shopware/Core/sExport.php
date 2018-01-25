@@ -1088,8 +1088,8 @@ class sExport
             $row['supplier'] = htmlspecialchars_decode($row['supplier']);
 
             //cast it to float to prevent the division by zero warning
-            $row['purchaseunit'] = floatval($row['purchaseunit']);
-            $row['referenceunit'] = floatval($row['referenceunit']);
+            $row['purchaseunit'] = (float) $row['purchaseunit'];
+            $row['referenceunit'] = (float) $row['referenceunit'];
             if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
                 $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
                     $row['price'],
@@ -1235,7 +1235,7 @@ class sExport
         if (!empty($cache[$payment]['surchargestring'])) {
             foreach (explode(';', $cache[$payment]['surchargestring']) as $countrySurcharge) {
                 list($key, $value) = explode(':', $countrySurcharge);
-                $value = floatval(str_replace(',', '.', $value));
+                $value = (float) str_replace(',', '.', $value);
                 if (!empty($value)) {
                     $cache[$payment]['country_surcharge'][$key] = $value;
                 }

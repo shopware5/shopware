@@ -86,6 +86,8 @@ class MediaCleanupCommand extends ShopwareCommand
      *
      * @param SymfonyStyle $io
      *
+     * @throws \Exception
+     *
      * @return int
      */
     private function handleCleanup(SymfonyStyle $io)
@@ -127,6 +129,8 @@ class MediaCleanupCommand extends ShopwareCommand
     }
 
     /**
+     * @throws \Exception
+     *
      * @return int
      */
     private function handleMove()

@@ -11,9 +11,15 @@ default:
             default_session: 'goutte'
             javascript_session: 'selenium2'
             goutte: ~
+            browser_name: chrome
             selenium2:
                 wd_host: "http://selenium:4444/wd/hub"
-            browser_name: chrome
+                capabilities:
+                    chrome:
+                        switches:
+                            - "--disable-gpu"
+                            - "--headless"
+                            - "--no-sandbox"
 
     gherkin:
       filters:

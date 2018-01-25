@@ -53,7 +53,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryContent = $this->loadCategoryContent($requestCategoryId);
 
-        $emotionConfiguration = $this->getEmotionConfiguration($requestCategoryId, false);
+        $emotionConfiguration = $this->getEmotionConfiguration(
+            $requestCategoryId,
+            false,
+            $categoryContent['streamId']
+        );
 
         $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
         if ($location) {
@@ -89,9 +93,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryId = (int) $this->Request()->getParam('sCategory');
 
-        $config = $this->getEmotionConfiguration($categoryId, true);
-
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+
+        $config = $this->getEmotionConfiguration($categoryId, true, $categoryContent['streamId']);
 
         $config = array_merge($config, [
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
@@ -186,10 +190,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign('manufacturer', $manufacturer);
         $this->View()->assign('ajaxCountUrlParams', [
             'sSupplier' => $manufacturerId,
-            'sCategory' => $context->getShop()->getCategory()->getId(),
+            'sCategory' => $context->getShop()->getCategory()->getId()
         ]);
 
-        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
+        $categoryContent = $this->getSeoDataOfManufacturer($manufacturer);
+        $categoryContent['productBoxLayout'] = $context->getShop()->getCategory()->getProductBoxLayout();
+
+        $this->View()->assign('sCategoryContent', $categoryContent);
     }
 
     /**
@@ -207,14 +214,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param int  $categoryId
-     * @param bool $withStreams
-     *
-     * @throws \Exception
+     * @param int    $categoryId
+     * @param bool   $withStreams
+     * @param string $streamId
      *
      * @return array
      */
-    protected function getEmotionConfiguration($categoryId, $withStreams = false)
+    protected function getEmotionConfiguration($categoryId, $withStreams = false, $streamId = null)
     {
         if ($this->Request()->getParam('sPage')) {
             return [
@@ -242,7 +248,38 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'showListing' => $this->hasListing($emotions) && !$isHomePage,
             'showListingDevices' => $devicesWithListing,
             'isHomePage' => $isHomePage,
+            'showListingButton' => $this->hasProducts($categoryId, $context, $streamId),
         ];
+    }
+
+    /**
+     * @param string               $categoryId
+     * @param ShopContextInterface $context
+     * @param string               $streamId
+     *
+     * @return bool
+     */
+    private function hasProducts($categoryId, ShopContextInterface $context, $streamId)
+    {
+        if ($streamId) {
+            $criteria = $this->createCategoryStreamCriteria($categoryId, $streamId);
+        } else {
+            /** @var $criteria Criteria */
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createListingCriteria($this->Request(), $context);
+        }
+
+        // Creating the criteria above will also set the sPage param to at least 1, which we don't want
+        $this->Request()->setParam('sPage', null);
+
+        // Performance increase
+        $criteria->setFetchCount(false);
+        $criteria->resetFacets();
+        $criteria->limit(1);
+
+        $numberResult = $this->get('shopware_search.product_number_search')->search($criteria, $context);
+
+        return $numberResult->getTotalCount() > 0;
     }
 
     /**

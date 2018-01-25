@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         }
 
         //search value changed?
-        if (store.getProxy().extraParams.filter === 'undefined' && searchString.length == 0) {
+        if (store.getProxy().extraParams.filter === 'undefined' && searchString.length === 0) {
             return;
         }
         if (store.getProxy().extraParams.filter === searchString) {
@@ -248,7 +248,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         } else {
             me.getView('album.Add').create();
         }
-
     },
 
     /**

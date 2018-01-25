@@ -87,3 +87,4 @@ Thumbs.db
 /build
 !/build/artifacts/.gitkeep
 !/build/logs/mink/.gitkeep
+/tests/nightwatch/node_modules

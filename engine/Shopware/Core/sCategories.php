@@ -363,6 +363,10 @@ class sCategories
         /** @var \Shopware\Models\Category\Category $category */
         $category = $this->repository->find($categoryId);
 
+        if (!$category) {
+            return 'basic';
+        }
+
         if ($category->getProductBoxLayout() !== 'extend' && $category->getProductBoxLayout() !== null) {
             return $category->getProductBoxLayout();
         }

@@ -74,21 +74,22 @@ class ConfigLoader implements SubscriberInterface
         /** @var $shop Shop */
         $shop = $this->container->get('shop');
 
+        $inheritance = $this->container->get('theme_inheritance');
+
         $templateManager = $this->container->get('template');
+        $templateManager->addPluginsDir(
+            $inheritance->getSmartyDirectories($shop->getTemplate())
+        );
+
         $themeSettings = $templateManager->getTemplateVars('theme');
         if (!empty($themeSettings)) {
             return;
         }
 
-        $inheritance = $this->container->get('theme_inheritance');
         $config = $inheritance->buildConfig(
             $shop->getTemplate(),
             $shop,
             false
-        );
-
-        $templateManager->addPluginsDir(
-            $inheritance->getSmartyDirectories($shop->getTemplate())
         );
 
         $templateManager->assign('theme', $config);

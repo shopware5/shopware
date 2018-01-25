@@ -26,14 +26,13 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+// {namespace name=backend/plugin_manager/translation}
 
-//{block name="backend/plugin_manager/view/account/register"}
+// {block name="backend/plugin_manager/view/account/register"}
 Ext.define('Shopware.apps.PluginManager.view.account.Register', {
     extend: 'Ext.container.Container',
 
     cls: 'plugin-manager-login-window',
-
 
     /**
      * Contains all snippets for the view component
@@ -137,7 +136,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             cls: Ext.baseCSSPrefix + 'password-field input--field',
             minLength: 5,
             validator: function (value) {
-                if (Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordConfirmationField.getValue())) {
+                if (Ext.String.trim(value) === Ext.String.trim(me.newRegistrationPasswordConfirmationField.getValue())) {
                     me.newRegistrationPasswordConfirmationField.clearInvalid();
                     return true;
                 } else {
@@ -168,7 +167,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             minLength: 5,
             cls: 'input--field',
             validator: function (value) {
-                if (Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordField.getValue())) {
+                if (Ext.String.trim(value) === Ext.String.trim(me.newRegistrationPasswordField.getValue())) {
                     me.newRegistrationPasswordField.clearInvalid();
                     return true;
                 } else {
@@ -200,7 +199,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             allowBlank: false,
             required: true,
             enableKeyEvents: true,
-            checkChangeBuffer: 700,
             listeners: {
                 specialkey: function (field, e) {
                     if (e.getKey() == e.ENTER) {
@@ -264,7 +262,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
 
         var formValues = me.formPanel.getForm().getValues();
 
-        formValues.registerDomain = formValues.registerDomain === "on";
+        formValues.registerDomain = formValues.registerDomain === 'on';
 
         Shopware.app.Application.fireEvent(
             'store-register',
@@ -273,8 +271,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
                 me.callback();
             }
         );
-
     }
-
 });
-//{/block}
+// {/block}
