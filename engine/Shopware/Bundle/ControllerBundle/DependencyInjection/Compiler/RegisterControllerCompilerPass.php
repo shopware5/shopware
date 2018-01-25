@@ -30,6 +30,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class RegisterControllerCompilerPass implements CompilerPassInterface
 {
@@ -100,11 +101,13 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
         }
 
         foreach ($finder as $file) {
+            $isNamespaced = strpos($file->getRealPath(), DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR) !== false;
+
             $eventName = $this->buildEventName(
                $file->getPathInfo()->getBasename(),
                $file->getBasename('.php')
            );
-            $controllers[$eventName] = $file->getPathname();
+            $controllers[$eventName] = $isNamespaced ? $this->buildNamespacedController($file) : $file->getPathname();
         }
 
         return $controllers;
@@ -120,6 +123,10 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
         $controllerPaths = array_map(function (Plugin $plugin) {
             if (is_dir($plugin->getPath() . '/Controllers')) {
                 return $plugin->getPath() . '/Controllers';
+            }
+
+            if (is_dir($plugin->getPath() . '/Controller')) {
+                return $plugin->getPath() . '/Controller';
             }
 
             return null;
@@ -140,6 +147,22 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
             'Enlight_Controller_Dispatcher_ControllerPath_%s_%s',
             $module,
             $controller
+        );
+    }
+
+    /**
+     * @param SplFileInfo $fileInfo
+     *
+     * @return string
+     */
+    private function buildNamespacedController(SplFileInfo $fileInfo)
+    {
+        $pathSplitted = explode(DIRECTORY_SEPARATOR, $fileInfo->getRealPath());
+
+        return sprintf('%s\Controller\%s\%s',
+            $pathSplitted[count($pathSplitted) - 4],
+            $fileInfo->getPathInfo()->getBasename(),
+            $fileInfo->getBasename('.php')
         );
     }
 }
