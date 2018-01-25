@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     height: 700,
     layout: 'fit',
     autoShow: true,
+    footerButton: true,
 
     /**
      * Holder property which holds of the album settings.
