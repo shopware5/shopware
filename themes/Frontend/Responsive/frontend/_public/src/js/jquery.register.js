@@ -505,9 +505,6 @@
             case 'register_personal_emailConfirmation':
                 action = 'ajax_validate_email';
                 break;
-            case 'register_billing_ustid':
-                action = 'ajax_validate_billing';
-                break;
             case 'register_personal_password':
             case 'register_personal_passwordConfirmation':
                 action = 'ajax_validate_password';
