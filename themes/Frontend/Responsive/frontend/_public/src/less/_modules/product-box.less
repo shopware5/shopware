@@ -166,7 +166,7 @@ Shopware provides 3 product box types:<br/>
     .variant--description {
         .unitize-height(40);
         .unitize-margin(0, 0, 5, 0);
-        .unitize(font-size, 14);
+        .unitize(font-size, 12);
         .unitize(line-height, 20);
         display: block;
         width: 100%;
@@ -174,8 +174,13 @@ Shopware provides 3 product box types:<br/>
         overflow: hidden;
         font-weight: @font-base-weight;
 
-        .variant--optionName {
+        .variant--groupName {
             font-weight: @font-bold-weight;
+        }
+
+        .variant--description--line {
+            white-space: nowrap;
+
         }
     }
 
