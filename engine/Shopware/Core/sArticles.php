@@ -1160,7 +1160,7 @@ class sArticles
             $selection
         );
 
-        if (!$article['isSelectionSpecified'] && $product->hasConfigurator()) {
+        if (!empty('isSelectionSpecified') && !$article['isSelectionSpecified'] && $product->hasConfigurator()) {
             $criteria = new SearchBundle\Criteria();
             foreach ($selection as $groupId => $optionId) {
                 $criteria->addBaseCondition(

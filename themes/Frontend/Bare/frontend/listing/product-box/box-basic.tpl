@@ -46,9 +46,17 @@
                         {block name='frontend_listing_box_variant_description'}
                             <div class="variant--description">
                                 {if $sArticle.attributes.swagVariantConfiguration}
-                                    {foreach $sArticle.attributes.swagVariantConfiguration->get('value') as $group}
-                                        {$group.groupName}: <span class="variant--optionName">{$group.optionName}</span> |
-                                    {/foreach}
+                                    <span title="
+                                        {foreach $sArticle.attributes.swagVariantConfiguration->get('value') as $group}
+                                                {$group.groupName}: {$group.optionName}
+                                        {/foreach}
+                                        ">
+                                        {foreach $sArticle.attributes.swagVariantConfiguration->get('value') as $group}
+                                            <span class="variant--description--line">
+                                                <span class="variant--groupName">{$group.groupName}:</span> {$group.optionName} {if !$group@last}|{/if}
+                                            </span>
+                                        {/foreach}
+                                    </span>
                                 {/if}
                             </div>
                         {/block}
