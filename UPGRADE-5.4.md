@@ -19,12 +19,12 @@ This changelog references changes done in Shopware 5.4 patch versions.
     - `shopware.release.revision`
         The revision of the Shopware installation (e.g. '20180081547')
 
-* Added new service in the DIC containing all parameters above 
+* Added new service in the DIC containing all parameters above
     - `shopware.release`
         A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
 
 * Added several paths to the DIC:
-	- `shopware.plugin_directories.projectplugins` 
+	- `shopware.plugin_directories.projectplugins`
 		Path to project specific plugins, see [Composer project](https://github.com/shopware/composer-project)
 	- `shopware.template.templatedir`
 		Path to the themes folder
@@ -37,8 +37,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 	- `shopware.web.webdir`
 		Path to the web folder
 	- `shopware.web.cachedir`
-		Path to the web-cache folder 
-	
+		Path to the web-cache folder
+
 	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
 
 ### Changes
@@ -50,7 +50,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed all writing actions to POST to be more HTTP compliant.
     * Checkout actions:
         - `finish`
-    
+
     * Basket actions
         - `addArticle`
         - `addAccessories`
@@ -62,7 +62,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `ajaxAddArticleCart`
         - `ajaxDeleteArticle`
         - `ajaxDeleteArticleCart`
-        
+
 * Changed JSONP requests to JSON in the following Frontend controllers:
     * Controller List
         - Frontend/AjaxSearch.php
@@ -82,7 +82,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
         - `s_core_shops.always_secure`
-        
+
     * Removed methods
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::setSecureHost`
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::getSecureHost`
@@ -107,6 +107,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `\Shopware\Components\Theme\PathResolver::formatPathToUrl`
            The method signature no longer contains the `isSecureRequest` parameter
 
+    * Removed properties
+        - `\sOrder::o_attr_1`
+        - `\sOrder::o_attr_2`
+        - `\sOrder::o_attr_3`
+        - `\sOrder::o_attr_4`
+        - `\sOrder::o_attr_5`
+        - `\sOrder::o_attr_6`
+
 ### Deprecations
 
 * Deprecated `forceSecure` and `sUseSSL` smarty flags. They are now without function.
@@ -120,5 +128,5 @@ This changelog references changes done in Shopware 5.4 patch versions.
             The revision of the Shopware installation (e.g. '20180081547')
     * New, alternative DIC service:
         - `shopware.release`
-            A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above 
+            A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
 * Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
