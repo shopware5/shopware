@@ -587,8 +587,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             { name: 'invoiceAmount', fieldLabel: me.snippets.details.amount, renderer: me.renderInvoiceAmount},
             { name: 'dispatch[name]', fieldLabel: me.snippets.details.dispatch},
             { name: 'partnerId', fieldLabel: me.snippets.details.partnerId},
-            { name: 'customerEmail', fieldLabel: me.snippets.details.customerEmail, renderer: me.renderCustomerEmail}
-
+            { name: 'customerEmail', fieldLabel: me.snippets.details.customerEmail, allowHtml: true, renderer: me.renderCustomerEmail}
         ];
         if (me.record.get('currencyFactor') !== 1) {
             fields.push({
