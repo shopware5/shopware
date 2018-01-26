@@ -241,6 +241,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             store: me.mediaStore,
             flex: 1,
             tpl: me.createMediaViewTemplate(),
+            autoScroll: true,
             plugins: [ Ext.create('Ext.ux.DataView.DragSelector', {}) ]
         });
 
