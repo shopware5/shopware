@@ -168,7 +168,7 @@ class ProductProvider implements ProductProviderInterface
 
         $combinations = $this->configurationLoader->getCombinations($numbers);
 
-        $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration);
+        $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration, $variantFacet);
 
         $result = [];
         foreach ($products as $listProduct) {
