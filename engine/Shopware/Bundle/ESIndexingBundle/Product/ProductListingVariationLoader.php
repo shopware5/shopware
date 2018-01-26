@@ -82,13 +82,15 @@ class ProductListingVariationLoader
      * @param Shop          $shop
      * @param ListProduct[] $products
      * @param array         $configurations
+     * @param VariantFacet  $variantFacet
      *
      * @return array
      */
     public function getListingPrices(
         Shop $shop,
         array $products,
-        array $configurations
+        array $configurations,
+        VariantFacet $variantFacet
     ) {
         $combinationPrices = [];
 
@@ -114,7 +116,8 @@ class ProductListingVariationLoader
                 $combinationPrices[$key][$product->getNumber()] = $this->getCombinationPrices(
                     $configuration,
                     $prices[$product->getId()],
-                    $combinations
+                    $combinations,
+                    $variantFacet
                 );
             }
         }
@@ -340,9 +343,8 @@ class ProductListingVariationLoader
             'prices.articleID',
             'relations.article_id as variant_id',
             'prices.price',
-            'GROUP_CONCAT(DISTINCT relations.option_id ORDER BY relations.option_id) as `options`',
-            'GROUP_CONCAT(DISTINCT options.name ORDER BY options.id) as `optionNames`',
-            'GROUP_CONCAT(DISTINCT options.group_id ORDER BY options.group_id) as `groups`',
+            'relations.option_id',
+            'options.group_id',
         ]);
 
         $query->from('s_articles_details', 'variant');
@@ -354,7 +356,6 @@ class ProductListingVariationLoader
         $query->andWhere('variant.active = 1');
         $query->andWhere('prices.to = :to');
         $query->andWhere('prices.articleID IN (:products)');
-        $query->groupBy('prices.articledetailsID');
 
         $query->setParameter('to', 'beliebig');
         $query->setParameter('products', $ids, Connection::PARAM_INT_ARRAY);
@@ -370,11 +371,21 @@ class ProductListingVariationLoader
 
         /** @var array[] $prices */
         foreach ($prices as &$productPrices) {
+            $priceResult = [];
             foreach ($productPrices as &$price) {
-                $price['options'] = array_filter(explode(',', $price['options']));
-                $price['options'] = array_map('intval', $price['options']);
-                $price['groups'] = array_filter(explode(',', $price['groups']));
-                $price['groups'] = array_map('intval', $price['groups']);
+                $priceResult[$price['variant_id']]['variant_id'] = (int) $price['variant_id'];
+                $priceResult[$price['variant_id']]['price'] = $price['price'];
+
+                $priceResult[$price['variant_id']]['options'][] = (int) $price['option_id'];
+                $priceResult[$price['variant_id']]['groups'][] = (int) $price['group_id'];
+            }
+            $productPrices = array_values($priceResult);
+        }
+
+        foreach ($prices as &$productPrices) {
+            foreach ($productPrices as &$price) {
+                sort($price['options']);
+                sort($price['groups']);
             }
         }
 
