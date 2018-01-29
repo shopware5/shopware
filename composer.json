@@ -63,8 +63,7 @@
         "ramsey/uuid": "3.5.2",
         "setasign/fpdf": "1.8.1",
         "setasign/fpdi": "1.6.2",
-        "ocramius/proxy-manager": "^1.0",
-        "mpdf/mpdf": "6.1.4"
+        "ocramius/proxy-manager": "^1.0"
     },
     "suggest": {
         "ext-apcu": "*",
@@ -92,7 +91,8 @@
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
             "Zend": "engine/Library/",
-            "JSMin": "engine/Library/minify/"
+            "JSMin": "engine/Library/minify/",
+            "mPDF": "engine/Library/Mpdf/"
         },
         "classmap": [
             "engine/Shopware/Core/"
