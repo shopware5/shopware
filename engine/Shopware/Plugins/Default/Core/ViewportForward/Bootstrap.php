@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -39,7 +38,7 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
     {
         $request = $args->getSubject()->Request();
 
-        if ($request->getModuleName() && $request->getModuleName() != 'frontend') {
+        if ($request->getModuleName() && 'frontend' !== $request->getModuleName()) {
             return;
         }
 
@@ -55,7 +54,7 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
                     }
                 }
 
-                if ($request->getParam('sAction') && $request->getParam('sAction') == 'doSale') {
+                if ($request->getParam('sAction') && 'doSale' === $request->getParam('sAction')) {
                     $request->setControllerName('checkout')->setActionName('finish')->setDispatched(false);
                 } else {
                     $request->setControllerName('checkout')->setActionName('confirm')->setDispatched(false);
@@ -72,6 +71,7 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
             case 'login':
             case 'logout':
                 $request->setActionName($request->getParam('sViewport'));
+                // no break
             case 'admin':
                 $request->setControllerName('account')->setDispatched(false);
                 break;
@@ -81,13 +81,6 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
             case 'register2shipping':
             case 'register3':
                 $request->setControllerName('register')->setDispatched(false);
-                break;
-            case 'sale':
-                if ($request->getParam('sAction') && $request->getParam('sAction') == 'doSale') {
-                    $request->setControllerName('checkout')->setActionName('finish')->setDispatched(false);
-                } else {
-                    $request->setControllerName('checkout')->setActionName('confirm')->setDispatched(false);
-                }
                 break;
             case 'sViewport,basket':
             case 'basket':
