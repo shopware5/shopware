@@ -2,7 +2,7 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
-[View all changes from v5.3.6...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.6...v5.4.0)
+[View all changes from v5.3.7...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.7...v5.4.0)
 
 ### Additions
 
@@ -18,10 +18,22 @@ This changelog references changes done in Shopware 5.4 patch versions.
         The version_text of the Shopware installation (e.g. 'RC1')
     - `shopware.release.revision`
         The revision of the Shopware installation (e.g. '20180081547')
-
 * Added new service in the DIC containing all parameters above 
     - `shopware.release`
         A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
+* Added new SEO routes
+    - `sViewport=register`:
+        `/anmeldung` (DE) and `/signup` (EN)
+    - `sViewport=checkout&sAction=cart`:
+        `/warenkorb` (DE) and `/basket` (EN)
+    - `sViewport=checkout&sAction=confirm`:
+        `/bestellen` (DE) and `/order` (EN)
+    - `sViewport=checkout&sAction=shippingPayment`:
+        `/zahlungsart-und-versand` (DE) and `/payment-and-delivery` (EN)
+    - `sViewport=checkout`:
+        `/pruefen-und-bestellen` (DE) and `/check-and-order` (EN)
+    - `sViewport=checkout&sAction=finish`:
+        `/vielen-dank-fuer-ihre-bestellung` (DE) and `/thank-you-for-your-order` (EN)
 
 * Added several paths to the DIC:
 	- `shopware.plugin_directories.projectplugins` 
@@ -122,3 +134,11 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `shopware.release`
             A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above 
 * Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
+* Deprecated SEO support for the following AJAX routes, see `themes/Frontend/Bare/frontend/index/index.tpl`:
+    - `/checkout/ajaxCart`
+    - `/register/index`
+    - `/checkout/addArticle`
+    - `/widgets/Listing/ajaxListing`
+    - `/checkout/ajaxAmount`
+    - `/address/ajaxSelection`
+    - `/address/ajaxEditor`
