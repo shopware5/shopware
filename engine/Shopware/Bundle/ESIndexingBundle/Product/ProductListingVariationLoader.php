@@ -79,10 +79,10 @@ class ProductListingVariationLoader
     }
 
     /**
-     * @param Shop          $shop
-     * @param ListProduct[] $products
-     * @param array         $configurations
-     * @param VariantFacet  $variantFacet
+     * @param Shop              $shop
+     * @param ListProduct[]     $products
+     * @param array             $configurations
+     * @param null|VariantFacet $variantFacet
      *
      * @return array
      */
@@ -90,7 +90,7 @@ class ProductListingVariationLoader
         Shop $shop,
         array $products,
         array $configurations,
-        VariantFacet $variantFacet
+        VariantFacet $variantFacet = null
     ) {
         $combinationPrices = [];
 
@@ -418,30 +418,50 @@ class ProductListingVariationLoader
         return $visibility;
     }
 
-    private function getCombinationPrices(array $configuration, array $prices, array $combinations)
+    /**
+     * @param array             $configuration
+     * @param array             $prices
+     * @param array             $combinations
+     * @param VariantFacet|null $variantFacet
+     *
+     * @return array
+     */
+    private function getCombinationPrices(array $configuration, array $prices, array $combinations, VariantFacet $variantFacet = null)
     {
         $cheapestPrices = [];
+
+        if (null !== $variantFacet) {
+            $expandGroupIds = $variantFacet->getExpandGroupIds();
+        } else {
+            $expandGroupIds = [];
+        }
 
         $options = [];
         foreach ($configuration as $group) {
             $options[$group->getId()] = $group->getOptions()[0]->getId();
         }
 
-        //combinations contains all group combinations ('size', 'color', 'size+color')
+        // Combinations contains all group combinations ('size', 'color', 'size+color')
         foreach ($combinations as $combination) {
             sort($combination, SORT_NUMERIC);
 
-            //now check which option ids are affected by the current combination
+            // Now check which option ids are affected by the current combination
             // size combination => only consider prices with same size
             // size + color combination => only consider prices with same size and color like the current product
-
-            $tmp = array_values(array_keys(array_intersect(array_flip($options), $combination)));
+            // Only consider prices without the groups which should not expand
+            $tmp = array_values(array_keys(
+                array_intersect(array_intersect(array_flip($options), $combination), $expandGroupIds)
+            ));
             sort($tmp, SORT_NUMERIC);
 
+            // Get the options of the groups which should not expand
+            $excludedOptions = array_values(array_keys(
+                array_diff(array_intersect(array_flip($options), $combination), $expandGroupIds)
+            ));
+
             //filter prices which has configuration matches the current variant configuration
-            $affected = array_filter($prices, function (array $price) use ($tmp) {
-                $diff = array_intersect($price['options'], $tmp);
-                $diff = array_values($diff);
+            $affected = array_filter($prices, function (array $price) use ($tmp, $excludedOptions) {
+                $diff = array_values(array_intersect(array_diff($price['options'], $excludedOptions), $tmp));
 
                 return $diff === $tmp;
             });

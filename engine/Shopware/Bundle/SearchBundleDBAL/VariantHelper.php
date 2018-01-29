@@ -97,12 +97,14 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @return bool|VariantFacet
+     * @throws \ReflectionException
+     *
+     * @return null|VariantFacet
      */
     public function getVariantFacet()
     {
         if ($this->variantFacet !== null) {
-            return $this->variantFacet;
+            return $this->variantFacet ? $this->variantFacet : null;
         }
 
         $this->variantFacet = false;
@@ -117,7 +119,7 @@ class VariantHelper implements VariantHelperInterface
             ->fetchColumn();
 
         if (empty($json)) {
-            return $this->variantFacet;
+            return $this->variantFacet ? $this->variantFacet : null;
         }
 
         $arr = json_decode($json, true);
@@ -126,7 +128,7 @@ class VariantHelper implements VariantHelperInterface
             $this->variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
         }
 
-        return $this->variantFacet;
+        return $this->variantFacet ? $this->variantFacet : null;
     }
 
     /**

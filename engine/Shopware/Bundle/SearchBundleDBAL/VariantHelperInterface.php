@@ -34,7 +34,7 @@ interface VariantHelperInterface
     /**
      * Returns the VariantFacet
      *
-     * @return VariantFacet|false
+     * @return VariantFacet|null
      */
     public function getVariantFacet();
 
