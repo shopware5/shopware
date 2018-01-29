@@ -1539,8 +1539,8 @@ class sBasket
      * Add product to cart
      * Used in multiple locations
      *
-     * @param int $id       Order number (s_articles_details.ordernumber)
-     * @param int $quantity Amount
+     * @param string $id       Order number (s_articles_details.ordernumber)
+     * @param int    $quantity Amount
      *
      * @throws \Exception
      * @throws \Enlight_Exception         If no price could be determined, or a database error occurs
@@ -2853,7 +2853,7 @@ class sBasket
     /**
      * Get article data for sAddArticle
      *
-     * @param int $id Article ordernumber
+     * @param string $id Article ordernumber
      *
      * @throws \Exception
      *
