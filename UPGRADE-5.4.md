@@ -56,6 +56,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added backend config option `logMailLevel` to choose the minimum log level for sending e-mail notifications
 * Added snippet `frontend/detail/data/DetailDataPriceInfo` in ajax cart template
+* Added snippet `frontend/detail/DetailCommentAnonymousName` for anonymous product ratings
 * Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
 
 ### Changes
@@ -88,6 +89,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - Frontend/Note.php
         - Widgets/Listing.php
 * Using the paging in a listing while using the live filter reloading will now scroll to the top paging bar
+* Changed name field in product ratings to be optional
 
 ### Removals
 
