@@ -53,8 +53,6 @@ Ext.define('Shopware.apps.Config', {
         var me = this,
             controller = me.getController(me.defaultController);
 
-        console.log('yay');
-
         return controller.mainWindow;
     }
 });
