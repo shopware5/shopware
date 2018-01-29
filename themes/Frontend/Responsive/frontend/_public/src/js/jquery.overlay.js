@@ -153,7 +153,7 @@
             }
 
             me.$overlay.one('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function() {
-                me.$overlay.off(me.options.events).removeAttr('style').remove();
+                me.$overlay.off(me.options.events).prop('style', '').remove();
                 deferred.resolve(me);
                 callback.call(scope);
             });

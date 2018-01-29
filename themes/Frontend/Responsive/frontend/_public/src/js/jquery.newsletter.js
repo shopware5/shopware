@@ -42,8 +42,8 @@
                 if (!me.opts.unsubscribeCaptchaRequired) {
                     me.$captchaForm.hide();
                     if (me.$captchaField) {
-                        me.$captchaField.removeAttr('required');
-                        me.$captchaField.removeAttr('aria-required');
+                        me.$captchaField.prop('required', false);
+                        me.$captchaField.prop('aria-required', false);
                     }
                 }
             } else {

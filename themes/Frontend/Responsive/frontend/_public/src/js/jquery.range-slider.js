@@ -441,7 +441,7 @@
                     .trigger('change');
             } else {
                 me.$minInputEl.val(value.toFixed(me.opts.digits))
-                    .removeAttr('disabled')
+                    .prop('disabled', false)
                     .trigger('change');
             }
 
@@ -460,7 +460,7 @@
                     .trigger('change');
             } else {
                 me.$maxInputEl.val(value.toFixed(me.opts.digits))
-                    .removeAttr('disabled')
+                    .prop('disabled', false)
                     .trigger('change');
             }
 

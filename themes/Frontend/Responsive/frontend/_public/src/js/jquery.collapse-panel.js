@@ -240,7 +240,7 @@
             me.$el.removeClass(opts.activeTriggerCls);
             me.$targetEl.removeClass(opts.collapsedStateCls)
                 .removeClass(opts.collapseTargetCls)
-                .removeAttr('style');
+                .prop('style', '');
 
             me._destroy();
         }

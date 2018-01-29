@@ -332,7 +332,7 @@
 
             $modal._$content
                 .find(me.opts.submitButtonSelector)
-                .removeAttr('disabled')
+                .prop('disabled', false)
                 .data('plugin_swPreloaderButton')
                 .reset();
         }

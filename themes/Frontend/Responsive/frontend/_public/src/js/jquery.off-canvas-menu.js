@@ -383,10 +383,10 @@
             me.$offCanvas.removeClass(opts.offCanvasElementCls)
                 .removeClass(opts.activeMenuCls)
                 .removeClass(opts.openClass)
-                .removeAttr('style');
+                .prop('style', '');
 
             if (opts.moveWrapper) {
-                me.$pageWrap.removeAttr('style');
+                me.$pageWrap.prop('style', '');
             }
 
             me.$el.off(me.getEventName('click'), opts.closeButtonSelector);
