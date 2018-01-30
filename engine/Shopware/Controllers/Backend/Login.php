@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -194,6 +193,17 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
 
         $result = $auth->isPasswordValid($username, $password);
+
+        if ($this->container->get('backendsession')->offsetExists('passwordVerified')) {
+            $this->container->get('backendsession')->offsetUnset('passwordVerified');
+        }
+
+        /*
+         * Set a flag in the backend session indicating that the password has been successfully verified
+         */
+        if ($result) {
+            $this->container->get('backendsession')->offsetSet('passwordVerified', true);
+        }
 
         $this->View()->assign('success', $result);
     }

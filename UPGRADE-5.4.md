@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
+* Changed password verification process for password protected actions in backend
 * Changed behaviour of search indexer to allow product attribute search
 * Changed hashing algorithm for product variant search join table aliases to prevent errors on 32bit systems
 
