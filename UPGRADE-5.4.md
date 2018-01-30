@@ -6,6 +6,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Additions
 
+* Added database field `s_articles_details.laststock` to be able to define per variant if said variant is available when the stock is lower or equal to 0
+* Added `lastStock` field to `\Shopware\Models\Article\Detail`
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
 * Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
@@ -133,6 +135,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * New, alternative DIC service:
         - `shopware.release`
             A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above 
+* Deprecated `lastStock` field in `\Shopware\Models\Article\Article` as the field has been moved to the variants. It will be removed in 6.0.
+* Deprecated `laststock` column in `s_articles` since this field has been moved to the variants. It will be removed in 6.0
 * Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
 * Deprecated SEO support for the following AJAX routes, see `themes/Frontend/Bare/frontend/index/index.tpl`:
     - `/checkout/ajaxCart`
