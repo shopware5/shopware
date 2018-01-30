@@ -63,7 +63,8 @@
         "ramsey/uuid": "3.5.2",
         "setasign/fpdf": "1.8.1",
         "setasign/fpdi": "1.6.2",
-        "ocramius/proxy-manager": "^1.0"
+        "ocramius/proxy-manager": "^1.0",
+        "mpdf/mpdf": "^7.0"
     },
     "suggest": {
         "ext-apcu": "*",

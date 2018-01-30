@@ -57,7 +57,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Updated mPDF to v6.1.4 and included it via composer
+* Updated mPDF to v6.1.4 and added mPDF 7, included it via composer in vendor/
+    * mPDF 7 is not compatible with previous versions of mPDF, as it features
+      new class names and constructor options
+* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 * Made the event selectors configurable in the `swJumpToTab` jQuery plugin
 * `\Shopware\Bundle\SearchBundle\ProductSearchResult::__construct` requires now the used Criteria and ShopContext object
 * Changed route to POST to be more HTTP compliant
