@@ -144,11 +144,14 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      *
      * @param string $source
      *
-     * @return string
+     * @return string|null
      */
     public function &filterSource($source)
     {
-        return preg_replace_callback('#<(a|form|iframe|link|img)[^<>]*(href|src|action)="([^"]*)".*>#Umsi', [$this, 'rewriteSrc'], $source);
+        // To allow the return of a reference, we need to add an interim variable
+        $source = preg_replace_callback('#<(a|form|iframe|link|img)[^<>]*(href|src|action)="([^"]*)".*>#Umsi', [$this, 'rewriteSrc'], $source);
+
+        return $source;
     }
 
     /**
