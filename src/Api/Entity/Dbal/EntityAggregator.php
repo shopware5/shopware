@@ -69,7 +69,7 @@ class EntityAggregator implements EntityAggregatorInterface
             EntityDefinitionResolver::joinField($fieldName, $definition, $table, $query, $context);
         }
 
-        $parsed = SqlQueryParser::parse($criteria->getFilters(), $definition);
+        $parsed = SqlQueryParser::parse($criteria->getFilters(), $definition, $context);
         if (!empty($parsed->getWheres())) {
             $query->andWhere(implode(' AND ', $parsed->getWheres()));
             foreach ($parsed->getParameters() as $key => $value) {
@@ -83,10 +83,11 @@ class EntityAggregator implements EntityAggregatorInterface
     private function fetchAggregation(string $definition, QueryBuilder $query, Aggregation $aggregation, TranslationContext $context)
     {
         /** @var EntityDefinition $definition */
-        $field = EntityDefinitionResolver::resolveField(
+        $field = EntityDefinitionResolver::getFieldAccessor(
             $aggregation->getField(),
             $definition,
-            $definition::getEntityName()
+            $definition::getEntityName(),
+            $context
         );
 
         if ($aggregation instanceof EntityAggregation) {

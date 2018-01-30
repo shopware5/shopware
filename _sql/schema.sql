@@ -841,50 +841,57 @@ CREATE TABLE `plugin` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `id` binary(16) NOT NULL,
-  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `active` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `price` decimal(10,3) DEFAULT NULL,
+  `parent_id` binary(16) DEFAULT NULL,
+  `tax_id` binary(16) DEFAULT NULL,
+  `product_manufacturer_id` binary(16) DEFAULT NULL,
+  `unit_id` binary(16) DEFAULT NULL,
+  `price_group_id` binary(16) DEFAULT NULL,
+  `media_join_id` binary(16) DEFAULT NULL,
+  `manufacturer_join_id` binary(16) DEFAULT NULL,
+  `tax_join_id` binary(16) DEFAULT NULL,
+  `unit_join_id` binary(16) DEFAULT NULL,
+  `category_join_id` binary(16) DEFAULT NULL,
+  `category_tree` json DEFAULT NULL,
+  `prices` json DEFAULT NULL,
   `supplier_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ean` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stock` int(11) NOT NULL DEFAULT '0',
-  `is_closeout` tinyint(1) NOT NULL DEFAULT '0',
+  `stock` int(11) DEFAULT NULL,
+  `is_closeout` tinyint(1) DEFAULT NULL,
   `min_stock` int(11) unsigned DEFAULT NULL,
   `purchase_steps` int(11) unsigned DEFAULT NULL,
   `max_purchase` int(11) unsigned DEFAULT NULL,
-  `min_purchase` int(11) unsigned NOT NULL DEFAULT '1',
+  `min_purchase` int(11) unsigned DEFAULT NULL,
   `purchase_unit` decimal(11,4) unsigned DEFAULT NULL,
   `reference_unit` decimal(10,3) unsigned DEFAULT NULL,
-  `shipping_free` tinyint(4) NOT NULL DEFAULT '0',
-  `purchase_price` double NOT NULL DEFAULT '0',
-  `pseudo_sales` int(11) NOT NULL DEFAULT '0',
-  `mark_as_topseller` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `sales` int(11) NOT NULL DEFAULT '0',
-  `position` int(11) unsigned NOT NULL DEFAULT '1',
-  `weight` decimal(10,3) unsigned NOT NULL DEFAULT '0',
-  `width` decimal(10,3) unsigned NOT NULL DEFAULT '0',
-  `height` decimal(10,3) unsigned NOT NULL DEFAULT '0',
-  `length` decimal(10,3) unsigned NOT NULL DEFAULT '0',
+  `shipping_free` tinyint(4) DEFAULT NULL,
+  `purchase_price` double DEFAULT NULL,
+  `pseudo_sales` int(11) DEFAULT NULL,
+  `mark_as_topseller` tinyint(1) unsigned DEFAULT NULL,
+  `sales` int(11) DEFAULT NULL,
+  `position` int(11) unsigned DEFAULT NULL,
+  `weight` decimal(10,3) unsigned DEFAULT NULL,
+  `width` decimal(10,3) unsigned DEFAULT NULL,
+  `height` decimal(10,3) unsigned DEFAULT NULL,
+  `length` decimal(10,3) unsigned DEFAULT NULL,
   `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `allow_notification` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `allow_notification` tinyint(1) unsigned DEFAULT NULL,
   `release_date` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `container_id` binary(16) DEFAULT NULL,
-  `tax_id` binary(16) DEFAULT NULL,
-  `product_manufacturer_id` binary(16) DEFAULT NULL,
-  `price_group_id` binary(16) DEFAULT NULL,
-  `unit_id` binary(16) DEFAULT NULL,
-  `category_tree` json NULL,
   PRIMARY KEY (`id`),
   KEY `fk_product.product_manufacturer_id` (`product_manufacturer_id`),
   KEY `fk_product.tax_id` (`tax_id`),
   KEY `fk_product.unit_id` (`unit_id`),
-  CONSTRAINT `fk_product.product_manufacturer_id` FOREIGN KEY (`product_manufacturer_id`) REFERENCES `product_manufacturer` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_product.tax_id` FOREIGN KEY (`tax_id`) REFERENCES `tax` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_product.unit_id` FOREIGN KEY (`unit_id`) REFERENCES `unit` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  KEY `container_id` (`parent_id`),
+  CONSTRAINT `fk_product.product_manufacturer_id` FOREIGN KEY (`product_manufacturer_id`) REFERENCES `product_manufacturer` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_product.tax_id` FOREIGN KEY (`tax_id`) REFERENCES `tax` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_product.unit_id` FOREIGN KEY (`unit_id`) REFERENCES `unit` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -899,22 +906,6 @@ CREATE TABLE `product_category` (
   KEY `fk_product_category.product_id` (`product_id`),
   CONSTRAINT `fk_product_category.category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_product_category.product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-DROP TABLE IF EXISTS `product_listing_price`;
-CREATE TABLE `product_listing_price` (
-  `id` binary(16) NOT NULL,
-  `sorting_price` float NOT NULL,
-  `price` float NOT NULL,
-  `display_from_price` TINYINT(1) NOT NULL,
-  `product_id` binary(16) NOT NULL,
-  `customer_group_id` binary(16) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_product_listing_price.product_id` (`product_id`),
-  KEY `fk_product_listing_price.customer_group_id` (`customer_group_id`),
-  CONSTRAINT `fk_product_listing_price.customer_group_id` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_product_listing_price.product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `search_keyword` (
@@ -996,31 +987,6 @@ CREATE TABLE `product_media` (
   CONSTRAINT `fk_product_media.product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-DROP TABLE IF EXISTS `product_price`;
-CREATE TABLE `product_price` (
-  `id` binary(16) NOT NULL,
-  `quantity_start` int(11) NOT NULL DEFAULT '0',
-  `quantity_end` int(11) DEFAULT NULL,
-  `price` double NOT NULL DEFAULT '0',
-  `pseudo_price` double DEFAULT NULL,
-  `base_price` double DEFAULT NULL,
-  `percentage` decimal(10,2) DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `customer_group_id` binary(16) NOT NULL,
-  `product_id` binary(16) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pricegroup_2` (`quantity_start`),
-  KEY `pricegroup` (`quantity_end`),
-  KEY `product_prices` (`quantity_start`),
-  KEY `fk_product_price.customer_group_id` (`customer_group_id`),
-  KEY `fk_product_price.product_id` (`product_id`),
-  CONSTRAINT `fk_product_price.customer_group_id` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_product_price.product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
 DROP TABLE IF EXISTS `product_seo_category`;
 CREATE TABLE `product_seo_category` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -1086,7 +1052,7 @@ CREATE TABLE `product_stream_tab` (
 DROP TABLE IF EXISTS `product_translation`;
 CREATE TABLE `product_translation` (
   `additional_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NULL,
   `keywords` mediumtext COLLATE utf8mb4_unicode_ci,
   `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `description_long` mediumtext COLLATE utf8mb4_unicode_ci,

@@ -24,6 +24,20 @@ class ProductBasicCollection extends EntityCollection
         return parent::current();
     }
 
+    public function getParentIds(): array
+    {
+        return $this->fmap(function (ProductBasicStruct $product) {
+            return $product->getParentId();
+        });
+    }
+
+    public function filterByParentId(string $id): self
+    {
+        return $this->filter(function (ProductBasicStruct $product) use ($id) {
+            return $product->getParentId() === $id;
+        });
+    }
+
     public function getTaxIds(): array
     {
         return $this->fmap(function (ProductBasicStruct $product) {
@@ -66,20 +80,6 @@ class ProductBasicCollection extends EntityCollection
         });
     }
 
-    public function getContainerIds(): array
-    {
-        return $this->fmap(function (ProductBasicStruct $product) {
-            return $product->getContainerId();
-        });
-    }
-
-    public function filterByContainerId(string $id): self
-    {
-        return $this->filter(function (ProductBasicStruct $product) use ($id) {
-            return $product->getContainerId() === $id;
-        });
-    }
-
     public function getPriceGroupIds(): array
     {
         return $this->fmap(function (ProductBasicStruct $product) {
@@ -119,50 +119,6 @@ class ProductBasicCollection extends EntityCollection
                 return $product->getUnit();
             })
         );
-    }
-
-    public function getListingPriceIds(): array
-    {
-        $ids = [];
-        foreach ($this->elements as $element) {
-            foreach ($element->getListingPrices()->getIds() as $id) {
-                $ids[] = $id;
-            }
-        }
-
-        return $ids;
-    }
-
-    public function getListingPrices(): ProductListingPriceBasicCollection
-    {
-        $collection = new ProductListingPriceBasicCollection();
-        foreach ($this->elements as $element) {
-            $collection->fill($element->getListingPrices()->getElements());
-        }
-
-        return $collection;
-    }
-
-    public function getPriceIds(): array
-    {
-        $ids = [];
-        foreach ($this->elements as $element) {
-            foreach ($element->getPrices()->getIds() as $id) {
-                $ids[] = $id;
-            }
-        }
-
-        return $ids;
-    }
-
-    public function getPrices(): ProductPriceBasicCollection
-    {
-        $collection = new ProductPriceBasicCollection();
-        foreach ($this->elements as $element) {
-            $collection->fill($element->getPrices()->getElements());
-        }
-
-        return $collection;
     }
 
     protected function getExpectedClass(): string

@@ -5,6 +5,7 @@ namespace Shopware\Api\Entity\Dbal;
 use Doctrine\DBAL\Connection;
 use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\EntityDefinition;
+use Shopware\Api\Entity\InheritedDefinition;
 use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\EntitySearcherInterface;
 use Shopware\Api\Entity\Search\IdSearchResult;
@@ -30,6 +31,13 @@ class EntitySearcher implements EntitySearcherInterface
         $table = $definition::getEntityName();
         $query = new QueryBuilder($this->connection);
 
+        $instance = new $definition();
+        if ($instance instanceof InheritedDefinition) {
+            /** @var InheritedDefinition|EntityDefinition|string $definition */
+            $parent = $definition::getFields()->get($definition::getParentPropertyName());
+            EntityDefinitionResolver::joinManyToOne($definition, $definition::getEntityName(), $parent, $query);
+        }
+
         //add id select, e.g. `product`.`id`;
         $query->addSelect(
             EntityDefinitionResolver::escape($table) . '.' . EntityDefinitionResolver::escape('id') . ' as array_key',
@@ -54,15 +62,15 @@ class EntitySearcher implements EntitySearcherInterface
             EntityDefinitionResolver::joinField($fieldName, $definition, $table, $query, $context);
         }
 
-        $this->addFilters($definition, $criteria, $query);
+        $this->addFilters($definition, $criteria, $query, $context);
 
-        $this->addQueries($definition, $criteria, $query);
+        $this->addQueries($definition, $criteria, $query, $context);
 
-        $this->addSortings($definition, $criteria, $query);
+        $this->addSortings($definition, $criteria, $query, $context);
 
         $this->addFetchCount($criteria, $query);
 
-        $this->addGroupBy($definition, $criteria, $query);
+        $this->addGroupBy($definition, $criteria, $query, $context);
 
         //add pagination
         if ($criteria->getOffset() >= 0) {
@@ -91,10 +99,15 @@ class EntitySearcher implements EntitySearcherInterface
         return new IdSearchResult($total, $converted, $criteria, $context);
     }
 
-    private function addQueries(string $definition, Criteria $criteria, QueryBuilder $query): void
+    private function addQueries(string $definition, Criteria $criteria, QueryBuilder $query, TranslationContext $context): void
     {
         /** @var string|EntityDefinition $definition */
-        $queries = SqlQueryParser::parseRanking($criteria->getQueries(), $definition, $definition::getEntityName());
+        $queries = SqlQueryParser::parseRanking(
+            $criteria->getQueries(),
+            $definition,
+            $definition::getEntityName(),
+            $context
+        );
         if (empty($queries->getWheres())) {
             return;
         }
@@ -122,9 +135,9 @@ class EntitySearcher implements EntitySearcherInterface
         }
     }
 
-    private function addFilters(string $definition, Criteria $criteria, QueryBuilder $query): void
+    private function addFilters(string $definition, Criteria $criteria, QueryBuilder $query, TranslationContext $context): void
     {
-        $parsed = SqlQueryParser::parse($criteria->getAllFilters(), $definition);
+        $parsed = SqlQueryParser::parse($criteria->getAllFilters(), $definition, $context);
 
         if (empty($parsed->getWheres())) {
             return;
@@ -136,15 +149,16 @@ class EntitySearcher implements EntitySearcherInterface
         }
     }
 
-    private function addSortings(string $definition, Criteria $criteria, QueryBuilder $query): void
+    private function addSortings(string $definition, Criteria $criteria, QueryBuilder $query, TranslationContext $context): void
     {
         /* @var string|EntityDefinition $definition */
         foreach ($criteria->getSortings() as $sorting) {
             $query->addOrderBy(
-                EntityDefinitionResolver::resolveField(
+                EntityDefinitionResolver::getFieldAccessor(
                     $sorting->getField(),
                     $definition,
-                    $definition::getEntityName()
+                    $definition::getEntityName(),
+                    $context
                 ),
                 $sorting->getDirection()
             );
@@ -163,7 +177,7 @@ class EntitySearcher implements EntitySearcherInterface
         $query->select($selects);
     }
 
-    private function addGroupBy(string $definition, Criteria $criteria, QueryBuilder $query): void
+    private function addGroupBy(string $definition, Criteria $criteria, QueryBuilder $query, TranslationContext $context): void
     {
         /** @var string|EntityDefinition $definition */
         $table = $definition::getEntityName();
@@ -178,10 +192,11 @@ class EntitySearcher implements EntitySearcherInterface
 
         // each order by column has to be inside the group by statement (sql_mode=only_full_group_by)
         foreach ($criteria->getSortings() as $sorting) {
-            $fields[] = EntityDefinitionResolver::resolveField(
+            $fields[] = EntityDefinitionResolver::getFieldAccessor(
                 $sorting->getField(),
                 $definition,
-                $definition::getEntityName()
+                $definition::getEntityName(),
+                $context
             );
         }
 

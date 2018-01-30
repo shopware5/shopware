@@ -6,8 +6,6 @@ use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\Query\TermsQuery;
 use Shopware\Api\Entity\Search\Sorting\FieldSorting;
 use Shopware\Api\Product\Collection\ProductBasicCollection;
-use Shopware\Api\Product\Collection\ProductListingPriceBasicCollection;
-use Shopware\Api\Product\Collection\ProductPriceBasicCollection;
 use Shopware\Api\Product\Repository\ProductMediaRepository;
 use Shopware\Api\Product\Repository\ProductRepository;
 use Shopware\Api\Product\Struct\ProductMediaSearchResult;
@@ -75,47 +73,6 @@ class StorefrontProductRepository
         return $this->productMediaRepository->search($criteria, $context->getTranslationContext());
     }
 
-    /**
-     * @param ProductPriceBasicCollection|ProductListingPriceBasicCollection $prices
-     * @param ShopContext                                                    $context
-     *
-     * @return ProductPriceBasicCollection|ProductListingPriceBasicCollection
-     */
-    private function filterCustomerPrices($prices, ShopContext $context)
-    {
-        $current = $prices->filterByCustomerGroupId(
-            $context->getCurrentCustomerGroup()->getId()
-        );
-        if ($current->count() > 0) {
-            return $current;
-        }
-
-        return $prices->filterByCustomerGroupId(
-            $context->getFallbackCustomerGroup()->getId()
-        );
-    }
-
-    /**
-     * @param TaxRuleCollection                                              $taxRules
-     * @param ProductPriceBasicCollection|ProductListingPriceBasicCollection $prices
-     * @param ShopContext                                                    $context
-     *
-     * @return ProductListingPriceBasicCollection|ProductPriceBasicCollection
-     */
-    private function calculatePrices(TaxRuleCollection $taxRules, $prices, ShopContext $context)
-    {
-        foreach ($prices as $price) {
-            $calculated = $this->priceCalculator->calculate(
-                new PriceDefinition($price->getPrice(), $taxRules),
-                $context
-            );
-
-            $price->setPrice($calculated->getTotalPrice());
-        }
-
-        return $prices;
-    }
-
     private function loadListProducts(ProductBasicCollection $products, ShopContext $context): ProductBasicCollection
     {
         $media = $this->fetchMedia($products->getIds(), $context);
@@ -130,19 +87,9 @@ class StorefrontProductRepository
                 new PercentageTaxRule($product->getTax()->getRate(), 100),
             ]);
 
-            $product->setPrices(
-                $this->calculatePrices(
-                    $taxRules,
-                    $this->filterCustomerPrices($product->getPrices(), $context),
-                    $context
-                )
-            );
-            $product->setListingPrices(
-                $this->calculatePrices(
-                    $taxRules,
-                    $this->filterCustomerPrices($product->getListingPrices(), $context),
-                    $context
-                )
+            $definition = new PriceDefinition($product->getPrice(), $taxRules, 1, true);
+            $product->setCalculatedPrice(
+                $this->priceCalculator->calculate($definition, $context)
             );
 
             $product->setMedia(

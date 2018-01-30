@@ -114,35 +114,35 @@ class EntityForeignKeyResolver
             $alias = $root . '.' . $cascade->getPropertyName();
 
             if ($cascade instanceof OneToManyAssociationField) {
-                EntityDefinitionResolver::joinOneToMany($root, $cascade, $query);
+                EntityDefinitionResolver::joinOneToMany($definition, $root, $cascade, $query);
 
                 $query->addSelect(
-                    'GROUP_CONCAT(' .
-                    EntityDefinitionResolver::escape($alias) . '.id' .
-                    ' SEPARATOR \'|||\')  as ' . EntityDefinitionResolver::escape($alias)
+                    'GROUP_CONCAT(HEX(' .
+                    EntityDefinitionResolver::escape($alias) . '.id)' .
+                    ' SEPARATOR \'||\')  as ' . EntityDefinitionResolver::escape($alias)
                 );
             }
 
             if ($cascade instanceof ManyToManyAssociationField) {
                 $mappingAlias = $root . '.' . $cascade->getPropertyName() . '.mapping';
 
-                EntityDefinitionResolver::joinManyToMany($root, $cascade, $query);
+                EntityDefinitionResolver::joinManyToMany($definition, $root, $cascade, $query);
 
                 $query->addSelect(
-                    'GROUP_CONCAT(' .
+                    'GROUP_CONCAT(HEX(' .
                     EntityDefinitionResolver::escape($mappingAlias) . '.' . $cascade->getMappingReferenceColumn() .
-                    ' SEPARATOR \'|||\')  as ' . EntityDefinitionResolver::escape($alias)
+                    ') SEPARATOR \'||\')  as ' . EntityDefinitionResolver::escape($alias)
                 );
                 continue;
             }
 
             if ($cascade instanceof ManyToOneAssociationField) {
-                EntityDefinitionResolver::joinManyToOne($root, $cascade, $query);
+                EntityDefinitionResolver::joinManyToOne($definition, $root, $cascade, $query);
 
                 $query->addSelect(
-                    'GROUP_CONCAT(' .
-                    EntityDefinitionResolver::escape($alias) . '.id' .
-                    ' SEPARATOR \'|||\')  as ' . EntityDefinitionResolver::escape($alias)
+                    'GROUP_CONCAT(HEX(' .
+                    EntityDefinitionResolver::escape($alias) . '.id)' .
+                    ' SEPARATOR \'||\')  as ' . EntityDefinitionResolver::escape($alias)
                 );
             }
 
@@ -194,14 +194,14 @@ class EntityForeignKeyResolver
             $restrictions = [];
 
             foreach ($row as $key => $value) {
-                $value = array_filter(explode('|||', (string) $value));
+                $value = array_filter(explode('||', (string) $value));
                 if (empty($value)) {
                     continue;
                 }
 
                 $value = array_map(
                     function ($id) {
-                        return Uuid::fromBytes($id)->toString();
+                        return Uuid::fromString($id)->toString();
                     },
                     $value
                 );

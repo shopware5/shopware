@@ -4,10 +4,8 @@ namespace Shopware\Api\Product\Event\Product;
 
 use Shopware\Api\Category\Event\Category\CategoryBasicLoadedEvent;
 use Shopware\Api\Product\Collection\ProductDetailCollection;
-use Shopware\Api\Product\Event\ProductListingPrice\ProductListingPriceBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductManufacturer\ProductManufacturerBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductMedia\ProductMediaBasicLoadedEvent;
-use Shopware\Api\Product\Event\ProductPrice\ProductPriceBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductSearchKeyword\ProductSearchKeywordBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductStream\ProductStreamBasicLoadedEvent;
 use Shopware\Api\Product\Event\ProductTranslation\ProductTranslationBasicLoadedEvent;
@@ -55,6 +53,9 @@ class ProductDetailLoadedEvent extends NestedEvent
     public function getEvents(): ?NestedEventCollection
     {
         $events = [];
+        if ($this->products->getParents()->count() > 0) {
+            $events[] = new ProductBasicLoadedEvent($this->products->getParents(), $this->context);
+        }
         if ($this->products->getTaxes()->count() > 0) {
             $events[] = new TaxBasicLoadedEvent($this->products->getTaxes(), $this->context);
         }
@@ -64,14 +65,11 @@ class ProductDetailLoadedEvent extends NestedEvent
         if ($this->products->getUnits()->count() > 0) {
             $events[] = new UnitBasicLoadedEvent($this->products->getUnits(), $this->context);
         }
-        if ($this->products->getListingPrices()->count() > 0) {
-            $events[] = new ProductListingPriceBasicLoadedEvent($this->products->getListingPrices(), $this->context);
+        if ($this->products->getChildren()->count() > 0) {
+            $events[] = new ProductBasicLoadedEvent($this->products->getChildren(), $this->context);
         }
         if ($this->products->getMedia()->count() > 0) {
             $events[] = new ProductMediaBasicLoadedEvent($this->products->getMedia(), $this->context);
-        }
-        if ($this->products->getPrices()->count() > 0) {
-            $events[] = new ProductPriceBasicLoadedEvent($this->products->getPrices(), $this->context);
         }
         if ($this->products->getSearchKeywords()->count() > 0) {
             $events[] = new ProductSearchKeywordBasicLoadedEvent($this->products->getSearchKeywords(), $this->context);
