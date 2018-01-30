@@ -522,24 +522,6 @@ class Kernel implements HttpKernelInterface
         $this->config = $configLoader->loadConfig(
             $this->getConfigPath()
         );
-
-        // Set up mpdf cache dirs
-        if (!defined('_MPDF_TEMP_PATH')) {
-            define('_MPDF_TEMP_PATH', $this->getCacheDir() . '/mpdf/tmp/');
-        }
-
-        if (!defined('_MPDF_TTFONTDATAPATH')) {
-            define('_MPDF_TTFONTDATAPATH', $this->getCacheDir() . '/mpdf/ttfontdata/');
-        }
-
-        // Set up custom mPDF fonts
-        if (!defined('_MPDF_SYSTEM_TTFONTS_CONFIG')) {
-            define('_MPDF_SYSTEM_TTFONTS_CONFIG', $this->getRootDir() . '/engine/Library/Mpdf/config_fonts.php');
-        }
-
-        if (!defined('_MPDF_SYSTEM_TTFONTS')) {
-            define('_MPDF_SYSTEM_TTFONTS', $this->getRootDir() . '/engine/Library/Mpdf/ttfonts/');
-        }
     }
 
     /**
@@ -628,8 +610,8 @@ class Kernel implements HttpKernelInterface
         $runtimeDirectories = [
             'cache' => $this->getCacheDir(),
             'coreCache' => $this->config['cache']['backendOptions']['cache_dir'],
-            'mpdfTemp' => _MPDF_TEMP_PATH,
-            'mpdfFontData' => _MPDF_TTFONTDATAPATH,
+            'mpdfTemp' => $this->config['mpdf']['defaultConfig']['tempDir'],
+            'mpdfFontData' => $this->config['mpdf']['defaultConfig']['tempDir'] . '/ttfontdata',
             'logs' => $this->getLogDir(),
         ];
 

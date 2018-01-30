@@ -246,4 +246,58 @@ return array_replace_recursive([
         'webDir' => $this->DocPath('web'),
         'cacheDir' => $this->DocPath('web_cache'),
     ],
+    'mpdf' => [
+        // Passed to \Mpdf\Mpdf::__construct:
+        'defaultConfig' => [
+            'tempDir' => $this->getCacheDir() . '/mpdf/',
+            'fontDir' => $this->DocPath('engine_Library_Mpdf_ttfonts_'),
+            'fonttrans' => [
+                'helvetica' => 'arial',
+                'verdana' => 'arial',
+                'times' => 'timesnewroman',
+                'courier' => 'couriernew',
+                'trebuchet' => 'arial',
+                'comic' => 'arial',
+                'franklin' => 'arial',
+                'albertus' => 'arial',
+                'arialuni' => 'arial',
+                'zn_hannom_a' => 'arial',
+                'ocr-b' => 'ocrb',
+                'ocr-b10bt' => 'ocrb',
+                'damase' => 'mph2bdamase',
+            ],
+            'fontdata' => [
+                'arial' => [
+                    'R' => 'arial.ttf',
+                    'B' => 'arialbd.ttf',
+                    'I' => 'ariali.ttf',
+                    'BI' => 'arialbi.ttf',
+                ],
+                'couriernew' => [
+                    'R' => 'cour.ttf',
+                    'B' => 'courbd.ttf',
+                    'I' => 'couri.ttf',
+                    'BI' => 'courbi.ttf',
+                ],
+                'georgia' => [
+                    'R' => 'georgia.ttf',
+                    'B' => 'georgiab.ttf',
+                    'I' => 'georgiai.ttf',
+                    'BI' => 'georgiaz.ttf',
+                ],
+                'timesnewroman' => [
+                    'R' => 'times.ttf',
+                    'B' => 'timesbd.ttf',
+                    'I' => 'timesi.ttf',
+                    'BI' => 'timesbi.ttf',
+                ],
+                'verdana' => [
+                    'R' => 'verdana.ttf',
+                    'B' => 'verdanab.ttf',
+                    'I' => 'verdanai.ttf',
+                    'BI' => 'verdanaz.ttf',
+                ],
+            ],
+        ],
+    ],
 ], $customConfig);

@@ -254,15 +254,24 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if ($this->_renderer === 'html' || !$this->_renderer) {
             echo $data;
         } elseif ($this->_renderer === 'pdf') {
+            $mpdfConfig = array_replace_recursive(
+                Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig'),
+                [
+                    'margin_left' => $this->_document['left'],
+                    'margin_right' => $this->_document['right'],
+                    'margin_top' => $this->_document['top'],
+                    'margin_bottom' => $this->_document['bottom'],
+                ]
+            );
             if ($this->_preview == true || !$this->_documentHash) {
-                $mpdf = new mPDF('utf-8', 'A4', '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
+                $mpdf = new \Mpdf\Mpdf($mpdfConfig);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output();
                 exit;
             }
             $documentsPath = rtrim(Shopware()->Container()->getParameter('shopware.app.documentsdir'), '/');
             $path = $documentsPath . '/' . $this->_documentHash . '.pdf';
-            $mpdf = new mPDF('utf-8', 'A4', '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
+            $mpdf = new \Mpdf\Mpdf($mpdfConfig);
             $mpdf->WriteHTML($data);
             $mpdf->Output($path, 'F');
         }
