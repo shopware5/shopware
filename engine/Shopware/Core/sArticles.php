@@ -1154,40 +1154,43 @@ class sArticles
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $article = $this->getLegacyProduct(
+        $legacyProduct = $this->getLegacyProduct(
             $product,
             $categoryId,
             $selection
         );
 
-        if (!empty('isSelectionSpecified') && !$article['isSelectionSpecified'] && $product->hasConfigurator()) {
-            $criteria = new SearchBundle\Criteria();
-            foreach ($selection as $groupId => $optionId) {
-                $criteria->addBaseCondition(
-                    new VariantCondition([(int) $optionId], true, (int) $groupId)
-                );
-            }
-
-            $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
-
-            $result = new SearchBundle\ProductSearchResult(
-                [$product->getNumber() => $product],
-                1,
-                [],
-                $criteria,
-                $context
-            );
-
-            $service->updatePrices($criteria, $result, $context);
-
-            if ($product->displayFromPrice()) {
-                $article['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
-            }
-
-            $article['price'] = $product->getListingPrice()->getCalculatedPrice();
+        $isSelectionSpecified = $legacyProduct['isSelectionSpecified'];
+        if ($isSelectionSpecified === true || !$product->hasConfigurator()) {
+            return $legacyProduct;
         }
 
-        return $article;
+        $criteria = new SearchBundle\Criteria();
+        foreach ($selection as $groupId => $optionId) {
+            $criteria->addBaseCondition(
+                new VariantCondition([(int) $optionId], true, (int) $groupId)
+            );
+        }
+
+        $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
+
+        $result = new SearchBundle\ProductSearchResult(
+            [$product->getNumber() => $product],
+            1,
+            [],
+            $criteria,
+            $context
+        );
+
+        $service->updatePrices($criteria, $result, $context);
+
+        if ($product->displayFromPrice()) {
+            $legacyProduct['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
+        }
+
+        $legacyProduct['price'] = $product->getListingPrice()->getCalculatedPrice();
+
+        return $legacyProduct;
     }
 
     /**
