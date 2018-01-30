@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 5
- * Copyright (c) shopware AG
+ * Copyright (c) shopware AG.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
@@ -94,7 +93,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $type = $element->getConfig()->get('article_type');
-        $key = 'emotion-element--' . $element->getId();
+        $key = 'emotion-element--'.$element->getId();
 
         if ($type === self::TYPE_STATIC_PRODUCT) {
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('article')]);
@@ -117,7 +116,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $key = 'emotion-element--' . $element->getId();
+        $key = 'emotion-element--'.$element->getId();
         $type = $element->getConfig()->get('article_type');
 
         /** @var ListProduct $product */

@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 5
- * Copyright (c) shopware AG
+ * Copyright (c) shopware AG.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
@@ -104,7 +103,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
-        $key = 'emotion-element--' . $element->getId();
+        $key = 'emotion-element--'.$element->getId();
 
         switch ($type) {
             case self::TYPE_PRODUCT_STREAM:
@@ -154,7 +153,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
-        $key = 'emotion-element--' . $element->getId();
+        $key = 'emotion-element--'.$element->getId();
 
         switch ($type) {
             case self::TYPE_PRODUCT_STREAM:
