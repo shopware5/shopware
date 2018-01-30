@@ -9,11 +9,12 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Additions 
 
 * Added new column `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
+* Added all additional article columns to product import/export
+* Added compatibility of the media garbage collector with the smarty function 'media'
 
 ### Changes
 
 * Changed loading of the themes/_private folder to be always executed
-* Added all additional article columns to product import/export
 * Changed the `checkOrderStatus` method in `Shopware_Controllers_Backend_Order` to only send e-mails when necessary
 * Changed `themes/Backend/ExtJs/backend/order/controller/batch.js` to inform the user about configuration errors
 * Changed `themes/Backend/ExtJs/backend/order/view/batch/form.js` to allow for more precise form validation and better feedback to the user
