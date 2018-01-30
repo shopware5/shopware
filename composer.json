@@ -92,8 +92,7 @@
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
             "Zend": "engine/Library/",
-            "JSMin": "engine/Library/minify/",
-            "mPDF": "engine/Library/Mpdf/"
+            "JSMin": "engine/Library/minify/"
         },
         "classmap": [
             "engine/Shopware/Core/"

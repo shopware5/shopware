@@ -57,10 +57,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Updated mPDF to v6.1.4 and added mPDF 7, included it via composer in vendor/
-    * mPDF 7 is now configurable in `config.php`, see the `mpdf`
-      configuration key and its default values in
-      `engine/Shopware/Configs/Default.php`
+* Updated mPDF to v7.0.3 and included it via composer
+    * mPDF is now configurable in `config.php`, see the `mpdf` configuration
+      key and its default values in `engine/Shopware/Configs/Default.php`
     * mPDF 7 is not compatible with previous versions of mPDF, as it features
       new class names and constructor options
 * Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
@@ -93,6 +92,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Removals
 
+* Removed the old, bundled mPDF. The old `mPDF` constructor is no longer
+  available and has been replaced by `\Mpdf\Mpdf`.
 * Removed config option for maximum number of category pages
 * Removed "Force http canonical url" setting in basic settings as it is obsolete
 * Removed config option `template_security['enabled']` for toggling smarty security
