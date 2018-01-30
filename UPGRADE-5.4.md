@@ -58,6 +58,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Updated mPDF to v6.1.4 and added mPDF 7, included it via composer in vendor/
+    * mPDF 7 is now configurable in `config.php`, see the `mpdf`
+      configuration key and its default values in
+      `engine/Shopware/Configs/Default.php`
     * mPDF 7 is not compatible with previous versions of mPDF, as it features
       new class names and constructor options
 * Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
