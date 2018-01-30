@@ -99,7 +99,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
+     * @deprecated Use '<your-widget-name>' snippet from 'backend/widget/labels' namespace instead
      *
      * @return string
      */
@@ -109,7 +109,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
+     * @deprecated Use '<your-widget-name>' snippet from 'backend/widget/labels' namespace instead
      *
      * @param string $label
      */
