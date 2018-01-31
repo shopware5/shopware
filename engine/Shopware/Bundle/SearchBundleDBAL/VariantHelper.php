@@ -56,6 +56,11 @@ class VariantHelper implements VariantHelperInterface
     protected $fieldHelper;
 
     /**
+     * @var null|VariantFacet|bool
+     */
+    protected $variantFacet = false;
+
+    /**
      * @var ReflectionHelper
      */
     private $reflectionHelper;
@@ -64,11 +69,6 @@ class VariantHelper implements VariantHelperInterface
      * @var \Shopware_Components_Config
      */
     private $config;
-
-    /**
-     * @var null|VariantFacet|bool
-     */
-    private $variantFacet;
     /**
      * @var ListingPriceHelper
      */
@@ -103,11 +103,9 @@ class VariantHelper implements VariantHelperInterface
      */
     public function getVariantFacet()
     {
-        if ($this->variantFacet !== null) {
-            return $this->variantFacet ? $this->variantFacet : null;
+        if ($this->variantFacet !== false) {
+            return $this->variantFacet;
         }
-
-        $this->variantFacet = false;
 
         $json = $this->connection->createQueryBuilder()
             ->addSelect('facet')
@@ -119,16 +117,18 @@ class VariantHelper implements VariantHelperInterface
             ->fetchColumn();
 
         if (empty($json)) {
-            return $this->variantFacet ? $this->variantFacet : null;
+            return $this->variantFacet = null;
         }
 
         $arr = json_decode($json, true);
 
-        if (!empty($arr)) {
-            $this->variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
+        if (empty($arr)) {
+            return $this->variantFacet = null;
         }
 
-        return $this->variantFacet ? $this->variantFacet : null;
+        $this->variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
+
+        return $this->variantFacet;
     }
 
     /**
