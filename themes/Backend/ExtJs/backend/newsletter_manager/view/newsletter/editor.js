@@ -70,8 +70,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
             'openPreview');
 
         me.callParent(arguments);
-
-
     },
 
     /**
@@ -93,6 +91,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                     name: 'mailAddress',
                     padding: '0 0 0 8',
                     ui: 'shopware-ui',
+                    checkChangeBuffer: 1000,
                     listeners: {
                         validitychange: function(field, isValid) {
                             var button = Ext.getCmp('sendMail');
@@ -111,7 +110,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                         me.fireEvent('sendTestMail', me.form);
                     },
                     disabled: true
-
                 },
                 '-',
                 {
@@ -127,7 +125,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
         });
 
         return me.toolbar;
-
     },
 
     /**
@@ -139,7 +136,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
 
         me.tinyMce = Ext.create('Shopware.form.field.TinyMCE', {
             name : 'content',
-            // Workarround for the tinyMCE height bug
+            // Workaround for the tinyMCE height bug
             margin: '0 0 27 0 ',
             height: 457,
             editor: {
