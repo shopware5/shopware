@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 interface MyInterface
 {
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null);
+    public function myPublic($bar, $foo = 'bar', array $barBar = array(), MyInterface $fooFoo = null);
 }
 
 interface MyReferenceInterface
@@ -38,7 +38,7 @@ interface MyReferenceInterface
 
 class MyBasicTestClass implements MyInterface
 {
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null)
+    public function myPublic($bar, $foo = 'bar', array $barBar = array(), MyInterface $fooFoo = null)
     {
         return $bar . $foo;
     }
@@ -87,11 +87,11 @@ class EnlightHookProxyFactoryTest extends TestCase
 class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\MyBasicTestClass implements \Enlight_Hook_Proxy
 {
 
-    private $_hookProxyExecutionContexts = null;
+    public function executeParent($method, $args = array())
+    {
+        return call_user_func_array([$this, 'parent::' . $method], $args);
+    }
 
-    /**
-     * @inheritdoc
-     */
     public static function getHookMethods()
     {
         return ['myPublic', 'myProtected'];
@@ -100,63 +100,11 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
     /**
      * @inheritdoc
      */
-    public function pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context)
-    {
-        $this->_hookProxyExecutionContexts[$method][] = $context;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function popHookExecutionContext($method)
-    {
-        if (isset($this->_hookProxyExecutionContexts[$method])) {
-            array_pop($this->_hookProxyExecutionContexts[$method]);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCurrentHookProxyExecutionContext($method)
-    {
-        if (!isset($this->_hookProxyExecutionContexts[$method]) || count($this->_hookProxyExecutionContexts[$method]) === 0) {
-            return null;
-        }
-
-        $contextCount = count($this->_hookProxyExecutionContexts[$method]);
-        $context = $this->_hookProxyExecutionContexts[$method][$contextCount - 1];
-
-        return $context;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function executeParent($method, array $args = array())
-    {
-        $context = $this->getCurrentHookProxyExecutionContext($method);
-        if (!$context) {
-            throw new Exception(
-                sprintf('Cannot execute parent without hook execution context for method "%s"', $method)
-            );
-        }
-
-        return $context->executeReplaceChain($args);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function myPublic($bar, $foo = 'bar', array $barBar = array(), \Shopware\Tests\Unit\Components\MyInterface $fooFoo = null)
     {
-        $method = 'myPublic';
-        $context = $this->getCurrentHookProxyExecutionContext($method);
-        $hookManager = ($context) ? $context->getHookManager() : Shopware()->Hooks();
-
-        return $hookManager->executeHooks(
+        return Shopware()->Hooks()->executeHooks(
             $this,
-            $method,
+            'myPublic',
             ['bar' => $bar, 'foo' => $foo, 'barBar' => $barBar, 'fooFoo' => $fooFoo]
         );
     }
@@ -166,13 +114,9 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
      */
     protected function myProtected($bar)
     {
-        $method = 'myProtected';
-        $context = $this->getCurrentHookProxyExecutionContext($method);
-        $hookManager = ($context) ? $context->getHookManager() : Shopware()->Hooks();
-
-        return $hookManager->executeHooks(
+        return Shopware()->Hooks()->executeHooks(
             $this,
-            $method,
+            'myProtected',
             ['bar' => $bar]
         );
     }
@@ -192,11 +136,11 @@ EOT;
 class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\MyReferenceTestClass implements \Enlight_Hook_Proxy
 {
 
-    private $_hookProxyExecutionContexts = null;
+    public function executeParent($method, $args = array())
+    {
+        return call_user_func_array([$this, 'parent::' . $method], $args);
+    }
 
-    /**
-     * @inheritdoc
-     */
     public static function getHookMethods()
     {
         return ['myPublic'];
@@ -205,63 +149,11 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
     /**
      * @inheritdoc
      */
-    public function pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context)
-    {
-        $this->_hookProxyExecutionContexts[$method][] = $context;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function popHookExecutionContext($method)
-    {
-        if (isset($this->_hookProxyExecutionContexts[$method])) {
-            array_pop($this->_hookProxyExecutionContexts[$method]);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCurrentHookProxyExecutionContext($method)
-    {
-        if (!isset($this->_hookProxyExecutionContexts[$method]) || count($this->_hookProxyExecutionContexts[$method]) === 0) {
-            return null;
-        }
-
-        $contextCount = count($this->_hookProxyExecutionContexts[$method]);
-        $context = $this->_hookProxyExecutionContexts[$method][$contextCount - 1];
-
-        return $context;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function executeParent($method, array $args = array())
-    {
-        $context = $this->getCurrentHookProxyExecutionContext($method);
-        if (!$context) {
-            throw new Exception(
-                sprintf('Cannot execute parent without hook execution context for method "%s"', $method)
-            );
-        }
-
-        return $context->executeReplaceChain($args);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function myPublic(&$bar, $foo)
     {
-        $method = 'myPublic';
-        $context = $this->getCurrentHookProxyExecutionContext($method);
-        $hookManager = ($context) ? $context->getHookManager() : Shopware()->Hooks();
-
-        return $hookManager->executeHooks(
+        return Shopware()->Hooks()->executeHooks(
             $this,
-            $method,
+            'myPublic',
             ['bar' => &$bar, 'foo' => $foo]
         );
     }
