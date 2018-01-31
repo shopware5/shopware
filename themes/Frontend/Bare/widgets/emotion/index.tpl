@@ -80,7 +80,7 @@
                                             {$emotionRows[$viewport.alias] = 0}
                                         {/if}
 
-                                        {if $emotionRows[$viewport.alias] < $viewport.endRow}
+                                        {if $viewport.visible && ($emotionRows[$viewport.alias] < $viewport.endRow)}
                                             {$emotionRows[$viewport.alias] = $viewport.endRow}
                                         {/if}
                                     {/foreach}
