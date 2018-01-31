@@ -277,6 +277,9 @@ class ProductMapping implements MappingInterface
         $prices = [];
         $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
         $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
+        if (!$shop->isMain()) {
+            $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getParentId());
+        }
 
         foreach ($currencies as $currency) {
             foreach ($customerGroups as $customerGroup) {
