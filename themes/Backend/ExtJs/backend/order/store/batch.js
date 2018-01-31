@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Order.store.Batch', {
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Order.model.Order',
+    model:'Shopware.apps.Order.model.Batch',
 
     /**
      * Configure the data communication

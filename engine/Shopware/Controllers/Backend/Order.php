@@ -673,7 +673,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $addAttachments = $this->request->getParam('addAttachments') === 'true';
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         if (empty($orders)) {
             $this->View()->assign([
@@ -685,17 +685,21 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        foreach ($orders as $key => $data) {
-            $orders[$key]['mail'] = null;
-            $orders[$key]['languageSubShop'] = null;
+        foreach ($orders as &$data) {
+            $data['mail'] = null;
+            $data['languageSubShop'] = null;
 
-            if (empty($data) || empty($data['id'])) {
+            if (empty($data['id'])) {
+                $data['success'] = false;
+                $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
                 continue;
             }
 
             /** @var $order \Shopware\Models\Order\Order */
             $order = Shopware()->Models()->find(Order::class, $data['id']);
             if (!$order) {
+                $data['success'] = false;
+                $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
                 continue;
             }
 
@@ -716,6 +720,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             try {
                 Shopware()->Models()->flush($order);
             } catch (Exception $e) {
+                $data['success'] = false;
+                $data['errorMessage'] = sprintf(
+                    $namespace->get('save_order_failed', 'Error when saving the order. Error: %s'),
+                    $e->getMessage()
+                );
                 continue;
             }
 
@@ -729,9 +738,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
             $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
 
-            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
-            //return the modified data array.
-            $orders[$key] = $data;
+            try {
+                // The method '$this->checkOrderStatus()' (even its name would not imply that) sends mails and can fail
+                // with an exception. Catch this exception, so the batch process does not abort.
+                $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
+            } catch (\Exception $e) {
+                $data['mail'] = null;
+                $data['success'] = false;
+                $data['errorMessage'] = sprintf(
+                    $namespace->get('send_mail_failed', 'Error when sending mail. Error: %s'),
+                    $e->getMessage()
+                );
+                continue;
+            }
+
+            $data['success'] = true;
+            $data['errorMessage'] = null;
         }
 
         $this->View()->assign([
