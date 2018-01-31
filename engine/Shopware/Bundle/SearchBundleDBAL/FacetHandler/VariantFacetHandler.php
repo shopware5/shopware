@@ -35,7 +35,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
@@ -56,7 +56,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @var PriceHelper
+     * @var PriceHelperInterface
      */
     private $helper;
 
@@ -65,11 +65,17 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
      */
     private $gateway;
 
+    /**
+     * @param ConfiguratorOptionsGateway   $gateway
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param QueryAliasMapper             $queryAliasMapper
+     * @param PriceHelperInterface         $helper
+     */
     public function __construct(
         ConfiguratorOptionsGateway $gateway,
         QueryBuilderFactoryInterface $queryBuilderFactory,
         QueryAliasMapper $queryAliasMapper,
-        PriceHelper $helper
+        PriceHelperInterface $helper
     ) {
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
             $this->fieldName = 'var';
