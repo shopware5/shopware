@@ -506,12 +506,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $order = $this->getRepository()->find($id);
 
         //if the status has been changed an status mail is created.
+        $warning = null;
         $mail = null;
         if ($order->getOrderStatus()->getId() !== $statusBefore->getId() || $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
             if ($order->getOrderStatus()->getId() !== $statusBefore->getId()) {
-                $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
+                $status = $order->getOrderStatus();
             } else {
-                $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
+                $status = $order->getPaymentStatus();
+            }
+            try {
+                $mail = $this->getMailForOrder($order->getId(), $status->getId());
+            } catch (\Exception $e) {
+                $warning = sprintf(
+                    $namespace->get('warning/mail_creation_failed'),
+                    $status->getName(),
+                    $e->getMessage()
+                );
             }
         }
 
@@ -522,10 +532,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['mail'] = null;
         }
 
-        $this->View()->assign([
+        $result = [
             'success' => true,
             'data' => $data,
-        ]);
+        ];
+        if (isset($warning)) {
+            $result['warning'] = $warning;
+        }
+
+        $this->View()->assign($result);
     }
 
     /**
@@ -797,17 +812,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $stateTranslator = $this->get('shopware.components.state_translator');
 
         $previousLocale = $this->getCurrentLocale();
-        foreach ($orders as $key => $data) {
-            $orders[$key]['mail'] = null;
-            $orders[$key]['languageSubShop'] = null;
+
+        foreach ($orders as &$data) {
+            $data['success'] = false;
+            $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
 
             if (empty($data) || empty($data['id'])) {
+                $data['success'] = false;
+                $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
                 continue;
             }
 
             /** @var \Shopware\Models\Order\Order $order */
             $order = $modelManager->find(Order::class, $data['id']);
             if (!$order) {
+                $data['success'] = false;
+                $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
                 continue;
             }
 
@@ -830,6 +850,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             try {
                 $modelManager->flush($order);
             } catch (Exception $e) {
+                $data['success'] = false;
+                $data['errorMessage'] = sprintf(
+                    $namespace->get('save_order_failed', 'Error when saving the order. Error: %s'),
+                    $e->getMessage()
+                );
                 continue;
             }
 
@@ -851,9 +876,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['paymentStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $modelManager->toArray($order->getPaymentStatus()));
             $data['orderStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $modelManager->toArray($order->getOrderStatus()));
 
-            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
-            // Return the modified data array.
-            $orders[$key] = $data;
+            try {
+                // The method '$this->checkOrderStatus()' (even its name would not imply that) sends mails and can fail
+                // with an exception. Catch this exception, so the batch process does not abort.
+                $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
+            } catch (\Exception $e) {
+                $data['mail'] = null;
+                $data['success'] = false;
+                $data['errorMessage'] = sprintf(
+                    $namespace->get('send_mail_failed', 'Error when sending mail. Error: %s'),
+                    $e->getMessage()
+                );
+                continue;
+            }
+
+            $data['success'] = true;
+            $data['errorMessage'] = null;
         }
 
         $this->View()->assign([
