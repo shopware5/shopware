@@ -62,6 +62,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
       key and its default values in `engine/Shopware/Configs/Default.php`
     * mPDF 7 is not compatible with previous versions of mPDF, as it features
       new class names and constructor options
+    * Note: The fonts included in upstream mPDF are not included in Shopware.
+      The only included fonts are located in `engine/Library/Mpdf/ttfonts`.
 * Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 * Made the event selectors configurable in the `swJumpToTab` jQuery plugin
 * `\Shopware\Bundle\SearchBundle\ProductSearchResult::__construct` requires now the used Criteria and ShopContext object
