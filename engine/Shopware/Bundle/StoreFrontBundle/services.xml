@@ -218,6 +218,14 @@
             <argument type="service" id="config" />
         </service>
 
+        <service id="shopware_storefront.variant_cheapest_price_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VariantCheapestPriceGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
+            <argument type="service" id="config" />
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
+        </service>
+
         <service id="shopware_storefront.price_group_discount_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PriceGroupDiscountGateway">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
@@ -490,6 +498,8 @@
         <service id="shopware_storefront.variant_listing_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
+            <argument type="service" id="shopware_storefront.variant_cheapest_price_gateway"/>
+            <argument type="service" id="shopware_storefront.price_calculation_service"/>
         </service>
 
         <service id="shopware_storefront.listing_link_rewrite_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService">
