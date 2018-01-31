@@ -362,7 +362,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
 * Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
 * Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
-* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 
 ### Removals
 
