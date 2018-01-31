@@ -1160,36 +1160,6 @@ class sArticles
             $selection
         );
 
-        $isSelectionSpecified = $legacyProduct['isSelectionSpecified'];
-        if ($isSelectionSpecified === true || !$product->hasConfigurator()) {
-            return $legacyProduct;
-        }
-
-        $criteria = new SearchBundle\Criteria();
-        foreach ($selection as $groupId => $optionId) {
-            $criteria->addBaseCondition(
-                new VariantCondition([(int) $optionId], true, (int) $groupId)
-            );
-        }
-
-        $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
-
-        $result = new SearchBundle\ProductSearchResult(
-            [$product->getNumber() => $product],
-            1,
-            [],
-            $criteria,
-            $context
-        );
-
-        $service->updatePrices($criteria, $result, $context);
-
-        if ($product->displayFromPrice()) {
-            $legacyProduct['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
-        }
-
-        $legacyProduct['price'] = $product->getListingPrice()->getCalculatedPrice();
-
         return $legacyProduct;
     }
 
@@ -2513,6 +2483,42 @@ class sArticles
         $data['sDescriptionKeywords'] = $this->getDescriptionKeywords(
             $data['description_long']
         );
+
+        $isSelectionSpecified = false;
+        if (isset($data['isSelectionSpecified']) || array_key_exists('isSelectionSpecified', $data)) {
+            $isSelectionSpecified = $data['isSelectionSpecified'];
+        }
+
+        if ($isSelectionSpecified === true || !$product->hasConfigurator()) {
+            $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
+
+            return $data;
+        }
+
+        $criteria = new SearchBundle\Criteria();
+        foreach ($selection as $groupId => $optionId) {
+            $criteria->addBaseCondition(
+                new VariantCondition([(int) $optionId], true, (int) $groupId)
+            );
+        }
+
+        $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
+
+        $result = new SearchBundle\ProductSearchResult(
+            [$product->getNumber() => $product],
+            1,
+            [],
+            $criteria,
+            $this->contextService->getShopContext()
+        );
+
+        $service->updatePrices($criteria, $result, $this->contextService->getShopContext());
+
+        if ($product->displayFromPrice()) {
+            $data['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
+        }
+
+        $data['price'] = $product->getListingPrice()->getCalculatedPrice();
 
         $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
 
