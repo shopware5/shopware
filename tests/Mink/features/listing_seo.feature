@@ -2,11 +2,11 @@
 Feature: Listing Seo BasicSettings
 
     @browsing
-    Scenario: I should not see canonical, index and follow in emotion world page for category with no pagination SEO
+    Scenario: I should see canonical, index and follow in emotion world page for category with no pagination SEO
       Given the config value of "seoIndexPaginationLinks" is 0
       And I am on the listing page for category 5
 
-      Then I should not see canonical link
+      Then I should see canonical link "genusswelten"
       And I should not see pagination metas
       And I should see robots metas "index" and "follow"
 
@@ -15,17 +15,16 @@ Feature: Listing Seo BasicSettings
       Given the config value of "seoIndexPaginationLinks" is 0
       And I am on the listing page for category 5 on page 1
 
-      Then I should not see canonical link
+      Then I should see canonical link "genusswelten"
       And I should not see pagination metas
       And I should see robots metas "noindex" and "follow"
-
 
     @browsing
     Scenario: I see canonical, index and follow in emotion world page for category with pagination SEO
       Given the config value of "seoIndexPaginationLinks" is 1
       And I am on the listing page for category 5
 
-      Then I should not see canonical link
+      Then I should see canonical link "genusswelten"
       And I should not see pagination metas
       And I should see robots metas "index" and "follow"
 
