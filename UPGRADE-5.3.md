@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Changes
 
 * Changed loading of the themes/_private folder to be always executed
+* Added all additional article columns to product import/export
 
 ### Removals
 

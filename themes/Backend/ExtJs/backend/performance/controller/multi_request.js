@@ -47,6 +47,10 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         done: {
             message: '{s name=request/done_message}Operation finished{/s}',
             title: '{s name=request/done_title}Successful{/s}'
+        },
+        error: {
+            message: '{s name=request/error_message}Request failed{/s}',
+            title: '{s name=request/error_title}Error{/s}'
         }
     },
 
@@ -267,9 +271,9 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     runRequest: function(offset, dialog, currentConfig, configs) {
         var me = this;
 
-        // support for multiple batch operation.
+        // Support for multiple batch operations
         if (currentConfig === null) {
-            // get next request configuration
+            // Get next request configuration
             currentConfig = configs.shift();
         }
 
@@ -278,49 +282,43 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             params = { };
         }
 
-        // last batch size processed?
+        // Last batch size processed?
         if (offset >= currentConfig.totalCount) {
-            // is progress bar configured?
+            // Is a progress bar configured?
             if (currentConfig.progress) {
                 currentConfig.progress.updateProgress(1, me.snippets.done.message, true);
             }
 
-            // no more request configurations exists?
+            // Was the request stack processed completely?
             if (configs.length === 0) {
                 // Enable close button, set progressBar to 'finish'
-                dialog.closeButton.enable();
-                dialog.startButton.show();
-                dialog.cancelButton.hide();
+                me.resetButtons(dialog);
 
                 // Show 'finished' message
                 Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
             } else {
-                // cancel button pushed?
+                // Cancel button pushed?
                 if (me.cancelOperation) {
-                    dialog.closeButton.enable();
-                    dialog.startButton.show();
-                    dialog.cancelButton.hide();
+                    me.resetButtons(dialog);
                     return;
                 }
 
-                // get next config and call again
+                // Get next config and call again
                 currentConfig = configs.shift();
                 me.runRequest(0, dialog, currentConfig, configs);
             }
             return;
         }
 
-        // cancel button pushed?
+        // Cancel button pushed?
         if (me.cancelOperation) {
-            dialog.closeButton.enable();
-            dialog.startButton.show();
-            dialog.cancelButton.hide();
+            me.resetButtons(dialog);
             return;
         }
 
-        // has the current request a progress bar?
+        // Does the current request have a progress bar?
         if (currentConfig.progress) {
-            // updates the progress bar value and text, the last parameter is the animation flag
+            // Updates the progress bar value and text, the last parameter is the animation flag
             currentConfig.progress.updateProgress(
                 ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)) / currentConfig.totalCount,
                 Ext.String.format(currentConfig.snippet, ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)), currentConfig.totalCount),
@@ -328,7 +326,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             );
         }
 
-        // set the params single, to support additional request params
+        // Set the params single, to support additional request params
         params.offset = offset;
         params.limit = currentConfig.batchSize;
 
@@ -340,14 +338,31 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             success: function(response) {
                 var json = Ext.decode(response.responseText);
 
-                // start recusive call here
+                // Start recursive call here
                 me.runRequest((offset + currentConfig.batchSize), dialog, currentConfig, configs);
             },
             failure: function(response) {
-                me.shouldCancel = true;
-                me.runRequest((offset + currentConfig.batchSize), dialog, currentConfig, configs);
+                var message = [
+                    me.snippets.error.message,
+                    response.status,
+                    response.statusText
+                ].join('</br>');
+
+                me.resetButtons(dialog);
+                Shopware.Notification.createGrowlMessage(me.snippets.error.title, message);
             }
         });
+    },
+
+    /**
+     * Resets the dialogs buttons to their initial state
+     *
+     * @param dialog
+     */
+    resetButtons: function (dialog) {
+        dialog.closeButton.enable();
+        dialog.startButton.show();
+        dialog.cancelButton.hide();
     },
 
     /**

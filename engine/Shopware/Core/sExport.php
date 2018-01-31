@@ -671,7 +671,9 @@ class sExport
         $fieldmark = '"';
         $elements = explode($separator, $line);
         $tmp_elements = [];
-        for ($i = 0; $i < count($elements); ++$i) {
+        $amountOfElements = count($elements);
+
+        for ($i = 0; $i < $amountOfElements; ++$i) {
             $nquotes = substr_count($elements[$i], $fieldmark);
             if ($nquotes % 2 == 1) {
                 if (isset($elements[$i + 1])) {
@@ -897,10 +899,7 @@ class sExport
                 d.stockmin,
                 d.weight,
                 d.position,
-
-                at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
-                at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
-
+                `at`.*,
                 s.name as supplier,
                 u.unit,
                 u.description as unit_description,
@@ -924,8 +923,8 @@ class sExport
             INNER JOIN s_articles_details d
             ON d.articleID = a.id
             $sql_add_article_detail_join_condition
-            LEFT JOIN s_articles_attributes at
-            ON d.id = at.articledetailsID
+            LEFT JOIN s_articles_attributes AS `at`
+            ON d.id = `at`.articledetailsID
 
             LEFT JOIN `s_core_units` as `u`
             ON d.unitID = u.id
@@ -1352,8 +1351,8 @@ class sExport
             ON (d.ordernumber=b.ordernumber)
             AND d.articleID=a.id
 
-            LEFT JOIN s_articles_attributes at
-            ON at.articledetailsID=d.id
+            LEFT JOIN s_articles_attributes AS `at`
+            ON `at`.articledetailsID=d.id
 
             LEFT JOIN s_core_tax t
             ON t.id=a.taxID
@@ -1465,7 +1464,10 @@ class sExport
         foreach ($basket as $key => $value) {
             $sql_basket[] = $this->db->quote($value) . " as `$key`";
         }
+
         $sql_basket = implode(', ', $sql_basket);
+
+        $articleId = $this->db->quote($basket['articleID']);
 
         $sql = "
             SELECT d.id, d.name, d.description, d.calculation, d.status_link, d.surcharge_calculation, d.bind_shippingfree, tax_calculation, t.tax as tax_calculation_value, d.shippingfree
@@ -1478,7 +1480,7 @@ class sExport
                 SELECT dc.dispatchID
                 FROM s_articles_categories_ro ac,
                 s_premium_dispatch_categories dc
-                WHERE ac.articleID={$basket['articleID']}
+                WHERE ac.articleID=$articleId
                 AND dc.categoryID=ac.categoryID
                 GROUP BY dc.dispatchID
             ) as dk
@@ -1515,6 +1517,7 @@ class sExport
             LIMIT 1
         ";
         $dispatch = $this->db->fetchRow($sql);
+
         if (empty($dispatch)) {
             $sql = '
                 SELECT
