@@ -222,7 +222,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     protected function getEmotionConfiguration($categoryId, $withStreams = false, $streamId = null)
     {
-        if ($this->Request()->getParam('sPage')) {
+        if ($this->Request()->has('sPage') && (int)$this->Request()->getParam('sPage') > 1) {
             return [
                 'hasEmotion' => false,
                 'showListing' => true,
