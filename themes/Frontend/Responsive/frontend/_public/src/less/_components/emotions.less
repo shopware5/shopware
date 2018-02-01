@@ -129,10 +129,6 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     // Emotion content
 .content--emotions {
     display: block;
-
-    .emotion--container:last-child {
-        .unitize(margin-bottom, 20);
-    }
 }
 
     // Emotion preview content
@@ -493,7 +489,7 @@ body.emotion--preview {
         top: 0; left: 0;
         z-index: @zindex-emotion-image-slider-title;
         color: #fff;
-        font-weight: 600;
+        font-weight: @font-bold-weight;
         background: rgba(0, 0, 0, 0.5);
         white-space: nowrap;
         overflow: hidden;
@@ -615,7 +611,7 @@ body.emotion--preview {
 
         .product--title {
             .unitize(14, 16, font-size);
-            font-weight: normal;
+            font-weight: @font-base-weight;
             white-space: normal;
         }
 
@@ -710,7 +706,7 @@ body.emotion--preview {
         position: absolute;
         bottom: 0; left: 0;
         color: #fff;
-        font-weight: 600;
+        font-weight: @font-bold-weight;
         background: rgba(0, 0, 0, 0.5);
         white-space: nowrap;
         overflow: hidden;
@@ -776,7 +772,7 @@ body.emotion--preview {
         width: 100%;
         height: 100%;
         color: @text-color;
-        font-weight: 600;
+        font-weight: @font-bold-weight;
         position: relative;
 
         &:hover {
@@ -939,7 +935,7 @@ body.emotion--preview {
     .blog--title {
         .unitize(font-size, 14);
         display: block;
-        font-weight: bold;
+        font-weight: @font-bold-weight;
         color: @text-color-dark;
         margin-bottom: 2%;
 

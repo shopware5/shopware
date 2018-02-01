@@ -1,6 +1,6 @@
 {block name="widgets_index_statistic_include"}
-    <script async id="refresh-statistic"></script>
-    <script>
+    <iframe id="refresh-statistics" width="0" height="0" style="display:none;"></iframe>
+    <script type="text/javascript">
         (function(window, document) {
             var cok = document.cookie.match(/session-{$Shop->getId()}=([^;])+/g),
                 sid = (cok && cok[0]) ? cok[0] : null,
@@ -41,7 +41,10 @@
                 document.cookie = 'x-ua-device=' + device + '; path=/';
             }
 
-            document.getElementById('refresh-statistic').setAttribute('src', url);
+            document.asyncReady(function(){
+                var frm = document.getElementById('refresh-statistics');
+                frm.src = url;
+            });
         })(window, document);
     </script>
 {/block}

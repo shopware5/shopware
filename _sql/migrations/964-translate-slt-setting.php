@@ -30,7 +30,7 @@ class Migrations_Migration964 extends AbstractMigration
     {
         $sql = <<<'EOD'
 SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'useSltCookie' LIMIT 1);
-INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementId, 2, 'Create shopware login cookie', 'A cookie is stored, where the user can be identified again. This cookie is only used for setting the current customer group and the active Customer Streams');
+INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES(@elementId, 2, 'Create Shopware Login Cookie', 'A cookie is stored, where the user can be identified again. This cookie is only used for setting the current customer group and the active Customer Streams');
 EOD;
         $this->addSql($sql);
     }

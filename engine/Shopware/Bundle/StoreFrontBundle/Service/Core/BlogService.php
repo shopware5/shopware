@@ -61,11 +61,20 @@ class BlogService implements Service\BlogServiceInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
+        $result = [];
         $blogs = $this->blogGateway->getList($ids, $context);
 
         $this->resolveMedias($blogs, $context);
 
-        return $blogs;
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $blogs)) {
+                continue;
+            }
+
+            $result[$id] = $blogs[$id];
+        }
+
+        return $result;
     }
 
     /**
@@ -76,7 +85,15 @@ class BlogService implements Service\BlogServiceInterface
     {
         $mediaIds = [];
         foreach ($blogs as $blog) {
+            if (count($blog->getMediaIds()) === 0) {
+                continue;
+            }
+
             $mediaIds[] = $blog->getMediaIds();
+        }
+
+        if (count($mediaIds) === 0) {
+            return;
         }
 
         $mediaIds = array_keys(array_flip(array_merge(...$mediaIds)));

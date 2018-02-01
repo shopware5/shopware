@@ -14,6 +14,10 @@
     {include file='frontend/listing/sidebar.tpl'}
 {/block}
 
+{block name="frontend_index_content_main_classes"}
+    {strip}{$smarty.block.parent}{if $hasEmotion} is--small{/if}{/strip}
+{/block}
+
 {* Main content *}
 {block name='frontend_index_content'}
     <div class="content listing--content">

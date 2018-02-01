@@ -1,6 +1,8 @@
 ;(function($, window) {
     'use strict';
 
+    var $body = $('body');
+
     $.plugin('swCookiePermission', {
 
         defaults: {
@@ -12,6 +14,14 @@
              * @type {string}
              */
             isHiddenClass: 'is--hidden',
+
+            /**
+             * Class name added to body when cookiePermission element is being shown.
+             *
+             * @property cookieMessageShowingClass
+             * @type {string}
+             */
+            cookieMessageShowingClass: 'cookie--permission--message',
 
             /**
              * Selector of the accept button for select the button and register events on it.
@@ -77,18 +87,46 @@
         },
 
         /**
+         * Calculates the height of the cookie permission element. Please keep in mind that the element has to be
+         * visible to get the actual size.
+         *
+         * @returns {String} height value including the unit e.g. `64px`
+         */
+        calculatePermissionHeight: function() {
+            return this.$el.css('height');
+        },
+
+        /**
+         * Sets the height of the cookie permission messages on the body element as a padding, therefore the message
+         * isn't blocking other content.
+         *
+         * @returns {void}
+         */
+        setPermissionHeight: function() {
+            $body.css('padding-bottom', this.calculatePermissionHeight());
+        },
+
+        /**
+         * Update method which will be automatically called when the user switches the defined breakpoints. The method
+         * recalculates the height and updates the `padding-bottom` value of the "body" element
+         *
+         * @return {void}
+         */
+        update: function() {
+            this.setPermissionHeight();
+        },
+
+        /**
          * Creates the required plugin properties
          *
          * @public
          * @method createProperties
          */
         createProperties: function() {
-            var me = this;
-
-            me.$privacyLink = me.$el.find(me.opts.privacyLinkSelector);
-            me.$acceptButton = me.$el.find(me.opts.acceptButtonSelector);
-            me.storageKey = me.createStorageKey();
-            me.storage = window.StorageManager.getLocalStorage();
+            this.$privacyLink = this.$el.find(this.opts.privacyLinkSelector);
+            this.$acceptButton = this.$el.find(this.opts.acceptButtonSelector);
+            this.storageKey = this.createStorageKey();
+            this.storage = window.StorageManager.getLocalStorage();
         },
 
         /**
@@ -98,25 +136,24 @@
          * @method preparePrivacyLink
          */
         preparePrivacyLink: function() {
-            var me = this,
-                prefix = me.opts.urlPrefix,
+            var prefix = this.opts.urlPrefix,
                 href;
 
-            if (!me.$privacyLink) {
+            if (!this.$privacyLink) {
                 return;
             }
 
-            href = me.$privacyLink.attr('href') || '';
+            href = this.$privacyLink.attr('href') || '';
 
             if (href.match(/^(http:|https:)/)) {
                 return;
             }
 
             if (href.match(/^\//)) {
-                prefix = me.opts.urlPrefix.replace(/(\/)$/, '');
+                prefix = this.opts.urlPrefix.replace(/(\/)$/, '');
             }
 
-            me.$privacyLink.attr('href', [
+            this.$privacyLink.attr('href', [
                 prefix,
                 href
             ].join(''));
@@ -129,9 +166,7 @@
          * @method registerEvents
          */
         registerEvents: function() {
-            var me = this;
-
-            me._on(me.$acceptButton, 'click', $.proxy(me.onAcceptButtonClick, me));
+            this._on(this.$acceptButton, 'click', $.proxy(this.onAcceptButtonClick, this));
         },
 
         /**
@@ -140,9 +175,7 @@
          * @param {function} callback
          */
         displayCookiePermission: function(callback) {
-            var me = this;
-
-            callback(!me.storage.getItem(me.storageKey));
+            callback(!this.storage.getItem(this.storageKey));
         },
 
         /**
@@ -155,13 +188,12 @@
          * @returns {string}
          */
         createStorageKey: function() {
-            var me = this,
-                delimiter = '-';
+            var delimiter = '-';
 
             return [
-                me.cookieStorageKeyPrefix,
+                this.cookieStorageKeyPrefix,
                 delimiter,
-                me.opts.shopId
+                this.opts.shopId
             ].join('');
         },
 
@@ -173,10 +205,9 @@
          */
         onAcceptButtonClick: function(event) {
             event.preventDefault();
-            var me = this;
 
-            me.storage.setItem(me.storageKey, 'true');
-            me.hideElement();
+            this.storage.setItem(this.storageKey, 'true');
+            this.hideElement();
         },
 
         /**
@@ -186,9 +217,8 @@
          * @method showElement
          */
         showElement: function() {
-            var me = this;
-
-            me.$el.removeClass(me.opts.isHiddenClass);
+            this.$el.removeClass(this.opts.isHiddenClass);
+            this.setPermissionHeight();
         },
 
         /**
@@ -198,9 +228,8 @@
          * @method hideElement
          */
         hideElement: function() {
-            var me = this;
-
-            me.$el.addClass(me.opts.isHiddenClass);
+            this.$el.addClass(this.opts.isHiddenClass);
+            $body.css('padding-bottom', 0);
         }
     });
 }(jQuery, window));

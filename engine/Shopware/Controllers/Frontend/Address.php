@@ -280,6 +280,12 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             }
         }
 
+        /** @var string $data */
+        $extraData = array_map(function ($data) {
+            // only allow alphanumeric characters, commas and spaces
+            return preg_replace('/[^A-Za-z0-9 ,]/', '', $data);
+        }, $extraData);
+
         $this->View()->assign('addresses', $addresses);
         $this->View()->assign('activeAddressId', $activeAddressId);
         $this->View()->assign('extraData', $extraData);

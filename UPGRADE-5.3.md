@@ -2,12 +2,55 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.8
+
+[View all changes from v5.3.7...v5.3.8](https://github.com/shopware/shopware/compare/v5.3.7...v5.3.8)
+
+### Additions 
+
+* Added new column `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
+
+### Changes
+
+* Changed loading of the themes/_private folder to be always executed
+* Added all additional article columns to product import/export
+
+### Removals
+
+* Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
+
+## 5.3.7
+
+[View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)
+
+### Changes
+
+* Changed input validation to fix non persistent XSS vulnerability in the frontend
+* Changed timeout for store API requests
+
+### Deprecations
+
+* Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
+
+## 5.3.6
+
+[View all changes from v5.3.5...v5.3.6](https://github.com/shopware/shopware/compare/v5.3.5...v5.3.6)
+
+### Changes
+
+* Changed logging of exceptions to not log 404 errors 
+
+### Additions
+
+* Added product sorting by stock facet
+
 ## 5.3.5
 
 [View all changes from v5.3.4...v5.3.5](https://github.com/shopware/shopware/compare/v5.3.4...v5.3.5)
 
 ### Additions
 
+* Added new filter event `Shopware_Modules_Order_SaveOrder_FilterAttributes` to `engine/Shopware/Core/sOrder.php` to allow modification of the Order's attributes
 * Added new notify until event `Shopware_Plugins_HttpCache_ShouldNotInvalidateCache` to `engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php` to be notified when the cache for a model will be invalidated and be able to prevent it
 * Added new service `Shopware\Components\HttpCache\CacheRouteInstaller` for creating cache routes
 * Added smarty block `frontend_index_header_meta_description_twitter` for `twitter:description` meta tag
@@ -20,7 +63,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new API endpoint /users which allows to manage the backend users. For more information, look [here](https://developers.shopware.com/developers-guide/rest-api/api-resource-user/) 
 * Added generatePassword method to engine/Shopware/Components/Random.php which allows to generate cryptographically secure passwords
 * Added UserName and UserEmail validator in /engine/Shopware/Components/Auth
-* Added hidden `sordernumber` form fields to inquiry forms 
+* Added hidden `sordernumber` form fields to inquiry forms
 
 ### Changes
 

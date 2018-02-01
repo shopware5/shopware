@@ -35,7 +35,7 @@ use Shopware\Components\Routing\RouterInterface;
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
     /**
-     * product navigation as json string
+     * Product navigation as json string
      */
     public function productNavigationAction()
     {
@@ -47,7 +47,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 throw new \InvalidArgumentException('Argument ordernumber missing');
             }
 
-            $categoryId = $this->Request()->get('categoryId');
+            $categoryId = (int) $this->Request()->get('categoryId');
             if (!$categoryId) {
                 throw new \InvalidArgumentException('Argument categoryId missing');
             }
@@ -79,10 +79,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         $linkRewriter = function ($link) {
-            /** @var $core sCore */
-            $core = Shopware()->Modules()->Core();
-
-            return $core->sRewriteLink($link);
+            return Shopware()->Modules()->Core()->sRewriteLink($link);
         };
 
         if (isset($navigation['previousProduct'])) {
@@ -101,7 +98,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * topseller action for getting topsellers
+     * Topseller action for getting topsellers
      * by category with perPage filtering
      */
     public function topSellerAction()
@@ -120,7 +117,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $numbers = array_filter(explode('|', $numbers));
         }
 
-        if ($this->Request()->get('type') == 'slider') {
+        if ($this->Request()->get('type') === 'slider') {
             $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
         } else {
             $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
@@ -177,7 +174,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * tag cloud by category
+     * Tag cloud by category
      */
     public function tagCloudAction()
     {
@@ -209,7 +206,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $categoryId = $this->Request()->getParam('sCategory');
+        $categoryId = (int) $this->Request()->getParam('sCategory');
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {
@@ -226,15 +223,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     /**
      * @deprecated since 5.3, remove in 5.5. Use \Shopware_Controllers_Widgets_Listing::listingCountAction instead
      *
-     * listing action for asynchronous fetching listing pages
+     * Listing action for asynchronous fetching listing pages
      * by infinite scrolling plugin
      */
     public function ajaxListingAction()
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
 
-        $categoryId = $this->Request()->getParam('sCategory');
-        $pageIndex = $this->Request()->getParam('sPage');
+        $categoryId = (int) $this->Request()->getParam('sCategory');
+        $pageIndex = (int) $this->Request()->getParam('sPage');
 
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
@@ -272,8 +269,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function getCategoryAction()
     {
-        $categoryId = $this->Request()->getParam('categoryId');
-        $categoryId = (int) $categoryId;
+        $categoryId = (int) $this->Request()->getParam('categoryId');
 
         $category = $this->getCategoryById($categoryId);
 
@@ -326,7 +322,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param $categoryId
+     * @param int $categoryId
      *
      * @throws Exception
      *
@@ -386,6 +382,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
+     * @param int $categoryId
      * @param int $productStreamId
      *
      * @return ProductSearchResult
@@ -515,13 +512,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchListing(ProductSearchResult $result)
     {
-        $categoryId = $this->Request()->getParam('sCategory', null);
+        $categoryId = (int) $this->Request()->getParam('sCategory');
 
         if ($this->Request()->has('productBoxLayout')) {
             $boxLayout = $this->Request()->get('productBoxLayout');
         } else {
-            $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
-                ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
+            $boxLayout = $this->get('config')->get('searchProductBoxLayout');
+            if ($categoryId) {
+                $boxLayout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
+            }
         }
 
         $articles = $this->convertArticlesResult($result, $categoryId);
@@ -532,7 +531,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $this->View()->assign([
             'sArticles' => $articles,
-            'pageIndex' => $this->Request()->getParam('sPage'),
+            'pageIndex' => (int) $this->Request()->getParam('sPage'),
             'productBoxLayout' => $boxLayout,
             'sCategoryCurrent' => $categoryId,
         ]);
@@ -547,9 +546,14 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchPagination(ProductSearchResult $result)
     {
-        $sPerPage = $this->Request()->getParam('sPerPage');
+        $sPerPage = (int) $this->Request()->getParam('sPerPage');
+
+        if ($sPerPage <= 0) {
+            $sPerPage = 1;
+        }
+
         $this->View()->assign([
-            'sPage' => $this->Request()->getParam('sPage'),
+            'sPage' => (int) $this->Request()->getParam('sPage'),
             'pages' => ceil($result->getTotalCount() / $sPerPage),
             'baseUrl' => $this->Request()->getBaseUrl() . $this->Request()->getPathInfo(),
             'pageSizes' => explode('|', $this->container->get('config')->get('numberArticlesToShow')),

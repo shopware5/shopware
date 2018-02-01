@@ -780,7 +780,11 @@ class %className% extends ModelEntity
         // Create the property initializations
         $initializations = [];
         foreach ($table->getColumns() as $column) {
-            if ($column->getDefault() === null || $this->isPrimaryColumn($table, $column)) {
+            if ($column->getDefault() === null || $this->isPrimaryColumn($table, $column)
+                // With MariaDB >= 10.2.7 and doctrine/dbal < 2.7.0 'NULL'
+                // will be returned as string if there is no default, see:
+                // https://github.com/doctrine/doctrine2/issues/6565
+                || $column->getDefault() === 'NULL') {
                 continue;
             }
 

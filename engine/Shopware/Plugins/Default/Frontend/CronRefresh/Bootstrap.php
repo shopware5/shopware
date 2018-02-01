@@ -105,7 +105,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      */
     private function deleteOldReferrerData($maximumReferrerAge)
     {
-        $maximumReferrerAge = intval($maximumReferrerAge);
+        $maximumReferrerAge = (int) $maximumReferrerAge;
         if ($maximumReferrerAge === 0) {
             $maximumReferrerAge = 90;
         }
@@ -129,7 +129,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      */
     private function deleteOldArticleImpressionData($maximumAge)
     {
-        $maximumAge = intval($maximumAge);
+        $maximumAge = (int) $maximumAge;
         if ($maximumAge === 0) {
             $maximumAge = 90;
         }
