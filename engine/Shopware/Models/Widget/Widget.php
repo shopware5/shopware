@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Widget;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -48,15 +49,7 @@ class Widget extends ModelEntity
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(name="label", type="string", nullable=false)
-     *
-     * @deprecated
-     */
-    private $label;
-
-    /**
-     * @var
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Widget\View", mappedBy="widget")
      */
     private $views;
@@ -99,27 +92,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
-     *
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * @return
+     * @return ArrayCollection
      */
     public function getViews()
     {
@@ -127,7 +100,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @param  $views
+     * @param ArrayCollection $views
      */
     public function setViews($views)
     {
