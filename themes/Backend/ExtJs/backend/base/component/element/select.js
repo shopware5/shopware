@@ -81,13 +81,15 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
     setValue:function (value) {
         var me = this;
 
-        if (value !== null && !me.store.loading && me.store.getCount() == 0) {
+        if (!me.store.loading && me.store.getCount() == 0) {
             me.store.load({
                 callback:function () {
-                    if(me.store.getCount() > 0) {
-                        me.setValue(value);
-                    } else {
-                        me.setValue(null);
+                    if (value !== null) {
+                        if(me.store.getCount() > 0) {
+                            me.setValue(value);
+                        } else {
+                            me.setValue(null);
+                        }
                     }
                 }
             });
