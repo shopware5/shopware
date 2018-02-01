@@ -55,6 +55,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 	
 	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
 
+* Backend widgets of plugins will be now removed after uninstall
+
 ### Changes
 
 * Updated mPDF to v6.1.4 and included it via composer

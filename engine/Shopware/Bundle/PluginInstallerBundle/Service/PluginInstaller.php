@@ -173,6 +173,7 @@ class PluginInstaller
         $this->removeMenuEntries($pluginId);
         $this->removeTemplates($pluginId);
         $this->removeEmotionComponents($pluginId);
+        $this->removeWidgetEntries($pluginId);
 
         $this->removeSnippets($bootstrap, $removeData);
         if ($removeData) {
@@ -567,6 +568,19 @@ SQL;
     private function removeEventSubscribers($pluginId)
     {
         $sql = 'DELETE FROM s_core_subscribes WHERE pluginID = :pluginId';
+        $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
+    }
+
+    /**
+     * @param int $pluginId
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function removeWidgetEntries($pluginId)
+    {
+        $sql = 'DELETE FROM s_core_widget_views WHERE widget_id IN(SELECT id FROM s_core_widgets WHERE plugin_id = :pluginId)';
+        $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
+        $sql = 'DELETE FROM s_core_widgets WHERE plugin_id = :pluginId';
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
     }
 }
