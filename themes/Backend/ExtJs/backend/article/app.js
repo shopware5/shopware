@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Article', {
         'image.List',
         'image.Info',
         'image.DropZone',
+        'image.DataView',
         'image.Mapping',
         'image.NewRule',
         'image.Progress',
