@@ -70,7 +70,7 @@ class ProductSearch implements ProductSearchInterface
 
         $result = new ProductSearchResult(
             $products,
-            $numberResult->getTotalCount(),
+            count($products),
             $numberResult->getFacets()
         );
 
