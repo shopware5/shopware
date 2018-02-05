@@ -271,14 +271,23 @@ Ext.define('Shopware.form.PluginPanel',
 
                 if (field.xtype == "base-element-boolean" || field.xtype == "base-element-checkbox") {
                     field = me.convertCheckBoxToComboBox(field, shop, initialValue);
-                }
-                else if ((field.xtype == "base-element-datetime" ||
+                } else if ((field.xtype == "base-element-datetime" ||
                         field.xtype == "base-element-date" ||
                         field.xtype == "base-element-time") && field.value) {
 
                     field.value += '+00:00';
                     field.value = new Date(field.value);
                     field.value = new Date((field.value.getTime() + (field.value.getTimezoneOffset() * 60 * 1000)));
+                } else if(field.xtype === 'checkbox') {
+                    field.checked = !!(value ? value.get('value') : element.get('value'));
+
+                    if (field.inputValue === undefined) {
+                        field.inputValue = true;
+                    }
+
+                    if (field.uncheckedValue === undefined) {
+                        field.uncheckedValue = false;
+                    }
                 }
 
                 fields.push(field);
