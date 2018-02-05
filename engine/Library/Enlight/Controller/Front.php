@@ -466,4 +466,77 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     {
         return $this->invokeParams;
     }
+
+    /**
+     * @param array $params
+     * @return Enlight_Controller_Response_Response|string
+     * @throws Enlight_Controller_Exception
+     * @throws Enlight_Exception
+     * @throws Exception
+     */
+    public function subRequest(array $params)
+    {
+        $dispatcher = clone $this->Dispatcher();
+
+        $modules = $dispatcher->getControllerDirectory();
+        if (empty($modules)) {
+            throw new Exception('Action helper depends on valid front controller instance');
+        }
+
+        $request = $this->Request();
+        $response = $this->Response();
+
+        if ($request === null || $response === null) {
+            throw new Exception(
+                'Action view helper requires both a registered request and response object in the front controller instance'
+            );
+        }
+
+        if (isset($params['name'])) {
+            $params['action'] = $params['name'];
+            unset($params['name']);
+        }
+        if (isset($params['params'])) {
+            $userParams = (array) $params['params'];
+            unset($params['params']);
+        } else {
+            $userParams = array();
+        }
+
+        $params = array_merge($userParams, $params);
+
+        $request  = clone $request;
+        $response = clone $response;
+
+        $request->clearParams();
+        $response->clearHeaders()
+            ->clearRawHeaders()
+            ->clearBody();
+
+        if (isset($params['module'])) {
+            $request->setModuleName($params['module'])
+                ->setControllerName('index')
+                ->setActionName('index');
+        }
+        if (isset($params['controller'])) {
+            $request->setControllerName($params['controller'])
+                ->setActionName('index');
+        }
+
+        // setParam is used for bc reasons, the attribute should be read for new code
+        $request->setParam('_isSubrequest', true);
+        $request->setAttribute('_isSubrequest', true);
+
+        $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
+        $request->setParams($params)
+            ->setDispatched();
+
+        $dispatcher->dispatch($request, $response);
+
+        if (!$request->isDispatched() || $response->isRedirect()) {
+            return false;
+        }
+
+        return $response;
+    }
 }

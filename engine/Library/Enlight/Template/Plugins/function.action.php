@@ -36,75 +36,11 @@
  */
 function smarty_function_action($params, Enlight_Template_Default $template)
 {
-    /** @var $front Enlight_Controller_Front */
-    $front = Shopware()->Front();
-    $dispatcher = clone $front->Dispatcher();
+    $response = Shopware()->Front()->subRequest($params);
 
-    $modules = $dispatcher->getControllerDirectory();
-    if (empty($modules)) {
-        $e = new Exception('Action helper depends on valid front controller instance');
-        //$e->setView($view);
-        throw $e;
-    }
-
-    $request = $front->Request();
-    $response = $front->Response();
-
-    if (empty($request) || empty($response)) {
-        $e = new Exception(
-            'Action view helper requires both a registered request and response object in the front controller instance'
-        );
-        //$e->setView($view);
-        throw $e;
-    }
-
-    if (isset($params['name'])) {
-        $params['action'] = $params['name'];
-        unset($params['name']);
-    }
-    if (isset($params['params'])) {
-        $userParams = (array) $params['params'];
-        unset($params['params']);
-    } else {
-        $userParams = array();
-    }
-
-    $params = array_merge($userParams, $params);
-
-    $request  = clone $request;
-    $response = clone $response;
-
-    $request->clearParams();
-    $response->clearHeaders()
-             ->clearRawHeaders()
-             ->clearBody();
-
-    if (isset($params['module'])) {
-        $request->setModuleName($params['module'])
-                ->setControllerName('index')
-                ->setActionName('index');
-    }
-    if (isset($params['controller'])) {
-        $request->setControllerName($params['controller'])
-                ->setActionName('index');
-    }
-
-    // setParam is used for bc reasons, the attribute should be read for new code
-    $request->setParam('_isSubrequest', true);
-    $request->setAttribute('_isSubrequest', true);
-
-    $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
-    $request->setParams($params)
-            ->setDispatched(true);
-
-    $dispatcher->dispatch($request, $response);
-
-    if (!$request->isDispatched() || $response->isRedirect()) {
-        // forwards and redirects render nothing
+    if ($response === false) {
         return '';
     }
 
-    $return = $response->getBody();
-
-    return $return;
+    return $response->getBody();
 }
