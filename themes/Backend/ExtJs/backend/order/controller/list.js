@@ -321,6 +321,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
 
                         store.remove(position);
                         order.set('invoiceAmount', rawData.data.invoiceAmount);
+                        order.set('changed', rawData.data.changed);
                         if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                             options.callback(order);
                         }

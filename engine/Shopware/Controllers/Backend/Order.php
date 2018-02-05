@@ -590,15 +590,18 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         Shopware()->Models()->flush();
 
         $invoiceAmount = $order->getInvoiceAmount();
+        $changed = $order->getChanged();
 
         if ($position->getOrder() instanceof \Shopware\Models\Order\Order) {
             $invoiceAmount = $position->getOrder()->getInvoiceAmount();
+            $changed = $position->getOrder()->getChanged();
         }
 
         $this->View()->assign([
             'success' => true,
             'data' => $data,
             'invoiceAmount' => $invoiceAmount,
+            'changed' => $changed,
         ]);
     }
 
