@@ -360,7 +360,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['types'])
-            ->from('Shopware\Models\Order\Document\Type', 'types');
+            ->from('Shopware\Models\Document\Document', 'types');
 
         return $builder;
     }
