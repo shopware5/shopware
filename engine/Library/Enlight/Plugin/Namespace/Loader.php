@@ -139,4 +139,40 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
         }
         return $this;
     }
+
+    /**
+     * @return Enlight_Controller_Plugins_Json_Bootstrap
+     * @throws Enlight_Exception
+     */
+    public function Json()
+    {
+        return $this->get(__FUNCTION__);
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_ViewRenderer_Bootstrap
+     * @throws Enlight_Exception
+     */
+    public function ViewRenderer()
+    {
+        return $this->get(__FUNCTION__);
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_ScriptRenderer_Bootstrap
+     * @throws Enlight_Exception
+     */
+    public function ScriptRenderer()
+    {
+        return $this->get(__FUNCTION__);
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_JsonRequest_Bootstrap
+     * @throws Enlight_Exception
+     */
+    public function JsonRequest()
+    {
+        return $this->get(__FUNCTION__);
+    }
 }
