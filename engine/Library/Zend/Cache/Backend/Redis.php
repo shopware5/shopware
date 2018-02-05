@@ -98,21 +98,22 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
             if (!array_key_exists('dbindex', $server)) {
                 $server['dbindex'] = self::DEFAULT_DBINDEX;
             }
-            if ($server['persistent']) {
+            if (isset($server['persistent'])) {
                 $result = $this->_redis->pconnect($server['host'], $server['port']);
             } else {
                 $result = $this->_redis->connect($server['host'], $server['port']);
             }
 
             // SW-20299 - sw-fix: support redis auth configuration
-            if ($server['redisAuth']) {
+            if (isset($server['redisAuth'])) {
                 $this->_redis->auth($server['redisAuth']);
             }
 
-            if ($result)
+            if (isset($result)) {
                 $this->_redis->select($server['dbindex']);
-            else
+            } else {
                 $this->_redis = null;
+            }
         }
     }
 
