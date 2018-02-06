@@ -142,6 +142,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     public function init()
     {
         if (empty($this->model)) {
+            if (!$this->Front()->getParam('showException')) {
+                throw new Enlight_Controller_Exception(
+                    'Controller "' . $this->Request()->getControllerName() . '" not found',
+                    Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+                );
+            }
+
             throw new Exception(
                 'The `model` property of your PHP controller is not configured!'
             );
