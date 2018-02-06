@@ -295,6 +295,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         }
 
         e.record.save({
+            params: {
+                changed: order.get('changed'),
+            },
             callback:function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
@@ -309,7 +312,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     }
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.positions.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
-                    e.store.remove(records);
+                    e.store.rejectChanges();
                 }
             }
         });
@@ -403,7 +406,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             }
             store.remove(positions);
             store.getProxy().extraParams = {
-                orderID: orderId
+                orderID: orderId,
+                changed: order.get('changed'),
             };
             store.sync({
                 callback:function (batch, operation) {
@@ -420,6 +424,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.delete.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
+                        store.rejectChanges();
                     }
                 }
             });

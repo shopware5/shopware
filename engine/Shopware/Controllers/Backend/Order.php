@@ -518,7 +518,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $this->Request()->getParam('orderId');
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         //check if an order id is passed. If no order id passed, return success false
         if (empty($orderId)) {
@@ -538,6 +538,18 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'success' => false,
                 'data' => $this->Request()->getParams(),
                 'message' => $namespace->get('no_order_id_passed', 'No valid order id passed.'),
+            ]);
+
+            return;
+        }
+
+        // Check whether the order has been modified in the meantime
+        $lastOrderChange = $this->Request()->getParam('changed');
+        if ($order->getChanged() != new \DateTime($lastOrderChange)) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $namespace->get('order_has_been_changed', 'The order has been changed in the meantime. To prevent overwriting these changes, saving the order was aborted. Please close the order and re-open it.'),
             ]);
 
             return;
@@ -614,7 +626,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function deletePositionAction()
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         $positions = $this->Request()->getParam('positions', [['id' => $this->Request()->getParam('id')]]);
 
@@ -642,6 +654,29 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
+        /** @var $order \Shopware\Models\Order\Order */
+        $order = $this->getRepository()->find($orderId);
+        if (empty($order)) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $namespace->get('no_order_id_passed', 'No valid order id passed.'),
+            ]);
+
+            return;
+        }
+        // Check whether the order has been modified in the meantime
+        $lastOrderChange = $this->Request()->getParam('changed');
+        if ($order->getChanged() != new \DateTime($lastOrderChange)) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $namespace->get('order_has_been_changed', 'The order has been changed in the meantime. To prevent overwriting these changes, saving the order was aborted. Please close the order and re-open it.'),
+            ]);
+
+            return;
+        }
+
         foreach ($positions as $position) {
             if (empty($position['id'])) {
                 continue;
@@ -656,10 +691,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //after each model has been removed to executes the doctrine flush.
         Shopware()->Models()->flush();
 
-        /** @var $order \Shopware\Models\Order\Order */
-        $order = $this->getRepository()->find($orderId);
         $order->calculateInvoiceAmount();
-
         Shopware()->Models()->flush();
 
         $data = $this->getOrder($order->getId());

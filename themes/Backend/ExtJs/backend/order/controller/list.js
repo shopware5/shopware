@@ -305,7 +305,8 @@ Ext.define('Shopware.apps.Order.controller.List', {
             }
             position.destroy({
                 params: {
-                    orderID: position.get('orderId')
+                    orderID: position.get('orderId'),
+                    changed: order.get('changed'),
                 },
                 callback: function(data, operation) {
                     if (orderPositionGrid) {
@@ -328,6 +329,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
 
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.deletePosition.failureTitle, me.snippets.deletePosition.failureMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        store.rejectChanges();
                     }
                 }
             });
