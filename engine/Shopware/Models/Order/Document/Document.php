@@ -118,7 +118,7 @@ class Document extends ModelEntity
     private $order;
 
     /**
-     * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Document\Type")
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
      *
      * @var
