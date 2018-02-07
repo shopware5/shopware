@@ -10,6 +10,8 @@ services:
     volumes:
       - .:/app
       - ~/.composer/cache:/.composer/cache
+    ports:
+      - "8088:80"
 
   app_mysql:
     build: dev-ops/docker/containers/mysql
