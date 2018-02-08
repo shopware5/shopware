@@ -275,13 +275,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
              AND product.pricegroupActive = 1'
         );
 
-        $graduation = 'prices.from = 1';
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')";
-        }
-
         $cheapestPriceQuery->where('prices.pricegroup = :customerGroup')
-            ->andWhere($graduation)
             ->andWhere('variant.active = 1');
 
         /*
@@ -323,6 +317,17 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
             }
         }
 
+        /*
+         * Last graduation configuration only needs to use for the cheapest price, not for the different price count
+         */
+        $countSubQuery = clone $cheapestPriceQuery;
+        $graduation = 'prices.from = 1';
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $graduation = "IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')";
+        }
+        $cheapestPriceQuery->andWhere($graduation);
+
+        $countQuery = clone $cheapestPriceIdQuery;
         $cheapestPriceIdQuery->select('cheapestPrices.id');
         $cheapestPriceIdQuery->from('s_articles_details', 'details');
         $cheapestPriceIdQuery->innerJoin('details', '(' . $cheapestPriceQuery->getSQL() . ')', 'cheapestPrices', $joinCondition);
@@ -333,9 +338,10 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         /*
          * Query to get the different price count
          */
-        $countQuery = clone $cheapestPriceIdQuery;
         $countQuery->select('count(DISTINCT cheapestPrices.price)');
-        $countQuery->setMaxResults(null);
+        $countQuery->from('s_articles_details', 'details');
+        $countQuery->innerJoin('details', '(' . $countSubQuery->getSQL() . ')', 'cheapestPrices', $joinCondition);
+        $countQuery->where('details.id = mainDetail.id');
 
         /*
          * Base query to get the cheapest price and different price count for each given variant
