@@ -75,13 +75,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         if (!in_array($this->Request()->getActionName(), ['index', 'load', 'skeleton', 'extends'])) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
-
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
-        $shopwareRelease = $this->container->get('shopware.release');
-
-        $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());
-        $this->View()->assign('SHOPWARE_VERSION_TEXT', $shopwareRelease->getVersionText());
-        $this->View()->assign('SHOPWARE_REVISION', $shopwareRelease->getRevision());
     }
 
     /**
