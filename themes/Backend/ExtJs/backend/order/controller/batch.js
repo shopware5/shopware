@@ -301,9 +301,11 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      */
     finishProcess: function (orders, resultStore, percentage, canceled) {
         var me = this,
+            mailSent = false,
             snippets = me.snippets,
             progressBar = me.getProgressBar(),
-            batchStore = me.getBatchList().getStore();
+            batchStore = me.getBatchList().getStore(),
+            settings = me.getSettingsPanel().getValues();
 
         //display finish update progress bar and display finish message
         progressBar.updateProgress(percentage, canceled ? '' : snippets.done.message, true);
@@ -323,8 +325,17 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         // Update the grid in order to set the new status or the mail
         batchStore.removeAll();
         resultStore.each(function (record) {
+            if (record.getMail().first() !== undefined) {
+                mailSent = true;
+            }
+
             batchStore.add(record);
         });
+
+        // Inform the user if no mail was sent, but the autoSendMail checkbox is active (Occurs when no status change took place for example)
+        if (!mailSent && settings && settings.autoSendMail) {
+            Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
+        }
 
         me.createSingleDocument(orders);
     },

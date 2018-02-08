@@ -207,27 +207,26 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             validator: function (selectedValue) {
                 var addAttachmentsField = me.getForm().findField('addAttachments'),
                     singleDocField = me.getForm().findField('createSingleDocument'),
+                    autoSendMailField = me.getForm().findField('autoSendMail'),
                     selectedValLowered = typeof selectedValue === 'string' ? selectedValue.toLowerCase() : '',
                     recordFound = true;
 
-                /**
-                 * If no value is selected, disable document-related fields and validate the form nonetheless
-                 */
+                // If no value is selected, disable document-related fields and validate the form nonetheless
                 if (!selectedValue || !selectedValue.length) {
                     addAttachmentsField.disable();
                     singleDocField.disable();
                     return recordFound;
                 }
-
-                /**
-                 * Validate the typed/selected option. Verify that it is indeed a store option
-                 */
+                // Validate the typed/selected option. Verify that it is indeed a store option
                 recordFound = store.data.findBy(function (item) {
                     return item.data.name.toLowerCase() === selectedValLowered;
                 });
 
                 if (recordFound){
-                    addAttachmentsField.enable();
+                    // Only enable the addAttachments field when E-Mails can be sent
+                    if (autoSendMailField.getValue()) {
+                        addAttachmentsField.enable();
+                    }
                     singleDocField.enable();
                     return true;
                 }
@@ -382,16 +381,12 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             selectedValLowered = typeof selectedValue === 'string' ? selectedValue.toLowerCase() : '',
             recordFound = true,
             store = me.store;
-        /**
-         * If no option is selected, this is also considered as valid
-         */
+
+        // If no option is selected, this is also considered as valid
         if (!selectedValue || !selectedValue.length) {
             return recordFound;
         }
-
-        /**
-         * Validate the typed/selected option. Verify that is indeed a store option
-         */
+        // Validate the typed/selected option. Verify that is indeed a store option
         recordFound = store.data.findBy(function (item) {
             return item.data.description.toLowerCase() === selectedValLowered;
         });
