@@ -33,7 +33,7 @@ const:
   DB_NAME: "shopware"
   SW_HOST: "127.0.0.1:8088"
   SW_BASE_PATH: ""
-  PHP_VERSION: "7.2"
+  PHP_VERSION: "7.1"
   MYSQL_VERSION: "5.7"
   APP_DEBUG: "1"
   APP_ENV: "dev"
