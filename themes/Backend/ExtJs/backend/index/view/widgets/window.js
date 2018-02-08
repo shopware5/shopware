@@ -515,7 +515,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     columnId: record.column,
                     rowId: record.position
                 },
-                draggable: me.createWidgetDragZone()
+                draggable: me.createWidgetDragZone(),
+                containerCollection: me.containerCollection
             };
 
         return Ext.widget(name, config);
