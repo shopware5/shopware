@@ -232,17 +232,9 @@ Ext.define('Shopware.apps.Article.view.image.List', {
     createMediaView: function() {
         var me = this;
 
-        me.dataView = Ext.create('Ext.view.View', {
-            itemSelector: '.article-thumb-wrap',
-            name: 'image-listing',
-            emptyText: 'No Media found',
-            multiSelect: true,
-            padding: '10 10 20',
+        me.dataView = Ext.create('Shopware.apps.Article.view.image.DataView', {
             store: me.mediaStore,
-            flex: 1,
-            tpl: me.createMediaViewTemplate(),
-            autoScroll: true,
-            plugins: [ Ext.create('Ext.ux.DataView.DragSelector', {}) ]
+            tpl: me.createMediaViewTemplate()
         });
 
         me.dataView.getSelectionModel().on('select', function (dataViewModel, media) {
