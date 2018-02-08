@@ -530,6 +530,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'sCategoryContent' => Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId),
         ]);
 
+        $this->get('events')->notify('Shopware_Controllers_Widgets_Listing_fetchListing_preFetch', new Enlight_Event_EventArgs([
+            'result' => $result,
+            'subject' => $this
+        ]));
+
         return $this->View()->fetch('frontend/listing/listing_ajax.tpl');
     }
 
@@ -554,6 +559,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'shortParameters' => $this->container->get('query_alias_mapper')->getQueryAliases(),
             'limit' => $sPerPage,
         ]);
+
+        $this->get('events')->notify('Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch', new Enlight_Event_EventArgs([
+            'result' => $result,
+            'subject' => $this
+        ]));
 
         return $this->View()->fetch('frontend/listing/actions/action-pagination.tpl');
     }
