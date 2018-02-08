@@ -58,7 +58,7 @@ class Manager
      */
     public function addEncoder(Encoder\PasswordEncoderInterface $encoder)
     {
-        $name = trim(strtolower($encoder->getName()));
+        $name = strtolower(trim($encoder->getName()));
 
         if (isset($this->encoder[$name])) {
             throw new \Exception("Encoder by name {$name} already registered");
@@ -76,7 +76,7 @@ class Manager
      */
     public function getEncoderByName($name)
     {
-        $name = trim(strtolower($name));
+        $name = strtolower(trim($name));
 
         if (!isset($this->encoder[$name])) {
             throw new \Exception("Encoder by name {$name} not found");

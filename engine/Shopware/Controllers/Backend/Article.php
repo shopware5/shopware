@@ -894,7 +894,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         // map the link target to the boolean format that is expected by the ExtJS backend module
         $links = $result[0]['links'];
         foreach ($links as &$linkData) {
-            $linkData['target'] = ($linkData['target'] === '_blank') ? true : false;
+            $linkData['target'] = $linkData['target'] === '_blank';
         }
 
         return $links;
@@ -4145,7 +4145,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareNumberSyntax($syntax)
     {
-        preg_match_all('#\{(.*?)\}#msi', $syntax, $result);
+        preg_match_all('#\{(.*?)\}#ms', $syntax, $result);
         $syntax = $result[1];
 
         $properties = [];

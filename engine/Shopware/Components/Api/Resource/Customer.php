@@ -387,7 +387,7 @@ class Customer extends Resource
 
             if (isset($paymentDataData['paymentMeanId'])) {
                 $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMeanId']);
-                if (is_null($paymentMean)) {
+                if (null === $paymentMean) {
                     throw new ApiException\CustomValidationException(
                         sprintf('%s by %s %s not found', 'Shopware\Models\Payment\Payment', 'id', $paymentDataData['paymentMeanId'])
                     );

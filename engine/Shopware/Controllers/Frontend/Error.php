@@ -55,7 +55,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             $this->View()->assign('success', false);
         } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
             $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
-        } elseif (isset($_ENV['SHELL']) || php_sapi_name() === 'cli') {
+        } elseif (isset($_ENV['SHELL']) || PHP_SAPI === 'cli') {
             $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
         } elseif (empty($_SERVER['SERVER_NAME'])) {
             $this->View()->loadTemplate($templateModule . '/error/ajax.tpl');

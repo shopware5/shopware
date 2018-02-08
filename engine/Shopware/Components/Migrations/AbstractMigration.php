@@ -95,7 +95,7 @@ abstract class AbstractMigration
     public function getVersion()
     {
         $result = [];
-        $regexPattern = '/[0-9]*$/i';
+        $regexPattern = '/[0-9]*$/';
 
         preg_match($regexPattern, get_class($this), $result);
 

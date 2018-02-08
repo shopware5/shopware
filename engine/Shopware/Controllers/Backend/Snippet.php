@@ -438,7 +438,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         chmod($filePath, 0644);
 
         if ($extension == 'xml') {
-            $xml = @simplexml_load_file($filePath, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $xml = simplexml_load_string(@file_get_contents($filePath), 'SimpleXMLElement', LIBXML_NOCDATA);
             $snippets = $xml->Worksheet->Table->Row;
             $headers = $this->readXmlRow(current($snippets));
         } else {
@@ -886,7 +886,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $csv = '';
         $lastKey = end($keys);
         foreach ($keys as $key) {
-            if (!is_null($line[$key])) {
+            if (null !== $line[$key]) {
                 if (strpos($line[$key], "\r") !== false || strpos($line[$key], "\n") !== false || strpos(
                     $line[$key], $settings['fieldmark']
                 ) !== false || strpos($line[$key], $settings['separator']) !== false

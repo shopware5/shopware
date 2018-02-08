@@ -283,7 +283,7 @@ class sArticlesComparisons
             ]);
 
             foreach ($articleProperties as $articleProperty) {
-                if (!in_array($articleProperty['id'], array_keys($properties))) {
+                if (!array_key_exists($articleProperty['id'], $properties)) {
                     //the key is not part of the array so add it to the end
                     $properties[$articleProperty['id']] = $this->extractPropertyTranslation($articleProperty);
                 }
@@ -306,7 +306,7 @@ class sArticlesComparisons
         foreach ($articles as $articleKey => $article) {
             $articleProperties = [];
             foreach ($properties as $propertyKey => $property) {
-                if (in_array($propertyKey, array_keys($article['sProperties']))) {
+                if (array_key_exists($propertyKey, $article['sProperties'])) {
                     $articleProperties[$propertyKey] = $article['sProperties'][$propertyKey];
                 } else {
                     $articleProperties[$propertyKey] = null;

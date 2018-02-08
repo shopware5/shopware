@@ -147,12 +147,12 @@ class Shopware_Components_Convert_Xml
             if ($type == 'open') { //The starting of the tag '<tag>'
                 $parent[$level - 1] = &$current;
 
-                if (!is_array($current) or (!in_array($tag, array_keys($current)))) { //Insert New tag
+                if (!is_array($current) or (!array_key_exists($tag, $current))) { //Insert New tag
                     $current[$tag] = $result;
                     $current = &$current[$tag];
                 } else { //There was another element with the same tag name
                     if (isset($current[$tag][0])) {
-                        array_push($current[$tag], $result);
+                        $current[$tag][] = $result;
                     } else {
                         $current[$tag] = [$current[$tag], $result];
                     }
