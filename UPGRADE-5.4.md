@@ -146,3 +146,4 @@ This changelog references changes done in Shopware 5.4 patch versions.
     - `/checkout/ajaxAmount`
     - `/address/ajaxSelection`
     - `/address/ajaxEditor`
+* Deprecated `\Shopware\Models\Order\Document\Type`, use `\Shopware\Models\Document\Document` instead. The old document type will be removed with 5.5.
