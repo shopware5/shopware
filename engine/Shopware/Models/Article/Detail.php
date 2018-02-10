@@ -191,6 +191,13 @@ class Detail extends ModelEntity
     private $stockMin = null;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="laststock", type="boolean", nullable=false)
+     */
+    private $lastStock = null;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
@@ -485,6 +492,30 @@ class Detail extends ModelEntity
     }
 
     /**
+     * Set lastStock
+     *
+     * @param int $lastStock
+     *
+     * @return Detail
+     */
+    public function setLastStock($lastStock)
+    {
+        $this->lastStock = $lastStock;
+
+        return $this;
+    }
+
+    /**
+     * Get lastStock
+     *
+     * @return int
+     */
+    public function getLastStock()
+    {
+        return $this->lastStock;
+    }
+
+    /**
      * Set weight
      *
      * @param float $weight
@@ -737,7 +768,7 @@ class Detail extends ModelEntity
      *
      * @param \DateTime|string|null $releaseDate
      *
-     * @return Article
+     * @return Detail
      */
     public function setReleaseDate($releaseDate = null)
     {

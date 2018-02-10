@@ -215,7 +215,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
          * the stock and minpurchase are set to 0
          */
         $subQuery->andWhere(
-            '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+            '(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)'
         );
 
         $subQuery->setMaxResults(1);

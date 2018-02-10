@@ -834,7 +834,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function deleteDocumentAction()
     {
         $documentId = $this->request->getParam('documentId');
-        $documentPath = $this->container->getParameter('kernel.root_dir') . '/files/documents/';
+        $documentPath = rtrim($this->container->getParameter('shopware.app.documentsdir'), '/') . DIRECTORY_SEPARATOR;
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->container->get('dbal_connection');
         $queryBuilder = $connection->createQueryBuilder();
@@ -1444,8 +1444,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function addAttachments(Enlight_Components_Mail $mail, $orderId, array $attachments = [])
     {
-        $rootDirectory = $this->container->getParameter('kernel.root_dir');
-        $documentDirectory = $rootDirectory . '/files/documents';
+        $documentDirectory = rtrim($this->get('service_container')->getParameter('shopware.app.documentsdir'), '/');
 
         foreach ($attachments as $attachment) {
             $filePath = $documentDirectory . '/' . $attachment['hash'] . '.pdf';

@@ -26,6 +26,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
+use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Models\Customer\Address;
 
 /**
@@ -33,7 +34,7 @@ use Shopware\Models\Customer\Address;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
@@ -66,6 +67,25 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->admin = Shopware()->Modules()->Admin();
         $this->basket = Shopware()->Modules()->Basket();
         $this->session = Shopware()->Session();
+    }
+
+    /**
+     * @return array
+     */
+    public function getCSRFProtectedActions()
+    {
+        return [
+            'ajaxAddArticle',
+            'addArticle',
+            'ajaxAddArticleCart',
+            'ajaxDeleteArticle',
+            'ajaxDeleteArticleCart',
+            'deleteArticle',
+            'addAccessories',
+            'changeQuantity',
+            'addPremium',
+            'setAddress',
+        ];
     }
 
     /**
@@ -277,7 +297,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             ';
 
             $order = Shopware()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId]);
-            if (!empty($order)) {
+
+            if (empty($order)) {
+                if ($this->Request()->isGet()) {
+                    return $this->forward('confirm');
+                }
+            } else {
                 $this->View()->assign($order);
                 $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
@@ -372,6 +397,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
         }
 
+        if ($this->Request()->isGet()) {
+            return $this->forward('confirm');
+        }
+
         $this->saveOrder();
         $this->saveDefaultAddresses();
         $this->resetTemporaryAddresses();
@@ -452,7 +481,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->redirect([
                 'controller' => $action[0],
                 'action' => empty($action[1]) ? 'index' : $action[1],
-                'forceSecure' => true,
             ]);
         }
     }
@@ -462,9 +490,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      *
      * @param sAdd = ordernumber
      * @param sQuantity = quantity
+     *
+     * @throws LogicException
      */
     public function addArticleAction()
     {
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $ordernumber = trim($this->Request()->getParam('sAdd'));
         $quantity = $this->Request()->getParam('sQuantity');
         $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
@@ -1391,12 +1425,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * This action will get redirected from the default addArticleAction
      * when the request was an AJAX request.
      *
-     * The json padding will be set so that the content type will get to
-     * 'text/javascript' so the template can be returned via jsonp
+     * The content type will be set to json
      */
     public function ajaxAddArticleAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        /** @var $jsonPlugin Enlight_Controller_Plugins_Json_Bootstrap */
+        $jsonPlugin = Shopware()->Plugins()->Controller()->Json();
+        $jsonPlugin->setRenderer();
     }
 
     /**
@@ -1412,6 +1447,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAddArticleCartAction()
     {
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
 
@@ -1444,6 +1483,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxDeleteArticleCartAction()
     {
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $itemId = $this->Request()->getParam('sDelete');
 
         if ($itemId) {
@@ -1462,8 +1505,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxCartAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
         $view = $this->View();
         $basket = $this->getBasket();
 
@@ -1484,7 +1525,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAmountAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        $this->Response()->setHeader('Content-Type', 'application/json');
 
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
@@ -1495,12 +1536,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $this->Response()->setBody(
-            json_encode(
-                [
+            json_encode([
                     'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
                     'quantity' => $quantity,
-                ]
-            )
+            ])
         );
     }
 

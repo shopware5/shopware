@@ -530,7 +530,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**

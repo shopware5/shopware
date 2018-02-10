@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                 value = element.getValues().find('shopId', shop.getId(), 0, false, true, true);
                 value = element.getValues().getAt(value);
                 var initialValue = value;
-                if(!value && shop.getId() != 1) {
+                if(!value && shop.getId() !== 1) {
                     value = element.getValues().find('shopId', 1, 0, false, true, true);
                     value = element.getValues().getAt(value);
                 }
@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                     allowBlank: !element.get('required') || !shop.get('default')
                 }, options);
 
-                if (field.xtype == "config-element-boolean" || field.xtype == "config-element-checkbox") {
+                if (field.xtype === 'config-element-boolean' || field.xtype === 'config-element-checkbox') {
                     field = me.convertCheckBoxToComboBox(field, shop, initialValue);
                 }
 
@@ -192,7 +192,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
     convertCheckBoxToComboBox: function (field, shop, initialValue) {
         var booleanSelectValue = field.value;
 
-        if (shop.get('id') != 1 && initialValue === undefined) {
+        if (shop.get('id') !== 1 && initialValue === undefined) {
             // set empty string only for foreign shops as a fallback to the default shop
             // the default shop always got a value
             booleanSelectValue = '';
@@ -203,9 +203,9 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
         }
 
         Ext.apply(field, {
-            xtype: "base-element-boolean-select",
+            xtype: 'base-element-boolean-select',
             value: booleanSelectValue,
-            emptyText: ""
+            emptyText: ''
         });
 
         return field;

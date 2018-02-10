@@ -211,7 +211,7 @@ class ListProductService implements Service\ListProductServiceInterface
             return false;
         }
 
-        if ($this->config->get('hideNoInStock') && $product->isCloseouts() && !$product->hasAvailableVariant()) {
+        if ($this->config->get('hideNoInStock') && !$product->isAvailable() && !$product->hasAvailableVariant()) {
             return false;
         }
 

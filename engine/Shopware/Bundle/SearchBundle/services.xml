@@ -38,6 +38,12 @@
             <tag name="criteria_request_handler"/>
         </service>
 
+        <service class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\VariantCriteriaRequestHandler" id="shopware_bundle_search.criteria_request_handler.variant_criteria_request_handler">
+            <argument id="dbal_connection" type="service"/>
+            <tag name="criteria_request_handler"/>
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
+        </service>
+
         <service id="shopware_search.store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >
             <argument type="service" id="config" />
             <argument type="service" id="events" />
@@ -60,5 +66,16 @@
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
         </service>
+
+        <service class="Shopware\Bundle\SearchBundle\VariantSearch"
+                 id="shopware_search.variant_search"
+                 decorates="shopware_search.product_search">
+
+            <argument id="shopware_search.variant_search.inner" type="service"/>
+            <argument id="shopware_storefront.variant_listing_price_service" type="service"/>
+            <argument type="service" id="shopware_storefront.configurator_service"/>
+        </service>
+
+
     </services>
 </container>

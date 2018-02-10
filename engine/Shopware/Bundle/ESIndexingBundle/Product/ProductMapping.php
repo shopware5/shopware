@@ -156,6 +156,7 @@ class ProductMapping implements MappingInterface
                 'unit' => $this->getUnitMapping(),
 
                 'attributes' => $this->getAttributeMapping(),
+                'configuration' => $this->getVariantOptionsMapping($shop),
             ],
         ];
     }
@@ -276,6 +277,9 @@ class ProductMapping implements MappingInterface
         $prices = [];
         $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
         $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
+        if (!$shop->isMain()) {
+            $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getParentId());
+        }
 
         foreach ($currencies as $currency) {
             foreach ($customerGroups as $customerGroup) {
@@ -337,6 +341,29 @@ class ProductMapping implements MappingInterface
             'properties' => [
                 'core' => [
                     'properties' => $properties,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param Shop $shop
+     *
+     * @return array
+     */
+    private function getVariantOptionsMapping(Shop $shop)
+    {
+        return [
+            'properties' => [
+                'id' => ['type' => 'long'],
+                'name' => $this->fieldMapping->getLanguageField($shop),
+                'description' => $this->fieldMapping->getLanguageField($shop),
+                'options' => [
+                    'properties' => [
+                        'id' => ['type' => 'long'],
+                        'name' => $this->fieldMapping->getLanguageField($shop),
+                        'description' => $this->fieldMapping->getLanguageField($shop),
+                    ],
                 ],
             ],
         ];

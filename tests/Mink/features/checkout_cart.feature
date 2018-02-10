@@ -3,8 +3,13 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
 
     Background:
         Given the cart contains the following products:
-            | number  | name            | quantity |
-            | SW10181 | Reisekoffer Set | 1        |
+            | articleId | number  | name            | quantity |
+            | 181       | SW10181 | Reisekoffer Set | 1        |
+
+    @onlypostallowed
+    Scenario: I can't add product to cart using the HTTP GET method
+        When I add the article "181" to my basket over HTTP GET
+        Then the response status code should be 503
 
     @fastOrder @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
@@ -191,8 +196,8 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | number  | name               | price | customergroup | category | manufacturer | purchaseunit | shippingFree |
             | SW11109 | purchase unit test | 2.13  | EK            | PUT      | UnitManu     | NULL         | 1            |
         And the cart contains the following products:
-            | number  | name            | quantity |
-            | SW11109 | purchase unit test | 100        |
+            | articleId | number  | name               | quantity   |
+            | 273       | SW11109 | purchase unit test | 100        |
         Then  the aggregations should look like this:
             | label         | value   |
             | sum           | 254,00 € |

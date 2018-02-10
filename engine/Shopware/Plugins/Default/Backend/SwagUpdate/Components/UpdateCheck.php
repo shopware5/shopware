@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 use Shopware\Components\OpenSSLVerifier;
+use Shopware\Components\ShopwareReleaseStruct;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
 /**
@@ -55,17 +56,24 @@ class UpdateCheck
     private $verificator;
 
     /**
-     * @param string          $apiEndpoint
-     * @param string          $channel
-     * @param bool            $verifySignature
-     * @param OpenSSLVerifier $verificator
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($apiEndpoint, $channel, $verifySignature, OpenSSLVerifier $verificator)
+    private $release;
+
+    /**
+     * @param string                $apiEndpoint
+     * @param string                $channel
+     * @param bool                  $verifySignature
+     * @param OpenSSLVerifier       $verificator
+     * @param ShopwareReleaseStruct $release
+     */
+    public function __construct($apiEndpoint, $channel, $verifySignature, OpenSSLVerifier $verificator, ShopwareReleaseStruct $release)
     {
         $this->apiEndpoint = rtrim($apiEndpoint, '/');
         $this->channel = $channel;
         $this->verifySignature = $verifySignature;
         $this->verificator = $verificator;
+        $this->release = $release;
     }
 
     /**
@@ -82,13 +90,13 @@ class UpdateCheck
      *
      * @return Version|null
      */
-    public function checkUpdate($shopwareVersion, $params = [])
+    public function checkUpdate($shopwareVersion, array $params = [])
     {
         $url = $this->apiEndpoint . '/release/update';
 
         $client = new \Zend_Http_Client($url, [
             'timeout' => 5,
-            'useragent' => 'Shopware/' . \Shopware::VERSION,
+            'useragent' => 'Shopware/' . $this->release->getVersion(),
         ]);
 
         $client->setParameterGet('shopware_version', $shopwareVersion);

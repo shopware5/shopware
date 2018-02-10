@@ -167,6 +167,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
     initHandlers: function() {
         return [
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.CategoryFacet'),
+            Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.VariantFacet'),
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.ImmediateDeliveryFacet'),
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.ManufacturerFacet'),
             Ext.create('Shopware.apps.Config.view.custom_search.facet.classes.PriceFacet'),

@@ -92,7 +92,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
      */
     private function getLocale()
     {
-        return Shopware()->Container()->get('Auth')->getIdentity()->locale->getLocale();
+        return $this->container->get('Auth')->getIdentity()->locale->getLocale();
     }
 
     /**
@@ -100,7 +100,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**
@@ -119,6 +119,9 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         return $token;
     }
 
+    /**
+     * @param Exception $e
+     */
     private function handleException(Exception $e)
     {
         if (!($e instanceof StoreException)) {
@@ -141,8 +144,6 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
 
     /**
      * @param StoreException $exception
-     *
-     * @throws Exception
      *
      * @return mixed|string
      */

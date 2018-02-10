@@ -370,6 +370,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $content['metaTitle'] = $manufacturer->getMetaTitle();
         $content['title'] = $manufacturer->getName();
+        $content['productBoxLayout'] = $this->get('config')->get('manufacturerProductBoxLayout');
 
         return $content;
     }

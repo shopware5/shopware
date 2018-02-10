@@ -39,11 +39,17 @@ class ConfiguratorHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
+     * @var MediaHydrator
+     */
+    private $mediaHydrator;
+
+    /**
      * @param AttributeHydrator $attributeHydrator
      */
-    public function __construct(AttributeHydrator $attributeHydrator)
+    public function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
+        $this->mediaHydrator = $mediaHydrator;
     }
 
     /**
@@ -140,6 +146,11 @@ class ConfiguratorHydrator extends Hydrator
 
         if ($data['__configuratorOptionAttribute_id']) {
             $this->attributeHydrator->addAttribute($option, $data, 'configuratorOptionAttribute', null, 'configuratorOption');
+        }
+        if (isset($data['__media_id'])) {
+            $option->setMedia(
+                $this->mediaHydrator->hydrate($data)
+            );
         }
 
         return $option;

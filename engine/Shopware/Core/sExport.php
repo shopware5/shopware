@@ -385,7 +385,7 @@ class sExport
         $this->sSmarty->config_vars['ES'] = $this->sSettings['escaped_fieldmark'];
         $this->sSmarty->config_vars['L'] = $this->sSettings['line_separator'];
         $this->sSmarty->config_vars['EL'] = $this->sSettings['escaped_line_separator'];
-        if ($this->sSettings['encoding'] == 'UTF-8') {
+        if ($this->sSettings['encoding'] === 'UTF-8') {
             $this->sSmarty->config_vars['BOM'] = "\xEF\xBB\xBF";
         } else {
             $this->sSmarty->config_vars['BOM'] = '';
@@ -436,14 +436,14 @@ class sExport
                     $string = str_replace($this->sSettings['separator'], $this->sSettings['escaped_separator'], $string);
                 }
 
-                if ($char_set != 'UTF-8') {
+                if ($char_set !== 'UTF-8') {
                     $string = utf8_decode($string);
                 }
                 $string = html_entity_decode($string, ENT_NOQUOTES, $char_set);
 
                 return $this->sSettings['fieldmark'] . $string . $this->sSettings['fieldmark'];
             case 'xml':
-                if ($char_set != 'UTF-8') {
+                if ($char_set !== 'UTF-8') {
                     $string = utf8_decode($string);
                 }
 
@@ -570,16 +570,16 @@ class sExport
      * Returns the article image links with the frontend logic.
      * Checks the image restriction of variant articles, too.
      *
-     * @param $articleId
-     * @param $orderNumber
-     * @param null   $imageSize
-     * @param string $separator
+     * @param int         $articleId
+     * @param string      $orderNumber
+     * @param null|string $imageSize
+     * @param string      $separator
      *
      * @return string
      */
     public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = '|')
     {
-        $imageSize = ($imageSize == null) ? 'original' : $imageSize;
+        $imageSize = ($imageSize === null) ? 'original' : $imageSize;
         $returnData = [];
         if (empty($articleId) || empty($orderNumber)) {
             return '';
@@ -598,8 +598,8 @@ class sExport
      * Returns an array with the article property data.
      * Needs to be parsed over the feed smarty template
      *
-     * @param $articleId
-     * @param $filterGroupId
+     * @param int $articleId
+     * @param int $filterGroupId
      *
      * @return string
      */
@@ -681,10 +681,10 @@ class sExport
                 }
             } else {
                 if ($nquotes > 0) {
-                    if (substr($elements[$i], 0, 1) == $fieldmark) {
+                    if (substr($elements[$i], 0, 1) === $fieldmark) {
                         $elements[$i] = substr($elements[$i], 1);
                     }
-                    if (substr($elements[$i], -1, 1) == $fieldmark) {
+                    if (substr($elements[$i], -1, 1) === $fieldmark) {
                         $elements[$i] = substr($elements[$i], 0, -1);
                     }
                     $elements[$i] = str_replace($fieldmark . $fieldmark, $fieldmark, $elements[$i]);
@@ -759,7 +759,7 @@ class sExport
         if (
             !empty($this->sCustomergroup['groupkey'])
             && empty($this->sCustomergroup['mode'])
-            && $this->sCustomergroup['groupkey'] != 'EK'
+            && $this->sCustomergroup['groupkey'] !== 'EK'
         ) {
             $sql_add_join[] = "
                 LEFT JOIN s_articles_prices as p2
@@ -1313,7 +1313,7 @@ class sExport
             SELECT
                 MIN(d.instock>=b.quantity) as instock,
                 MIN(d.instock>=(b.quantity+d.stockmin)) as stockmin,
-                MIN(a.laststock) as laststock,
+                MIN(d.laststock) as laststock,
                 SUM(d.weight*b.quantity) as weight,
                 SUM(IF(a.id,b.quantity,0)) as count_article,
                 MAX(b.shippingfree) as shippingfree,
@@ -1761,9 +1761,6 @@ class sExport
               COALESCE (s.base_url, m.base_url) AS base_url,
               COALESCE (s.hosts, m.hosts) AS hosts,
               GREATEST (COALESCE (s.secure, 0), COALESCE (m.secure, 0)) AS secure,
-              GREATEST (COALESCE (s.always_secure, 0), COALESCE (m.always_secure, 0)) AS always_secure,
-              COALESCE (s.secure_host, m.secure_host) AS secure_host,
-              COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
               COALESCE (s.template_id, m.template_id) AS template_id,
               COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
               s.category_id,
@@ -1830,7 +1827,7 @@ class sExport
 
         $url = str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
 
-        if ($this->shopData['always_secure']) {
+        if ($this->shopData['secure']) {
             return str_replace('http:', 'https:', $url);
         }
 

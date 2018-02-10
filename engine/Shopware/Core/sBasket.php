@@ -199,7 +199,7 @@ class sBasket
     {
         $result = $this->db->fetchAll(
             'SELECT (d.instock - b.quantity) as diffStock, b.ordernumber,
-                a.laststock, IF(a.active=1, d.active, 0) as active
+                d.laststock, IF(a.active=1, d.active, 0) as active
             FROM s_order_basket b
             LEFT JOIN s_articles_details d
               ON d.ordernumber = b.ordernumber
@@ -1539,8 +1539,8 @@ class sBasket
      * Add product to cart
      * Used in multiple locations
      *
-     * @param int $id       Order number (s_articles_details.ordernumber)
-     * @param int $quantity Amount
+     * @param string $id       Order number (s_articles_details.ordernumber)
+     * @param int    $quantity Amount
      *
      * @throws \Exception
      * @throws \Enlight_Exception         If no price could be determined, or a database error occurs
@@ -2516,7 +2516,7 @@ class sBasket
             ad.purchasesteps,
             ad.purchaseunit,
             COALESCE (ad.unitID, mad.unitID) AS unitID,
-            a.laststock,
+            ad.laststock,
             ad.shippingtime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,
@@ -2853,7 +2853,7 @@ class sBasket
     /**
      * Get article data for sAddArticle
      *
-     * @param int $id Article ordernumber
+     * @param string $id Article ordernumber
      *
      * @throws \Exception
      *
@@ -2863,7 +2863,7 @@ class sBasket
     {
         $sql = '
             SELECT s_articles.id AS articleID, s_articles.main_detail_id, name AS articleName, taxID,
-              additionaltext, s_articles_details.shippingfree, laststock, instock,
+              additionaltext, s_articles_details.shippingfree, s_articles_details.laststock, instock,
               s_articles_details.id as articledetailsID, ordernumber,
               s_articles.configurator_set_id
             FROM s_articles, s_articles_details

@@ -37,6 +37,8 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity
  * @ORM\Table(name="s_core_documents")
+ *
+ * @deprecated since 5.4, will be removed with 5.5. Use \Shopware\Models\Document\Document instead.
  */
 class Type extends ModelEntity
 {

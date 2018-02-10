@@ -29,13 +29,17 @@ use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
+use Shopware\Kernel;
 
 class InstallContextTest extends TestCase
 {
     public function testFrontendCaches()
     {
+        $kernel = new Kernel('testing', true);
+        $release = $kernel->getRelease();
+
         $entity = new \Shopware\Models\Plugin\Plugin();
-        $context = new ActivateContext($entity, \Shopware::VERSION, '1.0.0');
+        $context = new ActivateContext($entity, $release['version'], '1.0.0');
         $plugin = new MyPlugin(true);
         $plugin->activate($context);
 
@@ -45,8 +49,11 @@ class InstallContextTest extends TestCase
 
     public function testMessage()
     {
+        $kernel = new Kernel('testing', true);
+        $release = $kernel->getRelease();
+
         $entity = new \Shopware\Models\Plugin\Plugin();
-        $context = new DeactivateContext($entity, \Shopware::VERSION, '1.0.0');
+        $context = new DeactivateContext($entity, $release['version'], '1.0.0');
         $plugin = new MyPlugin(true);
 
         $plugin->deactivate($context);
@@ -56,8 +63,11 @@ class InstallContextTest extends TestCase
 
     public function testCacheCombination()
     {
+        $kernel = new Kernel('testing', true);
+        $release = $kernel->getRelease();
+
         $entity = new \Shopware\Models\Plugin\Plugin();
-        $context = new InstallContext($entity, \Shopware::VERSION, '1.0.0');
+        $context = new InstallContext($entity, $release['version'], '1.0.0');
         $plugin = new MyPlugin(true);
 
         $plugin->install($context);
@@ -68,8 +78,11 @@ class InstallContextTest extends TestCase
 
     public function testDefault()
     {
+        $kernel = new Kernel('testing', true);
+        $release = $kernel->getRelease();
+
         $entity = new \Shopware\Models\Plugin\Plugin();
-        $context = new UninstallContext($entity, \Shopware::VERSION, '1.0.0', true);
+        $context = new UninstallContext($entity, $release['version'], '1.0.0', true);
         $plugin = new MyPlugin(true);
 
         $plugin->uninstall($context);

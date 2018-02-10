@@ -22,12 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
-use Shopware\Components\Routing\RouterInterface;
 
 /**
  * Shopware Listing Widgets
@@ -43,6 +44,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         try {
             $ordernumber = $this->Request()->get('ordernumber');
+
             if (!$ordernumber) {
                 throw new \InvalidArgumentException('Argument ordernumber missing');
             }
@@ -60,41 +62,35 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             /** @var $articleModule \sArticles */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($ordernumber, $categoryId, $this->Request());
-        } catch (\InvalidArgumentException $e) {
-            $result = ['error' => $e->getMessage()];
-            $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-            $this->Response()->setBody($body);
-            $this->Response()->setHeader('Content-type', 'application/json', true);
-            $this->Response()->setHttpResponseCode(500);
-
-            return;
-        } catch (\Exception $e) {
-            $result = ['exception' => $e];
-            $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-            $this->Response()->setBody($body);
-            $this->Response()->setHeader('Content-type', 'application/json', true);
-            $this->Response()->setHttpResponseCode(500);
-
-            return;
-        }
 
         $linkRewriter = function ($link) {
             return Shopware()->Modules()->Core()->sRewriteLink($link);
         };
 
-        if (isset($navigation['previousProduct'])) {
-            $navigation['previousProduct']['href'] = $linkRewriter($navigation['previousProduct']['link']);
+            if (isset($navigation['previousProduct'])) {
+                $navigation['previousProduct']['href'] = $linkRewriter($navigation['previousProduct']['link']);
+            }
+
+            if (isset($navigation['nextProduct'])) {
+                $navigation['nextProduct']['href'] = $linkRewriter($navigation['nextProduct']['link']);
+            }
+
+            $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);
+            $responseCode = 200;
+            $body = json_encode($navigation, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        } catch (\InvalidArgumentException $e) {
+            $responseCode = 500;
+            $result = ['error' => $e->getMessage()];
+            $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        } catch (\Exception $e) {
+            $responseCode = 500;
+            $result = ['exception' => $e];
+            $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
         }
 
-        if (isset($navigation['nextProduct'])) {
-            $navigation['nextProduct']['href'] = $linkRewriter($navigation['nextProduct']['link']);
-        }
-
-        $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);
-
-        $body = json_encode($navigation, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-        $this->Response()->setBody($body);
         $this->Response()->setHeader('Content-type', 'application/json', true);
+        $this->Response()->setHttpResponseCode($responseCode);
+        $this->Response()->setBody($body);
     }
 
     /**
@@ -228,8 +224,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function ajaxListingAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
         $categoryId = (int) $this->Request()->getParam('sCategory');
         $pageIndex = (int) $this->Request()->getParam('sPage');
 
@@ -574,8 +568,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         /** @var LegacyStructConverter $converter */
         $converter = $this->get('legacy_struct_converter');
-        /** @var RouterInterface $router */
-        $router = $this->get('router');
 
         $articles = $converter->convertListProductStructList($result->getProducts());
 
@@ -583,24 +575,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return $articles;
         }
 
-        $urls = array_map(function ($article) use ($categoryId) {
-            if ($categoryId !== null) {
-                return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
-            }
-
-            return $article['linkDetails'];
-        }, $articles);
-
-        $rewrite = $router->generateList($urls);
-
-        foreach ($articles as $key => &$article) {
-            if (!array_key_exists($key, $rewrite)) {
-                continue;
-            }
-            $article['linkDetails'] = $rewrite[$key];
-        }
-
-        return $articles;
+        return $this->get('shopware_storefront.listing_link_rewrite_service')->rewriteLinks(
+            $result->getCriteria(),
+            $articles,
+            $result->getContext(),
+            $categoryId
+        );
     }
 
     private function loadThemeConfig()

@@ -1,8 +1,9 @@
 {extends file='frontend/account/index.tpl'}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' append}
-    {$sBreadcrumb[] = ['name'=>"{s name='ChangePaymentTitle'}{/s}", 'link'=>{url}]}
+{block name='frontend_index_start'}
+    {$smarty.block.parent}
+    {$sBreadcrumb[] = ['name' => "{s name='ChangePaymentTitle'}{/s}", 'link' => {url}]}
     {$sActiveAction = 'payment'}
 {/block}
 

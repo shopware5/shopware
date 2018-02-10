@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
@@ -57,6 +58,36 @@ class Product extends ListProduct
      * @var Price[]
      */
     protected $calculatedPrices = [];
+
+    /**
+     * @var Group[]
+     */
+    protected $configuration = [];
+
+    /**
+     * @var array
+     */
+    protected $visibility = [];
+
+    /**
+     * @var Group[]
+     */
+    protected $fullConfiguration;
+
+    /**
+     * @var string[]
+     */
+    protected $availableCombinations = [];
+
+    /**
+     * @var array
+     */
+    protected $listingVariationPrices = [];
+
+    /**
+     * @var array
+     */
+    protected $filterConfiguration = [];
 
     /**
      * @param ListProduct $listProduct
@@ -155,5 +186,77 @@ class Product extends ListProduct
     public function setCalculatedPrices($calculatedPrices)
     {
         $this->calculatedPrices = $calculatedPrices;
+    }
+
+    /**
+     * @param Group[] $configuration
+     */
+    public function setConfiguration($configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    public function setVisibility(array $visibility)
+    {
+        $this->visibility = $visibility;
+    }
+
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    public function setAvailableCombinations(array $combinations)
+    {
+        $this->availableCombinations = $combinations;
+    }
+
+    public function getAvailableCombinations()
+    {
+        return $this->availableCombinations;
+    }
+
+    /**
+     * @param Group[] $fullConfiguration
+     */
+    public function setFullConfiguration(array $fullConfiguration)
+    {
+        $this->fullConfiguration = $fullConfiguration;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getFullConfiguration()
+    {
+        return $this->fullConfiguration;
+    }
+
+    public function setListingVariationPrices(array $prices)
+    {
+        $this->listingVariationPrices = $prices;
+    }
+
+    public function getListingVariationPrices()
+    {
+        return $this->listingVariationPrices;
+    }
+
+    public function setFilterConfiguration(array $filterConfiguration)
+    {
+        $this->filterConfiguration = $filterConfiguration;
+    }
+
+    public function getFilterConfiguration()
+    {
+        return $this->filterConfiguration;
     }
 }

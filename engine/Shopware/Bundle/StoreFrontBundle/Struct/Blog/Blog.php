@@ -113,7 +113,7 @@ class Blog extends Extendable
     /**
      * @var int[]
      */
-    protected $mediaIds;
+    protected $mediaIds = [];
 
     /**
      * @var Media[]

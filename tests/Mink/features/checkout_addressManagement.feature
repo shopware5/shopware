@@ -5,8 +5,8 @@ Feature: Checkout address management
     Given I am on the page "Account"
     And   I log in successful as "Max Mustermann" with email "checkout@adressmanagement.localhost" and password "shopware"
     And   the cart contains the following products:
-      | number  | name                    | quantity |
-      | SW10167 | Sonnenbrille Speed Eyes | 3        |
+      | articleId | number  | name                     | quantity |
+      | 167       | SW10167 | Sonnenbrille Speed Eyes  | 3        |
 
   @javascript
   Scenario Outline: I can create a new address during checkout
@@ -118,8 +118,8 @@ Feature: Checkout address management
     And I proceed to checkout
     Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
     When the cart contains the following products:
-      | number  | name                    | quantity |
-      | SW10167 | Sonnenbrille Speed Eyes | 3        |
+      | articleId | number  | name                    | quantity |
+      | 167       | SW10167 | Sonnenbrille Speed Eyes | 3        |
     And I proceed to order confirmation
     Then the "Rechnungsadresse" addressbox must contain "<salutation> <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
     Examples:

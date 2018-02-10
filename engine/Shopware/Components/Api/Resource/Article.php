@@ -63,7 +63,7 @@ class Article extends Resource implements BatchInterface
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Article\Article');
+        return $this->getManager()->getRepository(\Shopware\Models\Article\Article::class);
     }
 
     /**
@@ -71,7 +71,7 @@ class Article extends Resource implements BatchInterface
      */
     public function getDetailRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Article\Detail');
+        return $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class);
     }
 
     /**
@@ -148,7 +148,7 @@ class Article extends Resource implements BatchInterface
             'propertyGroup',
             'customerGroups',
         ])
-            ->from('Shopware\Models\Article\Article', 'article')
+            ->from(\Shopware\Models\Article\Article::class, 'article')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.prices', 'mainDetailPrices')
             ->leftJoin('mainDetailPrices.customerGroup', 'priceCustomGroup')
@@ -208,7 +208,7 @@ class Article extends Resource implements BatchInterface
 
             if (isset($options['language']) && !empty($options['language'])) {
                 /** @var $shop Shop */
-                $shop = $this->findEntityByConditions('Shopware\Models\Shop\Shop', [
+                $shop = $this->findEntityByConditions(\Shopware\Models\Shop\Shop::class, [
                     ['id' => $options['language']],
                     ['shop' => $options['language']],
                 ]);
@@ -259,10 +259,10 @@ class Article extends Resource implements BatchInterface
 
         $builder = $this->getRepository()->createQueryBuilder('article')
             ->addSelect(['attribute'])
+            ->addSelect('mainDetail.lastStock')
             ->leftJoin('article.mainDetail', 'mainDetail')
-            ->leftJoin('mainDetail.attribute', 'attribute');
-
-        $builder->addFilter($criteria)
+            ->leftJoin('mainDetail.attribute', 'attribute')
+            ->addFilter($criteria)
             ->addOrderBy($orderBy)
             ->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -273,17 +273,27 @@ class Article extends Resource implements BatchInterface
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the article data
-        $articles = $paginator->getIterator()->getArrayCopy();
+        /**
+         * @Deprecated
+         *
+         * To support Shopware <= 5.3 we make sure the lastStock-column of the main variant is being used instead of the
+         * one on the product itself.
+         */
+        $articles = array_map(function (array $val) {
+            $val[0]['lastStock'] = $val['lastStock'];
+            unset($val['lastStock']);
+
+            return $val[0];
+        }, $paginator->getIterator()->getArrayCopy());
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY
             && isset($options['language'])
             && !empty($options['language'])) {
             /** @var $shop Shop */
-            $shop = $this->findEntityByConditions('Shopware\Models\Shop\Shop', [
+            $shop = $this->findEntityByConditions(\Shopware\Models\Shop\Shop::class, [
                 ['id' => $options['language']],
             ]);
 
@@ -332,6 +342,21 @@ class Article extends Resource implements BatchInterface
 
         if (!empty($translations)) {
             $this->writeTranslations($article->getId(), $translations);
+        }
+
+        /*
+         * @Deprecated
+         *
+         * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
+         *
+         * If `lastStock` was only defined on the main product, apply it to all it's variants
+         */
+        if (!array_key_exists('mainDetail', $params) && array_key_exists('lastStock', $params)) {
+            $db = $this->container->get('dbal_connection');
+            $db->executeQuery('UPDATE `s_articles_details` SET (lastStock) VALUES (:lastStock) WHERE `articleID`=:articleId', [
+                'lastStock' => $article->getLastStock(),
+                'articleId' => $article->getId(),
+            ]);
         }
 
         return $article;
@@ -750,7 +775,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['configuratorSet', 'groups'])
-            ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
+            ->from(\Shopware\Models\Article\Configurator\Set::class, 'configuratorSet')
             ->innerJoin('configuratorSet.articles', 'article')
             ->leftJoin('configuratorSet.groups', 'groups')
             ->addOrderBy('groups.position', 'ASC')
@@ -772,7 +797,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['images'])
-            ->from('Shopware\Models\Article\Image', 'images')
+            ->from(\Shopware\Models\Article\Image::class, 'images')
             ->innerJoin('images.article', 'article')
             ->where('article.id = :articleId')
             ->orderBy('images.position', 'ASC')
@@ -793,7 +818,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['downloads'])
-            ->from('Shopware\Models\Article\Download', 'downloads')
+            ->from(\Shopware\Models\Article\Download::class, 'downloads')
             ->innerJoin('downloads.article', 'article')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -813,7 +838,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['links'])
-            ->from('Shopware\Models\Article\Link', 'links')
+            ->from(\Shopware\Models\Article\Link::class, 'links')
             ->innerJoin('links.article', 'article')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -835,7 +860,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['categories.id', 'categories.name'])
-            ->from('Shopware\Models\Category\Category', 'categories')
+            ->from(\Shopware\Models\Category\Category::class, 'categories')
             ->innerJoin('categories.articles', 'articles')
             ->where('articles.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -855,7 +880,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL similar.{id, name}'])
-            ->from('Shopware\Models\Article\Article', 'article')
+            ->from(\Shopware\Models\Article\Article::class, 'article')
             ->innerJoin('article.similar', 'similar')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -877,7 +902,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL related.{id, name}'])
-            ->from('Shopware\Models\Article\Article', 'article')
+            ->from(\Shopware\Models\Article\Article::class, 'article')
             ->innerJoin('article.related', 'related')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -899,7 +924,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['seoCategories', 'category'])
-            ->from('Shopware\Models\Article\SeoCategory', 'seoCategories')
+            ->from(\Shopware\Models\Article\SeoCategory::class, 'seoCategories')
             ->innerJoin('seoCategories.category', 'category')
             ->where('seoCategories.articleId = :articleId')
             ->setParameter('articleId', $articleId);
@@ -1042,6 +1067,17 @@ class Article extends Resource implements BatchInterface
         }
 
         foreach ($data['variants'] as $variantData) {
+            /*
+             * @Deprecated
+             *
+             * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
+             *
+             * If `lastStock` was only defined on the main product, apply it to all it's variants
+             */
+            if (empty($variantData['lastStock'])) {
+                $variantData['lastStock'] = $article->getLastStock();
+            }
+
             if (isset($variantData['id'])) {
                 $variant = $this->getVariantResource()->internalUpdate(
                     $variantData['id'],
@@ -1055,7 +1091,7 @@ class Article extends Resource implements BatchInterface
                 //1. Use the number as identifier to update an existing variant
                 //2. Use this number for the new variant
                 if (isset($variantData['number'])) {
-                    $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy([
+                    $variant = $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy([
                         'number' => $variantData['number'],
                         'articleId' => $article->getId(),
                     ]);
@@ -1183,12 +1219,12 @@ class Article extends Resource implements BatchInterface
         foreach ($data['configuratorSet']['groups'] as $groupData) {
             $group = null;
             if (isset($groupData['id'])) {
-                $group = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group')->find($groupData['id']);
+                $group = $this->getManager()->getRepository(\Shopware\Models\Article\Configurator\Group::class)->find($groupData['id']);
                 if (!$group) {
                     throw new ApiException\CustomValidationException(sprintf('ConfiguratorGroup by id %s not found', $groupData['id']));
                 }
             } elseif (isset($groupData['name'])) {
-                $group = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group')->findOneBy(['name' => $groupData['name']]);
+                $group = $this->getManager()->getRepository(\Shopware\Models\Article\Configurator\Group::class)->findOneBy(['name' => $groupData['name']]);
 
                 if (!$group) {
                     $group = new Configurator\Group();
@@ -1204,12 +1240,12 @@ class Article extends Resource implements BatchInterface
                 $option = null;
                 if ($group->getId() > 0) {
                     if (isset($optionData['id'])) {
-                        $option = $this->getManager()->find('Shopware\Models\Article\Configurator\Option', $optionData['id']);
+                        $option = $this->getManager()->find(\Shopware\Models\Article\Configurator\Option::class, $optionData['id']);
                         if (!$option) {
                             throw new ApiException\CustomValidationException(sprintf('ConfiguratorOption by id %s not found', $optionData['id']));
                         }
                     } else {
-                        $option = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy([
+                        $option = $this->getManager()->getRepository(\Shopware\Models\Article\Configurator\Option::class)->findOneBy([
                             'name' => $optionData['name'],
                             'groupId' => $group->getId(),
                         ]);
@@ -1262,7 +1298,7 @@ class Article extends Resource implements BatchInterface
     {
         //check if a tax id is passed and load the tax model or set the tax parameter to null.
         if (!empty($data['taxId'])) {
-            $data['tax'] = $this->getManager()->find('Shopware\Models\Tax\Tax', $data['taxId']);
+            $data['tax'] = $this->getManager()->find(\Shopware\Models\Tax\Tax::class, $data['taxId']);
 
             if (empty($data['tax'])) {
                 throw new ApiException\CustomValidationException(sprintf('Tax by id %s not found', $data['taxId']));
@@ -1279,7 +1315,7 @@ class Article extends Resource implements BatchInterface
 
         //check if a supplier id is passed and load the supplier model or set the supplier parameter to null.
         if (!empty($data['supplierId'])) {
-            $data['supplier'] = $this->getManager()->find('Shopware\Models\Article\Supplier', $data['supplierId']);
+            $data['supplier'] = $this->getManager()->find(\Shopware\Models\Article\Supplier::class, $data['supplierId']);
             if (empty($data['supplier'])) {
                 throw new ApiException\CustomValidationException(sprintf('Supplier by id %s not found', $data['supplierId']));
             }
@@ -1299,7 +1335,7 @@ class Article extends Resource implements BatchInterface
             if (empty($data['priceGroupId'])) {
                 $data['priceGroupId'] = null;
             } else {
-                $data['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
+                $data['priceGroup'] = $this->getManager()->find(\Shopware\Models\Price\Group::class, $data['priceGroupId']);
                 if (empty($data['priceGroup'])) {
                     throw new ApiException\CustomValidationException(sprintf('Pricegroup by id %s not found', $data['priceGroupId']));
                 }
@@ -1313,7 +1349,7 @@ class Article extends Resource implements BatchInterface
             if (empty($data['filterGroupId'])) {
                 $data['propertyGroup'] = null;
             } else {
-                $data['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
+                $data['propertyGroup'] = $this->getManager()->find(\Shopware\Models\Property\Group::class, $data['filterGroupId']);
 
                 if (empty($data['propertyGroup'])) {
                     throw new ApiException\CustomValidationException(sprintf('PropertyGroup by id %s not found', $data['filterGroupId']));
@@ -1329,8 +1365,6 @@ class Article extends Resource implements BatchInterface
     /**
      * @param array                            $data
      * @param \Shopware\Models\Article\Article $article
-     *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
      * @return array
      */
@@ -1521,7 +1555,7 @@ class Article extends Resource implements BatchInterface
             $this->getManyToManySubElement(
                 $customerGroups,
                 $customerGroupData,
-                '\Shopware\Models\Customer\Group'
+                \Shopware\Models\Customer\Group::class
             );
         }
 
@@ -1562,7 +1596,7 @@ class Article extends Resource implements BatchInterface
                     $relatedArticle = $this->getManyToManySubElement(
                         $related,
                         ['id' => $articleId],
-                        '\Shopware\Models\Article\Article'
+                        \Shopware\Models\Article\Article::class
                     );
                 }
             }
@@ -1571,7 +1605,7 @@ class Article extends Resource implements BatchInterface
                 $relatedArticle = $this->getManyToManySubElement(
                     $related,
                     $relatedData,
-                    '\Shopware\Models\Article\Article'
+                    \Shopware\Models\Article\Article::class
                 );
             }
 
@@ -1626,7 +1660,7 @@ class Article extends Resource implements BatchInterface
                     $similarArticle = $this->getManyToManySubElement(
                         $similar,
                         ['id' => $articleId],
-                        '\Shopware\Models\Article\Article'
+                        \Shopware\Models\Article\Article::class
                     );
                 }
             }
@@ -1635,7 +1669,7 @@ class Article extends Resource implements BatchInterface
                 $similarArticle = $this->getManyToManySubElement(
                     $similar,
                     $similarData,
-                    '\Shopware\Models\Article\Article'
+                    \Shopware\Models\Article\Article::class
                 );
             }
 
@@ -1677,7 +1711,7 @@ class Article extends Resource implements BatchInterface
             return $data;
         }
 
-        $propertyRepository = $this->getManager()->getRepository('Shopware\Models\Property\Group');
+        $propertyRepository = $this->getManager()->getRepository(\Shopware\Models\Property\Group::class);
 
         /*
          *  Get group - this is required.
@@ -1701,7 +1735,7 @@ class Article extends Resource implements BatchInterface
 
             // Get value by id
             if (isset($valueData['id'])) {
-                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->find($valueData['id']);
+                $value = $this->getManager()->getRepository(\Shopware\Models\Property\Value::class)->find($valueData['id']);
                 if (!$value) {
                     throw new ApiException\CustomValidationException(sprintf('Property value by id %s not found', $valueData['id']));
                 }
@@ -1711,7 +1745,7 @@ class Article extends Resource implements BatchInterface
                 if (isset($valueData['option'])) {
                     // get option by id
                     if (isset($valueData['option']['id'])) {
-                        $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['option']['id']);
+                        $option = $this->getManager()->getRepository(\Shopware\Models\Property\Option::class)->find($valueData['option']['id']);
                         if (!$option) {
                             throw new ApiException\CustomValidationException(sprintf('Property option by id %s not found', $valueData['option']['id']));
                         }
@@ -1766,7 +1800,7 @@ class Article extends Resource implements BatchInterface
                 }
                 // create the value
                 // If there is a filter value with matching name and option, load this value, else create a new one
-                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy([
+                $value = $this->getManager()->getRepository(\Shopware\Models\Property\Value::class)->findOneBy([
                     'value' => $valueData['value'],
                     'optionId' => $option->getId(),
                 ]);
@@ -1800,7 +1834,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['mappings', 'image', 'rules'])
-            ->from('Shopware\Models\Article\Image\Mapping', 'mappings')
+            ->from(\Shopware\Models\Article\Image\Mapping::class, 'mappings')
             ->innerJoin('mappings.image', 'image')
             ->innerJoin('mappings.rules', 'rules')
             ->where('image.articleId = :articleId')
@@ -1842,7 +1876,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select('variants');
-        $builder->from('Shopware\Models\Article\Detail', 'variants')
+        $builder->from(\Shopware\Models\Article\Detail::class, 'variants')
             ->where('variants.articleId = :articleId')
             ->setParameter('articleId', $id);
 

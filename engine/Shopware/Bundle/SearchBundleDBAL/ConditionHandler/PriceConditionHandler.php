@@ -26,8 +26,10 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
+use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -36,21 +38,23 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceConditionHandler implements ConditionHandlerInterface
+class PriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     const LISTING_PRICE_JOINED = 'listing_price';
 
     /**
-     * @var ListingPriceTable
+     * @var ListingPriceSwitcher
      */
-    private $listingPriceTable;
+    private $priceSwitcher;
 
     /**
-     * @param ListingPriceTable $listingPriceTable
+     * @var Criteria
      */
-    public function __construct(ListingPriceTable $listingPriceTable)
+    private $criteria;
+
+    public function __construct(ListingPriceSwitcher $priceSwitcher)
     {
-        $this->listingPriceTable = $listingPriceTable;
+        $this->priceSwitcher = $priceSwitcher;
     }
 
     /**
@@ -69,14 +73,7 @@ class PriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (!$query->hasState(self::LISTING_PRICE_JOINED)) {
-            $table = $this->listingPriceTable->get($context);
-            $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');
-            foreach ($table->getParameters() as $key => $value) {
-                $query->setParameter($key, $value);
-            }
-            $query->addState(self::LISTING_PRICE_JOINED);
-        }
+        $this->priceSwitcher->joinPrice($query, $this->criteria, $context);
 
         $suffix = md5(json_encode($condition));
 
@@ -104,5 +101,10 @@ class PriceConditionHandler implements ConditionHandlerInterface
 
             return;
         }
+    }
+
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
     }
 }

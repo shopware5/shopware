@@ -123,6 +123,7 @@ return array_replace_recursive([
         'Local' => $this->AppPath('Plugins_Local'),
         'Community' => $this->AppPath('Plugins_Community'),
         'ShopwarePlugins' => $this->DocPath('custom_plugins'),
+        'ProjectPlugins' => $this->DocPath('custom_project'),
     ],
     'template' => [
         'compileCheck' => true,
@@ -134,6 +135,7 @@ return array_replace_recursive([
         'forceCache' => false,
         'cacheDir' => $this->getCacheDir() . '/templates',
         'compileDir' => $this->getCacheDir() . '/templates',
+        'templateDir' => $this->DocPath('themes'),
     ],
     'mail' => [
         'charset' => 'utf-8',
@@ -238,9 +240,16 @@ return array_replace_recursive([
         'locking' => false,
     ],
     'template_security' => [
-        // @deprecated with 5.3, config switch will be removed with 5.4
-        'enabled' => true,
         'php_modifiers' => include __DIR__ . '/smarty_functions.php',
         'php_functions' => include __DIR__ . '/smarty_functions.php',
+    ],
+    'app' => [
+        'rootDir' => $this->DocPath(),
+        'downloadsDir' => $this->DocPath('files_downloads'),
+        'documentsDir' => $this->DocPath('files_documents'),
+    ],
+    'web' => [
+        'webDir' => $this->DocPath('web'),
+        'cacheDir' => $this->DocPath('web_cache'),
     ],
 ], $customConfig);

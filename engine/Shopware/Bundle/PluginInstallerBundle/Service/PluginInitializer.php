@@ -36,9 +36,9 @@ class PluginInitializer
     private $connection;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $pluginDirectory;
+    private $pluginDirectories;
 
     /**
      * @var array[]
@@ -46,13 +46,13 @@ class PluginInitializer
     private $activePlugins = [];
 
     /**
-     * @param PDO $connection
-     * @param $pluginDirectory
+     * @param PDO             $connection
+     * @param string|string[] $pluginDirectories
      */
-    public function __construct(PDO $connection, $pluginDirectory)
+    public function __construct(PDO $connection, $pluginDirectories)
     {
         $this->connection = $connection;
-        $this->pluginDirectory = $pluginDirectory;
+        $this->pluginDirectories = (array) $pluginDirectories;
     }
 
     /**
@@ -72,41 +72,43 @@ class PluginInitializer
         $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 
         foreach ($this->activePlugins as $pluginName => &$pluginData) {
-            if ($pluginData['namespace'] === 'ShopwarePlugins') {
+            if (in_array($pluginData['namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
                 $shopwarePlugins[] = $pluginName;
             }
             $pluginData = $pluginData['version'];
         }
         unset($pluginData);
 
-        foreach (new \DirectoryIterator($this->pluginDirectory) as $pluginDir) {
-            if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
-                continue;
+        foreach ($this->pluginDirectories as $pluginDirectory) {
+            foreach (new \DirectoryIterator($pluginDirectory) as $pluginDir) {
+                if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
+                    continue;
+                }
+
+                $pluginName = $pluginDir->getBasename();
+                $pluginFile = $pluginDir->getPathname() . '/' . $pluginName . '.php';
+                if (!is_file($pluginFile)) {
+                    continue;
+                }
+
+                $namespace = $pluginName;
+                $className = '\\' . $namespace . '\\' . $pluginName;
+                $classLoader->addPrefix($namespace, $pluginDir->getPathname());
+
+                if (!class_exists($className)) {
+                    throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
+                }
+
+                $isActive = in_array($pluginName, $shopwarePlugins, true);
+
+                /** @var Plugin $plugin */
+                $plugin = new $className($isActive);
+
+                if (!$plugin instanceof Plugin) {
+                    throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
+                }
+                $plugins[$plugin->getName()] = $plugin;
             }
-
-            $pluginName = $pluginDir->getBasename();
-            $pluginFile = $pluginDir->getPathname() . '/' . $pluginName . '.php';
-            if (!is_file($pluginFile)) {
-                continue;
-            }
-
-            $namespace = $pluginName;
-            $className = '\\' . $namespace . '\\' . $pluginName;
-            $classLoader->addPrefix($namespace, $pluginDir->getPathname());
-
-            if (!class_exists($className)) {
-                throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
-            }
-
-            $isActive = in_array($pluginName, $shopwarePlugins, true);
-
-            /** @var Plugin $plugin */
-            $plugin = new $className($isActive);
-
-            if (!$plugin instanceof Plugin) {
-                throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
-            }
-            $plugins[$plugin->getName()] = $plugin;
         }
 
         return $plugins;

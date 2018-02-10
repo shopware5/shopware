@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\ShopwareReleaseStruct;
+
 /**
  * Shopware Config Model
  */
@@ -58,12 +60,19 @@ class Shopware_Components_Config implements ArrayAccess
     protected $_db;
 
     /**
-     * Constructor method
-     *
-     * @param array $config
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($config)
+    protected $release;
+
+    /**
+     * @param array $config
+     *
+     * @throws Zend_Cache_Exception
+     */
+    public function __construct(array $config)
     {
+        $this->release = $config['release'];
+
         if (isset($config['cache'])
             && $config['cache'] instanceof Zend_Cache_Core) {
             $this->_cache = $config['cache'];
@@ -304,7 +313,7 @@ class Shopware_Components_Config implements ArrayAccess
         ";
 
         $data = $this->_db->fetchAll($sql, [
-            'fallbackShopId' => 1, //Shop parent id
+            'fallbackShopId' => 1, // Shop parent id
             'parentShopId' => isset($this->_shop) && $this->_shop->getMain() !== null ? $this->_shop->getMain()->getId() : 1,
             'currentShopId' => isset($this->_shop) ? $this->_shop->getId() : null,
         ]);
@@ -317,9 +326,9 @@ class Shopware_Components_Config implements ArrayAccess
             $result[$row['form'] . '::' . $row['name']] = $value;
         }
 
-        $result['version'] = Shopware::VERSION;
-        $result['revision'] = Shopware::REVISION;
-        $result['versiontext'] = Shopware::VERSION_TEXT;
+        $result['version'] = $this->release->getVersion();
+        $result['revision'] = $this->release->getRevision();
+        $result['versiontext'] = $this->release->getVersionText();
 
         return $result;
     }

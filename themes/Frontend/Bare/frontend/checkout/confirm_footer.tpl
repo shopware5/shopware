@@ -1,6 +1,7 @@
 {extends file='frontend/checkout/cart_footer.tpl'}
 
-{block name='frontend_checkout_cart_footer_field_labels_taxes' append}
+{block name='frontend_checkout_cart_footer_field_labels_taxes'}
+    {$smarty.block.parent}
     {if {config name=countrynotice} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
         <li class="list--entry table-footer--country-notice">
         {* Include country specific notice message *}

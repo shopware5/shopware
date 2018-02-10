@@ -193,6 +193,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         var me = this;
         me.bbar = me.createToolbar();
         me.registerEvents();
+        me.registerGlobalEvents();
         me.callParent(arguments);
         me.changeTitle();
 
@@ -202,6 +203,31 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         }
 
         me.on('storesLoaded', me.onStoresLoaded, me);
+    },
+
+    registerGlobalEvents: function () {
+        Shopware.app.Application.on('assign-variant-image', this.onAssignImageToVariant, this);
+        Shopware.app.Application.on('grid-process-done', this.onProcessDone, this);
+    },
+
+    /**
+     * @param { Object } task
+     * @param { Ext.data.Model } record
+     * @param { Function } callback
+     */
+    onAssignImageToVariant: function (task, record, callback) {
+        this.fireEvent('assignVariantImage', task, record, callback);
+    },
+
+    /**
+     * @param { Shopware.window.Progress } progress
+     */
+    onProcessDone: function (progress) {
+        if (progress.name !== 'image-variants-progress-window') {
+            return;
+        }
+
+        this.fireEvent('gridProcessDone', progress);
     },
 
     /**
@@ -1071,6 +1097,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
 
         return true;
+    },
+
+    destroy: function () {
+        Shopware.app.Application.un('grid-process-done', this.onProcessDone, this);
+        Shopware.app.Application.un('assign-variant-image', this.onAssignImageToVariant, this);
+
+        this.callParent(arguments);
     }
 });
 //{/block}

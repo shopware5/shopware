@@ -29,6 +29,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Document\Document;
 
 /**
  * Repository for the order model (Shopware\Models\Order\Order).
@@ -360,7 +361,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['types'])
-            ->from('Shopware\Models\Order\Document\Type', 'types');
+            ->from(Document::class, 'types');
 
         return $builder;
     }

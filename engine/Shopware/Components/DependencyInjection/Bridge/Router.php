@@ -39,10 +39,11 @@ class Router
 {
     /**
      * @param EnlightEventManager $eventManager
-     * @param array $matchers
-     * @param array $generators
-     * @param array $preFilters
-     * @param array $postFilters
+     * @param array               $matchers
+     * @param array               $generators
+     * @param array               $preFilters
+     * @param array               $postFilters
+     *
      * @return RouterInterface
      */
     public function factory(
@@ -83,7 +84,7 @@ class Router
     {
         /** @var $container Container */
         $container = $args->getSubject();
-        /** @var $router RouterInterface  */
+        /** @var $router RouterInterface */
         $router = $container->get('router');
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('shop');
@@ -98,11 +99,7 @@ class Router
         if ($newContext->getHost() === null) {
             $newContext->setHost($context->getHost());
             $newContext->setBaseUrl($context->getBaseUrl());
-            // Reuse https
-            if (!$newContext->isSecure()) {
-                $newContext->setSecure($context->isSecure());
-                $newContext->setSecureBaseUrl($context->getSecureBaseUrl());
-            }
+            $newContext->setSecure($context->isSecure());
         }
         // Reuse the global params like controller and action
         $globalParams = $context->getGlobalParams();

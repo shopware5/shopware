@@ -166,18 +166,9 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             name       : 'text2',
             height: 350,
             xtype:'tinymce'
-        }, {
-            xtype: 'combobox',
-            name: 'shopIds',
-            fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
-            helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
-            store: me.shopStore,
-            multiSelect: true,
-            displayField: 'name',
-            valueField: 'id',
-            queryMode: 'local',
-            editable: false
-        }, {
+        },
+            me.getShopSelector(),
+        {
             fieldLabel: '{s name=label_metatitle}Meta title{/s}',
             name: 'metaTitle'
         }, {
@@ -190,6 +181,26 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             xtype: 'hidden',
             name: 'id'
         }, me.attributeForm];
+    },
+
+    /**
+     * @returns { Shopware.form.field.ShopGrid }
+     */
+    getShopSelector: function () {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory');
+
+        return Ext.create('Shopware.form.field.ShopGrid', {
+            name: 'shopIds',
+            fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
+            helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
+            editable: false,
+            allowSorting: false,
+            height: 130,
+            labelWidth: 155,
+            useSeparator: false,
+            store: selectionFactory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop'),
+            searchStore: selectionFactory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop')
+        });
     }
 });
 //{/block}

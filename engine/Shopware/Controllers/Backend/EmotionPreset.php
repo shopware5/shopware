@@ -234,7 +234,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return string
      */
@@ -274,6 +274,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     private function enrichPlugins(array $presets)
     {
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_service_view');
+        $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
         $names = [];
         foreach ($presets as $preset) {
@@ -285,7 +286,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         try {
             $plugins = $pluginManager->getPlugins(
-                new PluginsByTechnicalNameRequest($this->getLocale(), Shopware::VERSION, $names)
+                new PluginsByTechnicalNameRequest($this->getLocale(), $shopwareVersion, $names)
             );
         } catch (\Exception $e) {
             // catch store exception and continue.

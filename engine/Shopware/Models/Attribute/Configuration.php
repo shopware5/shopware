@@ -108,7 +108,7 @@ class Configuration extends ModelEntity
     private $custom = false;
 
     /**
-     * @var string
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
@@ -256,7 +256,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPosition()
     {
@@ -264,7 +264,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @param string $position
+     * @param int $position
      */
     public function setPosition($position)
     {

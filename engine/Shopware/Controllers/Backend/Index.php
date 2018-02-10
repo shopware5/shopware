@@ -66,14 +66,15 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
 
     /**
      * Activate caching, set backend redirect
+     *
+     * @throws Exception
      */
     public function preDispatch()
     {
         // Redirect broken backend urls to frontend
         if (!in_array($this->Request()->getActionName(), ['index', 'load', 'menu', 'auth', 'changeLocale'])) {
             $uri = $this->Request()->getRequestUri();
-            $uri = str_replace('shopware.php/', '', $uri);
-            $uri = str_replace('/backend/', '/', $uri);
+            $uri = str_replace(['shopware.php/', '/backend/'], ['', '/'], $uri);
             $this->redirect($uri, ['code' => 301]);
 
             return;
@@ -101,6 +102,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         try {
             $auth = $this->auth->checkAuth();
         } catch (Exception $e) {
+            $auth = null;
         }
 
         // No session
@@ -141,6 +143,12 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         /** @var Shopware_Components_Config $config */
         $config = $this->get('config');
 
+        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
+        $shopwareRelease = $this->container->get('shopware.release');
+
+        $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());
+        $this->View()->assign('SHOPWARE_VERSION_TEXT', $shopwareRelease->getVersionText());
+        $this->View()->assign('SHOPWARE_REVISION', $shopwareRelease->getRevision());
         $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
         $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
     }
@@ -205,26 +213,36 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
 
     /**
      * Load action for the script renderer.
+     *
+     * @throws Enlight_Controller_Exception
      */
     public function loadAction()
     {
         $auth = $this->auth->checkAuth();
         if ($auth === null) {
-            throw new Enlight_Controller_Exception('Unauthorized', 401);
+            throw new \Enlight_Controller_Exception('Unauthorized', 401);
         }
+        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
+        $shopwareRelease = $this->container->get('shopware.release');
+
+        $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());
+        $this->View()->assign('SHOPWARE_VERSION_TEXT', $shopwareRelease->getVersionText());
+        $this->View()->assign('SHOPWARE_REVISION', $shopwareRelease->getRevision());
     }
 
     /**
      * Load action for the script renderer.
+     *
+     * @throws Enlight_Controller_Exception
      */
     public function menuAction()
     {
         if ($this->auth->checkAuth() === null) {
-            throw new Enlight_Controller_Exception('Unauthorized', 401);
+            throw new \Enlight_Controller_Exception('Unauthorized', 401);
         }
 
         /** @var $menu \Shopware\Models\Menu\Repository */
-        $menu = Shopware()->Models()->getRepository('Shopware\Models\Menu\Menu');
+        $menu = Shopware()->Models()->getRepository(\Shopware\Models\Menu\Menu::class);
         $nodes = $menu->createQueryBuilder('m')
             ->select('m')
             ->leftJoin('m.plugin', 'p')
@@ -243,8 +261,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      * Returns if the first run wizard should be loaded in the current backend instance
      *
      * @param stdClass $identity
-     *
-     * @throws Exception
      *
      * @return bool
      */
@@ -285,7 +301,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     private function checkIsFeedbackRequired()
     {
-        return Shopware::VERSION_TEXT !== '___VERSION_TEXT___' && strlen(Shopware::VERSION_TEXT) !== 0;
+        $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
+
+        return !in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true);
     }
 
     /**
@@ -295,7 +313,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     private function checkForInstallationSurveyNecessity($identity)
     {
-        if (!$identity->role->getAdmin() || Shopware::VERSION_TEXT === '___VERSION_TEXT___') {
+        if ($this->checkIsFeedbackRequired() || !$identity->role->getAdmin()) {
             return false;
         }
         $installationSurvey = $this->container->get('config')->get('installationSurvey', false);
