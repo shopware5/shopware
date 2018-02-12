@@ -1150,6 +1150,22 @@
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [this, html, pages]);
             } else {
                 this.updatePagination(response);
+                this.scrollToTopPagination();
+            }
+        },
+
+        /**
+         * Scrolls to the top paging bar
+         */
+        scrollToTopPagination: function () {
+            var $htmlBodyCt = $('html, body'),
+                scrollTop = $htmlBodyCt.scrollTop(),
+                listingActionPos = this.$el.offset().top - 10;
+
+            if (scrollTop > listingActionPos) {
+                $htmlBodyCt.animate({
+                    scrollTop: listingActionPos
+                }, this.opts.animationSpeed);
             }
         },
 

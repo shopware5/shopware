@@ -84,6 +84,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - Frontend/Compare.php
         - Frontend/Note.php
         - Widgets/Listing.php
+* Using the paging in a listing while using the live filter reloading will now scroll to the top paging bar
 
 ### Removals
 
