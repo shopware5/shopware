@@ -37,7 +37,7 @@
                 value === 'false' ? false
                     : value === 'null' ? null
                     : numberRegex.test(value) ? +value
-                    : objectRegex.test(value) ? $.parseJSON(value)
+                    : objectRegex.test(value) ? JSON.parse(value)
                     : value
             );
         } catch (e) {
@@ -86,7 +86,7 @@
         me._events = [];
 
         // Create new selector for the plugin
-        $.expr[':']['plugin-' + name.toLowerCase()] = function (elem) {
+        $.expr.pseudos['plugin-' + name.toLowerCase()] = function (elem) {
             return !!$.data(elem, 'plugin_' + name);
         };
 
