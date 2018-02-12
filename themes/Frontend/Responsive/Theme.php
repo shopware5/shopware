@@ -78,7 +78,8 @@ class Theme extends \Shopware\Components\Theme
     protected $javascript = [
         // Third party plugins / libraries
         'src/js/vendors/modernizr/modernizr.custom.35977.js',
-        'vendors/js/jquery/jquery.min.js',
+        'vendors/js/jquery/jquery.js',
+        'vendors/js/jquery/jquery.migrate.js',
         'vendors/js/picturefill/picturefill.min.js',
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',

@@ -94,7 +94,7 @@
             this._on(this.$el, opts.eventName, $.proxy(this.sendSerializedForm, this));
 
             // Close modal on continue shopping button
-            $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(this.closeModal, this));
+            $('body').on('click.modal', '*[data-modal-close="true"]', $.proxy(this.closeModal, this));
 
             StateManager.addPlugin(opts.productSliderSelector, 'swProductSlider');
         },
