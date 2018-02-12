@@ -166,15 +166,14 @@
                 $.subscribe(me.getEventName('plugin/swAddArticle/onAddArticle'), $.proxy(me.onArticleAdded, me));
                 $.subscribe(me.getEventName('plugin/swAddArticle/onBeforeAddArticle'), $.proxy(me.onBeforeAddArticle, me));
             } else {
-                me._on('.container--ajax-cart,' + me.opts.triggerElSelector, 'mousemove', $.proxy(me.onMouseHover, me));
                 me._on(me._$triggerEl, 'mouseenter touchstart', $.proxy(me.onMouseEnter, me));
                 me._on(me._$triggerEl, 'mouseleave', $.proxy(me.onMouseLeave, me));
                 me._on(me._$triggerEl, 'click', $.proxy(me.onClick, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
-                $('.container--ajax-cart,' + me.opts.triggerElSelector).hover(
-                    $.proxy(me.onMouseHoverStart, me),
-                    $.proxy(me.onMouseHoverEnd, me)
-                );
+
+                $('.container--ajax-cart,' + me.opts.triggerElSelector)
+                    .on(me.getEventName('mouseover'), $.proxy(me.onMouseHoverStart, me))
+                    .on(me.getEventName('mouseleave'), $.proxy(me.onMouseHoverEnd, me));
             }
 
             $.publish('plugin/swCollapseCart/onRegisterEvents', [me]);
