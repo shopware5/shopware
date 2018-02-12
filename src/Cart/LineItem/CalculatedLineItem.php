@@ -2,6 +2,7 @@
 
 namespace Shopware\Cart\LineItem;
 
+use Shopware\Api\Media\Struct\MediaBasicStruct;
 use Shopware\Cart\Price\Struct\Price;
 use Shopware\Cart\Rule\Rule;
 use Shopware\Cart\Rule\Validatable;
@@ -35,7 +36,22 @@ class CalculatedLineItem extends Struct implements CalculatedLineItemInterface, 
     protected $type;
 
     /**
-     * @var null|Rule
+     * @var string
+     */
+    protected $label;
+
+    /**
+     * @var MediaBasicStruct|null
+     */
+    protected $cover;
+
+    /**
+     * @var string|null
+     */
+    protected $description;
+
+    /**
+     * @var Rule|null
      */
     protected $rule;
 
@@ -44,14 +60,20 @@ class CalculatedLineItem extends Struct implements CalculatedLineItemInterface, 
         Price $price,
         int $quantity,
         string $type,
+        string $label,
         ?LineItemInterface $lineItem = null,
-        ?Rule $rule = null
+        ?Rule $rule = null,
+        ?string $description = '',
+        ?MediaBasicStruct $cover = null
     ) {
         $this->identifier = $identifier;
         $this->price = $price;
         $this->quantity = $quantity;
-        $this->lineItem = $lineItem;
         $this->type = $type;
+        $this->label = $label;
+        $this->lineItem = $lineItem;
+        $this->description = $description;
+        $this->cover = $cover;
         $this->rule = $rule;
     }
 
@@ -83,5 +105,20 @@ class CalculatedLineItem extends Struct implements CalculatedLineItemInterface, 
     public function getRule(): ?Rule
     {
         return $this->rule;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function getCover(): ?MediaBasicStruct
+    {
+        return $this->cover;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }
