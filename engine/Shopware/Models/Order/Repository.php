@@ -471,8 +471,9 @@ class Repository extends ModelRepository
     public function getDetails(array $orderIds)
     {
         $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['details']);
+        $query->select(['details', 'attribute']);
         $query->from('Shopware\Models\Order\Detail', 'details');
+        $query->leftJoin('details.attribute', 'attribute');
         $query->where('IDENTITY(details.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
