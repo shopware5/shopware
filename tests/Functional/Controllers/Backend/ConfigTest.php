@@ -92,6 +92,84 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
+     * tests the existence of the document type key
+     */
+    public function testPersistDocumentTypeKey()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+
+        $newTestDocumentType = [
+            'id' => 0,
+            'name' => 'Test document 1',
+            'key' => 'first_test_document',
+            'template' => 'index.tpl',
+            'numbers' => 'user',
+            'left' => 2,
+            'right' => 3,
+            'top' => 4,
+            'bottom' => 5,
+            'pageBreak' => 6,
+            'elements' => [],
+        ];
+
+        $this->Request()->setPost($newTestDocumentType);
+        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+
+        $this->assertEquals(true, json_decode($response->getBody(), true)['success']);
+
+        Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `id` > 4;');
+    }
+
+    /**
+     * tests the document type key unique constraint
+     */
+    public function testDocumentTypeKeyUniqueConstraint()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+
+        $firstTestDocumentType = [
+            'id' => 0,
+            'name' => 'Test document 1',
+            'key' => 'test_document',
+            'template' => 'index.tpl',
+            'numbers' => 'user',
+            'left' => 2,
+            'right' => 3,
+            'top' => 4,
+            'bottom' => 5,
+            'pageBreak' => 6,
+            'elements' => [],
+        ];
+
+        $this->Request()->setPost($firstTestDocumentType);
+        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+
+        $this->assertEquals(true, json_decode($response->getBody(), true)['success']);
+
+        // Try to add another document type with the same document type
+        $secondTestDocumentType = [
+            'id' => 0,
+            'name' => 'Test document 2',
+            'key' => 'test_document',
+            'template' => 'index.tpl',
+            'numbers' => 'user',
+            'left' => 2,
+            'right' => 3,
+            'top' => 4,
+            'bottom' => 5,
+            'pageBreak' => 6,
+            'elements' => [],
+        ];
+
+        $this->Request()->setPost($secondTestDocumentType);
+        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+
+        $this->assertEquals(false, json_decode($response->getBody(), true)['success']);
+
+        Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `id` > 4;');
+    }
+
+    /**
      * test the config tableList
      *
      * @param $tableListName

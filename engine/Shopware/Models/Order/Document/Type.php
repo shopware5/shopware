@@ -57,6 +57,15 @@ class Type extends ModelEntity
     private $name;
 
     /**
+     * An internal key, which can be used to identify a document type independently
+     * from its id or name, because these values may have been changed by the user.
+     *
+     * @var string
+     * @ORM\Column(name="`key`", type="string", nullable=false, unique=true)
+     */
+    private $key;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=false)
@@ -137,6 +146,30 @@ class Type extends ModelEntity
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Sets the document's unique key
+     *
+     * @param string
+     *
+     * @return Type
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * Gets the document's unique key
+     *
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**
