@@ -162,6 +162,8 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         foreach ($data as $row) {
             $product = $row['__variant_ordernumber'];
             $prices[$product]['price'] = $this->priceHydrator->hydrateCheapestPrice($row);
+            $prices[$product]['price']->setCustomerGroup($customerGroup);
+
             $prices[$product]['different_price_count'] = $row['__different_price_count'];
         }
 
@@ -240,7 +242,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
          */
         $cheapestPriceQuery = $this->connection->createQueryBuilder();
 
-        $cheapestPriceQuery->select('prices.id, prices.articleID, prices.price')
+        $cheapestPriceQuery->select('prices.id, prices.articleID, prices.price, variant.minpurchase')
             ->from('s_articles_prices', 'prices');
 
         /*
@@ -292,18 +294,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
             '(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)'
         );
 
-        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
-            /*
-             * Sorting by the cheapest available price
-             */
-            $cheapestPriceQuery->orderBy('(prices.price * variant.minpurchase)');
-        } else {
-            /*
-             * Sorting by the cheapest unit price
-             */
-            $cheapestPriceQuery->orderBy('prices.price');
-        }
-
         /*
          * Query to get the id of the cheapest price
          */
@@ -332,7 +322,19 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $cheapestPriceIdQuery->from('s_articles_details', 'details');
         $cheapestPriceIdQuery->innerJoin('details', '(' . $cheapestPriceQuery->getSQL() . ')', 'cheapestPrices', $joinCondition);
         $cheapestPriceIdQuery->where('details.id = mainDetail.id');
-        $cheapestPriceIdQuery->orderBy('cheapestPrices.price');
+
+        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            /*
+             * Sorting by the cheapest available price
+             */
+            $cheapestPriceIdQuery->orderBy('(cheapestPrices.price * cheapestPrices.minpurchase)');
+        } else {
+            /*
+             * Sorting by the cheapest unit price
+             */
+            $cheapestPriceIdQuery->orderBy('cheapestPrices.price');
+        }
+
         $cheapestPriceIdQuery->setMaxResults(1);
 
         /*

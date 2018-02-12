@@ -500,6 +500,7 @@
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
             <argument type="service" id="shopware_storefront.variant_cheapest_price_gateway"/>
             <argument type="service" id="shopware_storefront.price_calculation_service"/>
+            <argument type="service" id="config"/>
         </service>
 
         <service id="shopware_storefront.listing_link_rewrite_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService">
