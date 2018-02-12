@@ -57,6 +57,6 @@ class EnlightRequestExtension extends AbstractTypeExtension
      */
     public function getExtendedType()
     {
-        return 'Symfony\Component\Form\Extension\Core\Type\FormType';
+        return \Symfony\Component\Form\Extension\Core\Type\FormType::class;
     }
 }
