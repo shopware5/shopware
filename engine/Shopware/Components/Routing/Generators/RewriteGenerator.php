@@ -74,6 +74,11 @@ class RewriteGenerator implements GeneratorListInterface
         if (array_key_exists('_seo', $params) && !$params['_seo']) {
             return $params;
         }
+
+        if (array_key_exists('_seo', $params)) {
+            unset($params['_seo']);
+        }
+
         $orgQuery = $this->preAssemble($params, $context);
 
         if (!is_array($orgQuery)) {
@@ -97,6 +102,7 @@ class RewriteGenerator implements GeneratorListInterface
         if (isset($orgQuery['sAction']) || (isset($query['action']) && $query['action'] === 'index')) {
             unset($query['action']);
         }
+
         if (!empty($query)) {
             $url .= '?' . $this->rewriteQuery($query);
         }
@@ -158,7 +164,7 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param $query
+     * @param array $query
      *
      * @return array
      */
@@ -235,7 +241,7 @@ class RewriteGenerator implements GeneratorListInterface
      *
      * @return array|bool
      */
-    private function preAssemble($params, Context $context)
+    private function preAssemble(array $params, Context $context)
     {
         if (isset($params['module']) && $params['module'] !== 'frontend') {
             return false;
@@ -293,7 +299,7 @@ class RewriteGenerator implements GeneratorListInterface
      *
      * @return string
      */
-    private function rewriteQuery($query)
+    private function rewriteQuery(array $query)
     {
         $tmp = $this->queryAliasMapper->replaceLongParams($query);
 

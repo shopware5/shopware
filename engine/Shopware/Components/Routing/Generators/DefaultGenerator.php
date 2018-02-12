@@ -48,8 +48,8 @@ class DefaultGenerator implements GeneratorInterface
     protected $separator;
 
     /**
-     * @param $dispatcher
-     * @param string $separator
+     * @param EnlightDispatcher $dispatcher
+     * @param string            $separator
      */
     public function __construct(EnlightDispatcher $dispatcher, $separator = '/')
     {
@@ -63,6 +63,10 @@ class DefaultGenerator implements GeneratorInterface
     public function generate(array $params, Context $context)
     {
         $route = [];
+
+        if (array_key_exists('_seo', $params)) {
+            unset($params['_seo']);
+        }
 
         $module = isset($params[$context->getModuleKey()])
             ? $params[$context->getModuleKey()]
@@ -80,19 +84,17 @@ class DefaultGenerator implements GeneratorInterface
             $params[$context->getControllerKey()],
             $params[$context->getActionKey()]);
 
-        if ($module != $this->dispatcher->getDefaultModule()) {
+        if ($module !== $this->dispatcher->getDefaultModule()) {
             $route[] = $module;
         }
 
-        if (count($params) > 0 || $controller != $this->dispatcher->getDefaultControllerName() || $action != $this->dispatcher->getDefaultAction()) {
+        $paramCount = \count($params);
+        if ($paramCount > 0 || $controller !== $this->dispatcher->getDefaultControllerName() || $action !== $this->dispatcher->getDefaultAction()) {
             $route[] = $controller;
         }
-        if (count($params) > 0 || $action != $this->dispatcher->getDefaultAction()) {
-            $route[] = $action;
-        }
 
-        if (array_key_exists('_seo', $params)) {
-            unset($params['_seo']);
+        if ($paramCount > 0 || $action !== $this->dispatcher->getDefaultAction()) {
+            $route[] = $action;
         }
 
         foreach ($params as $key => $value) {
