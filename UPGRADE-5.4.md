@@ -85,6 +85,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - Frontend/Note.php
         - Widgets/Listing.php
 
+* Changed rounding of prices to two decimal digits in `engine/Shopware/Bundle/StoreFrontBundle/Service/Core/PriceCalculator.php` and `engine/Shopware/Core/sArticles.php`
+
 ### Removals
 
 * Removed config option for maximum number of category pages
