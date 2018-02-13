@@ -46,6 +46,7 @@ use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandle
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
+use Shopware\Components\DependencyInjection\Compiler\ConfigureApiResourcesPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
@@ -649,6 +650,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());
         $container->addCompilerPass(new RouterCompilerPass());
+        $container->addCompilerPass(new ConfigureApiResourcesPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

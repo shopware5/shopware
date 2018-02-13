@@ -53,13 +53,13 @@ class Manager
 
             /** @var $resource Resource\Resource */
             $resource = new $class();
-        }
 
-        if ($resource instanceof ContainerAwareInterface) {
-            $resource->setContainer($container);
-        }
+            if ($resource instanceof ContainerAwareInterface) {
+                $resource->setContainer($container);
+            }
 
-        $resource->setManager($container->get('models'));
+            $resource->setManager($container->get('models'));
+        }
 
         if ($container->initialized('Auth')) {
             $resource->setAcl($container->get('acl'));
