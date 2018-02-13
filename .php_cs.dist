@@ -43,7 +43,8 @@ return PhpCsFixer\Config::create()
         'phpdoc_summary' => false,
         'blank_line_after_opening_tag' => false,
         'concat_space' => ['spacing' => 'one'],
-        'array_syntax' => ['syntax' => 'short']
+        'array_syntax' => ['syntax' => 'short'],
+        'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false]
     ])
     ->setFinder($finder)
 ;
