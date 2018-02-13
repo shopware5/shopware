@@ -53,7 +53,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 		Path to the web-cache folder 
 	
 	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
+
 * Added backend config option `logMailLevel` to choose the minimum log level for sending e-mail notifications
+* Added snippet `frontend/detail/data/DetailDataPriceInfo` in ajax cart template
+* Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
 
 ### Changes
 
