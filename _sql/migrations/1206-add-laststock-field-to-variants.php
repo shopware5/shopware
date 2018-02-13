@@ -31,8 +31,24 @@ class Migrations_Migration1206 extends AbstractMigration
      */
     public function up($modus)
     {
-        $this->addSql('ALTER TABLE `s_articles_details` ADD `laststock` INT(1) NOT NULL DEFAULT 0 AFTER `stockmin`');
-        $this->addSql('ALTER TABLE `s_article_configurator_options` ADD `media_id` int(11) NULL');
+        // Try/Catches are necessary to allow multiple runs of this migration
+        try {
+            $this->connection->exec('ALTER TABLE `s_articles_details` ADD `laststock` INT(1) NOT NULL DEFAULT 0 AFTER `stockmin`');
+        } catch (\PDOException $ex) {
+            // This code says the column already exists, we want only all other exceptions to be raised
+            if ($ex->getCode() !== '42S21') {
+                throw $ex;
+            }
+        }
+
+        try {
+            $this->connection->exec('ALTER TABLE `s_article_configurator_options` ADD `media_id` int(11) NULL');
+        } catch (\PDOException $ex) {
+            // This code says the column already exists, we want only all other exceptions to be raised
+            if ($ex->getCode() !== '42S21') {
+                throw $ex;
+            }
+        }
 
         $this->addSql('UPDATE `s_articles_details` d INNER JOIN `s_articles` a ON a.`id`=d.`articleID` SET d.`laststock`=a.`laststock`');
     }
