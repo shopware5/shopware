@@ -35,7 +35,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
-use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Customer\Group as CustomerGroupModel;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
 
@@ -716,8 +716,8 @@ class Variant extends Resource implements BatchInterface
                 ->getRepository('Shopware\Models\Customer\Group')
                 ->findOneBy(['key' => $priceData['customerGroupKey']]);
 
-            /** @var CustomerGroup $customerGroup */
-            if (!$customerGroup instanceof CustomerGroup) {
+            /** @var CustomerGroupModel $customerGroup */
+            if (!$customerGroup instanceof CustomerGroupModel) {
                 throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
             }
 
@@ -838,7 +838,7 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
             }
 
-        //new unit data send? create new unit for this variant
+            //new unit data send? create new unit for this variant
         } elseif (!empty($data['unit'])) {
             $data['unit'] = $this->updateUnitReference($data['unit']);
         }
