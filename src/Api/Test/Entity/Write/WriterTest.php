@@ -13,6 +13,7 @@ use Shopware\Api\Product\Definition\ProductDefinition;
 use Shopware\Context\Struct\TranslationContext;
 use Shopware\Defaults;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Shopware\Api\Entity\Write\EntityWriter;
 
 class WriterTest extends KernelTestCase
 {
@@ -31,7 +32,7 @@ class WriterTest extends KernelTestCase
         $this->idBytes = Uuid::fromString($this->id)->getBytes();
 
         $container = self::$kernel->getContainer();
-        $this->connection = $container->get('dbal_connection');
+        $this->connection = $container->get(Connection::class);
         $this->connection->beginTransaction();
     }
 
@@ -569,6 +570,6 @@ class WriterTest extends KernelTestCase
 
     private function getWriter(): EntityWriterInterface
     {
-        return self::$kernel->getContainer()->get('shopware.api.entity_writer');
+        return self::$kernel->getContainer()->get(EntityWriter::class);
     }
 }

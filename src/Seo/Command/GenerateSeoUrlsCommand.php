@@ -29,6 +29,8 @@ use Shopware\Context\Struct\TranslationContext;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Shopware\Seo\Generator\SeoUrlGeneratorRegistry;
+use Doctrine\DBAL\Connection;
 
 class GenerateSeoUrlsCommand extends ContainerAwareCommand
 {
@@ -43,11 +45,11 @@ class GenerateSeoUrlsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $shops = $this->getContainer()->get('dbal_connection')->fetchAll(
+        $shops = $this->getContainer()->get(Connection::class)->fetchAll(
             'SELECT id, fallback_translation_id, `is_default` FROM shop'
         );
 
-        $generatorRegistry = $this->getContainer()->get('shopware.seo.url_generator_registry');
+        $generatorRegistry = $this->getContainer()->get(SeoUrlGeneratorRegistry::class);
 
         foreach ($shops as $shop) {
             $context = new TranslationContext(

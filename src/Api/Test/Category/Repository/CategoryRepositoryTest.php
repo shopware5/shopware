@@ -19,6 +19,7 @@ use Shopware\Context\Struct\TranslationContext;
 use Shopware\Defaults;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Shopware\Api\Entity\Write\EntityWriter;
 
 class CategoryRepositoryTest extends KernelTestCase
 {
@@ -42,7 +43,7 @@ class CategoryRepositoryTest extends KernelTestCase
         self::bootKernel();
         $this->container = self::$kernel->getContainer();
         $this->repository = $this->container->get(CategoryRepository::class);
-        $this->connection = $this->container->get('dbal_connection');
+        $this->connection = $this->container->get(Connection::class);
         $this->connection->beginTransaction();
     }
 
@@ -205,7 +206,7 @@ class CategoryRepositoryTest extends KernelTestCase
             TranslationContext::createDefaultContext()
         );
 
-        $this->container->get('shopware.api.entity_writer')->insert(
+        $this->container->get(EntityWriter::class)->insert(
             ShopTemplateDefinition::class,
             [['id' => $shopId->toString(), 'template' => 'Test', 'name' => 'test']],
             TestWriteContext::create()
