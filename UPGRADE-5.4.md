@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added database field `s_articles_details.laststock` to be able to define per variant if said variant is available when the stock is lower or equal to 0
 * Added `lastStock` field to `\Shopware\Models\Article\Detail`
+* Added database field `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
 * Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
@@ -91,12 +92,16 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Using the paging in a listing while using the live filter reloading will now scroll to the top paging bar
 * Changed name field in product ratings to be optional
 
+* Changed loading of the themes/_private folder to be always executed
+* Added all additional article columns to product import/export
+
 ### Removals
 
 * Removed config option for maximum number of category pages
 * Removed "Force http canonical url" setting in basic settings as it is obsolete
 * Removed config option `template_security['enabled']` for toggling smarty security
 * Removed config option `blogcategory` and `bloglimit`
+* Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
 * Removed support for separate SSL host and SSL path. Also the `Use SSL` and `Always SSL` options were merged.
     * Removed database fields
         - `s_core_shops.secure_host`
