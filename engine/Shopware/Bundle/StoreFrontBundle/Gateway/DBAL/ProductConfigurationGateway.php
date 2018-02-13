@@ -94,7 +94,12 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
             return [];
         }
 
-        $ids = array_unique(array_map(function (Struct\BaseProduct $product) { return $product->getId(); }, $products));
+        $ids = [];
+        foreach ($products as $product) {
+            $ids[] = $product->getVariantId();
+        }
+        $ids = array_unique($ids);
+
         $query = $this->getQuery($ids, $context);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -130,7 +135,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
             ->innerJoin('configuratorOption', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = configuratorOption.group_id')
             ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
             ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
-            ->where('variants.articleId IN (:ids)')
+            ->where('relations.article_id IN (:ids)')
             ->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.id')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);

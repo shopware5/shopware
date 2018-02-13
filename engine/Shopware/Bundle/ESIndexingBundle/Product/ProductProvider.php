@@ -164,7 +164,11 @@ class ProductProvider implements ProductProviderInterface
 
         $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
 
-        $articleIds = array_map(function (ListProduct $product) { return $product->getId(); }, $products);
+        $articleIds = array_map(
+            function (ListProduct $product) {
+                return $product->getId();
+            }, $products);
+
         $configurations = $this->configurationLoader->getConfigurations($articleIds, $context);
 
         $combinations = $this->configurationLoader->getCombinations($articleIds);
