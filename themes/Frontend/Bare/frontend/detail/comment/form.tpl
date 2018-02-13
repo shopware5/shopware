@@ -20,7 +20,7 @@
 
         {* Review author name *}
         {block name='frontend_detail_comment_input_name'}
-            <input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}*" required="required" aria-required="true" />
+            <input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}" />
         {/block}
 
         {* Reviewer email address *}

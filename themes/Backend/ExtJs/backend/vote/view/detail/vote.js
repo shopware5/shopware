@@ -83,7 +83,8 @@ Ext.define('Shopware.apps.Vote.view.detail.Vote', {
                     },
                     name: {
                         xtype: 'displayfield',
-                        fieldLabel: '{s name="author"}{/s}'
+                        fieldLabel: '{s name="author"}{/s}',
+                        renderer: me.nameRenderer
                     },
                     headline: {
                         xtype: 'displayfield',
@@ -111,6 +112,18 @@ Ext.define('Shopware.apps.Vote.view.detail.Vote', {
             }]
         };
     },
+    /**
+     * Function to replace an empty name
+     * @param { string } value
+     * @return { string }
+     */
+    nameRenderer: function(value) {
+        if (!value) {
+            return '{s name="DetailCommentAnonymousName" namespace="frontend/detail/comment"}{/s}';
+        }
+        return value;
+    },
+
 
     dateRenderer: function(value) {
         if (!value) {

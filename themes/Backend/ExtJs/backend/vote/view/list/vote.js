@@ -56,7 +56,8 @@ Ext.define('Shopware.apps.Vote.view.list.Vote', {
                     header: '{s name="date"}{/s}'
                 },
                 name: {
-                    header: '{s name="author"}{/s}'
+                    header: '{s name="author"}{/s}',
+                    renderer: this.nameRenderer
                 },
                 headline: {
                     header: '{s name="headline"}{/s}'
@@ -164,6 +165,18 @@ Ext.define('Shopware.apps.Vote.view.list.Vote', {
 
     pointRenderer: function(value) {
         return this.renderPoints(value);
+    },
+
+    /**
+     * Function to replace an empty name
+     * @param { string } value
+     * @return { string }
+     */
+    nameRenderer: function(value) {
+        if (!value) {
+            return '{s name="DetailCommentAnonymousName" namespace="frontend/detail/comment"}{/s}';
+        }
+        return value;
     }
 });
 //{/block}
