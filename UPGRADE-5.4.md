@@ -24,19 +24,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new service in the DIC containing all parameters above 
     - `shopware.release`
         A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
-* Added new SEO routes
-    - `sViewport=register`:
-        `/anmeldung` (DE) and `/signup` (EN)
-    - `sViewport=checkout&sAction=cart`:
-        `/warenkorb` (DE) and `/basket` (EN)
-    - `sViewport=checkout&sAction=confirm`:
-        `/bestellen` (DE) and `/order` (EN)
-    - `sViewport=checkout&sAction=shippingPayment`:
-        `/zahlungsart-und-versand` (DE) and `/payment-and-delivery` (EN)
-    - `sViewport=checkout`:
-        `/pruefen-und-bestellen` (DE) and `/check-and-order` (EN)
-    - `sViewport=checkout&sAction=finish`:
-        `/vielen-dank-fuer-ihre-bestellung` (DE) and `/thank-you-for-your-order` (EN)
 * Added several paths to the DIC:
 	- `shopware.plugin_directories.projectplugins` 
 		Path to project specific plugins, see [Composer project](https://github.com/shopware/composer-project)
@@ -55,6 +42,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 	
 	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
 
+* Added all additional article columns to product import/export
 * Added backend config option `logMailLevel` to choose the minimum log level for sending e-mail notifications
 * Added snippet `frontend/detail/data/DetailDataPriceInfo` in ajax cart template
 * Added snippet `frontend/detail/DetailCommentAnonymousName` for anonymous product ratings
@@ -62,8 +50,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Updated mPDF to v6.1.4 and included it via composer
-* Made the event selectors configurable in the `swJumpToTab` jQuery plugin
+* Changed the event selectors to make them configurable in the `swJumpToTab` jQuery plugin
 * `\Shopware\Bundle\SearchBundle\ProductSearchResult::__construct` requires now the used Criteria and ShopContext object
 * Changed route to POST to be more HTTP compliant
 * Changed all writing actions to POST to be more HTTP compliant.
@@ -89,11 +76,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - Frontend/Compare.php
         - Frontend/Note.php
         - Widgets/Listing.php
-* Using the paging in a listing while using the live filter reloading will now scroll to the top paging bar
+* Changed the paging in a listing so that using it while using the live filter reloading will now scroll to the top paging bar
 * Changed name field in product ratings to be optional
-
 * Changed loading of the themes/_private folder to be always executed
-* Added all additional article columns to product import/export
 
 ### Removals
 
