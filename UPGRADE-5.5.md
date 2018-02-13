@@ -59,6 +59,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once
 * Changed Symfony version to 3.4.4
+* Changed jQuery version to 3.3.1
 * Changed Slugify version to 3.1
 * Changed the event `Shopware_Form_Builder` so that the `reference` contains the `BlockPrefix` of the Formtype, not the name
 * Changed REST API `articles` list call to include `mainDetail`
