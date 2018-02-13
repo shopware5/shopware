@@ -33,7 +33,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     /**
-     * reads the user agent black list and test if the bot can add an article
+     * Reads the user agent black list and test if the bot can add an article
      *
      * @ticket SW-6411
      */
@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     }
 
     /**
-     * test if an normal user can add an article
+     * Test if an normal user can add an article
      *
      * @ticket SW-6411
      */
@@ -94,6 +94,24 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     }
 
     /**
+     * Tests that the addArticle-Action returns HTML
+     */
+    public function testAddToBasketReturnsHtml()
+    {
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->Request()->setParam('sQuantity', 5);
+        $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
+        $this->Request()->setParam('isXHR', 1);
+
+        $response = $this->dispatch('/checkout/addArticle');
+        $this->assertContains('<div class="modal--checkout-add-article">', $response->getBody());
+
+        Shopware()->Modules()->Basket()->sDeleteBasket();
+    }
+
+    /**
      * Tests that products can't add to basket over HTTP-GET
      */
     public function testAddBasketOverGetFails()
@@ -104,6 +122,8 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setParam('sQuantity', 5);
         $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
+
+        Shopware()->Modules()->Basket()->sDeleteBasket();
     }
 
     /**
@@ -117,7 +137,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
      */
     public function runCheckoutTest($net = false)
     {
-        $tax = $net == true ? 0 : 1;
+        $tax = $net === true ? 0 : 1;
 
         // Set net customer group
         $defaultShop = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class)->find(1);
@@ -180,6 +200,8 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         // Test that sBasket calculation matches calculateInvoiceAmount
         $this->assertEquals($order->getInvoiceAmount(), $previousInvoiceAmount, $message);
         $this->assertEquals($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, $messageNet);
+
+        Shopware()->Modules()->Basket()->sDeleteBasket();
     }
 
     /**
@@ -196,7 +218,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         );
 
         /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
         $shop->registerResources();
@@ -210,12 +232,12 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     }
 
     /**
-     * fires the add article request with the given user agent
+     * Fires the add article request with the given user agent
      *
-     * @param $userAgent
-     * @param int $quantity
+     * @param string $userAgent
+     * @param int    $quantity
      *
-     * @return string | session id
+     * @return string session id
      */
     private function addBasketArticle($userAgent, $quantity = 1)
     {
@@ -223,7 +245,8 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setMethod('POST');
         $this->Request()->setHeader('User-Agent', $userAgent);
         $this->Request()->setParam('sQuantity', $quantity);
-        $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
+        $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
+        $this->dispatch('/checkout/addArticle');
 
         return Shopware()->Container()->get('SessionID');
     }
