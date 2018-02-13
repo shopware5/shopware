@@ -63,7 +63,8 @@
         "ramsey/uuid": "3.5.2",
         "setasign/fpdf": "1.8.1",
         "setasign/fpdi": "1.6.2",
-        "ocramius/proxy-manager": "^1.0"
+        "ocramius/proxy-manager": "^1.0",
+        "mpdf/mpdf": "^7.0"
     },
     "suggest": {
         "ext-apcu": "*",
@@ -91,8 +92,7 @@
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
             "Zend": "engine/Library/",
-            "JSMin": "engine/Library/minify/",
-            "mPDF": "engine/Library/Mpdf/"
+            "JSMin": "engine/Library/minify/"
         },
         "classmap": [
             "engine/Shopware/Core/"
@@ -123,6 +123,8 @@
     "scripts": {
         "cs-check": "php-cs-fixer fix --dry-run -v",
         "cs-fix": "php-cs-fixer fix -v",
+        "post-install-cmd": "./build/composer-post-install-cmd.sh",
+        "post-update-cmd": "./build/composer-post-update-cmd.sh",
         "test": "phpunit -c tests/ --colors=always",
         "test-unit": "phpunit -c tests/phpunit_unit.xml.dist --colors=always"
     }

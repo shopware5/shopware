@@ -84,7 +84,11 @@ Thumbs.db
 /.psh.yml.override
 
 # tests / ci
-/build
+/build/**
 !/build/artifacts/.gitkeep
 !/build/logs/mink/.gitkeep
 /tests/nightwatch/node_modules
+
+# scripts
+!/build/composer-post-install-cmd.sh
+!/build/composer-post-update-cmd.sh

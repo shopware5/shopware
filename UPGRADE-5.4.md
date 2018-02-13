@@ -57,7 +57,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Updated mPDF to v6.1.4 and included it via composer
+* Updated mPDF to v7.0.3 and included it via composer
+    * mPDF is now configurable in `config.php`, see the `mpdf` configuration
+      key and its default values in `engine/Shopware/Configs/Default.php`
+    * mPDF 7 is not compatible with previous versions of mPDF, as it features
+      new class names and constructor options
+    * Note: The fonts included in upstream mPDF are not included in Shopware.
+      The only included fonts are located in `engine/Library/Mpdf/ttfonts`.
+* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 * Made the event selectors configurable in the `swJumpToTab` jQuery plugin
 * `\Shopware\Bundle\SearchBundle\ProductSearchResult::__construct` requires now the used Criteria and ShopContext object
 * Changed route to POST to be more HTTP compliant
@@ -88,6 +95,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Removals
 
+* Removed the old, bundled mPDF. The old `mPDF` constructor is no longer
+  available and has been replaced by `\Mpdf\Mpdf`.
 * Removed config option for maximum number of category pages
 * Removed "Force http canonical url" setting in basic settings as it is obsolete
 * Removed config option `template_security['enabled']` for toggling smarty security

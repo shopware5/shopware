@@ -265,7 +265,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
         Shopware()->Template()->addTemplateDir(__DIR__ . '/../Views/');
         $data = Shopware()->Template()->fetch('frontend/plugins/sepa/email.tpl');
 
-        $mpdf = new \mPDF('utf-8', 'A4', '', '');
+        $mpdfConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
+        $mpdf = new \Mpdf\Mpdf($mpdfConfig);
         $mpdf->WriteHTML($data);
         $pdfFileContent = $mpdf->Output('', 'S');
 
