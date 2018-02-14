@@ -987,6 +987,7 @@
          */
         sendListingRequest: function (params, loadFacets, loadProducts, callback, appendDefaults) {
             if (typeof params === 'object') {
+                params = this.cleanParams(params);
                 params = '?' + $.param(params);
             }
 
