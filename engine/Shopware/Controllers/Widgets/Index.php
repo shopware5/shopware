@@ -34,6 +34,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     {
         if ($this->Request()->getActionName() === 'refreshStatistic') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+            $this->Response()->setHeader('Content-Type', 'application/javascript');
         }
     }
 
