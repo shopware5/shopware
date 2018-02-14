@@ -25,6 +25,7 @@
     <target name="write-properties" description="Write build-variables to file">
         <propertyfile file="${build.dir}/build.properties" comment="Project properties">
             <entry  key="db.host"     value="${db.host}"/>
+            <entry  key="db.socket"   value="${db.socket}"/>
             <entry  key="db.name"     value="${db.name}"/>
             <entry  key="db.user"     value="${db.user}"/>
             <entry  key="db.password" value="${db.password}"/>
@@ -38,6 +39,10 @@
         <input message="Please enter db-host:"
                addproperty="user.db.host"
                defaultvalue="${db.host}" />
+
+        <input message="Please enter db-socket: (only mandatory if host is empty)"
+               addproperty="user.db.socket"
+               defaultvalue="${db.socket}" />
 
         <input message="Please enter db-port:"
                addproperty="user.db.port"
@@ -65,6 +70,7 @@
 
            <antcall target="write-properties">
                <param name="db.host" value="${user.db.host}"/>
+               <param name="db.socket" value="${user.db.socket}"/>
                <param name="db.port" value="${user.db.port}"/>
                <param name="db.name" value="${user.db.name}"/>
                <param name="db.user" value="${user.db.user}"/>
@@ -197,6 +203,7 @@
             <filterset begintoken="%" endtoken="%">
                 <filter token="db.database" value="${db.name}"/>
                 <filter token="db.host"     value="${db.host}"/>
+                <filter token="db.socket"   value="${db.socket}"/>
                 <filter token="db.user"     value="${db.user}"/>
                 <filter token="db.password" value="${db.password}"/>
                 <filter token="db.port"     value="${db.port}"/>

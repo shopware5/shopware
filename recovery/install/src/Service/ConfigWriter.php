@@ -24,8 +24,8 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
-use Zend\Code\Generator\ValueGenerator;
 
 /**
  * @category  Shopware
@@ -50,42 +50,31 @@ class ConfigWriter
     /**
      * @param DatabaseConnectionInformation $info
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function writeConfig(DatabaseConnectionInformation $info)
     {
-        $databaseConfigFile = $this->configPath;
-
-        $config = [
-            'db' => [],
-        ];
-
         $mapping = [
-            'databaseName' => 'dbname',
-            'hostname' => 'host',
+            'databaseName' => 'db.database',
+            'port' => 'db.port',
+            'hostname' => 'db.host',
+            'socket' => 'db.socket',
+            'username' => 'db.user',
+            'password' => 'db.password',
         ];
+
+        $template = file_get_contents($this->configPath . '.dist');
 
         foreach (get_object_vars($info) as $key => $parameter) {
-            if ($key == 'port' && empty($parameter)) {
+            if (!isset($mapping[$key])) {
                 continue;
             }
 
-            if ($key == 'socket' && empty($parameter)) {
-                continue;
-            }
-
-            if (isset($mapping[$key])) {
-                $key = $mapping[$key];
-            }
-
-            $config['db'][$key] = trim($parameter);
+            $template = str_replace('%' . $mapping[$key] . '%', $parameter, $template);
         }
 
-        $value = new ValueGenerator($config, ValueGenerator::TYPE_ARRAY_SHORT);
-        $template = '<?php return ' . $value->generate(). ';';
-
-        if (!file_put_contents($databaseConfigFile, $template)) {
-            throw new \RuntimeException("Could not write config: $databaseConfigFile");
+        if (!file_put_contents($this->configPath, $template)) {
+            throw new RuntimeException("Could not write config: $this->configPath");
         }
     }
 }
