@@ -5,9 +5,11 @@ namespace Shopware\Api\Product\Definition;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\FkField;
+use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\LongTextWithHtmlField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
@@ -20,7 +22,7 @@ use Shopware\Api\Product\Repository\ProductTranslationRepository;
 use Shopware\Api\Product\Struct\ProductTranslationBasicStruct;
 use Shopware\Api\Product\Struct\ProductTranslationDetailStruct;
 use Shopware\Api\Shop\Definition\ShopDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ProductTranslationDefinition extends EntityDefinition
 {
     /**
@@ -51,7 +53,11 @@ class ProductTranslationDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new FkField('product_id', 'productId', ProductDefinition::class))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             (new FkField('language_id', 'languageId', ShopDefinition::class))->setFlags(new PrimaryKey(), new Required()),
+            (new ReferenceVersionField(ShopDefinition::class, 'language_version_id'))->setFlags(new PrimaryKey(), new Required()),
+
             new StringField('additional_text', 'additionalText'),
             new StringField('name', 'name'),
             new LongTextField('keywords', 'keywords'),

@@ -16,10 +16,11 @@ use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\FloatField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
-
+use Shopware\Api\Entity\Field\VersionField;
 class CustomerGroupDiscountDefinition extends EntityDefinition
 {
     /**
@@ -48,9 +49,11 @@ class CustomerGroupDiscountDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(CustomerGroupDefinition::class))->setFlags(new Required()),
             (new FloatField('percentage_discount', 'percentageDiscount'))->setFlags(new Required()),
             (new FloatField('minimum_cart_amount', 'minimumCartAmount'))->setFlags(new Required()),
             new DateField('created_at', 'createdAt'),

@@ -10,6 +10,7 @@ use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
@@ -26,7 +27,7 @@ use Shopware\Api\Product\Event\ProductManufacturer\ProductManufacturerWrittenEve
 use Shopware\Api\Product\Repository\ProductManufacturerRepository;
 use Shopware\Api\Product\Struct\ProductManufacturerBasicStruct;
 use Shopware\Api\Product\Struct\ProductManufacturerDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ProductManufacturerDefinition extends EntityDefinition
 {
     /**
@@ -55,9 +56,12 @@ class ProductManufacturerDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             new FkField('media_id', 'mediaId', MediaDefinition::class),
+            new ReferenceVersionField(MediaDefinition::class),
+
             new TranslatedField(new StringField('name', 'name')),
             new StringField('link', 'link'),
             new DateField('updated_at', 'updatedAt'),

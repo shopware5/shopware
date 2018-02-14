@@ -12,6 +12,7 @@ use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\CascadeDelete;
@@ -24,7 +25,7 @@ use Shopware\Api\Order\Event\OrderLineItem\OrderLineItemWrittenEvent;
 use Shopware\Api\Order\Repository\OrderLineItemRepository;
 use Shopware\Api\Order\Struct\OrderLineItemBasicStruct;
 use Shopware\Api\Order\Struct\OrderLineItemDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class OrderLineItemDefinition extends EntityDefinition
 {
     /**
@@ -53,9 +54,13 @@ class OrderLineItemDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             (new FkField('order_id', 'orderId', OrderDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(OrderDefinition::class))->setFlags(new Required()),
+
             (new StringField('identifier', 'identifier'))->setFlags(new Required()),
             (new IntField('quantity', 'quantity'))->setFlags(new Required()),
             (new FloatField('unit_price', 'unitPrice'))->setFlags(new Required()),

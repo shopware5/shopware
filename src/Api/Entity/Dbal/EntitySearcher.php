@@ -28,24 +28,19 @@ class EntitySearcher implements EntitySearcherInterface
     {
         /** @var EntityDefinition $definition */
         $table = $definition::getEntityName();
-        $query = new QueryBuilder($this->connection);
+
+        $query = EntityDefinitionQueryHelper::getBaseQuery($this->connection, $definition, $context);
 
         if ($definition::getParentPropertyName()) {
             /** @var EntityDefinition|string $definition */
             $parent = $definition::getFields()->get($definition::getParentPropertyName());
-            EntityDefinitionQueryHelper::joinManyToOne($definition, $definition::getEntityName(), $parent, $query);
+            EntityDefinitionQueryHelper::joinManyToOne($definition, $definition::getEntityName(), $parent, $query, $context);
         }
 
         //add id select, e.g. `product`.`id`;
         $query->addSelect(
             EntityDefinitionQueryHelper::escape($table) . '.' . EntityDefinitionQueryHelper::escape('id') . ' as array_key',
             EntityDefinitionQueryHelper::escape($table) . '.' . EntityDefinitionQueryHelper::escape('id') . ' as primary_key'
-        );
-
-        //build from path with escaped alias, e.g. FROM product as `product`
-        $query->from(
-            EntityDefinitionQueryHelper::escape($table),
-            EntityDefinitionQueryHelper::escape($table)
         );
 
         $fields = array_merge(

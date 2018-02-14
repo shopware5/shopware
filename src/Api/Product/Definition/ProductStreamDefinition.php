@@ -13,6 +13,7 @@ use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToManyAssociationField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\CascadeDelete;
@@ -26,7 +27,7 @@ use Shopware\Api\Product\Event\ProductStream\ProductStreamWrittenEvent;
 use Shopware\Api\Product\Repository\ProductStreamRepository;
 use Shopware\Api\Product\Struct\ProductStreamBasicStruct;
 use Shopware\Api\Product\Struct\ProductStreamDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ProductStreamDefinition extends EntityDefinition
 {
     /**
@@ -55,9 +56,11 @@ class ProductStreamDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             new FkField('listing_sorting_id', 'listingSortingId', ListingSortingDefinition::class),
+            new ReferenceVersionField(ListingSortingDefinition::class),
             (new StringField('name', 'name'))->setFlags(new Required()),
             new LongTextField('conditions', 'conditions'),
             new IntField('type', 'type'),

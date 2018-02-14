@@ -19,6 +19,7 @@ use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
@@ -28,7 +29,7 @@ use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
 use Shopware\Api\Order\Definition\OrderAddressDefinition;
 use Shopware\Api\Tax\Definition\TaxAreaRuleDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class CountryStateDefinition extends EntityDefinition
 {
     /**
@@ -59,7 +60,11 @@ class CountryStateDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             (new FkField('country_id', 'countryId', CountryDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(CountryDefinition::class))->setFlags(new Required()),
+
             (new StringField('short_code', 'shortCode'))->setFlags(new Required()),
             new TranslatedField(new StringField('name', 'name')),
             new IntField('position', 'position'),

@@ -12,6 +12,7 @@ use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
@@ -27,7 +28,7 @@ use Shopware\Api\Mail\Repository\MailRepository;
 use Shopware\Api\Mail\Struct\MailBasicStruct;
 use Shopware\Api\Mail\Struct\MailDetailStruct;
 use Shopware\Api\Order\Definition\OrderStateDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class MailDefinition extends EntityDefinition
 {
     /**
@@ -58,7 +59,9 @@ class MailDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             new FkField('order_state_id', 'orderStateId', OrderStateDefinition::class),
+            new ReferenceVersionField(OrderStateDefinition::class),
             (new StringField('name', 'name'))->setFlags(new Required()),
             (new BoolField('is_html', 'isHtml'))->setFlags(new Required()),
             (new StringField('attachment', 'attachment'))->setFlags(new Required()),

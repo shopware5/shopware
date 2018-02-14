@@ -36,7 +36,7 @@ class WriteContext
     /**
      * @var array
      */
-    private $paths = [];
+    public $paths = [];
 
     /**
      * @var TranslationContext
@@ -174,5 +174,17 @@ class WriteContext
     {
         $this->paths = [];
         $this->set(ShopDefinition::class, 'id', $this->translationContext->getShopId());
+    }
+
+    public function createWithVersionId(string $versionId): self
+    {
+        return self::createFromTranslationContext(
+            new TranslationContext(
+                $this->getTranslationContext()->getShopId(),
+                $this->getTranslationContext()->isDefaultShop(),
+                $this->getTranslationContext()->getFallbackId(),
+                $versionId
+            )
+        );
     }
 }

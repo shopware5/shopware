@@ -24,7 +24,7 @@ use Shopware\Api\Locale\Struct\LocaleBasicStruct;
 use Shopware\Api\Locale\Struct\LocaleDetailStruct;
 use Shopware\Api\Shop\Definition\ShopDefinition;
 use Shopware\Api\User\Definition\UserDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class LocaleDefinition extends EntityDefinition
 {
     /**
@@ -53,8 +53,9 @@ class LocaleDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new StringField('code', 'code'))->setFlags(new Required()),
             new TranslatedField(new StringField('name', 'name')),
             new TranslatedField(new StringField('territory', 'territory')),

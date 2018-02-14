@@ -10,6 +10,7 @@ use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
@@ -21,7 +22,7 @@ use Shopware\Api\Product\Event\ProductMedia\ProductMediaWrittenEvent;
 use Shopware\Api\Product\Repository\ProductMediaRepository;
 use Shopware\Api\Product\Struct\ProductMediaBasicStruct;
 use Shopware\Api\Product\Struct\ProductMediaDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ProductMediaDefinition extends EntityDefinition
 {
     /**
@@ -50,15 +51,19 @@ class ProductMediaDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new FkField('product_id', 'productId', ProductDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(ProductDefinition::class))->setFlags(new Required()),
+
             (new FkField('media_id', 'mediaId', MediaDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(MediaDefinition::class))->setFlags(new Required()),
+
             (new BoolField('is_cover', 'isCover'))->setFlags(new Required()),
             new IntField('position', 'position'),
             new DateField('created_at', 'createdAt'),
             new DateField('updated_at', 'updatedAt'),
-            new IdField('parent_id', 'parentId'),
             new ManyToOneAssociationField('product', 'product_id', ProductDefinition::class, false),
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, true),
         ]);

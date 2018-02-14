@@ -19,6 +19,7 @@ use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\CascadeDelete;
@@ -28,7 +29,7 @@ use Shopware\Api\Entity\Write\Flag\RestrictDelete;
 use Shopware\Api\Order\Definition\OrderDefinition;
 use Shopware\Api\Payment\Definition\PaymentMethodDefinition;
 use Shopware\Api\Shop\Definition\ShopDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class CustomerDefinition extends EntityDefinition
 {
     /**
@@ -57,14 +58,25 @@ class CustomerDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             (new FkField('customer_group_id', 'groupId', CustomerGroupDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(CustomerGroupDefinition::class))->setFlags(new Required()),
+
             (new FkField('default_payment_method_id', 'defaultPaymentMethodId', PaymentMethodDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(PaymentMethodDefinition::class, 'default_payment_method_version_id'))->setFlags(new Required()),
+
             (new FkField('shop_id', 'shopId', ShopDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(ShopDefinition::class))->setFlags(new Required()),
+
             new FkField('last_payment_method_id', 'lastPaymentMethodId', PaymentMethodDefinition::class),
+            new ReferenceVersionField(PaymentMethodDefinition::class, 'last_payment_method_version_id'),
+
             (new FkField('default_billing_address_id', 'defaultBillingAddressId', CustomerAddressDefinition::class))->setFlags(new Required()),
             (new FkField('default_shipping_address_id', 'defaultShippingAddressId', CustomerAddressDefinition::class))->setFlags(new Required()),
+
             (new StringField('customer_number', 'number'))->setFlags(new Required()),
             (new StringField('salutation', 'salutation'))->setFlags(new Required()),
             (new StringField('first_name', 'firstName'))->setFlags(new Required()),

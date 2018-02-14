@@ -6,6 +6,7 @@ use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
@@ -18,7 +19,7 @@ use Shopware\Api\Unit\Event\UnitTranslation\UnitTranslationWrittenEvent;
 use Shopware\Api\Unit\Repository\UnitTranslationRepository;
 use Shopware\Api\Unit\Struct\UnitTranslationBasicStruct;
 use Shopware\Api\Unit\Struct\UnitTranslationDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class UnitTranslationDefinition extends EntityDefinition
 {
     /**
@@ -49,7 +50,9 @@ class UnitTranslationDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new FkField('unit_id', 'unitId', UnitDefinition::class))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new FkField('language_id', 'languageId', ShopDefinition::class))->setFlags(new PrimaryKey(), new Required()),
+            (new ReferenceVersionField(ShopDefinition::class, 'language_id'))->setFlags(new PrimaryKey(), new Required()),
             (new StringField('short_code', 'shortCode'))->setFlags(new Required()),
             (new StringField('name', 'name'))->setFlags(new Required()),
             new ManyToOneAssociationField('unit', 'unit_id', UnitDefinition::class, false),

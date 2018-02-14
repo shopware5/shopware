@@ -28,7 +28,10 @@ use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Dbal\EntityForeignKeyResolver;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\Field\Field;
+use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\IdField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
+use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\MappingEntityDefinition;
 use Shopware\Api\Entity\Write\FieldAware\DefaultExtender;
 use Shopware\Api\Entity\Write\FieldAware\FieldExtenderCollection;
@@ -39,6 +42,7 @@ use Shopware\Api\Entity\Write\Command\InsertCommand;
 use Shopware\Api\Entity\Write\Command\UpdateCommand;
 use Shopware\Api\Entity\Write\Command\WriteCommandInterface;
 use Shopware\Api\Entity\Write\Command\WriteCommandQueue;
+use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Validation\RestrictDeleteViolation;
 use Shopware\Api\Entity\Write\Validation\RestrictDeleteViolationException;
 
@@ -144,13 +148,24 @@ class EntityWriter implements EntityWriterInterface
 
             /** @var StorageAware|IdField $field */
             foreach ($fields as $field) {
-                if (!array_key_exists($field->getPropertyName(), $raw)) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Missing primary key value %s for entity %s', $field->getPropertyName(), $definition::getEntityName())
-                    );
+                if (array_key_exists($field->getPropertyName(), $raw)) {
+                   $mapped[$field->getStorageName()] = $raw[$field->getPropertyName()];
+                   continue;
                 }
 
-                $mapped[$field->getStorageName()] = $raw[$field->getPropertyName()];
+                if ($field instanceof ReferenceVersionField) {
+                    $mapped[$field->getStorageName()] = $writeContext->getTranslationContext()->getVersionId();
+                    continue;
+                }
+
+                if ($field instanceof VersionField) {
+                    $mapped[$field->getStorageName()] = $writeContext->getTranslationContext()->getVersionId();
+                    continue;
+                }
+
+                throw new \InvalidArgumentException(
+                    sprintf('Missing primary key value %s for entity %s', $field->getPropertyName(), $definition::getEntityName())
+                );
             }
 
             $resolved[] = $mapped;
@@ -158,24 +173,36 @@ class EntityWriter implements EntityWriterInterface
 
         $instance = new $definition();
         if (!$instance instanceof MappingEntityDefinition) {
-            $restrictions = $this->foreignKeyResolver->getAffectedDeleteRestrictions($definition, $resolved);
+            $restrictions = $this->foreignKeyResolver->getAffectedDeleteRestrictions($definition, $resolved, $writeContext->getTranslationContext());
 
             if (!empty($restrictions)) {
                 $restrictions = array_map(function ($restriction) {
                     return new RestrictDeleteViolation($restriction['pk'], $restriction['restrictions']);
                 }, $restrictions);
 
-                throw new RestrictDeleteViolationException($restrictions);
+                throw new RestrictDeleteViolationException($definition, $restrictions);
             }
         }
 
         $cascades = [];
         if (!$instance instanceof MappingEntityDefinition) {
-            $cascadeDeletes = $this->foreignKeyResolver->getAffectedDeletes($definition, $resolved);
+            $cascadeDeletes = $this->foreignKeyResolver->getAffectedDeletes($definition, $resolved, $writeContext->getTranslationContext());
 
             $cascadeDeletes = array_column($cascadeDeletes, 'restrictions');
             foreach ($cascadeDeletes as $cascadeDelete) {
                 $cascades = array_merge_recursive($cascades, $cascadeDelete);
+            }
+
+            foreach ($cascades as &$cascade) {
+                $cascade = array_map(function($key) {
+                    $payload = $key;
+
+                    if (!is_array($key)) {
+                        $payload = ['id' => $key];
+                    }
+
+                    return ['primaryKey' => $key, 'payload' => $payload];
+                }, $cascade);
             }
         }
 
@@ -207,10 +234,15 @@ class EntityWriter implements EntityWriterInterface
             }
 
             $identifiers[$resource] = [];
-
             /** @var WriteCommandInterface[] $commands */
             foreach ($commands as $command) {
-                $identifiers[$resource][] = $this->getCommandPrimaryKey($command);
+                $primaryKey = $this->getCommandPrimaryKey($command);
+                $payload = $this->getCommandPayload($command);
+
+                $identifiers[$resource][] = [
+                    'primaryKey' => $primaryKey,
+                    'payload' => $payload
+                ];
             }
         }
 
@@ -251,6 +283,9 @@ class EntityWriter implements EntityWriterInterface
     private function getCommandPrimaryKey(WriteCommandInterface $command)
     {
         $fields = $command->getDefinition()::getPrimaryKeys();
+        $fields = $fields->filter(function(Field $field) {
+            return !$field instanceof VersionField && !$field instanceof ReferenceVersionField;
+        });
 
         $primaryKey = $command->getPrimaryKey();
 
@@ -269,5 +304,44 @@ class EntityWriter implements EntityWriterInterface
         }
 
         return $data;
+    }
+
+    private function getCommandPayload(WriteCommandInterface $command): array
+    {
+        /** @var InsertCommand|UpdateCommand $command */
+        $payload = $command instanceof DeleteCommand ? [] : $command->getPayload();
+
+        $fields = $command->getDefinition()::getFields();
+
+        $convertedPayload = [];
+        foreach ($payload as $key => $value) {
+            $field = $fields->getByStorageName($key);
+
+            if (($field instanceof IdField || $field instanceof FkField) && !empty($value)) {
+                $value = Uuid::fromBytes($value)->toString();
+            }
+            $convertedPayload[$field->getPropertyName()] = $value;
+        }
+
+        $primaryKeys = $fields->filterByFlag(PrimaryKey::class);
+
+        /** @var Field|StorageAware $primaryKey */
+        foreach ($primaryKeys as $primaryKey) {
+            if (array_key_exists($primaryKey->getPropertyName(), $payload)) {
+                continue;
+            }
+
+            if (!array_key_exists($primaryKey->getStorageName(), $command->getPrimaryKey())) {
+                throw new \RuntimeException(
+                    sprintf('Primary key field %s::%s not found in payload or command primary key', $command->getDefinition(), $primaryKey->getStorageName())
+                );
+            }
+
+            $key = $command->getPrimaryKey()[$primaryKey->getStorageName()];
+
+            $convertedPayload[$primaryKey->getPropertyName()] = Uuid::fromBytes($key)->toString();
+        }
+
+        return $convertedPayload;
     }
 }

@@ -6,6 +6,7 @@ use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
@@ -18,7 +19,7 @@ use Shopware\Api\Listing\Repository\ListingFacetTranslationRepository;
 use Shopware\Api\Listing\Struct\ListingFacetTranslationBasicStruct;
 use Shopware\Api\Listing\Struct\ListingFacetTranslationDetailStruct;
 use Shopware\Api\Shop\Definition\ShopDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ListingFacetTranslationDefinition extends EntityDefinition
 {
     /**
@@ -47,9 +48,12 @@ class ListingFacetTranslationDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new FkField('listing_facet_id', 'listingFacetId', ListingFacetDefinition::class))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new FkField('language_id', 'languageId', ShopDefinition::class))->setFlags(new PrimaryKey(), new Required()),
+            (new ReferenceVersionField(ShopDefinition::class, 'language_version_id'))->setFlags(new PrimaryKey(), new Required()),
+
             (new StringField('name', 'name'))->setFlags(new Required()),
             new ManyToOneAssociationField('listingFacet', 'listing_facet_id', ListingFacetDefinition::class, false),
             new ManyToOneAssociationField('language', 'language_id', ShopDefinition::class, false),

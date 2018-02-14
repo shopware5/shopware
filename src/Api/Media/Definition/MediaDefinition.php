@@ -12,6 +12,7 @@ use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
@@ -31,7 +32,7 @@ use Shopware\Api\Media\Struct\MediaDetailStruct;
 use Shopware\Api\Product\Definition\ProductManufacturerDefinition;
 use Shopware\Api\Product\Definition\ProductMediaDefinition;
 use Shopware\Api\User\Definition\UserDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class MediaDefinition extends EntityDefinition
 {
     /**
@@ -60,8 +61,15 @@ class MediaDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
+            (new FkField('media_album_id', 'albumId', MediaAlbumDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(MediaAlbumDefinition::class))->setFlags(new Required()),
+
+            new FkField('user_id', 'userId', UserDefinition::class),
+            new ReferenceVersionField(UserDefinition::class),
 
             (new StringField('file_name', 'fileName'))->setFlags(new Required()),
             (new StringField('mime_type', 'mimeType'))->setFlags(new Required()),
@@ -69,21 +77,17 @@ class MediaDefinition extends EntityDefinition
             new LongTextField('meta_data', 'metaData'),
             new DateField('created_at', 'createdAt'),
             new DateField('updated_at', 'updatedAt'),
-
-            (new TranslationsAssociationField('translations', MediaTranslationDefinition::class, 'media_id', false, 'id'))->setFlags(new Required(), new CascadeDelete()),
             new TranslatedField(new LongTextField('description', 'description')),
             new TranslatedField(new StringField('name', 'name')),
+
+            new ManyToOneAssociationField('album', 'media_album_id', MediaAlbumDefinition::class, true),
+            new ManyToOneAssociationField('user', 'user_id', UserDefinition::class, false),
 
             new OneToManyAssociationField('categories', CategoryDefinition::class, 'media_id', false, 'id'),
             (new OneToManyAssociationField('mailAttachments', MailAttachmentDefinition::class, 'media_id', false, 'id'))->setFlags(new RestrictDelete()),
             new OneToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, 'media_id', false, 'id'),
             (new OneToManyAssociationField('productMedia', ProductMediaDefinition::class, 'media_id', false, 'id'))->setFlags(new CascadeDelete()),
-
-            new ManyToOneAssociationField('album', 'media_album_id', MediaAlbumDefinition::class, true),
-            new ManyToOneAssociationField('user', 'user_id', UserDefinition::class, false),
-
-            (new FkField('media_album_id', 'albumId', MediaAlbumDefinition::class))->setFlags(new Required()),
-            new FkField('user_id', 'userId', UserDefinition::class),
+            (new TranslationsAssociationField('translations', MediaTranslationDefinition::class, 'media_id', false, 'id'))->setFlags(new Required(), new CascadeDelete()),
         ]);
 
         foreach (self::$extensions as $extension) {

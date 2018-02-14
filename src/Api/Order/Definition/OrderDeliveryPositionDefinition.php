@@ -10,6 +10,7 @@ use Shopware\Api\Entity\Field\FloatField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
@@ -20,7 +21,7 @@ use Shopware\Api\Order\Event\OrderDeliveryPosition\OrderDeliveryPositionWrittenE
 use Shopware\Api\Order\Repository\OrderDeliveryPositionRepository;
 use Shopware\Api\Order\Struct\OrderDeliveryPositionBasicStruct;
 use Shopware\Api\Order\Struct\OrderDeliveryPositionDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class OrderDeliveryPositionDefinition extends EntityDefinition
 {
     /**
@@ -49,10 +50,16 @@ class OrderDeliveryPositionDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             (new FkField('order_delivery_id', 'orderDeliveryId', OrderDeliveryDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(OrderDeliveryDefinition::class))->setFlags(new Required()),
+            
             (new FkField('order_line_item_id', 'orderLineItemId', OrderLineItemDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(OrderLineItemDefinition::class))->setFlags(new Required()),
+            
             (new FloatField('unit_price', 'unitPrice'))->setFlags(new Required()),
             (new FloatField('total_price', 'totalPrice'))->setFlags(new Required()),
             (new FloatField('quantity', 'quantity'))->setFlags(new Required()),

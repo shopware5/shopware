@@ -28,7 +28,7 @@ use Shopware\Api\Entity\Write\Flag\WriteOnly;
 use Shopware\Api\Shipping\Definition\ShippingMethodDefinition;
 use Shopware\Api\Shop\Definition\ShopDefinition;
 use Shopware\Api\Tax\Definition\TaxAreaRuleDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class CustomerGroupDefinition extends EntityDefinition
 {
     /**
@@ -57,8 +57,9 @@ class CustomerGroupDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             new TranslatedField(new StringField('name', 'name')),
             new BoolField('display_gross', 'displayGross'),
             new BoolField('input_gross', 'inputGross'),

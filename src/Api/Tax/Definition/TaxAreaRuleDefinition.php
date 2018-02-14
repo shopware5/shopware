@@ -14,9 +14,11 @@ use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\FloatField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
+use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\CascadeDelete;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
@@ -57,13 +59,25 @@ class TaxAreaRuleDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
-            new FkField('country_area_id', 'countryAreaId', CountryAreaDefinition::class),
-            new FkField('country_id', 'countryId', CountryDefinition::class),
-            new FkField('country_state_id', 'countryStateId', CountryStateDefinition::class),
+            new VersionField(),
+
             (new FkField('tax_id', 'taxId', TaxDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(TaxDefinition::class))->setFlags(new Required()),
+
+            new FkField('country_area_id', 'countryAreaId', CountryAreaDefinition::class),
+            new ReferenceVersionField(CountryAreaDefinition::class),
+            
+            new FkField('country_id', 'countryId', CountryDefinition::class),
+            new ReferenceVersionField(CountryDefinition::class),
+
+            new FkField('country_state_id', 'countryStateId', CountryStateDefinition::class),
+            new ReferenceVersionField(CountryStateDefinition::class),
+
             (new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(CustomerGroupDefinition::class))->setFlags(new Required()),
+
             (new FloatField('tax_rate', 'taxRate'))->setFlags(new Required()),
             new TranslatedField(new StringField('name', 'name')),
             new BoolField('active', 'active'),

@@ -19,6 +19,7 @@ use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
@@ -26,7 +27,7 @@ use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\CascadeDelete;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ConfigFormFieldDefinition extends EntityDefinition
 {
     /**
@@ -55,9 +56,13 @@ class ConfigFormFieldDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             new FkField('config_form_id', 'configFormId', ConfigFormDefinition::class),
+            new ReferenceVersionField(ConfigFormDefinition::class),
+
             (new StringField('name', 'name'))->setFlags(new Required()),
             (new StringField('type', 'type'))->setFlags(new Required()),
             new LongTextField('value', 'value'),

@@ -17,11 +17,12 @@ use Shopware\Api\Entity\Field\DateField;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
-
+use Shopware\Api\Entity\Field\VersionField;
 class CustomerAddressDefinition extends EntityDefinition
 {
     /**
@@ -52,9 +53,17 @@ class CustomerAddressDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             (new FkField('customer_id', 'customerId', CustomerDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(CustomerDefinition::class))->setFlags(new Required()),
+
             (new FkField('country_id', 'countryId', CountryDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(CountryDefinition::class))->setFlags(new Required()),
+
             new FkField('country_state_id', 'countryStateId', CountryStateDefinition::class),
+            new ReferenceVersionField(CountryStateDefinition::class),
+
             (new StringField('salutation', 'salutation'))->setFlags(new Required()),
             (new StringField('first_name', 'firstName'))->setFlags(new Required()),
             (new StringField('last_name', 'lastName'))->setFlags(new Required()),

@@ -23,7 +23,7 @@ use Shopware\Api\Listing\Event\ListingFacet\ListingFacetWrittenEvent;
 use Shopware\Api\Listing\Repository\ListingFacetRepository;
 use Shopware\Api\Listing\Struct\ListingFacetBasicStruct;
 use Shopware\Api\Listing\Struct\ListingFacetDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ListingFacetDefinition extends EntityDefinition
 {
     /**
@@ -54,6 +54,7 @@ class ListingFacetDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new StringField('unique_key', 'uniqueKey'))->setFlags(new Required()),
             (new LongTextField('payload', 'payload'))->setFlags(new Required()),
             new TranslatedField(new StringField('name', 'name')),

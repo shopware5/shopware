@@ -18,6 +18,7 @@ use Shopware\Api\Entity\Field\IntField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\TranslationsAssociationField;
@@ -26,7 +27,7 @@ use Shopware\Api\Entity\Write\Flag\CascadeDelete;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
 use Shopware\Api\Plugin\Definition\PluginDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ConfigFormDefinition extends EntityDefinition
 {
     /**
@@ -55,9 +56,13 @@ class ConfigFormDefinition extends EntityDefinition
             return self::$fields;
         }
 
-        self::$fields = new FieldCollection([
+        self::$fields = new FieldCollection([ 
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
+
             new FkField('parent_id', 'parentId', self::class),
+            new ReferenceVersionField(self::class),
+
             new FkField('plugin_id', 'pluginId', PluginDefinition::class),
             (new StringField('name', 'name'))->setFlags(new Required()),
             new IntField('position', 'position'),

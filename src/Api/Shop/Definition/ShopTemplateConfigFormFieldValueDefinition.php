@@ -9,6 +9,7 @@ use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
@@ -19,7 +20,7 @@ use Shopware\Api\Shop\Event\ShopTemplateConfigFormFieldValue\ShopTemplateConfigF
 use Shopware\Api\Shop\Repository\ShopTemplateConfigFormFieldValueRepository;
 use Shopware\Api\Shop\Struct\ShopTemplateConfigFormFieldValueBasicStruct;
 use Shopware\Api\Shop\Struct\ShopTemplateConfigFormFieldValueDetailStruct;
-
+use Shopware\Api\Entity\Field\VersionField;
 class ShopTemplateConfigFormFieldValueDefinition extends EntityDefinition
 {
     /**
@@ -50,8 +51,11 @@ class ShopTemplateConfigFormFieldValueDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new FkField('shop_template_config_form_field_id', 'shopTemplateConfigFormFieldId', ShopTemplateConfigFormFieldDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(ShopTemplateConfigFormFieldDefinition::class))->setFlags(new Required()),
             (new FkField('shop_id', 'shopId', ShopDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(ShopDefinition::class))->setFlags(new Required()),
             (new LongTextField('value', 'value'))->setFlags(new Required()),
             new DateField('created_at', 'createdAt'),
             new DateField('updated_at', 'updatedAt'),

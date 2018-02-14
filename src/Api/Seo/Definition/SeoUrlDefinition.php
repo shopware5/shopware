@@ -10,6 +10,7 @@ use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
@@ -22,7 +23,7 @@ use Shopware\Api\Seo\Repository\SeoUrlRepository;
 use Shopware\Api\Seo\Struct\SeoUrlBasicStruct;
 use Shopware\Api\Seo\Struct\SeoUrlDetailStruct;
 use Shopware\Api\Shop\Definition\ShopDefinition;
-
+use Shopware\Api\Entity\Field\VersionField;
 class SeoUrlDefinition extends EntityDefinition
 {
     /**
@@ -53,9 +54,12 @@ class SeoUrlDefinition extends EntityDefinition
 
         self::$fields = new FieldCollection([
             (new IdField('id', 'id'))->setFlags(new PrimaryKey(), new Required()),
+            new VersionField(),
             (new FkField('shop_id', 'shopId', ShopDefinition::class))->setFlags(new Required()),
+            (new ReferenceVersionField(ShopDefinition::class))->setFlags(new Required()),
             (new StringField('name', 'name'))->setFlags(new Required()),
             (new IdField('foreign_key', 'foreignKey'))->setFlags(new Required()),
+            (new IdField('foreign_key_version_id', 'foreignKeyVersionId'))->setFlags(new Required()),
             (new LongTextField('path_info', 'pathInfo'))->setFlags(new Required()),
             (new LongTextField('seo_path_info', 'seoPathInfo'))->setFlags(new Required()),
             new BoolField('is_canonical', 'isCanonical'),
