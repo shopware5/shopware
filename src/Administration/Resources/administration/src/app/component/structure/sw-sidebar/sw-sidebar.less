@@ -1,9 +1,9 @@
+@import "~less/variables";
+
 .sw--sidebar {
     height: 100%;
     grid-column: 1;
-    background: #2A3345;
-    padding-bottom: 20000px;
-    margin-bottom: -20000px;
+    background: @gradient-dark-gray;
     overflow: hidden;
     
     .sidebar--logo {
@@ -20,14 +20,14 @@
         .logo--text {
             display: inline-block;
             font-weight: 600;
-            color: #ffffff;
+            color: @color-white;
             vertical-align: top;
             line-height: 16px;
 
             .text--suffix {
                 font-size: 12px;
                 font-weight: 300;
-                color: #CACCCF;
+                color: @color-steam-cloud;
             }
         }
     }
@@ -44,7 +44,7 @@
                 display: block;
                 padding: 12px 30px;
                 text-decoration: none;
-                color: #E5E5E5;
+                color: @color-steam-cloud;
                 font-size: 14px;
                 font-weight: 600;
                 line-height: 24px;
@@ -59,7 +59,8 @@
                 }
 
                 &:hover {
-                    background: #323B4D;
+                    background: lighten(@color-gradient-dark-gray-start, 4%);
+                    color: @color-white;
                 }
             }
         }
@@ -70,7 +71,7 @@
         bottom: 20px;
 
         a {
-            color: #e5e5e5;
+            color: @color-steam-cloud;
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
