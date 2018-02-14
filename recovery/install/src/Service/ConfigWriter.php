@@ -25,6 +25,7 @@
 namespace Shopware\Recovery\Install\Service;
 
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
+use Zend\Code\Generator\ValueGenerator;
 
 /**
  * @category  Shopware
@@ -64,10 +65,11 @@ class ConfigWriter
             'hostname' => 'host',
         ];
 
-        foreach ($info as $key => $parameter) {
+        foreach (get_object_vars($info) as $key => $parameter) {
             if ($key == 'port' && empty($parameter)) {
                 continue;
             }
+
             if ($key == 'socket' && empty($parameter)) {
                 continue;
             }
@@ -79,7 +81,9 @@ class ConfigWriter
             $config['db'][$key] = trim($parameter);
         }
 
-        $template = '<?php return ' . var_export($config, true) . ';';
+        $value = new ValueGenerator($config, ValueGenerator::TYPE_ARRAY_SHORT);
+        $template = '<?php return ' . $value->generate(). ';';
+
         if (!file_put_contents($databaseConfigFile, $template)) {
             throw new \RuntimeException("Could not write config: $databaseConfigFile");
         }
