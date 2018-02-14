@@ -48,6 +48,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added snippet `frontend/detail/DetailCommentAnonymousName` for anonymous product ratings
 * Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
 * Added order attributes to return values of `OrderRepository::getDetails`
+* Added option for batch updating plugins to plugin update command
 
 ### Changes
 
