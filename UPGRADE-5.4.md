@@ -47,6 +47,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added snippet `frontend/detail/data/DetailDataPriceInfo` in ajax cart template
 * Added snippet `frontend/detail/DetailCommentAnonymousName` for anonymous product ratings
 * Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
+* Added config `preLoadStoredEntry` to `Shopware.form.field.PagingComboBox` to be compatible with saving and loading entries from e.g. the second page.
 * Added order attributes to return values of `OrderRepository::getDetails`
 
 ### Changes
