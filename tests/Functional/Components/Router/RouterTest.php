@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Test_TestCase
 {
     /**
@@ -30,14 +29,32 @@ class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Tes
     public function testSeoRouteGeneration()
     {
         $router = Shopware()->Container()->get('router');
+        $localRouter = clone $router;
 
-        $seo = $router->assemble(['controller' => 'register']);
-        $seoExplicit = $router->assemble(['controller' => 'register', '_seo' => true]);
+        $context = new \Shopware\Components\Routing\Context();
+        $context->setShopId(1);
+        $localRouter->setContext($context);
+
+        $seo = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229]);
+        $seoExplicit = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229, '_seo' => true]);
 
         $this->assertEquals($seo, $seoExplicit);
+    }
 
-        $seo = $router->assemble(['controller' => 'register', '_seo' => false]);
-        $seoExplicit = $router->assemble(['controller' => 'register', '_seo' => true]);
+    /**
+     * Tests that the seo route generation can be deactivated
+     */
+    public function testDeactivatingSeoRouteGeneration()
+    {
+        $router = Shopware()->Container()->get('router');
+        $localRouter = clone $router;
+
+        $context = new \Shopware\Components\Routing\Context();
+        $context->setShopId(1);
+        $localRouter->setContext($context);
+
+        $seo = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229]);
+        $seoExplicit = $localRouter->assemble(['controller' => 'category', 'sCategory' => 11, '_seo' => false]);
 
         $this->assertNotEquals($seo, $seoExplicit);
     }
@@ -48,15 +65,38 @@ class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Tes
     public function testNoneExistingSeoRouteGeneration()
     {
         $router = Shopware()->Container()->get('router');
+        $localRouter = clone $router;
 
-        $seo = $router->assemble(['controller' => 'registerare']);
-        $raw = $router->assemble(['controller' => 'registerare', '_seo' => false]);
+        $context = new \Shopware\Components\Routing\Context();
+        $context->setShopId(1);
+        $localRouter->setContext($context);
+
+        $seo = $localRouter->assemble(['controller' => 'doesnotexist']);
+        $raw = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => false]);
 
         $this->assertEquals($raw, $seo);
 
-        $raw = $router->assemble(['controller' => 'registerare', '_seo' => false]);
-        $seo = $router->assemble(['controller' => 'registerare', '_seo' => true]);
+        $raw = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => false]);
+        $seo = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => true]);
 
         $this->assertEquals($raw, $seo);
+    }
+
+    /**
+     * Tests if the default action is being ignored
+     */
+    public function testDefaultActionDoesntMatter()
+    {
+        $router = Shopware()->Container()->get('router');
+        $localRouter = clone $router;
+
+        $context = new \Shopware\Components\Routing\Context();
+        $context->setShopId(1);
+        $localRouter->setContext($context);
+
+        $withAction = $localRouter->assemble(['controller' => 'doesnotexist', 'action' => 'index']);
+        $withoutAction = $localRouter->assemble(['controller' => 'doesnotexist']);
+
+        $this->assertEquals($withAction, $withoutAction);
     }
 }
