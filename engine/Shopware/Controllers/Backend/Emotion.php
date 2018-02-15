@@ -178,6 +178,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data = [];
 
             foreach ($componentData as $entry) {
+                $filterResult = $this->container->get('events')->filter(
+                    'Shopware_Plugin_Emotion_Handle_Preview_Media_Value',
+                    $entry,
+                    ['subject' => $this]
+                );
+
+                $entry = $filterResult;
+
                 switch (strtolower($entry['valueType'])) {
                     case 'json':
                         if ($entry['value'] != '') {
