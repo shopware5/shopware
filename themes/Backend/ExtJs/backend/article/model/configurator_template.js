@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorTemplate', {
         { name: 'active', type: 'int' },
         { name: 'inStock', type: 'int' },
         { name: 'stockMin', type: 'int' },
+        { name: 'lastStock', type: 'boolean' },
         { name: 'weight', type: 'float' },
         { name: 'ean', type: 'string', useNull: true },
         { name: 'width', type: 'float', useNull: true },

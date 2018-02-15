@@ -3207,6 +3207,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             'active' => 1,
             'configuratorOptions' => $optionsModels,
             'purchasePrice' => $detailData['purchasePrice'],
+            'lastStock' => $detailData['lastStock'],
         ];
 
         if ($mergeType == 1 && $counter == 0) {
@@ -3300,8 +3301,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->getConfiguratorTemplateByArticleIdQuery($article->getId())
                 ->getArrayResult();
         }
-
-        $detailData[0]['laststock'] = (int) $detailData[0]['laststock'];
 
         return $detailData[0];
     }
