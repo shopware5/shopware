@@ -47,6 +47,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added snippet `frontend/detail/data/DetailDataPriceInfo` in ajax cart template
 * Added snippet `frontend/detail/DetailCommentAnonymousName` for anonymous product ratings
 * Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
+* Added order attributes to return values of `OrderRepository::getDetails`
 
 ### Changes
 
@@ -79,6 +80,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed the paging in a listing so that using it while using the live filter reloading will now scroll to the top paging bar
 * Changed name field in product ratings to be optional
 * Changed loading of the themes/_private folder to be always executed
+* Changed the `checkOrderStatus` method in `Shopware_Controllers_Backend_Order` to only send e-mails when necessary
+* Changed `themes/Backend/ExtJs/backend/order/controller/batch.js` to inform the user about configuration errors
+* Changed `themes/Backend/ExtJs/backend/order/view/batch/form.js` to allow for more precise form validation and better feedback to the user
 
 ### Removals
 
