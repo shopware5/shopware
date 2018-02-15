@@ -116,14 +116,33 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $content = $this->View()->sSupport;
 
-        $mailBody = $this->replaceVariables($content['email_template']);
-        $mailSubject = $this->replaceVariables($content['email_subject']);
+        $compiler = new Shopware_Components_StringCompiler($this->get('template'));
+        $compiler->setIsCompatibilityMode();
+
+        $context = ['sVars' => []];
+
+        $mailBody = $content['email_template'];
+        foreach ($this->_postData as $key => $value) {
+            if ($this->_elements[$key]['typ'] === 'text2') {
+                $names = explode(';', $this->_elements[$key]['name']);
+                $context['sVars'][$names[0]] = $value[0];
+                $context['sVars'][$names[1]] = $value[1];
+                $mailBody = str_replace(['{sVars.' . $names[0] . '}', '{sVars.' . $names[1] . '}'], ['{$sVars.' . $names[0] . '}', '{$sVars.' . $names[1] . '}'], $mailBody);
+            } else {
+                $mailBody = str_replace('{sVars.' . $this->_elements[$key]['name'] . '}', '{$sVars.' . $this->_elements[$key]['name'] . '}', $mailBody);
+                $context['sVars'][$this->_elements[$key]['name']] = $value;
+            }
+        }
+
+        $context['sIP'] = $this->Request()->getClientIp();
+        $context['sDateTime'] = date('d.m.Y h:i:s');
+        $context['sShopname'] = Shopware()->Config()->shopName;
 
         $mail->setFrom(Shopware()->Config()->Mail);
         $mail->clearRecipients();
         $mail->addTo($content['email']);
-        $mail->setBodyText($mailBody);
-        $mail->setSubject($mailSubject);
+        $mail->setBodyText($compiler->compileString($mailBody, $context));
+        $mail->setSubject($compiler->compileString($content['email_subject'], $context));
 
         $mail = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, ['subject' => $this]);
 
@@ -622,36 +641,5 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
             }
         }
-    }
-
-    /**
-     * Replaces placeholder variables
-     *
-     * @param string $content
-     *
-     * @return string
-     */
-    private function replaceVariables($content)
-    {
-        foreach ($this->_postData as $key => $value) {
-            if ($this->_elements[$key]['typ'] === 'text2') {
-                $names = explode(';', $this->_elements[$key]['name']);
-                $content = str_replace(
-                    ['{sVars.' . $names[0] . '}', '{sVars.' . $names[1] . '}'],
-                    [$value[0], $value[1]],
-                    $content
-                );
-            } else {
-                $content = str_replace('{sVars.' . $this->_elements[$key]['name'] . '}', $value, $content);
-            }
-        }
-
-        $content = str_replace(
-            ['{sIP}', '{sDateTime}', '{sShopname}'],
-            [$_SERVER['REMOTE_ADDR'], date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
-            $content
-        );
-
-        return strip_tags($content);
     }
 }
