@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added new optional parameter `$filterGroupIds` to `PropertyGatewayInterface.php` for proper property sorting in a listing
 * Added variant filtering to selection product streams
+* Added `queryMode` option to select- and comboboxes in `engine/Shopware/Controllers/Backend/Config.php`
 
 ### Changes
 
