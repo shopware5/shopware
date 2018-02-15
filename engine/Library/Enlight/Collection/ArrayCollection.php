@@ -52,13 +52,13 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     }
 
     /**
-     * Counts the stored items or checks whether elements are deposited.
+     * Counts the stored items.
      *
      * @return int
      */
     public function count()
     {
-        return isset($this->_elements) ? 0 : count($this->_elements);
+        return count($this->_elements);
     }
 
     /**
