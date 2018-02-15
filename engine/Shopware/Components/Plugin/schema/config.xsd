@@ -33,7 +33,7 @@
             <xsd:element name="options" type="options" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="type" type="type" default="text"/>
-        <xsd:attribute name="required" type="xsd:boolean" default="true"/>
+        <xsd:attribute name="required" type="xsd:boolean" default="false"/>
         <xsd:attribute name="scope" type="scope" default="locale"/>
     </xsd:complexType>
 
