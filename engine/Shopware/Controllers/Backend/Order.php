@@ -721,7 +721,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             // the setOrder function of the Shopware_Components_Document change the currency of the shop.
             // this would create a new Shop if we execute an flush();
-            $this->createOrderDocuments($documentType, $documentMode, $order);
+            // Only create order documents when requested.
+            if ($documentType) {
+                $this->createOrderDocuments($documentType, $documentMode, $order);
+            }
 
             $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
             $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
@@ -1317,9 +1320,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * Internal helper function to check if the order or payment status has been changed. If one
-     * of the status changed, the function will create a status mail. If the passed autoSend parameter
-     * is true, the created status mail will be send directly.
+     * Internal helper function to check if the order or payment status has been changed.
+     * If one of the status changed, the function will create a status mail.
+     * If the autoSend parameter is true, the created status mail will be sent directly,
+     * if addAttachments and documentType are true/selected aswell, the according documents will be attached.
      *
      * @param Order                         $order
      * @param \Shopware\Models\Order\Status $statusBefore
@@ -1332,30 +1336,38 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments)
     {
-        if ($autoSend ||
-            $order->getOrderStatus()->getId() !== $statusBefore->getId() ||
-            $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
-            //status or cleared changed?
-            if ($order->getOrderStatus()->getId() !== $statusBefore->getId()) {
-                $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
-            } elseif ($order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
-                $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
-            } else {
-                $mail = $this->getMailForOrder($order->getId(), null);
+        $orderStatusChanged = $order->getOrderStatus()->getId() !== $statusBefore->getId();
+        $paymentStatusChanged = $order->getPaymentStatus()->getId() !== $clearedBefore->getId();
+        $documentMailSendable = $documentType && $addAttachments;
+        $mail = null;
+
+        // Abort if autoSend isn't active and neither the order-, nor the payment-status changed
+        if (!$autoSend && !$orderStatusChanged && !$paymentStatusChanged) {
+            return null;
+        }
+
+        if ($orderStatusChanged) {
+            // Generate mail with order status template
+            $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
+        } elseif ($paymentStatusChanged) {
+            // Generate mail with payment status template
+            $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
+        } elseif ($documentMailSendable) {
+            // Generate mail with document template
+            $mail = $this->getMailForOrder($order->getId(), null);
+        }
+
+        if (is_object($mail['mail'])) {
+            if ($addAttachments) {
+                // Attach documents
+                $document = $this->getDocument($documentType, $order);
+                $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
             }
-
-            //mail object created and auto send activated, then send mail directly.
-            if ($autoSend && is_object($mail['mail'])) {
-                if ($addAttachments) {
-                    $document = $this->getDocument($documentType, $order);
-                    $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
-                }
+            if ($autoSend) {
+                // Send mail
                 $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
-
-                //check if send mail was successfully.
                 $mail['data']['sent'] = is_object($result);
             }
-
             return $mail['data'];
         }
 

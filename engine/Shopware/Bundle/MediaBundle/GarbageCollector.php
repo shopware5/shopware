@@ -219,10 +219,20 @@ class GarbageCollector
         $values = $this->fetchColumn($mediaPosition);
 
         foreach ($values as $value) {
-            preg_match_all("/<(\s+)?img(?:.*src=[\"'](.*?)[\"'].*)\/>?/mi", $value, $matches);
+            // Media path matches
+            preg_match_all("/{{1}media[\s+]?path=[\"'](?'mediaTag'\S*)[\"']}{1}/mi", $value, $mediaMatches);
+            // Src tag matches
+            preg_match_all("/<?img[^<]*src=[\"'](?'srcTag'[^{]*?)[\"'][^>]*\/?>?/mi", $value, $srcMatches);
 
-            if (isset($matches[2]) && !empty($matches[2])) {
-                foreach ($matches[2] as $match) {
+            if ($mediaMatches['mediaTag']) {
+                foreach ($mediaMatches['mediaTag'] as $match) {
+                    $match = $this->mediaService->normalize($match);
+                    $this->addMediaByPath($match);
+                }
+            }
+
+            if ($srcMatches['srcTag']) {
+                foreach ($srcMatches['srcTag'] as $match) {
                     $match = $this->mediaService->normalize($match);
                     $this->addMediaByPath($match);
                 }
