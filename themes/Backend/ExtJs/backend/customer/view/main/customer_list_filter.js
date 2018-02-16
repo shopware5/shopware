@@ -123,7 +123,8 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     store: shopStore
                 },
                 firstLogin: {
-                    fieldLabel: '{s name="first_login"}{/s}'
+                    fieldLabel: '{s name="first_login"}{/s}',
+                    expression: '>='
                 },
                 lastLogin: {
                     fieldLabel: '{s name="lastLogin"}{/s}'
