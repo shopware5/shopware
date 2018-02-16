@@ -42,8 +42,6 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 #SetEnvIf Host "dev.shopware.in" SHOPWARE_ENV=dev
 #SetEnv SHOPWARE_ENV dev
 
-DirectoryIndex index.html
-DirectoryIndex index.php
 DirectoryIndex shopware.php
 
 # Disables download of configuration
