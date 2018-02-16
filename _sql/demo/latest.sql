@@ -6005,7 +6005,8 @@ INSERT INTO `s_core_shop_currencies` (`shop_id`, `currency_id`) VALUES
 
 TRUNCATE TABLE `s_core_shop_pages`;
 INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
-(2, 7),
+(1, 1),
+(1, 2),
 (2, 9),
 (2, 10);
 

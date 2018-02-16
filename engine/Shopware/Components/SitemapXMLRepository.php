@@ -236,18 +236,12 @@ class SitemapXMLRepository
         $shopId = $this->contextService->getShopContext()->getShop()->getId();
         $sites = $this->getSitesByShopId($shopId);
 
-        foreach ($sites as $site) {
-            if (!empty($site['children'])) {
-                $sites = array_merge($sites, $site['children']);
-            }
-        }
-
         foreach ($sites as &$site) {
             $site['urlParams'] = [
                 'sViewport' => 'custom',
                 'sCustom' => $site['id'],
             ];
-
+            $site['changed'] = new \DateTime($site['changed']);
             $site['show'] = $this->filterLink($site['link'], $site['urlParams']);
         }
 
@@ -258,6 +252,8 @@ class SitemapXMLRepository
      * Helper function to read all static pages of a shop from the database
      *
      * @param int $shopId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      *
      * @return array
      */
@@ -275,15 +271,32 @@ class SitemapXMLRepository
 
         $keys = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        $siteRepository = $this->em->getRepository('Shopware\Models\Site\Site');
-
         $sites = [];
         foreach ($keys as $key) {
-            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
-                ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
-                ->getQuery()
-                ->getArrayResult();
+            $builder = $this->connection->createQueryBuilder();
+            $current = $builder->from('s_cms_static', 'sites')
+                ->select('*')
+                ->andWhere(
+                    $builder->expr()->orX(
+                        $builder->expr()->eq('sites.grouping', ':g1'),        // = gBottom
+                        $builder->expr()->like('sites.grouping', ':g2'),      //like 'gBottom|%
+                        $builder->expr()->like('sites.grouping', ':g3'),      //like '|gBottom
+                        $builder->expr()->like('sites.grouping', ':g4')      //like '|gBottom|
+                    )
+                )
+                ->andWhere(
+                    $builder->expr()->orX(
+                        $builder->expr()->like('sites.shop_ids', ':shopId'),
+                        $builder->expr()->isNull('sites.shop_ids')
+                    )
+                )
+                ->setParameter('g1', $key)
+                ->setParameter('g2', $key . '|%')
+                ->setParameter('g3', '%|' . $key)
+                ->setParameter('g4', '%|' . $key . '|%')
+                ->setParameter('shopId', '%|' . $shopId . '|%')
+                ->execute()
+                ->fetchAll(\PDO::FETCH_ASSOC);
 
             $sites += $current;
         }
