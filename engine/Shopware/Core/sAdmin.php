@@ -2247,7 +2247,6 @@ class sAdmin
     public function sNewsletterSubscription($email, $unsubscribe = false, $groupID = null)
     {
         if (empty($unsubscribe)) {
-            $errorFlag = [];
             $config = Shopware()->Container()->get('config');
 
             if ($this->shouldVerifyCaptcha($config) && $this->front->Request()->getParam('voteConfirmed', false) == false) {
@@ -2261,20 +2260,15 @@ class sAdmin
                 }
             }
 
-            $fields = ['newsletter'];
-            foreach ($fields as $field) {
-                $fieldData = $this->front->Request()->getPost($field);
-                if (isset($fieldData) && empty($fieldData)) {
-                    $errorFlag[$field] = true;
-                }
-            }
-
-            if (!empty($errorFlag)) {
+            $subscribe = $this->front->Request()->getPost('newsletter');
+            if ($subscribe !== null && empty($subscribe)) {
                 return [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('ErrorFillIn', 'Please fill in all red fields'),
-                    'sErrorFlag' => $errorFlag,
+                    'sErrorFlag' => [
+                        'newsletter' => true,
+                    ],
                 ];
             }
         }
