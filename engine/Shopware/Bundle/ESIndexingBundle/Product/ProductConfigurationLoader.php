@@ -27,6 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductConfigurationLoader
@@ -56,11 +57,11 @@ class ProductConfigurationLoader
     /**
      * Get possible combinations of all products
      *
-     * @param array $numbers
+     * @param array $articleIds
      *
      * @return array
      */
-    public function getCombinations(array $numbers)
+    public function getCombinations(array $articleIds)
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -70,12 +71,12 @@ class ProductConfigurationLoader
         ]);
 
         $query->from('s_article_configurator_option_relations', 'relations');
-        $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.ordernumber IN (:numbers) AND variant.active = 1');
+        $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleId IN (:articleIds) AND variant.active = 1');
         $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         $query->addGroupBy('variant.articleID');
         $query->addGroupBy('variant.id');
 
-        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -86,12 +87,12 @@ class ProductConfigurationLoader
     /**
      * Fetches  all groups with all options for provided products
      *
-     * @param array                       $numbers
-     * @param Struct\ShopContextInterface $context
+     * @param array                $articleIds
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Configurator\Group[]
+     * @return Group[]
      */
-    public function getConfigurations(array $numbers, ShopContextInterface $context)
+    public function getConfigurations(array $articleIds, ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
         $query->addSelect('product.id as array_key');
@@ -122,8 +123,8 @@ class ProductConfigurationLoader
         $query->addGroupBy('product.id');
         $query->addGroupBy('configuratorOption.id');
 
-        $query->where('variant.ordernumber IN (:numbers)');
-        $query->setParameter('numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        $query->where('variant.articleId IN (:articleIds)');
+        $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
 
