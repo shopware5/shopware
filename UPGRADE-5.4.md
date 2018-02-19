@@ -85,6 +85,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed `themes/Backend/ExtJs/backend/order/controller/batch.js` to inform the user about configuration errors
 * Changed `themes/Backend/ExtJs/backend/order/view/batch/form.js` to allow for more precise form validation and better feedback to the user
 
+* Changed rounding of prices to two decimal digits in `engine/Shopware/Bundle/StoreFrontBundle/Service/Core/PriceCalculator.php` and `engine/Shopware/Core/sArticles.php`
+
 ### Removals
 
 * Removed config option for maximum number of category pages

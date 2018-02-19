@@ -696,9 +696,9 @@ class sArticles
             }
         } else {
             if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $price = round($price, 3);
+                $price = round($price, 2);
             } else {
-                $price = round($price * (100 + $tax) / 100, 3);
+                $price = round($price * (100 + $tax) / 100, 2);
             }
         }
 
