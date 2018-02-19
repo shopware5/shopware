@@ -49,6 +49,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
 * Added order attributes to return values of `OrderRepository::getDetails`
 * Added option for batch updating plugins to plugin update command
+* Added defaults for `ignored_url_parameters` setting of HTTP cache in `config.php`. See [Ignore some HTTP parameters](https://developers.shopware.com/developers-guide/http-cache/#ignore-some-http-parameters) for more information. 
 
 ### Changes
 
