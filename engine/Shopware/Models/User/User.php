@@ -594,10 +594,14 @@ class User extends ModelEntity
 
     /**
      * @param string $encoder
+     *
+     * @return \Shopware\Models\User\User
      */
     public function setEncoder($encoder)
     {
         $this->encoder = $encoder;
+        
+        return $this
     }
 
     /**
