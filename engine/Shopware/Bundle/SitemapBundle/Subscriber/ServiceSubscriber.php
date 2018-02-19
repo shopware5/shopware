@@ -22,27 +22,31 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Bundle\SitemapBundle\Subscriber;
+
+use Enlight\Event\SubscriberInterface;
+use Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml;
+
 /**
- * Sitemap controller
- *
- * @category  Shopware
- *
- * @deprecated Will be removed in Shopware 6.0
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Class ServiceSubscriber
  */
-class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
+class ServiceSubscriber implements SubscriberInterface
 {
     /**
-     * Index action method
+     * {@inheritdoc}
      */
-    public function indexAction()
+    public static function getSubscribedEvents()
     {
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-        set_time_limit(0);
+        return [
+            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SitemapIndexXml' => 'registerSitemapIndexXmlController',
+        ];
+    }
 
-        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
-        $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
+    /**
+     * @return string
+     */
+    public function registerSitemapIndexXmlController()
+    {
+        return SitemapIndexXml::class;
     }
 }

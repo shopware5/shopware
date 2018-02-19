@@ -22,27 +22,38 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Sitemap controller
- *
- * @category  Shopware
- *
- * @deprecated Will be removed in Shopware 6.0
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
+namespace Shopware\Bundle\SitemapBundle\Controller;
+
+use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
+use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
+
+class SitemapIndexXml extends \Enlight_Controller_Action
 {
     /**
      * Index action method
      */
     public function indexAction()
     {
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-        set_time_limit(0);
+        /** @var SitemapListerInterface $sitemap */
+        $sitemapLister = $this->get('shopware_bundle_sitemap.service.sitemap_lister');
 
-        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
-        $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
+        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
+
+        $this->View()->sitemaps = $sitemapLister->getSitemaps();
+
+        $this->response->sendResponse();
+        ob_flush();
+
+        // Todo: Checken, wie alt die Sitemaps sind und bei Bedarf neu generieren
+        $age = 500;
+
+        if ($age > 1000) {
+            set_time_limit(0);
+
+            /** @var SitemapExporterInterface $exporter */
+            $exporter = $this->get('shopware_bundle_sitemap.service.sitemap_exporter');
+
+            $exporter->generate();
+        }
     }
 }

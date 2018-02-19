@@ -22,27 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Sitemap controller
- *
- * @category  Shopware
- *
- * @deprecated Will be removed in Shopware 6.0
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
+namespace Shopware\Bundle\SitemapBundle;
+
+interface SitemapNameGeneratorInterface
 {
     /**
-     * Index action method
+     * @param int $shopId
+     *
+     * @return string
      */
-    public function indexAction()
-    {
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-        set_time_limit(0);
-
-        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
-        $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
-    }
+    public function getSitemapFilename($shopId);
 }

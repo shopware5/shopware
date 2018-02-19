@@ -22,27 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Sitemap controller
- *
- * @category  Shopware
- *
- * @deprecated Will be removed in Shopware 6.0
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
+namespace Shopware\Bundle\SitemapBundle;
+
+use Shopware\Bundle\SitemapBundle\Struct\Url;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Routing;
+
+interface UrlProviderInterface
 {
     /**
-     * Index action method
+     * @param Routing\Context      $routingContext
+     * @param ShopContextInterface $shopContext
+     *
+     * @return null|Url[]
      */
-    public function indexAction()
-    {
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-        set_time_limit(0);
-
-        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
-        $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
-    }
+    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
 }
