@@ -49,8 +49,11 @@
 
         {* Product email notification *}
         {block name="frontend_detail_index_notification"}
-            {if $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
-                {include file="frontend/plugins/notification/index.tpl"}
+            {if $ShowNotification && $sArticle.notification && !$sArticle.isAvailable}
+                {* Support products with or without variants *}
+                {if ($sArticle.hasAvailableVariant && $sArticle.isSelectionSpecified) || !$sArticle.hasAvailableVariant}
+                    {include file="frontend/plugins/notification/index.tpl"}
+                {/if}
             {/if}
         {/block}
 

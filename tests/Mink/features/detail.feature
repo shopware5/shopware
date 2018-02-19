@@ -29,15 +29,22 @@ Feature: Detail page
 
 
     @plugin @notification
-    Scenario: I can let me notify, when an article is available
-        Given I am on the detail page for article 243
+    Scenario: I can let me notify, when an article is not available
+        Given The notification plugin is activated
+        And   I am on the detail page for article 243
         Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
 
-        When  I submit the notification form with "test@example.de"
+        When  I submit the notification form with "test-notification@example.de"
         Then  I should see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert! Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
+
+    @plugin @notification
+    Scenario: I should not see the notification box, when the notification plugin is disabled
+        Given The notification plugin is deactivated
+        And   I am on the detail page for article 243
+        Then  I should not see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
 
     @language @javascript
     Scenario: I can change the language
