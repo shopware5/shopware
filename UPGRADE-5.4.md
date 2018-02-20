@@ -130,7 +130,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Deprecations
 
 * Deprecated `forceSecure` and `sUseSSL` smarty flags. They are now without function.
-* Deprecated constants `Shopware::VERSION`, `Shopware::VERSION_TEXT` and `Shopware::REVISION`, they will be removed in Shopware v5.5. This information can now be retrieved from the DIC.
+* Deprecated constants `Shopware::VERSION`, `Shopware::VERSION_TEXT` and `Shopware::REVISION`, they will be removed in Shopware v5.6. This information can now be retrieved from the DIC.
     * New, alternative DIC parameters:
         - `shopware.release.version`
             The version of the Shopware installation (e.g. '5.4.0')
