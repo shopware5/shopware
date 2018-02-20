@@ -80,7 +80,7 @@ class Kernel implements HttpKernelInterface
     /**
      * @Deprecated
      *
-     * Will be removed in Shopware v5.5
+     * Will be removed in Shopware v5.6
      *
      * Use the following parameters from the DIC instead:
      *      'shopware.release.version'
