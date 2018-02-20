@@ -777,7 +777,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $models = $query->getResult();
         foreach ($models as $model) {
             foreach ($model->getDocuments() as $document) {
-                $files[] = Shopware()->DocPath('files/documents') . $document->getHash() . '.pdf';
+                $files[] = Shopware()->Container()->getParameter('shopware.app.documentsdir') . '/' . $document->getHash() . '.pdf';
             }
         }
         $this->mergeDocuments($files);
