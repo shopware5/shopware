@@ -162,18 +162,20 @@ class ProductProvider implements ProductProviderInterface
 
         $variantFacet = $this->variantHelper->getVariantFacet();
 
-        $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
+        if ($variantFacet) {
+            $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
 
-        $articleIds = array_map(
-            function (ListProduct $product) {
-                return $product->getId();
-            }, $products);
+            $articleIds = array_map(
+                function (ListProduct $product) {
+                    return $product->getId();
+                }, $products);
 
-        $configurations = $this->configurationLoader->getConfigurations($articleIds, $context);
+            $configurations = $this->configurationLoader->getConfigurations($articleIds, $context);
 
-        $combinations = $this->configurationLoader->getCombinations($articleIds);
+            $combinations = $this->configurationLoader->getCombinations($articleIds);
 
-        $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration, $variantFacet);
+            $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration, $variantFacet);
+        }
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -181,31 +183,37 @@ class ProductProvider implements ProductProviderInterface
             $number = $product->getNumber();
             $id = $product->getId();
 
-            if (array_key_exists($number, $variantConfiguration)) {
-                $product->setConfiguration($variantConfiguration[$number]);
-            }
-            if (array_key_exists($id, $configurations)) {
-                $product->setFullConfiguration($configurations[$id]);
-            }
-            if (array_key_exists($id, $combinations)) {
-                $product->setAvailableCombinations($combinations[$id]);
-            }
+            if ($variantFacet) {
+                if (array_key_exists($number, $variantConfiguration)) {
+                    $product->setConfiguration($variantConfiguration[$number]);
+                }
+                if (array_key_exists($id, $configurations)) {
+                    $product->setFullConfiguration($configurations[$id]);
+                }
+                if (array_key_exists($id, $combinations)) {
+                    $product->setAvailableCombinations($combinations[$id]);
+                }
 
-            if ($variantFacet && $product->getConfiguration()) {
-                $product->setVisibility(
-                    $this->listingVariationLoader->getVisibility($product, $variantFacet)
-                );
+                if ($product->getConfiguration()) {
+                    $product->setVisibility(
+                        $this->listingVariationLoader->getVisibility($product, $variantFacet)
+                    );
 
-                $product->setFilterConfiguration(
-                    $this->buildFilterConfiguration(
-                        $variantFacet->getExpandGroupIds(),
-                        $product->getConfiguration(),
-                        $product->getFullConfiguration()
-                    )
-                );
-                $product->setListingVariationPrices(
-                    $listingPrices[$product->getNumber()]
-                );
+                    $product->setFilterConfiguration(
+                        $this->buildFilterConfiguration(
+                            $variantFacet->getExpandGroupIds(),
+                            $product->getConfiguration(),
+                            $product->getFullConfiguration()
+                        )
+                    );
+                    $product->setListingVariationPrices(
+                        $listingPrices[$product->getNumber()]
+                    );
+                }
+            } else {
+                if (!$product->isMainVariant()) {
+                    continue;
+                }
             }
 
             if (isset($average[$number])) {
