@@ -928,7 +928,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function openPdfAction()
     {
         $name = basename($this->Request()->getParam('id')) . '.pdf';
-        $file = Shopware()->DocPath('files/documents') . $name;
+        $file = Shopware()->Container()->getParameter('shopware.app.documentsdir') . '/' . $name;
         if (!file_exists($file)) {
             $this->View()->assign([
                 'success' => false,
