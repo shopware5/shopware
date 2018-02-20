@@ -203,9 +203,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             }
         }
 
-        if (empty(Shopware()->System()->_POST['sVoteName'])) {
-            $sErrorFlag['sVoteName'] = true;
-        }
         if (empty(Shopware()->System()->_POST['sVoteSummary'])) {
             $sErrorFlag['sVoteSummary'] = true;
         }

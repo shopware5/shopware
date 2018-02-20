@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             'mediamanager-album-tree button[action=mediamanager-album-tree-add]': {
                 click: me.onOpenAddWindow
             },
-            //remove selected album
+            // Remove selected album
             'mediamanager-album-tree button[action=mediamanager-album-tree-delete]': {
                 click: me.onDeleteAlbumButton
             },
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
     /**
      * Event listener method which fired when the user uploads files
-     * and the upload completed. Refreshs the tree and select the last
+     * and the upload completed. Refreshes the tree and select the last
      * selected node.
      */
     onReload: function () {
@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             view = tree.viewConfig.plugins.cmp,
             plugin = view.initialConfig.plugins.cmp.plugins[0];
 
-        //lock drag and drop if the tree is filtered.
+        // Lock drag and drop if the tree is filtered.
         if (searchString.length > 0) {
             plugin.dropZone.lock();
             plugin.dragZone.lock();
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             plugin.dragZone.unlock();
         }
 
-        //search value changed?
+        // Search value changed?
         if (store.getProxy().extraParams.filter === 'undefined' && searchString.length === 0) {
             return;
         }
@@ -257,9 +257,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * Opens the "album settings"-window
      *
      * @event editSettings
-     * @param [object] scope - Scope of the fired event
-     * @param [object] view - the Ext.tree.Panel
-     * @param [object] record - clicked Ext.data.Model
+     * @param { object } scope - Scope of the fired event
+     * @param { object } view - the Ext.tree.Panel
+     * @param { object } record - clicked Ext.data.Model
      * @return void
      */
     onOpenSettingsWindow: function (scope, view, record) {
@@ -273,7 +273,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * The method adds a new album to the store
      *
      * @event click
-     * @param [object] btn - pressed Ext.button.Button
+     * @param { object } btn - pressed Ext.button.Button
      */
     onAddAlbum: function(btn) {
         var win = btn.up('window'),
@@ -281,14 +281,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             values = form.getForm().getValues(),
             me = this,
             model = me.getModel('Album').create(values),
-            store = me.getAlbumTree().store,
             tree = me.getAlbumTree();
 
         tree.setLoading(true);
 
         model.save({
             callback: function(record) {
-                if (win.closeAction == 'destroy') {
+                if (win.closeAction === 'destroy') {
                     win.destroy();
                 } else {
                     win.close()
@@ -306,9 +305,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * Opens the "add album"-window with the parent id
      *
      * @event addSubAlbum
-     * @param [object] scope - Scope of the fired event
-     * @param [object] view - Ext.tree.Panel which has fired the event
-     * @param [object] record - Associated Ext.data.Model
+     * @param { object } scope - Scope of the fired event
+     * @param { object } view - Ext.tree.Panel which has fired the event
+     * @param { object } record - Associated Ext.data.Model
      * @return void
      */
     onAddSubAlbum: function (scope, view, record) {
@@ -329,11 +328,10 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param record
      */
     onDeleteAlbum: function (scope, view, record) {
-        var me = this,
-            tree = me.getAlbumTree();
+        var tree = this.getAlbumTree();
 
         record.set('albumID', record.get('id'));
-        me.deleteAlbum(record, tree);
+        this.deleteAlbum(record, tree);
     },
 
     /**
@@ -351,7 +349,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             return;
         }
         selected = tree.getSelectionModel().getSelection()[0];
-        //delete only leaf albums
+        // Delete only leaf albums
         if (selected.isLeaf()) {
             selected.set('albumID', selected.get('id'));
             me.deleteAlbum(selected, tree);
@@ -377,9 +375,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * Deletes the associated album.
      *
      * @event deleteAlbum
-     * @param scope
-     * @param view
-     * @param record
      */
     onEmptyTrash: function () {
         var me = this;
@@ -392,8 +387,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             Ext.Ajax.request({
                 url: '{url controller="MediaManager" action="emptyTrash"}',
                 success: function(response) {
-                    var response = Ext.JSON.decode(response.responseText);
-                    if(response.success) {
+                    var responseText = Ext.JSON.decode(response.responseText);
+                    if(responseText.success) {
                         me.onReload();
                         me.getController('Media').onReload();
                     }
@@ -409,9 +404,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * Moves an album to a different position.
      *
      * @event itemmove
-     * @param [object] node - actual Ext.data.Model
-     * @param [object] oldParent - old Ext.data.Model
-     * @param [object] newParent - updated Ext.data.Model
+     * @param { object } node - actual Ext.data.Model
+     * @param { object } oldParent - old Ext.data.Model
+     * @param { object } newParent - updated Ext.data.Model
      * @return void
      */
     onMoveAlbum: function (node, oldParent, newParent) {
@@ -431,7 +426,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * Changes the album settings
      *
      * @event click
-     * @param [object] btn - pressed Ext.button.Button
+     * @param { object } btn - pressed Ext.button.Button
      * @return void
      */
     onSaveSettings: function (btn) {
@@ -470,7 +465,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      *
      * @param model
      * @param win
-     * @param setSizes
+     *
      * @returns boolean
      */
     handleAlbumModelData: function (model, win) {
@@ -485,6 +480,10 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         return thumbChanged;
     },
 
+    /**
+     * @param { Object } model
+     * @param { Array } thumbItems
+     */
     setAlbumSizes: function(model, thumbItems){
         var sizes = [];
 
@@ -515,7 +514,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
                 me.setAlbumSizes(model, thumbItems);
 
-                // save the album and generate the thumbnails on the callback
+                // Save the album and generate the thumbnails on the callback
                 model.save({
                     callback: function () {
                         window.fireEvent('createThumbnailWindow', model);
@@ -530,19 +529,20 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
     /**
      * Determines if the thumbnails sizes have changed
      *
-     * @param thumbnailItems
-     * @param oldSizes
-     * @returns bool
+     * @param { Array } thumbnailItems
+     * @param { Array } oldSizes
+     *
+     * @returns boolean
      */
     checkThumbnailsChanged: function (thumbnailItems, oldSizes) {
         var thumbnails = [];
 
-        // check if new thumbnails were created or changed
+        // Check if new thumbnails were created or changed
         Ext.each(thumbnailItems, function (item) {
             thumbnails.push(item.data);
         });
 
-        return JSON.stringify(oldSizes) != JSON.stringify(thumbnails);
+        return JSON.stringify(oldSizes) !== JSON.stringify(thumbnails);
     }
 });
 //{/block}

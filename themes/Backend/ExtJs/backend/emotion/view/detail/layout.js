@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
 
         me.tplStore = Ext.create('Shopware.apps.Emotion.store.Templates').load();
 
-        me.tplComboBox = Ext.create('Ext.form.field.ComboBox', {
+        me.tplComboBox = Ext.create('Shopware.form.field.PagingComboBox', {
             fieldLabel: me.snippets.fields.templateLabel,
             name: 'templateId',
             valueField: 'id',
@@ -122,7 +122,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             queryMode: 'remote',
             store: me.tplStore,
             emptyText: me.snippets.fields.templateEmptyText,
-            labelWidth: layoutLabelWidth
+            labelWidth: layoutLabelWidth,
+            preLoadStoredEntry: true
         });
 
         me.modeSelectionTpl = new Ext.XTemplate(

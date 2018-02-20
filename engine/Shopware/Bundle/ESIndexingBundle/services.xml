@@ -101,6 +101,7 @@
             <argument type="service" id="shopware_elastic_search.product_query_factory" />
 
             <tag name="shopware_elastic_search.data_indexer" />
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
         <service id="shopware_elastic_search.product_synchronizer" class="Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer">

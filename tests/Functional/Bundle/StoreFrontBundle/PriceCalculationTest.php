@@ -68,19 +68,19 @@ class PriceCalculationTest extends TestCase
         $cheapest = $listProduct->getCheapestPrice();
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(67.227, $cheapest->getCalculatedPrice());
+        $this->assertEquals(67.23, $cheapest->getCalculatedPrice());
         $this->assertEquals(73.950, $cheapest->getCalculatedPseudoPrice());
-        $this->assertEquals(134.454, $cheapest->getCalculatedReferencePrice());
+        $this->assertEquals(134.46, $cheapest->getCalculatedReferencePrice());
 
         $graduation = $graduations[1];
         $this->assertEquals(50.420, $graduation->getCalculatedPrice());
-        $this->assertEquals(57.143, $graduation->getCalculatedPseudoPrice());
+        $this->assertEquals(57.14, $graduation->getCalculatedPseudoPrice());
         $this->assertEquals(100.84, $graduation->getCalculatedReferencePrice());
 
         $graduation = $graduations[2];
-        $this->assertEquals(33.613, $graduation->getCalculatedPrice());
-        $this->assertEquals(40.336, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(67.226, $graduation->getCalculatedReferencePrice());
+        $this->assertEquals(33.61, $graduation->getCalculatedPrice());
+        $this->assertEquals(40.34, $graduation->getCalculatedPseudoPrice());
+        $this->assertEquals(67.22, $graduation->getCalculatedReferencePrice());
     }
 
     public function testCurrencyFactor()
@@ -148,19 +148,19 @@ class PriceCalculationTest extends TestCase
         $cheapest = $listProduct->getCheapestPrice();
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(70.588, $cheapest->getCalculatedPrice());
-        $this->assertEquals(77.647, $cheapest->getCalculatedPseudoPrice());
-        $this->assertEquals(141.176, $cheapest->getCalculatedReferencePrice());
+        $this->assertEquals(70.59, $cheapest->getCalculatedPrice());
+        $this->assertEquals(77.65, $cheapest->getCalculatedPseudoPrice());
+        $this->assertEquals(141.18, $cheapest->getCalculatedReferencePrice());
 
         $graduation = $graduations[1];
-        $this->assertEquals(52.941, $graduation->getCalculatedPrice());
-        $this->assertEquals(60.000, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(105.882, $graduation->getCalculatedReferencePrice());
+        $this->assertEquals(52.94, $graduation->getCalculatedPrice());
+        $this->assertEquals(60.00, $graduation->getCalculatedPseudoPrice());
+        $this->assertEquals(105.88, $graduation->getCalculatedReferencePrice());
 
         $graduation = $graduations[2];
-        $this->assertEquals(35.294, $graduation->getCalculatedPrice());
-        $this->assertEquals(42.353, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(70.588, $graduation->getCalculatedReferencePrice());
+        $this->assertEquals(35.29, $graduation->getCalculatedPrice());
+        $this->assertEquals(42.35, $graduation->getCalculatedPseudoPrice());
+        $this->assertEquals(70.58, $graduation->getCalculatedReferencePrice());
     }
 
     public function testDiscountCurrencyGross()

@@ -36,6 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class ProductListingVariationLoader
 {
@@ -135,9 +136,11 @@ class ProductListingVariationLoader
 
             /** @var array[] $customerPrices */
             foreach ($customerPrices as $number => $productPrices) {
-                $product = $products[$number];
                 foreach ($productPrices as &$price) {
-                    $price = $this->calculator->calculatePrice($price, $product->getTax(), $context);
+                    // Don't use a tax, because the tax is calculated before in the fetchPrices method
+                    $tax = new Tax();
+                    $tax->setTax(0);
+                    $price = $this->calculator->calculatePrice($price, $tax, $context);
                 }
 
                 $calculated[$number][$key] = $productPrices;
@@ -342,18 +345,21 @@ class ProductListingVariationLoader
         $query->addSelect([
             'prices.articleID',
             'relations.article_id as variant_id',
-            'prices.price',
+            $this->listingPriceHelper->getSelection($context) . 'as price',
             'relations.option_id',
             'options.group_id',
         ]);
 
-        $query->from('s_articles_details', 'variant');
-        $query->innerJoin('variant', '(' . $priceTable . ')', 'prices', 'variant.id = prices.articledetailsID');
+        $query->from('s_articles_details', 'availableVariant');
+        $query->innerJoin('availableVariant', 's_articles', 'product', 'availableVariant.articleId = product.id');
+        $query->innerJoin('availableVariant', '(' . $priceTable . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
         $query->innerJoin('prices', 's_article_configurator_option_relations', 'relations', 'relations.article_id = prices.articledetailsID');
         $query->innerJoin('relations', 's_article_configurator_options', 'options', 'relations.option_id = options.id');
+        $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
+        $this->listingPriceHelper->joinPriceGroup($query);
 
-        $query->andWhere('variant.laststock * variant.instock >= variant.laststock * variant.minpurchase');
-        $query->andWhere('variant.active = 1');
+        $query->andWhere('availableVariant.laststock * availableVariant.instock >= availableVariant.laststock * availableVariant.minpurchase');
+        $query->andWhere('availableVariant.active = 1');
         $query->andWhere('prices.to = :to');
         $query->andWhere('prices.articleID IN (:products)');
 
