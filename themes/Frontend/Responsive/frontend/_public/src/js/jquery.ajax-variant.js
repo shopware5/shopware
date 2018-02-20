@@ -142,11 +142,10 @@
                         .addPlugin('*[data-add-article="true"]', 'swAddArticle')
                         .addPlugin('*[data-modalbox="true"]', 'swModalbox');
 
-                    document.asyncReady = function (callback) {
-                        if (typeof callback === 'function') {
-                            window.setTimeout(callback.apply(document), 0);
-                        }
-                    };
+                    // Replace the async ready to fire the callbacks right after registration
+                    if (Object.prototype.hasOwnProperty.call(window, 'replaceAsyncReady') && typeof (window.replaceAsyncReady) === 'function') {
+                        window.replaceAsyncReady();
+                    }
 
                     // Plugin developers should subscribe to this event to update their plugins accordingly
                     $.publish('plugin/swAjaxVariant/onRequestData', [me, response, values, stateObj.location]);
