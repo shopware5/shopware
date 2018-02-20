@@ -24,7 +24,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration965 extends AbstractMigration
+class Migrations_Migration1212 extends AbstractMigration
 {
     /**
      * Add a 'changed' columns in 's_order' and 's_user' that save the timestamp of the last change of the row.
