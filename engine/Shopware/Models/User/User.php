@@ -601,7 +601,7 @@ class User extends ModelEntity
     {
         $this->encoder = $encoder;
         
-        return $this
+        return $this;
     }
 
     /**
