@@ -36,6 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class ProductListingVariationLoader
 {
@@ -135,9 +136,11 @@ class ProductListingVariationLoader
 
             /** @var array[] $customerPrices */
             foreach ($customerPrices as $number => $productPrices) {
-                $product = $products[$number];
                 foreach ($productPrices as &$price) {
-                    $price = $this->calculator->calculatePrice($price, $product->getTax(), $context);
+                    // Don't use a tax, because the tax is calculated before in the fetchPrices method
+                    $tax = new Tax();
+                    $tax->setTax(0);
+                    $price = $this->calculator->calculatePrice($price, $tax, $context);
                 }
 
                 $calculated[$number][$key] = $productPrices;
