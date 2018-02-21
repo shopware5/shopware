@@ -30,7 +30,7 @@ use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\Query\TermQuery;
 use Shopware\Api\Entity\Search\Query\TermsQuery;
 use Shopware\Category\Tree\TreeBuilder;
-use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\StorefrontContext;
 
 class NavigationService
 {
@@ -44,9 +44,9 @@ class NavigationService
         $this->repository = $repository;
     }
 
-    public function load(string $categoryId, ShopContext $context): Navigation
+    public function load(string $categoryId, StorefrontContext $context): Navigation
     {
-        $activeCategory = $this->repository->readBasic([$categoryId], $context->getTranslationContext())
+        $activeCategory = $this->repository->readBasic([$categoryId], $context->getShopContext())
             ->get($categoryId);
 
         $systemCategory = $context->getShop()->getCategory();
@@ -58,7 +58,7 @@ class NavigationService
         $criteria->addFilter(new TermQuery('category.active', 1));
 
         /** @var CategorySearchResult $categories */
-        $categories = $this->repository->search($criteria, $context->getTranslationContext());
+        $categories = $this->repository->search($criteria, $context->getShopContext());
 
         $tree = TreeBuilder::buildTree(
             $systemCategory->getId(),

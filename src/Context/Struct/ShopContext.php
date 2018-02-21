@@ -24,137 +24,137 @@
 
 namespace Shopware\Context\Struct;
 
-use Shopware\Api\Currency\Struct\CurrencyBasicStruct;
-use Shopware\Api\Customer\Struct\CustomerBasicStruct;
-use Shopware\Api\Customer\Struct\CustomerGroupBasicStruct;
-use Shopware\Api\Payment\Struct\PaymentMethodBasicStruct;
-use Shopware\Api\Shipping\Struct\ShippingMethodBasicStruct;
-use Shopware\Api\Shop\Struct\ShopDetailStruct;
-use Shopware\Api\Tax\Collection\TaxBasicCollection;
-use Shopware\Cart\Delivery\Struct\ShippingLocation;
+use Shopware\Api\Shop\Struct\ShopBasicStruct;
+use Shopware\Defaults;
 use Shopware\Framework\Struct\Struct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ShopContext extends Struct
 {
-    /**
-     * @var CustomerGroupBasicStruct
-     */
-    protected $currentCustomerGroup;
+    protected $languageId;
 
     /**
-     * @var CustomerGroupBasicStruct
+     * @var string
      */
-    protected $fallbackCustomerGroup;
+    protected $fallbackLanguageId;
 
     /**
-     * @var CurrencyBasicStruct
+     * @var string
      */
-    protected $currency;
+    protected $versionId;
 
     /**
-     * @var ShopDetailStruct
+     * @var string
      */
-    protected $shop;
+    protected $applicationId;
 
     /**
-     * @var TaxBasicCollection
+     * @var array
      */
-    protected $taxRules;
+    protected $catalogueIds;
 
     /**
-     * @var CustomerBasicStruct|null
+     * @var string
      */
-    protected $customer;
+    protected $currencyId;
 
     /**
-     * @var PaymentMethodBasicStruct
+     * @var float
      */
-    protected $paymentMethod;
+    protected $currencyFactor;
 
     /**
-     * @var ShippingMethodBasicStruct
+     * @var array
      */
-    protected $shippingMethod;
+    protected $contextRules;
 
-    /**
-     * @var ShippingLocation
-     */
-    protected $shippingLocation;
-
-    public function __construct(
-        ShopDetailStruct $shop,
-        CurrencyBasicStruct $currency,
-        CustomerGroupBasicStruct $currentCustomerGroup,
-        CustomerGroupBasicStruct $fallbackCustomerGroup,
-        TaxBasicCollection $taxRules,
-        PaymentMethodBasicStruct $paymentMethod,
-        ShippingMethodBasicStruct $shippingMethod,
-        ShippingLocation $shippingLocation,
-        ?CustomerBasicStruct $customer
-    ) {
-        $this->currentCustomerGroup = $currentCustomerGroup;
-        $this->fallbackCustomerGroup = $fallbackCustomerGroup;
-        $this->currency = $currency;
-        $this->shop = $shop;
-        $this->taxRules = $taxRules;
-        $this->customer = $customer;
-        $this->paymentMethod = $paymentMethod;
-        $this->shippingMethod = $shippingMethod;
-        $this->shippingLocation = $shippingLocation;
+    public function __construct(string $applicationId, array $catalogueIds, array $contextRules, string $currencyId, string $languageId, ?string $fallbackLanguageId = null, string $versionId = Defaults::LIVE_VERSION, float $currencyFactor = 1.0)
+    {
+        $this->languageId = $languageId;
+        $this->fallbackLanguageId = $fallbackLanguageId;
+        $this->versionId = $versionId;
+        $this->applicationId = $applicationId;
+        $this->catalogueIds = $catalogueIds;
+        $this->currencyId = $currencyId;
+        $this->currencyFactor = $currencyFactor;
+        $this->contextRules = $contextRules;
     }
 
-    public function getCurrentCustomerGroup(): CustomerGroupBasicStruct
+    public static function createDefaultContext(): self
     {
-        return $this->currentCustomerGroup;
+        return new self(Defaults::SHOP, [Defaults::CATALOGUE], [], Defaults::CURRENCY, Defaults::SHOP);
     }
 
-    public function getFallbackCustomerGroup(): CustomerGroupBasicStruct
+    public static function createFromShop(ShopBasicStruct $shop): self
     {
-        return $this->fallbackCustomerGroup;
+        return new self(
+            $shop->getId(),
+            [Defaults::CATALOGUE],
+            [],
+            $shop->getCurrency()->getId(),
+            $shop->getLocaleId(),
+            $shop->getFallbackTranslationId(),
+            Defaults::LIVE_VERSION,
+            $shop->getCurrency()->getFactor()
+        );
     }
 
-    public function getCurrency(): CurrencyBasicStruct
+    public function hasFallback(): bool
     {
-        return $this->currency;
+        return $this->getFallbackLanguageId() !== null
+            && $this->getFallbackLanguageId() !== $this->getLanguageId();
     }
 
-    public function getShop(): ShopDetailStruct
+    public function getApplicationId(): string
     {
-        return $this->shop;
+        return $this->applicationId;
     }
 
-    public function getTaxRules(): TaxBasicCollection
+    public function getVersionId(): string
     {
-        return $this->taxRules;
+        return $this->versionId;
     }
 
-    public function getCustomer(): ?CustomerBasicStruct
+    public function getLanguageId(): string
     {
-        return $this->customer;
+        return $this->languageId;
     }
 
-    public function getPaymentMethod(): PaymentMethodBasicStruct
+    public function getCatalogueIds(): array
     {
-        return $this->paymentMethod;
+        return $this->catalogueIds;
     }
 
-    public function getShippingMethod(): ShippingMethodBasicStruct
+    public function getCurrencyId(): string
     {
-        return $this->shippingMethod;
+        return $this->currencyId;
     }
 
-    public function getShippingLocation(): ShippingLocation
+    public function getCurrencyFactor(): float
     {
-        return $this->shippingLocation;
+        return $this->currencyFactor;
     }
 
-    public function getTranslationContext(): TranslationContext
+    public function getContextRules(): array
     {
-        return TranslationContext::createFromShop($this->shop);
+        return $this->contextRules;
+    }
+
+    public function getFallbackLanguageId(): ? string
+    {
+        return $this->fallbackLanguageId;
+    }
+
+    public function createWithVersionId(string $versionId)
+    {
+        return new self(
+            $this->applicationId,
+            $this->catalogueIds,
+            $this->contextRules,
+            $this->currencyId,
+            $this->languageId,
+            $this->fallbackLanguageId,
+            $versionId,
+            $this->currencyFactor
+        );
     }
 }

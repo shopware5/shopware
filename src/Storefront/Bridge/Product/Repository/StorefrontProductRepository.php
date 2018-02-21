@@ -14,7 +14,7 @@ use Shopware\Cart\Price\PriceCalculator;
 use Shopware\Cart\Price\Struct\PriceDefinition;
 use Shopware\Cart\Tax\Struct\PercentageTaxRule;
 use Shopware\Cart\Tax\Struct\TaxRuleCollection;
-use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Storefront\Bridge\Product\Struct\ProductBasicStruct;
 
 class StorefrontProductRepository
@@ -44,16 +44,16 @@ class StorefrontProductRepository
         $this->productMediaRepository = $productMediaRepository;
     }
 
-    public function read(array $ids, ShopContext $context): ProductBasicCollection
+    public function read(array $ids, StorefrontContext $context): ProductBasicCollection
     {
-        $basics = $this->repository->readBasic($ids, $context->getTranslationContext());
+        $basics = $this->repository->readBasic($ids, $context->getShopContext());
 
         return $this->loadListProducts($basics, $context);
     }
 
-    public function search(Criteria $criteria, ShopContext $context): ProductSearchResult
+    public function search(Criteria $criteria, StorefrontContext $context): ProductSearchResult
     {
-        $basics = $this->repository->search($criteria, $context->getTranslationContext());
+        $basics = $this->repository->search($criteria, $context->getShopContext());
         $listProducts = $this->loadListProducts($basics, $context);
 
         $basics->clear();
@@ -62,7 +62,7 @@ class StorefrontProductRepository
         return $basics;
     }
 
-    private function fetchMedia(array $ids, ShopContext $context): ProductMediaSearchResult
+    private function fetchMedia(array $ids, StorefrontContext $context): ProductMediaSearchResult
     {
         /** @var ProductMediaSearchResult $media */
         $criteria = new Criteria();
@@ -70,10 +70,10 @@ class StorefrontProductRepository
         $criteria->addSorting(new FieldSorting('product_media.isCover', FieldSorting::DESCENDING));
         $criteria->addSorting(new FieldSorting('product_media.position'));
 
-        return $this->productMediaRepository->search($criteria, $context->getTranslationContext());
+        return $this->productMediaRepository->search($criteria, $context->getShopContext());
     }
 
-    private function loadListProducts(ProductBasicCollection $products, ShopContext $context): ProductBasicCollection
+    private function loadListProducts(ProductBasicCollection $products, StorefrontContext $context): ProductBasicCollection
     {
         $media = $this->fetchMedia($products->getIds(), $context);
 
