@@ -54,17 +54,24 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
      */
     public function createCategoryQuery($categoryId, $limit = null)
     {
-        $query = $this->connection->createQueryBuilder()
-            ->select(['categories.articleID', 'categories.articleID'])
-            ->from('s_articles_categories_ro', 'categories')
-            ->andWhere('categories.articleID > :lastId')
-            ->andWhere('categories.categoryID = :categoryId')
-            ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT)
-            ->setParameter(':lastId', 0, \PDO::PARAM_INT)
-            ->orderBy('categories.articleID');
+        if (!$this->variantHelper->getVariantFacet()) {
+            $query = $this->connection->createQueryBuilder()
+                ->select(['categories.articleID', 'categories.articleID'])
+                ->from('s_articles_categories_ro', 'categories')
+                ->andWhere('categories.articleID > :lastId')
+                ->andWhere('categories.categoryID = :categoryId')
+                ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT)
+                ->setParameter(':lastId', 0, \PDO::PARAM_INT)
+                ->orderBy('categories.articleID');
 
-        if ($limit !== null) {
-            $query->setMaxResults($limit);
+            if ($limit !== null) {
+                $query->setMaxResults($limit);
+            }
+        } else {
+            $query = $this->createQuery($limit);
+            $query->innerJoin('variant', 's_articles_categories_ro', 'categories', 'variant.articleID = categories.articleID')
+                ->andWhere('categories.categoryID = :categoryId')
+                ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT);
         }
 
         return new LastIdQuery($query);
@@ -212,6 +219,11 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
             ->andWhere('variant.id > :lastId')
             ->setParameter(':lastId', 0)
             ->orderBy('variant.id');
+
+        if (!$this->variantHelper->getVariantFacet()) {
+            $query->andWhere('variant.kind = :kind')
+                ->setParameter(':kind', 1);
+        }
 
         if ($limit !== null) {
             $query->setMaxResults($limit);

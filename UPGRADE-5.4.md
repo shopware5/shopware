@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added database field `s_articles_details.laststock` to be able to define per variant if said variant is available when the stock is lower or equal to 0
 * Added `lastStock` field to `\Shopware\Models\Article\Detail`
+* Added database field `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
 * Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
@@ -23,20 +24,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new service in the DIC containing all parameters above 
     - `shopware.release`
         A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
-* Added new SEO routes
-    - `sViewport=register`:
-        `/anmeldung` (DE) and `/signup` (EN)
-    - `sViewport=checkout&sAction=cart`:
-        `/warenkorb` (DE) and `/basket` (EN)
-    - `sViewport=checkout&sAction=confirm`:
-        `/bestellen` (DE) and `/order` (EN)
-    - `sViewport=checkout&sAction=shippingPayment`:
-        `/zahlungsart-und-versand` (DE) and `/payment-and-delivery` (EN)
-    - `sViewport=checkout`:
-        `/pruefen-und-bestellen` (DE) and `/check-and-order` (EN)
-    - `sViewport=checkout&sAction=finish`:
-        `/vielen-dank-fuer-ihre-bestellung` (DE) and `/thank-you-for-your-order` (EN)
-
 * Added several paths to the DIC:
 	- `shopware.plugin_directories.projectplugins` 
 		Path to project specific plugins, see [Composer project](https://github.com/shopware/composer-project)
@@ -55,10 +42,20 @@ This changelog references changes done in Shopware 5.4 patch versions.
 	
 	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
 
+* Added all additional article columns to product import/export
+* Added backend config option `logMailLevel` to choose the minimum log level for sending e-mail notifications
+* Added snippet `frontend/detail/data/DetailDataPriceInfo` in ajax cart template
+* Added snippet `frontend/detail/DetailCommentAnonymousName` for anonymous product ratings
+* Added block `frontend_checkout_ajax_cart_prices_info` in `frontend/checkout/ajax_cart.tpl`
+* Added config `preLoadStoredEntry` to `Shopware.form.field.PagingComboBox` to be compatible with saving and loading entries from e.g. the second page.
+* Added order attributes to return values of `OrderRepository::getDetails`
+* Added option for batch updating plugins to plugin update command
+* Added defaults for `ignored_url_parameters` setting of HTTP cache in `config.php`. See [Ignore some HTTP parameters](https://developers.shopware.com/developers-guide/http-cache/#ignore-some-http-parameters) for more information. 
+* Added optional `id` parameter to `getTemplatesAction` in `engine/Shopware/Controllers/Backend/Emotion.php` to allow fetching of a single template
+
 ### Changes
 
-* Updated mPDF to v6.1.4 and included it via composer
-* Made the event selectors configurable in the `swJumpToTab` jQuery plugin
+* Changed the event selectors to make them configurable in the `swJumpToTab` jQuery plugin
 * `\Shopware\Bundle\SearchBundle\ProductSearchResult::__construct` requires now the used Criteria and ShopContext object
 * Changed route to POST to be more HTTP compliant
 * Changed all writing actions to POST to be more HTTP compliant.
@@ -84,6 +81,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - Frontend/Compare.php
         - Frontend/Note.php
         - Widgets/Listing.php
+* Changed the paging in a listing so that using it while using the live filter reloading will now scroll to the top paging bar
+* Changed name field in product ratings to be optional
+* Changed loading of the themes/_private folder to be always executed
+* Changed the `checkOrderStatus` method in `Shopware_Controllers_Backend_Order` to only send e-mails when necessary
+* Changed `themes/Backend/ExtJs/backend/order/controller/batch.js` to inform the user about configuration errors
+* Changed `themes/Backend/ExtJs/backend/order/view/batch/form.js` to allow for more precise form validation and better feedback to the user
+
+* Changed rounding of prices to two decimal digits in `engine/Shopware/Bundle/StoreFrontBundle/Service/Core/PriceCalculator.php` and `engine/Shopware/Core/sArticles.php`
 
 ### Removals
 
@@ -91,6 +96,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Removed "Force http canonical url" setting in basic settings as it is obsolete
 * Removed config option `template_security['enabled']` for toggling smarty security
 * Removed config option `blogcategory` and `bloglimit`
+* Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
 * Removed support for separate SSL host and SSL path. Also the `Use SSL` and `Always SSL` options were merged.
     * Removed database fields
         - `s_core_shops.secure_host`
@@ -124,7 +130,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Deprecations
 
 * Deprecated `forceSecure` and `sUseSSL` smarty flags. They are now without function.
-* Deprecated constants `Shopware::VERSION`, `Shopware::VERSION_TEXT` and `Shopware::REVISION`, they will be removed in Shopware v5.5. This information can now be retrieved from the DIC.
+* Deprecated constants `Shopware::VERSION`, `Shopware::VERSION_TEXT` and `Shopware::REVISION`, they will be removed in Shopware v5.6. This information can now be retrieved from the DIC.
     * New, alternative DIC parameters:
         - `shopware.release.version`
             The version of the Shopware installation (e.g. '5.4.0')
@@ -146,3 +152,4 @@ This changelog references changes done in Shopware 5.4 patch versions.
     - `/checkout/ajaxAmount`
     - `/address/ajaxSelection`
     - `/address/ajaxEditor`
+* Deprecated `\Shopware\Models\Order\Document\Type`, use `\Shopware\Models\Document\Document` instead. The old document type will be removed with 5.5.

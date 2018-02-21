@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Vote.view.list.extensions.Info', {
                         '</p>',
                         '<p'+rowStyle+'>',
                             '<b>{s name=author}{/s}:</b> ',
-                            '<span>{literal}{name}{/literal}</span>',
+                            '<span>{literal}{[this.nameRenderer(values.name)]}{/literal}</span>',
                         '</p>',
                         '<tpl if="email">',
                             '<p'+rowStyle+'>',
@@ -101,8 +101,8 @@ Ext.define('Shopware.apps.Vote.view.list.extensions.Info', {
                 /**
                  * Member function of the template which formats a date string
                  *
-                 * @param [string] value - Date string in the following format: Y-m-d H:i:s
-                 * @return [string] formatted date string
+                 * @param { string } value - Date string in the following format: Y-m-d H:i:s
+                 * @return { string } formatted date string
                  */
                 formatDate: function(value) {
                     return Ext.util.Format.date(value);
@@ -110,10 +110,23 @@ Ext.define('Shopware.apps.Vote.view.list.extensions.Info', {
 
                 /**
                  * Function to format the points as a stars-rating
-                 * @param points Contains the points
+                 * @param { int } points Contains the points
+                 * @return { string }
                  */
                 formatPoints: function(points) {
                     return me.renderPoints(points);
+                },
+
+                /**
+                 * Function to replace an empty name
+                 * @param { string } value
+                 * @return { string }
+                 */
+                nameRenderer: function(value) {
+                    if (!value) {
+                        return '{s name=DetailCommentAnonymousName namespace=frontend/detail/comment}{/s}';
+                    }
+                    return value;
                 }
             }
         )

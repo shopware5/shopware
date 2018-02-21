@@ -56,8 +56,10 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
+        $rules = $product->getPriceRules();
+
         $prices = [];
-        foreach ($product->getPriceRules() as $rule) {
+        foreach ($rules as $rule) {
             $prices[] = $this->calculatePriceStruct($rule, $tax, $context);
         }
 
@@ -169,6 +171,6 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     {
         $value = $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
 
-        return round($value, 3);
+        return round($value, 2);
     }
 }

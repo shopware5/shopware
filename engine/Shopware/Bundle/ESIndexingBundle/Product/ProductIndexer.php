@@ -28,6 +28,7 @@ use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 
 class ProductIndexer implements DataIndexerInterface
 {
@@ -47,18 +48,26 @@ class ProductIndexer implements DataIndexerInterface
     private $queryFactory;
 
     /**
+     * @var VariantHelperInterface
+     */
+    private $variantHelper;
+
+    /**
      * @param Client                       $client
      * @param ProductProviderInterface     $provider
      * @param ProductQueryFactoryInterface $queryFactory
+     * @param VariantHelperInterface       $variantHelper
      */
     public function __construct(
         Client $client,
         ProductProviderInterface $provider,
-        ProductQueryFactoryInterface $queryFactory
+        ProductQueryFactoryInterface $queryFactory,
+        VariantHelperInterface $variantHelper
     ) {
         $this->client = $client;
         $this->provider = $provider;
         $this->queryFactory = $queryFactory;
+        $this->variantHelper = $variantHelper;
     }
 
     /**
@@ -72,8 +81,14 @@ class ProductIndexer implements DataIndexerInterface
         $progress->start($idQuery->fetchCount(), 'Indexing products');
 
         while ($ids = $idQuery->fetch()) {
-            $query = $this->queryFactory->createProductIdQuery($ids);
-            $this->indexProducts($index, $query->fetch());
+            if (!$this->variantHelper->getVariantFacet()) {
+                $query = $this->queryFactory->createProductIdQuery($ids);
+                $numbers = $query->fetch();
+            } else {
+                $numbers = $ids;
+            }
+
+            $this->indexProducts($index, $numbers);
             $progress->advance(count(array_unique($ids)));
         }
 

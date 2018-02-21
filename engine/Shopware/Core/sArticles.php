@@ -696,9 +696,9 @@ class sArticles
             }
         } else {
             if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $price = round($price, 3);
+                $price = round($price, 2);
             } else {
-                $price = round($price * (100 + $tax) / 100, 3);
+                $price = round($price * (100 + $tax) / 100, 2);
             }
         }
 
@@ -2384,7 +2384,18 @@ class sArticles
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
-        $searchResult = $this->searchService->search($criteria, $context);
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+
+        if (count($conditions) > 0) {
+            $this->config->offsetSet('forceArticleMainImageInListing', 0);
+            $searchResult = $this->searchService->search($criteria, $context);
+            $this->config->offsetSet('forceArticleMainImageInListing', 1);
+        } else {
+            $searchResult = $this->searchService->search($criteria, $context);
+        }
 
         $articles = [];
         foreach ($searchResult->getProducts() as $product) {

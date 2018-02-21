@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -36,7 +35,7 @@ class Shopware extends Enlight_Application
     /**
      * @Deprecated
      *
-     * Will be removed in Shopware v5.5
+     * Will be removed in Shopware v5.6
      *
      * Use the following parameters from the DIC instead:
      *      'shopware.release.version'

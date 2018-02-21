@@ -94,6 +94,101 @@ Ext.define('Shopware.form.field.PagingComboBox',
     forceDefaultPageSize: false,
 
     /**
+     * If set to true, the combobox will load the entry it holds by making an additional call to the server. This fixes
+     * issues when saving entries from e.g. page two of the paging combobox.
+     *
+     * Defaults to false, since its use requires the PHP controller to be able to handle requests for a single entry
+     * of the store.
+     * See method `templateComboBoxChanged` for more information.
+     *
+     * This field is marked deprecated and will be set by default in Shopware 5.5
+     *
+     * @default false
+     * @boolean
+     *
+     * @deprecated
+     */
+    preLoadStoredEntry: false,
+
+    initComponent: function () {
+        var me = this;
+
+        me.callParent(arguments);
+
+        if (me.preLoadStoredEntry) {
+            me.on('change', me.templateComboBoxChanged);
+        }
+    },
+
+    /**
+     * Load name for selected value by displayField.
+     * Necessary if e.g. our selected value is on page two, so the combobox doesn't know the proper name for our selected entry.
+     * Therefore we load the name for the selected entry every time.
+     *
+     * @param { Ext.form.field.ComboBox } combo
+     * @param { * } newValue
+     */
+    templateComboBoxChanged: function(combo, newValue) {
+        var store = combo.getStore();
+
+        if (!newValue) {
+            return;
+        }
+
+        store.getProxy().setExtraParam(combo.valueField, newValue);
+        store.currentPage = 1;
+        store.load({
+            callback: function (responseData, operation, success) {
+                if (!success) {
+                    return;
+                }
+
+                if (responseData.length > 1) {
+                    throw new Error('The PHP controller returned more than one entry. When using the config \'preLoadStoredEntry\' in the paging combobox, your controller needs to be able to handle requests for just a single entry.');
+                }
+
+                // Reset extra params and reload the store, so the combobox will still show all possible entries
+                this.getProxy().extraParams = [];
+                this.load();
+            }
+        });
+    },
+
+    /**
+     * Prevent replacing our displayValue while browsing through the combobox paging
+     *
+     * @Override
+     * @returns { string }
+     */
+    getDisplayValue: function () {
+        if (!this.preLoadStoredEntry) {
+            return this.callParent(arguments);
+        }
+
+        if (!this.displayTplData.length) {
+            return this.emptyText;
+        }
+
+        if (!this.isValidRecordData(this.displayTplData[0])) {
+            return this.getRawValue();
+        }
+
+        return this.callParent(arguments);
+    },
+
+    /**
+     * @param { Object } displayData
+     * @returns { boolean }
+     */
+    isValidRecordData: function (displayData) {
+        var objectKeys = Object.keys(displayData),
+            objectLen = objectKeys.length;
+
+        // If there's just one key and it's the same as the displayField, chances are high this is a faked object
+        return !(objectLen === 1 && objectKeys[0] === this.displayField);
+    },
+
+    /**
      * The createPicker function creates a boundlist which contains the paging toolbar.
      * To modify the toolbar, this function has to be overridden.
      * @return Ext.view.BoundList
@@ -178,7 +273,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                 keyNavEnabled: false,
                                 selectOnFocus: true,
                                 submitValue: false,
-                                // mark it as not a field so the form will not catch it when getting fields
+                                // Mark it as not a field so the form will not catch it when getting fields
                                 isFormField: false,
                                 width: me.inputItemWidth,
                                 margins: '-1 2 3 2',
@@ -224,7 +319,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                 scope: me
                             }];
 
-                            //text field displayed? insert the page text
+                            // Text field displayed? insert the page text
                             if (pagingComboBox.pagingBarConfig.jumpTo) {
                                 Ext.Array.insert(pagingBarItems, 2, ['-', me.beforePageText]);
                             }
@@ -255,6 +350,5 @@ Ext.define('Shopware.form.field.PagingComboBox',
 
         return picker;
     }
-
 });
 //{/block}

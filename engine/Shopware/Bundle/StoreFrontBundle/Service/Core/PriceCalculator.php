@@ -66,7 +66,7 @@ class PriceCalculator implements PriceCalculatorInterface
          * check if the customer group should see gross prices.
          */
         if (!$customerGroup->displayGrossPrices()) {
-            return round($price, 3);
+            return round($price, 2);
         }
 
         /**
@@ -88,6 +88,6 @@ class PriceCalculator implements PriceCalculatorInterface
          */
         $price = $price * (100 + $tax->getTax()) / 100;
 
-        return round($price, 3);
+        return round($price, 2);
     }
 }

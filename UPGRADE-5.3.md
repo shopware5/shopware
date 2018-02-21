@@ -2,23 +2,6 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
-## 5.3.8
-
-[View all changes from v5.3.7...v5.3.8](https://github.com/shopware/shopware/compare/v5.3.7...v5.3.8)
-
-### Additions 
-
-* Added new column `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
-
-### Changes
-
-* Changed loading of the themes/_private folder to be always executed
-* Added all additional article columns to product import/export
-
-### Removals
-
-* Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
-
 ## 5.3.7
 
 [View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)

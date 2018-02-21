@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomFacetGatewayInterface;
@@ -137,7 +136,6 @@ class VariantHelper implements VariantHelperInterface
      * @param Criteria             $criteria
      *
      * @throws \RuntimeException
-     * @throws \ReflectionException
      * @throws \InvalidArgumentException
      */
     public function joinPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria)
@@ -149,7 +147,9 @@ class VariantHelper implements VariantHelperInterface
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         /** @var VariantCondition $condition */
         foreach ($conditions as $condition) {
-            $this->joinVariantCondition($query, $condition);
+            if ($condition->expandVariants()) {
+                $this->joinVariantCondition($query, $condition);
+            }
         }
 
         $variantCondition = [
@@ -157,6 +157,10 @@ class VariantHelper implements VariantHelperInterface
         ];
 
         foreach ($conditions as $condition) {
+            if (!$condition->expandVariants()) {
+                continue;
+            }
+
             $tableKey = $condition->getName();
             $variantCondition[] = 'listing_price.' . $tableKey . '_id = ' . $tableKey . '.option_id';
         }
@@ -281,8 +285,12 @@ class VariantHelper implements VariantHelperInterface
 
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
-        /** @var ConditionInterface $condition */
+        /** @var VariantCondition $condition */
         foreach ($conditions as $condition) {
+            if (!$condition->expandVariants()) {
+                continue;
+            }
+
             $tableKey = $condition->getName();
             $column = $tableKey . '.option_id AS ' . $tableKey . '_id';
             $query->innerJoin('prices', 's_article_configurator_option_relations', $tableKey, $tableKey . '.article_id = prices.articledetailsID');

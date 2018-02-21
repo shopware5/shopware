@@ -24,14 +24,19 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class VariantListingPriceService
 {
@@ -45,12 +50,33 @@ class VariantListingPriceService
      */
     private $factory;
 
+    /**
+     * @var VariantCheapestPriceGatewayInterface
+     */
+    private $variantCheapestPriceGateway;
+
+    /**
+     * @var PriceCalculationServiceInterface
+     */
+    private $priceCalculationService;
+
+    /**
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
     public function __construct(
         QueryBuilderFactoryInterface $factory,
-        VariantHelperInterface $helper
+        VariantHelperInterface $helper,
+        VariantCheapestPriceGatewayInterface $variantCheapestPriceGateway,
+        PriceCalculationServiceInterface $priceCalculationService,
+        Shopware_Components_Config $config
     ) {
         $this->helper = $helper;
         $this->factory = $factory;
+        $this->variantCheapestPriceGateway = $variantCheapestPriceGateway;
+        $this->priceCalculationService = $priceCalculationService;
+        $this->config = $config;
     }
 
     public function updatePrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
@@ -65,15 +91,7 @@ class VariantListingPriceService
             return;
         }
 
-        //check if variant listing prices is already loaded by price condition or price sorting
-        //in this case it is not necessary to reload variant listing prices
-        $updated = $this->tryUpdateByAttribute($result);
-
-        if ($updated) {
-            return;
-        }
-
-        //executed if no price condition or price sorting included in search request
+        //executed if no price condition included in search request
         $this->loadPrices($criteria, $result, $context);
     }
 
@@ -84,61 +102,100 @@ class VariantListingPriceService
      */
     private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
-        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
-        $conditions = array_filter($conditions, function (VariantCondition $condition) {
-            return $condition->expandVariants();
-        });
-
-        $cleanCriteria = new Criteria();
-        foreach ($conditions as $condition) {
-            $cleanCriteria->addCondition($condition);
-        }
-        $numbers = array_keys($result->getProducts());
-        $cleanCriteria->addCondition(new OrdernumberCondition($numbers));
-
-        $query = $this->factory->createQuery($cleanCriteria, $context);
-        $select = $query->getQueryPart('select');
-        $select = array_merge(['variant.ordernumber as array_key'], $select);
-        $query->select($select);
-
-        $this->helper->joinPrices($query, $context, $cleanCriteria);
-        $query->addGroupBy('product.id');
-
-        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        $cheapestPriceData = $this->variantCheapestPriceGateway->getList($result->getProducts(), $context, $context->getCurrentCustomerGroup(), $criteria);
 
         foreach ($result->getProducts() as $product) {
             $number = $product->getNumber();
 
-            if (!array_key_exists($number, $data)) {
+            if (!array_key_exists($number, $cheapestPriceData)) {
                 continue;
             }
 
-            $product->getListingPrice()->setCalculatedPrice(
-                round((float) $data[$number]['cheapest_price'], 2)
-            );
+            /** @var $cheapestPriceRule PriceRule */
+            $cheapestPriceRule = $cheapestPriceData[$number]['price'];
+            if ($product->isPriceGroupActive()) {
+                $cheapestPriceRule = $this->calculatePriceGroupDiscounts($product, $cheapestPriceRule, $context);
+            }
 
-            $product->setDisplayFromPrice($data[$number]['different_price_count'] > 1);
+            $product->setCheapestPriceRule($cheapestPriceRule);
+            $this->priceCalculationService->calculateProduct($product, $context);
+
+            $product->setListingPrice($product->getCheapestUnitPrice());
+            if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+                $product->setListingPrice($product->getCheapestPrice());
+            }
+
+            $product->setDisplayFromPrice($cheapestPriceData[$number]['different_price_count'] > 1);
         }
     }
 
-    private function tryUpdateByAttribute(ProductSearchResult $result)
+    /**
+     * @param ListProduct $product
+     * @param PriceRule   $price
+     * @param ShopContext $context
+     *
+     * @return PriceRule
+     */
+    private function calculatePriceGroupDiscounts($product, $price, $context)
     {
-        foreach ($result->getProducts() as $product) {
-            /** @var Attribute $attribute */
-            $attribute = $product->getAttribute('search');
-            if (!$attribute) {
-                return false;
-            }
-
-            if (!$attribute->exists('cheapest_price')) {
-                return false;
-            }
-
-            $product->getListingPrice()->setCalculatedPrice(
-                round((float) $attribute->get('cheapest_price'), 2)
-            );
+        if (!$product->isPriceGroupActive()) {
+            return $price;
         }
 
-        return true;
+        $discount = $this->getHighestQuantityDiscount($product, $context, $price->getFrom());
+
+        if (!$discount) {
+            return $price;
+        }
+        $price->setPrice($price->getPrice() / 100 * (100 - $discount->getPercent()));
+
+        return $price;
+    }
+
+    /**
+     * Returns the highest price group discount for the provided product.
+     *
+     * The price groups are stored in the provided context object.
+     * If the product has no configured price group or the price group has no discount defined for the
+     * current customer group, the function returns null.
+     *
+     * @param ListProduct $product
+     * @param ShopContext $context
+     * @param $quantity
+     *
+     * @return null|PriceDiscount
+     */
+    private function getHighestQuantityDiscount(ListProduct $product, ShopContext $context, $quantity)
+    {
+        $priceGroups = $context->getPriceGroups();
+        if (empty($priceGroups)) {
+            return null;
+        }
+
+        $id = $product->getPriceGroup()->getId();
+        if (!isset($priceGroups[$id])) {
+            return null;
+        }
+
+        $priceGroup = $priceGroups[$id];
+
+        /** @var $highest PriceDiscount */
+        $highest = null;
+        foreach ($priceGroup->getDiscounts() as $discount) {
+            if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {
+                continue;
+            }
+
+            if (!$highest) {
+                $highest = $discount;
+                continue;
+            }
+
+            if ($highest->getPercent() < $discount->getPercent()) {
+                $highest = $discount;
+            }
+        }
+
+        return $highest;
     }
 }
