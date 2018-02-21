@@ -160,8 +160,9 @@
                         window.history.pushState(stateObj.state, stateObj.title, location);
                     }
                 },
-                complete: function () {
+                complete: function (response, status) {
                     $.loadingIndicator.close();
+                    $.publish('plugin/swAjaxVariant/onRequestDataCompleted', [me, response, status, values, stateObj.location]);
                 }
             });
         },
