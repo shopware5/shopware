@@ -1,10 +1,5 @@
 /** Initializer */
-import initContext from 'src/app/init/context.init';
-import initHttpClient from 'src/app/init/http.init';
-import initCoreModules from 'src/app/init/modules.init';
-import initView from 'src/app/init/view.init';
-import initRouter from 'src/app/init/router.init';
-import initEntity from 'src/app/init/entity.init';
+import initializers from 'src/app/init';
 
 /** Services */
 import MenuService from 'src/app/service/menu.service';
@@ -17,13 +12,14 @@ import 'src/app/assets/less/all.less';
 
 const application = Shopware.Application;
 
+// Add initializers
+Object.keys(initializers).forEach((key) => {
+    const initializer = initializers[key];
+    application.addInitializer(key, initializer);
+});
+
+// Add service providers
 application
-    .addInitializer('contextService', initContext)
-    .addInitializer('httpClient', initHttpClient)
-    .addInitializer('coreModuleRoutes', initCoreModules)
-    .addInitializer('view', initView)
-    .addInitializer('router', initRouter)
-    .addInitializer('entity', initEntity)
     .addServiceProvider('menuService', () => {
         const factoryContainer = application.getContainer('factory');
         return MenuService(factoryContainer.module);
@@ -36,12 +32,11 @@ application
         return JsonApiParser;
     });
 
-// Loop through the api services and register them as service providers in the application
-apiServices.forEach((service) => {
-    const ServiceFactoryClass = service.provider;
-    const name = service.name;
+// Add api service providers
+Object.keys(apiServices).forEach((key) => {
+    const ServiceFactoryClass = apiServices[key];
 
-    application.addServiceProvider(name, (container) => {
+    application.addServiceProvider(key, (container) => {
         const initContainer = application.getContainer('init');
         return new ServiceFactoryClass(initContainer.httpClient, container.loginService);
     });
