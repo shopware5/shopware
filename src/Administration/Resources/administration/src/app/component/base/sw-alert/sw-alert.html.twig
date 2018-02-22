@@ -1,0 +1,19 @@
+{% block sw_alert %}
+    <div class="sw-alert" :class="alertClasses">
+        {% block sw_alert_inner %}
+            {% block sw_alert_icon %}
+                <sw-icon :name="alertIcon" decorative />
+            {% endblock %}
+
+            {% block sw_alert_title %}
+                <div v-if="title" class="sw-alert__title">{{ title }}</div>
+            {% endblock %}
+
+            {% block sw_alert_message %}
+                <div class="sw-alert__message">
+                    <slot>{% block sw_alert_slot_default %}{% endblock %}</slot>
+                </div>
+            {% endblock %}
+        {% endblock %}
+    </div>
+{% endblock %}
