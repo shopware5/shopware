@@ -11,7 +11,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added database field `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
 * Added product box layout selection support for manufacturer listings
 * Added destroy method to `swJumpToTab` jQuery plugin
-* Added option to discard Less/Javascript files of extended themes (more information: https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
+* Added option to discard Less/Javascript files of extended themes. [More information](https://developers.shopware.com/designers-guide/theme-startup-guide/#theme.php)
 * Added multi-select feature when assigning variant configurations to product images
 * Added variant configuration information in the image information panel
 * Added DIC parameters:
@@ -52,6 +52,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added option for batch updating plugins to plugin update command
 * Added defaults for `ignored_url_parameters` setting of HTTP cache in `config.php`. See [Ignore some HTTP parameters](https://developers.shopware.com/developers-guide/http-cache/#ignore-some-http-parameters) for more information. 
 * Added optional `id` parameter to `getTemplatesAction` in `engine/Shopware/Controllers/Backend/Emotion.php` to allow fetching of a single template
+* Added new filter event `Shopware_Controllers_Backend_Emotion_Detail_Filter_Values` to `Shopware/Controllers/Backend/Emotion.php` to allow manipulation of elements
 
 ### Changes
 
